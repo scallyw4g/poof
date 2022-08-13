@@ -5,8 +5,8 @@
 #include <bonsai_stdlib/bonsai_stdlib.h>
 #include <bonsai_stdlib/bonsai_stdlib.cpp>
 
-#include <metaprogramming/functions.h>
-#include <metaprogramming/preprocessor.h>
+#include <poof/functions.h>
+#include <poof/preprocessor.h>
 
 global_variable memory_arena Global_PermMemory = {};
 
@@ -5531,7 +5531,7 @@ bonsai_function arguments
 ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_arena* Memory)
 {
   arguments Result = {
-    .Outpath      = CS("src/metaprogramming/output"),
+    .Outpath      = CS("src/poof/output"),
     .Files        = AllocateBuffer<counted_string_cursor, counted_string>((u32)ArgCount, Memory),
     .IncludePaths = AllocateBuffer<counted_string_cursor, counted_string>((u32)ArgCount, Memory),
   };
@@ -8749,7 +8749,7 @@ FlushOutputToDisk(parse_context *Ctx, counted_string OutputForThisParser, counte
   else
   {
     // TODO(Jesse id: 183, tags: high_priority) This should respect Args.OutPath passed in!
-    OutputPath = Concat(CS("src/metaprogramming/output/"), NewFilename, Memory);
+    OutputPath = Concat(CS("src/poof/output/"), NewFilename, Memory);
     Output(OutputForThisParser, OutputPath, Memory);
 
 #if 0

@@ -17,7 +17,7 @@ enum metaprogramming_directive
   polymorphic_func,
 };
 meta( string_and_value_tables(metaprogramming_directive) )
-#include <metaprogramming/output/string_and_value_tables_metaprogramming_directive.h>
+#include <poof/output/string_and_value_tables_metaprogramming_directive.h>
 
 enum meta_arg_operator
 {
@@ -32,7 +32,7 @@ enum meta_arg_operator
   is_struct,
 };
 meta( generate_value_table(meta_arg_operator) )
-#include <metaprogramming/output/generate_value_table_meta_arg_operator.h>
+#include <poof/output/generate_value_table_meta_arg_operator.h>
 
 enum meta_transform_op
 {
@@ -41,7 +41,7 @@ enum meta_transform_op
   to_capital_case = (1 << 0),
 };
 meta(generate_value_table(meta_transform_op))
-#include <metaprogramming/output/generate_value_table_meta_transform_op.h>
+#include <poof/output/generate_value_table_meta_transform_op.h>
 
 
 
@@ -240,7 +240,7 @@ enum c_token_type
   CT_InsertedCode,
 };
 meta(generate_string_table(c_token_type))
-#include <metaprogramming/output/generate_string_table_c_token_type.h>
+#include <poof/output/generate_string_table_c_token_type.h>
 
 enum c_token_flags
 {
@@ -346,22 +346,22 @@ enum token_cursor_source
   TokenCursorSource_Count,
 };
 meta(generate_string_table(token_cursor_source));
-#include <metaprogramming/output/generate_string_table_token_cursor_source.h>
+#include <poof/output/generate_string_table_token_cursor_source.h>
 
 // TODO(Jesse): Add a way to append additional members to generated datatypes
 // then reenable this.
 /* meta(generate_cursor(c_token)) */
-#include <metaprogramming/output/generate_cursor_c_token.h>
+#include <poof/output/generate_cursor_c_token.h>
 
 
 meta(buffer(c_token))
-#include <metaprogramming/output/buffer_c_token.h>
+#include <poof/output/buffer_c_token.h>
 
 meta(buffer(c_token_buffer))
-#include <metaprogramming/output/buffer_c_token_buffer.h>
+#include <poof/output/buffer_c_token_buffer.h>
 
 meta(generate_stream(c_token_buffer))
-#include <metaprogramming/output/generate_stream_c_token_buffer.h>
+#include <poof/output/generate_stream_c_token_buffer.h>
 
 enum parse_error_code
 {
@@ -378,7 +378,7 @@ enum parse_error_code
   ParseErrorCode_Unknown,
 };
 meta(generate_string_table(parse_error_code))
-#include <metaprogramming/output/generate_string_table_parse_error_code.h>
+#include <poof/output/generate_string_table_parse_error_code.h>
 
 struct parser
 {
@@ -389,10 +389,10 @@ struct parser
   c_token_cursor *Tokens;
 };
 meta(generate_cursor(parser))
-#include <metaprogramming/output/generate_cursor_parser.h>
+#include <poof/output/generate_cursor_parser.h>
 
 meta(generate_stream(parser))
-#include <metaprogramming/output/generate_stream_parser.h>
+#include <poof/output/generate_stream_parser.h>
 
 bonsai_function parser
 MakeParser(c_token_cursor *Tokens)
@@ -412,7 +412,7 @@ meta(
     struct_member_function_destructor  enum_only
   }
 )
-#include <metaprogramming/output/d_union_c_decl_function.h>
+#include <poof/output/d_union_c_decl_function.h>
 
 struct struct_member_stream_chunk;
 
@@ -441,7 +441,7 @@ struct struct_def
   b32 IsUnion;
 };
 meta(stream_and_cursor(struct_def))
-#include <metaprogramming/output/stream_and_cursor_struct_def.h>
+#include <poof/output/stream_and_cursor_struct_def.h>
 
 struct struct_member_anonymous
 {
@@ -455,7 +455,7 @@ struct stl_container_def
   counted_string Name;
 };
 meta(generate_stream(stl_container_def))
-#include <metaprogramming/output/generate_stream_stl_container_def.h>
+#include <poof/output/generate_stream_stl_container_def.h>
 
 enum datatype_type
 {
@@ -570,7 +570,7 @@ struct variable_decl
   ast_node *Value;
 };
 meta(generate_stream(variable_decl))
-#include <metaprogramming/output/generate_stream_variable_decl.h>
+#include <poof/output/generate_stream_variable_decl.h>
 
 enum function_type
 {
@@ -598,7 +598,7 @@ struct function_decl
 };
 
 meta(generate_stream(function_decl))
-#include <metaprogramming/output/generate_stream_function_decl.h>
+#include <poof/output/generate_stream_function_decl.h>
 
 /* TODO(Jesse, id: 290, tags: metaprogramming, improvement): generating this:
  * meta( d_union declaration { function_decl variable_decl })
@@ -638,13 +638,13 @@ meta(
     struct_member_anonymous
   }
 )
-#include <metaprogramming/output/d_union_c_decl.h>
+#include <poof/output/d_union_c_decl.h>
 
 meta(generate_cursor(struct_member))
-#include <metaprogramming/output/generate_cursor_c_decl.h>
+#include <poof/output/generate_cursor_c_decl.h>
 
 meta( generate_stream_chunk_struct(struct_member) )
-#include <metaprogramming/output/generate_stream_chunk_struct_c_decl.h>
+#include <poof/output/generate_stream_chunk_struct_c_decl.h>
 
 struct ast_node_expression;
 struct enum_member
@@ -653,7 +653,7 @@ struct enum_member
   ast_node_expression *Value;
 };
 meta(generate_stream(enum_member))
-#include <metaprogramming/output/generate_stream_enum_field.h>
+#include <poof/output/generate_stream_enum_field.h>
 
 struct d_union_member
 {
@@ -662,7 +662,7 @@ struct d_union_member
   d_union_flags Flags;
 };
 meta(generate_stream(d_union_member))
-#include <metaprogramming/output/generate_stream_d_union_member.h>
+#include <poof/output/generate_stream_d_union_member.h>
 
 struct enum_def
 {
@@ -670,7 +670,7 @@ struct enum_def
   enum_member_stream Members;
 };
 meta(stream_and_cursor(enum_def))
-#include <metaprogramming/output/stream_and_cursor_enum_def.h>
+#include <poof/output/stream_and_cursor_enum_def.h>
 
 struct type_def
 {
@@ -679,7 +679,7 @@ struct type_def
   b32 IsFunction;
 };
 meta(generate_stream(type_def))
-#include <metaprogramming/output/generate_stream_type_def.h>
+#include <poof/output/generate_stream_type_def.h>
 
 
 struct primitive_def
@@ -687,7 +687,7 @@ struct primitive_def
   type_spec Type;
 };
 meta(generate_stream(primitive_def))
-#include <metaprogramming/output/generate_stream_primitive_def.h>
+#include <poof/output/generate_stream_primitive_def.h>
 
 
 bonsai_function datatype
@@ -757,7 +757,7 @@ struct meta_func_arg
   datatype Data;
 };
 meta(generate_stream(meta_func_arg))
-#include <metaprogramming/output/generate_stream_meta_func_arg.h>
+#include <poof/output/generate_stream_meta_func_arg.h>
 
 
 
@@ -798,7 +798,7 @@ struct macro_def
   /* b32 IsExpanding; */
 };
 meta(generate_stream(macro_def))
-#include <metaprogramming/output/generate_stream_macro_def.h>
+#include <poof/output/generate_stream_macro_def.h>
 
 bonsai_function umm
 Hash(macro_def *M)
@@ -809,7 +809,7 @@ Hash(macro_def *M)
 }
 
 meta(hashtable(macro_def))
-#include <metaprogramming/output/hashtable_macro_def.h>
+#include <poof/output/hashtable_macro_def.h>
 
 
 struct meta_func
@@ -819,7 +819,7 @@ struct meta_func
   parser Body;
 };
 meta(generate_stream(meta_func))
-#include <metaprogramming/output/generate_stream_meta_func.h>
+#include <poof/output/generate_stream_meta_func.h>
 
 
 struct todo
@@ -829,7 +829,7 @@ struct todo
   b32 FoundInCodebase;
 };
 meta(generate_stream(todo))
-#include <metaprogramming/output/generate_stream_todo.h>
+#include <poof/output/generate_stream_todo.h>
 
 struct tag
 {
@@ -837,7 +837,7 @@ struct tag
   todo_stream Todos;
 };
 meta(generate_stream(tag))
-#include <metaprogramming/output/generate_stream_tag.h>
+#include <poof/output/generate_stream_tag.h>
 
 struct person
 {
@@ -845,7 +845,7 @@ struct person
   tag_stream Tags;
 };
 meta(generate_stream(person))
-#include <metaprogramming/output/generate_stream_person.h>
+#include <poof/output/generate_stream_person.h>
 
 #define SafeAccess(T, Ptr) (&(Ptr)->T); Assert((Ptr)->Type == type_##T)
 
@@ -855,7 +855,7 @@ struct ast_node_expression
   ast_node_expression *Next;
 };
 meta(generate_stream(ast_node_expression))
-#include <metaprogramming/output/generate_stream_ast_node_expression.h>
+#include <poof/output/generate_stream_ast_node_expression.h>
 
 struct ast_node_statement
 {
@@ -885,7 +885,7 @@ struct ast_node_variable_def
   ast_node *Value;
 };
 meta(generate_stream(ast_node_variable_def))
-#include <metaprogramming/output/generate_stream_ast_node_variable_def.h>
+#include <poof/output/generate_stream_ast_node_variable_def.h>
 
 struct ast_node_access
 {
@@ -951,10 +951,10 @@ meta(
     ast_node_type_specifier
   }
 )
-#include <metaprogramming/output/d_union_ast_node.h>
+#include <poof/output/d_union_ast_node.h>
 
 meta(generate_stream(ast_node))
-#include <metaprogramming/output/generate_stream_ast_node.h>
+#include <poof/output/generate_stream_ast_node.h>
 
 bonsai_function ast_node*
 AllocateAstNode(ast_node_type T, ast_node **Result, memory_arena* Memory)
@@ -1382,10 +1382,10 @@ PeekToken(ansi_stream* Stream, u32 Lookahead = 0)
 }
 
 meta(generate_stream_iterator(struct_member))
-#include <metaprogramming/output/generate_stream_iterator_c_decl.h>
+#include <poof/output/generate_stream_iterator_c_decl.h>
 
 meta(generate_stream_push(struct_member))
-#include <metaprogramming/output/generate_stream_push_c_decl.h>
+#include <poof/output/generate_stream_push_c_decl.h>
 
 bonsai_function b32
 Contains(parser *Parser, c_token *T)
