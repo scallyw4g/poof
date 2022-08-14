@@ -17,7 +17,7 @@ enum metaprogramming_directive
   polymorphic_func,
 };
 meta( string_and_value_tables(metaprogramming_directive) )
-#include <metaprogramming/output/string_and_value_tables_metaprogramming_directive.h>
+#include <poof/output/string_and_value_tables_metaprogramming_directive.h>
 
 enum meta_arg_operator
 {
@@ -32,7 +32,7 @@ enum meta_arg_operator
   is_struct,
 };
 meta( generate_value_table(meta_arg_operator) )
-#include <metaprogramming/output/generate_value_table_meta_arg_operator.h>
+#include <poof/output/generate_value_table_meta_arg_operator.h>
 
 enum meta_transform_op
 {
@@ -41,7 +41,7 @@ enum meta_transform_op
   to_capital_case = (1 << 0),
 };
 meta(generate_value_table(meta_transform_op))
-#include <metaprogramming/output/generate_value_table_meta_transform_op.h>
+#include <poof/output/generate_value_table_meta_transform_op.h>
 
 
 
@@ -240,7 +240,7 @@ enum c_token_type
   CT_InsertedCode,
 };
 meta(generate_string_table(c_token_type))
-#include <metaprogramming/output/generate_string_table_c_token_type.h>
+#include <poof/output/generate_string_table_c_token_type.h>
 
 enum c_token_flags
 {
@@ -346,22 +346,22 @@ enum token_cursor_source
   TokenCursorSource_Count,
 };
 meta(generate_string_table(token_cursor_source));
-#include <metaprogramming/output/generate_string_table_token_cursor_source.h>
+#include <poof/output/generate_string_table_token_cursor_source.h>
 
 // TODO(Jesse): Add a way to append additional members to generated datatypes
 // then reenable this.
 /* meta(generate_cursor(c_token)) */
-#include <metaprogramming/output/generate_cursor_c_token.h>
+#include <poof/output/generate_cursor_c_token.h>
 
 
 meta(buffer(c_token))
-#include <metaprogramming/output/buffer_c_token.h>
+#include <poof/output/buffer_c_token.h>
 
 meta(buffer(c_token_buffer))
-#include <metaprogramming/output/buffer_c_token_buffer.h>
+#include <poof/output/buffer_c_token_buffer.h>
 
 meta(generate_stream(c_token_buffer))
-#include <metaprogramming/output/generate_stream_c_token_buffer.h>
+#include <poof/output/generate_stream_c_token_buffer.h>
 
 enum parse_error_code
 {
@@ -378,7 +378,7 @@ enum parse_error_code
   ParseErrorCode_Unknown,
 };
 meta(generate_string_table(parse_error_code))
-#include <metaprogramming/output/generate_string_table_parse_error_code.h>
+#include <poof/output/generate_string_table_parse_error_code.h>
 
 struct parser
 {
@@ -389,10 +389,10 @@ struct parser
   c_token_cursor *Tokens;
 };
 meta(generate_cursor(parser))
-#include <metaprogramming/output/generate_cursor_parser.h>
+#include <poof/output/generate_cursor_parser.h>
 
 meta(generate_stream(parser))
-#include <metaprogramming/output/generate_stream_parser.h>
+#include <poof/output/generate_stream_parser.h>
 
 bonsai_function parser
 MakeParser(c_token_cursor *Tokens)
@@ -412,7 +412,7 @@ meta(
     struct_member_function_destructor  enum_only
   }
 )
-#include <metaprogramming/output/d_union_c_decl_function.h>
+#include <poof/output/d_union_c_decl_function.h>
 
 struct struct_member_stream_chunk;
 
@@ -441,7 +441,7 @@ struct struct_def
   b32 IsUnion;
 };
 meta(stream_and_cursor(struct_def))
-#include <metaprogramming/output/stream_and_cursor_struct_def.h>
+#include <poof/output/stream_and_cursor_struct_def.h>
 
 struct struct_member_anonymous
 {
@@ -455,7 +455,7 @@ struct stl_container_def
   counted_string Name;
 };
 meta(generate_stream(stl_container_def))
-#include <metaprogramming/output/generate_stream_stl_container_def.h>
+#include <poof/output/generate_stream_stl_container_def.h>
 
 enum datatype_type
 {
@@ -570,7 +570,7 @@ struct variable_decl
   ast_node *Value;
 };
 meta(generate_stream(variable_decl))
-#include <metaprogramming/output/generate_stream_variable_decl.h>
+#include <poof/output/generate_stream_variable_decl.h>
 
 enum function_type
 {
@@ -598,7 +598,7 @@ struct function_decl
 };
 
 meta(generate_stream(function_decl))
-#include <metaprogramming/output/generate_stream_function_decl.h>
+#include <poof/output/generate_stream_function_decl.h>
 
 /* TODO(Jesse, id: 290, tags: metaprogramming, improvement): generating this:
  * meta( d_union declaration { function_decl variable_decl })
@@ -638,13 +638,13 @@ meta(
     struct_member_anonymous
   }
 )
-#include <metaprogramming/output/d_union_c_decl.h>
+#include <poof/output/d_union_c_decl.h>
 
 meta(generate_cursor(struct_member))
-#include <metaprogramming/output/generate_cursor_c_decl.h>
+#include <poof/output/generate_cursor_c_decl.h>
 
 meta( generate_stream_chunk_struct(struct_member) )
-#include <metaprogramming/output/generate_stream_chunk_struct_c_decl.h>
+#include <poof/output/generate_stream_chunk_struct_c_decl.h>
 
 struct ast_node_expression;
 struct enum_member
@@ -653,7 +653,7 @@ struct enum_member
   ast_node_expression *Value;
 };
 meta(generate_stream(enum_member))
-#include <metaprogramming/output/generate_stream_enum_field.h>
+#include <poof/output/generate_stream_enum_field.h>
 
 struct d_union_member
 {
@@ -662,7 +662,7 @@ struct d_union_member
   d_union_flags Flags;
 };
 meta(generate_stream(d_union_member))
-#include <metaprogramming/output/generate_stream_d_union_member.h>
+#include <poof/output/generate_stream_d_union_member.h>
 
 struct enum_def
 {
@@ -670,7 +670,7 @@ struct enum_def
   enum_member_stream Members;
 };
 meta(stream_and_cursor(enum_def))
-#include <metaprogramming/output/stream_and_cursor_enum_def.h>
+#include <poof/output/stream_and_cursor_enum_def.h>
 
 struct type_def
 {
@@ -679,7 +679,7 @@ struct type_def
   b32 IsFunction;
 };
 meta(generate_stream(type_def))
-#include <metaprogramming/output/generate_stream_type_def.h>
+#include <poof/output/generate_stream_type_def.h>
 
 
 struct primitive_def
@@ -687,7 +687,7 @@ struct primitive_def
   type_spec Type;
 };
 meta(generate_stream(primitive_def))
-#include <metaprogramming/output/generate_stream_primitive_def.h>
+#include <poof/output/generate_stream_primitive_def.h>
 
 
 bonsai_function datatype
@@ -757,7 +757,7 @@ struct meta_func_arg
   datatype Data;
 };
 meta(generate_stream(meta_func_arg))
-#include <metaprogramming/output/generate_stream_meta_func_arg.h>
+#include <poof/output/generate_stream_meta_func_arg.h>
 
 
 
@@ -798,7 +798,7 @@ struct macro_def
   /* b32 IsExpanding; */
 };
 meta(generate_stream(macro_def))
-#include <metaprogramming/output/generate_stream_macro_def.h>
+#include <poof/output/generate_stream_macro_def.h>
 
 bonsai_function umm
 Hash(macro_def *M)
@@ -809,7 +809,7 @@ Hash(macro_def *M)
 }
 
 meta(hashtable(macro_def))
-#include <metaprogramming/output/hashtable_macro_def.h>
+#include <poof/output/hashtable_macro_def.h>
 
 
 struct meta_func
@@ -819,7 +819,7 @@ struct meta_func
   parser Body;
 };
 meta(generate_stream(meta_func))
-#include <metaprogramming/output/generate_stream_meta_func.h>
+#include <poof/output/generate_stream_meta_func.h>
 
 
 struct todo
@@ -829,7 +829,7 @@ struct todo
   b32 FoundInCodebase;
 };
 meta(generate_stream(todo))
-#include <metaprogramming/output/generate_stream_todo.h>
+#include <poof/output/generate_stream_todo.h>
 
 struct tag
 {
@@ -837,7 +837,7 @@ struct tag
   todo_stream Todos;
 };
 meta(generate_stream(tag))
-#include <metaprogramming/output/generate_stream_tag.h>
+#include <poof/output/generate_stream_tag.h>
 
 struct person
 {
@@ -845,7 +845,7 @@ struct person
   tag_stream Tags;
 };
 meta(generate_stream(person))
-#include <metaprogramming/output/generate_stream_person.h>
+#include <poof/output/generate_stream_person.h>
 
 #define SafeAccess(T, Ptr) (&(Ptr)->T); Assert((Ptr)->Type == type_##T)
 
@@ -855,7 +855,7 @@ struct ast_node_expression
   ast_node_expression *Next;
 };
 meta(generate_stream(ast_node_expression))
-#include <metaprogramming/output/generate_stream_ast_node_expression.h>
+#include <poof/output/generate_stream_ast_node_expression.h>
 
 struct ast_node_statement
 {
@@ -885,7 +885,7 @@ struct ast_node_variable_def
   ast_node *Value;
 };
 meta(generate_stream(ast_node_variable_def))
-#include <metaprogramming/output/generate_stream_ast_node_variable_def.h>
+#include <poof/output/generate_stream_ast_node_variable_def.h>
 
 struct ast_node_access
 {
@@ -951,10 +951,10 @@ meta(
     ast_node_type_specifier
   }
 )
-#include <metaprogramming/output/d_union_ast_node.h>
+#include <poof/output/d_union_ast_node.h>
 
 meta(generate_stream(ast_node))
-#include <metaprogramming/output/generate_stream_ast_node.h>
+#include <poof/output/generate_stream_ast_node.h>
 
 bonsai_function ast_node*
 AllocateAstNode(ast_node_type T, ast_node **Result, memory_arena* Memory)
@@ -1193,251 +1193,3 @@ CToken(u32 UnsignedValue)
     .UnsignedValue = UnsignedValue,
   };
   return Result;
-}
-
-inline c_token
-CToken(counted_string Value)
-{
-  c_token Result = {
-    .Type = CTokenType_Identifier,
-    .Value = Value
-  };
-  return Result;
-}
-
-inline c_token
-CToken(c_token_type Type, counted_string Value = CSz(""))
-{
-  c_token Result = {};
-
-  Result.Type = Type;
-  Result.Value = Value;
-
-  return Result;
-}
-
-inline void
-CTokenCursor(c_token_cursor *Result, c_token *Buffer, umm Count, counted_string Filename, token_cursor_source Source, c_token_cursor_up Up)
-{
-  Result->Filename = Filename;
-  Result->Source = Source;
-  Result->Start = Buffer;
-  Result->At = Result->Start;
-  Result->End = Result->Start + Count;
-  Result->Up = Up;
-}
-
-bonsai_function c_token_cursor
-CTokenCursor(c_token *Start, c_token *End, counted_string Filename, token_cursor_source Source, c_token_cursor_up Up)
-{
-  c_token_cursor Result = {
-    .Start = Start,
-    .End = End,
-    .At = Start,
-    .Filename = Filename,
-    .Source = Source,
-    .Up = Up,
-  };
-  return Result;
-}
-
-bonsai_function c_token_cursor
-CTokenCursor(c_token_buffer *Buf, counted_string Filename, token_cursor_source Source, c_token_cursor_up Up)
-{
-  c_token_cursor Result = CTokenCursor(Buf->Start, Buf->Start + Buf->Count, Filename, Source, Up);
-  return Result;
-}
-
-
-inline void
-CTokenCursor(c_token_cursor *Result, umm Count, memory_arena *Memory, counted_string Filename, token_cursor_source Source, c_token_cursor_up Up)
-{
-  c_token *Buffer = AllocateProtection(c_token, Memory, Count, False);
-  CTokenCursor(Result, Buffer, Count, Filename, Source, Up);
-}
-
-c_token_cursor *
-AllocateTokenCursor(memory_arena* Memory, counted_string Filename, umm Count, token_cursor_source Source, u32 LineNumber, c_token_cursor_up Up)
-{
-  c_token_cursor *Result = AllocateProtection(c_token_cursor, Memory, 1, False);
-  CTokenCursor(Result, Count, Memory, Filename, Source, Up);
-  return Result;
-}
-
-bonsai_function parser
-AllocateParser(counted_string Filename, u32 LineNumber, u32 TokenCount, token_cursor_source Source, u32 OutputBufferTokenCount, c_token_cursor_up Up, memory_arena *Memory)
-{
-  TIMED_FUNCTION();
-
-  parser Result = {};
-
-  Result.Tokens = AllocateTokenCursor(Memory, Filename, TokenCount, Source, LineNumber, Up);
-  if (!Result.Tokens->Start)
-  {
-    Error("Allocating Token Buffer");
-    return Result;
-  }
-
-  return Result;
-}
-
-bonsai_function parser*
-AllocateParserPtr(counted_string Filename, u32 LineNumber, u32 TokenCount, token_cursor_source Source, u32 OutputBufferTokenCount, c_token_cursor_up Up,  memory_arena *Memory)
-{
-  Assert(OutputBufferTokenCount == 0);
-  parser *Result = AllocateProtection(parser, Memory, 1, False);
-  *Result = AllocateParser(Filename, LineNumber, TokenCount, Source, OutputBufferTokenCount, Up, Memory);
-  return Result;
-}
-
-c_token
-PeekToken(ansi_stream* Stream, u32 Lookahead = 0)
-{
-  c_token Result = {};
-
-  if (Stream->At+Lookahead < Stream->End)
-  {
-    char At = *(Stream->At+Lookahead);
-    // TODO(Jesse, id: 193, tags: metaprogramming): Metaprogram this.  I've had bugs multiple times because of it.
-    switch (At)
-    {
-
-      case CT_ControlChar_Start_of_Heading:
-      case CT_ControlChar_Start_of_Text:
-      case CT_ControlChar_End_of_Text:
-      case CT_ControlChar_End_of_Transmission:
-      case CT_ControlChar_Enquiry:
-      case CT_ControlChar_Acknowledgement:
-      case CT_ControlChar_Bell:
-      case CT_ControlChar_Backspace:
-      case CT_ControlChar_Vertical_Tab:
-      case CT_ControlChar_Form_Feed:
-      case CT_ControlChar_Shift_Out:
-      case CT_ControlChar_Shift_In:
-      case CT_ControlChar_Data_Link_Escape:
-      case CT_ControlChar_Device_Control_1:
-      case CT_ControlChar_Device_Control_2:
-      case CT_ControlChar_Device_Control_3:
-      case CT_ControlChar_Device_Control_4:
-      case CT_ControlChar_Negative_Acknowledgement:
-      case CT_ControlChar_Synchronous_Idle:
-      case CT_ControlChar_End_of_Transmission_Block:
-      case CT_ControlChar_Cancel:
-      case CT_ControlChar_End_of_Medium:
-      case CT_ControlChar_Substitute:
-      case CT_ControlChar_Escape:
-      case CT_ControlChar_File_Separator:
-      case CT_ControlChar_Group_Separator:
-      case CT_ControlChar_Record_Separator:
-      case CT_ControlChar_Unit_Separator:
-      case CT_ControlChar_Delete:
-
-      case CTokenType_OpenBracket:
-      case CTokenType_CloseBracket:
-      case CTokenType_OpenBrace:
-      case CTokenType_CloseBrace:
-      case CTokenType_OpenParen:
-      case CTokenType_CloseParen:
-      case CTokenType_Dot:
-      case CTokenType_Comma:
-      case CTokenType_Semicolon:
-      case CTokenType_Colon:
-      case CTokenType_Hash:
-      case CTokenType_At:
-      case CTokenType_Dollar:
-      case CTokenType_Space:
-      case CTokenType_Tab:
-      case CTokenType_Star:
-      case CTokenType_Ampersand:
-      case CTokenType_SingleQuote:
-      case CTokenType_DoubleQuote:
-      case CTokenType_Equals:
-      case CTokenType_LT:
-      case CTokenType_GT:
-      case CTokenType_Plus:
-      case CTokenType_Minus:
-      case CTokenType_Percent:
-      case CTokenType_Bang:
-      case CTokenType_Hat:
-      case CTokenType_Question:
-      case CTokenType_FSlash:
-      case CTokenType_BSlash:
-      case CTokenType_Tilde:
-      case CTokenType_Backtick:
-      case CTokenType_Pipe:
-      case CTokenType_Newline:
-      case CTokenType_CarrigeReturn:
-      case CTokenType_EOF:
-      {
-        Result = { .Type = (c_token_type)At };
-      } break;
-    }
-  }
-  else
-  {
-    Warn("Attempted to get token past end of stream on file : %S", Stream->Filename);
-  }
-
-  return Result;
-}
-
-meta(generate_stream_iterator(struct_member))
-#include <metaprogramming/output/generate_stream_iterator_c_decl.h>
-
-meta(generate_stream_push(struct_member))
-#include <metaprogramming/output/generate_stream_push_c_decl.h>
-
-bonsai_function b32
-Contains(parser *Parser, c_token *T)
-{
-  b32 Result = False;
-  if (T >= Parser->Tokens->Start && T < Parser->Tokens->End)
-  {
-    Result = True;
-  }
-  return Result;
-}
-
-enum parser_push_type
-{
-  parser_push_type_noop,
-
-  parser_push_type_root,
-  parser_push_type_include,
-  parser_push_type_macro,
-};
-
-struct parse_context
-{
-  parser                *CurrentParser;
-
-  program_datatypes      Datatypes;
-  counted_string_cursor *IncludePaths;
-  meta_func_stream       MetaFunctions;
-  memory_arena          *Memory;
-};
-
-enum erase_token_mode
-{
-  PreserveTokens = 0,
-  EraseTokens = 1,
-};
-
-bonsai_function parse_context
-AllocateParseContext(memory_arena *Memory)
-{
-  parse_context Ctx = {
-    .Memory = Memory
-  };
-  Ctx.Datatypes.Macros = Allocate_macro_def_hashtable(4096, Memory);
-  Ctx.Datatypes.FilesParsed = Allocate_counted_string_hashtable(512, Memory);
-  return Ctx;
-}
-
-bonsai_function b32
-IsValidForCursor(c_token_cursor *Tokens, c_token *T)
-{
-  b32 Result = T < Tokens->End && T >= Tokens->Start;
-  return Result;
-}
-
