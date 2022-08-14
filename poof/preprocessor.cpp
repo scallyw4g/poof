@@ -5,8 +5,8 @@
 #include <bonsai_stdlib/bonsai_stdlib.h>
 #include <bonsai_stdlib/bonsai_stdlib.cpp>
 
-#include <functions.h>
-#include <preprocessor.h>
+#include <poof/functions.h>
+#include <poof/preprocessor.h>
 
 global_variable memory_arena Global_PermMemory = {};
 
@@ -5531,7 +5531,7 @@ bonsai_function arguments
 ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_arena* Memory)
 {
   arguments Result = {
-    .Outpath      = CS("src/poof/output"),
+    .Outpath      = CSz(""),
     .Files        = AllocateBuffer<counted_string_cursor, counted_string>((u32)ArgCount, Memory),
     .IncludePaths = AllocateBuffer<counted_string_cursor, counted_string>((u32)ArgCount, Memory),
   };
@@ -5644,7 +5644,10 @@ ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_aren
               StringsMatch(CS("--output-path"), Arg) )
     {
       Result.Outpath = PopArgString(ArgStrings, ArgCount, &ArgIndex);
-      Error("Output path _NOT_CURRENTLY_SUPPORTED_ : (%S)", Result.Outpath);
+      if (LastChar(Result.Outpath) == '/')
+      {
+        Warn("Value passed with (%S) should not end with a '/'.", Arg);
+      }
     }
     else if ( StartsWith(Arg, CSz("-")) )
     {
@@ -8714,43 +8717,21 @@ FlushOutputToDisk(parse_context *Ctx, counted_string OutputForThisParser, counte
 
   counted_string OutputPath = {};
 
-  // TODO(Jesse id: 182, tags: high_priority) This should respect Args.Outpath passed in!
   if ( PeekTokenRaw(Parser).Type == CTokenType_Newline &&
        PeekTokenRaw(Parser, 1).Type == CT_PreprocessorInclude )
   {
     RequireTokenRaw(Parser, CToken(CTokenType_Newline));
-    /* RuntimeBreak(); */
-    OutputPath = RequireTokenRaw(Parser, CT_PreprocessorInclude).IncludePath;
-
-    /* RequireTokenRaw(Parser, CToken(CTokenType_Space)); */
-    /* RequireTokenRaw(Parser, CTokenType_LT); */
-    /* RequireTokenRaw(Parser, CToken(CS("metaprogramming"))); */
-    /* RequireTokenRaw(Parser, CTokenType_FSlash); */
-    /* RequireTokenRaw(Parser, CToken(CS("output"))); */
-    /* RequireTokenRaw(Parser, CTokenType_FSlash); */
-    /* counted_string IncludeFilename = RequireTokenRaw(Parser, CTokenType_Identifier).Value; */
-
-    /* string_builder IncludePathBuilder = {}; */
-    /* Append(&IncludePathBuilder, CS("src/metaprogramming/output/")); */
-    /* Append(&IncludePathBuilder, IncludeFilename); */
-
-    /* if (OptionalTokenRaw(Parser, CTokenType_Dot)) */
-    /* { */
-    /*   Append(&IncludePathBuilder, CS(".")); */
-    /*   counted_string Extension = RequireTokenRaw(Parser, CTokenType_Identifier).Value; */
-    /*   Append(&IncludePathBuilder, Extension); */
-    /* } */
-
-    /* RequireTokenRaw(Parser, CTokenType_GT); */
-
-    /* OutputPath = Finalize(&IncludePathBuilder, Memory); */
-    Output(OutputForThisParser, Concat(CSz("src/"), OutputPath, Memory), Memory);
+    counted_string IncludePath = RequireTokenRaw(Parser, CT_PreprocessorInclude).IncludePath;
+    OutputPath = Concat(Ctx->Args->Outpath, Basename(IncludePath), Memory);
   }
   else
   {
-    // TODO(Jesse id: 183, tags: high_priority) This should respect Args.OutPath passed in!
-    OutputPath = Concat(CS("src/poof/output/"), NewFilename, Memory);
-    Output(OutputForThisParser, OutputPath, Memory);
+    // NOTE(Jesse): This path is for inserting the requisite includes when we
+    // re-enable inplace editing
+    NotImplemented;
+
+    Assert(PeekTokenRaw(Parser).Type == CTokenType_Newline);
+    OutputPath = Concat(Ctx->Args->Outpath, NewFilename, Memory);
 
 #if 0
     Push(CToken(CTokenType_Newline),     &Parser->OutputTokens);
@@ -8768,6 +8749,7 @@ FlushOutputToDisk(parse_context *Ctx, counted_string OutputForThisParser, counte
 #endif
   }
 
+  Output(OutputForThisParser, OutputPath, Memory);
   parser *OutputParse = ParserForAnsiStream(Ctx, AnsiStream(OutputForThisParser, OutputPath), TokenCursorSource_MetaprogrammingExpansion);
 
   if (IsInlineCode)
@@ -9041,6 +9023,7 @@ bonsai_function counted_string
 GenerateOutfileNameFor(counted_string Name, counted_string DatatypeName, memory_arena* Memory, counted_string Modifier = {})
 {
   string_builder OutfileBuilder = {};
+  Append(&OutfileBuilder, CSz("/"));
   Append(&OutfileBuilder, Name);
   Append(&OutfileBuilder, CSz("_"));
   Append(&OutfileBuilder, DatatypeName);
@@ -9991,6 +9974,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               counted_string Code = Execute(&Func, &Args, Ctx, Memory);
 
               RequireToken(Parser, CTokenType_CloseParen);
+              while(OptionalToken(Parser, CTokenType_Semicolon));
               if (Code.Count)
               {
                 counted_string OutfileName = GenerateOutfileNameFor(Func.Name, ArgType, Memory, GetRandomString(8, Hash(&Code), Memory));
@@ -10088,10 +10072,8 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               }
             }
 
-
             counted_string Code = Finalize(&OutputBuilder, Memory);
             counted_string OutfileName = GenerateOutfileNameFor(ToString(Directive), CSz("debug_print"), Memory);
-
             FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
           } break;
 
@@ -10101,8 +10083,6 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
             d_union_decl dUnion = ParseDiscriminatedUnion(Parser, Datatypes, DatatypeName, Memory);
             if (Parser->ErrorCode == ParseErrorCode_None)
             {
-              counted_string OutfileName = GenerateOutfileNameFor(ToString(Directive), DatatypeName, Memory);
-
               string_builder CodeBuilder = {};
               if (!dUnion.CustomEnumType.Count)
               {
@@ -10118,6 +10098,9 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               counted_string Code = Finalize(&CodeBuilder, Memory);
 
               RequireToken(Parser, CTokenType_CloseParen);
+              while(OptionalToken(Parser, CTokenType_Semicolon));
+
+              counted_string OutfileName = GenerateOutfileNameFor(ToString(Directive), DatatypeName, Memory);
               FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
 
             }
@@ -10142,6 +10125,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               meta_func_arg_stream Args = {};
               Push(&Args, ReplacementPattern(Func->ArgName, Arg), Memory);
               counted_string Code = Execute(Func, &Args, Ctx, Memory);
+              while(OptionalToken(Parser, CTokenType_Semicolon));
 
               if (Code.Count)
               {
@@ -10453,6 +10437,7 @@ main(s32 ArgCount_, const char** ArgStrings)
   SetupStdout(ArgCount, ArgStrings);
 
   arguments Args = ParseArgs(ArgStrings, ArgCount, &Ctx, Memory);
+  Ctx.Args = &Args;
 
 
   if (!SearchForProjectRoot()) {
