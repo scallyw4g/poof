@@ -40,6 +40,11 @@ function BuildPoof {
 
   if [ $? -eq 0 ]; then
    echo -e "$Success $executable"
+
+    echo -e ""
+    echo -e "$Delimeter"
+    echo -e ""
+
   else
    echo ""
    echo -e "$Failed Error building preprocessor, exiting."
@@ -57,22 +62,6 @@ if [ ! -d "$BIN_TEST" ]; then
 fi
 
 
-function RunPreprocessor
-{
-  SetSourceFiles
-  ColorizeTitle "Preprocessing"
-  if [ -x $PREPROCESSOR_EXECUTABLE ]; then
-    $PREPROCESSOR_EXECUTABLE $SOURCE_FILES
-    if [ $? -ne 0 ]; then
-      echo ""
-      echo -e "$Failed Preprocessing failed, exiting." 
-      git checkout "src/poof/generated"
-      exit 1
-    fi
-  fi
-}
-
 if [[ $BuildPoof == 1 || $BUILD_EVERYTHING == 1 ]]; then
   BuildPoof
-  [ ! -x $PREPROCESSOR_EXECUTABLE ] && echo -e "$Failed Couldn't find poof executable, exiting." && exit 1
 fi
