@@ -5,8 +5,8 @@
 #include <bonsai_stdlib/bonsai_stdlib.h>
 #include <bonsai_stdlib/bonsai_stdlib.cpp>
 
-#include <metaprogramming/functions.h>
-#include <metaprogramming/preprocessor.h>
+#include <functions.h>
+#include <preprocessor.h>
 
 global_variable memory_arena Global_PermMemory = {};
 

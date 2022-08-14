@@ -1,0 +1,3 @@
+[submodule "include/bonsai_stdlib"]
+	path = include/bonsai_stdlib
+	url = git@github.com:jjbandit/bonsai_stdlib
