@@ -486,6 +486,7 @@ IsComment(c_token *T)
 // instead.
 //
 // Half-measure might be renaming it to NotEmpty() or something..
+#if 0
 bonsai_function umm
 Remaining(parser* Parser)
 {
@@ -506,6 +507,7 @@ Remaining(parser* Parser)
 
   return Result;
 }
+#endif
 
 #if 0
 umm Remaining(c_token_cursor *Tokens)
@@ -665,18 +667,19 @@ ParseMacroArgument(parser* Parser, c_token_buffer *Result)
 
   u32 Depth = 0;
   b32 Done = False;
-  while (!Done && Remaining(Parser->Tokens))
+  while (c_token *T = PeekTokenRawPointer(Parser) )
   {
-    c_token T = PeekTokenRaw(Parser);
-    if (Depth == 0 && T.Type == CTokenType_Comma)
+    if (Done) break;
+
+    if (Depth == 0 && T->Type == CTokenType_Comma)
     {
       Done = True;
     }
-    else if (Depth > 0 && T.Type == CTokenType_CloseParen)
+    else if (Depth > 0 && T->Type == CTokenType_CloseParen)
     {
       --Depth;
     }
-    else if (T.Type == CTokenType_OpenParen)
+    else if (T->Type == CTokenType_OpenParen)
     {
       ++Depth;
     }
@@ -686,7 +689,7 @@ ParseMacroArgument(parser* Parser, c_token_buffer *Result)
 
   Result->Count = (umm)(Parser->Tokens->At - Result->Start);
 
-  if (Remaining(Parser)) RequireToken(Parser, CTokenType_Comma);
+  OptionalToken(Parser, CTokenType_Comma);
 
   return;
 }
@@ -694,7 +697,8 @@ ParseMacroArgument(parser* Parser, c_token_buffer *Result)
 bonsai_function void
 EatUntilExcluding(parser* Parser, c_token_type Close)
 {
-  while (Remaining(Parser))
+  // TODO(Jesse, performance, slow): This is slow AF
+  while (PeekTokenRawPointer(Parser))
   {
     if(PeekTokenRaw(Parser).Type == Close)
     {
@@ -711,9 +715,9 @@ EatUntilExcluding(parser* Parser, c_token_type Close)
 bonsai_function void
 EatUntilIncluding(parser* Parser, c_token_type Close)
 {
-  while (Remaining(Parser))
+  while (c_token *T = PopTokenRawPointer(Parser))
   {
-    if(PopTokenRaw(Parser).Type == Close)
+    if(T->Type == Close)
     {
       break;
     }
@@ -2094,7 +2098,7 @@ PopTokenRaw(parser* Parser)
   if (DEBUG_CHECK_FOR_BREAK_HERE(&Result))
   {
     RuntimeBreak();
-    if (Remaining(Parser)) { AdvanceParser(Parser); }
+    if (PeekTokenRawPointer(Parser)) { AdvanceParser(Parser); }
     Result = PopTokenRaw(Parser);
   }
 
@@ -2142,7 +2146,7 @@ PopTokenPointer(parser* Parser)
   if (DEBUG_CHECK_FOR_BREAK_HERE(Result))
   {
     RuntimeBreak();
-    if (Remaining(Parser)) { AdvanceParser(Parser); }
+    if (PeekTokenRawPointer(Parser)) { AdvanceParser(Parser); }
     Result = PopTokenPointer(Parser);
   }
   else if (Result)
@@ -2593,13 +2597,13 @@ ExpandMacro( parse_context *Ctx,
 
         if (Macro->Variadic)
         {
-          while (Remaining(InstanceArgs))
+          while (TokensRemain(InstanceArgs))
           {
             c_token_buffer *Arg = Push(&VarArgs, {}, TempMemory);
             ParseMacroArgument(InstanceArgs, Arg);
           }
         }
-        Assert(Remaining(InstanceArgs) == 0);
+        Assert(TokensRemain(InstanceArgs) == 0);
       }
 
     } break;
@@ -5417,11 +5421,11 @@ ParseDiscriminatedUnion(parser* Parser, program_datatypes* Datatypes, counted_st
   if (OptionalToken(Parser, CTokenType_OpenBrace))
   {
     b32 Complete = False;
-    while (!Complete && Remaining(Parser))
+    while (c_token *Interior = PeekTokenPointer(Parser))
     {
-      c_token Interior = PeekToken(Parser);
+      if (Complete) break;
 
-      switch (Interior.Type)
+      switch (Interior->Type)
       {
         case CTokenType_Identifier:
         {
@@ -5433,7 +5437,7 @@ ParseDiscriminatedUnion(parser* Parser, program_datatypes* Datatypes, counted_st
             Flags = d_union_flag_enum_only;
           }
 
-          PushMember(&dUnion, Interior, Flags, Memory);
+          PushMember(&dUnion, *Interior, Flags, Memory);
         } break;
 
         case CTokenType_CloseBrace:
@@ -5806,16 +5810,15 @@ EatUntil_TrackingDepth(parser *Parser, c_token_type Open, c_token_type Close, c_
 {
   u32 Depth = 0;
   b32 Success = False;
-  while ( Remaining(Parser) )
+  while ( c_token *T = PopTokenPointer(Parser) )
   {
-    c_token T = PopToken(Parser);
 
-    if (T.Type == Open)
+    if (T->Type == Open)
     {
       ++Depth;
     }
 
-    if (T.Type == Close)
+    if (T->Type == Close)
     {
       if (Depth == 0)
       {
@@ -5935,16 +5938,15 @@ EatBetween(parser* Parser, c_token_type Open, c_token_type Close)
     u32 Depth = 0;
     RequireToken(Parser, Open);
 
-    while (Remaining(Parser))
+    while ( c_token *T = PopTokenPointer(Parser) )
     {
-      c_token T = PopToken(Parser);
 
-      if (T.Type == Open)
+      if (T->Type == Open)
       {
         ++Depth;
       }
 
-      if (T.Type == Close)
+      if (T->Type == Close)
       {
         if (Depth == 0)
         {
@@ -7463,6 +7465,10 @@ ParseStructMember(parse_context *Ctx, counted_string StructName)
 bonsai_function counted_string
 ConcatTokensUntil(parser* Parser, c_token_type Close, memory_arena* Memory)
 {
+  NotImplemented;
+
+  counted_string Result = {};
+#if 0
   // TODO(Jesse  id: 225, tags: todos, easy): Rewrite with string_from_parser
   string_builder Builder = {};
   while (Remaining(Parser) && PeekTokenRaw(Parser).Type != Close)
@@ -7470,6 +7476,7 @@ ConcatTokensUntil(parser* Parser, c_token_type Close, memory_arena* Memory)
     Append(&Builder, PopTokenRaw(Parser).Value);
   }
   counted_string Result = Finalize(&Builder, Memory);
+#endif
   return Result;
 }
 
@@ -9179,10 +9186,8 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
   Assert(Scope.Tokens->At == Scope.Tokens->Start);
 
   string_builder OutputBuilder = {};
-  while (Remaining(Scope.Tokens))
+  while ( c_token *BodyToken = PopTokenRawPointer(&Scope) )
   {
-    c_token *BodyToken = PopTokenRawPointer(&Scope);
-
     if ( BodyToken->Type == CTokenType_StringLiteral )
     {
       counted_string TempStr = BodyToken->Value;
