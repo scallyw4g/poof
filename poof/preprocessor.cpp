@@ -10445,10 +10445,10 @@ main(s32 ArgCount_, const char** ArgStrings)
   Ctx.Args = &Args;
 
 
-  if (!SearchForProjectRoot()) {
-    Error("Couldn't find root dir, exiting."); return False;
-    return FAILURE_EXIT_CODE;
-  }
+  /* if (!SearchForProjectRoot()) { */
+  /*   Error("Couldn't find root dir, exiting."); return False; */
+  /*   return FAILURE_EXIT_CODE; */
+  /* } */
 
 
   if (Args.DoDebugWindow)
