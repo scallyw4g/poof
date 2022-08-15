@@ -21,8 +21,8 @@ struct my_struct
 // Structure iteration is similar to enum value iteration, however we use
 // `map_members` instead of `map_values`.
 //
-// For the sake of consistency, those APIs may merge these into just `map` in
-// the future.  TBD.
+// For the sake of consistency, those APIs may merge into just `map` in the
+// future.  TBD.
 meta
 (
   func print_struct_members(StructType)

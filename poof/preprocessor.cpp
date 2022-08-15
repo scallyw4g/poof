@@ -5247,7 +5247,7 @@ GenerateStructDef(d_union_decl* dUnion, memory_arena* Memory)
     dUnion->CustomEnumType :
     FormatCountedString(Memory, CSz("%S_type"), UnionName);
 
-  counted_string Result = FormatCountedString(Memory, CSz("struct %S\n{\n  %S Type;\n"),
+  counted_string Result = FormatCountedString(Memory, CSz("struct %S\n{\n  enum %S Type;\n"),
       UnionName, TagType);
 
   ITERATE_OVER(&dUnion->CommonMembers)
@@ -5275,7 +5275,7 @@ GenerateStructDef(d_union_decl* dUnion, memory_arena* Memory)
         Result = Concat(Result, CS("\n  union\n  {\n"), Memory);
         ValidMemberFound = True;
       }
-      Result = Concat(Result, FormatCountedString(Memory, CSz("    %S %S;\n"), Member->Type, Member->Name), Memory);
+      Result = Concat(Result, FormatCountedString(Memory, CSz("    struct %S %S;\n"), Member->Type, Member->Name), Memory);
     }
   }
   if (ValidMemberFound)
@@ -8589,11 +8589,12 @@ ParseFunctionCall(parse_context *Ctx, counted_string FunctionName)
 }
 
 bonsai_function void
-ParseDatatypes(parse_context *Ctx)
+ParseDatatypes(parse_context *Ctx, parser *Parser)
 {
   TIMED_FUNCTION();
 
-  parser *Parser = Ctx->CurrentParser;
+  Assert(Parser == Ctx->CurrentParser);
+
   program_datatypes* Datatypes = &Ctx->Datatypes;
   memory_arena* Memory = Ctx->Memory;
 
@@ -8763,6 +8764,15 @@ FlushOutputToDisk(parse_context *Ctx, counted_string OutputForThisParser, counte
   {
     // TODO(Jesse, id: 226, tags: metaprogramming, output): Should we handle this differently?
     Warn("Not parsing datatypes in inlined code for %S", OutputPath);
+  }
+  else
+  {
+    // NOTE(Jesse): This is horribly tortured.. remove Ctx->CurrentParser.. it's
+    // completely unnecessary cruft.
+    parser *OldParser = Ctx->CurrentParser;
+    Ctx->CurrentParser = OutputParse;
+    ParseDatatypes(Ctx, OutputParse);
+    Ctx->CurrentParser = OldParser;
   }
 
   /* PushParser(Ctx->CurrentParser, OutputParse, parser_push_type_include); */
@@ -9546,7 +9556,8 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               }
               else
               {
-                Error("Called map_members on a datatype that wasn't a struct - %S", Replace->Data.enum_def->Name);
+                Assert(Replace->Data.Type);
+                Error("Called map_members on a datatype that wasn't a struct");
               }
 
             } break;
@@ -9961,6 +9972,8 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
           {
             if (OptionalToken(Parser, CTokenType_OpenParen))
             {
+              c_token *ArgTypeToken = PeekTokenPointer(Parser);
+
               counted_string ArgType = RequireToken(Parser, CTokenType_Identifier).Value;
               counted_string ArgName = RequireToken(Parser, CTokenType_Identifier).Value;
               RequireToken(Parser, CTokenType_CloseParen);
@@ -9974,20 +9987,31 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               };
 
               datatype Arg = GetDatatypeByName(&Ctx->Datatypes, ArgType);
-              meta_func_arg_stream Args = {};
-              Push(&Args, ReplacementPattern(ArgName, Arg), Memory);
-              counted_string Code = Execute(&Func, &Args, Ctx, Memory);
 
-              RequireToken(Parser, CTokenType_CloseParen);
-              while(OptionalToken(Parser, CTokenType_Semicolon));
-              if (Code.Count)
+              if (Arg.Type)
               {
-                counted_string OutfileName = GenerateOutfileNameFor(Func.Name, ArgType, Memory, GetRandomString(8, Hash(&Code), Memory));
-                FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory, True);
+                meta_func_arg_stream Args = {};
+                Push(&Args, ReplacementPattern(ArgName, Arg), Memory);
+                counted_string Code = Execute(&Func, &Args, Ctx, Memory);
+
+                RequireToken(Parser, CTokenType_CloseParen);
+                while(OptionalToken(Parser, CTokenType_Semicolon));
+                if (Code.Count)
+                {
+                  counted_string OutfileName = GenerateOutfileNameFor(Func.Name, ArgType, Memory, GetRandomString(8, Hash(&Code), Memory));
+                  FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory, True);
+                }
+                else
+                {
+                  Warn("Unable to generate code for meta_func %S", Func.Name);
+                }
               }
               else
               {
-                Warn("Unable to generate code for meta_func %S", Func.Name);
+                ParseError(Parser,
+                    ParseErrorCode_UndefinedDatatype,
+                    FormatCountedString(TranArena, CSz("Unable to find definition for datatype (%S)"), ArgTypeToken->Value),
+                    ArgTypeToken);
               }
             }
             else
@@ -10493,7 +10517,7 @@ main(s32 ArgCount_, const char** ArgStrings)
       /* RemoveAllMetaprogrammingOutputRecursive(GetNullTerminated(Args.Outpath)); */
 
       Ctx.CurrentParser = Parser;
-      ParseDatatypes(&Ctx);
+      ParseDatatypes(&Ctx, Parser);
 
       MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(0);
 

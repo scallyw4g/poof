@@ -372,8 +372,10 @@ enum parse_error_code
   ParseErrorCode_InvalidTokenGenerated,
 
   ParseErrorCode_DUnionParse,
+  ParseErrorCode_UndefinedDatatype,
 
   ParseErrorCode_InputStreamNull,
+
 
   ParseErrorCode_Unknown,
 };
