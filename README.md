@@ -2,7 +2,7 @@
 
 Features may change or be removed without warning.  Features documented in the
 examples folder are sorted in (roughly) descending order from most-stable to
-least-stable.  If you to take it for a test-drive and have feedback I'm happy
+least-stable.  If you to take it for a test-drive and have feedback, I'm happy
 to hear it :)
 
 
@@ -18,9 +18,6 @@ systematically remove the use of C++ features from the codebase over time.
 
 
 # Features
-
-Take a look in [examples](https://github.com/jjbandit/poof/tree/master/examples)
-for, well, examples of the following.
 
 - Templating
   - Generate new types and code from existing types.
@@ -85,9 +82,50 @@ And to build it:
 `cd poof && scripts/make.sh`
 
 
-# Documentation
+# Current Status
+
+`poof` is currently undergoing a hardening phase before a 0.1.0-alpha release.
+
+At the time of this writing, the tool relies on itself to generate ~15k lines
+of code, and makes use of every documented feature.  That said, there are many
+combinations of features that are left un-used, and likely broken.
+
+Error messages are sometimes nonsensical, misleading, or missing.
+
+## Roadmap to 0.1.0-alpha
+
+### Feature Set
+[-] Formally specify feature set for 0.1.0-alpha
+    - this was somewhat self-informed by the features required to build `poof`
+    - still somewhat TBD, but I have a mostly-complete list
+
+### Behavior
+[X] Parse include graph of `poof` (excluding CRT headers)
+[X] Parse include graph of `poof` (including CRT headers)
+[X] Write test suite that exhaustively validates behavior of the parser
+[ ] Write test suite that validates the behavior of `poof`
+
+### Hardening
+[X] Harden by successfully parsing all C headers on my linux system
+[-] Harden by successfully parsing all C headers on my windows system
+[ ] Harden by successfully parsing some popular C projects: redis, sqlite, ..?
+
+### Error Reporting
+[ ] Audit error messages; find nonsensical, misleading or missing errors
+
+### Documentation
+[-] Write example code
+[ ] Write documentation
+
+
+# Examples
 
 See the [examples](https://github.com/jjbandit/poof/tree/master/examples)
-folder for use cases for `poof`.  For an example of a real project using `poof`
-have a look at [bonsai](https://github.com/jjbandit/bonsai).
+folder for, well, examples of how to use `poof`.  Take note that these examples
+are meant to demonstrate language features, and make heavy use of printf.  This
+is not a typical use-case, but it makes seeing the output of the language
+easier.
+
+For less contrived examples of using `poof` have a look at
+[bonsai](https://github.com/jjbandit/bonsai).
 
