@@ -1,20 +1,13 @@
-#include <stdio.h> // We need printf for this example
+#include <stdio.h>
 
 #define meta(...)
 
 
-// Here's a pretty useless datatype for you.
-//
 struct my_struct
 {
   int foo;
   float bar;
-
-  struct
-  {
-    struct my_struct * my_foo;
-    struct my_struct ** my_bar;
-  } baz;
+  struct my_struct *baz;
 };
 
 
@@ -22,20 +15,7 @@ struct my_struct
 
 int main()
 {
-  // TODO(Jesse, immediate): The output of this is actually quite broken.
-  // Correct output is a printf call for each member of my_struct, and
-  // my_struct::baz.  Something like:
-  //
-  // printf("int foo");
-  // printf("float bar");
-  // printf("struct baz");
-  // printf("struct my_struct * my_foo");
-  // printf("struct my_struct ** my_bar");
-  //
-  //
-
-
-  // Structure iteration is similar to enum value iteration, however we use
+  // Struct member iteration is similar to enum value iteration, however we use
   // `map_members` instead of `map_values`.
   //
   // For the sake of consistency, those APIs may merge into just `map` in the
@@ -52,3 +32,14 @@ int main()
   )
 #include <generated/anonymous_function_my_struct_f8p25x1m.h>
 }
+
+//
+// TODO(Jesse, immediate): The output of this is actually quite broken.
+// Correct output is a printf call for each member of my_struct.  Something like:
+//
+// printf("int foo");
+// printf("float bar");
+// printf("struct my_struct * baz");
+//
+
+

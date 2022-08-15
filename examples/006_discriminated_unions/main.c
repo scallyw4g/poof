@@ -41,8 +41,8 @@ int main()
 {
   meta
   (
-    // TODO(Jesse, examples, immediate): The output of this is a bit borked.  I'd
-    // expect the union member to show up, but it does not.
+    // TODO(Jesse, examples, immediate): The output of this is a bit borked.
+    // I'd expect the union member to show up, but it does not.
     func (my_discriminated_union StructType)
     {
       (StructType.map_members (Member)

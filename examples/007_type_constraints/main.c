@@ -42,6 +42,10 @@ int main()
   (
     // Using the `containing` constraint allows us to filter members which
     // contain a specified type.
+    //
+    // This is incredibly useful in rare cases.  I expect to add more of these
+    // constraints in the future, or a more generic system for creating them
+    // on-the-fly.
     func (my_discriminated_union StructType)
     {
       (StructType.map_members(Member).containing(nested_struct)

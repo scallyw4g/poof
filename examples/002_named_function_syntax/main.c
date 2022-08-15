@@ -1,8 +1,6 @@
 #define meta(...)
 
 
-// Here's a pretty useless datatype for you.
-//
 struct my_struct
 {
   int whatever;
@@ -11,8 +9,8 @@ struct my_struct
 
 
 
-// Now, let's define our first meta function.  We're going to make a new struct
-// type using `my_struct` we defined above.
+// Let's define our first meta function!  We're going to make a new struct type
+// using `my_struct` we defined above.
 meta
 (
   // Functions in `poof` are defined using the func keyword.  Here we define
