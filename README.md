@@ -20,19 +20,21 @@ the use of C++ features in favor of using `poof` itself.
 
 # Features
 
-- Templating
-  - Generate new types and code from existing types.
+- Template Metaprogramming
+  - Generate new code and types from existing types.
 
-- Datatype member iteration
+- Datatype Iteration
   - Iterate over the members of a specified type.
 
 - Type constraints
   - Some support for refinement types.
   - This is useful for statically avoiding a specific class of bugs which are
     otherwise not possible to detect at compile time (in pure C).
+  - This has proven to be extremely useful in a small number of cases.  I
+    expect to add more type constraints as `poof` matures.
 
 - Experimental: Static analysis
-  - `poof` can be used as a C++ library to build custom static-analyzers.  This
+  - `poof` can be used as a C++ library to build custom static analyzers.  This
     is not well documented, but if you're interested in trying this I'd be
     happy to write a tutorial.
   - The code that enables this is somewhat janky right now, but static-analysis
@@ -46,6 +48,10 @@ the use of C++ features in favor of using `poof` itself.
 `poof` depends on two submodules to build, which are themselves entirely
 self-contained.  The CRT is the only external dependency, which I may remove
 in the future.
+
+NOTE(Jesse): This may not be strictly true on Windows .. I think the OS loads
+some DLLs (and launches threads) that a userspace process has little or no
+control over.  TBD if we care about this level of cleanliness.
 
 ### Linux
 
@@ -87,9 +93,9 @@ And to build it:
 
 `poof` is currently undergoing a hardening phase before a 0.1.0-alpha release.
 
-At the time of this writing, the tool relies on itself to generate ~15k lines
-of code and makes use of every documented feature.  That said, there are many
-combinations of features that are left un-used, and very possibly broken.
+At the time of this writing, the tool relies on itself to generate ~15k LoC and
+makes use of every documented feature.  That said, there are many combinations
+of features that are left un-used, and very possibly broken.
 
 At the moment, error messages are sometimes misleading or missing.  Generally,
 UX is reasonable in some places, and highly questionable in others.
