@@ -4,6 +4,7 @@ set -o nounset
 set -o pipefail
 set -o errexit
 
+for filename in ./generated/*; do rm $filename; done
 
 ../../bin/poof_dev  \
   -I "."            \
@@ -11,7 +12,9 @@ set -o errexit
   main.c
 
 clang main.c      \
-  -o introduction \
+  -o main         \
   -I "."
-./introduction
+
+./main
+
 echo "Our example program compiled and returned $?, hooray!"

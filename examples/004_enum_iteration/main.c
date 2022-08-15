@@ -19,11 +19,11 @@ enum my_enum
 //
 meta
 (
-  func make_fancy_new_enum(EnumType)
+  func make_fancy_new_enum(Enum)
   {
-    enum augmented_(EnumType.name) {
+    enum augmented_(Enum.name) {
 
-      (EnumType.map_values (EnumValue)
+      (Enum.map_values (EnumValue)
        {
           Augmented_(EnumValue.name),
        })
@@ -32,20 +32,6 @@ meta
       Agumented_Doo,
       Agumented_Boo,
     };
-  }
-)
-
-//
-// Here's a meta-function that iterates over each value of an enum and outputs
-// a call to printf with it's name embedded in a c-string.
-meta
-(
-  func print_enum_values(EnumType)
-  {
-    (EnumType.map_values (EnumValue) {
-      printf("(EnumValue.name)\n");
-    })
-    printf("\n"); // This isn't necessary, but it'll make the output formatting slightly nicer.
   }
 )
 
@@ -63,19 +49,36 @@ int main()
 {
   printf("-- test program begin\n\n");
 
+  printf("-- print out my_enum values \n");
 
   // Here we generate code to print my_enum values
-  printf("-- print out my_enum values \n");
-  meta(print_enum_values(my_enum))
-#include <generated/print_enum_values_my_enum.h>
+  meta
+  (
+    func (my_enum Enum)
+    {
+      (Enum.map_values (EnumValue) {
+        printf("(EnumValue.name)\n");
+      })
+    }
+  )
+#include <generated/anonymous_function_my_enum_fd8fda1m.h>
 
-
-  // Here we generate code to print augmented_my_enum values
   printf("-- print out augmented_enum values \n");
-  meta(print_enum_values(augmented_my_enum))
-#include <generated/print_enum_values_augmented_my_enum.h>
 
 
-  printf("-- test program end\n");
+  // Here we generate code to print the augmented_my_enum values
+  meta
+  (
+    func (augmented_my_enum Enum)
+    {
+      (Enum.map_values (EnumValue) {
+        printf("(EnumValue.name)\n");
+      })
+    }
+  )
+#include <generated/anonymous_function_augmented_my_enum_qta832h1.h>
+
+
+  printf("\n-- test program end\n");
   return 0;
 }

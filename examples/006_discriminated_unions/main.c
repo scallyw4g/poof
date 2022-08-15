@@ -41,7 +41,6 @@ int main()
 {
   printf("-- test program begin\n\n");
 
-
 meta
 (
 
@@ -53,12 +52,11 @@ meta
     {
        printf("(Member.type) (Member.name)\n");
     })
-    printf("\n");
   }
 )
 #include <generated/print_struct_members_my_struct.h>
 
 
-  printf("-- test program end\n");
+  printf("\n-- test program end\n");
   return 0;
 }

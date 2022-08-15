@@ -18,27 +18,6 @@ struct my_struct
 };
 
 
-// Structure iteration is similar to enum value iteration, however we use
-// `map_members` instead of `map_values`.
-//
-// For the sake of consistency, those APIs may merge into just `map` in the
-// future.  TBD.
-meta
-(
-  func print_struct_members(StructType)
-  {
-      (StructType.map_members (Member)
-       {
-         printf("(Member.type) (Member.name)\n");
-         (Member.is_struct? {
-            (print_struct_members(Member))
-          })
-       })
-   printf("\n");
-  }
-)
-
-
 
 
 int main()
@@ -57,11 +36,25 @@ int main()
   //
   //
 
-  printf("-- print out my_struct values \n");
-  meta(print_struct_members(my_struct))
-#include <generated/print_struct_members_my_struct.h>
+
+  // Structure iteration is similar to enum value iteration, however we use
+  // `map_members` instead of `map_values`.
+  //
+  // For the sake of consistency, those APIs may merge into just `map` in the
+  // future.  TBD.
+  meta
+  (
+    func (my_struct Type)
+    {
+      (Type.map_members (Member)
+       {
+         printf("(Member.type) (Member.name)\n");
+       })
+    }
+  )
+#include <generated/anonymous_function_my_struct_f8p25x1m.h>
 
 
-  printf("-- test program end\n");
+  printf("\n-- test program end\n");
   return 0;
 }

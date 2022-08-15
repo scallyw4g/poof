@@ -47,9 +47,9 @@ meta(metaprogram_another_useless_struct(my_struct))
 
 int main()
 {
-  struct my_struct foo = { .whatever = 1; }; // <-- This is the original struct we defined
+  struct my_struct foo = { .whatever = 1 }; // <-- This is the original struct we defined
 
-  struct metaprogrammed_my_struct bar = { .trevor = 2; }; // <-- And this is the one we metaprogrammed!
+  struct metaprogrammed_my_struct bar = { .trevor = 2 }; // <-- And this is the one we metaprogrammed!
 
   return 0;
 }
