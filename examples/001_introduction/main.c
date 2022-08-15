@@ -1,17 +1,19 @@
-// `poof` programs compile in two steps.
+// Programs using `poof` undergo two phases of compilation.
 //
-// First, `poof` runs over the program and executes metaprogramming routines as
-// specified.  The resulting code is output to header files that are included
-// inline immediately after where the meta code was written.
 //
-// Secondly, our program gets compiled with a regular C or C++ compiler.  In
-// the case of these examples we'll use clang, but any compiler will do.
+// First, `poof` looks through the program and executes metaprogramming
+// routines as specified.  Poof generates C code which is output to header
+// files.  Those headers are included inline, immediately after the meta code
+// that was written by the programmer.
 //
+// After poof has run, the program gets compiled with a regular C or C++
+// compiler.  In the case of these examples we'll use clang, but any compiler
+// will do.
 
 
 // One of the core design philosophies of `poof` is that:
 //
-// "If the tool disappears, I should be left with a working program"
+// "If poof disappears, I should be left with a working program"
 //
 // All `poof` code lives inside the `meta` macro.
 

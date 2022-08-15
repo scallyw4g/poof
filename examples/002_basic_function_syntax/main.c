@@ -20,6 +20,12 @@ meta
   func derive_useless_struct_from(Type)
   {
     // And here we define a new type derived from whatever type we passed in
+    //
+    // `poof` looks for identifiers it knows about surrounded by parens ()
+    //
+    // The (Type.name) statement below is substituted by poof for the name of
+    // the type we pass into this function.
+    //
     struct (Type.name)_derived
     {
       int ignored;

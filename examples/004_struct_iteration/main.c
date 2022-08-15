@@ -18,13 +18,11 @@ struct my_struct
 };
 
 
+// Structure iteration is similar to enum value iteration, however we use
+// `map_members` instead of `map_values`.
 //
-// Here's a meta-function that creates a new enum augmented with values
-// generated from an old enum.
-//
-// I can't say I can imagine why one would want to do this, but it illustrates
-// enum value iteration in a nice way.
-//
+// For the sake of consistency, those APIs may merge these into just `map` in
+// the future.  TBD.
 meta
 (
   func print_struct_members(StructType)
@@ -48,7 +46,7 @@ int main()
   printf("-- test program begin\n\n");
 
   // TODO(Jesse, immediate): The output of this is actually quite broken.
-  // Correct output is for a printf call for each member of my_struct, and
+  // Correct output is a printf call for each member of my_struct, and
   // my_struct::baz.  Something like:
   //
   // printf("int foo");
@@ -60,7 +58,7 @@ int main()
   //
 
   printf("-- print out my_struct values \n");
-meta(print_struct_members(my_struct))
+  meta(print_struct_members(my_struct))
 #include <generated/print_struct_members_my_struct.h>
 
 

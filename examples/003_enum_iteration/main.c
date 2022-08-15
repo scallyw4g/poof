@@ -15,10 +15,7 @@ enum my_enum
 
 //
 // Here's a meta-function that creates a new enum augmented with values
-// generated from an old enum.
-//
-// I can't say I can imagine why one would want to do this, but it illustrates
-// enum value iteration in a nice way.
+// generated from another enum.
 //
 meta
 (
@@ -67,11 +64,13 @@ int main()
   printf("-- test program begin\n\n");
 
 
+  // Here we generate code to print my_enum values
   printf("-- print out my_enum values \n");
   meta(print_enum_values(my_enum))
 #include <generated/print_enum_values_my_enum.h>
 
 
+  // Here we generate code to print augmented_my_enum values
   printf("-- print out augmented_enum values \n");
   meta(print_enum_values(augmented_my_enum))
 #include <generated/print_enum_values_augmented_my_enum.h>
@@ -80,27 +79,3 @@ int main()
   printf("-- test program end\n");
   return 0;
 }
-
-
-// NOTE(Jesse): The includes are normally generated and written to your source
-// files automatically by `poof`.  This functionality is currently broken,
-// however it's on the top of my priority list to fix this feature.  Manually
-// typing those include names is super annoying.
-//
-// NOTE(Jesse): `poof` currently only supports absolute includes using angle
-// brackets <>.  Supporting relative includes is a small amount of work and
-// is also high on my priority list.
-//
-// NOTE(Jesse): Passing primitives such at:
-//
-// meta(derive_useless_struct_from(int))
-// meta(derive_useless_struct_from(float))
-// meta(derive_useless_struct_from(char))
-// .. etc
-//
-// is currently unsupported for somewhat subtle reasons.  It may be worthwhile
-// to implement a subset of `poof` functionality for primitives, though doing
-// so is not high-priority at this moment.  I've encountered a need to do this
-// a few times.
-//
-
