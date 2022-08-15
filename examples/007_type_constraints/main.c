@@ -22,13 +22,7 @@ struct baz_struct
   int BazInt;
 };
 
-// The d_union keyword asks `poof` to please generate a discriminated union structure
-// for us from the specified structures.
-//
-// The enum_only keyword specifies that an additional `type` enum value should
-// be generated with the given name (in this case, flazz), but there is not an
-// accompanying struct definition.
-//
+
 meta
 (
   d_union my_discriminated_union
