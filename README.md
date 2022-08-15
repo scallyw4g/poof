@@ -94,6 +94,21 @@ Error messages are sometimes nonsensical, misleading, or missing.
 
 ## Roadmap to 0.1.0-alpha
 
+Most of the hard work of writing a C preprocessor and parser is done.  There
+are still some unusual cases that don't correctly parse that I've found in
+windows headers, but for the most part the parser works correctly.  Once I'm
+satisfied it parses headers correctly, I'll point it at a few popular C
+projects in an attempt to ferret out more bugs.
+
+Once I'm satisfied with the parser, I'll move on to writing a test harness that
+explicitly validates the behavior of `poof` itself.  Until then, the behavior
+will continue to be implicitly specified by its own output, which is used to
+build itself.
+
+Finally, auditing error messages and completing documentation will be done
+before releasing a 0.1.0-alpha version of `poof`.
+
+
 ### Feature Set
 [-] Formally specify feature set for 0.1.0-alpha
 
@@ -110,19 +125,25 @@ Error messages are sometimes nonsensical, misleading, or missing.
 [ ] Write test suite that validates the behavior of `poof`
 
 ### Hardening
-[X] Harden by successfully parsing all C headers on my linux system
+[X] parse all C headers on my linux system
 
-[-] Harden by successfully parsing all C headers on my windows system
+[-] parse all C headers on my windows system
 
-[ ] Harden by successfully parsing some popular C projects: redis, sqlite, ..?
+[ ] parse some popular C projects: redis, sqlite, ..?
 
-### Error Reporting
-[ ] Audit error messages; find nonsensical, misleading or missing errors
+### UX
+[-] Fix a laundry list of issues I have logged that result in unnecessary friction
+
+[-] Audit error messages; find nonsensical, misleading or missing errors
+
+[ ] Consider options for controlling whitespace in generated code.
 
 ### Documentation
 [-] Write example code
 
 [ ] Write documentation
+- For alpha this may be the same as example code, although a formal language
+  specification should exist somewhere at the least.
 
 
 # Examples
@@ -130,9 +151,10 @@ Error messages are sometimes nonsensical, misleading, or missing.
 See the [examples](https://github.com/jjbandit/poof/tree/master/examples)
 folder for, well, examples of how to use `poof`.  Take note that these examples
 are meant to demonstrate language features, and make heavy use of printf.  This
-is not a typical use-case, but it makes seeing the output of the language
-easier.
+is not a typical use-case, but it makes visualizing the output of `poof` easier.
 
-For less contrived examples of using `poof` have a look at
-[bonsai](https://github.com/jjbandit/bonsai).
+For less contrived examples of using `poof` have a look at the
+[functions](https://github.com/jjbandit/poof/blob/master/poof/functions.h) used
+by poof, and their
+[output](https://github.com/jjbandit/poof/tree/master/poof/generated).
 
