@@ -23,15 +23,14 @@ for, well, examples of the following.
 
 - Templating
   - Generate new types and code from existing types.
-  - Useful for: implementing containers.
 
 - Datatype member iteration
   - Iterate over the members of a specified type.
-  - Useful for: printing enum values as strings, static analysis.
 
 - Type constraints
   - Some support for refinement types.
-  - Useful for: statically avoiding a specific class of bugs which are otherwise not possible to detect at compile time (in pure C).
+  - This is useful for statically avoiding a specific class of bugs which are
+    otherwise not possible to detect at compile time (in pure C).
 
 - Experimental: Static analysis
   - `poof` can be used as a C library to build custom static-analyzers.  This
@@ -62,9 +61,9 @@ Windows](https://gitforwindows.org/) comes with a shell that should work.
 You'll also need `clang++` (preferably 6.0.0), which I'll leave as an exercise
 to the reader.
 
-NOTE(Jesse): Once upon a time I targeted MSVC on Windows, but have since gotten
-fed up with Visual Studio.  Clang has been reliable enough for this project,
-though it is slightly more onerous to set up.
+NOTE(Jesse): Once upon a time I targeted MSVC on Windows, but have since given
+up on Microsoft products.  Clang has been reliable enough, though it is
+slightly more onerous to set up.
 
 ### Mac
 
