@@ -16,8 +16,8 @@ struct my_struct
 meta
 (
   // Functions in `poof` are defined using the func keyword.  Here we define
-  // derive_useless_struct_from, which takes a type argument.
-  func derive_useless_struct_from(Type)
+  // metaprogram_another_useless_struct, which takes a type argument.
+  func metaprogram_another_useless_struct(Type)
   {
     // And here we define a new type derived from whatever type we passed in
     //
@@ -26,9 +26,12 @@ meta
     // The (Type.name) statement below is substituted by poof for the name of
     // the type we pass into this function.
     //
-    struct (Type.name)_derived
+    // In this example, we're going to pass in `my_struct` to this function, so
+    // the line below will be expanded to `struct metaprogrammed_my_struct`
+    //
+    struct metaprogrammed_(Type.name)
     {
-      int ignored;
+      int trevor;
     };
   }
 )
@@ -37,15 +40,16 @@ meta
 
 // Here we call the meta func declared above, which poof executes and outputs
 // the result of to the include file immediately afterwards.
-meta(derive_useless_struct_from(my_struct))
-#include <generated/babys_first_meta_func_my_struct_derived.h>
+meta(metaprogram_another_useless_struct(my_struct))
+#include <generated/metaprogram_another_useless_struct_my_struct.h>
 
 
 
 int main()
 {
-  struct my_struct foo = {}; // <-- This is the original struct we defined
-  struct my_struct_derived bar = {}; // <-- And this is the one we metaprogrammed!
+  struct my_struct foo = { .whatever = 1; }; // <-- This is the original struct we defined
+
+  struct metaprogrammed_my_struct bar = { .trevor = 2; }; // <-- And this is the one we metaprogrammed!
 
   return 0;
 }
@@ -62,14 +66,14 @@ int main()
 //
 // NOTE(Jesse): Passing primitives such at:
 //
-// meta(derive_useless_struct_from(int))
-// meta(derive_useless_struct_from(float))
-// meta(derive_useless_struct_from(char))
+// meta(metaprogram_another_useless_struct(int))
+// meta(metaprogram_another_useless_struct(float))
+// meta(metaprogram_another_useless_struct(char))
 // .. etc
 //
 // is currently unsupported for somewhat subtle reasons.  It may be worthwhile
 // to implement a subset of `poof` functionality for primitives, though doing
 // so is not high-priority at this moment.  I've encountered a need to do this
-// a few times.
+// only a few times, so the cost-benefit ratio seems high to me.
 //
 

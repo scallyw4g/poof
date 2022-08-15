@@ -6,6 +6,11 @@
 // files.  Those headers are included inline, immediately after the meta code
 // that was written by the programmer.
 //
+// Typically, the meta code will look something like:
+//
+// meta( poof code goes here )
+// #include <the_result_of_the_above_meta_code.h>
+//
 // After poof has run, the program gets compiled with a regular C or C++
 // compiler.  In the case of these examples we'll use clang, but any compiler
 // will do.
@@ -25,7 +30,7 @@
 
 int main()
 {
-  meta(Type whatever random crap in here you want clang will ignore it)
+  meta(Type almost any random crap in here you want; clang will ignore it)
   return 0;
 }
 
