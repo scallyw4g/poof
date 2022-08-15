@@ -7,13 +7,14 @@ to hear it :)
 
 
 # Poof the Magic Dragon, Lived by the C
-`poof` is a 'metaprogramming C compiler' that aims to bring some of the
-niceties of more modern languages to C, but without a lot of heartache that
-comes along with them.
+`poof` is a 'metaprogramming language' that aims to bring some of the niceties
+of more modern languages to C.
 
-Poof currently parses a small subset of C++, so you can use it in your codebase
-that makes use of operator overloading and/or (sane) templates.  I may be open
-to discussion of supporting a wider subset of C++ than `poof` does currently.
+Poof parses a small subset of C++, so you can use it in your codebase that
+makes use of operator overloading and simple templates.
+
+Poof requires a C++ compiler to build, though I'm making an effort to
+systematically remove the use of C++ features from the codebase over time.
 
 
 # Features
@@ -33,7 +34,7 @@ for, well, examples of the following.
     otherwise not possible to detect at compile time (in pure C).
 
 - Experimental: Static analysis
-  - `poof` can be used as a C library to build custom static-analyzers.  This
+  - `poof` can be used as a C++ library to build custom static-analyzers.  This
     is currently not documented, but if you're interested in trying this I'd be
     happy to write a tutorial.  Disclaimer: The code that enables this is
     pretty janky right now, and as such using it may be an exercise in
@@ -67,10 +68,10 @@ slightly more onerous to set up.
 
 ### Mac
 
-OSX is currently unsupported because I do not own Apple hardware to port it.
-Porting it to Apple should be a minimal amount of effort and I'd be happy to do
-it if someone would donate me a Macbook.  PRs are also most welcome. Feel free
-to contact me if you're interested in OSX support.
+OSX is currently unsupported because I do not own Apple hardware.  Porting to
+Apple should be a minimal amount of effort; I'd be happy to do it if someone
+would donate me a Macbook.  PRs are also most welcome. Feel free to open an
+issue if you're interested in OSX support.
 
 
 # Building
