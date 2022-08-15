@@ -1,4 +1,4 @@
-           printf(" foo\n");
-       printf(" bar\n");
+               printf(" foo\n");
+         printf(" bar\n");
 
 

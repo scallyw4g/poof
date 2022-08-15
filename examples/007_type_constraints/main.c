@@ -38,12 +38,8 @@ meta
 
 int main()
 {
-  printf("-- test program begin\n\n");
-
-
   meta
   (
-
     // Using the `containing` constraint allows us to filter members which
     // contain a specified type.
     func (my_discriminated_union StructType)
@@ -55,8 +51,4 @@ int main()
     }
   )
 #include <generated/print_struct_members_my_struct.h>
-
-
-  printf("\n-- test program end\n");
-  return 0;
 }

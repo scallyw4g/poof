@@ -47,9 +47,7 @@ meta(make_fancy_new_enum(my_enum))
 
 int main()
 {
-  printf("-- test program begin\n\n");
-
-  printf("-- print out my_enum values \n");
+  printf("> my_enum values \n");
 
   // Here we generate code to print my_enum values
   meta
@@ -63,7 +61,7 @@ int main()
   )
 #include <generated/anonymous_function_my_enum_fd8fda1m.h>
 
-  printf("-- print out augmented_enum values \n");
+  printf("\n> augmented_enum values \n");
 
 
   // Here we generate code to print the augmented_my_enum values
@@ -77,8 +75,4 @@ int main()
     }
   )
 #include <generated/anonymous_function_augmented_my_enum_qta832h1.h>
-
-
-  printf("\n-- test program end\n");
-  return 0;
 }

@@ -22,8 +22,6 @@ struct my_struct
 
 int main()
 {
-  printf("-- test program begin\n\n");
-
   // TODO(Jesse, immediate): The output of this is actually quite broken.
   // Correct output is a printf call for each member of my_struct, and
   // my_struct::baz.  Something like:
@@ -53,8 +51,4 @@ int main()
     }
   )
 #include <generated/anonymous_function_my_struct_f8p25x1m.h>
-
-
-  printf("\n-- test program end\n");
-  return 0;
 }

@@ -39,24 +39,17 @@ meta
 
 int main()
 {
-  printf("-- test program begin\n\n");
-
-meta
-(
-
-  // TODO(Jesse, examples, immediate): The output of this is a bit borked.  I'd
-  // expect the union member to show up, but it does not.
-  func (my_discriminated_union StructType)
-  {
-    (StructType.map_members (Member)
+  meta
+  (
+    // TODO(Jesse, examples, immediate): The output of this is a bit borked.  I'd
+    // expect the union member to show up, but it does not.
+    func (my_discriminated_union StructType)
     {
-       printf("(Member.type) (Member.name)\n");
-    })
-  }
-)
+      (StructType.map_members (Member)
+      {
+         printf("(Member.type) (Member.name)\n");
+      })
+    }
+  )
 #include <generated/print_struct_members_my_struct.h>
-
-
-  printf("\n-- test program end\n");
-  return 0;
 }

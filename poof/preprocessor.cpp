@@ -5540,9 +5540,8 @@ ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_aren
     .IncludePaths = AllocateBuffer<counted_string_cursor, counted_string>((u32)ArgCount, Memory),
   };
 
+#if 0
   counted_string PrevArg = {};
-
-  LogDirect("Booting Preprocessor\n");
   for ( u32 ArgIndex = 0;
         ArgIndex < ArgCount;
         ++ArgIndex)
@@ -5558,6 +5557,7 @@ ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_aren
     PrevArg = Arg;
   }
   LogDirect("\n");
+#endif
 
   for ( u32 ArgIndex = 1;
         ArgIndex < ArgCount;
@@ -10467,13 +10467,6 @@ main(s32 ArgCount_, const char** ArgStrings)
 
   arguments Args = ParseArgs(ArgStrings, ArgCount, &Ctx, Memory);
   Ctx.Args = &Args;
-
-
-  /* if (!SearchForProjectRoot()) { */
-  /*   Error("Couldn't find root dir, exiting."); return False; */
-  /*   return FAILURE_EXIT_CODE; */
-  /* } */
-
 
   if (Args.DoDebugWindow)
   {
