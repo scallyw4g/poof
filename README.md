@@ -2,19 +2,20 @@
 
 Features may change or be removed without warning.  Features documented in the
 examples folder are sorted in (roughly) descending order from most-stable to
-least-stable.  If you to take it for a test-drive and have feedback, I'm happy
-to hear it :)
+least-stable.
+
+If you to take `poof` for a test-drive I'd love to hear about it :)
 
 
-# Poof the Magic Dragon, Lived by the C
+# About
 `poof` is a 'metaprogramming language' that aims to bring some of the niceties
 of more modern languages to C.
 
-Poof parses a small subset of C++, so you can use it in your codebase that
+`poof` parses a small subset of C++, so you can use it in your codebase that
 makes use of operator overloading and simple templates.
 
-Poof requires a C++ compiler to build, though I'm making an effort to
-systematically remove the use of C++ features from the codebase over time.
+`poof` requires a C++ compiler to build, though I'm making an effort to remove
+the use of C++ features in favor of using `poof` itself.
 
 
 # Features
@@ -32,10 +33,10 @@ systematically remove the use of C++ features from the codebase over time.
 
 - Experimental: Static analysis
   - `poof` can be used as a C++ library to build custom static-analyzers.  This
-    is currently not documented, but if you're interested in trying this I'd be
-    happy to write a tutorial.  Disclaimer: The code that enables this is
-    pretty janky right now, and as such using it may be an exercise in
-    patience/debugging.
+    is not well documented, but if you're interested in trying this I'd be
+    happy to write a tutorial.
+  - The code that enables this is somewhat janky right now, but static-analysis
+    is a medium-term goal for `poof`, so it will get better Soon™
 
 
 # Getting started
