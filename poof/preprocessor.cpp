@@ -5535,7 +5535,7 @@ bonsai_function arguments
 ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_arena* Memory)
 {
   arguments Result = {
-    .Outpath      = CSz(""),
+    .Outpath      = CSz("."),
     .Files        = AllocateBuffer<counted_string_cursor, counted_string>((u32)ArgCount, Memory),
     .IncludePaths = AllocateBuffer<counted_string_cursor, counted_string>((u32)ArgCount, Memory),
   };
