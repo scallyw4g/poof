@@ -96,18 +96,24 @@ Error messages are sometimes nonsensical, misleading, or missing.
 
 ### Feature Set
 [-] Formally specify feature set for 0.1.0-alpha
-    - this was somewhat self-informed by the features required to build `poof`
-    - still somewhat TBD, but I have a mostly-complete list
+
+- this was somewhat self-informed by the features required to build `poof`
+- still somewhat TBD, but I have a mostly-complete list
 
 ### Behavior
 [X] Parse include graph of `poof` (excluding CRT headers)
+
 [X] Parse include graph of `poof` (including CRT headers)
+
 [X] Write test suite that exhaustively validates behavior of the parser
+
 [ ] Write test suite that validates the behavior of `poof`
 
 ### Hardening
 [X] Harden by successfully parsing all C headers on my linux system
+
 [-] Harden by successfully parsing all C headers on my windows system
+
 [ ] Harden by successfully parsing some popular C projects: redis, sqlite, ..?
 
 ### Error Reporting
@@ -115,6 +121,7 @@ Error messages are sometimes nonsensical, misleading, or missing.
 
 ### Documentation
 [-] Write example code
+
 [ ] Write documentation
 
 
