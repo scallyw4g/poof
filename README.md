@@ -88,25 +88,33 @@ And to build it:
 `poof` is currently undergoing a hardening phase before a 0.1.0-alpha release.
 
 At the time of this writing, the tool relies on itself to generate ~15k lines
-of code, and makes use of every documented feature.  That said, there are many
-combinations of features that are left un-used, and likely broken.
+of code and makes use of every documented feature.  That said, there are many
+combinations of features that are left un-used, and very possibly broken.
 
-Error messages are sometimes nonsensical, misleading, or missing.
+At the moment, error messages are sometimes misleading or missing.  Generally,
+UX is reasonable in some places, and highly questionable in others.
+
+That said, helpful error reporting is a primary concern for `poof`.  I've put a
+large amount of effort into writing a system that makes error reporting easy
+for the language and helpful for the user.  Taking the error reporting system
+and putting it to use at the language level is the final step.  The C parser
+uses the error reporting system extensively, and it works great.
+
+
+
 
 ## Roadmap to 0.1.0-alpha
 
 Most of the hard work of writing a C preprocessor and parser is done.  There
-are still some unusual cases that don't correctly parse that I've found in
-windows headers, but for the most part the parser works correctly.  Once I'm
-satisfied it parses headers correctly, I'll point it at a few popular C
-projects in an attempt to ferret out more bugs.
+are still some unusual cases I've found that don't parse correctly, but for
+most normal-ish code it's solid.
 
 Once I'm satisfied with the parser, I'll move on to writing a test harness that
 explicitly validates the behavior of `poof` itself.  Until then, the behavior
 will continue to be implicitly specified by its own output, which is used to
-build itself.
+build `poof` itself.
 
-Finally, auditing error messages and completing documentation will be done
+Finally, auditing error messages and completing documentation needs to be done
 before releasing a 0.1.0-alpha version of `poof`.
 
 
@@ -142,9 +150,9 @@ before releasing a 0.1.0-alpha version of `poof`.
 ### Documentation
 [-] Write example code
 
-[ ] Write documentation
+[ ] Write language documentation
 - For alpha this may be the same as example code, although a formal language
-  specification should exist somewhere at the least.
+  specification should probably exist somewhere.
 
 
 # Examples
@@ -156,6 +164,6 @@ is not a typical use-case, but it makes visualizing the output of `poof` easier.
 
 For less contrived examples of using `poof` have a look at the
 [functions](https://github.com/jjbandit/poof/blob/master/poof/functions.h) used
-by poof, and their
+to build `poof`, and their
 [output](https://github.com/jjbandit/poof/tree/master/poof/generated).
 
