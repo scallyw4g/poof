@@ -12,6 +12,14 @@ for filename in $FILES_TO_POOF; do
     $filename \
     -o generated/$basename_stripped
 
-  git diff generated/$basename_stripped
+  DIFF_CHANGED=$(git diff --ignore-all-space --ignore-blank-lines generated/$basename_stripped | wc -l)
+
+  if [[ $DIFF_CHANGED == 0 ]]; then
+    echo "PASS $filename"
+  else
+    echo "FAIL $filename"
+  fi
+
+
 
 done
