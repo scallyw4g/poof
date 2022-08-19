@@ -21,6 +21,11 @@
             case TypeQual_Union: { Result = CSz("TypeQual_Union"); } break;
             case TypeQual_Enum: { Result = CSz("TypeQual_Enum"); } break;
             case TypeQual_Inline: { Result = CSz("TypeQual_Inline"); } break;
+            case TypeQual_Double: { Result = CSz("TypeQual_Double"); } break;
+            case TypeQual_Float: { Result = CSz("TypeQual_Float"); } break;
+            case TypeQual_Void: { Result = CSz("TypeQual_Void"); } break;
+            case TypeQual_Auto: { Result = CSz("TypeQual_Auto"); } break;
+            case TypeQual_Bool: { Result = CSz("TypeQual_Bool"); } break;
 
       }
       return Result;
@@ -48,6 +53,11 @@
           if (StringsMatch(S, CSz("TypeQual_Union"))) { return TypeQual_Union; }
           if (StringsMatch(S, CSz("TypeQual_Enum"))) { return TypeQual_Enum; }
           if (StringsMatch(S, CSz("TypeQual_Inline"))) { return TypeQual_Inline; }
+          if (StringsMatch(S, CSz("TypeQual_Double"))) { return TypeQual_Double; }
+          if (StringsMatch(S, CSz("TypeQual_Float"))) { return TypeQual_Float; }
+          if (StringsMatch(S, CSz("TypeQual_Void"))) { return TypeQual_Void; }
+          if (StringsMatch(S, CSz("TypeQual_Auto"))) { return TypeQual_Auto; }
+          if (StringsMatch(S, CSz("TypeQual_Bool"))) { return TypeQual_Bool; }
 
 
       return Result;

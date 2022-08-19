@@ -23,9 +23,13 @@ struct foo_struct
   int bar = 0;
   int baz = (1 << 1) -1;
 
-  volatile int baz = 42;
+  float fbaz = 42.0f;
+  double dbaz = 42.0f;
 
-  const double *baz = 'foo';
+  char cbaz = 'f';
+
+  enum foo_enum fenum;
+  foo_enum fenum2;
 };
 
 meta(

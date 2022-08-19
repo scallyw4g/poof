@@ -66,5 +66,25 @@
           {
             Append(&Builder, CSz("inline "));
           }
+          if (Type->Qualifier & TypeQual_Double)
+          {
+            Append(&Builder, CSz("double "));
+          }
+          if (Type->Qualifier & TypeQual_Float)
+          {
+            Append(&Builder, CSz("float "));
+          }
+          if (Type->Qualifier & TypeQual_Void)
+          {
+            Append(&Builder, CSz("void "));
+          }
+          if (Type->Qualifier & TypeQual_Auto)
+          {
+            Append(&Builder, CSz("auto "));
+          }
+          if (Type->Qualifier & TypeQual_Bool)
+          {
+            Append(&Builder, CSz("bool "));
+          }
 
 

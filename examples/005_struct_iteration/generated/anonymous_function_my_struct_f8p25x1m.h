@@ -1,5 +1,5 @@
-               printf(" foo\n");
+               printf("int  foo\n");
          printf(" bar\n");
-         printf("my_struct baz\n");
+         printf(" baz\n");
 
 

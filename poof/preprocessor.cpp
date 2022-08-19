@@ -6452,13 +6452,40 @@ ParseTypeSpecifier(parse_context *Ctx)
       } break;
 
       case CTokenType_Double:
+      {
+        RequireToken(Parser, T.Type);
+        Result.Qualifier |= TypeQual_Double;
+        Done = True;
+      } break;
       case CTokenType_Float:
+      {
+        RequireToken(Parser, T.Type);
+        Result.Qualifier |= TypeQual_Float;
+        Done = True;
+      } break;
       case CTokenType_Char:
+      {
+        RequireToken(Parser, T.Type);
+        Result.Qualifier |= TypeQual_Char;
+        Done = True;
+      } break;
       case CTokenType_Void:
+      {
+        RequireToken(Parser, T.Type);
+        Result.Qualifier |= TypeQual_Void;
+        Done = True;
+      } break;
       case CTokenType_Bool:
+      {
+        RequireToken(Parser, T.Type);
+        Result.Qualifier |= TypeQual_Bool;
+        Done = True;
+      } break;
+
       case CTokenType_Auto:
       {
         RequireToken(Parser, T.Type);
+        Result.Qualifier |= TypeQual_Auto;
         Done = True;
       } break;
 

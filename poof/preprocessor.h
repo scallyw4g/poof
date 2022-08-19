@@ -550,6 +550,11 @@ enum type_qualifier
   TypeQual_Union       = (1 << 13),
   TypeQual_Enum        = (1 << 14),
   TypeQual_Inline      = (1 << 15),
+  TypeQual_Double      = (1 << 16),
+  TypeQual_Float       = (1 << 17),
+  TypeQual_Void        = (1 << 18),
+  TypeQual_Auto        = (1 << 19),
+  TypeQual_Bool        = (1 << 20),
 };
 meta(string_and_value_tables(type_qualifier))
 #include <poof/generated/string_and_value_tables_type_qualifier.h>

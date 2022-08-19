@@ -9,13 +9,13 @@ META_OUT="$ROOT/poof/generated"
 
 BUILD_EVERYTHING=0
 
-git checkout $META_OUT
+# git checkout $META_OUT
 
-BuildPoof=1
-RunPoof=1
+BuildPoof=0
+RunPoof=0
 
-BuildParserTests=1
-RunParserTests=1
+BuildParserTests=0
+RunParserTests=0
 
 RunIntegrationTests=1
 
