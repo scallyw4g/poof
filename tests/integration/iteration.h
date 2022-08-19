@@ -1,14 +1,18 @@
+#define upshift_by_31 <<31
+
 enum foo_enum
 {
-  bar = 0,
-  baz = 1,
+  foo = 1,
+  bar = 'a',
+  baz = (1 upshift_by_31),
 };
 
 meta(
   func (foo_enum Type)
   {
     (Type.map_values (Value) {
-      (Value.name)
+
+      (Value.name) (Value.value)
     })
   }
 )

@@ -7644,7 +7644,7 @@ ParseEnumBody(parse_context *Ctx, parser *Parser, enum_def *Enum, memory_arena *
 
     if (OptionalToken(Parser, CTokenType_Equals))
     {
-      Field.Value = ParseExpression(Ctx);
+      Field.Expr = ParseExpression(Ctx);
     }
 
     Push(&Enum->Members, Field, Ctx->Memory);
@@ -9184,6 +9184,8 @@ CopyStream(meta_func_arg_stream* Stream, memory_arena* Memory)
 bonsai_function counted_string
 Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory);
 
+#include <poof/print_ast_node.h>
+
 // TODO(Jesse id: 222, tags: immediate, parsing, metaprogramming) : Re-add [[nodiscard]] here
 bonsai_function counted_string
 Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx, memory_arena* Memory)
@@ -9316,16 +9318,13 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
             {
               if (Replace->Data.Type == type_enum_member)
               {
-                // Changed enum_member::Value from counted_string to
-                // ast_node_expression, and don't have a string representation
-                // so this is going away for a bit..
-                //
+                auto Child = SafeAccessObj(enum_member, Replace->Data);
 
-                NotImplemented;
+                string_builder Builder = {};
+                PrintAstNode(Child->Expr->Value, &Builder);
 
-                /* meta_transform_op Transformations = ParseTransformations(&Scope); */
-                /* counted_string Name = Transform(Transformations, Replace->Data.enum_member->Value, Memory); */
-                /* Append(&OutputBuilder, Name); */
+                counted_string Value = Finalize(&Builder, Memory);
+                Append(&OutputBuilder, Value);
               }
               else
               {

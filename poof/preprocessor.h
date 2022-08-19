@@ -652,7 +652,7 @@ struct ast_node_expression;
 struct enum_member
 {
   counted_string Name;
-  ast_node_expression *Value;
+  ast_node_expression *Expr;
 };
 meta(generate_stream(enum_member))
 #include <poof/generated/generate_stream_enum_field.h>
@@ -850,6 +850,8 @@ meta(generate_stream(person))
 #include <poof/generated/generate_stream_person.h>
 
 #define SafeAccess(T, Ptr) (&(Ptr)->T); Assert((Ptr)->Type == type_##T)
+
+#define SafeAccessObj(T, Obj) ((Obj).T); Assert((Obj).Type == type_##T)
 
 struct ast_node_expression
 {
