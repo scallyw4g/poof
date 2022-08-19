@@ -1,0 +1,89 @@
+<xml>
+
+  <fake-value>42</fake-value>
+
+  <fake-value> 42 </fake-value>
+
+  <fake-value>
+    42   
+  </fake-value>
+
+  <first-value>
+    42 42
+  </first-value>
+
+  <first-value id="id-value">
+    42
+  </first-value>
+
+  <outer>
+    <inner>
+      <fake-value />
+      <second-value>
+        42
+      </second-value>
+      <second-value>
+        43
+      </second-value>
+    </inner>
+  </outer>
+
+</xml>
+
+<xml>
+
+  <fake-value />
+  <third-value>
+    42
+  </third-value>
+
+  <outer>
+    <inner>
+      <fake-value />
+      <fourth-value> 42 </fourth-value>
+    </inner>
+  </outer>
+
+</xml>
+
+
+<xml>
+
+  <outer>
+    <inner id="second-fourth-value">
+      <fourth-value> 42 </fourth-value>
+    </inner>
+  </outer>
+
+</xml>
+
+<xml>
+  <library_lights>
+    <light name="Lamp"/>
+    <light id="Lamp-light" name="Lamp">
+      <technique_common>
+        <point>
+          <color sid="color">1 1 1</color>
+          <constant_attenuation>1</constant_attenuation>
+          <linear_attenuation>0</linear_attenuation>
+          <quadratic_attenuation>0.00111109</quadratic_attenuation>
+        </point>
+      </technique_common>
+    </light>
+    <light name="Lamp"/>
+  </library_lights>
+
+  <library_effects>
+    <effect id="material-effect">
+      <color>1 2 3 4</color>
+    </effect>
+  </library_effects>
+</xml>
+
+<xml>
+  <outer>
+    <target/>
+  </outer>
+
+  <first-value id="id-value" name="bar"/>
+</xml>
