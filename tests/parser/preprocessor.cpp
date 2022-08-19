@@ -4,6 +4,8 @@
 
 #include <tests/parser/bug_defines.h>
 
+#define TEST_FIXTURES_PATH "tests/parser/fixtures"
+
 #if 1
 bonsai_function void
 PositiveExponentTests(parser *Parser, c_token_type FloatingPointTokenType)
