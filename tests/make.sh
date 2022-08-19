@@ -58,6 +58,6 @@ function BuildParserTests
       $executable && echo -e "$Success $executable -> $output_basename$PLATFORM_EXE_EXTENSION"
 }
 
-# RunIntegrationTests
-BuildParserTests
+RunIntegrationTests
+# BuildParserTests
 

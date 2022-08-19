@@ -1,8 +1,5 @@
-    
-      foo 1
-
+          foo 1
       bar 'a'
-
       baz (1 << 31)
 
 

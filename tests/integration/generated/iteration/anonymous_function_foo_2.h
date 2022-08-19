@@ -1,4 +1,4 @@
-           bar 0
-       baz (1 << 1) - 1
+           int bar 0
+       int baz (1 << 1) - 1
 
 

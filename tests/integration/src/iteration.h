@@ -11,7 +11,6 @@ meta(
   func (foo_enum Type)
   {
     (Type.map_values (Value) {
-
       (Value.name) (Value.value)
     })
   }
