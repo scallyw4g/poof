@@ -9,13 +9,13 @@ enum struct_member_type
 
 struct struct_member
 {
-  struct_member_type Type;
+  enum struct_member_type Type;
 
   union
   {
-    variable_decl variable_decl;
-    function_decl function_decl;
-    struct_member_anonymous struct_member_anonymous;
+    struct variable_decl variable_decl;
+    struct function_decl function_decl;
+    struct struct_member_anonymous struct_member_anonymous;
   };
 };
 
