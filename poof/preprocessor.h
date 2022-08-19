@@ -39,6 +39,8 @@ enum meta_transform_op
   meta_transform_op_noop,
 
   to_capital_case = (1 << 0),
+  to_lowercase    = (1 << 1),
+  strip_prefix    = (1 << 2),
 };
 meta(generate_value_table(meta_transform_op))
 #include <poof/generated/generate_value_table_meta_transform_op.h>

@@ -9102,17 +9102,30 @@ GetNameForStructMember(struct_member* Decl)
 }
 
 bonsai_function counted_string
-Transform(meta_transform_op Transformations, counted_string Input, memory_arena* Memory)
+ApplyTransformations(meta_transform_op Transformations, counted_string Input, memory_arena* Memory)
 {
   counted_string Result = Input;
-  while ( Transformations )
   {
     if ( Transformations & to_capital_case )
     {
       UnsetBitfield(meta_transform_op, Transformations, to_capital_case );
       Result = ToCapitalCase(Result, Memory);
     }
+
+    if ( Transformations & to_lowercase )
+    {
+      UnsetBitfield(meta_transform_op, Transformations, to_lowercase );
+      Result = ToLowerCase(Result, Memory);
+    }
+
+    if ( Transformations & strip_prefix )
+    {
+      UnsetBitfield(meta_transform_op, Transformations, to_capital_case );
+      Result = StripPrefix(Result, Memory);
+    }
   }
+
+  Assert(Transformations == meta_transform_op_noop);
 
   return Result;
 }
@@ -9169,7 +9182,7 @@ ParseTransformations(parser* Scope)
     }
     else
     {
-      Error("Parsing transform ops.");
+      Error("Parsing meta_transform_ops.");
     }
   }
 
@@ -9224,8 +9237,8 @@ PrintType(type_spec *Type, memory_arena *Memory)
         {
           if (Type->Qualifier & (EnumVal.name))
           {
-            // Append(&Builder, CSz("(EnumVal.name > strip_prefix > lowercase) ")); // TODO(Jesse): Strip prefix and lowercase
-            Append(&Builder, CSz("(EnumVal.name) ")); // TODO(Jesse): Strip prefix and lowercase
+            Append(&Builder, CSz("(EnumVal.name.strip_prefix.to_lowercase) ")); // TODO(Jesse): Strip prefix and lowercase
+            /* Append(&Builder, CSz("(EnumVal.name) ")); // TODO(Jesse): Strip prefix and lowercase */
           }
         })
       }
@@ -9517,7 +9530,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
               }
 
-              counted_string Name = Transform(Transformations, TypeName, Memory);
+              counted_string Name = ApplyTransformations(Transformations, TypeName, Memory);
               Append(&OutputBuilder, Name);
             } break;
 
@@ -9529,28 +9542,28 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                 {
                   counted_string MemberName = GetNameForStructMember(Replace->Data.struct_member);
                   meta_transform_op Transformations = ParseTransformations(&Scope);
-                  counted_string Name = Transform(Transformations, MemberName, Memory);
+                  counted_string Name = ApplyTransformations(Transformations, MemberName, Memory);
                   Append(&OutputBuilder, Name);
                 } break;
 
                 case type_enum_member:
                 {
                   meta_transform_op Transformations = ParseTransformations(&Scope);
-                  counted_string Name = Transform(Transformations, Replace->Data.enum_member->Name, Memory);
+                  counted_string Name = ApplyTransformations(Transformations, Replace->Data.enum_member->Name, Memory);
                   Append(&OutputBuilder, Name);
                 } break;
 
                 case type_enum_def:
                 {
                   meta_transform_op Transformations = ParseTransformations(&Scope);
-                  counted_string Name = Transform(Transformations, Replace->Data.enum_def->Name, Memory);
+                  counted_string Name = ApplyTransformations(Transformations, Replace->Data.enum_def->Name, Memory);
                   Append(&OutputBuilder, Name);
                 } break;
 
                 case type_struct_def:
                 {
                   meta_transform_op Transformations = ParseTransformations(&Scope);
-                  counted_string Name = Transform(Transformations, Replace->Data.struct_def->Type, Memory);
+                  counted_string Name = ApplyTransformations(Transformations, Replace->Data.struct_def->Type, Memory);
                   Append(&OutputBuilder, Name);
                 } break;
 

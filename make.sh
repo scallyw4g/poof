@@ -4,8 +4,8 @@ BUILD_EVERYTHING=0
 
 # git checkout $META_OUT
 
-RunPoof=1
-BuildPoof=0
+RunPoof=0
+BuildPoof=1
 
 BuildParserTests=0
 RunParserTests=0
@@ -38,12 +38,12 @@ function RunPoof {
   # to special-case that one file.
   #
 
-  if [ -d $META_OUT ]; then
-    rm -Rf $META_OUT
-    mkdir -p $META_OUT
-    mkdir -p $META_OUT/tmp
-    git checkout poof/generated/generate_cursor_c_token.h
-  fi
+  # if [ -d $META_OUT ]; then
+  #   rm -Rf $META_OUT
+  #   mkdir -p $META_OUT
+  #   mkdir -p $META_OUT/tmp
+  #   git checkout poof/generated/generate_cursor_c_token.h
+  # fi
 
   bin/poof_dev                 \
     poof/preprocessor.cpp      \
