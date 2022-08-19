@@ -557,21 +557,21 @@ meta(string_and_value_tables(type_qualifier))
 
 struct type_spec
 {
-  c_token Token;
-
+  c_token DatatypeToken;
   datatype Datatype;
 
-  type_indirection_info Indirection;
-
-  b32 IsMetaTemplateVar;
-
-  b32 HasTemplateArguments;
+  c_token *QualifierTokens[8]; // TODO(Jesse): Can this be done in a less wasteful way?
 
   u32 Qualifier; // enum type_qualifier TODO(Jesse): How do we fix this?
 
+  type_indirection_info Indirection;
+
+  b32 HasTemplateArguments;
+  counted_string TemplateSource;
+
   linkage_type Linkage;
 
-  counted_string TemplateSource;
+  /* b32 IsMetaTemplateVar; */
   /* counted_string SourceText; */
 };
 

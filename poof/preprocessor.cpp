@@ -5253,7 +5253,7 @@ GenerateStructDef(d_union_decl* dUnion, memory_arena* Memory)
     Result =
       Concat(Result,
         FormatCountedString(Memory, CSz("  %S %S;\n"),
-          Member->variable_decl.Type.Token.Value,
+          Member->variable_decl.Type.DatatypeToken.Value,
           Member->variable_decl.Name),
       Memory);
   }
@@ -5478,8 +5478,8 @@ ParseDiscriminatedUnion(parser* Parser, program_datatypes* Datatypes, counted_st
       struct_member Decl = {
         .Type = type_variable_decl,
         .variable_decl = {
-          .Type.Token = RequireToken(Parser, CTokenType_Identifier),
-          .Name       = RequireToken(Parser, CTokenType_Identifier).Value,
+          .Type.DatatypeToken = RequireToken(Parser, CTokenType_Identifier),
+          .Name               = RequireToken(Parser, CTokenType_Identifier).Value,
         }
       };
       Push(&dUnion.CommonMembers, Decl, Memory);
@@ -6294,8 +6294,10 @@ ParseTypeSpecifier(parse_context *Ctx)
 
       case CTokenType_At:
       {
-        RequireToken(Parser, CTokenType_At);
-        Result.IsMetaTemplateVar = True;
+        NotImplemented;
+
+        /* RequireToken(Parser, CTokenType_At); */
+        /* Result.IsMetaTemplateVar = True; */
       } break;
 
       case CTokenType_ThreadLocal:
@@ -6468,13 +6470,13 @@ ParseTypeSpecifier(parse_context *Ctx)
 
       case CTokenType_Identifier:
       {
-        if (Result.Token.Type)
+        if (Result.DatatypeToken.Type)
         {
           Done = True;
         }
         else
         {
-          Result.Token = RequireToken(Parser, T.Type);
+          Result.DatatypeToken = RequireToken(Parser, T.Type);
           Result.Datatype = GetDatatypeByName(&Ctx->Datatypes, T.Value);
           // TODO(Jesse, id: 296, tags: immediate): When we properly traverse
           // include graphs, this assert should not fail.
@@ -6506,7 +6508,7 @@ ParseTypeSpecifier(parse_context *Ctx)
   // TODO(Jesse): This check is weird.  Should
   // ParseReferencesIndirectionAndPossibleFunctionPointerness not just handle
   // this case?
-  if (IsConstructorFunctionName(Result.Token))
+  if (IsConstructorFunctionName(Result.DatatypeToken))
   {
   }
   else
@@ -6667,11 +6669,11 @@ ParseFunctionOrVariableDecl(parse_context *Ctx)
         Result.function_decl = ParseAndPushFunctionPrototype(Ctx, &DeclType, &OperatorName, function_type_operator);
       }
     }
-    else if (IsConstructorFunctionName(DeclType.Token))
+    else if (IsConstructorFunctionName(DeclType.DatatypeToken))
     {
       Result.Type = type_declaration_function_decl;
       RequireToken(Parser, CTokenType_OpenParen);
-      Result.function_decl = ParseAndPushFunctionPrototype(Ctx, &DeclType, &DeclType.Token.Value, function_type_constructor);
+      Result.function_decl = ParseAndPushFunctionPrototype(Ctx, &DeclType, &DeclType.DatatypeToken.Value, function_type_constructor);
     }
     else
     {
@@ -7518,7 +7520,7 @@ MembersOfType(struct_def* Struct, counted_string MemberType, memory_arena *Memor
       {
         case type_variable_decl:
         {
-          if (StringsMatch(Member->variable_decl.Type.Token.Value, MemberType))
+          if (StringsMatch(Member->variable_decl.Type.DatatypeToken.Value, MemberType))
           {
             Push(&Result, *Member, Memory);
           }
@@ -8176,9 +8178,9 @@ ParseTypeSpecifierNode(parse_context *Ctx, ast_node_expression *Result, datatype
   }
   else
   {
-    if (Node->TypeSpec.Token.Type == CTokenType_Identifier)
+    if (Node->TypeSpec.DatatypeToken.Type == CTokenType_Identifier)
     {
-      Node->Datatype = GetDatatypeByName(&Ctx->Datatypes, Node->TypeSpec.Token.Value);
+      Node->Datatype = GetDatatypeByName(&Ctx->Datatypes, Node->TypeSpec.DatatypeToken.Value);
       if (Node->Datatype.Type == type_datatype_noop)
       {
         // TODO(Jesse id: 319, tags: id_320): Type-checking failed.
@@ -9225,7 +9227,7 @@ PrintType(type_spec *Type, memory_arena *Memory)
 
   if (Type->Datatype.Type)
   {
-    Result = Type->Token.Value;
+    Result = Type->DatatypeToken.Value;
   }
   else
   {
@@ -9237,7 +9239,7 @@ PrintType(type_spec *Type, memory_arena *Memory)
         {
           if (Type->Qualifier & (EnumVal.name))
           {
-            Append(&Builder, CSz("(EnumVal.name.strip_prefix.to_lowercase)"));
+            Append(&Builder, CSz("(EnumVal.name.strip_prefix.to_lowercase) "));
           }
         })
       }
@@ -9340,7 +9342,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                   {
                     case type_variable_decl:
                     {
-                      enum_def *E = GetEnumByType(&Datatypes->Enums, Replace->Data.struct_member->variable_decl.Type.Token.Value);
+                      enum_def *E = GetEnumByType(&Datatypes->Enums, Replace->Data.struct_member->variable_decl.Type.DatatypeToken.Value);
                       if (E)
                       {
                         meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
@@ -9614,7 +9616,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                     case type_variable_decl:
                     {
                       if ( ContainingConstraint.Count &&
-                           !StringsMatch(Member->variable_decl.Type.Token.Value, ContainingConstraint) )
+                           !StringsMatch(Member->variable_decl.Type.DatatypeToken.Value, ContainingConstraint) )
                       {
                         // Containing constraint failed
                       }
@@ -9639,7 +9641,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                         struct_member* UnionMember = GET_ELEMENT(UnionMemberIter);
                         if (UnionMember->Type == type_variable_decl)
                         {
-                          struct_def* Struct = GetStructByType(&Datatypes->Structs, UnionMember->variable_decl.Type.Token.Value);
+                          struct_def* Struct = GetStructByType(&Datatypes->Structs, UnionMember->variable_decl.Type.DatatypeToken.Value);
                           if (Struct)
                           {
                             struct_member_stream ContainedMembers = MembersOfType(Struct, ContainingConstraint, Memory);
@@ -9662,7 +9664,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                           }
                           else
                           {
-                            counted_string Name = UnionMember->variable_decl.Type.Token.Value;
+                            counted_string Name = UnionMember->variable_decl.Type.DatatypeToken.Value;
                             counted_string ParentStructName = Replace->Data.struct_def->Type;
                             Warn("Couldn't find struct type '%S' in union parent '%S'.", Name, ParentStructName);
                           }
