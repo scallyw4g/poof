@@ -651,10 +651,6 @@ AdvanceTo(parser* Parser, c_token* T)
     AdvanceTo(Parser, &Peek);
     Assert(Parser->Tokens->At == T);
   }
-  else
-  {
-    Warn("Couldn't advance parser to specified token.");
-  }
 
   SanityCheckParserChain(Parser);
   return Peek.At;
@@ -9229,7 +9225,12 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
         {
           ExecutedChildFunc = True;
           RequireToken(&Scope, CTokenType_Dot);
-          meta_arg_operator Operator = MetaArgOperator( RequireToken(&Scope, CTokenType_Identifier).Value);
+
+          // NOTE(Jesse): RequireTokenPointer
+          c_token *MetaOperatorToken = PeekTokenPointer(&Scope);
+          RequireToken(&Scope, CTokenType_Identifier);
+
+          meta_arg_operator Operator = MetaArgOperator( MetaOperatorToken->Value );
 
           switch (Operator)
           {
@@ -9316,20 +9317,72 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
             case value:
             {
-              if (Replace->Data.Type == type_enum_member)
+              switch (Replace->Data.Type )
               {
-                auto Child = SafeAccessObj(enum_member, Replace->Data);
+                case type_datatype_noop:
+                {
+                  InvalidCodePath();
+                } break;
 
-                string_builder Builder = {};
-                PrintAstNode(Child->Expr->Value, &Builder);
+                case type_struct_def:
+                case type_enum_def:
+                case type_type_def:
+                case type_primitive_def:
+                case type_stl_container_def:
+                {
+                  NotImplemented;
+                } break;
 
-                counted_string Value = Finalize(&Builder, Memory);
-                Append(&OutputBuilder, Value);
+                case type_enum_member:
+                {
+                  enum_member *Datatype = SafeAccessObj(enum_member, Replace->Data);
+
+                  string_builder Builder = {};
+                  PrintAstNode(Datatype->Expr->Value, &Builder);
+
+                  counted_string Value = Finalize(&Builder, Memory);
+                  Append(&OutputBuilder, Value);
+                } break;
+
+
+                case type_struct_member:
+                {
+                  struct_member *Member = SafeAccessObj(struct_member, Replace->Data);
+                  switch (Member->Type)
+                  {
+                    case type_struct_member_noop:
+                    {
+                      InvalidCodePath();
+                    } break;
+
+                    case type_struct_decl:
+                    case type_function_decl:
+                    case type_struct_member_anonymous:
+                    {
+                      NotImplemented;
+                    } break;
+
+                    case type_variable_decl:
+                    {
+                      variable_decl *Var = SafeAccess(variable_decl, Member);
+                      counted_string Value = PrintAstNode(Var->Value, Memory);
+                      Append(&OutputBuilder, Value);
+                    } break;
+                  }
+
+                  auto Datatype = SafeAccessObj(struct_member, Replace->Data);
+
+#if 0
+                  string_builder Builder = {};
+                  PrintAstNode(Datatype->Expr->Value, &Builder);
+
+                  counted_string Value = Finalize(&Builder, Memory);
+                  Append(&OutputBuilder, Value);
+#endif
+
+                } break;
               }
-              else
-              {
-                Error("Called .value on non-enum_member type.");
-              }
+
             } break;
 
             case type:

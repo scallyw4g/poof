@@ -1,4 +1,4 @@
-#define upshift_by_31 <<31
+#define upshift_by_31 << 31
 
 enum foo_enum
 {
@@ -21,15 +21,15 @@ meta(
 
 struct foo_struct
 {
-  int bar;
-  int baz;
+  int bar = 0;
+  int baz = (1 << 1) -1;
 };
 
 meta(
   func (foo_struct Type)
   {
     (Type.map_members (Value) {
-      (Value.type) (Value.name)
+      (Value.type) (Value.name) (Value.value)
     })
   }
 )

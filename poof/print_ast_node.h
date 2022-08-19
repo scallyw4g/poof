@@ -1,4 +1,5 @@
 bonsai_function void PrintAstNode(ast_node* Node, string_builder *Builder);
+bonsai_function void PrintAstNode(ast_node_expression *Node, string_builder *Builder);
 bonsai_function void PrintAstNode(ast_node_statement* Node, string_builder *Builder);
 
 bonsai_function void
@@ -64,6 +65,12 @@ PrintAstNode(ast_node *Node, string_builder *Builder)
         /* Append(Builder, CSz(" ")); */
       } break;
 
+      case type_ast_node_expression:
+      {
+        auto Child = SafeAccess(ast_node_expression, Node);
+        PrintAstNode(Child, Builder);
+      } break;
+
 
 
 
@@ -98,13 +105,6 @@ PrintAstNode(ast_node *Node, string_builder *Builder)
         PrintAstNode(Child->Symbol, Builder);
       } break;
 
-      case type_ast_node_expression:
-      {
-        NotImplemented;
-        auto Child = SafeAccess(ast_node_expression, Node);
-        PrintAstNode(Child, Builder);
-      } break;
-
       case type_ast_node_return:
       {
         NotImplemented;
@@ -125,5 +125,14 @@ PrintAstNode(ast_node *Node, string_builder *Builder)
       } break;
     }
   }
+}
+
+bonsai_function counted_string
+PrintAstNode(ast_node *Node, memory_arena *Memory)
+{
+  string_builder Builder = {};
+  PrintAstNode(Node, &Builder);
+  counted_string Value = Finalize(&Builder, Memory);
+  return Value;
 }
 
