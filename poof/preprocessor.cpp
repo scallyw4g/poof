@@ -9120,7 +9120,7 @@ ApplyTransformations(meta_transform_op Transformations, counted_string Input, me
 
     if ( Transformations & strip_prefix )
     {
-      UnsetBitfield(meta_transform_op, Transformations, to_capital_case );
+      UnsetBitfield(meta_transform_op, Transformations, strip_prefix );
       Result = StripPrefix(Result, Memory);
     }
   }
@@ -9237,8 +9237,7 @@ PrintType(type_spec *Type, memory_arena *Memory)
         {
           if (Type->Qualifier & (EnumVal.name))
           {
-            Append(&Builder, CSz("(EnumVal.name.strip_prefix.to_lowercase) ")); // TODO(Jesse): Strip prefix and lowercase
-            /* Append(&Builder, CSz("(EnumVal.name) ")); // TODO(Jesse): Strip prefix and lowercase */
+            Append(&Builder, CSz("(EnumVal.name.strip_prefix.to_lowercase)"));
           }
         })
       }

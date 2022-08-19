@@ -4,13 +4,13 @@ BUILD_EVERYTHING=0
 
 # git checkout $META_OUT
 
-RunPoof=0
+RunPoof=1
 BuildPoof=1
 
-BuildParserTests=0
-RunParserTests=0
+BuildParserTests=1
+RunParserTests=1
 
-RunIntegrationTests=0
+RunIntegrationTests=1
 
 . scripts/preamble.sh
 . scripts/setup_for_cxx.sh
@@ -45,6 +45,7 @@ function RunPoof {
   #   git checkout poof/generated/generate_cursor_c_token.h
   # fi
 
+  # gdb --args bin/poof_dev                 \
   bin/poof_dev                 \
     poof/preprocessor.cpp      \
     $COLORFLAG                 \
