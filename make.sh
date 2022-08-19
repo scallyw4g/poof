@@ -1,28 +1,28 @@
 #! /bin/bash
 
-BUILD_EVERYTHING=0
-
-# git checkout $META_OUT
-
-RunPoof=0
-BuildPoof=1
-
-BuildParserTests=0
-RunParserTests=0
-
-RunIntegrationTests=0
-
-. scripts/preamble.sh
-. scripts/setup_for_cxx.sh
-
-OPTIMIZATION_LEVEL="-O0"
-
 ROOT="."
 SRC="$ROOT/poof"
 BIN="$ROOT/bin"
 BIN_TEST="$BIN/tests"
 META_OUT="$ROOT/poof/generated"
 
+
+BUILD_EVERYTHING=0
+
+git checkout $META_OUT
+
+BuildPoof=1
+RunPoof=1
+
+BuildParserTests=1
+RunParserTests=1
+
+RunIntegrationTests=1
+
+. scripts/preamble.sh
+. scripts/setup_for_cxx.sh
+
+OPTIMIZATION_LEVEL="-O0"
 
 function RunPoof {
 
@@ -38,18 +38,18 @@ function RunPoof {
   # to special-case that one file.
   #
 
-  # if [ -d $META_OUT ]; then
-  #   rm -Rf $META_OUT
-  #   mkdir -p $META_OUT
-  #   mkdir -p $META_OUT/tmp
-  #   git checkout poof/generated/generate_cursor_c_token.h
-  # fi
+  if [ -d $META_OUT ]; then
+    rm -Rf $META_OUT
+    mkdir -p $META_OUT
+    mkdir -p $META_OUT/tmp
+    git checkout poof/generated/generate_cursor_c_token.h
+  fi
 
+  #  --log-level LogLevel_Error \
   # gdb --args bin/poof_dev                 \
   bin/poof_dev                 \
     poof/preprocessor.cpp      \
     $COLORFLAG                 \
-    --log-level LogLevel_Error \
     -D BONSAI_PREPROCESSOR     \
     -D BONSAI_LINUX            \
     -I "."                     \
@@ -104,13 +104,12 @@ if [ ! -d "$BIN_TEST" ]; then
   mkdir "$BIN_TEST"
 fi
 
+if [[ $BuildPoof == 1 || $BUILD_EVERYTHING == 1 ]]; then
+  BuildPoof
+fi
 
 if [[ $RunPoof == 1 || $BUILD_EVERYTHING == 1 ]]; then
   RunPoof
-fi
-
-if [[ $BuildPoof == 1 || $BUILD_EVERYTHING == 1 ]]; then
-  BuildPoof
 fi
 
 if [[ $BuildParserTests == 1 || $BUILD_EVERYTHING == 1 ]]; then

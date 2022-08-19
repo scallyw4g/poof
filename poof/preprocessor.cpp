@@ -8787,10 +8787,11 @@ FlushOutputToDisk(parse_context *Ctx, counted_string OutputForThisParser, counte
   }
   else
   {
-    // NOTE(Jesse): This is horribly tortured.. remove Ctx->CurrentParser.. it's
-    // completely unnecessary cruft.
+    // NOTE(Jesse): This is horribly tortured.. remove Ctx->CurrentParser..
+    // it's completely unnecessary cruft.
     parser *OldParser = Ctx->CurrentParser;
     Ctx->CurrentParser = OutputParse;
+    RunPreprocessor(Ctx, OutputParse, Memory);
     ParseDatatypes(Ctx, OutputParse);
     Ctx->CurrentParser = OldParser;
   }
