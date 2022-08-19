@@ -1,7 +1,16 @@
 #! /bin/bash
 
-BUILD_EVERYTHING=1
-BuildPoof=1
+BUILD_EVERYTHING=0
+
+# git checkout $META_OUT
+
+RunPoof=1
+BuildPoof=0
+
+BuildParserTests=0
+RunParserTests=0
+
+RunIntegrationTests=0
 
 . scripts/preamble.sh
 . scripts/setup_for_cxx.sh
@@ -12,7 +21,40 @@ ROOT="."
 SRC="$ROOT/poof"
 BIN="$ROOT/bin"
 BIN_TEST="$BIN/tests"
-META_OUT="$SRC/poof/generated"
+META_OUT="$ROOT/poof/generated"
+
+
+function RunPoof {
+
+  # NOTE(Jesse): This currently doesn't work (well, it could be forced to)
+  # because poof/generated/generate_cursor_c_token.h isn't generated and I don't
+  # really want to move it out of there since a med-term goal is to be able to
+  # augment generated structures with additional members
+  #
+  # If you really want, add:
+  #
+  # git checkout poof/generated/generate_cursor_c_token.h
+  #
+  # to special-case that one file.
+  #
+
+  if [ -d $META_OUT ]; then
+    rm -Rf $META_OUT
+    mkdir -p $META_OUT
+    mkdir -p $META_OUT/tmp
+    git checkout poof/generated/generate_cursor_c_token.h
+  fi
+
+  bin/poof_dev                 \
+    poof/preprocessor.cpp      \
+    $COLORFLAG                 \
+    --log-level LogLevel_Error \
+    -D BONSAI_PREPROCESSOR     \
+    -D BONSAI_LINUX            \
+    -I "."                     \
+    -I "include"               \
+    -o $META_OUT
+}
 
 function BuildPoof {
   which clang++ > /dev/null
@@ -62,6 +104,23 @@ if [ ! -d "$BIN_TEST" ]; then
 fi
 
 
+if [[ $RunPoof == 1 || $BUILD_EVERYTHING == 1 ]]; then
+  RunPoof
+fi
+
 if [[ $BuildPoof == 1 || $BUILD_EVERYTHING == 1 ]]; then
   BuildPoof
+fi
+
+if [[ $BuildParserTests == 1 || $BUILD_EVERYTHING == 1 ]]; then
+  ./tests/make.sh BuildParserTests
+fi
+
+
+if [[ $RunParserTests == 1 || $BUILD_EVERYTHING == 1 ]]; then
+  ./tests/make.sh RunParserTests
+fi
+
+if [[ $RunIntegrationTests == 1 ]]; then
+  ./tests/make.sh RunIntegrationTests
 fi

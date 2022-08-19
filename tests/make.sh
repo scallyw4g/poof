@@ -6,7 +6,6 @@ cd ~/work/poof
 . scripts/preamble.sh
 . scripts/setup_for_cxx.sh
 
-
 function RunIntegrationTests()
 {
   INTEGRATION_SRC_DIR=tests/integration/src
@@ -23,9 +22,9 @@ function RunIntegrationTests()
     # whole directory to confirm/deny the output is identical for that test file
 
     # gdb --args bin/poof_dev \
-    bin/poof_dev \
-      $filename             \
-      $COLORFLAG            \
+    bin/poof_dev              \
+      $filename               \
+      $COLORFLAG              \
       -o $INTEGRATION_OUTPUT_DIR/$basename_stripped
 
     DIFF_CHANGED=$(git diff --ignore-all-space --ignore-blank-lines $INTEGRATION_OUTPUT_DIR/$basename_stripped | wc -l)
@@ -58,6 +57,15 @@ function BuildParserTests
       $executable && echo -e "$Success $executable -> $output_basename$PLATFORM_EXE_EXTENSION"
 }
 
-RunIntegrationTests
-# BuildParserTests
+function RunParserTests
+{
+  # gdb --args ./bin/tests/preprocessor $COLORFLAG
+  ./bin/tests/preprocessor $COLORFLAG
+}
+
+
+
+#######################################
+$@
+#######################################
 

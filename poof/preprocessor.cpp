@@ -6223,13 +6223,13 @@ bonsai_function void
 ParseLongness(parser *Parser, type_spec *Result)
 {
   RequireToken(Parser, CTokenType_Long);
-  Result->Long = True;
+  Result->Qualifier |= TypeQual_Long;
 
-  if (OptionalToken(Parser, CTokenType_Double)) { Result->LongDouble = True; }
+  if (OptionalToken(Parser, CTokenType_Double)) { Result->Qualifier |= TypeQual_LongDouble; }
   else
   {
-    if (OptionalToken(Parser, CTokenType_Long)) { Result->LongLong = True; }
-    if (OptionalToken(Parser, CTokenType_Int)) { Result->Int = True; }
+    if (OptionalToken(Parser, CTokenType_Long)) { Result->Qualifier |= TypeQual_LongLong; }
+    if (OptionalToken(Parser, CTokenType_Int)) { Result->Qualifier |= TypeQual_Int; }
   }
 }
 
@@ -6260,10 +6260,22 @@ TryEatAttributes(parser *Parser)
   }
 }
 
+bonsai_function counted_string 
+StringFromTokenSpan(parser *Parser, c_token *StartToken, c_token *EndToken, memory_arena *Memory)
+{
+  Assert(IsValidForCursor(Parser->Tokens, StartToken));
+  Assert(IsValidForCursor(Parser->Tokens, EndToken));
+
+  counted_string Result = {};
+  return Result;
+}
+
 bonsai_function type_spec
 ParseTypeSpecifier(parse_context *Ctx)
 {
   parser *Parser = Ctx->CurrentParser;
+
+  c_token *StartToken = PeekTokenPointer(Parser);
 
   type_spec Result = {};
 
@@ -6289,32 +6301,32 @@ ParseTypeSpecifier(parse_context *Ctx)
       case CTokenType_ThreadLocal:
       {
         RequireToken(Parser, CTokenType_ThreadLocal);
-        Result.ThreadLocal = True;
+        Result.Qualifier |= TypeQual_ThreadLocal;
       } break;
 
       case CTokenType_Const:
       {
-        if (Result.Const)
+        if (Result.Qualifier & TypeQual_Const)
         {
           Done = True;
         }
         else
         {
           RequireToken(Parser, CTokenType_Const);
-          Result.Const = True;
+          Result.Qualifier |= TypeQual_Const;
         }
       } break;
 
       case CTokenType_Static:
       {
         RequireToken(Parser, CTokenType_Static);
-        Result.Static = True;
+        Result.Qualifier |= TypeQual_Static;
       } break;
 
       case CTokenType_Volatile:
       {
         RequireToken(Parser, CTokenType_Volatile);
-        Result.Volatile = True;
+        Result.Qualifier |= TypeQual_Volatile;
       } break;
 
       case CTokenType_Signed:
@@ -6324,11 +6336,11 @@ ParseTypeSpecifier(parse_context *Ctx)
 
         if (T.Type == CTokenType_Signed)
         {
-          Result.Signed = True;
+          Result.Qualifier |= TypeQual_Signed;
         }
         else if (T.Type == CTokenType_Unsigned)
         {
-          Result.Unsigned = True;
+          Result.Qualifier |= TypeQual_Unsigned;
         }
         else
         {
@@ -6345,17 +6357,17 @@ ParseTypeSpecifier(parse_context *Ctx)
             case CTokenType_Int:
             {
               RequireToken(Parser, nT->Type);
-              Result.Int = True;
+              Result.Qualifier |= TypeQual_Int;
             } break;
             case CTokenType_Short:
             {
               RequireToken(Parser, nT->Type);
-              Result.Short = True;
+              Result.Qualifier |= TypeQual_Short;
             } break;
             case CTokenType_Char:
             {
               RequireToken(Parser, nT->Type);
-              Result.Char = True;
+              Result.Qualifier |= TypeQual_Char;
             } break;
             case CTokenType_Long:
             {
@@ -6371,19 +6383,19 @@ ParseTypeSpecifier(parse_context *Ctx)
       case CTokenType_Enum:
       {
         RequireToken(Parser, CTokenType_Enum);
-        Result.Enum = True;
+        Result.Qualifier |= TypeQual_Enum;
       } break;
 
       case CTokenType_Struct:
       {
         RequireToken(Parser, CTokenType_Struct);
-        Result.Struct = True;
+        Result.Qualifier |= TypeQual_Struct;
       } break;
 
       case CTokenType_Union:
       {
         RequireToken(Parser, CTokenType_Union);
-        Result.Union = True;
+        Result.Qualifier |= TypeQual_Union;
       } break;
 
       case CTokenType_TemplateKeyword:
@@ -6411,7 +6423,7 @@ ParseTypeSpecifier(parse_context *Ctx)
       case CTokenType_Inline:
       {
         RequireToken(Parser, T.Type);
-        Result.Inline = True;
+        Result.Qualifier |= TypeQual_Inline;
       } break;
 
       case CTokenType_Long:
@@ -6422,18 +6434,24 @@ ParseTypeSpecifier(parse_context *Ctx)
 
       case CTokenType_Short:
       {
-        Result.Short = True;
+        Result.Qualifier |= TypeQual_Short;
         RequireToken(Parser, CTokenType_Short);
 
-        if (OptionalToken(Parser, CTokenType_Int)) { Result.Int = True; }
+        if (OptionalToken(Parser, CTokenType_Int)) { Result.Qualifier |= TypeQual_Int; }
 
+        Done = True;
+      } break;
+
+      case CTokenType_Int:
+      {
+        RequireToken(Parser, T.Type);
+        Result.Qualifier |= TypeQual_Int;
         Done = True;
       } break;
 
       case CTokenType_Double:
       case CTokenType_Float:
       case CTokenType_Char:
-      case CTokenType_Int:
       case CTokenType_Void:
       case CTokenType_Bool:
       case CTokenType_Auto:
@@ -6495,6 +6513,10 @@ ParseTypeSpecifier(parse_context *Ctx)
   {
     Result.Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
   }
+
+
+  c_token *EndToken = PeekTokenRawPointer(Parser);
+  /* counted_string SourceText = StringFromTokenSpan(Parser, StartToken, EndToken, Ctx->Memory); */
 
   return Result;
 }
@@ -9182,6 +9204,43 @@ Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_
 
 #include <poof/print_ast_node.h>
 
+bonsai_function counted_string
+PrintType(type_spec *Type, memory_arena *Memory)
+{
+  counted_string Result = {};
+  string_builder Builder = {};
+
+  if (Type->Datatype.Type)
+  {
+    Result = Type->Token.Value;
+  }
+  else
+  {
+    meta
+    (
+      func (type_qualifier Enum)
+      {
+        (Enum.map_values(EnumVal)
+        {
+          if (Type->Qualifier & (EnumVal.name))
+          {
+            // Append(&Builder, CSz("(EnumVal.name > strip_prefix > lowercase) ")); // TODO(Jesse): Strip prefix and lowercase
+            Append(&Builder, CSz("(EnumVal.name) ")); // TODO(Jesse): Strip prefix and lowercase
+          }
+        })
+      }
+    )
+#include <poof/generated/anonymous_function_type_qualifier_fPa9h41Z.h>
+  }
+
+  if (Result.Count == 0)
+  {
+    Result = Finalize(&Builder, Memory);
+  }
+
+  return Result;
+}
+
 // TODO(Jesse id: 222, tags: immediate, parsing, metaprogramming) : Re-add [[nodiscard]] here
 bonsai_function counted_string
 Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx, memory_arena* Memory)
@@ -9427,13 +9486,15 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
                 case type_struct_member:
                 {
-                  switch (Replace->Data.struct_member->Type)
+                  auto Member = SafeAccessObj(struct_member, Replace->Data);
+                  switch (Member->Type)
                   {
                     case type_struct_member_noop: { InvalidCodePath(); } break;
 
                     case type_variable_decl:
                     {
-                      TypeName = Replace->Data.struct_member->variable_decl.Type.Token.Value;
+                      auto Decl = SafeAccess(variable_decl, Member);
+                      TypeName = PrintType(&Decl->Type, Memory);
                     } break;
 
                     case type_function_decl:

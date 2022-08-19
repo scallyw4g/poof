@@ -524,6 +524,35 @@ struct type_indirection_info
   counted_string FunctionPointerTypeName;
 };
 
+// TODO(Jesse): Adding an index feature to map_values would let us generate
+// bitfields like this.  We could also do stuff like statically ensure a
+// particular width, or quickly re-order fields without having to manually
+// re-jig the shifts.
+//
+enum type_qualifier
+{
+  TypeQual_None        = 0,
+  TypeQual_ThreadLocal = (1 << 0),
+  TypeQual_Const       = (1 << 1),
+  TypeQual_Static      = (1 << 2),
+  TypeQual_Volatile    = (1 << 3),
+  TypeQual_Unsigned    = (1 << 4),
+  TypeQual_Signed      = (1 << 5),
+  TypeQual_Int         = (1 << 6),
+  TypeQual_Char        = (1 << 7),
+  TypeQual_Long        = (1 << 8),
+  TypeQual_LongLong    = (1 << 9),
+  TypeQual_LongDouble  = (1 << 10),
+  TypeQual_Short       = (1 << 11),
+  TypeQual_Struct      = (1 << 12),
+  TypeQual_Union       = (1 << 13),
+  TypeQual_Enum        = (1 << 14),
+  TypeQual_Inline      = (1 << 15),
+};
+meta(string_and_value_tables(type_qualifier))
+#include <poof/generated/string_and_value_tables_type_qualifier.h>
+
+
 struct type_spec
 {
   c_token Token;
@@ -536,31 +565,12 @@ struct type_spec
 
   b32 HasTemplateArguments;
 
-  b32 ThreadLocal;
-  b32 Const;
-  b32 Static;
-  b32 Volatile;
-
-  b32 Unsigned;
-  b32 Signed;
-
-  b32 Int;
-  b32 Char;
-  b32 Long;
-  b32 LongLong;
-  b32 LongDouble;
-  b32 Short;
-
-  b32 Struct;
-  b32 Union;
-  b32 Enum;
-
-  b32 Inline;
+  u32 Qualifier; // enum type_qualifier TODO(Jesse): How do we fix this?
 
   linkage_type Linkage;
 
   counted_string TemplateSource;
-  counted_string SourceText;
+  /* counted_string SourceText; */
 };
 
 struct ast_node;
