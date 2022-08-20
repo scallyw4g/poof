@@ -93,9 +93,9 @@ And to build it:
 
 `poof` is currently undergoing a hardening phase before a 0.1.0-alpha release.
 
-At the time of this writing, the tool relies on itself to generate ~15k LoC and
-makes use of every documented feature.  That said, there are many combinations
-of features that are left un-used, and very possibly broken.
+At the time of this writing, the tool relies on itself to generate ~3.5k LoC
+and makes use of every documented feature.  [Bonsai](https://github.com/jjbandit/bonsai)
+relies on `poof` to generate ~15k LoC.
 
 At the moment, error messages are sometimes misleading or missing.  Generally,
 UX is reasonable in some places, and highly questionable in others.
@@ -125,7 +125,16 @@ before releasing a 0.1.0-alpha version of `poof`.
 
 
 ### Feature Set
-[-] Formally specify feature set for 0.1.0-alpha
+
+[X] = finished
+
+[o] = started
+
+[\_] = unstarted
+
+---
+
+[o] Formally specify feature set for 0.1.0-alpha
 
 - this was somewhat self-informed by the features required to build `poof`
 - still somewhat TBD, but I have a mostly-complete list
@@ -135,28 +144,28 @@ before releasing a 0.1.0-alpha version of `poof`.
 
 [X] Parse include graph of `poof` (including CRT headers)
 
-[X] Write test suite that exhaustively validates behavior of the parser
+[o] Write test suite that exhaustively validates behavior of the C parser
 
-[ ] Write test suite that validates the behavior of `poof`
+[o] Write test suite that validates the behavior of `poof`
 
 ### Hardening
 [X] parse all C headers on my linux system
 
-[-] parse all C headers on my windows system
+[o] parse all C headers on my windows system
 
-[ ] parse some popular C projects: redis, sqlite, ..?
+[\_] parse some popular C projects: redis, sqlite, ..?
 
 ### UX
-[-] Fix a laundry list of issues I have logged that result in unnecessary friction
+[X] Fix a laundry list of issues I have logged that result in unnecessary friction
 
-[-] Audit error messages; find nonsensical, misleading or missing errors
+[o] Audit error messages; find nonsensical, misleading or missing errors
 
-[ ] Consider options for controlling whitespace in generated code.
+[\_] Consider options for controlling whitespace in generated code.
 
 ### Documentation
-[-] Write example code
+[o] Write example code
 
-[ ] Write language documentation
+[\_] Write language documentation
 - For alpha this may be the same as example code, although a formal language
   specification should probably exist somewhere.
 
