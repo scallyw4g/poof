@@ -7,7 +7,7 @@ struct my_struct
 {
   int foo;
   float bar;
-  struct my_struct *baz;
+  long baz;
 };
 
 
@@ -32,14 +32,4 @@ int main()
   )
 #include <generated/anonymous_function_my_struct_f8p25x1m.h>
 }
-
-//
-// TODO(Jesse, immediate): The output of this is actually quite broken.
-// Correct output is a printf call for each member of my_struct.  Something like:
-//
-// printf("int foo");
-// printf("float bar");
-// printf("struct my_struct * baz");
-//
-
 

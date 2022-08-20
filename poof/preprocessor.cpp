@@ -1229,7 +1229,6 @@ ParseError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessa
 
   counted_string ParserName = {};
 
-#if 1
   if (AdvanceTo(Parser, ErrorToken))
   {
   }
@@ -1241,7 +1240,6 @@ ParseError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessa
     Error("Couldn't find specified token in parser chain.");
     Parser = 0;
   }
-#endif
 
 
   if (Parser)

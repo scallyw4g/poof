@@ -12,12 +12,12 @@ BUILD_EVERYTHING=0
 # git checkout $META_OUT
 
 BuildPoof=0
-RunPoof=0
+RunPoof=1
 
 BuildParserTests=0
 RunParserTests=0
 
-RunIntegrationTests=1
+RunIntegrationTests=0
 
 . scripts/preamble.sh
 . scripts/setup_for_cxx.sh
@@ -38,12 +38,12 @@ function RunPoof {
   # to special-case that one file.
   #
 
-  if [ -d $META_OUT ]; then
-    rm -Rf $META_OUT
-    mkdir -p $META_OUT
-    mkdir -p $META_OUT/tmp
-    git checkout poof/generated/generate_cursor_c_token.h
-  fi
+  # if [ -d $META_OUT ]; then
+  #   rm -Rf $META_OUT
+  #   mkdir -p $META_OUT
+  #   mkdir -p $META_OUT/tmp
+  #   git checkout poof/generated/generate_cursor_c_token.h
+  # fi
 
   #  --log-level LogLevel_Error \
   # gdb --args bin/poof_dev                 \

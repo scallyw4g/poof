@@ -1,5 +1,5 @@
                printf("int  foo\n");
-         printf(" bar\n");
-         printf(" baz\n");
+         printf("float  bar\n");
+         printf("long  baz\n");
 
 
