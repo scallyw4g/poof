@@ -5152,6 +5152,11 @@ ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
 {
   TIMED_FUNCTION();
 
+  if (const char *INCLUDE_ENV = PlatformGetEnvironmentVar("INCLUDE"))
+  {
+    Warn("poof does not support the environemnt variable INCLUDE (%s)", INCLUDE_ENV);
+  }
+
   Assert(IsValidForCursor(Parser->Tokens, T));
 
   c_token_cursor *Result = {};
@@ -5180,7 +5185,6 @@ ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
       Assert(Current->Filename.Count);
       PartialPath = StripQuotes(PartialPath);
       counted_string CurrentFilepath = Concat(Dirname(Current->Filename), PartialPath, TranArena);
-      Info("Relative include searching (%S)", CurrentFilepath);
       if (FileExists(CurrentFilepath))
       {
         FinalIncludePath = CurrentFilepath;
