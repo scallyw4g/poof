@@ -5135,69 +5135,91 @@ bonsai_function c_token_cursor *
 ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
 {
   TIMED_FUNCTION();
+
+  Assert(IsValidForCursor(Parser->Tokens, T));
+
   c_token_cursor *Result = {};
   counted_string FinalIncludePath = {};
 
   b32 SkipFirst = T->Type == CT_PreprocessorIncludeNext ? True : False;
 
   counted_string PartialPath = T->IncludePath;
+  if (PartialPath.Count == 0)
+  {
+    ParseError(Parser, CSz("Include path must be specified."), T);
+    return Result;
+  }
 
   if (T->Flags & CTFlags_RelativeInclude)
   {
-    Warn("Relative includes NOT SUPPORTED (%S)", PartialPath);
-    return Result;
-  }
-  else
-  {
-    if (PartialPath.Count == 0)
+    if (SkipFirst != False)
     {
-      ParseError(Parser, CSz("Include path must be specified."));
+      Error("Relative includes not supported with 'include_next'.");
+      return Result;
     }
-    else
-    {
-    }
-  }
 
-  counted_string_cursor *IncludePaths = Ctx->IncludePaths;
-  if (IncludePaths)
-  {
-    if (!Result)
+    c_token_cursor *Current = Parser->Tokens;
+    while (Current)
     {
-      for ( u32 PrefixIndex = 0;
-            PrefixIndex < Count(IncludePaths);
-            ++PrefixIndex )
+      Assert(Current->Filename.Count);
+      PartialPath = StripQuotes(PartialPath);
+      counted_string CurrentFilepath = Concat(Dirname(Current->Filename), PartialPath, TranArena);
+      Info("Relative include searching (%S)", CurrentFilepath);
+      if (FileExists(CurrentFilepath))
       {
-        counted_string PrefixPath = IncludePaths->Start[PrefixIndex];
-        counted_string FullPath = Concat(PrefixPath, PartialPath, TranArena); // TODO(Jesse id: 304): only do this work once
-
-        if (FileExists(FullPath))
-        {
-          if (SkipFirst)
-          {
-            SkipFirst = False;
-          }
-          else
-          {
-            FinalIncludePath = FullPath;
-            break;
-          }
-        }
-      }
-
-    }
-  }
-
-  if ( ! FinalIncludePath.Count )
-  {
-    if (FileExists(PartialPath))
-    {
-      if (SkipFirst)
-      {
-        SkipFirst = False;
+        FinalIncludePath = CurrentFilepath;
+        break;
       }
       else
       {
-        FinalIncludePath = PartialPath;
+        Current = Current->Up.Tokens;
+      }
+    }
+  }
+
+  if (FinalIncludePath.Count == 0)
+  {
+    counted_string_cursor *IncludePaths = Ctx->IncludePaths;
+    if (IncludePaths)
+    {
+      if (!Result)
+      {
+        for ( u32 PrefixIndex = 0;
+              PrefixIndex < Count(IncludePaths);
+              ++PrefixIndex )
+        {
+          counted_string PrefixPath = IncludePaths->Start[PrefixIndex];
+          counted_string FullPath = Concat(PrefixPath, PartialPath, TranArena); // TODO(Jesse id: 304): only do this work once
+
+          if (FileExists(FullPath))
+          {
+            if (SkipFirst)
+            {
+              SkipFirst = False;
+            }
+            else
+            {
+              FinalIncludePath = FullPath;
+              break;
+            }
+          }
+        }
+
+      }
+    }
+
+    if ( ! FinalIncludePath.Count )
+    {
+      if (FileExists(PartialPath))
+      {
+        if (SkipFirst)
+        {
+          SkipFirst = False;
+        }
+        else
+        {
+          FinalIncludePath = PartialPath;
+        }
       }
     }
   }
@@ -5217,14 +5239,11 @@ ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
   }
   else
   {
-    if (SkipFirst)
-    {
-      Warn("Unable to resolve include_next for file : (%S)", PartialPath);
-    }
-    else
-    {
-      Warn("Unable to resolve include for file : (%S)", PartialPath);
-    }
+    const char *FmtMessage = SkipFirst ?
+      "Unable to resolve include_next for file : (%S)" :
+      "Unable to resolve include for file : (%S)";
+
+    Warn(FmtMessage, PartialPath);
   }
 
   return Result;
@@ -9349,12 +9368,8 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
     if ( BodyToken->Type == CTokenType_StringLiteral )
     {
       counted_string TempStr = BodyToken->Value;
-      Assert(TempStr.Count >= 2);
-      Assert(TempStr.Start[0] == '"');
-      Assert(TempStr.Start[TempStr.Count-1] == '"');
 
-      TempStr.Count -= 2;
-      TempStr.Start += 1;
+      TempStr = StripQuotes(TempStr);
 
       parser *StringParse = ParserForAnsiStream(Ctx, AnsiStream(TempStr), TokenCursorSource_MetaprogrammingExpansion);
       counted_string Code = Execute(FuncName, *StringParse, ReplacePatterns, Ctx, Memory);

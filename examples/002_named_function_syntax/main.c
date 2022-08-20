@@ -56,10 +56,6 @@ int main()
 // however it's on the top of my priority list to fix this feature.  Manually
 // typing those include names is super annoying.
 //
-// NOTE(Jesse): `poof` currently only supports absolute includes using angle
-// brackets <>.  Supporting relative includes is a small amount of work and
-// is also high on my priority list.
-//
 // NOTE(Jesse): Passing primitives such at:
 //
 // meta(metaprogram_another_useless_struct(int))

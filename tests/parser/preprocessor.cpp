@@ -2464,6 +2464,20 @@ void TestMultiCursorTokenControl(memory_arena *Memory)
 
 }
 
+void
+TestRelativeIncludes(memory_arena *Memory)
+{
+  parse_context Ctx = AllocateParseContext(Memory);
+
+  parser *Parser = PreprocessedParserForFile( &Ctx,
+                                              CSz(TEST_FIXTURES_PATH "/preprocessor/relative_includes_0.cpp"),
+                                              TokenCursorSource_RootFile, {});
+
+  TestThat(RequireToken(Parser, CToken(CSz("parser_token_0"))));
+  TestThat(RequireToken(Parser, CToken(CSz("parser_token_1"))));
+
+}
+
 s32
 main(s32 ArgCount, const char** Args)
 {
@@ -2489,14 +2503,15 @@ main(s32 ArgCount, const char** Args)
   TestBasicTokenizationAndParsing(Memory);
   TestStructParsing(Memory);
   TestCommentSituation(Memory);
+  TestRelativeIncludes(Memory);
   TestMacrosAndIncludes(Memory);
   TestIncludeGuards(Memory);
   TestDefinesAndConditionals(Memory);
   TestLogicalOperators(Memory);
   TestLineNumbers(Memory);
   TestErrors(Memory);
-#endif
   TestAst(Memory);
+#endif
 
   TestSuiteEnd();
   exit(TestsFailed);
