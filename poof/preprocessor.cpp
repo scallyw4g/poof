@@ -56,6 +56,7 @@ bonsai_function c_token   PopToken(parser *Parser);
 bonsai_function b32       OptionalTokenRaw(parser *Parser, c_token_type Type);
 bonsai_function c_token * OptionalToken(parser *Parser, c_token T);
 bonsai_function c_token * OptionalToken(parser *Parser, c_token_type Type);
+bonsai_function c_token   RequireToken(parser *Parser, c_token *ExpectedToken);
 bonsai_function c_token   RequireToken(parser *Parser, c_token ExpectedToken);
 bonsai_function c_token   RequireToken(parser *Parser, c_token_type ExpectedType);
 bonsai_function c_token   RequireTokenRaw(parser *Parser, c_token Expected);
@@ -2265,12 +2266,22 @@ RequireToken(parser* Parser, c_token ExpectedToken)
   return Result;
 }
 
+// TODO(Jesse): This function should likely be primal for the sake of efficiency
 bonsai_function c_token
 RequireToken(parser* Parser, c_token *ExpectedToken)
 {
-  c_token Result = RequireToken(Parser, *ExpectedToken);
+  c_token Result = {};
+  if (ExpectedToken)
+  {
+    Result = RequireToken(Parser, *ExpectedToken);
+  }
+  else
+  {
+    Error("Internal error : RequireToken was passed ptr(0)");
+  }
   return Result;
 }
+
 
 bonsai_function c_token
 RequireToken(parser* Parser, c_token_type ExpectedType)
@@ -3932,6 +3943,20 @@ TryTransmuteKeywordToken(c_token *T, c_token *LastTokenPushed)
   Assert(T->Type == CT_PreprocessorPaste_InvalidToken ||
          T->Type == CTokenType_Unknown);
 
+
+  // TODO(Jesse): A large portion of this can be generated.  It should also
+  // probably do a comptime string hash and switch off that instead of doing
+  // so many serial comparisons.  It _also_ shouldn't even do serial
+  // comparisons but I benched doing it both ways
+  //
+  // ie `if {} if {}` vs `if {} else if {} else if {}`
+  //
+  // and there was no measurable difference in runtime.  I decided to keep them
+  // serial in case there's a subtle behavior difference between the two that
+  // the tests don't pick up on.  I'd rather hit and debug that when this moves
+  // to being generated if it doesn't make the program perceptibly faster.
+  //
+
   if ( StringsMatch(T->Value, CSz("if")) )
   {
     T->Type = CTokenType_If;
@@ -4047,6 +4072,18 @@ TryTransmuteKeywordToken(c_token *T, c_token *LastTokenPushed)
   else if ( StringsMatch(T->Value, CSz("protected")) )
   {
     T->Type = CT_Keyword_Protected;
+  }
+  else if ( StringsMatch(T->Value, CSz("noexcept")) )
+  {
+    T->Type = CT_Keyword_Constexpr;
+  }
+  else if ( StringsMatch(T->Value, CSz("constexpr")) )
+  {
+    T->Type = CT_Keyword_Constexpr;
+  }
+  else if ( StringsMatch(T->Value, CSz("namespace")) )
+  {
+    T->Type = CT_Keyword_Namespace;
   }
   else if ( StringsMatch(T->Value, CSz("class")) )
   {
@@ -7682,6 +7719,22 @@ EatAdditionalCommaSeperatedNames(parse_context *Ctx)
   }
 }
 
+bonsai_function void
+EatAllVisibilityQualifiers(parser *Parser)
+{
+  c_token *T = PeekTokenPointer(Parser);
+  while (T &&
+              ( T->Type == CT_Keyword_Public ||
+                T->Type == CT_Keyword_Private ||
+                T->Type == CT_Keyword_Protected )
+        )
+  {
+    RequireToken(Parser, T);
+    RequireToken(Parser, CTokenType_Colon);
+    T = PeekTokenPointer(Parser);
+  }
+}
+
 // TODO(Jesse id: 299): This could be improved by not taking the StructName, and
 // filling it out internally.  It would have to check where the struct name is
 //
@@ -7703,6 +7756,8 @@ ParseStructBody(parse_context *Ctx, counted_string StructName)
 
   for (;;)
   {
+    EatAllVisibilityQualifiers(Parser);
+
     struct_member Declaration = ParseStructMember(Ctx, Result.Type);
     if (Declaration.Type == type_struct_member_noop)
     {
@@ -7878,6 +7933,7 @@ ParseDatatypeDef(parse_context *Ctx)
       Push(&Ctx->Datatypes.Enums, Enum, Ctx->Memory);
     } break;
 
+    case CT_Keyword_Class:
     case CTokenType_Struct:
     {
       counted_string StructName = RequireToken(Parser, CTokenType_Identifier).Value;
@@ -8734,16 +8790,15 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
   program_datatypes* Datatypes = &Ctx->Datatypes;
   memory_arena* Memory = Ctx->Memory;
 
-  while (TokensRemain(Parser))
+  while ( c_token *T = PeekTokenPointer(Parser) )
   {
-    c_token T = PeekToken(Parser);
 
-    switch(T.Type)
+    switch(T->Type)
     {
       case CT_KeywordPragma:
       case CTokenType_Meta:
       {
-        RequireToken(Parser, T.Type);
+        RequireToken(Parser, T->Type);
         EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
       } break;
 
@@ -8761,6 +8816,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         RequireToken(Parser, CTokenType_Semicolon);
       } break;
 
+      case CT_Keyword_Class:
       case CTokenType_Struct:
       case CTokenType_Enum:
       case CTokenType_Union:
@@ -8772,8 +8828,22 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         }
         else
         {
-          // NOTE(Jesse): Globally-scoped variable
-          ParseVariableDecl(Ctx);
+          if (T->Type == CT_Keyword_Class)
+          {
+            // Forward declaration.
+            //
+            // NOTE(Jesse): Not sure if C++ allows global class instances using
+            // the class keyword, but if it does we don't support it yet.
+            //
+            RequireToken(Parser, T);
+            RequireToken(Parser, CTokenType_Identifier);
+            RequireToken(Parser, CTokenType_Semicolon);
+          }
+          else
+          {
+            // NOTE(Jesse): Globally-scoped variable : `global_variable struct foo = { .bar = 1 }`
+            ParseVariableDecl(Ctx);
+          }
         }
       } break;
 

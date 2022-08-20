@@ -141,6 +141,9 @@ enum c_token_type
 
   CTokenType_Meta,
 
+  CT_Keyword_Noexcept,
+  CT_Keyword_Constexpr,
+  CT_Keyword_Namespace,
   CT_Keyword_Class,
   CTokenType_Struct,
   CTokenType_Enum,
