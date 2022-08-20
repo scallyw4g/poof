@@ -2,53 +2,13 @@
           {
             Append(&Builder, CSz("none "));
           }
-          if (Type->Qualifier & TypeQual_ThreadLocal)
+          if (Type->Qualifier & TypeQual_Void)
           {
-            Append(&Builder, CSz("threadlocal "));
+            Append(&Builder, CSz("void "));
           }
-          if (Type->Qualifier & TypeQual_Const)
+          if (Type->Qualifier & TypeQual_Auto)
           {
-            Append(&Builder, CSz("const "));
-          }
-          if (Type->Qualifier & TypeQual_Static)
-          {
-            Append(&Builder, CSz("static "));
-          }
-          if (Type->Qualifier & TypeQual_Volatile)
-          {
-            Append(&Builder, CSz("volatile "));
-          }
-          if (Type->Qualifier & TypeQual_Unsigned)
-          {
-            Append(&Builder, CSz("unsigned "));
-          }
-          if (Type->Qualifier & TypeQual_Signed)
-          {
-            Append(&Builder, CSz("signed "));
-          }
-          if (Type->Qualifier & TypeQual_Int)
-          {
-            Append(&Builder, CSz("int "));
-          }
-          if (Type->Qualifier & TypeQual_Char)
-          {
-            Append(&Builder, CSz("char "));
-          }
-          if (Type->Qualifier & TypeQual_Long)
-          {
-            Append(&Builder, CSz("long "));
-          }
-          if (Type->Qualifier & TypeQual_LongLong)
-          {
-            Append(&Builder, CSz("longlong "));
-          }
-          if (Type->Qualifier & TypeQual_LongDouble)
-          {
-            Append(&Builder, CSz("longdouble "));
-          }
-          if (Type->Qualifier & TypeQual_Short)
-          {
-            Append(&Builder, CSz("short "));
+            Append(&Builder, CSz("auto "));
           }
           if (Type->Qualifier & TypeQual_Struct)
           {
@@ -62,29 +22,69 @@
           {
             Append(&Builder, CSz("enum "));
           }
+          if (Type->Qualifier & TypeQual_Bool)
+          {
+            Append(&Builder, CSz("bool "));
+          }
           if (Type->Qualifier & TypeQual_Inline)
           {
             Append(&Builder, CSz("inline "));
+          }
+          if (Type->Qualifier & TypeQual_ThreadLocal)
+          {
+            Append(&Builder, CSz("threadlocal "));
+          }
+          if (Type->Qualifier & TypeQual_Static)
+          {
+            Append(&Builder, CSz("static "));
+          }
+          if (Type->Qualifier & TypeQual_Extern)
+          {
+            Append(&Builder, CSz("extern "));
+          }
+          if (Type->Qualifier & TypeQual_Const)
+          {
+            Append(&Builder, CSz("const "));
+          }
+          if (Type->Qualifier & TypeQual_Volatile)
+          {
+            Append(&Builder, CSz("volatile "));
+          }
+          if (Type->Qualifier & TypeQual_Signed)
+          {
+            Append(&Builder, CSz("signed "));
+          }
+          if (Type->Qualifier & TypeQual_Unsigned)
+          {
+            Append(&Builder, CSz("unsigned "));
+          }
+          if (Type->Qualifier & TypeQual_Char)
+          {
+            Append(&Builder, CSz("char "));
+          }
+          if (Type->Qualifier & TypeQual_Long)
+          {
+            Append(&Builder, CSz("long "));
+          }
+          if (Type->Qualifier & TypeQual_Int)
+          {
+            Append(&Builder, CSz("int "));
+          }
+          if (Type->Qualifier & TypeQual_Long_Long)
+          {
+            Append(&Builder, CSz("long "));
           }
           if (Type->Qualifier & TypeQual_Double)
           {
             Append(&Builder, CSz("double "));
           }
+          if (Type->Qualifier & TypeQual_Short)
+          {
+            Append(&Builder, CSz("short "));
+          }
           if (Type->Qualifier & TypeQual_Float)
           {
             Append(&Builder, CSz("float "));
-          }
-          if (Type->Qualifier & TypeQual_Void)
-          {
-            Append(&Builder, CSz("void "));
-          }
-          if (Type->Qualifier & TypeQual_Auto)
-          {
-            Append(&Builder, CSz("auto "));
-          }
-          if (Type->Qualifier & TypeQual_Bool)
-          {
-            Append(&Builder, CSz("bool "));
           }
 
 

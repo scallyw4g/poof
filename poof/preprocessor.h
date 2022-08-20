@@ -38,9 +38,10 @@ enum meta_transform_op
 {
   meta_transform_op_noop,
 
-  to_capital_case = (1 << 0),
-  to_lowercase    = (1 << 1),
-  strip_prefix    = (1 << 2),
+  to_capital_case     = (1 << 0),
+  to_lowercase        = (1 << 1),
+  strip_single_prefix = (1 << 2),
+  strip_all_prefix    = (1 << 3),
 };
 meta(generate_value_table(meta_transform_op))
 #include <poof/generated/generate_value_table_meta_transform_op.h>
@@ -534,27 +535,27 @@ struct type_indirection_info
 enum type_qualifier
 {
   TypeQual_None        = 0,
-  TypeQual_ThreadLocal = (1 << 0),
-  TypeQual_Const       = (1 << 1),
-  TypeQual_Static      = (1 << 2),
-  TypeQual_Volatile    = (1 << 3),
-  TypeQual_Unsigned    = (1 << 4),
-  TypeQual_Signed      = (1 << 5),
-  TypeQual_Int         = (1 << 6),
-  TypeQual_Char        = (1 << 7),
-  TypeQual_Long        = (1 << 8),
-  TypeQual_LongLong    = (1 << 9),
-  TypeQual_LongDouble  = (1 << 10),
-  TypeQual_Short       = (1 << 11),
-  TypeQual_Struct      = (1 << 12),
-  TypeQual_Union       = (1 << 13),
-  TypeQual_Enum        = (1 << 14),
-  TypeQual_Inline      = (1 << 15),
-  TypeQual_Double      = (1 << 16),
-  TypeQual_Float       = (1 << 17),
-  TypeQual_Void        = (1 << 18),
-  TypeQual_Auto        = (1 << 19),
-  TypeQual_Bool        = (1 << 20),
+  TypeQual_Void        = (1 << 0),
+  TypeQual_Auto        = (1 << 1),
+  TypeQual_Struct      = (1 << 2),
+  TypeQual_Union       = (1 << 3),
+  TypeQual_Enum        = (1 << 4),
+  TypeQual_Bool        = (1 << 5),
+  TypeQual_Inline      = (1 << 6),
+  TypeQual_ThreadLocal = (1 << 7),
+  TypeQual_Static      = (1 << 8),
+  TypeQual_Extern      = (1 << 9),
+  TypeQual_Const       = (1 << 10),
+  TypeQual_Volatile    = (1 << 11),
+  TypeQual_Signed      = (1 << 12),
+  TypeQual_Unsigned    = (1 << 13),
+  TypeQual_Char        = (1 << 14),
+  TypeQual_Long        = (1 << 15),
+  TypeQual_Int         = (1 << 16),
+  TypeQual_Long_Long   = (1 << 17),
+  TypeQual_Double      = (1 << 18),
+  TypeQual_Short       = (1 << 19),
+  TypeQual_Float       = (1 << 20),
 };
 meta(string_and_value_tables(type_qualifier))
 #include <poof/generated/string_and_value_tables_type_qualifier.h>

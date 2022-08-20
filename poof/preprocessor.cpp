@@ -6225,10 +6225,10 @@ ParseLongness(parser *Parser, type_spec *Result)
   RequireToken(Parser, CTokenType_Long);
   Result->Qualifier |= TypeQual_Long;
 
-  if (OptionalToken(Parser, CTokenType_Double)) { Result->Qualifier |= TypeQual_LongDouble; }
+  if (OptionalToken(Parser, CTokenType_Double)) { Result->Qualifier |= TypeQual_Double; }
   else
   {
-    if (OptionalToken(Parser, CTokenType_Long)) { Result->Qualifier |= TypeQual_LongLong; }
+    if (OptionalToken(Parser, CTokenType_Long)) { Result->Qualifier |= TypeQual_Long_Long; }
     if (OptionalToken(Parser, CTokenType_Int)) { Result->Qualifier |= TypeQual_Int; }
   }
 }
@@ -7355,7 +7355,7 @@ ParseStructMember(parse_context *Ctx, counted_string StructName)
   c_token T = PeekToken(Parser);
   switch(T.Type)
   {
-    case CTokenType_Tilde:
+    case CTokenType_Tilde: // Destructor
     {
       RequireToken(Parser, CTokenType_Tilde);
 
@@ -7400,7 +7400,7 @@ ParseStructMember(parse_context *Ctx, counted_string StructName)
         else
         {
           Result.variable_decl = ParseVariableDecl(Ctx);
-          /* type_indirection_info Indirection = */ ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
+          Result.variable_decl.Type.Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
         }
       }
 
@@ -7566,6 +7566,7 @@ struct comma_separated_decl
   counted_string Name;
   type_indirection_info Indirection;
   ast_node *StaticBufferSize;
+  ast_node *Value;
 };
 
 bonsai_function comma_separated_decl
@@ -7581,6 +7582,11 @@ ParseCommaSeperatedDecl(parse_context *Ctx)
   {
     ParseExpression(Ctx, &Result.StaticBufferSize );
     RequireToken(Parser, CTokenType_CloseBracket);
+  }
+
+  if ( OptionalToken(Parser, CTokenType_Equals) )
+  {
+    ParseExpression(Ctx, &Result.Value);
   }
 
   return Result;
@@ -7616,10 +7622,9 @@ ParseStructBody(parse_context *Ctx, counted_string StructName)
 
   RequireToken(Parser, CTokenType_OpenBrace);
 
-  struct_member Declaration = {};
   for (;;)
   {
-    Declaration = ParseStructMember(Ctx, Result.Type);
+    struct_member Declaration = ParseStructMember(Ctx, Result.Type);
     if (Declaration.Type == type_struct_member_noop)
     {
       break;
@@ -7632,8 +7637,13 @@ ParseStructBody(parse_context *Ctx, counted_string StructName)
     //  Parse comma-separated definitions .. ie `struct fing { int foo, bar, baz; };`
     while (OptionalToken(Parser, CTokenType_Comma))
     {
-      counted_string Name = ParseCommaSeperatedDecl(Ctx).Name;
-      Declaration.variable_decl.Name = Name;
+      comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
+
+      Declaration.variable_decl.Name = Decl.Name;
+      Declaration.variable_decl.Type.Indirection = Decl.Indirection;
+      Declaration.variable_decl.StaticBufferSize = Decl.StaticBufferSize;
+      Declaration.variable_decl.Value = Decl.Value;
+
       Push(&Result.Members, Declaration, Ctx->Memory);
     }
 
@@ -9148,10 +9158,16 @@ ApplyTransformations(meta_transform_op Transformations, counted_string Input, me
       Result = ToLowerCase(Result, Memory);
     }
 
-    if ( Transformations & strip_prefix )
+    if ( Transformations & strip_single_prefix )
     {
-      UnsetBitfield(meta_transform_op, Transformations, strip_prefix );
-      Result = StripPrefix(Result, Memory);
+      UnsetBitfield(meta_transform_op, Transformations, strip_single_prefix );
+      Result = StripPrefix(Result, Memory, 0);
+    }
+
+    if ( Transformations & strip_all_prefix )
+    {
+      UnsetBitfield(meta_transform_op, Transformations, strip_all_prefix );
+      Result = StripPrefix(Result, Memory, u64_MAX);
     }
   }
 
@@ -9267,7 +9283,7 @@ PrintType(type_spec *Type, memory_arena *Memory)
         {
           if (Type->Qualifier & (EnumVal.name))
           {
-            Append(&Builder, CSz("(EnumVal.name.strip_prefix.to_lowercase) "));
+            Append(&Builder, CSz("(EnumVal.name.strip_all_prefix.to_lowercase) "));
           }
         })
       }
