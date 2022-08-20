@@ -10803,6 +10803,8 @@ main(s32 ArgCount_, const char** ArgStrings)
     }
   }
 
+  TryDeleteDirectory(TMP_DIR_ROOT);
+
   s32 Result = !Success; // ? SUCCESS_EXIT_CODE : FAILURE_EXIT_CODE ;
   return Result;
 }
