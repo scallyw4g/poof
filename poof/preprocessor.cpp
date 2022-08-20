@@ -453,6 +453,23 @@ IsNewline(c_token *T)
 
 
 bonsai_function b32
+IsNBSP(c_token_type Type)
+{
+  b32 Result = Type == CTokenType_Tab            ||
+               Type == CTokenType_Space;
+
+  return Result;
+}
+
+bonsai_function b32
+IsNBSP(c_token *T)
+{
+  b32 Result = IsNBSP(T->Type);
+  return Result;
+}
+
+
+bonsai_function b32
 IsWhitespace(c_token_type Type)
 {
   b32 Result = Type == CTokenType_Newline        ||
@@ -3039,6 +3056,29 @@ EatSpacesTabsAndEscapedNewlines(parser *Parser)
 }
 
 
+// NOTE(Jesse): We could metapgrogram these routines if we had a feature for it
+// @meta_similar_whitespace_routines
+//
+// @optimize_call_advance_instead_of_being_dumb
+bonsai_function b32
+EatNBSP(parser* Parser)
+{
+  b32 Result = False;
+
+  c_token *T = PeekTokenRawPointer(Parser);
+  while (T && IsNBSP(T))
+  {
+    Result = True;
+    PopTokenRawPointer(Parser);
+    T = PeekTokenRawPointer(Parser);
+  }
+
+  return Result;
+}
+
+
+// @meta_similar_whitespace_routines
+//
 // @optimize_call_advance_instead_of_being_dumb
 bonsai_function b32
 EatWhitespace(parser* Parser)
@@ -3056,6 +3096,7 @@ EatWhitespace(parser* Parser)
   return Result;
 }
 
+// NOTE(Jesse): This is the same as EatWhitespace but it doesn't return a bool
 bonsai_function void
 TrimLeadingWhitespace(parser* Parser)
 {
@@ -4669,6 +4710,7 @@ TokenizeAnsiStream(ansi_stream Code, memory_arena* Memory, b32 IgnoreQuotes, par
           // NOTE(Jesse): This path throws an error during ResolveInclude()
         }
 
+        // TODO(Jesse, correctness): This seems very sus..  Why would we need to eat whitespace?
         LineNumber += EatSpacesTabsAndEscapedNewlines(&Code);
         PushT.Value.Count = (umm)(Code.At - PushT.Value.Start);
 
@@ -8780,57 +8822,50 @@ FlushOutputToDisk(parse_context *Ctx, counted_string OutputForThisParser, counte
 
   counted_string OutputPath = {};
 
-  if ( PeekTokenRaw(Parser).Type == CTokenType_Newline &&
-       PeekTokenRaw(Parser, 1).Type == CT_PreprocessorInclude )
+  EatUntilIncluding(Parser, CTokenType_Newline);
+  EatNBSP(Parser);
+
+  b32 FoundValidInclude = False;
+  c_token *T = PeekTokenRawPointer(Parser);
+  if (T && T->Type == CT_PreprocessorInclude)
   {
-    RequireTokenRaw(Parser, CToken(CTokenType_Newline));
     counted_string IncludePath = RequireTokenRaw(Parser, CT_PreprocessorInclude).IncludePath;
     OutputPath = Concat(Ctx->Args->Outpath, Basename(IncludePath), Memory);
+    FoundValidInclude = True;
   }
-  else
+
+  if (FoundValidInclude == False)
   {
+    ParseError(Parser, CSz("A meta() tag must be followed directly by an include tag on the next line."), T);
+
     // NOTE(Jesse): This path is for inserting the requisite includes when we
     // re-enable inplace editing
-    NotImplemented;
+    /* NotImplemented; */
 
-    Assert(PeekTokenRaw(Parser).Type == CTokenType_Newline);
-    OutputPath = Concat(Ctx->Args->Outpath, NewFilename, Memory);
-
-#if 0
-    Push(CToken(CTokenType_Newline),     &Parser->OutputTokens);
-    Push(CToken(CTokenType_Hash),        &Parser->OutputTokens);
-    Push(CToken(CS("include")),          &Parser->OutputTokens);
-    Push(CToken(CTokenType_Space),       &Parser->OutputTokens);
-
-    Push(CToken(CTokenType_LT),          &Parser->OutputTokens);
-    Push(CToken(CS("metaprogramming")),  &Parser->OutputTokens);
-    Push(CToken(CTokenType_FSlash),      &Parser->OutputTokens);
-    Push(CToken(CS("output")),           &Parser->OutputTokens);
-    Push(CToken(CTokenType_FSlash),      &Parser->OutputTokens);
-    Push(CToken(NewFilename),            &Parser->OutputTokens);
-    Push(CToken(CTokenType_GT),          &Parser->OutputTokens);
-#endif
-  }
-
-  Output(OutputForThisParser, OutputPath, Memory);
-  parser *OutputParse = ParserForAnsiStream(Ctx, AnsiStream(OutputForThisParser, OutputPath), TokenCursorSource_MetaprogrammingExpansion);
-
-  if (IsInlineCode)
-  {
-    // TODO(Jesse, id: 226, tags: metaprogramming, output): Should we handle this differently?
-    Warn("Not parsing datatypes in inlined code for %S", OutputPath);
+    /* Assert(PeekTokenRaw(Parser).Type == CTokenType_Newline); */
+    /* OutputPath = Concat(Ctx->Args->Outpath, NewFilename, Memory); */
   }
   else
   {
-    // NOTE(Jesse): This is horribly tortured.. remove Ctx->CurrentParser..
-    // it's completely unnecessary cruft.
-    parser *OldParser = Ctx->CurrentParser;
-    Ctx->CurrentParser = OutputParse;
-    RunPreprocessor(Ctx, OutputParse, Memory);
-    ParseDatatypes(Ctx, OutputParse);
-    Ctx->CurrentParser = OldParser;
-  }
+    Output(OutputForThisParser, OutputPath, Memory);
+    parser *OutputParse = ParserForAnsiStream(Ctx, AnsiStream(OutputForThisParser, OutputPath), TokenCursorSource_MetaprogrammingExpansion);
 
+    if (IsInlineCode)
+    {
+      // TODO(Jesse, id: 226, tags: metaprogramming, output): Should we handle this differently?
+      Warn("Not parsing datatypes in inlined code for %S", OutputPath);
+    }
+    else
+    {
+      // NOTE(Jesse): This is horribly tortured.. remove Ctx->CurrentParser..
+      // it's completely unnecessary cruft.
+      parser *OldParser = Ctx->CurrentParser;
+      Ctx->CurrentParser = OutputParse;
+      RunPreprocessor(Ctx, OutputParse, Memory);
+      ParseDatatypes(Ctx, OutputParse);
+      Ctx->CurrentParser = OldParser;
+    }
+  }
   /* PushParser(Ctx->CurrentParser, OutputParse, parser_push_type_include); */
   /* GoGoGadgetMetaprogramming(Ctx, TodoInfo); */
 
