@@ -10,9 +10,6 @@ struct my_struct
   long baz;
 };
 
-
-
-
 int main()
 {
   // Struct member iteration is similar to enum value iteration, however we use

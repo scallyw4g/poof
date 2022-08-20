@@ -14,7 +14,7 @@ int main()
   // specifies a type for its type argument.
   //
   // This is particularly useful when paired with type constraints for avoiding
-  // a certain class of bugs.
+  // a certain class of bugs.  We'll get to this in a subsequent lesson.
   //
   meta
   (

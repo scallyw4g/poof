@@ -17,8 +17,8 @@ struct baz_struct
   int baz_int;
 };
 
-// The d_union keyword asks `poof` to please generate a discriminated union structure
-// for us from the specified structures.
+// The d_union keyword asks `poof` to please generate a discriminated union
+// structure for us from the specified structs.
 //
 // The enum_only keyword specifies that an additional `type` enum value should
 // be generated with the given name (in this case, flazz), but there is not an
@@ -39,6 +39,20 @@ meta
 
 int main()
 {
+  // Here, we generate code to print the enum tag values for the discriminated union
+  meta
+  (
+    func (my_discriminated_union_type Enum)
+    {
+      (Enum.map_values (Val)
+      {
+       printf("(Val.name)\n");
+      })
+    }
+  )
+#include <generated/print_enum_values_fd9ff432f.h>
+
+  // Here, we generate code to print the discriminated union struct we generated
   meta
   (
     // TODO(Jesse, examples, immediate): The output of this is a bit borked.

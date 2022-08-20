@@ -9,6 +9,7 @@ mkdir generated
 
   # --log-level LogLevel_Error \
 
+# gdb --args ../../bin/poof_dev           \
 ../../bin/poof_dev           \
   -I "."                     \
   --output-path ./generated  \
