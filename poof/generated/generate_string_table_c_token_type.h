@@ -80,6 +80,7 @@
             case CTokenType_DoubleLiteral: { Result = CSz("CTokenType_DoubleLiteral"); } break;
             case CTokenType_FloatLiteral: { Result = CSz("CTokenType_FloatLiteral"); } break;
             case CTokenType_Meta: { Result = CSz("CTokenType_Meta"); } break;
+            case CT_Keyword_Class: { Result = CSz("CT_Keyword_Class"); } break;
             case CTokenType_Struct: { Result = CSz("CTokenType_Struct"); } break;
             case CTokenType_Enum: { Result = CSz("CTokenType_Enum"); } break;
             case CTokenType_Union: { Result = CSz("CTokenType_Union"); } break;
@@ -103,6 +104,9 @@
             case CTokenType_Inline: { Result = CSz("CTokenType_Inline"); } break;
             case CTokenType_TemplateKeyword: { Result = CSz("CTokenType_TemplateKeyword"); } break;
             case CTokenType_OperatorKeyword: { Result = CSz("CTokenType_OperatorKeyword"); } break;
+            case CT_Keyword_Public: { Result = CSz("CT_Keyword_Public"); } break;
+            case CT_Keyword_Private: { Result = CSz("CT_Keyword_Private"); } break;
+            case CT_Keyword_Protected: { Result = CSz("CT_Keyword_Protected"); } break;
             case CT_KeywordPragma: { Result = CSz("CT_KeywordPragma"); } break;
             case CT_KeywordAttribute: { Result = CSz("CT_KeywordAttribute"); } break;
             case CT_StaticAssert: { Result = CSz("CT_StaticAssert"); } break;

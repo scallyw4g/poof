@@ -4036,6 +4036,22 @@ TryTransmuteKeywordToken(c_token *T, c_token *LastTokenPushed)
   {
     T->Type = CTokenType_Unsigned;
   }
+  else if ( StringsMatch(T->Value, CSz("public")) )
+  {
+    T->Type = CT_Keyword_Public;
+  }
+  else if ( StringsMatch(T->Value, CSz("private")) )
+  {
+    T->Type = CT_Keyword_Private;
+  }
+  else if ( StringsMatch(T->Value, CSz("protected")) )
+  {
+    T->Type = CT_Keyword_Protected;
+  }
+  else if ( StringsMatch(T->Value, CSz("class")) )
+  {
+    T->Type = CT_Keyword_Class;
+  }
   else if ( StringsMatch(T->Value, CSz("struct")) )
   {
     T->Type = CTokenType_Struct;

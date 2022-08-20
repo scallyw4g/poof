@@ -141,6 +141,7 @@ enum c_token_type
 
   CTokenType_Meta,
 
+  CT_Keyword_Class,
   CTokenType_Struct,
   CTokenType_Enum,
   CTokenType_Union,
@@ -168,6 +169,10 @@ enum c_token_type
   CTokenType_Inline,
   CTokenType_TemplateKeyword,
   CTokenType_OperatorKeyword,
+
+  CT_Keyword_Public,
+  CT_Keyword_Private,
+  CT_Keyword_Protected,
 
   CT_KeywordPragma,
   CT_KeywordAttribute,
