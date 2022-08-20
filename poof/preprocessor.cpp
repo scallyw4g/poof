@@ -10672,6 +10672,9 @@ main(s32 ArgCount_, const char** ArgStrings)
   arguments Args = ParseArgs(ArgStrings, ArgCount, &Ctx, Memory);
   Ctx.Args = &Args;
 
+  TryCreateDirectory(TMP_DIR_ROOT);
+  TryCreateDirectory(Args.Outpath);
+
   if (Args.DoDebugWindow)
   {
     if (BootstrapDebugSystem() == 1)
