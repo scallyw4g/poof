@@ -86,5 +86,9 @@
           {
             Append(&Builder, CSz("float "));
           }
+          if (Type->Qualifier & TypeQual_Constexpr)
+          {
+            Append(&Builder, CSz("constexpr "));
+          }
 
 

@@ -572,6 +572,7 @@ enum type_qualifier
   TypeQual_Double      = (1 << 18),
   TypeQual_Short       = (1 << 19),
   TypeQual_Float       = (1 << 20),
+  TypeQual_Constexpr   = (1 << 21),
 };
 meta(string_and_value_tables(type_qualifier))
 #include <poof/generated/string_and_value_tables_type_qualifier.h>

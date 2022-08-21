@@ -6598,18 +6598,21 @@ ParsePrimitivesAndQualifiers(parser *Parser, type_spec *Result)
         }
       } break;
 
+      case CT_Keyword_Constexpr:
+      {
+        RequireToken(Parser, CT_Keyword_Constexpr);
+        Result->Qualifier |= TypeQual_Constexpr;
+      } break;
       case CTokenType_Static:
       {
         RequireToken(Parser, CTokenType_Static);
         Result->Qualifier |= TypeQual_Static;
       } break;
-
       case CTokenType_Volatile:
       {
         RequireToken(Parser, CTokenType_Volatile);
         Result->Qualifier |= TypeQual_Volatile;
       } break;
-
       case CTokenType_Signed:
       {
         RequireToken(Parser, T);
@@ -6620,19 +6623,16 @@ ParsePrimitivesAndQualifiers(parser *Parser, type_spec *Result)
         RequireToken(Parser, T);
         Result->Qualifier |= TypeQual_Unsigned;
       } break;
-
       case CTokenType_Enum:
       {
         RequireToken(Parser, CTokenType_Enum);
         Result->Qualifier |= TypeQual_Enum;
       } break;
-
       case CTokenType_Struct:
       {
         RequireToken(Parser, CTokenType_Struct);
         Result->Qualifier |= TypeQual_Struct;
       } break;
-
       case CTokenType_Union:
       {
         RequireToken(Parser, CTokenType_Union);
@@ -6740,6 +6740,7 @@ bonsai_function b32
 IsPrimitiveType(type_spec *Type)
 {
   u32 Mask =
+    TypeQual_Constexpr |
     TypeQual_Auto      |
     TypeQual_Bool      |
     TypeQual_Signed    |
@@ -7721,6 +7722,7 @@ ParseStructMember(parse_context *Ctx, counted_string StructName)
       EatNameQualifiers(Parser);
     } [[fallthrough]];
 
+    case CT_Keyword_Constexpr:
     case CTokenType_ThreadLocal:
     case CTokenType_Const:
     case CTokenType_Static:

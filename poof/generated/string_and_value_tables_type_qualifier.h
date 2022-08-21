@@ -26,6 +26,7 @@
             case TypeQual_Double: { Result = CSz("TypeQual_Double"); } break;
             case TypeQual_Short: { Result = CSz("TypeQual_Short"); } break;
             case TypeQual_Float: { Result = CSz("TypeQual_Float"); } break;
+            case TypeQual_Constexpr: { Result = CSz("TypeQual_Constexpr"); } break;
 
       }
       return Result;
@@ -58,6 +59,7 @@
           if (StringsMatch(S, CSz("TypeQual_Double"))) { return TypeQual_Double; }
           if (StringsMatch(S, CSz("TypeQual_Short"))) { return TypeQual_Short; }
           if (StringsMatch(S, CSz("TypeQual_Float"))) { return TypeQual_Float; }
+          if (StringsMatch(S, CSz("TypeQual_Constexpr"))) { return TypeQual_Constexpr; }
 
 
       return Result;

@@ -24,11 +24,12 @@ RunPoof=1
 BuildParserTests=1
 RunParserTests=1
 
-RunIntegrationTests=1
+RunIntegrationTests=0
 
 OPTIMIZATION_LEVEL="-O0"
 
 function RunPoof {
+  ColorizeTitle "Poofing!"
 
   # NOTE(Jesse): This currently doesn't work (well, it could be forced to)
   # because poof/generated/generate_cursor_c_token.h isn't generated and I don't
@@ -59,6 +60,11 @@ function RunPoof {
     -I "."                     \
     -I "include"               \
     -o $META_OUT
+
+  echo -e ""
+  echo -e "$Delimeter"
+  echo -e ""
+
 }
 
 function BuildPoof {
@@ -174,7 +180,7 @@ function RunParserTests
   ColorizeTitle "Running Parser Tests"
   # gdb --args ./bin/tests/preprocessor $COLORFLAG
   ./bin/tests/preprocessor     \
-    --log-level LogLevel_Shush \
+    --log-level LogLevel_Error \
     $COLORFLAG
 
   echo -e "$Delimeter"

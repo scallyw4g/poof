@@ -1,4 +1,17 @@
 
+class Obj {
+ public:
+  constexpr Obj(){}
+};
+
+struct foo
+{
+  constexpr foo()
+  {
+  }
+};
+
+
 static int *foo {};
 
 volatile int * volatile foo;
