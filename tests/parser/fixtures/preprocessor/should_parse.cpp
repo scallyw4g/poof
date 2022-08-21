@@ -1,4 +1,8 @@
 
+static int *foo {};
+
+volatile int * volatile foo;
+
 struct foo
 {
   int bar[0][0];

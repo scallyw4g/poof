@@ -534,6 +534,7 @@ enum linkage_type
 struct type_indirection_info
 {
   b32 ConstPointer;
+  b32 VolatileValue;
 
   u32 ReferenceLevel;
   u32 IndirectionLevel;

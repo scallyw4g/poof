@@ -1534,14 +1534,16 @@ ParseError_StreamEndedUnexpectedly(parser *Parser)
   (T) ? ToString((T)->Type) : CSz(""), (T) ? (T)->Value : CSz("null")
 
 bonsai_function counted_string
-ParseError_ExpectedSemicolonEqualsOrComma(parser *Parser, c_token *T)
+ParseError_ExpectedSemicolonEqualsCommaOrOpenBrace(parser *Parser, c_token *T)
 {
   counted_string Result =
-    FormatCountedString_(TranArena, CSz("Got %S(%S)\n\nExpected %S(%c), %S(%c) or %S(%c) while parsing variable declaration."),
+    FormatCountedString_(TranArena, CSz("Got %S(%S)\n\nExpected %S(%c), %S(%c), %S(%c) or %S(%c) while parsing variable declaration."),
         ParseErrorTokenHelper(T),
         ToString(CTokenType_Semicolon), CTokenType_Semicolon,
         ToString(CTokenType_Equals), CTokenType_Equals,
-        ToString(CTokenType_Comma), CTokenType_Comma);
+        ToString(CTokenType_Comma), CTokenType_Comma,
+        ToString(CTokenType_OpenBrace), CTokenType_OpenBrace
+        );
 
   ParseError(Parser, ParseErrorCode_ExpectedSemicolonOrEquals, Result, PeekTokenPointer(Parser) );
   return Result;
@@ -6378,6 +6380,12 @@ ParseReferencesIndirectionAndPossibleFunctionPointerness(parser *Parser)
         Done = True;
       } break;
 
+      case CTokenType_Volatile:
+      {
+        RequireToken(Parser, CTokenType_Volatile);
+        Result.VolatileValue = True;
+      } break;
+
       case CTokenType_Ampersand:
       {
         RequireToken(Parser, CTokenType_Ampersand);
@@ -7014,9 +7022,13 @@ ParseFunctionOrVariableDecl(parse_context *Ctx)
         else if ( PeekToken(Parser).Type == CTokenType_Comma )
         {
         }
+        else if ( PeekToken(Parser).Type == CTokenType_OpenBrace )
+        {
+          Result.variable_decl.Value = ParseInitializerList(Parser, Ctx->Memory);
+        }
         else
         {
-          ParseError_ExpectedSemicolonEqualsOrComma(Parser, PeekTokenPointer(Parser));
+          ParseError_ExpectedSemicolonEqualsCommaOrOpenBrace(Parser, PeekTokenPointer(Parser));
         }
       }
     }
