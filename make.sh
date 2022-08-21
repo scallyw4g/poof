@@ -53,7 +53,7 @@ function RunPoof {
   # gdb --args bin/poof_dev                 \
   bin/poof_dev                 \
     --log-level LogLevel_Error \
-    poof/preprocessor.cpp      \
+    poof/poof.cpp      \
     $COLORFLAG                 \
     -D BONSAI_PREPROCESSOR     \
     -D BONSAI_LINUX            \
@@ -72,7 +72,7 @@ function BuildPoof {
   [ $? -ne 0 ] && echo -e "Please install clang++" && exit 1
 
   ColorizeTitle "Building Preprocessor"
-  source_file="$SRC/preprocessor.cpp"
+  source_file="$SRC/poof.cpp"
   SetFullOutputName "$source_file" bin
   echo -e "$Building $source_file"
 
@@ -144,7 +144,7 @@ function RunIntegrationTests()
 function BuildParserTests
 {
   ColorizeTitle "Building Tests"
-    source_file=tests/parser/preprocessor.cpp
+    source_file=tests/parser/poof.cpp
     SetFullOutputName "$source_file" bin/tests
     echo -e "$Building $source_file"
 

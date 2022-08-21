@@ -6,9 +6,7 @@ class Obj {
 
 struct foo
 {
-  constexpr foo()
-  {
-  }
+  constexpr foo(){}
 };
 
 

@@ -1,5 +1,5 @@
 #define EXCLUDE_PREPROCESSOR_MAIN 1
-#include <poof/preprocessor.cpp>
+#include <poof/poof.cpp>
 #include <bonsai_stdlib/test/utils.h>
 
 #include <tests/parser/bug_defines.h>
