@@ -40,6 +40,13 @@
       Iter->At = Iter->At->Next;
     }
 
+    bonsai_function b32
+    IsLastElement(stl_container_def_iterator* Iter)
+    {
+      b32 Result = Iter->At->Next == 0;
+      return Result;
+    }
+
 
         bonsai_function stl_container_def *
     Push(stl_container_def_stream* Stream, stl_container_def Element, memory_arena* Memory)

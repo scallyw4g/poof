@@ -988,7 +988,7 @@ TestAst(memory_arena *Memory)
 }
 
 bonsai_function void
-TestMacrosAndIncludes(memory_arena *Memory)
+MacroAndIncludetest(memory_arena *Memory)
 {
   parse_context Ctx = AllocateParseContext(Memory);
   parser *Parser = PreprocessedParserForFile(&Ctx, CS(TEST_FIXTURES_PATH "/preprocessor/macro_and_include_test.cpp"), TokenCursorSource_RootFile, 0);
@@ -1275,6 +1275,25 @@ TestMacrosAndIncludes(memory_arena *Memory)
     TestThat(RequireToken(Parser, CToken(CSz("valid_path"))));
 
     TestThat(RequireToken(Parser, CToken(CSz("this_is_a_variable_name"))));
+
+    TestThat(RequireToken(Parser, CToken(CSz("P1"))));
+    TestThat(RequireToken(Parser, CToken(CSz("_foo"))));
+    TestThat(RequireToken(Parser, CToken(CSz("P2"))));
+    TestThat(RequireToken(Parser, CToken(CSz("_bar"))));
+    TestThat(RequireToken(Parser, CToken(CSz("P3"))));
+    TestThat(RequireToken(Parser, CToken(CSz("_baz"))));
+
+    TestThat(RequireToken(Parser, CToken(CSz("P1"))));
+    TestThat(RequireToken(Parser, CToken(CSz("_foo"))));
+    TestThat(RequireToken(Parser, CToken(CSz("P2"))));
+    TestThat(RequireToken(Parser, CToken(CSz("_bar"))));
+    TestThat(RequireToken(Parser, CToken(CSz("P3"))));
+    TestThat(RequireToken(Parser, CToken(CSz("_baz"))));
+
+    TestThat(RequireToken(Parser, CToken(CSz("_foo"))));
+    TestThat(RequireToken(Parser, CToken(CSz("_bar"))));
+    TestThat(RequireToken(Parser, CToken(CTokenType_Comma)));
+    TestThat(RequireToken(Parser, CToken(CSz("_baz"))));
 
     TestThat( TokensRemain(Parser) == False );
   }
@@ -2504,7 +2523,7 @@ main(s32 ArgCount, const char** Args)
   TestStructParsing(Memory);
   TestCommentSituation(Memory);
   TestRelativeIncludes(Memory);
-  TestMacrosAndIncludes(Memory);
+  MacroAndIncludetest(Memory);
   TestIncludeGuards(Memory);
   TestDefinesAndConditionals(Memory);
   TestLogicalOperators(Memory);

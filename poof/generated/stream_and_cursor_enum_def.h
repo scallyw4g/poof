@@ -59,6 +59,13 @@
       Iter->At = Iter->At->Next;
     }
 
+    bonsai_function b32
+    IsLastElement(enum_def_iterator* Iter)
+    {
+      b32 Result = Iter->At->Next == 0;
+      return Result;
+    }
+
 
         bonsai_function enum_def *
     Push(enum_def_stream* Stream, enum_def Element, memory_arena* Memory)

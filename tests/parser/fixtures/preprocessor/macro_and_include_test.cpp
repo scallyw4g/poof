@@ -261,3 +261,58 @@ self_including_macro_function()
 #define whatever double
 concat_4(variable_name,, (whatever __x))
 
+
+
+// @va_args_paste_into_another_arg
+//
+// Found out MSVC and GCC have different behavoir for the following.  Currently
+// poof emulates MSVC
+//
+// gcc outputs
+// P1 = _foo | P2 = _bar | P3 = _baz
+//
+// MSVC & poof output
+// P1 = _foo _bar _baz | P2 = | P3 =
+//
+// Supposedly amending MACRO_VA_ARGS to:
+// #define MACRO_VA_ARGS(...) MACRO_WITH_3_PARAMS( ## __VA_ARGS__)
+//
+// convinces MSVC and GCC to emit the same thing, which is the gcc case.
+//
+// I experimented and clang exhibits the same behavior as GCC, so that's the
+// behavior I've emulated for poof.
+//
+// https://renenyffenegger.ch/notes/development/languages/C-C-plus-plus/preprocessor/macros/__VA_ARGS__/index
+
+
+#define MACRO_WITH_3_PARAMS(p1, p2, p3) P1 p1 P2 p2 P3 p3
+#define MACRO_VA_ARGS(...) MACRO_WITH_3_PARAMS(__VA_ARGS__)
+MACRO_VA_ARGS(_foo, _bar, _baz)
+
+#define MACRO_VA_ARGS_PASTED(...) MACRO_WITH_3_PARAMS(##__VA_ARGS__)
+MACRO_VA_ARGS_PASTED(_foo, _bar, _baz)
+
+
+// @non_portable_va_args_paste
+//
+// https://en.cppreference.com/w/cpp/preprocessor/replace
+//
+// ```
+// Note: some compilers offer an extension that allows ## to appear after a
+// comma and before __VA_ARGS__, in which case the ## does nothing when the
+// variable arguments are present, but removes the comma when the variable
+// arguments are not present: this makes it possible to define macros such as
+// fprintf (stderr, format, ##__VA_ARGS__)
+// ```
+//
+// FML.
+
+#define macro_with_disappearing_comma(a, ...) a , ## __VA_ARGS__
+macro_with_disappearing_comma(_foo)        // _foo        < no comma
+macro_with_disappearing_comma(_bar, _baz)  // _bar, _baz  < comma
+                                           //
+                                           //             .. magic
+
+
+
+

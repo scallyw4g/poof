@@ -40,6 +40,13 @@
       Iter->At = Iter->At->Next;
     }
 
+    bonsai_function b32
+    IsLastElement(person_iterator* Iter)
+    {
+      b32 Result = Iter->At->Next == 0;
+      return Result;
+    }
+
 
         bonsai_function person *
     Push(person_stream* Stream, person Element, memory_arena* Memory)

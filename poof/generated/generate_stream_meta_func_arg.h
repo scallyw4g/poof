@@ -40,6 +40,13 @@
       Iter->At = Iter->At->Next;
     }
 
+    bonsai_function b32
+    IsLastElement(meta_func_arg_iterator* Iter)
+    {
+      b32 Result = Iter->At->Next == 0;
+      return Result;
+    }
+
 
         bonsai_function meta_func_arg *
     Push(meta_func_arg_stream* Stream, meta_func_arg Element, memory_arena* Memory)

@@ -166,6 +166,7 @@
             case CT_PreprocessorError: { Result = CSz("CT_PreprocessorError"); } break;
             case CT_PreprocessorWarning: { Result = CSz("CT_PreprocessorWarning"); } break;
             case CT_Preprocessor__VA_ARGS__: { Result = CSz("CT_Preprocessor__VA_ARGS__"); } break;
+            case CT_Preprocessor_Nuked: { Result = CSz("CT_Preprocessor_Nuked"); } break;
             case CT_InsertedCode: { Result = CSz("CT_InsertedCode"); } break;
 
       }

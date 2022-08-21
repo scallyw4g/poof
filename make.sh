@@ -11,7 +11,7 @@ BUILD_EVERYTHING=0
 
 # git checkout $META_OUT
 
-BuildPoof=0
+BuildPoof=1
 RunPoof=1
 
 BuildParserTests=1

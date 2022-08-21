@@ -60,6 +60,7 @@ bonsai_function c_token   RequireToken(parser *Parser, c_token *ExpectedToken);
 bonsai_function c_token   RequireToken(parser *Parser, c_token ExpectedToken);
 bonsai_function c_token   RequireToken(parser *Parser, c_token_type ExpectedType);
 bonsai_function c_token   RequireTokenRaw(parser *Parser, c_token Expected);
+bonsai_function c_token   RequireTokenRaw(parser *Parser, c_token *Expected);
 bonsai_function c_token   RequireTokenRaw(parser *Parser, c_token_type ExpectedType);
 
 bonsai_function b32       TokensRemain(parser *Parser, u32 TokenLookahead = 0);
@@ -89,6 +90,7 @@ bonsai_function b32         TryTransmuteKeywordToken(c_token *T, c_token *LastTo
 bonsai_function b32         TryTransmuteOperatorToken(c_token *T);
 bonsai_function b32         TryTransmuteIdentifierToken(c_token *T);
 bonsai_function macro_def * TryTransmuteIdentifierToMacro(parse_context *Ctx, parser *Parser, c_token *T, macro_def *ExpandingMacro);
+bonsai_function macro_def * IdentifierShouldBeExpanded(parse_context *Ctx, parser *Parser, c_token *T, macro_def *ExpandingMacro);
 
 bonsai_function c_token_cursor * ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T);
 bonsai_function parser * ExpandMacro(parse_context *Ctx, parser *Parser, macro_def *Macro, memory_arena *PermMemory, memory_arena *TempMemory, b32 ScanArgsForAdditionalMacros = False);
@@ -862,9 +864,9 @@ DumpCursorSimple(c_token_cursor* Tokens, c_token *AbsoluteAt = 0, u32 Depth = 0)
   {
     c_token *T = Tokens->Start + TIndex;
 
-    /* PrintToken(T); */
-    /* PrintTraySimple(T); */
-    PrintTokenVerbose(Tokens, T, AbsoluteAt, Depth);
+    PrintToken(T);
+    PrintTraySimple(T);
+    /* PrintTokenVerbose(Tokens, T, AbsoluteAt, Depth); */
 
     switch (T->Type)
     {
@@ -2310,6 +2312,14 @@ RequireTokenRaw(parser *Parser, c_token Expected )
   return Result;
 }
 
+bonsai_function c_token
+RequireTokenRaw(parser *Parser, c_token *Expected )
+{
+  Assert(Expected);
+  c_token Result = RequireTokenRaw(Parser, *Expected);
+  return Result;
+}
+
 // @duplicated_require_token_raw
 // @optimize_call_advance_instead_of_being_dumb
 bonsai_function c_token
@@ -2506,6 +2516,23 @@ TryMacroArgSubstitution(c_token *T, counted_string_buffer *NamedArguments, c_tok
   return Result;
 }
 
+bonsai_function void
+CopyVaArgsInto(c_token_buffer_stream *VarArgs, c_token_cursor *Dest, b32 DoCommas)
+{
+  ITERATE_OVER(VarArgs)
+  {
+    c_token_buffer* Arg = GET_ELEMENT(Iter);
+    CopyBufferIntoCursor(Arg, Dest);
+
+    if (DoCommas)
+    {
+      if (IsLastElement(&Iter) == False)
+      {
+        Push(CToken(CTokenType_Comma, CSz(",")), Dest);
+      }
+    }
+  }
+}
 
 // TODO(Jesse, tags: immediate, memory):  The memory allocation in this function
 // is super bad.  What we need is Begin/End TemporaryMemory such that we can
@@ -2636,17 +2663,86 @@ ExpandMacro( parse_context *Ctx,
 
   /* c_token *ResetToken = PeekTokenRawPointer(Parser); */
 
-  //
-  // Do parameter substitution and pasting
-  //
+
 
   TIMED_BLOCK("Parameter Sub && Pasting");
+
+  BUG("@need_to_copy_macro_body_tokens_expand_macro");
+  // This routine needs to _copy_ macro body tokens and throw them away at the
+  // end of the routine because if we modify the body tokens (by marking flags
+  // and calling TryTransmuteIdentifierToMacro we change the same memory other
+  // functions are looking at.");
+
   c_token_cursor TmpTokens = Macro->Body;
   parser MacroBody_ = MakeParser(&TmpTokens);
   parser *MacroBody = &MacroBody_;
   TrimLeadingWhitespace(MacroBody);
   FullRewind(MacroBody);
 
+  //
+  // Pre-scan for any macros such that we can mark __VA_ARGS__ to expand with
+  // comma separators.  This is to support @va_args_paste_into_another_arg
+  //
+
+  while (c_token *T = PeekTokenRawPointer(MacroBody))
+  {
+    if (T->Type == CT_MacroLiteral ||
+       (T->Type == CTokenType_Identifier && TryTransmuteIdentifierToMacro(Ctx, MacroBody, T, Macro)) )
+    {
+      if (T->Macro.Def->Type == type_macro_function)
+      {
+        RequireToken(MacroBody, T);
+
+        u32 Depth = 0;
+
+        for (;;)
+        {
+          T = PopTokenRawPointer(MacroBody);
+
+          if (T->Type == CT_Preprocessor__VA_ARGS__)
+          {
+            // NOTE(Jesse): Once we fix @need_to_copy_macro_body_tokens_expand_macro
+            // this assert should hold up
+            /* Assert(T->Flags == 0); */
+            T->Flags |= va_args_flags_expand_with_commas;
+          }
+
+          if (T->Type == CTokenType_OpenParen)
+          {
+            ++Depth;
+          }
+
+          if (T->Type == CTokenType_CloseParen)
+          {
+            // NOTE(Jesse): Decrementing first is kinda wonky, but we start on
+            // the macro token and always hit an open paren
+            Assert(Depth > 0);
+            if (--Depth == 0)
+            {
+              break;
+            }
+          }
+
+          continue;
+        }
+
+      }
+      else
+      {
+        RequireTokenRaw(MacroBody, T);
+      }
+    }
+    else
+    {
+      RequireTokenRaw(MacroBody, T);
+    }
+  }
+
+  FullRewind(MacroBody);
+
+  //
+  // Do parameter substitution and pasting
+  //
 
   // @optimize_call_advance_instead_of_being_dumb
   while (c_token *T = PeekTokenRawPointer(MacroBody))
@@ -2658,28 +2754,23 @@ ExpandMacro( parse_context *Ctx,
       case CT_Preprocessor__VA_ARGS__:
       {
         RequireToken(MacroBody, T->Type);
-        ITERATE_OVER(&VarArgs)
-        {
-          c_token_buffer* Arg = GET_ELEMENT(Iter);
-          CopyBufferIntoCursor(Arg, FirstPass->Tokens);
-        }
+        CopyVaArgsInto(&VarArgs, FirstPass->Tokens, T->Flags & va_args_flags_expand_with_commas);
       } break;
 
       case CTokenType_Identifier:
       {
-        // TODO(Jesse): RequireToken should be able to accept a pointer directly, duh.
-        RequireToken(MacroBody, *T);
+        RequireToken(MacroBody, T);
 
         if (c_token_buffer *ArgBuffer = TryMacroArgSubstitution(T, &Macro->NamedArguments, &ArgInstanceValues ))
         {
-          c_token_cursor Tokens = CTokenCursor(ArgBuffer, CSz(DEFAULT_FILE_IDENTIFIER), TokenCursorSource_IntermediateRepresentaton, {0,0} );
-          parser Src = MakeParser(&Tokens);
-          while (c_token* ArgT = PeekTokenRawPointer(&Src))
+          c_token_cursor ArgTokens = CTokenCursor(ArgBuffer, CSz(DEFAULT_FILE_IDENTIFIER), TokenCursorSource_IntermediateRepresentaton, {0,0} );
+          parser Arguments = MakeParser(&ArgTokens);
+          while (c_token* ArgToken = PeekTokenRawPointer(&Arguments))
           {
-            if (ArgT->Type == CT_MacroLiteral ||
-               (ArgT->Type == CTokenType_Identifier && TryTransmuteIdentifierToMacro(Ctx, &Src, ArgT, Macro)) )
+            if (ArgToken->Type == CT_MacroLiteral ||
+               (ArgToken->Type == CTokenType_Identifier && TryTransmuteIdentifierToMacro(Ctx, &Arguments, ArgToken, Macro)) )
             {
-              parser *Expanded = ExpandMacro(Ctx, &Src, ArgT->Macro.Def, PermMemory, TempMemory);
+              parser *Expanded = ExpandMacro(Ctx, &Arguments, ArgToken->Macro.Def, PermMemory, TempMemory);
               if (Expanded->ErrorCode == ParseErrorCode_None)
               {
                 // Copy expanded buffer into FirstPass, marking self-referring
@@ -2688,7 +2779,11 @@ ExpandMacro( parse_context *Ctx,
                 {
                   // TODO(Jesse, tags: metaprogramming, correctness): Test this
                   // path actually does what I intended.  At the moment I
-                  // observed self-refe'd macros not getting expanded due to MacroShouldBeExpanded()
+                  // observed self-refe'd macros not getting expanded due to
+                  // MacroShouldBeExpanded()
+                  //
+                  // @mark_keyword_macros_self_referential
+                  //
                   if (Macro->Type == type_macro_keyword && StringsMatch(ExpandedT->Value, Macro->Name))
                   {
                     ExpandedT->Type = CT_MacroLiteral_SelfRefExpansion;
@@ -2700,15 +2795,15 @@ ExpandMacro( parse_context *Ctx,
               {
                 ParseError( FirstPass,
                             Expanded->ErrorCode,
-                            FormatCountedString(TranArena, CSz("While Expanding %S"), ArgT->Value),
-                            ArgT);
+                            FormatCountedString(TranArena, CSz("While Expanding %S"), ArgToken->Value),
+                            ArgToken);
               }
             }
             else
             {
               // @token_control_pointers
-              Ensure(PopTokenRawPointer(&Src) == ArgT);
-              Push(*ArgT, FirstPass->Tokens);
+              Ensure(PopTokenRawPointer(&Arguments) == ArgToken);
+              Push(*ArgToken, FirstPass->Tokens);
             }
 
           }
@@ -2783,36 +2878,60 @@ ExpandMacro( parse_context *Ctx,
 
         if (Prev && Next)
         {
-          Prev->Type = CT_PreprocessorPaste_InvalidToken;
-          Prev->Value = Concat(Prev->Value, Next->Value, &Global_PermMemory);
-
-          // TODO(Jesse, correctness): Pasting numeric tokens together should
-          // result in new numeric tokens .. yes..?  Write TryTransmuteNumber()
+          // This is a rediculous special case.
           //
-          Prev->UnsignedValue = 0;
-
-          if (TryTransmuteKeywordToken(Prev, 0))
+          // @non_portable_va_args_paste for more information on wtf is going
+          // on.  Somebody is definitely fired.
+          if ( Prev->Type == CTokenType_Comma &&
+               Next->Type == CT_Preprocessor__VA_ARGS__ &&
+               VarArgs.FirstChunk == 0 )
           {
+            Prev->Type = CT_Preprocessor_Nuked;
+            Prev->Erased = True;
+            Prev->Value.Start = 0;
+            Prev->Value.Count = 0;
           }
-          else if (TryTransmuteOperatorToken(Prev))
+          else if ( Next->Type == CT_Preprocessor__VA_ARGS__ )
           {
-          }
-          else if (TryTransmuteIdentifierToken(Prev))
-          {
+            // Don't paste __VA_ARGS__ onto stuff
+            //
+            // TODO(Jesse, correctness): What do real compilers do?  No idea.
+            //
+            CopyVaArgsInto(&VarArgs, FirstPass->Tokens, True);
           }
           else
           {
-            umm CurrentSize = TotalSize(FirstPass->Tokens);
-            TruncateToCurrentElements(FirstPass->Tokens);
-            /* umm NewSize = TotalSize(&FirstPass->Tokens); */
-            /* Reallocate((u8*)FirstPass->Tokens->Start, TranArena, CurrentSize, NewSize); */
+            Prev->Type = CT_PreprocessorPaste_InvalidToken;
+            Prev->Value = Concat(Prev->Value, Next->Value, &Global_PermMemory);
 
-            ParseError(FirstPass,
-                       ParseErrorCode_InvalidTokenGenerated,
-                       FormatCountedString(TranArena, CSz("Invalid token generated during paste (%S)"), Prev->Value),
-                       Prev);
+            // TODO(Jesse, correctness): Pasting numeric tokens together should
+            // result in new numeric tokens .. yes..?  Write TryTransmuteNumber()
+            //
+            Prev->UnsignedValue = 0;
+
+            if (TryTransmuteKeywordToken(Prev, 0))
+            {
+            }
+            else if (TryTransmuteOperatorToken(Prev))
+            {
+            }
+            else if (TryTransmuteIdentifierToken(Prev))
+            {
+            }
+            else
+            {
+              umm CurrentSize = TotalSize(FirstPass->Tokens);
+              TruncateToCurrentElements(FirstPass->Tokens);
+              /* umm NewSize = TotalSize(&FirstPass->Tokens); */
+              /* Reallocate((u8*)FirstPass->Tokens->Start, TranArena, CurrentSize, NewSize); */
+
+              ParseError(FirstPass,
+                         ParseErrorCode_InvalidTokenGenerated,
+                         FormatCountedString(TranArena, CSz("Invalid token generated during paste (%S)"), Prev->Value),
+                         Prev);
+            }
+
           }
-
         }
         else if (Next) // No Prev pointer .. macro was called like : CONCAT(,only_passed_one_thing)
         {
@@ -3858,7 +3977,10 @@ MacroShouldBeExpanded(parser *Parser, c_token *T, macro_def *ThisMacro, macro_de
     {
       if (ExpandingMacro && StringsMatch(ExpandingMacro->Name, ThisMacro->Name))
       {
-        Info("Prevented recursive macro expansion of (%S)",  ExpandingMacro->Name);
+        // TODO(Jesse): This is the path that's preventing self-referential macros
+        // from expanding, but we should take this out in favor of the code at
+        // @mark_keyword_macros_self_referential.
+        /* Info("Prevented recursive macro expansion of (%S)",  ExpandingMacro->Name); */
       }
       else
       {
@@ -3874,23 +3996,34 @@ MacroShouldBeExpanded(parser *Parser, c_token *T, macro_def *ThisMacro, macro_de
 }
 
 bonsai_function macro_def *
-TryTransmuteIdentifierToMacro(parse_context *Ctx, parser *Parser, c_token *T, macro_def *ExpandingMacro)
+IdentifierShouldBeExpanded(parse_context *Ctx, parser *Parser, c_token *T, macro_def *ExpandingMacro)
 {
-  TIMED_FUNCTION();
-
   Assert(T->Type == CTokenType_Identifier);
 
-  macro_def *Result = 0;
+  macro_def *Result = False;
 
   if (macro_def *ThisMacro = GetMacroDef(Ctx, T->Value))
   {
     if (MacroShouldBeExpanded(Parser, T, ThisMacro, ExpandingMacro))
     {
-      T->Type = CT_MacroLiteral;
-      T->Macro.Def = ThisMacro;
-      Assert(T->Macro.Expansion == 0);
       Result = ThisMacro;
     }
+  }
+
+  return Result;
+}
+
+bonsai_function macro_def *
+TryTransmuteIdentifierToMacro(parse_context *Ctx, parser *Parser, c_token *T, macro_def *ExpandingMacro)
+{
+  Assert(T->Type == CTokenType_Identifier);
+
+  macro_def *Result = IdentifierShouldBeExpanded(Ctx, Parser, T, ExpandingMacro);
+  if (Result)
+  {
+    T->Type = CT_MacroLiteral;
+    T->Macro.Def = Result;
+    Assert(T->Macro.Expansion == 0);
   }
 
   return Result;

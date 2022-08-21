@@ -247,6 +247,7 @@ enum c_token_type
   CT_PreprocessorError,
   CT_PreprocessorWarning,
   CT_Preprocessor__VA_ARGS__,
+  CT_Preprocessor_Nuked,
 
   CT_InsertedCode,
 };
@@ -288,6 +289,12 @@ struct macro_expansion
   macro_def *Def;
 };
 
+
+enum va_args_flags
+{
+  va_args_flags_none = 0,
+  va_args_flags_expand_with_commas = (1 << 0),
+};
 
 struct parser;
 struct c_token
