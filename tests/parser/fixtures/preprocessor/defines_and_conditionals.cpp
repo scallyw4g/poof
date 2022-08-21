@@ -1,4 +1,4 @@
-#include <src/tests/bug_defines.h>
+#include <tests/parser/bug_defines.h>
 //
 // Value is defined
 //

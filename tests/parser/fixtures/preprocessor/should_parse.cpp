@@ -56,7 +56,7 @@ int sigqueue(union sigval __val);
 int sigqueue(const union sigval __val);
 
 #if 1
-#include <src/tests/bug_defines.h>
+#include <tests/parser/bug_defines.h>
 #include <tests/parser/fixtures/preprocessor/other_file_that_should_parse.cpp>
 
 void func(arg_type *ArgName);
@@ -355,7 +355,7 @@ TestFunc(int foo)
 #define bonsai_function static
 #define CSz(NullTerminatedCString) \
   CS(NullTerminatedCString, sizeof(NullTerminatedCString)-1)
-#include <src/bonsai_stdlib/headers/console_macros.h>
+#include <include/bonsai_stdlib/headers/console_macros.h>
 
 #undef foo;
 #undef bar;

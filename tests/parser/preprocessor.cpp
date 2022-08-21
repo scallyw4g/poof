@@ -2535,8 +2535,8 @@ main(s32 ArgCount, const char** Args)
   TestLogicalOperators(Memory);
   TestLineNumbers(Memory);
   TestErrors(Memory);
-  TestAst(Memory);
 #endif
+  TestAst(Memory);
 
   TestSuiteEnd();
   exit(TestsFailed);

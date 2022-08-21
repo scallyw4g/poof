@@ -1,5 +1,5 @@
 
-#include <src/tests/bug_defines.h>
+#include <tests/parser/bug_defines.h>
 
 #if 1
 

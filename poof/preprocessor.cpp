@@ -6547,15 +6547,9 @@ StringFromTokenSpan(parser *Parser, c_token *StartToken, c_token *EndToken, memo
   return Result;
 }
 
-bonsai_function type_spec
-ParseTypeSpecifier(parse_context *Ctx)
+bonsai_function void
+ParsePrimitivesAndQualifiers(parser *Parser, type_spec *Result)
 {
-  parser *Parser = Ctx->CurrentParser;
-
-  c_token *StartToken = PeekTokenPointer(Parser);
-
-  type_spec Result = {};
-
   b32 Done = False;
   while (!Done)
   {
@@ -6574,107 +6568,67 @@ ParseTypeSpecifier(parse_context *Ctx)
         NotImplemented;
 
         /* RequireToken(Parser, CTokenType_At); */
-        /* Result.IsMetaTemplateVar = True; */
+        /* Result->IsMetaTemplateVar = True; */
       } break;
 
       case CTokenType_ThreadLocal:
       {
         RequireToken(Parser, CTokenType_ThreadLocal);
-        Result.Qualifier |= TypeQual_ThreadLocal;
+        Result->Qualifier |= TypeQual_ThreadLocal;
       } break;
 
       case CTokenType_Const:
       {
-        if (Result.Qualifier & TypeQual_Const)
+        if (Result->Qualifier & TypeQual_Const)
         {
           Done = True;
         }
         else
         {
           RequireToken(Parser, CTokenType_Const);
-          Result.Qualifier |= TypeQual_Const;
+          Result->Qualifier |= TypeQual_Const;
         }
       } break;
 
       case CTokenType_Static:
       {
         RequireToken(Parser, CTokenType_Static);
-        Result.Qualifier |= TypeQual_Static;
+        Result->Qualifier |= TypeQual_Static;
       } break;
 
       case CTokenType_Volatile:
       {
         RequireToken(Parser, CTokenType_Volatile);
-        Result.Qualifier |= TypeQual_Volatile;
+        Result->Qualifier |= TypeQual_Volatile;
       } break;
 
       case CTokenType_Signed:
+      {
+        RequireToken(Parser, T);
+        Result->Qualifier |= TypeQual_Signed;
+      } break;
       case CTokenType_Unsigned:
       {
         RequireToken(Parser, T);
-
-        if (T.Type == CTokenType_Signed)
-        {
-          Result.Qualifier |= TypeQual_Signed;
-        }
-        else if (T.Type == CTokenType_Unsigned)
-        {
-          Result.Qualifier |= TypeQual_Unsigned;
-        }
-        else
-        {
-          InvalidCodePath();
-        }
-
-        // @optimize_call_advance_instead_of_being_dumb
-        while ( c_token *nT = PeekTokenPointer(Parser) )
-        {
-          if (Done) break;
-
-          switch ( nT->Type )
-          {
-            case CTokenType_Int:
-            {
-              RequireToken(Parser, nT->Type);
-              Result.Qualifier |= TypeQual_Int;
-            } break;
-            case CTokenType_Short:
-            {
-              RequireToken(Parser, nT->Type);
-              Result.Qualifier |= TypeQual_Short;
-            } break;
-            case CTokenType_Char:
-            {
-              RequireToken(Parser, nT->Type);
-              Result.Qualifier |= TypeQual_Char;
-            } break;
-            case CTokenType_Long:
-            {
-              ParseLongness(Parser, &Result);
-            } break;
-
-            default: Done = True; break;
-          }
-
-        }
+        Result->Qualifier |= TypeQual_Unsigned;
       } break;
 
       case CTokenType_Enum:
       {
         RequireToken(Parser, CTokenType_Enum);
-        Result.Qualifier |= TypeQual_Enum;
+        Result->Qualifier |= TypeQual_Enum;
       } break;
 
       case CTokenType_Struct:
       {
         RequireToken(Parser, CTokenType_Struct);
-        Result.Qualifier |= TypeQual_Struct;
+        Result->Qualifier |= TypeQual_Struct;
       } break;
 
       case CTokenType_Union:
       {
         RequireToken(Parser, CTokenType_Union);
-        Result.Qualifier |= TypeQual_Union;
+        Result->Qualifier |= TypeQual_Union;
       } break;
 
       case CTokenType_TemplateKeyword:
@@ -6682,115 +6636,86 @@ ParseTypeSpecifier(parse_context *Ctx)
         RequireToken(Parser, CTokenType_TemplateKeyword);
         string_from_parser Builder = StartStringFromParser(Parser);
         EatBetween(Parser, CTokenType_LT, CTokenType_GT);
-        Result.TemplateSource = FinalizeStringFromParser(&Builder);
+        Result->TemplateSource = FinalizeStringFromParser(&Builder);
       } break;
 
       case CTokenType_Extern:
       {
         RequireToken(Parser, T.Type);
-        Result.Linkage = linkage_extern;
+        Result->Linkage = linkage_extern;
         if ( OptionalToken(Parser, CToken(CTokenType_StringLiteral, CSz("\"C\""))) )
         {
-          Result.Linkage = linkage_extern_c;
+          Result->Linkage = linkage_extern_c;
         }
         else if ( OptionalToken(Parser, CToken(CTokenType_StringLiteral, CSz("\"C++\""))) )
         {
-          Result.Linkage = linkage_extern_cpp;
+          Result->Linkage = linkage_extern_cpp;
         }
       } break;
 
       case CTokenType_Inline:
       {
         RequireToken(Parser, T.Type);
-        Result.Qualifier |= TypeQual_Inline;
+        Result->Qualifier |= TypeQual_Inline;
       } break;
 
       case CTokenType_Long:
       {
-        ParseLongness(Parser, &Result);
-        Done = True;
+        RequireToken(Parser, CTokenType_Long);
+        if (Result->Qualifier & TypeQual_Long)
+        {
+          Result->Qualifier |= TypeQual_Long_Long;
+        }
+        Result->Qualifier |= TypeQual_Long;
       } break;
 
       case CTokenType_Short:
       {
-        Result.Qualifier |= TypeQual_Short;
         RequireToken(Parser, CTokenType_Short);
-
-        if (OptionalToken(Parser, CTokenType_Int)) { Result.Qualifier |= TypeQual_Int; }
-
-        Done = True;
+        Result->Qualifier |= TypeQual_Short;
       } break;
 
       case CTokenType_Int:
       {
         RequireToken(Parser, T.Type);
-        Result.Qualifier |= TypeQual_Int;
-        Done = True;
+        Result->Qualifier |= TypeQual_Int;
       } break;
 
       case CTokenType_Double:
       {
         RequireToken(Parser, T.Type);
-        Result.Qualifier |= TypeQual_Double;
-        Done = True;
+        Result->Qualifier |= TypeQual_Double;
       } break;
       case CTokenType_Float:
       {
         RequireToken(Parser, T.Type);
-        Result.Qualifier |= TypeQual_Float;
-        Done = True;
+        Result->Qualifier |= TypeQual_Float;
       } break;
       case CTokenType_Char:
       {
         RequireToken(Parser, T.Type);
-        Result.Qualifier |= TypeQual_Char;
-        Done = True;
+        Result->Qualifier |= TypeQual_Char;
       } break;
       case CTokenType_Void:
       {
         RequireToken(Parser, T.Type);
-        Result.Qualifier |= TypeQual_Void;
-        Done = True;
+        Result->Qualifier |= TypeQual_Void;
       } break;
       case CTokenType_Bool:
       {
         RequireToken(Parser, T.Type);
-        Result.Qualifier |= TypeQual_Bool;
-        Done = True;
+        Result->Qualifier |= TypeQual_Bool;
       } break;
 
       case CTokenType_Auto:
       {
         RequireToken(Parser, T.Type);
-        Result.Qualifier |= TypeQual_Auto;
-        Done = True;
+        Result->Qualifier |= TypeQual_Auto;
       } break;
 
       case CT_NameQualifier:
       {
         EatNameQualifiers(Parser);
-      } break;
-
-
-      case CTokenType_Identifier:
-      {
-        if (Result.DatatypeToken.Type)
-        {
-          Done = True;
-        }
-        else
-        {
-          Result.DatatypeToken = RequireToken(Parser, T.Type);
-          Result.Datatype = GetDatatypeByName(&Ctx->Datatypes, T.Value);
-          // TODO(Jesse, id: 296, tags: immediate): When we properly traverse
-          // include graphs, this assert should not fail.
-          //
-          // UPDATE(Jesse): This actually holds up when we specify the full
-          // traversal (at least to the extent that we finish the parse to
-          // date).  Not sure when it'll be able to be put in, but we're close.
-          //
-          /* Assert(Result.Datatype.Type != type_datatype_noop); */
-        }
       } break;
 
       default:
@@ -6801,6 +6726,58 @@ ParseTypeSpecifier(parse_context *Ctx)
     EatWhitespaceAndComments(Parser);
     continue;
   }
+}
+
+bonsai_function b32
+IsPrimitiveType(type_spec *Type)
+{
+  u32 Mask =
+    TypeQual_Auto      |
+    TypeQual_Bool      |
+    TypeQual_Signed    |
+    TypeQual_Unsigned  |
+    TypeQual_Char      |
+    TypeQual_Long      |
+    TypeQual_Int       |
+    TypeQual_Long_Long |
+    TypeQual_Double    |
+    TypeQual_Short     |
+    TypeQual_Void      |
+    TypeQual_Float;
+
+  b32 Result = (Type->Qualifier & Mask) > 0;
+  return Result;
+}
+
+bonsai_function type_spec
+ParseTypeSpecifier(parse_context *Ctx)
+{
+  parser *Parser = Ctx->CurrentParser;
+
+  c_token *StartToken = PeekTokenPointer(Parser);
+
+  type_spec Result = {};
+
+  ParsePrimitivesAndQualifiers(Parser, &Result);
+
+#if 1
+  if (IsPrimitiveType(&Result))
+  {
+  }
+  else
+  {
+    Result.DatatypeToken = RequireToken(Parser, CTokenType_Identifier);
+    Result.Datatype = GetDatatypeByName(&Ctx->Datatypes, Result.DatatypeToken.Value);
+    // TODO(Jesse, id: 296, tags: immediate): When we properly traverse
+    // include graphs, this assert should not fail.
+    //
+    // UPDATE(Jesse): This actually holds up when we specify the full
+    // traversal (at least to the extent that we finish the parse to
+    // date).  Not sure when it'll be able to be put in, but we're close.
+    //
+    /* Assert(Result.Datatype.Type != type_datatype_noop); */
+  }
+#endif
 
 
   // Value Attribute

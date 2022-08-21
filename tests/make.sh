@@ -59,8 +59,8 @@ function BuildParserTests
 
 function RunParserTests
 {
-  # gdb --args ./bin/tests/preprocessor $COLORFLAG
-  ./bin/tests/preprocessor $COLORFLAG
+  gdb --args ./bin/tests/preprocessor $COLORFLAG
+  # ./bin/tests/preprocessor $COLORFLAG
 }
 
 
