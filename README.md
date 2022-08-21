@@ -155,7 +155,7 @@ before releasing a 0.1.0-alpha version of `poof`.
 
 [o] parse some popular C projects
   - [✓] https://github.com/ndilieto/uacme
-  - [o] https://github.com/HandmadeHero
+  - [✓] https://github.com/HandmadeHero
   - [o] https://github.com/redis/redis
   - [o] https://github.com/sqlite/sqlite
   - [o] https://github.com/oil/oil -- C++, but I have a use-case
