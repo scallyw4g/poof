@@ -65,28 +65,26 @@ function BuildPoof {
   which clang++ > /dev/null
   [ $? -ne 0 ] && echo -e "Please install clang++" && exit 1
 
-  echo -e ""
-  echo -e "$Delimeter"
-  echo -e ""
-
   ColorizeTitle "Building Preprocessor"
-  executable="$SRC/preprocessor.cpp"
-  echo -e "$Building $executable"
-  clang++                                                \
-    $OPTIMIZATION_LEVEL                                  \
-    $CXX_OPTIONS                                         \
-    $PLATFORM_CXX_OPTIONS                                \
-    $PLATFORM_LINKER_OPTIONS                             \
-    $PLATFORM_DEFINES                                    \
-    -D "BONSAI_DEBUG_SYSTEM_API"                         \
-    $PLATFORM_INCLUDE_DIRS                               \
-    -I "$ROOT"                                           \
-    -I "$ROOT/include"                                   \
-    -o "bin/poof_dev""$PLATFORM_EXE_EXTENSION"           \
-    $executable
+  source_file="$SRC/preprocessor.cpp"
+  SetFullOutputName "$source_file" bin
+  echo -e "$Building $source_file"
+
+  clang++                        \
+    $source_file                 \
+    $OPTIMIZATION_LEVEL          \
+    $CXX_OPTIONS                 \
+    $PLATFORM_CXX_OPTIONS        \
+    $PLATFORM_LINKER_OPTIONS     \
+    $PLATFORM_DEFINES            \
+    -D "BONSAI_DEBUG_SYSTEM_API" \
+    $PLATFORM_INCLUDE_DIRS       \
+    -I "$ROOT"                   \
+    -I "$ROOT/include"           \
+    -o "$full_output_name"
 
   if [ $? -eq 0 ]; then
-   echo -e "$Success $executable"
+    echo -e "$Success $source_file -> $full_output_name"
 
     echo -e ""
     echo -e "$Delimeter"
@@ -101,6 +99,8 @@ function BuildPoof {
 
 function RunIntegrationTests()
 {
+  ColorizeTitle "Running Integration Tests"
+
   INTEGRATION_SRC_DIR=tests/integration/src
   INTEGRATION_OUTPUT_DIR=tests/integration/generated
 
@@ -124,39 +124,61 @@ function RunIntegrationTests()
     DIFF_CHANGED=$(git diff --ignore-all-space --ignore-blank-lines $INTEGRATION_OUTPUT_DIR/$basename_stripped | wc -l)
 
     if [[ $DIFF_CHANGED == 0 ]]; then
-      echo "PASS $filename"
+      echo -e "$Success $filename"
     else
-      echo "FAIL $filename"
+      echo -e "$Failed $filename"
     fi
   done
+
+  echo -e ""
+  echo -e "$Delimeter"
+  echo -e ""
 }
 
 function BuildParserTests
 {
-  echo ""
-  ColorizeTitle "Tests"
-    executable=tests/parser/preprocessor.cpp
-    SetOutputBinaryPathBasename "$executable" bin/tests
-    echo -e "$Building $executable"
-    clang++                                          \
-      $OPTIMIZATION_LEVEL                            \
-      $CXX_OPTIONS                                   \
-      $PLATFORM_CXX_OPTIONS                          \
-      $PLATFORM_LINKER_OPTIONS                       \
-      $PLATFORM_DEFINES                              \
-      $PLATFORM_INCLUDE_DIRS                         \
-      -I"."                                          \
-      -I"include"                                    \
-      -o "$output_basename""$PLATFORM_EXE_EXTENSION" \
-      $executable && echo -e "$Success $executable -> $output_basename$PLATFORM_EXE_EXTENSION"
+  ColorizeTitle "Building Tests"
+    source_file=tests/parser/preprocessor.cpp
+    SetFullOutputName "$source_file" bin/tests
+    echo -e "$Building $source_file"
+
+    clang++                    \
+      $source_file             \
+      $OPTIMIZATION_LEVEL      \
+      $CXX_OPTIONS             \
+      $PLATFORM_CXX_OPTIONS    \
+      $PLATFORM_LINKER_OPTIONS \
+      $PLATFORM_DEFINES        \
+      $PLATFORM_INCLUDE_DIRS   \
+      -I"."                    \
+      -I"include"              \
+      -o "$full_output_name"
+
+  if [ $? -eq 0 ]; then
+    echo -e "$Success $source_file -> $full_output_name"
+    echo -e ""
+    echo -e "$Delimeter"
+    echo -e ""
+
+  else
+   echo ""
+   echo -e "$Failed Error building $source_file, exiting."
+   echo ""
+   exit 1
+  fi
+
 }
 
 function RunParserTests
 {
+  ColorizeTitle "Running Parser Tests"
   # gdb --args ./bin/tests/preprocessor $COLORFLAG
   ./bin/tests/preprocessor     \
     --log-level LogLevel_Shush \
     $COLORFLAG
+
+  echo -e "$Delimeter"
+  echo -e ""
 }
 
 
@@ -175,7 +197,7 @@ function RunAllTests
 function BuildAndRunAll
 {
   BuildAll
-  RunAll
+  RunAllTests
 }
 
 
@@ -186,6 +208,10 @@ fi
 if [ ! -d "$BIN_TEST" ]; then
   mkdir "$BIN_TEST"
 fi
+
+echo -e ""
+echo -e "$Delimeter"
+echo -e ""
 
 # If someone supplied a command line argument, call the function, otherwise
 # respect the runflags
