@@ -1,4 +1,9 @@
 
+struct foo
+{
+  int bar[0][0];
+};
+
 // unnamed function pointer
 b32 foo( b32 (*) ( int*, int) );
 

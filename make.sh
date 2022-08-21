@@ -14,8 +14,8 @@ BUILD_EVERYTHING=0
 BuildPoof=1
 RunPoof=1
 
-BuildParserTests=1
-RunParserTests=1
+BuildParserTests=0
+RunParserTests=0
 
 RunIntegrationTests=1
 
@@ -45,7 +45,7 @@ function RunPoof {
   #   git checkout poof/generated/generate_cursor_c_token.h
   # fi
 
-  #  --log-level LogLevel_Error \
+  # --log-level LogLevel_Error \
   # gdb --args bin/poof_dev                 \
   bin/poof_dev                 \
     poof/preprocessor.cpp      \

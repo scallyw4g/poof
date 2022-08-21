@@ -115,6 +115,13 @@ bonsai_function void PrintTraySimple(c_token *T);
 bonsai_function void ParseError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken = 0);
 bonsai_function void ParseError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken = 0);
 
+
+
+bonsai_function ast_node_expression* ParseExpression(parse_context *Ctx);
+bonsai_function void                 ParseExpression(parse_context *Ctx, ast_node_expression *Result);
+bonsai_function void                 ParseExpression(parse_context *Ctx, ast_node** Result);
+
+
 inline c_token_cursor *
 HasValidDownPointer(c_token *T)
 {
@@ -6829,12 +6836,6 @@ ParseInitializerList(parser *Parser, memory_arena *Memory)
   return Result;
 }
 
-bonsai_function ast_node_expression*
-ParseExpression(parse_context *Ctx);
-
-bonsai_function void
-ParseExpression(parse_context *Ctx, ast_node** Result);
-
 bonsai_function variable_decl
 ParseVariableDecl(parse_context *Ctx)
 {
@@ -6939,6 +6940,29 @@ ParseAndPushFunctionPrototype(parse_context *Ctx, type_spec *ReturnType, counted
 bonsai_function struct_def
 ParseStructBody(parse_context *Ctx, counted_string StructName);
 
+bonsai_function void
+ParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest)
+{
+  ast_node_expression *Current = {};
+
+  if ( PeekToken(Parser).Type == CTokenType_OpenBracket )
+  {
+    Current = AllocateAndCastTo(ast_node_expression, Dest, Ctx->Memory);
+  }
+
+  while ( OptionalToken(Parser, CTokenType_OpenBracket) )
+  {
+    ParseExpression(Ctx, Current);
+    RequireToken(Parser, CTokenType_CloseBracket);
+
+    if ( PeekToken(Parser).Type == CTokenType_OpenBracket )
+    {
+      Current->Next = Allocate(ast_node_expression, Ctx->Memory, 1);
+    }
+    Current = Current->Next;
+  }
+}
+
 bonsai_function declaration
 ParseFunctionOrVariableDecl(parse_context *Ctx)
 {
@@ -6994,11 +7018,7 @@ ParseFunctionOrVariableDecl(parse_context *Ctx)
 
         TryEatAttributes(Parser);
 
-        if ( OptionalToken(Parser, CTokenType_OpenBracket) )
-        {
-          ParseExpression(Ctx, &Result.variable_decl.StaticBufferSize );
-          RequireToken(Parser, CTokenType_CloseBracket);
-        }
+        ParseStaticBuffers(Ctx, Parser, &Result.variable_decl.StaticBufferSize);
 
         if ( OptionalToken(Parser, CTokenType_Equals) )
         {
