@@ -126,7 +126,7 @@ before releasing a 0.1.0-alpha version of `poof`.
 
 ### Feature Set
 
-[X] = finished
+[✓] = finished
 
 [o] = started
 
@@ -140,23 +140,28 @@ before releasing a 0.1.0-alpha version of `poof`.
 - still somewhat TBD, but I have a mostly-complete list
 
 ### Behavior
-[X] Parse include graph of `poof` (excluding CRT headers)
+[✓] Parse include graph of `poof` (excluding CRT headers)
 
-[X] Parse include graph of `poof` (including CRT headers)
+[✓] Parse include graph of `poof` (including CRT headers)
 
 [o] Write test suite that exhaustively validates behavior of the C parser
 
 [o] Write test suite that validates the behavior of `poof`
 
 ### Hardening
-[X] parse all C headers on my linux system
+[✓] parse all C headers on my linux system
 
 [o] parse all C headers on my windows system
 
-[\_] parse some popular C projects: redis, sqlite, ..?
+[o] parse some popular C projects
+  - [✓] https://github.com/ndilieto/uacme
+  - [o] https://github.com/HandmadeHero
+  - [o] https://github.com/redis/redis
+  - [o] https://github.com/sqlite/sqlite
+  - [o] https://github.com/oil/oil -- C++, but I have a use-case
 
 ### UX
-[X] Fix a laundry list of issues I have logged that result in unnecessary friction
+[✓] Fix a laundry list of issues I have logged that result in unnecessary friction
 
 [o] Audit error messages; find nonsensical, misleading or missing errors
 
