@@ -80,13 +80,27 @@ issue if you're interested in OSX support.
 
 # Building
 
-To get the source:
+Clone:
 
 `git clone --recursive https://github.com/jjbandit/poof.git poof`
 
-And to build it:
+Build:
 
-`cd poof && scripts/make.sh`
+`./make.sh BuildAll` Builds everything
+
+`./make.sh BuildPoof` Builds poof binary; required for running integration tests
+
+`./make.sh BuildParserTests` Builds parser test suite
+
+
+
+`./make.sh RunAll` Runs everything
+
+`./make.sh RunPoof` Runs poof against its own codebase.  Useful for development
+
+`./make.sh RunParserTests` Runs parser test suite
+
+`./make.sh RunIntegrationTests` Runs integration test suite
 
 
 # Current Status
