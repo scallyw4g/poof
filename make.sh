@@ -14,8 +14,8 @@ BUILD_EVERYTHING=0
 BuildPoof=1
 RunPoof=1
 
-BuildParserTests=0
-RunParserTests=0
+BuildParserTests=1
+RunParserTests=1
 
 RunIntegrationTests=1
 
