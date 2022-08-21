@@ -50,8 +50,8 @@ function RunPoof {
   #   git checkout poof/generated/generate_cursor_c_token.h
   # fi
 
-  # gdb --args bin/poof_dev                 \
-  bin/poof_dev                 \
+  # gdb --args bin/poof                 \
+  bin/poof                 \
     --log-level LogLevel_Error \
     poof/poof.cpp      \
     $COLORFLAG                 \
@@ -71,7 +71,7 @@ function BuildPoof {
   which clang++ > /dev/null
   [ $? -ne 0 ] && echo -e "Please install clang++" && exit 1
 
-  ColorizeTitle "Building Preprocessor"
+  ColorizeTitle "Building Poof"
   source_file="$SRC/poof.cpp"
   SetFullOutputName "$source_file" bin
   echo -e "$Building $source_file"
@@ -98,7 +98,7 @@ function BuildPoof {
 
   else
    echo ""
-   echo -e "$Failed Error building preprocessor, exiting."
+   echo -e "$Failed Error building poof, exiting."
    exit 1
   fi
 }
@@ -120,8 +120,8 @@ function RunIntegrationTests()
     # we'll write all the meta() output to for that test file.  We diff that
     # whole directory to confirm/deny the output is identical for that test file
 
-    # gdb --args bin/poof_dev    \
-    bin/poof_dev                 \
+    # gdb --args bin/poof    \
+    bin/poof                 \
       $filename                  \
       $COLORFLAG                 \
       --log-level LogLevel_Error \
@@ -178,8 +178,8 @@ function BuildParserTests
 function RunParserTests
 {
   ColorizeTitle "Running Parser Tests"
-  # gdb --args ./bin/tests/preprocessor $COLORFLAG
-  ./bin/tests/preprocessor     \
+  # gdb --args ./bin/tests/poof $COLORFLAG
+  ./bin/tests/poof     \
     --log-level LogLevel_Error \
     $COLORFLAG
 
