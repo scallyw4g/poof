@@ -2682,6 +2682,14 @@ ExpandMacro( parse_context *Ctx,
   {
     Assert(T->Type != CT_MacroLiteral);
 
+    // NOTE(Jesse): Can't do this because IdentifierShouldBeExpanded needs to
+    // be able to peek the next token.  I suppose we could make it just blindly
+    // trust we're on a macro, but I'd much rather have assertions in that
+    // function.  Maybe this is indicative that that function is weird and we
+    // should delete it?
+    //
+    // RequireTokenRaw(MacroBody, T);
+
 
     if ( T->Type == CTokenType_Identifier )
     {
@@ -2698,9 +2706,7 @@ ExpandMacro( parse_context *Ctx,
 
           if (T->Type == CT_Preprocessor__VA_ARGS__)
           {
-            // NOTE(Jesse): Once we fix @need_to_copy_macro_body_tokens_expand_macro
-            // this assert should hold up
-            /* Assert(T->Flags == 0); */
+            Assert(T->Flags == 0);
             T->Flags |= va_args_flags_expand_with_commas;
           }
 
