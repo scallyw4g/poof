@@ -1295,6 +1295,13 @@ MacroAndIncludetest(memory_arena *Memory)
     TestThat(RequireToken(Parser, CToken(CTokenType_Comma)));
     TestThat(RequireToken(Parser, CToken(CSz("_baz"))));
 
+    TestThat(RequireToken(Parser, CToken(CSz("a1"))));
+    TestThat(RequireToken(Parser, CToken(CSz("a2"))));
+
+    TestThat(RequireToken(Parser, CToken(CSz("a1"))));
+    TestThat(RequireToken(Parser, CToken(CSz("a2"))));
+
+
     TestThat( TokensRemain(Parser) == False );
   }
   else
@@ -2508,7 +2515,6 @@ main(s32 ArgCount, const char** Args)
 
 
   memory_arena* Memory = AllocateArena();
-
 
 #if 1
   TestSingleCursorTokenControl(Memory);

@@ -11,13 +11,13 @@ BUILD_EVERYTHING=0
 
 # git checkout $META_OUT
 
-BuildPoof=1
-RunPoof=1
+BuildPoof=0
+RunPoof=0
 
 BuildParserTests=1
 RunParserTests=1
 
-RunIntegrationTests=1
+RunIntegrationTests=0
 
 . scripts/preamble.sh
 . scripts/setup_for_cxx.sh

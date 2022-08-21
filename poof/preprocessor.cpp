@@ -82,6 +82,10 @@ bonsai_function void      EatWhitespaceAndComments(parser *Parser);
 
 bonsai_function void      FullRewind(parser* Parser);
 
+bonsai_function parser * DuplicateParserTokens(parser *Parser, memory_arena *Memory);
+bonsai_function parser * DuplicateParser(parser *Parser, memory_arena *Memory);
+bonsai_function c_token_cursor * DuplicateCTokenCursor(c_token_cursor *Tokens, memory_arena *Memory);
+bonsai_function parser *         DuplicateCTokenCursor2(c_token_cursor *Tokens, memory_arena *Memory);
 //
 // Preprocessor stuff
 //
@@ -2667,31 +2671,24 @@ ExpandMacro( parse_context *Ctx,
 
   TIMED_BLOCK("Parameter Sub && Pasting");
 
-  BUG("@need_to_copy_macro_body_tokens_expand_macro");
-  // This routine needs to _copy_ macro body tokens and throw them away at the
-  // end of the routine because if we modify the body tokens (by marking flags
-  // and calling TryTransmuteIdentifierToMacro we change the same memory other
-  // functions are looking at.");
-
-  c_token_cursor TmpTokens = Macro->Body;
-  parser MacroBody_ = MakeParser(&TmpTokens);
-  parser *MacroBody = &MacroBody_;
-  TrimLeadingWhitespace(MacroBody);
-  FullRewind(MacroBody);
+  parser *MacroBody = DuplicateCTokenCursor2(&Macro->Body, TempMemory);
 
   //
   // Pre-scan for any macros such that we can mark __VA_ARGS__ to expand with
-  // comma separators.  This is to support @va_args_paste_into_another_arg
+  // comma separators.  This is to support @va_args_paste_into_another_macro
   //
 
   while (c_token *T = PeekTokenRawPointer(MacroBody))
   {
-    if (T->Type == CT_MacroLiteral ||
-       (T->Type == CTokenType_Identifier && TryTransmuteIdentifierToMacro(Ctx, MacroBody, T, Macro)) )
+    Assert(T->Type != CT_MacroLiteral);
+
+
+    if ( T->Type == CTokenType_Identifier )
     {
-      if (T->Macro.Def->Type == type_macro_function)
+      macro_def *ThisMacro = IdentifierShouldBeExpanded(Ctx, MacroBody, T, Macro);
+      if (ThisMacro && ThisMacro->Type == type_macro_function)
       {
-        RequireToken(MacroBody, T);
+        RequireTokenRaw(MacroBody, T);
 
         u32 Depth = 0;
 
@@ -3772,29 +3769,55 @@ SplitAndInsertTokenCursor(c_token_cursor *CursorToSplit, c_token_cursor *CursorT
   return SplitAndInsertTokenCursor(CursorToSplit, CursorToSplit->At, CursorToInsert, CursorToSplit->At, Memory);
 }
 
-bonsai_function parser *
-DuplicateParserTokens(parser *Parser, memory_arena *Memory)
+bonsai_function c_token_cursor *
+DuplicateCTokenCursor(c_token_cursor *Tokens, memory_arena *Memory)
 {
-  Assert(Parser->Tokens->At == Parser->Tokens->Start);
+  Assert(Tokens->At == Tokens->Start);
 
-  umm TokenCount = (umm)(Parser->Tokens->End - Parser->Tokens->Start);
-  c_token *NewBuffer = Allocate(c_token, Memory, TokenCount);
+  parser Parser_ = MakeParser(Tokens);
+  parser *Parser = &Parser_;
 
-  c_token *At = NewBuffer;
+
+  umm TokenCount = (umm)(Tokens->End - Tokens->Start);
+  u32 LineNumber = 0;
+  counted_string Filename = CSz("TODO(Jesse): add filename here?");
+  c_token_cursor *Result = AllocateTokenCursor(Memory, Filename, TokenCount, TokenCursorSource_Unknown, LineNumber, {});
+
+  c_token *At = Result->Start;
   u32 AtIndex = 0;
   while (c_token *T = PopTokenRawPointer(Parser))
   {
-    // TODO(Jesse)(correctness): This assertion sounds fishy to me.. shouldn't it be and's ?
+    // NOTE(Jesse): This routine only supports copying buffers with no down pointers
+    Assert(HasValidDownPointer(T) == False);
+
     Assert(T->Type != CTokenType_CommentMultiLine || T->Type != CTokenType_CommentSingleLine || !T->Erased);
     At[AtIndex++] = *T;
   }
 
   Assert(AtIndex == TokenCount);
 
-  Parser->Tokens->Start = NewBuffer;
-  Parser->Tokens->At = NewBuffer;
-  Parser->Tokens->End = NewBuffer+TokenCount;
+  Rewind(Tokens);
 
+  return Result;
+}
+
+bonsai_function parser *
+DuplicateCTokenCursor2(c_token_cursor *Tokens, memory_arena *Memory)
+{
+  Assert(Tokens->At == Tokens->Start);
+
+  parser *Result = Allocate(parser, Memory, 1);
+  Result->Tokens = DuplicateCTokenCursor(Tokens, Memory);
+  return Result;
+}
+
+// NOTE(Jesse): This function is pretty sketch .. it modifies the parser you
+// pass in which kinda goes against convention in this codebase.
+bonsai_function parser *
+DuplicateParserTokens(parser *Parser, memory_arena *Memory)
+{
+  Assert(Parser->Tokens->At == Parser->Tokens->Start);
+  Parser->Tokens = DuplicateCTokenCursor(Parser->Tokens, Memory);
   return Parser;
 }
 
@@ -3898,28 +3921,20 @@ DefineMacro(parse_context *Ctx, parser *Parser, macro_def *Macro)
 
   InstanceParser->Tokens->Start = InstanceParser->Tokens->At;
 
-  //
-  // Parse body of macro
-  //
-
-  // @optimize_call_advance_instead_of_being_dumb ?
+#if 0
+  // Sanity check
   while (c_token *T = PeekTokenRawPointer(InstanceParser))
   {
     switch (T->Type)
     {
 
-      case CTokenType_Identifier:
-      {
-        TryTransmuteIdentifierToMacro(Ctx, InstanceParser, T, Macro);
-        RequireTokenRaw(InstanceParser, T->Type);
-      } break;
-
+      case CT_MacroLiteral:
       case CTokenType_Newline: { InvalidCodePath(); } break;
       default: { PopTokenRaw(InstanceParser); } break;
     }
   }
-
   Assert(InstanceParser->Tokens->At == InstanceParser->Tokens->End);
+#endif
 
   if (Macro->Body.Start && TokenCursorsMatch(&Macro->Body, InstanceParser->Tokens))
   {

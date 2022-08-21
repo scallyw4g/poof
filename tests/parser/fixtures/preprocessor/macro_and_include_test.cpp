@@ -263,7 +263,7 @@ concat_4(variable_name,, (whatever __x))
 
 
 
-// @va_args_paste_into_another_arg
+// @va_args_paste_into_another_macro
 //
 // Found out MSVC and GCC have different behavoir for the following.  Currently
 // poof emulates MSVC
@@ -315,4 +315,13 @@ macro_with_disappearing_comma(_bar, _baz)  // _bar, _baz  < comma
 
 
 
+#undef foo
 
+#define foo f
+#define foo_arg_func(a1, foo) a1 foo
+
+foo_arg_func(a1, a2)
+
+#undef foo
+
+foo_arg_func(a1, a2)
