@@ -86,17 +86,23 @@ Clone:
 
 Build:
 
-`./make.sh BuildAll` Builds everything
+`./make.sh BuildAndRunAll` Go nuclear -- builds everything and runs all tests
+
+.
+
+`./make.sh BuildAll` Builds all binaries
 
 `./make.sh BuildPoof` Builds poof binary; required for running integration tests
 
-`./make.sh BuildParserTests` Builds parser test suite
+`./make.sh BuildParserTests` Builds parser test suite binary
 
-
-
-`./make.sh RunAll` Runs everything
+.
 
 `./make.sh RunPoof` Runs poof against its own codebase.  Useful for development
+
+.
+
+`./make.sh RunAllTests` Run all test suites
 
 `./make.sh RunParserTests` Runs parser test suite
 

@@ -166,12 +166,18 @@ function BuildAll
   BuildParserTests
 }
 
-function RunAll
+function RunAllTests
 {
-  RunPoof
   RunParserTests
   RunIntegrationTests
 }
+
+function BuildAndRunAll
+{
+  BuildAll
+  RunAll
+}
+
 
 if [ ! -d "$BIN" ]; then
   mkdir "$BIN"
