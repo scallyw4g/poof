@@ -7,6 +7,7 @@
                     case TypeQual_None: { Result = CSz("TypeQual_None"); } break;
             case TypeQual_Void: { Result = CSz("TypeQual_Void"); } break;
             case TypeQual_Auto: { Result = CSz("TypeQual_Auto"); } break;
+            case TypeQual_Class: { Result = CSz("TypeQual_Class"); } break;
             case TypeQual_Struct: { Result = CSz("TypeQual_Struct"); } break;
             case TypeQual_Union: { Result = CSz("TypeQual_Union"); } break;
             case TypeQual_Enum: { Result = CSz("TypeQual_Enum"); } break;
@@ -40,6 +41,7 @@
                 if (StringsMatch(S, CSz("TypeQual_None"))) { return TypeQual_None; }
           if (StringsMatch(S, CSz("TypeQual_Void"))) { return TypeQual_Void; }
           if (StringsMatch(S, CSz("TypeQual_Auto"))) { return TypeQual_Auto; }
+          if (StringsMatch(S, CSz("TypeQual_Class"))) { return TypeQual_Class; }
           if (StringsMatch(S, CSz("TypeQual_Struct"))) { return TypeQual_Struct; }
           if (StringsMatch(S, CSz("TypeQual_Union"))) { return TypeQual_Union; }
           if (StringsMatch(S, CSz("TypeQual_Enum"))) { return TypeQual_Enum; }

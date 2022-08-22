@@ -122,6 +122,7 @@
             case CTokenType_Break: { Result = CSz("CTokenType_Break"); } break;
             case CTokenType_Switch: { Result = CSz("CTokenType_Switch"); } break;
             case CTokenType_Case: { Result = CSz("CTokenType_Case"); } break;
+            case CT_Keyword_Delete: { Result = CSz("CT_Keyword_Delete"); } break;
             case CTokenType_Default: { Result = CSz("CTokenType_Default"); } break;
             case CTokenType_For: { Result = CSz("CTokenType_For"); } break;
             case CTokenType_While: { Result = CSz("CTokenType_While"); } break;

@@ -1,11 +1,24 @@
+template <classname T>
+class foo {
+}
+
+template <classname T>
+struct foo;
+
+template <classname T>
+class foo;
+
+class foo;
 
 class Obj {
  public:
   Obj() {}
-  // foo() {} // << Should break, but might not
   constexpr Obj() : _foo(0) {}
   void thing() { _foo = 2; }
   int _foo;
+
+  Obj() = delete;
+  Obj() = default;
 };
 
 struct foo
@@ -14,6 +27,7 @@ struct foo
 };
 
 
+static int foo {};
 static int *foo {};
 
 volatile int * volatile foo;

@@ -10,6 +10,10 @@
           {
             Append(&Builder, CSz("auto "));
           }
+          if (Type->Qualifier & TypeQual_Class)
+          {
+            Append(&Builder, CSz("class "));
+          }
           if (Type->Qualifier & TypeQual_Struct)
           {
             Append(&Builder, CSz("struct "));

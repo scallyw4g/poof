@@ -2452,6 +2452,7 @@ RequireOperatorToken(parser* Parser)
     case CTokenType_Star:
     case CTokenType_Arrow:
     case CTokenType_Dot:
+    case CTokenType_Equals: // Assignment
     {
       RequireToken(Parser, T.Type);
     } break;
@@ -4141,6 +4142,10 @@ TryTransmuteKeywordToken(c_token *T, c_token *LastTokenPushed)
   else if ( StringsMatch(T->Value, CSz("case")) )
   {
     T->Type = CTokenType_Case;
+  }
+  else if ( StringsMatch(T->Value, CSz("delete")) )
+  {
+    T->Type = CT_Keyword_Delete;
   }
   else if ( StringsMatch(T->Value, CSz("default")) )
   {
@@ -6388,6 +6393,13 @@ ParseReferencesIndirectionAndPossibleFunctionPointerness(parser *Parser)
         Result.VolatileValue = True;
       } break;
 
+      case CTokenType_LogicalAnd:
+      {
+        RequireToken(Parser, CTokenType_LogicalAnd);
+        Assert(Result.ReferenceLevel == 0);
+        Result.ReferenceLevel += 2;
+      } break;
+
       case CTokenType_Ampersand:
       {
         RequireToken(Parser, CTokenType_Ampersand);
@@ -6415,6 +6427,7 @@ ParseReferencesIndirectionAndPossibleFunctionPointerness(parser *Parser)
       case CT_NameQualifier:
       case CTokenType_OperatorKeyword: // Finish parsing the return type of an operator funciton
       case CTokenType_OpenBracket: // Parsing an un-named followed by [], such as in `void myfunc(char[42])`
+      case CTokenType_Ellipsis:
       case CTokenType_Semicolon:
       {
         Done = True;
@@ -6637,6 +6650,11 @@ ParsePrimitivesAndQualifiers(parser *Parser, type_spec *Result)
         RequireToken(Parser, CTokenType_Enum);
         Result->Qualifier |= TypeQual_Enum;
       } break;
+      case CT_Keyword_Class:
+      {
+        RequireToken(Parser, CT_Keyword_Class);
+        Result->Qualifier |= TypeQual_Class;
+      } break;
       case CTokenType_Struct:
       {
         RequireToken(Parser, CTokenType_Struct);
@@ -6740,7 +6758,7 @@ ParsePrimitivesAndQualifiers(parser *Parser, type_spec *Result)
         Done = True;
       } break;
     }
-    EatWhitespaceAndComments(Parser);
+
     continue;
   }
 }
@@ -6770,15 +6788,11 @@ IsPrimitiveType(type_spec *Type)
 bonsai_function type_spec
 ParseTypeSpecifier(parse_context *Ctx)
 {
-  parser *Parser = Ctx->CurrentParser;
-
-  c_token *StartToken = PeekTokenPointer(Parser);
-
   type_spec Result = {};
+  parser *Parser = Ctx->CurrentParser;
 
   ParsePrimitivesAndQualifiers(Parser, &Result);
 
-#if 1
   if (IsPrimitiveType(&Result))
   {
   }
@@ -6789,24 +6803,14 @@ ParseTypeSpecifier(parse_context *Ctx)
     // TODO(Jesse, id: 296, tags: immediate): When we properly traverse
     // include graphs, this assert should not fail.
     //
-    // UPDATE(Jesse): This actually holds up when we specify the full
-    // traversal (at least to the extent that we finish the parse to
-    // date).  Not sure when it'll be able to be put in, but we're close.
-    //
-    /* Assert(Result.Datatype.Type != type_datatype_noop); */
+    // Assert(Result.Datatype.Type != type_datatype_noop);
   }
-#endif
 
-
-  // Value Attribute
-  TryEatAttributes(Parser);
-
+  TryEatAttributes(Parser); // Value Attribute
 
   Result.HasTemplateArguments = TryAndEatTemplateParameterList(Parser, &Ctx->Datatypes);
 
-  // TODO(Jesse): This check is weird.  Should
-  // ParseReferencesIndirectionAndPossibleFunctionPointerness not just handle
-  // this case?
+  // TODO(Jesse): This check is weird.  Should ParseReferencesIndirectionAndPossibleFunctionPointerness not just handle this case?
   if (IsConstructorFn(Result.DatatypeToken))
   {
   }
@@ -6814,10 +6818,6 @@ ParseTypeSpecifier(parse_context *Ctx)
   {
     Result.Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
   }
-
-
-  c_token *EndToken = PeekTokenRawPointer(Parser);
-  /* counted_string SourceText = StringFromTokenSpan(Parser, StartToken, EndToken, Ctx->Memory); */
 
   return Result;
 }
@@ -6924,6 +6924,11 @@ ParseAndPushFunctionPrototype(parse_context *Ctx, type_spec *ReturnType, counted
   else if (PeekToken(Parser).Type == CTokenType_Colon)
   {
   }
+  else if (OptionalToken(Parser, CTokenType_Equals))
+  {
+    OptionalToken(Parser, CTokenType_Default);
+    OptionalToken(Parser, CT_Keyword_Delete);
+  }
   else
   {
     // void FunctionName( arg A1, arg, A2);
@@ -6992,6 +6997,10 @@ ParseFunctionOrVariableDecl(parse_context *Ctx)
       Result.Type = type_declaration_function_decl;
       RequireToken(Parser, CTokenType_OpenParen);
       Result.function_decl = ParseAndPushFunctionPrototype(Ctx, &DeclType, &DeclType.DatatypeToken.Value, function_type_constructor);
+    }
+    else if ( OptionalToken(Parser, CTokenType_Semicolon) )
+    {
+      // template<typename T> class foo;
     }
     else
     {
@@ -9021,22 +9030,24 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         }
         else
         {
-          if (T->Type == CT_Keyword_Class)
-          {
-            // Forward declaration.
-            //
-            // NOTE(Jesse): Not sure if C++ allows global class instances using
-            // the class keyword, but if it does we don't support it yet.
-            //
-            RequireToken(Parser, T);
-            RequireToken(Parser, CTokenType_Identifier);
-            RequireToken(Parser, CTokenType_Semicolon);
-          }
-          else
-          {
-            // NOTE(Jesse): Globally-scoped variable : `global_variable struct foo = { .bar = 1 }`
-            ParseVariableDecl(Ctx);
-          }
+          /* if (T->Type == CT_Keyword_Class) */
+          /* { */
+          /*   // Forward declaration. */
+          /*   // */
+          /*   // NOTE(Jesse): Not sure if C++ allows global class instances using */
+          /*   // the class keyword, but if it does we don't support it yet. */
+          /*   // */
+          /*   RequireToken(Parser, T); */
+          /*   RequireToken(Parser, CTokenType_Identifier); */
+          /*   RequireToken(Parser, CTokenType_Semicolon); */
+          /* } */
+          /* else */
+          /* { */
+
+          // NOTE(Jesse): Globally-scoped variable : `global_variable struct foo = { .bar = 1 }`
+          ParseVariableDecl(Ctx);
+
+          /* } */
         }
       } break;
 
@@ -9055,6 +9066,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         EatNameQualifiers(Parser);
       } break;
 
+      case CT_Keyword_Constexpr:
       case CTokenType_TemplateKeyword:
       case CTokenType_Extern:
       case CTokenType_Inline:

@@ -1,16 +1,21 @@
 #! /bin/bash
 
 
+LOG_LEVEL="--log-level LogLevel_Shush"
+LOG_LEVEL=""
 
+# TEST_DEBUGGER="gdb --args"
+
+# POOF_DEBUGGER="gdb --args"
 
 BUILD_EVERYTHING=0
 
 # git checkout $META_OUT
 
-BuildPoof=1
-RunPoof=1
+BuildPoof=0
+RunPoof=0
 
-BuildParserTests=1
+BuildParserTests=0
 RunParserTests=1
 
 RunIntegrationTests=0
@@ -58,10 +63,9 @@ function RunPoof {
   #   git checkout poof/generated/generate_cursor_c_token.h
   # fi
 
-  # gdb --args bin/poof                 \
-  bin/poof                 \
+  $POOF_DEBUGGER bin/poof      \
     --log-level LogLevel_Error \
-    poof/poof.cpp      \
+    poof/poof.cpp              \
     $COLORFLAG                 \
     -D BONSAI_PREPROCESSOR     \
     -D BONSAI_LINUX            \
@@ -186,9 +190,8 @@ function BuildParserTests
 function RunParserTests
 {
   ColorizeTitle "Running Parser Tests"
-    # --log-level LogLevel_Error \
-  # gdb --args ./bin/tests/poof $COLORFLAG
-  ./bin/tests/poof     \
+  $TEST_DEBUGGER ./bin/tests/poof $COLORFLAG \
+    $LOG_LEVEL \
     $COLORFLAG
 
   echo -e "$Delimeter"
