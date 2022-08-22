@@ -13,10 +13,15 @@ class Obj {
   Obj() = delete;
   Obj() = default;
 
-  /* operator==() */
-  /* { */
-  /* } */
+  operator==()
+  {
+  }
+
 };
+
+operator==(foo * F1, foo* F2)
+{
+}
 
 #if 1
 /* template <classname T> */

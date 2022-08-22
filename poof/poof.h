@@ -580,17 +580,17 @@ meta(string_and_value_tables(type_qualifier))
 #include <poof/generated/string_and_value_tables_type_qualifier.h>
 
 
+global_variable c_token NullToken = {};
+
 struct type_spec
 {
-  c_token DatatypeToken;
+  c_token *DatatypeToken = &NullToken; // TODO(Jesse): Do we actually want this?
   datatype Datatype;
-
-  c_token *QualifierTokens[8]; // TODO(Jesse): Can this be done in a less wasteful way?
 
   u32 Qualifier; // enum type_qualifier TODO(Jesse): How do we fix this?
 
   type_indirection_info Indirection;
-
+  b32 IsConstructor;
   b32 HasTemplateArguments;
   counted_string TemplateSource;
 

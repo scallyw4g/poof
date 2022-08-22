@@ -5590,7 +5590,7 @@ GenerateStructDef(d_union_decl* dUnion, memory_arena* Memory)
     Result =
       Concat(Result,
         FormatCountedString(Memory, CSz("  %S %S;\n"),
-          Member->variable_decl.Type.DatatypeToken.Value,
+          Member->variable_decl.Type.DatatypeToken->Value,
           Member->variable_decl.Name),
       Memory);
   }
@@ -5815,7 +5815,7 @@ ParseDiscriminatedUnion(parser* Parser, program_datatypes* Datatypes, counted_st
       struct_member Decl = {
         .Type = type_variable_decl,
         .variable_decl = {
-          .Type.DatatypeToken = RequireToken(Parser, CTokenType_Identifier),
+          .Type.DatatypeToken = RequireTokenPointer(Parser, CTokenType_Identifier),
           .Name               = RequireToken(Parser, CTokenType_Identifier).Value,
         }
       };
@@ -6573,11 +6573,10 @@ IsConstructorOrDestructorName(counted_string ClassName, counted_string FnName)
 bonsai_function b32
 IsConstructorOrDestructorName(c_token *ClassNameT, c_token *FNameT)
 {
-  Assert(ClassNameT != FNameT);
-
   b32 Result = False;
   if (ClassNameT && FNameT)
   {
+    Assert(ClassNameT != FNameT);
     Result = StringsMatch(ClassNameT->Value, FNameT->Value);
   }
 
@@ -6595,11 +6594,12 @@ IsConstructorOrDestructorName(counted_string *ClassName, counted_string *FnName)
 bonsai_function b32
 IsConstructorOrDestructorName(c_token *T)
 {
-  if (T->Type)
+  b32 Result = False;
+  if (T)
   {
-    Assert(T->Type == CTokenType_Identifier);
+    if (T->Type) { Assert(T->Type == CTokenType_Identifier); }
+    Result = T->QualifierName && StringsMatch(T->QualifierName->Value, T->Value);
   }
-  b32 Result = T->QualifierName && StringsMatch(T->QualifierName->Value, T->Value);
   return Result;
 }
 
@@ -6875,8 +6875,8 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
   }
   else
   {
-    Result.DatatypeToken = RequireToken(Parser, CTokenType_Identifier);
-    Result.Datatype = GetDatatypeByName(&Ctx->Datatypes, Result.DatatypeToken.Value);
+    Result.DatatypeToken = RequireTokenPointer(Parser, CTokenType_Identifier);
+    Result.Datatype = GetDatatypeByName(&Ctx->Datatypes, Result.DatatypeToken->Value);
     // TODO(Jesse, id: 296, tags: immediate): When we properly traverse
     // include graphs, this assert should not fail.
     //
@@ -6887,11 +6887,10 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
 
   Result.HasTemplateArguments = TryAndEatTemplateParameterList(Parser, &Ctx->Datatypes);
 
-  // TODO(Jesse): These checks are weird af.  Not 100% sure what to do here instead.
-  if (IsConstructorOrDestructorName(&Result.DatatypeToken))
-  {
-  }
-  else if (IsConstructorOrDestructorName(&Result.DatatypeToken, StructNameT))
+  Result.IsConstructor = (IsConstructorOrDestructorName(Result.DatatypeToken) ||
+                          IsConstructorOrDestructorName(Result.DatatypeToken, StructNameT)) && PeekToken(Parser).Type == CTokenType_OpenParen;
+
+  if (Result.IsConstructor)
   {
   }
   else
@@ -7108,6 +7107,8 @@ ParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest)
   }
 }
 
+// NOTE(Jesse): This function is not meant to parse struct-member specific
+// functions such as opearators or constructors.  It parses variables or free functions
 bonsai_function declaration
 ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *DeclType)
 {
@@ -7122,7 +7123,8 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *DeclType)
   }
   else
   {
-    if ( OptionalToken(Parser, CTokenType_OperatorKeyword) )
+    b32 IsOperator = OptionalToken(Parser, CTokenType_OperatorKeyword) != 0;
+    if ( IsOperator ) // operator==(foo *F1, foo *F2)
     {
       c_token *OperatorNameT = RequireOperatorToken(Parser);
 
@@ -7134,28 +7136,30 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *DeclType)
         Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
       }
     }
-    else if (IsConstructorOrDestructorName(&DeclType->DatatypeToken)) // my_thing::my_thing
+    else if (DeclType->IsConstructor) // my_thing::my_thing(...) {...}
     {
       Result.Type = type_declaration_function_decl;
-      Result.function_decl = ParseFunctionParameterList(Ctx, DeclType, &DeclType->DatatypeToken, function_type_constructor, DeclType->DatatypeToken.QualifierName);
+      Result.function_decl = ParseFunctionParameterList(Ctx, DeclType, DeclType->DatatypeToken, function_type_constructor, DeclType->DatatypeToken->QualifierName);
       Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
     }
-    else if ( OptionalToken(Parser, CTokenType_Semicolon) )
+    else if ( OptionalToken(Parser, CTokenType_Semicolon) ) // template<typename T> class foo;
     {
-      // template<typename T> class foo;
+      // TODO(Jesse): Do we actually need this still?
     }
-    else
+    else // could be variable or fn
     {
       EatNameQualifiers(Parser);
 
       c_token *DeclNameToken = RequireTokenPointer(Parser, CTokenType_Identifier);
-      if ( PeekToken(Parser).Type == CTokenType_OpenParen )
+
+      b32 IsFunction = PeekToken(Parser).Type == CTokenType_OpenParen;
+      if ( IsFunction )
       {
         Result.Type = type_declaration_function_decl;
         Result.function_decl = ParseFunctionParameterList(Ctx, DeclType, DeclNameToken, function_type_normal);
         Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
       }
-      else
+      else // Variable decl
       {
         // TODO(Jesse): Call ParseVariableDecl here!!
         Result.Type = type_declaration_variable_decl;
@@ -7826,7 +7830,7 @@ ParseStructMemberConstructorFn(parse_context *Ctx, type_spec *DeclType, struct_m
 {
   parser *Parser = Ctx->CurrentParser;
 
-  c_token *FuncNameT = &DeclType->DatatypeToken;
+  c_token *FuncNameT = DeclType->DatatypeToken;
 
   if (IsConstructorOrDestructorName(StructNameT, FuncNameT))
   {
@@ -8009,12 +8013,18 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
       {
         type_spec DeclType = ParseTypeSpecifier(Ctx, StructNameT);
 
-        if ( IsConstructorOrDestructorName(StructNameT, &DeclType.DatatypeToken) &&
-             PeekToken(Parser).Type == CTokenType_OpenParen ) // Constructor
+        b32 IsConstructor = IsConstructorOrDestructorName(StructNameT, DeclType.DatatypeToken) &&
+                            PeekToken(Parser).Type == CTokenType_OpenParen ;
+
+        Assert(DeclType.IsConstructor == IsConstructor);
+
+        /* b32 IsOperator = OptionalToken(Parser, CTokenType_OperatorKeyword) != 0; */
+
+        if (DeclType.IsConstructor)
         {
           ParseStructMemberConstructorFn(Ctx, &DeclType, &Result, StructNameT);
         }
-        else
+        else // operator, regular function, or variable decl
         {
           declaration Decl = ParseFunctionOrVariableDecl(Ctx, &DeclType);
           switch (Decl.Type)
@@ -8034,7 +8044,7 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
               {
                 if (OptionalToken(Parser, CTokenType_Colon)) // Member initializers
                 {
-                InvalidCodePath();
+                  InvalidCodePath();
 #if 0
                   while (OptionalToken(Parser, CTokenType_Identifier))
                   {
@@ -8047,6 +8057,7 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
 
               if (PeekToken(Parser).Type == '{')
               {
+                /* InvalidCodePath(); */
                 Result.function_decl.Body = GetBodyTextForNextScope(Parser, Ctx->Memory);
                 /* Push(&Ctx->Datatypes.Functions, Result.function_decl, Ctx->Memory); */
               }
@@ -8113,7 +8124,7 @@ MembersOfType(struct_def* Struct, counted_string MemberType, memory_arena *Memor
       {
         case type_variable_decl:
         {
-          if (StringsMatch(Member->variable_decl.Type.DatatypeToken.Value, MemberType))
+          if (StringsMatch(Member->variable_decl.Type.DatatypeToken->Value, MemberType))
           {
             Push(&Result, *Member, Memory);
           }
@@ -8831,9 +8842,9 @@ ParseTypeSpecifierNode(parse_context *Ctx, ast_node_expression *Result, datatype
   }
   else
   {
-    if (Node->TypeSpec.DatatypeToken.Type == CTokenType_Identifier)
+    if (Node->TypeSpec.DatatypeToken->Type == CTokenType_Identifier)
     {
-      Node->Datatype = GetDatatypeByName(&Ctx->Datatypes, Node->TypeSpec.DatatypeToken.Value);
+      Node->Datatype = GetDatatypeByName(&Ctx->Datatypes, Node->TypeSpec.DatatypeToken->Value);
       if (Node->Datatype.Type == type_datatype_noop)
       {
         // TODO(Jesse id: 319, tags: id_320): Type-checking failed.
@@ -9883,7 +9894,7 @@ PrintType(type_spec *Type, memory_arena *Memory)
 
   if (Type->Datatype.Type)
   {
-    Result = Type->DatatypeToken.Value;
+    Result = Type->DatatypeToken->Value;
   }
   else
   {
@@ -9994,7 +10005,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                   {
                     case type_variable_decl:
                     {
-                      enum_def *E = GetEnumByType(&Datatypes->Enums, Replace->Data.struct_member->variable_decl.Type.DatatypeToken.Value);
+                      enum_def *E = GetEnumByType(&Datatypes->Enums, Replace->Data.struct_member->variable_decl.Type.DatatypeToken->Value);
                       if (E)
                       {
                         meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
@@ -10268,7 +10279,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                     case type_variable_decl:
                     {
                       if ( ContainingConstraint.Count &&
-                           !StringsMatch(Member->variable_decl.Type.DatatypeToken.Value, ContainingConstraint) )
+                           !StringsMatch(Member->variable_decl.Type.DatatypeToken->Value, ContainingConstraint) )
                       {
                         // Containing constraint failed
                       }
@@ -10293,7 +10304,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                         struct_member* UnionMember = GET_ELEMENT(UnionMemberIter);
                         if (UnionMember->Type == type_variable_decl)
                         {
-                          struct_def* Struct = GetStructByType(&Datatypes->Structs, UnionMember->variable_decl.Type.DatatypeToken.Value);
+                          struct_def* Struct = GetStructByType(&Datatypes->Structs, UnionMember->variable_decl.Type.DatatypeToken->Value);
                           if (Struct)
                           {
                             struct_member_stream ContainedMembers = MembersOfType(Struct, ContainingConstraint, Memory);
@@ -10317,7 +10328,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                           }
                           else
                           {
-                            counted_string Name = UnionMember->variable_decl.Type.DatatypeToken.Value;
+                            counted_string Name = UnionMember->variable_decl.Type.DatatypeToken->Value;
                             counted_string ParentStructName = Replace->Data.struct_def->Type->Value;
                             Warn("Couldn't find struct type '%S' in union parent '%S'.", Name, ParentStructName);
                           }
