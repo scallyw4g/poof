@@ -116,13 +116,13 @@ bonsai_function void PrintTraySimple(c_token *T);
 bonsai_function void ParseError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken = 0);
 bonsai_function void ParseError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken = 0);
 
-bonsai_function struct_def ParseStructBody(parse_context *, c_token *);
-
-
-
 bonsai_function ast_node_expression* ParseExpression(parse_context *Ctx);
 bonsai_function void                 ParseExpression(parse_context *Ctx, ast_node_expression *Result);
 bonsai_function void                 ParseExpression(parse_context *Ctx, ast_node** Result);
+
+bonsai_function struct_def ParseStructBody(parse_context *, c_token *);
+
+bonsai_function parser MaybeParseFunctionBody(parser *Parser, memory_arena *Memory);
 
 
 inline c_token_cursor *
@@ -6979,6 +6979,18 @@ MaybeParseDeleteOrDefault(parser *Parser, function_decl *Result)
   }
 }
 
+bonsai_function void
+MaybeParseAttributes(parser *Parser)
+{
+  if (PeekToken(Parser).Type == CT_KeywordAttribute)
+  {
+    // void FunctionName( arg A1, arg, A2) __attribute__((whatever));
+    //
+    TryEatAttributes(Parser);
+    RequireToken(Parser, CTokenType_Semicolon);
+  }
+}
+
 bonsai_function function_decl
 ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *FuncNameT, function_type Type, c_token *StructNameT = 0)
 {
@@ -7003,16 +7015,6 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
     } break;
 
     case function_type_constructor:
-    {
-      if (IsConstructorOrDestructorName(StructNameT, FuncNameT))
-      {
-      }
-      else
-      {
-        ParseError(Parser, FormatCountedString(TranArena, CSz("Destructor (%S) name must match the struct name (%S)"), FuncNameT, StructNameT) );
-      }
-    } [[fallthrough]];
-
     case function_type_operator:
     case function_type_normal:
     {
@@ -7052,51 +7054,31 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
 
   switch (Type)
   {
-    case function_type_constructor:
-    {
-      if (OptionalToken(Parser, CTokenType_Colon) )
-      {
-      }
-
-    } break;
-
-    case function_type_destructor:
-    case function_type_operator:
-    case function_type_normal: {} break;
-    case function_type_noop: { ParseError(Parser, CSz("Got function_type_noop during ParseFunctionParameterList") ); } break;
-  }
-
-  switch (Type)
-  {
     case function_type_destructor:
     {
       InvalidCodePath();
     } break;
 
     case function_type_operator:
-    case function_type_constructor:
     {
       MaybeParseDeleteOrDefault(Parser, &Result);
     } break;
 
+    case function_type_constructor:
     case function_type_normal: {} break;
     case function_type_noop: { ParseError(Parser, CSz("Got function_type_noop during ParseFunctionParameterList") ); } break;
   }
 
 
-  if (PeekToken(Parser).Type == CT_KeywordAttribute)
-  {
-    // void FunctionName( arg A1, arg, A2) __attribute__((whatever));
-    //
-    TryEatAttributes(Parser);
-    RequireToken(Parser, CTokenType_Semicolon);
-  }
+  MaybeParseAttributes(Parser);
 
+#if 0
   if (PeekToken(Parser).Type == CTokenType_OpenBrace)
   {
     // void FunctionName( arg A1, arg, A2) { .. body text .. }
     Result.Body = GetBodyTextForNextScope(Parser, Ctx->Memory);
   }
+#endif
 
 
   return Result;
@@ -7149,12 +7131,14 @@ ParseFunctionOrVariableDecl(parse_context *Ctx)
       {
         Result.Type = type_declaration_function_decl;
         Result.function_decl = ParseFunctionParameterList(Ctx, &DeclType, OperatorNameT, function_type_operator);
+        Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
       }
     }
     else if (IsConstructorOrDestructorName(&DeclType.DatatypeToken)) // my_thing::my_thing
     {
       Result.Type = type_declaration_function_decl;
       Result.function_decl = ParseFunctionParameterList(Ctx, &DeclType, &DeclType.DatatypeToken, function_type_constructor, DeclType.DatatypeToken.QualifierName);
+      Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
     }
     else if ( OptionalToken(Parser, CTokenType_Semicolon) )
     {
@@ -7169,6 +7153,7 @@ ParseFunctionOrVariableDecl(parse_context *Ctx)
       {
         Result.Type = type_declaration_function_decl;
         Result.function_decl = ParseFunctionParameterList(Ctx, &DeclType, DeclNameToken, function_type_normal);
+        Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
       }
       else
       {
@@ -7831,14 +7816,40 @@ MaybeParseFunctionBody(parser *Parser, memory_arena *Memory)
   return Result;
 }
 
-bonsai_function function_decl
-ParseDestructorImpl(parser *Parser, memory_arena *Memory)
+bonsai_function void
+ParseStructMemberConstructor(parse_context *Ctx, struct_member *Result, c_token *StructNameT)
 {
-  function_decl Result = {};
-  Result.Type = function_type_destructor;
-  MaybeParseDeleteOrDefault(Parser, &Result);
-  Result.Body = MaybeParseFunctionBody(Parser, Memory);
-  return Result;
+  parser *Parser = Ctx->CurrentParser;
+
+  c_token *FuncNameT = PopTokenPointer(Parser);
+
+  if (IsConstructorOrDestructorName(StructNameT, FuncNameT))
+  {
+    Result->Type = type_function_decl;
+    type_spec ReturnType = {};
+    Result->function_decl = ParseFunctionParameterList(Ctx, &ReturnType, FuncNameT, function_type_constructor, StructNameT);
+
+    if (OptionalToken(Parser, CTokenType_Colon) ) { NotImplemented; /* TODO(Jesse): Eat initialziers here. */  }
+
+    MaybeParseDeleteOrDefault(Parser, &Result->function_decl);
+    MaybeParseAttributes(Parser);
+    Result->function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
+
+    if (IsImplementation(&Result->function_decl) ||
+        IsDefaultImplementation(&Result->function_decl) ||
+        IsDeletedImplementation(&Result->function_decl))
+    {
+      Push(&Ctx->Datatypes.Functions, Result->function_decl, Ctx->Memory);
+    }
+    else
+    {
+      ParseError(Parser, CSz("Constructor function must have a body"), FuncNameT);
+    }
+  }
+  else
+  {
+    ParseError(Parser, FormatCountedString(TranArena, CSz("Destructor (%S) name must match the struct name (%S)"), FuncNameT, StructNameT) );
+  }
 }
 
 bonsai_function void
@@ -7851,7 +7862,6 @@ ParseStructMemberDestructor(parse_context *Ctx, struct_member *Result, c_token *
 
   c_token *FuncNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
   type_spec ReturnType = {};
-
 
   if (IsConstructorOrDestructorName(StructNameT, FuncNameT))
   {
@@ -7871,7 +7881,10 @@ ParseStructMemberDestructor(parse_context *Ctx, struct_member *Result, c_token *
   }
 
   Result->Type = type_function_decl;
-  Result->function_decl = ParseDestructorImpl(Parser, Ctx->Memory);
+  Result->function_decl.Type = function_type_destructor;
+
+  MaybeParseDeleteOrDefault(Parser, &Result->function_decl);
+  Result->function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
 }
 
 
@@ -7980,22 +7993,7 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
       {
         if ( IsConstructorOrDestructorName(StructNameT, T) && PeekToken(Parser, 1).Type == CTokenType_OpenParen ) // Constructor
         {
-          c_token *NameT = RequireTokenPointer(Parser, T);
-
-          Result.Type = type_function_decl;
-          type_spec ReturnType = {};
-          Result.function_decl = ParseFunctionParameterList(Ctx, &ReturnType, NameT, function_type_constructor, StructNameT);
-
-          if (IsImplementation(&Result.function_decl) ||
-              IsDefaultImplementation(&Result.function_decl) ||
-              IsDeletedImplementation(&Result.function_decl))
-          {
-            Push(&Ctx->Datatypes.Functions, Result.function_decl, Ctx->Memory);
-          }
-          else
-          {
-            ParseError(Parser, CSz("Constructor function must have a body"), T);
-          }
+          ParseStructMemberConstructor(Ctx, &Result, StructNameT);
         }
         else
         {
