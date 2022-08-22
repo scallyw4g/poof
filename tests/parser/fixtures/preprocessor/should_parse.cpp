@@ -1,6 +1,25 @@
-template <classname T>
-class foo {
-}
+class Obj {
+ public:
+  Obj() {}
+
+  ~Obj() {}
+  ~Obj();
+
+  constexpr Obj() : _foo(0) {}
+  void thing() { _foo = 2; }
+  int _foo;
+
+  Obj() = delete;
+  Obj() = default;
+
+  /* operator==() */
+  /* { */
+  /* } */
+};
+
+#if 1
+/* template <classname T> */
+/* class foo { } */
 
 template <classname T>
 struct foo;
@@ -10,20 +29,12 @@ class foo;
 
 class foo;
 
-class Obj {
- public:
-  Obj() {}
-  constexpr Obj() : _foo(0) {}
-  void thing() { _foo = 2; }
-  int _foo;
-
-  Obj() = delete;
-  Obj() = default;
-};
 
 struct foo
 {
   constexpr foo(){}
+  foo() {}
+  foo * foo_ptr;
 };
 
 
@@ -498,4 +509,6 @@ int *afp[]();          // an array of functions returning int pointers (ILLEGAL)
 int afa[]()[];         // an array of functions returning an array of ints (ILLEGAL)
 int aff[]()();         // an array of functions returning functions returning an int (ILLEGAL)
 int af[]();            // an array of functions returning an int (ILLEGAL)
+#endif
+
 #endif

@@ -1,22 +1,20 @@
 #! /bin/bash
 
+# git checkout $META_OUT
+
 
 LOG_LEVEL="--log-level LogLevel_Shush"
 LOG_LEVEL=""
 
-# TEST_DEBUGGER="gdb --args"
-
-# POOF_DEBUGGER="gdb --args"
-
 BUILD_EVERYTHING=0
 
-# git checkout $META_OUT
+BuildPoof=1
+RunPoof=1
+# POOF_DEBUGGER="gdb --args"
 
-BuildPoof=0
-RunPoof=0
-
-BuildParserTests=0
-RunParserTests=1
+# BuildParserTests=1
+# RunParserTests=1
+# TEST_DEBUGGER="gdb --args"
 
 RunIntegrationTests=0
 

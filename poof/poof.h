@@ -455,7 +455,7 @@ struct struct_member_stream
 
 struct struct_def
 {
-  counted_string Type;
+  c_token *Type;
   counted_string DefinedInFile;
   struct_member_stream Members;
 
@@ -619,18 +619,22 @@ enum function_type
   function_type_operator,
   function_type_normal,
 };
+meta(string_and_value_tables(function_type))
+#include <poof/generated/string_and_value_tables_function_type.h>
 
 struct ast_node_statement;
 struct function_decl
 {
   function_type Type;
 
-  counted_string Name;
   type_spec ReturnType;
-
+  c_token *NameT;
   variable_decl_stream Args;
 
+  // TODO(Jesse): Pack these into a u8 flags
   b32 IsVariadic;
+  b32 ImplIsDefault;
+  b32 ImplIsDeleted;
 
   parser Body;
   ast_node_statement *Ast;
