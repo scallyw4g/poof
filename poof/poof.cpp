@@ -6873,6 +6873,10 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
   if (IsPrimitiveType(&Result))
   {
   }
+  else if (OptionalToken(Parser, CTokenType_OperatorKeyword))
+  {
+    Result.Qualifier |= TypeQual_Operator;
+  }
   else
   {
     Result.DatatypeToken = RequireTokenPointer(Parser, CTokenType_Identifier);
@@ -6887,10 +6891,14 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
 
   Result.HasTemplateArguments = TryAndEatTemplateParameterList(Parser, &Ctx->Datatypes);
 
-  Result.IsConstructor = (IsConstructorOrDestructorName(Result.DatatypeToken) ||
+  b32 IsConstructor = (IsConstructorOrDestructorName(Result.DatatypeToken) ||
                           IsConstructorOrDestructorName(Result.DatatypeToken, StructNameT)) && PeekToken(Parser).Type == CTokenType_OpenParen;
 
-  if (Result.IsConstructor)
+  if (IsConstructor)
+  {
+    Result.Qualifier |= TypeQual_Constructor;
+  }
+  else if (Result.Qualifier & TypeQual_Operator)
   {
   }
   else
@@ -7108,7 +7116,7 @@ ParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest)
 }
 
 // NOTE(Jesse): This function is not meant to parse struct-member specific
-// functions such as opearators or constructors.  It parses variables or free functions
+// functions such as constructors and destructors.  It parses variables or free functions
 bonsai_function declaration
 ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *DeclType)
 {
@@ -7123,8 +7131,7 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *DeclType)
   }
   else
   {
-    b32 IsOperator = OptionalToken(Parser, CTokenType_OperatorKeyword) != 0;
-    if ( IsOperator ) // operator==(foo *F1, foo *F2)
+    if ( DeclType->Qualifier & TypeQual_Operator ) // operator==(foo *F1, foo *F2)
     {
       c_token *OperatorNameT = RequireOperatorToken(Parser);
 
@@ -7136,7 +7143,7 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *DeclType)
         Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
       }
     }
-    else if (DeclType->IsConstructor) // my_thing::my_thing(...) {...}
+    else if (DeclType->Qualifier & TypeQual_Constructor) // my_thing::my_thing(...) {...}
     {
       Result.Type = type_declaration_function_decl;
       Result.function_decl = ParseFunctionParameterList(Ctx, DeclType, DeclType->DatatypeToken, function_type_constructor, DeclType->DatatypeToken->QualifierName);
@@ -7993,6 +8000,7 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
         EatNameQualifiers(Parser);
       } [[fallthrough]];
 
+      case CTokenType_OperatorKeyword:
       case CT_Keyword_Constexpr:
       case CTokenType_ThreadLocal:
       case CTokenType_Const:
@@ -8016,11 +8024,9 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
         b32 IsConstructor = IsConstructorOrDestructorName(StructNameT, DeclType.DatatypeToken) &&
                             PeekToken(Parser).Type == CTokenType_OpenParen ;
 
-        Assert(DeclType.IsConstructor == IsConstructor);
+        Assert( ((DeclType.Qualifier & TypeQual_Constructor)>0) == IsConstructor);
 
-        /* b32 IsOperator = OptionalToken(Parser, CTokenType_OperatorKeyword) != 0; */
-
-        if (DeclType.IsConstructor)
+        if (DeclType.Qualifier & TypeQual_Constructor)
         {
           ParseStructMemberConstructorFn(Ctx, &DeclType, &Result, StructNameT);
         }
@@ -9339,6 +9345,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         EatNameQualifiers(Parser);
       } break;
 
+      case CTokenType_OperatorKeyword:
       case CT_Keyword_Constexpr:
       case CTokenType_TemplateKeyword:
       case CTokenType_Extern:
