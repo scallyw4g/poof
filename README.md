@@ -80,15 +80,15 @@ issue if you're interested in OSX support.
 
 # Building
 
-Clone:
+### Clone:
 
 `git clone --recursive https://github.com/jjbandit/poof.git poof`
 
-Build:
+### Build:
 
 `./make.sh BuildAndRunAll` Go nuclear -- builds everything and runs all tests
 
-.
+---
 
 `./make.sh BuildAll` Builds all binaries
 
@@ -96,11 +96,11 @@ Build:
 
 `./make.sh BuildParserTests` Builds parser test suite binary
 
-.
+---
 
 `./make.sh RunPoof` Runs poof against its own codebase.  Useful for development
 
-.
+---
 
 `./make.sh RunAllTests` Run all test suites
 
