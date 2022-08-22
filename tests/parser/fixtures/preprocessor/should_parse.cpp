@@ -1,7 +1,11 @@
 
 class Obj {
  public:
-  constexpr Obj(){}
+  Obj() {}
+  // foo() {} // << Should break, but might not
+  constexpr Obj() : _foo(0) {}
+  void thing() { _foo = 2; }
+  int _foo;
 };
 
 struct foo

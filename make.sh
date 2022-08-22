@@ -1,17 +1,6 @@
 #! /bin/bash
 
-. scripts/preamble.sh
-. scripts/setup_for_cxx.sh
 
-if [ $# -gt 1 ]; then
-  echo "make.sh supports a maximum of 1 argument"
-fi
-
-ROOT="."
-SRC="$ROOT/poof"
-BIN="$ROOT/bin"
-BIN_TEST="$BIN/tests"
-META_OUT="$ROOT/poof/generated"
 
 
 BUILD_EVERYTHING=0
@@ -27,6 +16,25 @@ RunParserTests=1
 RunIntegrationTests=0
 
 OPTIMIZATION_LEVEL="-O0"
+
+
+
+
+
+
+. scripts/preamble.sh
+. scripts/setup_for_cxx.sh
+
+if [ $# -gt 1 ]; then
+  echo "make.sh supports a maximum of 1 argument"
+fi
+
+ROOT="."
+SRC="$ROOT/poof"
+BIN="$ROOT/bin"
+BIN_TEST="$BIN/tests"
+META_OUT="$ROOT/poof/generated"
+
 
 function RunPoof {
   ColorizeTitle "Poofing!"
@@ -178,9 +186,9 @@ function BuildParserTests
 function RunParserTests
 {
   ColorizeTitle "Running Parser Tests"
+    # --log-level LogLevel_Error \
   # gdb --args ./bin/tests/poof $COLORFLAG
   ./bin/tests/poof     \
-    --log-level LogLevel_Error \
     $COLORFLAG
 
   echo -e "$Delimeter"

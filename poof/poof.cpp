@@ -66,9 +66,9 @@ bonsai_function c_token   RequireTokenRaw(parser *Parser, c_token_type ExpectedT
 bonsai_function b32       TokensRemain(parser *Parser, u32 TokenLookahead = 0);
 bonsai_function b32       RawTokensRemain(parser *Parser, u32 TokenLookahead = 0);
 
-bonsai_function b32       TokenIsOperator(c_token_type T);
-bonsai_function b32       NextTokenIsOperator(parser *Parser);
-bonsai_function void      RequireOperatorToken(parser *Parser);
+bonsai_function b32            TokenIsOperator(c_token_type T);
+bonsai_function b32            NextTokenIsOperator(parser *Parser);
+bonsai_function counted_string RequireOperatorToken(parser *Parser);
 
 bonsai_function void      TrimFirstToken(parser* Parser, c_token_type TokenType);
 bonsai_function void      TrimLastToken(parser* Parser, c_token_type TokenType);
@@ -2412,9 +2412,10 @@ NextTokenIsOperator(parser* Parser)
   return Result;
 }
 
-bonsai_function void
+bonsai_function counted_string
 RequireOperatorToken(parser* Parser)
 {
+  string_from_parser Builder = StartStringFromParser(Parser);
   c_token T = PeekToken(Parser);
   switch (T.Type)
   {
@@ -2464,7 +2465,8 @@ RequireOperatorToken(parser* Parser)
     default: { ParseError(Parser, CSz("Expected operator.")); } break;
   }
 
-  return;
+  counted_string OperatorName = FinalizeStringFromParser(&Builder);
+  return OperatorName;
 }
 
 
@@ -6498,7 +6500,14 @@ TryAndEatTemplateParameterList(parser *Parser, program_datatypes *Datatypes)
 }
 
 bonsai_function b32
-IsConstructorFunctionName(c_token T)
+IsConstructorFn(counted_string ClassName, counted_string FnName)
+{
+  b32 Result = StringsMatch(ClassName, FnName);
+  return Result;
+}
+
+bonsai_function b32
+IsConstructorFn(c_token T)
 {
   b32 Result = T.QualifierName && StringsMatch(T.QualifierName->Value, T.Value);
   return Result;
@@ -6798,7 +6807,7 @@ ParseTypeSpecifier(parse_context *Ctx)
   // TODO(Jesse): This check is weird.  Should
   // ParseReferencesIndirectionAndPossibleFunctionPointerness not just handle
   // this case?
-  if (IsConstructorFunctionName(Result.DatatypeToken))
+  if (IsConstructorFn(Result.DatatypeToken))
   {
   }
   else
@@ -6889,6 +6898,7 @@ ParseAndPushFunctionPrototype(parse_context *Ctx, type_spec *ReturnType, counted
   while ( !DoneParsingArguments && TokensRemain(Parser) )
   {
     variable_decl Arg = ParseVariableDecl(Ctx);
+    Push(&Result.Args, Arg, Ctx->Memory);
 
     if (!OptionalToken(Parser, CTokenType_Comma))
     {
@@ -6901,7 +6911,6 @@ ParseAndPushFunctionPrototype(parse_context *Ctx, type_spec *ReturnType, counted
       DoneParsingArguments = True;
     }
 
-    Push(&Result.Args, Arg, Ctx->Memory);
     continue;
   }
   RequireToken(Parser, CTokenType_CloseParen); // Ending paren for arguments
@@ -6911,6 +6920,9 @@ ParseAndPushFunctionPrototype(parse_context *Ctx, type_spec *ReturnType, counted
     // void FunctionName( arg A1, arg, A2) { .. body text .. }
     Result.Body = GetBodyTextForNextScope(Parser, Ctx->Memory);
     Push(&Ctx->Datatypes.Functions, Result, Ctx->Memory);
+  }
+  else if (PeekToken(Parser).Type == CTokenType_Colon)
+  {
   }
   else
   {
@@ -6967,16 +6979,15 @@ ParseFunctionOrVariableDecl(parse_context *Ctx)
   {
     if ( OptionalToken(Parser, CTokenType_OperatorKeyword) )
     {
-      string_from_parser Builder = StartStringFromParser(Parser);
-      RequireOperatorToken(Parser);
-      counted_string OperatorName = FinalizeStringFromParser(&Builder);
+      counted_string OperatorName = RequireOperatorToken(Parser);
+
       if ( OptionalToken(Parser, CTokenType_OpenParen) )
       {
         Result.Type = type_declaration_function_decl;
         Result.function_decl = ParseAndPushFunctionPrototype(Ctx, &DeclType, &OperatorName, function_type_operator);
       }
     }
-    else if (IsConstructorFunctionName(DeclType.DatatypeToken))
+    else if (IsConstructorFn(DeclType.DatatypeToken)) // my_thing::my_thing
     {
       Result.Type = type_declaration_function_decl;
       RequireToken(Parser, CTokenType_OpenParen);
@@ -7639,7 +7650,7 @@ ParseStructMember(parse_context *Ctx, counted_string StructName)
     {
       RequireToken(Parser, CTokenType_Tilde);
 
-      if (StringsMatch(StructName, PeekToken(Parser).Value) &&
+      if ( IsConstructorFn(StructName, PeekToken(Parser).Value) &&
            PeekToken(Parser, 1).Type == CTokenType_OpenParen)
       {
         RequireToken(Parser, CTokenType_Identifier);
@@ -7740,7 +7751,6 @@ ParseStructMember(parse_context *Ctx, counted_string StructName)
     case CTokenType_Signed:
     case CTokenType_Identifier:
     {
-      u32 DefKeywordsEncountered = 0;
       if ( StringsMatch(StructName, T.Value) &&
            PeekToken(Parser, 1).Type == CTokenType_OpenParen)
       {
@@ -7767,6 +7777,24 @@ ParseStructMember(parse_context *Ctx, counted_string StructName)
           {
             Result.Type = type_function_decl;
             Result.function_decl = Decl.function_decl;
+
+            if (IsConstructorFn(StructName, Result.function_decl.Name))
+            {
+              if (OptionalToken(Parser, CTokenType_Colon)) // Member initializers
+              {
+                while (OptionalToken(Parser, CTokenType_Identifier))
+                {
+                  EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
+                  OptionalToken(Parser, CTokenType_Comma);
+                }
+              }
+            }
+
+            if (PeekToken(Parser).Type == '{')
+            {
+              Result.function_decl.Body = GetBodyTextForNextScope(Parser, Ctx->Memory);
+              Push(&Ctx->Datatypes.Functions, Result.function_decl, Ctx->Memory);
+            }
           } break;
 
           case type_declaration_noop:
@@ -7774,8 +7802,8 @@ ParseStructMember(parse_context *Ctx, counted_string StructName)
             InvalidCodePath();
           } break;
         }
-      }
 
+      }
     } break;
 
     case CTokenType_Semicolon:
