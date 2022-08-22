@@ -6629,7 +6629,7 @@ EatNameQualifiers(parser *Parser)
     }
     else
     {
-      Assert(T->Type == CTokenType_Identifier);
+      /* Assert(T->Type == CTokenType_Identifier); */
       break;
     }
   }
@@ -6863,7 +6863,7 @@ IsPrimitiveType(type_spec *Type)
 }
 
 bonsai_function type_spec
-ParseTypeSpecifier(parse_context *Ctx)
+ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
 {
   type_spec Result = {};
   parser *Parser = Ctx->CurrentParser;
@@ -6887,9 +6887,11 @@ ParseTypeSpecifier(parse_context *Ctx)
 
   Result.HasTemplateArguments = TryAndEatTemplateParameterList(Parser, &Ctx->Datatypes);
 
-  // TODO(Jesse): This check is weird.  Pretty sure we can call ParseReferencesIndirectionAndPossibleFunctionPointerness
-  // regardelss of if we have a constructor or destructor?
+  // TODO(Jesse): These checks are weird af.  Not 100% sure what to do here instead.
   if (IsConstructorOrDestructorName(&Result.DatatypeToken))
+  {
+  }
+  else if (IsConstructorOrDestructorName(&Result.DatatypeToken, StructNameT))
   {
   }
   else
@@ -7107,18 +7109,16 @@ ParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest)
 }
 
 bonsai_function declaration
-ParseFunctionOrVariableDecl(parse_context *Ctx)
+ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *DeclType)
 {
   parser *Parser = Ctx->CurrentParser;
 
   declaration Result = {};
 
-  type_spec DeclType = ParseTypeSpecifier(Ctx);
-
-  if (DeclType.Indirection.IsFunctionPointer)
+  if (DeclType->Indirection.IsFunctionPointer)
   {
     Result.Type = type_declaration_variable_decl;
-    Result.variable_decl.Type = DeclType;
+    Result.variable_decl.Type = *DeclType;
   }
   else
   {
@@ -7129,15 +7129,15 @@ ParseFunctionOrVariableDecl(parse_context *Ctx)
       if ( PeekToken(Parser).Type == CTokenType_OpenParen )
       {
         Result.Type = type_declaration_function_decl;
-        Result.function_decl = ParseFunctionParameterList(Ctx, &DeclType, OperatorNameT, function_type_operator);
+        Result.function_decl = ParseFunctionParameterList(Ctx, DeclType, OperatorNameT, function_type_operator);
         MaybeParseDeleteOrDefault(Parser, &Result.function_decl);
         Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
       }
     }
-    else if (IsConstructorOrDestructorName(&DeclType.DatatypeToken)) // my_thing::my_thing
+    else if (IsConstructorOrDestructorName(&DeclType->DatatypeToken)) // my_thing::my_thing
     {
       Result.Type = type_declaration_function_decl;
-      Result.function_decl = ParseFunctionParameterList(Ctx, &DeclType, &DeclType.DatatypeToken, function_type_constructor, DeclType.DatatypeToken.QualifierName);
+      Result.function_decl = ParseFunctionParameterList(Ctx, DeclType, &DeclType->DatatypeToken, function_type_constructor, DeclType->DatatypeToken.QualifierName);
       Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
     }
     else if ( OptionalToken(Parser, CTokenType_Semicolon) )
@@ -7152,14 +7152,14 @@ ParseFunctionOrVariableDecl(parse_context *Ctx)
       if ( PeekToken(Parser).Type == CTokenType_OpenParen )
       {
         Result.Type = type_declaration_function_decl;
-        Result.function_decl = ParseFunctionParameterList(Ctx, &DeclType, DeclNameToken, function_type_normal);
+        Result.function_decl = ParseFunctionParameterList(Ctx, DeclType, DeclNameToken, function_type_normal);
         Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
       }
       else
       {
         // TODO(Jesse): Call ParseVariableDecl here!!
         Result.Type = type_declaration_variable_decl;
-        Result.variable_decl.Type = DeclType;
+        Result.variable_decl.Type = *DeclType;
         Result.variable_decl.Name = DeclNameToken->Value;
 
         TryEatAttributes(Parser);
@@ -7822,11 +7822,11 @@ ParseStructMemberOperatorFn(parse_context *Ctx, struct_member *Result, c_token *
 }
 
 bonsai_function void
-ParseStructMemberConstructorFn(parse_context *Ctx, struct_member *Result, c_token *StructNameT)
+ParseStructMemberConstructorFn(parse_context *Ctx, type_spec *DeclType, struct_member *Result, c_token *StructNameT)
 {
   parser *Parser = Ctx->CurrentParser;
 
-  c_token *FuncNameT = PopTokenPointer(Parser);
+  c_token *FuncNameT = &DeclType->DatatypeToken;
 
   if (IsConstructorOrDestructorName(StructNameT, FuncNameT))
   {
@@ -7834,7 +7834,14 @@ ParseStructMemberConstructorFn(parse_context *Ctx, struct_member *Result, c_toke
     type_spec ReturnType = {};
     Result->function_decl = ParseFunctionParameterList(Ctx, &ReturnType, FuncNameT, function_type_constructor, StructNameT);
 
-    if (OptionalToken(Parser, CTokenType_Colon) ) { NotImplemented; /* TODO(Jesse): Eat initialziers here. */  }
+    if (OptionalToken(Parser, CTokenType_Colon) )
+    {
+      while (OptionalToken(Parser, CTokenType_Identifier))
+      {
+        EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
+        OptionalToken(Parser, CTokenType_Comma);
+      }
+    }
 
     MaybeParseDeleteOrDefault(Parser, &Result->function_decl);
     MaybeParseAttributes(Parser);
@@ -7844,16 +7851,20 @@ ParseStructMemberConstructorFn(parse_context *Ctx, struct_member *Result, c_toke
         IsDefaultImplementation(&Result->function_decl) ||
         IsDeletedImplementation(&Result->function_decl))
     {
-      Push(&Ctx->Datatypes.Functions, Result->function_decl, Ctx->Memory);
+      /* Push(&Ctx->Datatypes.Functions, Result->function_decl, Ctx->Memory); */
     }
     else
     {
-      ParseError(Parser, CSz("Constructor function must have a body"), FuncNameT);
+      ParseError(Parser,
+          CSz("Constructor function must have a body"),
+          FuncNameT);
     }
   }
   else
   {
-    ParseError(Parser, FormatCountedString(TranArena, CSz("Destructor (%S) name must match the struct name (%S)"), FuncNameT, StructNameT) );
+    ParseError(Parser,
+        FormatCountedString(TranArena, CSz("Constructor (%S) name must match the struct name (%S)"), FuncNameT->Value, StructNameT->Value),
+        FuncNameT );
   }
 }
 
@@ -7922,7 +7933,7 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
       case CTokenType_Union:
       case CTokenType_Struct:
       {
-        RequireToken(Parser, T->Type);
+        RequireToken(Parser, T);
 
         c_token *TypeNameT = {};
         if (PeekToken(Parser).Type == CTokenType_Identifier)
@@ -7996,14 +8007,16 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
       case CTokenType_Signed:
       case CTokenType_Identifier:
       {
-        if ( IsConstructorOrDestructorName(StructNameT, T) &&
-             PeekToken(Parser, 1).Type == CTokenType_OpenParen ) // Constructor
+        type_spec DeclType = ParseTypeSpecifier(Ctx, StructNameT);
+
+        if ( IsConstructorOrDestructorName(StructNameT, &DeclType.DatatypeToken) &&
+             PeekToken(Parser).Type == CTokenType_OpenParen ) // Constructor
         {
-          ParseStructMemberConstructorFn(Ctx, &Result, StructNameT);
+          ParseStructMemberConstructorFn(Ctx, &DeclType, &Result, StructNameT);
         }
         else
         {
-          declaration Decl = ParseFunctionOrVariableDecl(Ctx);
+          declaration Decl = ParseFunctionOrVariableDecl(Ctx, &DeclType);
           switch (Decl.Type)
           {
             case type_declaration_variable_decl:
@@ -8021,18 +8034,21 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
               {
                 if (OptionalToken(Parser, CTokenType_Colon)) // Member initializers
                 {
+                InvalidCodePath();
+#if 0
                   while (OptionalToken(Parser, CTokenType_Identifier))
                   {
                     EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
                     OptionalToken(Parser, CTokenType_Comma);
                   }
+#endif
                 }
               }
 
               if (PeekToken(Parser).Type == '{')
               {
                 Result.function_decl.Body = GetBodyTextForNextScope(Parser, Ctx->Memory);
-                Push(&Ctx->Datatypes.Functions, Result.function_decl, Ctx->Memory);
+                /* Push(&Ctx->Datatypes.Functions, Result.function_decl, Ctx->Memory); */
               }
             } break;
 
@@ -9333,7 +9349,8 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
       case CTokenType_Signed:
       case CTokenType_Identifier:
       {
-        declaration Decl = ParseFunctionOrVariableDecl(Ctx);
+        type_spec DeclType = ParseTypeSpecifier(Ctx);
+        declaration Decl = ParseFunctionOrVariableDecl(Ctx, &DeclType);
 
         if (Decl.Type == type_declaration_function_decl)
         {

@@ -5,7 +5,8 @@ class Obj {
   ~Obj() {}
   ~Obj();
 
-  constexpr Obj() : _foo(0) {}
+  Obj() : _foo(0) {}
+  /* constexpr Obj() : _foo(0) {} */
   void thing() { _foo = 2; }
   int _foo;
 
