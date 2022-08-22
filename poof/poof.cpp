@@ -6953,6 +6953,31 @@ ParseVariableDecl(parse_context *Ctx)
 }
 
 
+bonsai_function void
+MaybeParseDeleteOrDefault(parser *Parser, function_decl *Result)
+{
+  auto Type = Result->Type ;
+  Assert(Type == function_type_constructor ||
+         Type == function_type_destructor ||
+         Type == function_type_operator );
+
+  if (OptionalToken(Parser, CTokenType_Equals))
+  {
+    Result->ImplIsDefault = (b32)(OptionalToken(Parser, CTokenType_Default) != 0);
+    Result->ImplIsDeleted = (b32)(OptionalToken(Parser, CT_Keyword_Delete) != 0);
+
+    if (! (Result->ImplIsDefault || Result->ImplIsDeleted) )
+    {
+      ParseError(Parser, CSz("Expected either keyword : 'delete' or 'default'") );
+    }
+
+    if ( Result->ImplIsDefault && Result->ImplIsDeleted )
+    {
+      ParseError(Parser,
+          FormatCountedString(TranArena, CSz("Cannot delete and default implementation of %S %S"), ToString(Type), Result->NameT->Value) );
+    }
+  }
+}
 
 bonsai_function function_decl
 ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *FuncNameT, function_type Type, c_token *StructNameT = 0)
@@ -6974,21 +6999,7 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
   {
     case function_type_destructor:
     {
-      if (IsConstructorOrDestructorName(StructNameT, FuncNameT))
-      {
-        c_token *GotClose = OptionalToken(Parser, CTokenType_CloseParen);
-        if ( GotClose )
-        {
-        }
-        else
-        {
-          ParseError(Parser, FormatCountedString(TranArena, CSz("Destructor (%S) must have an empty parameter list!"), FuncNameT->Value) );
-        }
-      }
-      else
-      {
-        ParseError(Parser, FormatCountedString(TranArena, CSz("Destructor (%S) name must match the struct name (%S)"), FuncNameT->Value, StructNameT->Value ) );
-      }
+      InvalidCodePath();
     } break;
 
     case function_type_constructor:
@@ -7057,17 +7068,15 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
 
   switch (Type)
   {
-    case function_type_operator:
-    case function_type_constructor:
     case function_type_destructor:
     {
-      if (OptionalToken(Parser, CTokenType_Equals))
-      {
-        Result.ImplIsDefault = (b32)(OptionalToken(Parser, CTokenType_Default) != 0);
-        Result.ImplIsDeleted = (b32)(OptionalToken(Parser, CT_Keyword_Delete) != 0);
-        if (! (Result.ImplIsDefault || Result.ImplIsDeleted) ) { ParseError(Parser, CSz("Expected either keyword : 'delete' or 'default'") ); }
-        if ( Result.ImplIsDefault && Result.ImplIsDeleted ) { ParseError(Parser, FormatCountedString(TranArena, CSz("Cannot delete and default implementation of %S %S"), ToString(Type), FuncNameT->Value) ); }
-      }
+      InvalidCodePath();
+    } break;
+
+    case function_type_operator:
+    case function_type_constructor:
+    {
+      MaybeParseDeleteOrDefault(Parser, &Result);
     } break;
 
     case function_type_normal: {} break;
@@ -7811,21 +7820,58 @@ IsDeletedImplementation(function_decl *Func)
   return Result;
 }
 
+bonsai_function parser
+MaybeParseFunctionBody(parser *Parser, memory_arena *Memory)
+{
+  parser Result = {};
+  if (PeekToken(Parser).Type == CTokenType_OpenBrace)
+  {
+    Result = GetBodyTextForNextScope(Parser, Memory);
+  }
+  return Result;
+}
+
+bonsai_function function_decl
+ParseDestructorImpl(parser *Parser, memory_arena *Memory)
+{
+  function_decl Result = {};
+  Result.Type = function_type_destructor;
+  MaybeParseDeleteOrDefault(Parser, &Result);
+  Result.Body = MaybeParseFunctionBody(Parser, Memory);
+  return Result;
+}
+
 bonsai_function void
 ParseStructMemberDestructor(parse_context *Ctx, struct_member *Result, c_token *StructNameT)
 {
   Assert(Result->Type == type_struct_member_noop);
 
-
   parser *Parser = Ctx->CurrentParser;
   RequireToken(Parser, CTokenType_Tilde);
 
-  c_token *NameT = RequireTokenPointer(Parser, CTokenType_Identifier);
+  c_token *FuncNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
   type_spec ReturnType = {};
 
+
+  if (IsConstructorOrDestructorName(StructNameT, FuncNameT))
+  {
+    c_token *GotOpen = OptionalToken(Parser, CTokenType_OpenParen);
+    c_token *GotClose = OptionalToken(Parser, CTokenType_CloseParen);
+    if ( GotOpen && GotClose )
+    {
+    }
+    else
+    {
+      ParseError(Parser, FormatCountedString(TranArena, CSz("Destructor (%S) must have an empty parameter list!"), FuncNameT->Value) );
+    }
+  }
+  else
+  {
+    ParseError(Parser, FormatCountedString(TranArena, CSz("Destructor (%S) name must match the struct name (%S)"), FuncNameT->Value, StructNameT->Value ) );
+  }
+
   Result->Type = type_function_decl;
-  Result->function_decl = ParseFunctionParameterList(Ctx, &ReturnType, NameT, function_type_destructor, StructNameT);
-  /* Result->function_decl.Body = MaybeParseFunctionBody(Ctx); */
+  Result->function_decl = ParseDestructorImpl(Parser, Ctx->Memory);
 }
 
 
