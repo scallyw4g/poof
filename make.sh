@@ -7,7 +7,7 @@ LOG_LEVEL="--log-level LogLevel_Shush"
 LOG_LEVEL=""
 
 POOF_LOG_LEVEL="--log-level LogLevel_Shush"
-POOF_LOG_LEVEL="--log-level LogLevel_Debug"
+# POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
 BUILD_EVERYTHING=0
 

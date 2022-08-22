@@ -7061,7 +7061,6 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
 
     case function_type_operator:
     {
-      MaybeParseDeleteOrDefault(Parser, &Result);
     } break;
 
     case function_type_constructor:
@@ -7131,6 +7130,7 @@ ParseFunctionOrVariableDecl(parse_context *Ctx)
       {
         Result.Type = type_declaration_function_decl;
         Result.function_decl = ParseFunctionParameterList(Ctx, &DeclType, OperatorNameT, function_type_operator);
+        MaybeParseDeleteOrDefault(Parser, &Result.function_decl);
         Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
       }
     }
@@ -7817,7 +7817,12 @@ MaybeParseFunctionBody(parser *Parser, memory_arena *Memory)
 }
 
 bonsai_function void
-ParseStructMemberConstructor(parse_context *Ctx, struct_member *Result, c_token *StructNameT)
+ParseStructMemberOperatorFn(parse_context *Ctx, struct_member *Result, c_token *StructNameT)
+{
+}
+
+bonsai_function void
+ParseStructMemberConstructorFn(parse_context *Ctx, struct_member *Result, c_token *StructNameT)
 {
   parser *Parser = Ctx->CurrentParser;
 
@@ -7853,7 +7858,7 @@ ParseStructMemberConstructor(parse_context *Ctx, struct_member *Result, c_token 
 }
 
 bonsai_function void
-ParseStructMemberDestructor(parse_context *Ctx, struct_member *Result, c_token *StructNameT)
+ParseStructMemberDestructorFn(parse_context *Ctx, struct_member *Result, c_token *StructNameT)
 {
   Assert(Result->Type == type_struct_member_noop);
 
@@ -7899,11 +7904,11 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
   c_token *T = PeekTokenPointer(Parser);
   if (T)
   {
-  switch(T->Type)
-  {
+    switch(T->Type)
+    {
       case CTokenType_Tilde: // Destructor
       {
-        ParseStructMemberDestructor(Ctx, &Result, StructNameT);
+        ParseStructMemberDestructorFn(Ctx, &Result, StructNameT);
       } break;
 
       // NOTE(Jesse): We don't handle inline enum declarations atm
@@ -7991,9 +7996,10 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
       case CTokenType_Signed:
       case CTokenType_Identifier:
       {
-        if ( IsConstructorOrDestructorName(StructNameT, T) && PeekToken(Parser, 1).Type == CTokenType_OpenParen ) // Constructor
+        if ( IsConstructorOrDestructorName(StructNameT, T) &&
+             PeekToken(Parser, 1).Type == CTokenType_OpenParen ) // Constructor
         {
-          ParseStructMemberConstructor(Ctx, &Result, StructNameT);
+          ParseStructMemberConstructorFn(Ctx, &Result, StructNameT);
         }
         else
         {
@@ -8047,7 +8053,7 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
 
       InvalidDefaultWhileParsing(Parser,
           FormatCountedString(TranArena, CSz("Unexpected token encountered while parsing struct %S"), StructNameT->Value));
-  }
+    }
   }
 
   return Result;
@@ -8199,18 +8205,49 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
     //  Parse comma-separated definitions .. ie `struct fing { int foo, bar, baz; };`
     while (OptionalToken(Parser, CTokenType_Comma))
     {
-      comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
+      switch (Declaration.Type)
+      {
+        // NOTE(Jesse): This is weird, but we use the variable_decl type for
+        // struct declarations..?
+        case type_struct_decl:
+        case type_variable_decl:
+        {
+          // NOTE(Jesse): Because we use variable_decl for structs we can't use
+          // SafeAccess()
+          // auto Var = SafeAccessObj(variable_decl, Declaration);
 
-      Declaration.variable_decl.Name = Decl.NameT->Value;
-      Declaration.variable_decl.Type.Indirection = Decl.Indirection;
-      Declaration.variable_decl.StaticBufferSize = Decl.StaticBufferSize;
-      Declaration.variable_decl.Value = Decl.Value;
+          auto Var =  Declaration.variable_decl;
+          comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
 
+          Var.Name = Decl.NameT->Value;
+          Var.Type.Indirection = Decl.Indirection;
+          Var.StaticBufferSize = Decl.StaticBufferSize;
+          Var.Value = Decl.Value;
+        } break;
+
+        case type_function_decl:
+        case type_struct_member_anonymous:
+        {
+          NotImplemented;
+        } break;
+
+        case type_struct_member_noop:
+        {
+          InvalidCodePath();
+        } break;
+
+      }
       Push(&Result.Members, Declaration, Ctx->Memory);
     }
 
-    // NOTE(Jesse): function bodies don't have to be followed by semicolons
-    OptionalToken(Parser, CTokenType_Semicolon);
+    if (Declaration.Type == type_function_decl)
+    {
+      OptionalToken(Parser, CTokenType_Semicolon);
+    }
+    else
+    {
+      RequireToken(Parser, CTokenType_Semicolon);
+    }
   }
 
   RequireToken(Parser, CTokenType_CloseBrace);
@@ -9220,7 +9257,6 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
 
   while ( c_token *T = PeekTokenPointer(Parser) )
   {
-
     switch(T->Type)
     {
       case CT_KeywordPragma:
@@ -9256,24 +9292,8 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         }
         else
         {
-          /* if (T->Type == CT_Keyword_Class) */
-          /* { */
-          /*   // Forward declaration. */
-          /*   // */
-          /*   // NOTE(Jesse): Not sure if C++ allows global class instances using */
-          /*   // the class keyword, but if it does we don't support it yet. */
-          /*   // */
-          /*   RequireToken(Parser, T); */
-          /*   RequireToken(Parser, CTokenType_Identifier); */
-          /*   RequireToken(Parser, CTokenType_Semicolon); */
-          /* } */
-          /* else */
-          /* { */
-
           // NOTE(Jesse): Globally-scoped variable : `global_variable struct foo = { .bar = 1 }`
           ParseVariableDecl(Ctx);
-
-          /* } */
         }
       } break;
 
@@ -9313,10 +9333,12 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
       case CTokenType_Signed:
       case CTokenType_Identifier:
       {
-        // We ignore the result of this.  We're just looking to push functions
-        // and push them onto the program_datatypes stream which this function
-        // does internally.  Maybe we should change that?
-        ParseFunctionOrVariableDecl(Ctx);
+        declaration Decl = ParseFunctionOrVariableDecl(Ctx);
+
+        if (Decl.Type == type_declaration_function_decl)
+        {
+          Push(&Ctx->Datatypes.Functions, Decl.function_decl, Ctx->Memory); // Free function
+        }
 
         EatAdditionalCommaSeperatedNames(Ctx);
       } break;
