@@ -2640,11 +2640,6 @@
           DebugPrint("\n");
           DebugPrint("}", Depth+2);
           DebugPrint("\n");
-          DebugPrint("counted_string DefinedInFile {\n", Depth+2);
-          DebugPrint(S.DefinedInFile, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
           DebugPrint("struct_member_stream Members {\n", Depth+2);
           DebugPrint(S.Members, Depth+4);
           DebugPrint("\n");
@@ -6514,6 +6509,10 @@
                     case meta_arg_operator_noop:
             {
               DebugPrint("meta_arg_operator_noop ", Depth);
+            } break;
+            case is_union:
+            {
+              DebugPrint("is_union ", Depth);
             } break;
             case name:
             {

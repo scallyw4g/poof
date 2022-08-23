@@ -94,7 +94,7 @@ meta(
               case type_(UnionMember.type):
               {
                 DebugPrint(UnionStruct.(UnionMember.type), Depth+4);
-              }
+              } break;
             })
           })
         })

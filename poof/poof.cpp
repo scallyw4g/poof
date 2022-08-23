@@ -19,7 +19,7 @@ global_variable memory_arena Global_PermMemory = {};
 
 
 
-#define DEBUG_PRINT (0)
+#define DEBUG_PRINT (1)
 #if DEBUG_PRINT
 #include <bonsai_stdlib/headers/debug_print.h>
 
