@@ -1,3 +1,6 @@
+template <classname T>
+class foo { };
+
 class Obj {
  private:
  public:
@@ -35,8 +38,6 @@ operator==(foo * F1, foo* F2)
 }
 
 #if 1
-template <classname T>
-class foo { }
 
 template <classname T>
 struct foo;

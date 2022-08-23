@@ -9328,6 +9328,12 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         RequireToken(Parser, CTokenType_Semicolon);
       } break;
 
+      case CTokenType_TemplateKeyword:
+      {
+        RequireToken(Parser, CTokenType_TemplateKeyword);
+        EatBetween(Parser, CTokenType_LT, CTokenType_GT);
+      } break;
+
       case CT_Keyword_Class:
       case CTokenType_Struct:
       case CTokenType_Enum:
@@ -9362,7 +9368,6 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
 
       case CTokenType_OperatorKeyword:
       case CT_Keyword_Constexpr:
-      case CTokenType_TemplateKeyword:
       case CTokenType_Extern:
       case CTokenType_Inline:
       case CTokenType_ThreadLocal:
