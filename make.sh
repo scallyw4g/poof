@@ -13,14 +13,15 @@ POOF_LOG_LEVEL="--log-level LogLevel_Error"
 BUILD_EVERYTHING=0
 
 BuildPoof=1
-RunPoof=1
+# RunPoof=1
 # POOF_DEBUGGER="gdb --args"
 
-BuildParserTests=1
-RunParserTests=1
+# BuildParserTests=1
+# RunParserTests=1
 # TEST_DEBUGGER="gdb --args"
 
-RunIntegrationTests=0
+RunIntegrationTests=1
+# INTEGRATION_TEST_DEBUGGER="gdb --args"
 
 OPTIMIZATION_LEVEL="-O0"
 
@@ -134,11 +135,10 @@ function RunIntegrationTests()
     # we'll write all the meta() output to for that test file.  We diff that
     # whole directory to confirm/deny the output is identical for that test file
 
-    # gdb --args bin/poof    \
-    bin/poof                 \
-      $filename                  \
-      $COLORFLAG                 \
-      --log-level LogLevel_Error \
+    $INTEGRATION_TEST_DEBUGGER bin/poof \
+      $filename                         \
+      $COLORFLAG                        \
+      --log-level LogLevel_Error        \
       -o $INTEGRATION_OUTPUT_DIR/$basename_stripped
 
     DIFF_CHANGED=$(git diff --ignore-all-space --ignore-blank-lines $INTEGRATION_OUTPUT_DIR/$basename_stripped | wc -l)

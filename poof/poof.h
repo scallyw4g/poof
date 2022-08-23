@@ -896,6 +896,7 @@ meta(generate_stream(person))
 
 #define SafeAccess(T, Ptr) (&(Ptr)->T); Assert((Ptr)->Type == type_##T)
 
+#define SafeAccessPtr(T, Ptr) ((Ptr)->T); Assert((Ptr)->Type == type_##T)
 #define SafeAccessObj(T, Obj) ((Obj).T); Assert((Obj).Type == type_##T)
 
 struct ast_node_expression

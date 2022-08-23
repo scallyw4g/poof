@@ -47,10 +47,7 @@ int main()
     {
       (Enum.map_values (Val)
       {
-       printf("(Val.name)\n");
-       (Val.is_union? {
-          printf("------");
-        })
+        printf("(Val.name)\n");
       })
     }
   )
@@ -65,7 +62,7 @@ int main()
       (StructType.map_members (Member)
       {
          printf("(Member.type) (Member.name)\n");
-         (Member.is_struct? {
+         (Member.is_union? {
             printf("------");
           })
       })

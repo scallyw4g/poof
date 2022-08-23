@@ -8270,13 +8270,13 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
           // SafeAccess()
           // auto Var = SafeAccessObj(variable_decl, Declaration);
 
-          auto Var =  Declaration.variable_decl;
+          auto Var =  &Declaration.variable_decl;
           comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
 
-          Var.Name = Decl.NameT->Value;
-          Var.Type.Indirection = Decl.Indirection;
-          Var.StaticBufferSize = Decl.StaticBufferSize;
-          Var.Value = Decl.Value;
+          Var->Name = Decl.NameT->Value;
+          Var->Type.Indirection = Decl.Indirection;
+          Var->StaticBufferSize = Decl.StaticBufferSize;
+          Var->Value = Decl.Value;
         } break;
 
         case type_function_decl:
@@ -9818,7 +9818,7 @@ GetNameForStructMember(struct_member* Decl)
 
     case type_struct_member_anonymous:
     {
-      Result = CSz("(anonymous struct or union)");
+      Result = CSz("(anonymous)");
     } break;
 
     InvalidDefaultCase;
@@ -9989,7 +9989,7 @@ PrintType(type_spec *Type, memory_arena *Memory)
 bonsai_function counted_string
 GetValueForDatatype(datatype Data, memory_arena *Memory)
 {
-  counted_string Value = {};
+  counted_string Result = {};
   switch (Data.Type )
   {
     case type_datatype_noop:
@@ -10009,7 +10009,7 @@ GetValueForDatatype(datatype Data, memory_arena *Memory)
     case type_enum_member:
     {
       enum_member *Datatype = SafeAccessObj(enum_member, Data);
-      PrintAstNode(Datatype->Expr->Value, Memory);
+      Result = PrintAstNode(Datatype->Expr->Value, Memory);
     } break;
 
 
@@ -10023,9 +10023,13 @@ GetValueForDatatype(datatype Data, memory_arena *Memory)
           InvalidCodePath();
         } break;
 
+        case type_struct_member_anonymous:
+        {
+          Result = CSz("(anonymous)");
+        } break;
+
         case type_struct_decl:
         case type_function_decl:
-        case type_struct_member_anonymous:
         {
           NotImplemented;
         } break;
@@ -10033,7 +10037,7 @@ GetValueForDatatype(datatype Data, memory_arena *Memory)
         case type_variable_decl:
         {
           variable_decl *Var = SafeAccess(variable_decl, Member);
-          Value = PrintAstNode(Var->Value, Memory);
+          Result = PrintAstNode(Var->Value, Memory);
         } break;
       }
 
@@ -10050,7 +10054,7 @@ GetValueForDatatype(datatype Data, memory_arena *Memory)
     } break;
   }
 
-  return Value;
+  return Result;
 }
 
 bonsai_function counted_string
@@ -10084,6 +10088,86 @@ GetNameForDatatype(datatype *Data)
 
   return Result;
 }
+
+#if 1
+bonsai_function counted_string
+GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
+{
+  counted_string Result = {};
+  switch (Data->Type)
+  {
+    case type_datatype_noop: { InvalidCodePath(); } break;
+
+    case type_type_def:
+    {
+      NotImplemented;
+    } break;
+
+    case type_stl_container_def:
+    {
+      NotImplemented;
+    } break;
+
+    case type_primitive_def:
+    {
+      NotImplemented;
+      // Does this actually work?
+      // Result = Data->primitive_def->Type.SourceText;
+    } break;
+
+    case type_struct_def:
+    {
+      Result = Data->struct_def->Type->Value;
+    } break;
+
+    case type_enum_def:
+    {
+      Result = Data->enum_def->Name;
+    } break;
+
+    case type_enum_member:
+    {
+      Result = Data->enum_member->Name;
+    } break;
+
+#if 1
+    case type_struct_member:
+    {
+      auto Member = SafeAccessPtr(struct_member, Data);
+      switch (Member->Type)
+      {
+        case type_struct_member_noop: { InvalidCodePath(); } break;
+
+        case type_variable_decl:
+        {
+          auto Decl = SafeAccess(variable_decl, Member);
+          Result = PrintType(&Decl->Type, Memory);
+        } break;
+
+        case type_function_decl:
+        {
+          Result = Data->struct_member->function_decl.NameT->Value;
+        } break;
+
+        case type_struct_decl:
+        {
+          Result = CSz("TODO(Jesse): Preserve the struct name here.");
+        } break;
+
+        case type_struct_member_anonymous:
+        {
+          /* auto Anon = SafeAccces(struct_member_anonymous, Data); */
+          /* Result = Anon.Body.IsUnion ? CSz("union") : CSz("struct"); */
+        } break;
+      }
+
+    } break;
+#endif
+  }
+
+  return Result;
+}
+#endif
 
 // TODO(Jesse id: 222, tags: immediate, parsing, metaprogramming) : Re-add [[nodiscard]] here
 bonsai_function counted_string
@@ -10125,12 +10209,9 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
           ExecutedChildFunc = True;
           RequireToken(&Scope, CTokenType_Dot);
 
-          // NOTE(Jesse): RequireTokenPointer
-          c_token *MetaOperatorToken = PeekTokenPointer(&Scope);
-          RequireToken(&Scope, CTokenType_Identifier);
+          c_token *MetaOperatorToken = RequireTokenPointer(&Scope, CTokenType_Identifier);
 
           meta_arg_operator Operator = MetaArgOperator( MetaOperatorToken->Value );
-
           switch (Operator)
           {
             case meta_arg_operator_noop:
@@ -10282,79 +10363,10 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
             case type:
             {
+              counted_string TypeName = GetTypeNameForDatatype(&Replace->Data, Memory);
               meta_transform_op Transformations = ParseTransformations(&Scope);
-              counted_string TypeName = {};
-              switch (Replace->Data.Type)
-              {
-                case type_datatype_noop: { InvalidCodePath(); } break;
-
-                case  type_type_def:
-                {
-                  NotImplemented;
-                } break;
-
-                case type_stl_container_def:
-                {
-                  NotImplemented;
-                } break;
-
-                case type_primitive_def:
-                {
-                  NotImplemented;
-                  // Does this actually work?
-                  // TypeName = Replace->Data.primitive_def->Type.SourceText;
-                } break;
-
-                case type_struct_def:
-                {
-                  TypeName = Replace->Data.struct_def->Type->Value;
-                } break;
-
-                case type_enum_def:
-                {
-                  TypeName = Replace->Data.enum_def->Name;
-                } break;
-
-                case type_enum_member:
-                {
-                  TypeName = Replace->Data.enum_member->Name;
-                } break;
-
-                case type_struct_member:
-                {
-                  auto Member = SafeAccessObj(struct_member, Replace->Data);
-                  switch (Member->Type)
-                  {
-                    case type_struct_member_noop: { InvalidCodePath(); } break;
-
-                    case type_variable_decl:
-                    {
-                      auto Decl = SafeAccess(variable_decl, Member);
-                      TypeName = PrintType(&Decl->Type, Memory);
-                    } break;
-
-                    case type_function_decl:
-                    {
-                      TypeName = Replace->Data.struct_member->function_decl.NameT->Value;
-                    } break;
-
-                    case type_struct_decl:
-                    {
-                      TypeName = CSz("TODO(Jesse): Preserve the struct name here.");
-                    } break;
-
-                    case type_struct_member_anonymous:
-                    {
-                      TypeName = CSz("(anonymous struct/union)");
-                    } break;
-                  }
-
-                } break;
-
-              }
-
-              counted_string Name = ApplyTransformations(Transformations, TypeName, Memory);
-              Append(&OutputBuilder, Name);
+              counted_string TransformedName = ApplyTransformations(Transformations, TypeName, Memory);
+              Append(&OutputBuilder, TransformedName);
             } break;
 
             case name:
@@ -10363,7 +10375,6 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               meta_transform_op Transformations = ParseTransformations(&Scope);
               counted_string TransformedName = ApplyTransformations(Transformations, Name, Memory);
               Append(&OutputBuilder, TransformedName);
-
             } break;
 
             case map_members:

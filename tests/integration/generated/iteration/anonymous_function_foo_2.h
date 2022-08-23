@@ -1,5 +1,5 @@
-          int  first 1
-      int  second 0
+          int  first 42
+      int  second  - 1
       int  bar 0
       int  baz (1 << 1) - 1
       float  fbaz 42.0f
