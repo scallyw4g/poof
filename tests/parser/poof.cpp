@@ -987,7 +987,27 @@ TestAst(memory_arena *Memory)
 
       /* WalkAst(Func->Ast); */
       DebugLine("Function Name(%S) Type(%S)", Func->NameT->Value, ToString(Func->Type));
-      DumpCursorSimple(Func->Body.Tokens);
+      if (Func->Body.Tokens)
+      {
+        DebugLine("Has Function Body");
+
+        // TODO(Jesse): Read GetBodyTextForNextScope for more information on
+        // why the assert firesin DumpCursorSimple fires.  I think we should be
+        // clever enough to make sure it doesn't. somehow...
+        //
+        // The issue here is that GetBodyTextForNextScope allocates another
+        // Tokens cursor for the function body.  Very unclear how we get
+        // around this.  Maybe this structure is just fundamentally broken
+        // and we need to move to two mega-buffers, one non-expanded and one
+        // macro-expanded.
+        //
+        //
+        /* DumpCursorSimple(Func->Body.Tokens); */
+      }
+      else
+      {
+        DebugLine("No Function Body");
+      }
     }
   }
   else

@@ -914,7 +914,7 @@ DumpCursorSimple(c_token_cursor* Tokens, c_token *AbsoluteAt = 0, u32 Depth = 0)
     PrintTokenVerbose(Tokens, &UnknownMarkerToken, &UnknownMarkerToken, Depth);
   }
 
-  if (LastToken->Type != CTokenType_Newline)
+  if (LastToken == 0 || LastToken->Type != CTokenType_Newline)
   {
     DebugChars("\n");
   }

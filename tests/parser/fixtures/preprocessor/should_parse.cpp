@@ -4,7 +4,7 @@ b32 whatever()
   b32 thing = 1 < 2;
 }
 
-#if 0
+#if 1
 
 class foo : public bar
 {
@@ -45,6 +45,7 @@ class Obj {
 
   int operator==()
   {
+    foo = bar;
   }
 
   Obj &operator+(Obj o2)
@@ -55,6 +56,7 @@ class Obj {
 
 operator==(foo * F1, foo* F2)
 {
+  fdafdsa
 }
 
 #if 1
