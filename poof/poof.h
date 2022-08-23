@@ -142,6 +142,7 @@ enum c_token_type
   CTokenType_Meta,
 
   CT_Keyword_Noexcept,
+  CT_Keyword_Explicit,
   CT_Keyword_Constexpr,
   CT_Keyword_Namespace,
   CT_Keyword_Class,
@@ -573,8 +574,9 @@ enum type_qualifier
   TypeQual_Short       = (1 << 20),
   TypeQual_Float       = (1 << 21),
   TypeQual_Constexpr   = (1 << 22),
-  TypeQual_Operator    = (1 << 23),
-  TypeQual_Constructor = (1 << 24),
+  TypeQual_Explicit    = (1 << 23),
+  TypeQual_Operator    = (1 << 24),
+  TypeQual_Constructor = (1 << 25),
 };
 meta(string_and_value_tables(type_qualifier))
 #include <poof/generated/string_and_value_tables_type_qualifier.h>

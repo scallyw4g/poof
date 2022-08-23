@@ -1,11 +1,24 @@
+
+class foo : public bar
+{
+};
+
+
 template <classname T>
 class foo { };
 
+/* struct List {}; */
+/* struct Str {}; */
+
 class Obj {
+
+ /* void foofunc2(foo<Obj*> *foof); */
+
  private:
  public:
  private:
   constexpr Obj() : _foo(0) {}
+  explicit Obj() : _foo(Tag::Opaque, kZeroMask, 0){};
 
   Obj() {}
 

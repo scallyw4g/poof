@@ -4297,7 +4297,11 @@ TryTransmuteKeywordToken(c_token *T, c_token *LastTokenPushed)
   }
   else if ( StringsMatch(T->Value, CSz("noexcept")) )
   {
-    T->Type = CT_Keyword_Constexpr;
+    T->Type = CT_Keyword_Noexcept;
+  }
+  else if ( StringsMatch(T->Value, CSz("explicit")) )
+  {
+    T->Type = CT_Keyword_Explicit;
   }
   else if ( StringsMatch(T->Value, CSz("constexpr")) )
   {
@@ -6485,7 +6489,7 @@ ParseReferencesIndirectionAndPossibleFunctionPointerness(parser *Parser)
         Done = True;
       } break;
 
-      InvalidDefaultWhileParsing(Parser, CSz("Invalid token while parsing indirection and reference levels."));
+      InvalidDefaultWhileParsing(Parser, CSz("Unexpected token while parsing indirection and reference levels"));
     }
   }
 
@@ -6500,7 +6504,7 @@ IsTypeIdentifier(counted_string TypeName, program_datatypes *Datatypes)
 }
 
 bonsai_function b32
-TryAndEatTemplateParameterList(parser *Parser, program_datatypes *Datatypes)
+TryEatTemplateParameterList(parser *Parser, program_datatypes *Datatypes)
 {
   b32 ValidTemplateList = PeekToken(Parser).Type == CTokenType_LT;
   b32 Done = False;
@@ -6698,6 +6702,11 @@ ParsePrimitivesAndQualifiers(parser *Parser, type_spec *Result)
         }
       } break;
 
+      case CT_Keyword_Explicit:
+      {
+        RequireToken(Parser, CT_Keyword_Explicit);
+        Result->Qualifier |= TypeQual_Explicit;
+      } break;
       case CT_Keyword_Constexpr:
       {
         RequireToken(Parser, CT_Keyword_Constexpr);
@@ -6902,7 +6911,7 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
 
   TryEatAttributes(Parser); // Value Attribute
 
-  Result.HasTemplateArguments = TryAndEatTemplateParameterList(Parser, &Ctx->Datatypes);
+  Result.HasTemplateArguments = TryEatTemplateParameterList(Parser, &Ctx->Datatypes);
 
   b32 IsConstructor = (IsConstructorOrDestructorName(Result.DatatypeToken) ||
                        IsConstructorOrDestructorName(Result.DatatypeToken, StructNameT)) && PeekToken(Parser).Type == CTokenType_OpenParen;
@@ -8022,6 +8031,7 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
 
       case CTokenType_OperatorKeyword:
       case CT_Keyword_Constexpr:
+      case CT_Keyword_Explicit:
       case CTokenType_ThreadLocal:
       case CTokenType_Const:
       case CTokenType_Static:
@@ -8450,6 +8460,12 @@ ParseDatatypeDef(parse_context *Ctx)
     case CTokenType_Struct:
     {
       c_token *StructNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
+
+      if ( PeekToken(Parser).Type == CTokenType_Colon )
+      {
+        EatUntilExcluding(Parser, CTokenType_OpenBrace);
+      }
+
       if ( PeekToken(Parser).Type == CTokenType_OpenBrace )
       {
         struct_def S = ParseStructBody(Ctx, StructNameT);
@@ -9340,7 +9356,8 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
       case CTokenType_Union:
       {
         if (PeekToken(Parser, 1).Type == CTokenType_OpenBrace ||
-            PeekToken(Parser, 2).Type == CTokenType_OpenBrace)
+            PeekToken(Parser, 2).Type == CTokenType_OpenBrace ||
+            PeekToken(Parser, 2).Type == CTokenType_Colon)
         {
           ParseDatatypeDef(Ctx);
         }
@@ -9367,6 +9384,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
       } break;
 
       case CTokenType_OperatorKeyword:
+      case CT_Keyword_Explicit:
       case CT_Keyword_Constexpr:
       case CTokenType_Extern:
       case CTokenType_Inline:

@@ -81,6 +81,7 @@
             case CTokenType_FloatLiteral: { Result = CSz("CTokenType_FloatLiteral"); } break;
             case CTokenType_Meta: { Result = CSz("CTokenType_Meta"); } break;
             case CT_Keyword_Noexcept: { Result = CSz("CT_Keyword_Noexcept"); } break;
+            case CT_Keyword_Explicit: { Result = CSz("CT_Keyword_Explicit"); } break;
             case CT_Keyword_Constexpr: { Result = CSz("CT_Keyword_Constexpr"); } break;
             case CT_Keyword_Namespace: { Result = CSz("CT_Keyword_Namespace"); } break;
             case CT_Keyword_Class: { Result = CSz("CT_Keyword_Class"); } break;

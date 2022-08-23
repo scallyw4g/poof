@@ -94,6 +94,10 @@
           {
             Append(&Builder, CSz("constexpr "));
           }
+          if (Type->Qualifier & TypeQual_Explicit)
+          {
+            Append(&Builder, CSz("explicit "));
+          }
           if (Type->Qualifier & TypeQual_Operator)
           {
             Append(&Builder, CSz("operator "));
