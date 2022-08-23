@@ -968,6 +968,7 @@ TestAst(memory_arena *Memory)
 
     Ctx.CurrentParser = Parser;
 
+    Info("Parsing Datatypes for %S", Parser->Tokens->Filename);
     ParseDatatypes(&Ctx, Parser);
     TestThat(Parser->ErrorCode == ParseErrorCode_None);
 
@@ -979,7 +980,7 @@ TestAst(memory_arena *Memory)
 
       Func->Ast = ParseAllStatements_ast_node(&Ctx);
       /* WalkAst(Func->Ast); */
-      PrintAstNode(Func->Ast, Ctx.Memory);
+      /* DebugPrint(Func->Ast); */
 
       /* DebugLine("Function Name(%S) Type(%S)", Func->NameT->Value, ToString(Func->Type)); */
     }
@@ -2519,7 +2520,7 @@ main(s32 ArgCount, const char** Args)
 
   memory_arena* Memory = AllocateArena();
 
-#if 0
+#if 1
   TestSingleCursorTokenControl(Memory);
   TestMultiCursorTokenControl(Memory);
   // TODO(Jesse): Axe this or turn it into something more meaningful

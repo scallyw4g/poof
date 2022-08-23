@@ -3,8 +3,8 @@
 # git checkout $META_OUT
 
 
-LOG_LEVEL="--log-level LogLevel_Shush"
-LOG_LEVEL=""
+TEST_LOG_LEVEL="--log-level LogLevel_Error"
+# TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
 # POOF_LOG_LEVEL="--log-level LogLevel_Shush"
 POOF_LOG_LEVEL="--log-level LogLevel_Error"
@@ -16,8 +16,8 @@ BuildPoof=1
 RunPoof=1
 # POOF_DEBUGGER="gdb --args"
 
-# BuildParserTests=1
-# RunParserTests=1
+BuildParserTests=1
+RunParserTests=1
 # TEST_DEBUGGER="gdb --args"
 
 RunIntegrationTests=0
@@ -193,7 +193,7 @@ function RunParserTests
 {
   ColorizeTitle "Running Parser Tests"
   $TEST_DEBUGGER ./bin/tests/poof $COLORFLAG \
-    $LOG_LEVEL \
+    $TEST_LOG_LEVEL \
     $COLORFLAG
 
   echo -e "$Delimeter"

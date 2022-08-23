@@ -39,29 +39,35 @@ meta
 
 int main()
 {
+
+  printf(" -- Enum Values\n");
   // Here, we generate code to print the enum tag values for the discriminated union
-  meta
-  (
+  meta(
     func (my_discriminated_union_type Enum)
     {
       (Enum.map_values (Val)
       {
        printf("(Val.name)\n");
+       (Val.is_union? {
+          printf("------");
+        })
       })
     }
   )
 #include <generated/print_enum_values_fd9ff432f.h>
 
+  printf("\n -- Struct Members\n");
+
   // Here, we generate code to print the discriminated union struct we generated
-  meta
-  (
-    // TODO(Jesse, examples, immediate): The output of this is a bit borked.
-    // I'd expect the union member to show up, but it does not.
+  meta(
     func (my_discriminated_union StructType)
     {
       (StructType.map_members (Member)
       {
          printf("(Member.type) (Member.name)\n");
+         (Member.is_struct? {
+            printf("------");
+          })
       })
     }
   )

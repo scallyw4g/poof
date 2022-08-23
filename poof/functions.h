@@ -75,7 +75,16 @@ meta(
   func dunion_debug_print(DUnionType)
   {
     bonsai_function void
-    DebugPrint( (DUnionType.type) UnionStruct, u32 Depth = 0)
+    DebugPrint( (DUnionType.type) *UnionStruct, u32 Depth)
+    {
+      if (UnionStruct)
+      {
+        DebugPrint(*UnionStruct, Depth+4);
+      }
+    }
+
+    bonsai_function void
+    DebugPrint( (DUnionType.type) UnionStruct, u32 Depth)
     {
       switch(UnionStruct.Type)
       {
@@ -83,7 +92,7 @@ meta(
           DUnionType.map_members (M)
           {
             (
-              M.is_anonymous?
+              M.is_union?
               {
                 (
                   M.map_values (UnionMember)

@@ -1,3 +1,3 @@
-               printf("foo_struct foo_struct\n");
+               printf("(anonymous struct/union) (anonymous struct or union)\n");
 
 

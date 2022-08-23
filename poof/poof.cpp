@@ -14,9 +14,12 @@ global_variable memory_arena Global_PermMemory = {};
 #define InvalidDefaultWhileParsing(P, ErrorMessage) \
     default: { ParseError(P, ErrorMessage, PeekTokenPointer(P)); } break;
 
+#define InvalidDefaultError(P, ErrorMessage, Token) \
+    default: { ParseError(P, ErrorMessage, Token); } break;
 
 
-#define DEBUG_PRINT (0)
+
+#define DEBUG_PRINT (1)
 #if DEBUG_PRINT
 #include <bonsai_stdlib/headers/debug_print.h>
 
@@ -241,12 +244,6 @@ SinglyLinkedListSwapInplace(c_token_cursor *P0, c_token_cursor *P1)
   Assert(P1->Up != P1);
 }
 #endif
-
-struct d_list
-{
-  d_list *Prev;
-  d_list *Next;
-};
 
 #if 1
 bonsai_function void
@@ -5918,19 +5915,16 @@ ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_aren
     {
       counted_string Include = PopArgString(ArgStrings, ArgCount, &ArgIndex);
 
-      if (Include.Count)
+      // TODO(Jesse): Can we pass arguments that fuck this up?  ie. can we get
+      // a 0-length string here somehow?
+      if (LastChar(Include) != '/')
       {
-        if (Include.Start[Include.Count-1] == '/')
-        {
-        }
-        else
-        {
-          Include = Concat(Include, CSz("/"), TranArena ); // Make sure we end with a '/'
-        }
-
-        Info("Include path added : (%S)", Include);
-        Push(Include, &Result.IncludePaths);
+        Include = Concat(Include, CSz("/"), Memory ); // Make sure we end with a '/'
       }
+
+      Info("Include path added : (%S)", Include);
+      Push(Include, &Result.IncludePaths);
+
     }
     else if ( StringsMatch(CS("-D"), Arg) ||
               StringsMatch(CS("--define"), Arg) )
@@ -5959,7 +5953,7 @@ ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_aren
       }
       else
       {
-        Error("Macro name required when using (--define/-D) switches.");
+        Error("Macro name required when using (%S) switch", Arg);
       }
 
     }
@@ -5976,7 +5970,7 @@ ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_aren
     else if ( StringsMatch(CS("--log-level"), Arg) )
     {
       // Handled in SetupStdout
-      ArgIndex += 1; // Have to skip the switch value
+      ArgIndex += 1; // Skip the switch value
     }
     else if ( StringsMatch(CS("-c0"), Arg) ||
               StringsMatch(CS("--colors-off"), Arg) )
@@ -5987,9 +5981,9 @@ ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_aren
               StringsMatch(CS("--output-path"), Arg) )
     {
       Result.Outpath = PopArgString(ArgStrings, ArgCount, &ArgIndex);
-      if (LastChar(Result.Outpath) == '/')
+      if (LastChar(Result.Outpath) != '/')
       {
-        Warn("Value passed with (%S) should not end with a '/'.", Arg);
+        Result.Outpath = Concat(Result.Outpath, CSz("/"), Memory );
       }
     }
     else if ( StartsWith(Arg, CSz("-")) )
@@ -8171,17 +8165,13 @@ MembersOfType(struct_def* Struct, counted_string MemberType, memory_arena *Memor
       }
     }
   }
+  else
+  {
+    Result = Struct->Members;
+  }
 
   return Result;
 }
-
-struct comma_separated_decl
-{
-  c_token *NameT;
-  type_indirection_info Indirection;
-  ast_node *StaticBufferSize;
-  ast_node *Value;
-};
 
 bonsai_function comma_separated_decl
 ParseCommaSeperatedDecl(parse_context *Ctx)
@@ -9993,6 +9983,108 @@ PrintType(type_spec *Type, memory_arena *Memory)
   return Result;
 }
 
+// NOTE(Jesse): We have to pass by value here not for any specific reason other
+// than the SafeAccess macros don't support a pointer type accessing a pointer
+// member.  fml.
+bonsai_function counted_string
+GetValueForDatatype(datatype Data, memory_arena *Memory)
+{
+  counted_string Value = {};
+  switch (Data.Type )
+  {
+    case type_datatype_noop:
+    {
+      InvalidCodePath();
+    } break;
+
+    case type_struct_def:
+    case type_enum_def:
+    case type_type_def:
+    case type_primitive_def:
+    case type_stl_container_def:
+    {
+      NotImplemented;
+    } break;
+
+    case type_enum_member:
+    {
+      enum_member *Datatype = SafeAccessObj(enum_member, Data);
+      PrintAstNode(Datatype->Expr->Value, Memory);
+    } break;
+
+
+    case type_struct_member:
+    {
+      struct_member *Member = SafeAccessObj(struct_member, Data);
+      switch (Member->Type)
+      {
+        case type_struct_member_noop:
+        {
+          InvalidCodePath();
+        } break;
+
+        case type_struct_decl:
+        case type_function_decl:
+        case type_struct_member_anonymous:
+        {
+          NotImplemented;
+        } break;
+
+        case type_variable_decl:
+        {
+          variable_decl *Var = SafeAccess(variable_decl, Member);
+          Value = PrintAstNode(Var->Value, Memory);
+        } break;
+      }
+
+      auto Datatype = SafeAccessObj(struct_member, Data);
+
+#if 0
+      string_builder Builder = {};
+      PrintAstNode(Datatype->Expr->Value, &Builder);
+
+      counted_string Value = Finalize(&Builder, Memory);
+      Append(&OutputBuilder, Value);
+#endif
+
+    } break;
+  }
+
+  return Value;
+}
+
+bonsai_function counted_string
+GetNameForDatatype(datatype *Data)
+{
+  counted_string Result = {};
+  switch (Data->Type)
+  {
+    case type_struct_member:
+    {
+      Result = GetNameForStructMember(Data->struct_member);
+    } break;
+
+    case type_enum_member:
+    {
+      Result = Data->enum_member->Name;
+    } break;
+
+    case type_enum_def:
+    {
+      Result = Data->enum_def->Name;
+    } break;
+
+    case type_struct_def:
+    {
+      Result = Data->struct_def->Type->Value;
+    } break;
+
+    InvalidDefaultCase;
+  }
+
+  return Result;
+}
+
 // TODO(Jesse id: 222, tags: immediate, parsing, metaprogramming) : Re-add [[nodiscard]] here
 bonsai_function counted_string
 Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx, memory_arena* Memory)
@@ -10043,7 +10135,65 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
           {
             case meta_arg_operator_noop:
             {
-              ParseError(&Scope, CSz("Invalid operator encountered."));
+              ParseError( &Scope,
+                          FormatCountedString(TranArena, CSz("Unknown meta operator (%S)"), MetaOperatorToken->Value),
+                          MetaOperatorToken);
+            } break;
+
+            case is_union:
+            {
+              RequireToken(&Scope, CTokenType_Question);
+              parser StructScope = GetBodyTextForNextScope(&Scope, Memory);
+              switch (Replace->Data.Type)
+              {
+                case type_struct_member:
+                {
+                  auto Member = SafeAccessObj(struct_member, Replace->Data);
+
+                  switch(Member->Type)
+                  {
+                    case type_struct_member_anonymous:
+                    {
+                      auto Anon = SafeAccess(struct_member_anonymous, Member);
+                      if (Anon->Body.IsUnion)
+                      {
+                        counted_string Code = Execute(FuncName, StructScope, ReplacePatterns, Ctx, Memory);
+                        Append(&OutputBuilder, Code);
+                      }
+                    } break;
+
+                    case type_variable_decl:
+                    case type_struct_decl:
+                    case type_function_decl:
+                    {
+                    } break;
+
+                    case type_struct_member_noop:
+                    {
+                      ParseError(&Scope, CSz("Infinite sadness"));
+                    } break;
+                  }
+
+                } break;
+
+                case type_struct_def:
+                {
+                  // TODO(Jesse): Does this path actually work, or even make sense?
+                  /* NotImplemented; */
+                  struct_def *Def = SafeAccessObj(struct_def, Replace->Data);
+                  if (Def->IsUnion)
+                  {
+                    counted_string Code = Execute(FuncName, StructScope, ReplacePatterns, Ctx, Memory);
+                    Append(&OutputBuilder, Code);
+                  }
+                } break;
+
+                InvalidDefaultError(&Scope,
+                    FormatCountedString( TranArena,
+                                         CSz("%S called on invalid type (%S) with name (%S)"),
+                                         MetaOperatorToken->Value, ToString(Replace->Data.Type), GetNameForDatatype(&Replace->Data) ),
+                    MetaOperatorToken);
+              }
             } break;
 
             case is_struct:
@@ -10099,6 +10249,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                     case type_struct_decl:
                     case type_function_decl:
                     {
+                      NotImplemented;
                     }
                   }
                 } break;
@@ -10106,6 +10257,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                 case type_primitive_def:
                 case type_struct_def:
                 {
+                  NotImplemented;
                 } break;
 
                 case type_stl_container_def:
@@ -10124,72 +10276,8 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
             case value:
             {
-              switch (Replace->Data.Type )
-              {
-                case type_datatype_noop:
-                {
-                  InvalidCodePath();
-                } break;
-
-                case type_struct_def:
-                case type_enum_def:
-                case type_type_def:
-                case type_primitive_def:
-                case type_stl_container_def:
-                {
-                  NotImplemented;
-                } break;
-
-                case type_enum_member:
-                {
-                  enum_member *Datatype = SafeAccessObj(enum_member, Replace->Data);
-
-                  string_builder Builder = {};
-                  PrintAstNode(Datatype->Expr->Value, &Builder);
-
-                  counted_string Value = Finalize(&Builder, Memory);
-                  Append(&OutputBuilder, Value);
-                } break;
-
-
-                case type_struct_member:
-                {
-                  struct_member *Member = SafeAccessObj(struct_member, Replace->Data);
-                  switch (Member->Type)
-                  {
-                    case type_struct_member_noop:
-                    {
-                      InvalidCodePath();
-                    } break;
-
-                    case type_struct_decl:
-                    case type_function_decl:
-                    case type_struct_member_anonymous:
-                    {
-                      NotImplemented;
-                    } break;
-
-                    case type_variable_decl:
-                    {
-                      variable_decl *Var = SafeAccess(variable_decl, Member);
-                      counted_string Value = PrintAstNode(Var->Value, Memory);
-                      Append(&OutputBuilder, Value);
-                    } break;
-                  }
-
-                  auto Datatype = SafeAccessObj(struct_member, Replace->Data);
-
-#if 0
-                  string_builder Builder = {};
-                  PrintAstNode(Datatype->Expr->Value, &Builder);
-
-                  counted_string Value = Finalize(&Builder, Memory);
-                  Append(&OutputBuilder, Value);
-#endif
-
-                } break;
-              }
-
+              counted_string Value = GetValueForDatatype(Replace->Data, Memory);
+              Append(&OutputBuilder, Value);
             } break;
 
             case type:
@@ -10271,39 +10359,10 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
             case name:
             {
-              switch (Replace->Data.Type)
-              {
-                case type_struct_member:
-                {
-                  counted_string MemberName = GetNameForStructMember(Replace->Data.struct_member);
-                  meta_transform_op Transformations = ParseTransformations(&Scope);
-                  counted_string Name = ApplyTransformations(Transformations, MemberName, Memory);
-                  Append(&OutputBuilder, Name);
-                } break;
-
-                case type_enum_member:
-                {
-                  meta_transform_op Transformations = ParseTransformations(&Scope);
-                  counted_string Name = ApplyTransformations(Transformations, Replace->Data.enum_member->Name, Memory);
-                  Append(&OutputBuilder, Name);
-                } break;
-
-                case type_enum_def:
-                {
-                  meta_transform_op Transformations = ParseTransformations(&Scope);
-                  counted_string Name = ApplyTransformations(Transformations, Replace->Data.enum_def->Name, Memory);
-                  Append(&OutputBuilder, Name);
-                } break;
-
-                case type_struct_def:
-                {
-                  meta_transform_op Transformations = ParseTransformations(&Scope);
-                  counted_string Name = ApplyTransformations(Transformations, Replace->Data.struct_def->Type->Value, Memory);
-                  Append(&OutputBuilder, Name);
-                } break;
-
-                InvalidDefaultCase;
-              }
+              counted_string Name = GetNameForDatatype(&Replace->Data);
+              meta_transform_op Transformations = ParseTransformations(&Scope);
+              counted_string TransformedName = ApplyTransformations(Transformations, Name, Memory);
+              Append(&OutputBuilder, TransformedName);
 
             } break;
 
@@ -10368,6 +10427,12 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                     case type_struct_decl:
                     case type_struct_member_anonymous:
                     {
+                        meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
+                        Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)), Memory);
+                        Rewind(MapMemberScope.Tokens);
+                        counted_string StructFieldOutput = Execute(FuncName, MapMemberScope, &NewArgs, Ctx, Memory);
+                        Append(&OutputBuilder, StructFieldOutput);
+#if 0
                       for (struct_member_iterator UnionMemberIter = Iterator(&Member->struct_member_anonymous.Body.Members);
                           IsValid(&UnionMemberIter);
                           Advance(&UnionMemberIter))
@@ -10410,6 +10475,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                           Error("Nested structs/unions and bonsai_function pointers unsupported.");
                         }
                       }
+#endif
                     } break;
                   }
 

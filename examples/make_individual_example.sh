@@ -5,12 +5,11 @@ set -o pipefail
 set -o errexit
 
 [ -d generated ] && rm -Rf generated
-mkdir generated
 
   # --log-level LogLevel_Error \
 
-# gdb --args ../../bin/poof_dev           \
-../../bin/poof_dev           \
+# gdb --args ../../bin/poof    \
+../../bin/poof               \
   -I "."                     \
   --output-path ./generated  \
   main.c

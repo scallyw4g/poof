@@ -30,6 +30,7 @@ enum meta_arg_operator
   map_members,
   is_enum,
   is_struct,
+  is_union,
 };
 meta( generate_value_table(meta_arg_operator) )
 #include <poof/generated/generate_value_table_meta_arg_operator.h>
@@ -493,6 +494,8 @@ enum datatype_type
 
   type_stl_container_def,
 };
+meta(generate_string_table(datatype_type))
+#include <poof/generated/generate_string_table_datatype_type.h>
 
 struct struct_member;
 struct struct_def;
@@ -1469,6 +1472,20 @@ enum erase_token_mode
 {
   PreserveTokens = 0,
   EraseTokens = 1,
+};
+
+struct comma_separated_decl
+{
+  c_token *NameT;
+  type_indirection_info Indirection;
+  ast_node *StaticBufferSize;
+  ast_node *Value;
+};
+
+struct d_list
+{
+  d_list *Prev;
+  d_list *Next;
 };
 
 bonsai_function parse_context
