@@ -7236,6 +7236,11 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *DeclType)
 
       c_token *DeclNameToken = RequireTokenPointer(Parser, CTokenType_Identifier);
 
+      if (OptionalToken(Parser, CTokenType_LT))
+      {
+        EatUntilIncluding(Parser, CTokenType_GT);
+      }
+
       b32 IsFunction = PeekToken(Parser).Type == CTokenType_OpenParen;
       if ( IsFunction )
       {
@@ -8122,7 +8127,9 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
           if (OptionalToken(Parser, CTokenType_Equals))
           {
             RequireToken(Parser, CToken(0u));
-            RequireToken(Parser, CTokenType_Semicolon);
+          }
+          else if (OptionalToken(Parser, CT_Keyword_Override))
+          {
           }
         }
         else // operator, regular function, or variable decl
@@ -8280,20 +8287,36 @@ EatAdditionalCommaSeperatedNames(parse_context *Ctx)
   }
 }
 
-bonsai_function void
-EatAllVisibilityQualifiers(parser *Parser)
+bonsai_function b32
+MaybeEatVisibilityQualifier(parser *Parser)
 {
+  b32 Result = False;
   c_token *T = PeekTokenPointer(Parser);
-  while (T &&
-              ( T->Type == CT_Keyword_Public ||
-                T->Type == CT_Keyword_Private ||
-                T->Type == CT_Keyword_Protected )
-        )
+  if ( T &&
+     ( T->Type == CT_Keyword_Public  ||
+       T->Type == CT_Keyword_Private ||
+       T->Type == CT_Keyword_Protected )
+    )
   {
     RequireToken(Parser, T);
     RequireToken(Parser, CTokenType_Colon);
-    T = PeekTokenPointer(Parser);
+    Result = True;
   }
+
+  return Result;
+}
+
+bonsai_function b32
+MaybeEatStaticAssert(parser *Parser)
+{
+  b32 Result = False;
+  if (OptionalToken(Parser, CT_StaticAssert))
+  {
+    EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
+    RequireToken(Parser, CTokenType_Semicolon);
+    Result = True;
+  }
+  return Result;
 }
 
 // TODO(Jesse id: 299): This could be improved by not taking the StructName, and
@@ -8317,7 +8340,15 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
 
   for (;;)
   {
-    EatAllVisibilityQualifiers(Parser);
+    if (MaybeEatStaticAssert(Parser))
+    {
+      continue;
+    }
+
+    if (MaybeEatVisibilityQualifier(Parser))
+    {
+      continue;
+    }
 
     struct_member Declaration = ParseStructMember(Ctx, Result.Type);
     if (Declaration.Type == type_struct_member_noop)
@@ -8366,6 +8397,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
       }
       Push(&Result.Members, Declaration, Ctx->Memory);
     }
+
 
     if (Declaration.Type == type_function_decl)
     {
