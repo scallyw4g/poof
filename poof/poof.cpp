@@ -6845,8 +6845,7 @@ bonsai_function b32
 IsPrimitiveType(type_spec *Type)
 {
   u32 Mask =
-    TypeQual_Constexpr |
-    TypeQual_Auto      |
+    TypeQual_Auto      | // Questionable
     TypeQual_Bool      |
     TypeQual_Signed    |
     TypeQual_Unsigned  |
@@ -6879,11 +6878,10 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
     // NOTE(Jesse): It's nuts we have to do this check three times but that's
     // just the world we live in when we're trying to tolerate unknown types
     //
-    // This case is for a struct member such as
-    //
-    // operator bool()
+    // This case is for a struct member such as : operator bool()
     //
     // @operator_qual_triple_check
+    //
     Result.Qualifier |= TypeQual_Operator;
   }
   else
@@ -6898,11 +6896,7 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
 
   if (OptionalToken(Parser, CTokenType_OperatorKeyword))
   {
-    // @operator_qual_triple_check
-    //
-    // This case is for:
-    //
-    // u32 operator *()
+    // @operator_qual_triple_check : this case is for: u32 operator *()
     Result.Qualifier |= TypeQual_Operator;
   }
 
@@ -6911,7 +6905,7 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
   Result.HasTemplateArguments = TryAndEatTemplateParameterList(Parser, &Ctx->Datatypes);
 
   b32 IsConstructor = (IsConstructorOrDestructorName(Result.DatatypeToken) ||
-                          IsConstructorOrDestructorName(Result.DatatypeToken, StructNameT)) && PeekToken(Parser).Type == CTokenType_OpenParen;
+                       IsConstructorOrDestructorName(Result.DatatypeToken, StructNameT)) && PeekToken(Parser).Type == CTokenType_OpenParen;
 
   if (IsConstructor)
   {
@@ -6925,11 +6919,7 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
     Result.Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
   }
 
-  // @operator_qual_triple_check
-  //
-  // This case is for:
-  //
-  // foo *operator &()
+  // @operator_qual_triple_check : this case is for : foo *operator &()
   if (OptionalToken(Parser, CTokenType_OperatorKeyword))
   {
     Result.Qualifier |= TypeQual_Operator;
@@ -8050,11 +8040,6 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
       case CTokenType_Identifier:
       {
         type_spec DeclType = ParseTypeSpecifier(Ctx, StructNameT);
-
-        b32 IsConstructor = IsConstructorOrDestructorName(StructNameT, DeclType.DatatypeToken) &&
-                            PeekToken(Parser).Type == CTokenType_OpenParen ;
-
-        Assert( ((DeclType.Qualifier & TypeQual_Constructor)>0) == IsConstructor);
 
         if (DeclType.Qualifier & TypeQual_Constructor)
         {

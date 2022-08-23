@@ -12,11 +12,11 @@ POOF_LOG_LEVEL="--log-level LogLevel_Error"
 
 BUILD_EVERYTHING=0
 
-BuildPoof=1
-RunPoof=1
+# BuildPoof=1
+# RunPoof=1
 # POOF_DEBUGGER="gdb --args"
 
-BuildParserTests=1
+# BuildParserTests=1
 RunParserTests=1
 # TEST_DEBUGGER="gdb --args"
 

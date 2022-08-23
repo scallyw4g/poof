@@ -1,12 +1,15 @@
 class Obj {
+ private:
  public:
+ private:
+  constexpr Obj() : _foo(0) {}
+
   Obj() {}
 
   ~Obj() {}
   ~Obj();
 
   Obj() : _foo(0) {}
-  /* constexpr Obj() : _foo(0) {} */
   void thing() { _foo = 2; }
   int _foo;
 
@@ -32,8 +35,8 @@ operator==(foo * F1, foo* F2)
 }
 
 #if 1
-/* template <classname T> */
-/* class foo { } */
+template <classname T>
+class foo { }
 
 template <classname T>
 struct foo;
