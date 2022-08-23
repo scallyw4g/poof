@@ -6876,6 +6876,14 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
   }
   else if (OptionalToken(Parser, CTokenType_OperatorKeyword))
   {
+    // NOTE(Jesse): It's nuts we have to do this check three times but that's
+    // just the world we live in when we're trying to tolerate unknown types
+    //
+    // This case is for a struct member such as
+    //
+    // operator bool()
+    //
+    // @operator_qual_triple_check
     Result.Qualifier |= TypeQual_Operator;
   }
   else
@@ -6890,6 +6898,11 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
 
   if (OptionalToken(Parser, CTokenType_OperatorKeyword))
   {
+    // @operator_qual_triple_check
+    //
+    // This case is for:
+    //
+    // u32 operator *()
     Result.Qualifier |= TypeQual_Operator;
   }
 
@@ -6912,6 +6925,11 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
     Result.Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
   }
 
+  // @operator_qual_triple_check
+  //
+  // This case is for:
+  //
+  // foo *operator &()
   if (OptionalToken(Parser, CTokenType_OperatorKeyword))
   {
     Result.Qualifier |= TypeQual_Operator;
