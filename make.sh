@@ -16,11 +16,11 @@ BuildPoof=1
 RunPoof=1
 # POOF_DEBUGGER="gdb --args"
 
-# BuildParserTests=1
-# RunParserTests=1
+BuildParserTests=1
+RunParserTests=1
 # TEST_DEBUGGER="gdb --args"
 
-RunIntegrationTests=1
+# RunIntegrationTests=1
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 
 OPTIMIZATION_LEVEL="-O0"

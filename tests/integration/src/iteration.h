@@ -8,6 +8,10 @@ enum foo_enum
 };
 
 
+struct nested_struct
+{
+};
+
 struct foo_struct
 {
   int *first[0] = 42, *second = -1;
@@ -25,6 +29,9 @@ struct foo_struct
 
   enum foo_enum fenum;
   foo_enum fenum2;
+
+  nested_struct foo;
+
 };
 
 struct bar_struct
@@ -32,7 +39,7 @@ struct bar_struct
   int fda;
 };
 
-#if 0
+#if 1
 meta(
   func (foo_enum Type)
   {
@@ -61,12 +68,28 @@ meta (d_union foobar_dunion { foo_struct bar_struct } )
 meta(
   func (foobar_dunion Foobar)
   {
+    -- all members start --
+
     (Foobar.map_members (Member) {
       (Member.type) (Member.name) (Member.value)
-      (Member.is_union? {
-        weeeeeeeeee
+    })
+
+    -- all members end --
+
+    -- filtered members start --
+
+    (Foobar.map_members(M)
+    {
+      (M.is_union? {
+        (M.map_members(UM).containing(nested_struct)
+        {
+          (UM.type) (UM.name)
+        })
       })
     })
+
+    -- filtered members end --
+
   }
 )
 #include <tests/integration/generated/anonymous_function_foo_3.h>

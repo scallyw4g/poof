@@ -88,25 +88,16 @@ meta(
     {
       switch(UnionStruct.Type)
       {
-        (
-          DUnionType.map_members (M)
-          {
-            (
-              M.is_union?
+        (DUnionType.map_members (M) {
+          (M.is_union? {
+            (M.map_members (UnionMember) {
+              case type_(UnionMember.type):
               {
-                (
-                  M.map_values (UnionMember)
-                  {
-                    case type_(UnionMember.type):
-                    {
-                      DebugPrint(UnionStruct.(UnionMember.type), Depth+4);
-                    }
-                  }
-                )
+                DebugPrint(UnionStruct.(UnionMember.type), Depth+4);
               }
-            )
-          }
-        )
+            })
+          })
+        })
 
         InvalidDefaultCase;
       }

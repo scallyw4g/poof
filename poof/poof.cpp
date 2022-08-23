@@ -19,7 +19,7 @@ global_variable memory_arena Global_PermMemory = {};
 
 
 
-#define DEBUG_PRINT (1)
+#define DEBUG_PRINT (0)
 #if DEBUG_PRINT
 #include <bonsai_stdlib/headers/debug_print.h>
 
@@ -117,6 +117,9 @@ bonsai_function void PrintTray(char_cursor *Dest, c_token *T, u32 Columns, count
 bonsai_function void PrintTraySimple(c_token *T);
 
 
+bonsai_function void PoofTypeError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken);
+bonsai_function void PoofTypeError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken);
+
 bonsai_function void ParseError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken = 0);
 bonsai_function void ParseError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken = 0);
 
@@ -128,6 +131,7 @@ bonsai_function struct_def ParseStructBody(parse_context *, c_token *);
 
 bonsai_function parser MaybeParseFunctionBody(parser *Parser, memory_arena *Memory);
 
+bonsai_function counted_string GetTypeNameForDatatype(datatype *Data, memory_arena *Memory);
 
 inline c_token_cursor *
 HasValidDownPointer(c_token *T)
@@ -1520,6 +1524,20 @@ ParseError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
   ParseError(Parser, ParseErrorCode_Unknown, ErrorMessage, ErrorToken);
 }
 
+// TODO(Jesse): Make a generic error function that has more-parameterzied messages
+//
+// ie. Now every error says "Parse Error ::", but we'd rather be able to say "Poof Type Error ::" in addition.
+bonsai_function void
+PoofTypeError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken)
+{
+  ParseError(Parser, ErrorCode, ErrorMessage, ErrorToken);
+}
+
+bonsai_function void
+PoofTypeError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
+{
+  PoofTypeError(Parser, ParseErrorCode_Unknown, ErrorMessage, ErrorToken);
+}
 
 #if 0
 bonsai_function counted_string
@@ -9805,6 +9823,39 @@ GenerateOutfileNameFor(counted_string Name, counted_string DatatypeName, memory_
 }
 
 bonsai_function counted_string
+GetTypeNameForStructMember(struct_member* Decl, memory_arena *Memory)
+{
+  counted_string Result = {};
+
+  switch (Decl->Type)
+  {
+    case type_function_decl:
+    {
+      NotImplemented;
+    } break;
+
+    case type_variable_decl:
+    {
+      auto Var = SafeAccess(variable_decl, Decl);
+      if (Var->Type.Datatype.Type) // TODO(Jesse): Yikes
+      {
+        Result = GetTypeNameForDatatype(&Var->Type.Datatype, Memory);
+      }
+    } break;
+
+    case type_struct_member_anonymous:
+    {
+      Result = CSz("(anonymous)");
+    } break;
+
+    InvalidDefaultCase;
+  }
+
+  return Result;
+}
+
+
+bonsai_function counted_string
 GetNameForStructMember(struct_member* Decl)
 {
   counted_string Result = {};
@@ -10094,7 +10145,6 @@ GetNameForDatatype(datatype *Data)
   return Result;
 }
 
-#if 1
 bonsai_function counted_string
 GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
 {
@@ -10135,7 +10185,6 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
       Result = Data->enum_member->Name;
     } break;
 
-#if 1
     case type_struct_member:
     {
       auto Member = SafeAccessPtr(struct_member, Data);
@@ -10161,18 +10210,57 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
 
         case type_struct_member_anonymous:
         {
-          /* auto Anon = SafeAccces(struct_member_anonymous, Data); */
-          /* Result = Anon.Body.IsUnion ? CSz("union") : CSz("struct"); */
+          auto Anon = SafeAccessPtr(struct_member_anonymous, Member);
+          Result = Anon.Body.IsUnion ? CSz("union") : CSz("struct");
         } break;
       }
 
     } break;
-#endif
   }
 
   return Result;
 }
-#endif
+
+bonsai_function struct_member_stream*
+GetMembersFor(datatype *Data)
+{
+  struct_member_stream *Result = {};
+  switch (Data->Type)
+  {
+    case type_struct_def:
+    {
+      auto S = SafeAccessPtr(struct_def, Data);
+      Result = &S->Members;
+    } break;
+
+    case type_struct_member:
+    {
+      auto S = SafeAccessPtr(struct_member, Data);
+
+      switch(S->Type)
+      {
+        case type_struct_member_anonymous:
+        {
+          auto Anon = SafeAccessPtr(struct_member_anonymous, S);
+          Result = &Anon.Body.Members;
+        } break;
+
+        default: {} break;;
+      }
+
+
+    } break;
+
+    /* case type_struct_def: */
+    /* { */
+    /* } break; */
+
+    default:
+    {
+    } break;
+  }
+  return Result;
+}
 
 // TODO(Jesse id: 222, tags: immediate, parsing, metaprogramming) : Re-add [[nodiscard]] here
 bonsai_function counted_string
@@ -10403,9 +10491,11 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               }
 
               parser MapMemberScope = GetBodyTextForNextScope(&Scope, Memory);
-              if (Replace->Data.Type == type_struct_def)
+              struct_member_stream *Members = GetMembersFor(&Replace->Data);
+
+              if (Members)
               {
-                ITERATE_OVER_AS(Member, &Replace->Data.struct_def->Members)
+                ITERATE_OVER_AS(Member, Members)
                 {
                   struct_member* Member = GET_ELEMENT(MemberIter);
 
@@ -10422,12 +10512,31 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
                     case type_variable_decl:
                     {
-                      if ( ContainingConstraint.Count &&
-                           !StringsMatch(Member->variable_decl.Type.DatatypeToken->Value, ContainingConstraint) )
+                      b32 ConstraintPassed = False;
+                      b32 HaveConstraint = ContainingConstraint.Count > 0;
+
+                      if (HaveConstraint)
                       {
-                        // Containing constraint failed
+                        auto Var = SafeAccess(variable_decl, Member);
+                        auto VarMembers = GetMembersFor(&Var->Type.Datatype);
+
+                        if (VarMembers)
+                        {
+                          ITERATE_OVER_AS(VarMember, VarMembers)
+                          {
+                            struct_member* VarMember = GET_ELEMENT(VarMemberIter);
+                            counted_string MemberName = GetTypeNameForStructMember(VarMember, Memory);
+
+                            if (StringsMatch( MemberName, ContainingConstraint))
+                            {
+                              ConstraintPassed = True;
+                            }
+                          }
+                        }
                       }
-                      else
+
+                      if (HaveConstraint == False           ||
+                         (HaveConstraint && ConstraintPassed) )
                       {
                         meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
                         Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)), Memory);
@@ -10441,55 +10550,11 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                     case type_struct_decl:
                     case type_struct_member_anonymous:
                     {
-                        meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
-                        Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)), Memory);
-                        Rewind(MapMemberScope.Tokens);
-                        counted_string StructFieldOutput = Execute(FuncName, MapMemberScope, &NewArgs, Ctx, Memory);
-                        Append(&OutputBuilder, StructFieldOutput);
-#if 0
-                      for (struct_member_iterator UnionMemberIter = Iterator(&Member->struct_member_anonymous.Body.Members);
-                          IsValid(&UnionMemberIter);
-                          Advance(&UnionMemberIter))
-                      {
-                        struct_member* UnionMember = GET_ELEMENT(UnionMemberIter);
-                        if (UnionMember->Type == type_variable_decl)
-                        {
-                          struct_def* Struct = GetStructByType(&Datatypes->Structs, UnionMember->variable_decl.Type.DatatypeToken->Value);
-                          if (Struct)
-                          {
-                            struct_member_stream ContainedMembers = MembersOfType(Struct, ContainingConstraint, Memory);
-                            if (ContainedMembers.FirstChunk)
-                            {
-                              meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
-                              Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Struct)), Memory);
-                              if (ChildName.Count) {
-                                struct_def SyntheticStruct = {
-                                  // TODO(Jesse): If this crashes .. sorry.  What should we actually do here?
-                                  .Type = 0, // CToken(CSz("synthetically_created_struct")),
-                                  .DefinedInFile = Struct->DefinedInFile,
-                                  .Members = ContainedMembers,
-                                };
-                                Push(&NewArgs, ReplacementPattern(ChildName, Datatype(&SyntheticStruct)), Memory);
-                              }
-                              Rewind(MapMemberScope.Tokens);
-                              counted_string StructFieldOutput = Execute(FuncName, MapMemberScope, &NewArgs, Ctx, Memory);
-                              Append(&OutputBuilder, StructFieldOutput);
-                            }
-                          }
-                          else
-                          {
-                            counted_string Name = UnionMember->variable_decl.Type.DatatypeToken->Value;
-                            counted_string ParentStructName = Replace->Data.struct_def->Type->Value;
-                            Warn("Couldn't find struct type '%S' in union parent '%S'.", Name, ParentStructName);
-                          }
-
-                        }
-                        else
-                        {
-                          Error("Nested structs/unions and bonsai_function pointers unsupported.");
-                        }
-                      }
-#endif
+                      meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
+                      Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)), Memory);
+                      Rewind(MapMemberScope.Tokens);
+                      counted_string StructFieldOutput = Execute(FuncName, MapMemberScope, &NewArgs, Ctx, Memory);
+                      Append(&OutputBuilder, StructFieldOutput);
                     } break;
                   }
 
@@ -10498,8 +10563,11 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               }
               else
               {
-                Assert(Replace->Data.Type);
-                Error("Called map_members on a datatype that wasn't a struct");
+                PoofTypeError( &Scope, 
+                               FormatCountedString( TranArena,
+                                                    CSz("Called map_members on a datatype that didn't have members (%S)"),
+                                                    GetNameForDatatype(&Replace->Data)),
+                               MetaOperatorToken);
               }
 
             } break;
@@ -10507,7 +10575,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
             case map_values:
             {
               RequireToken(&Scope, CTokenType_OpenParen);
-              counted_string EnumValueMatch  = RequireToken(&Scope, CTokenType_Identifier).Value;
+              c_token *EnumValueMatch  = RequireTokenPointer(&Scope, CTokenType_Identifier);
               RequireToken(&Scope, CTokenType_CloseParen);
               parser NextScope = GetBodyTextForNextScope(&Scope, Memory);
 
@@ -10517,7 +10585,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                 {
                   enum_member* EnumMember = GET_ELEMENT(Iter);
                   meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
-                  Push(&NewArgs, ReplacementPattern(EnumValueMatch, Datatype(EnumMember)), Memory);
+                  Push(&NewArgs, ReplacementPattern(EnumValueMatch->Value, Datatype(EnumMember)), Memory);
                   Rewind(NextScope.Tokens);
                   counted_string EnumFieldOutput = Execute(FuncName, NextScope, &NewArgs, Ctx, Memory);
                   Append(&OutputBuilder, EnumFieldOutput);
@@ -10527,7 +10595,11 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               }
               else
               {
-                Error("Called map_values on a datatype that wasn't an enum - %S", Replace->Data.struct_def->Type);
+                PoofTypeError( &Scope, 
+                               FormatCountedString( TranArena,
+                                                    CSz("Called map_values on a datatype that wasn't an enum (%S)"),
+                                                    GetNameForDatatype(&Replace->Data)),
+                               MetaOperatorToken);
               }
 
             } break;

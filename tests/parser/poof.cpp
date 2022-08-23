@@ -2520,7 +2520,7 @@ main(s32 ArgCount, const char** Args)
 
   memory_arena* Memory = AllocateArena();
 
-#if 0
+#if 1
   TestSingleCursorTokenControl(Memory);
   TestMultiCursorTokenControl(Memory);
   // TODO(Jesse): Axe this or turn it into something more meaningful

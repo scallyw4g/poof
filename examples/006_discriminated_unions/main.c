@@ -61,10 +61,7 @@ int main()
     {
       (StructType.map_members (Member)
       {
-         printf("(Member.type) (Member.name)\n");
-         (Member.is_union? {
-            printf("------");
-          })
+        printf("(Member.type) (Member.name)\n");
       })
     }
   )
