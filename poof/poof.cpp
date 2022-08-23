@@ -6937,8 +6937,14 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
 
   if (PeekToken(Parser).Type == CTokenType_LT)
   {
-    Result.HasTemplateArguments = TryEatTemplateParameterList(Parser, &Ctx->Datatypes);
-    /* EatBetween(Parser, CTokenType_LT, CTokenType_GT); */
+    if (Result.Qualifier & TypeQual_Operator)
+    {
+    }
+    else
+    {
+      /* Result.HasTemplateArguments = TryEatTemplateParameterList(Parser, &Ctx->Datatypes); */
+      EatBetween(Parser, CTokenType_LT, CTokenType_GT);
+    }
   }
 
   b32 IsConstructor = (IsConstructorOrDestructorName(Result.DatatypeToken) ||
@@ -8592,8 +8598,8 @@ ParseTypedef(parse_context *Ctx)
       TryEatAttributes(Parser);
 
       EatAdditionalCommaSeperatedNames(Ctx);
-
       RequireToken(Parser, CTokenType_Semicolon);
+
       Push(&Ctx->Datatypes.Structs, S, Ctx->Memory);
     }
     else if ( PeekToken(Parser, 0).Type == CTokenType_Identifier &&

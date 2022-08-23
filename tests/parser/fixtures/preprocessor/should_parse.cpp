@@ -19,7 +19,7 @@ class foo { };
 
 class Obj {
 
- /* void foofunc2(foo<Obj*> *foof); */
+ void foofunc2(foo<Obj*> *foof);
 
  private:
  public:
@@ -39,6 +39,9 @@ class Obj {
   Obj() = delete;
   Obj() = default;
 
+  operator<()
+  {
+  }
   operator bool()
   {
   }
@@ -56,7 +59,6 @@ class Obj {
 
 operator==(foo * F1, foo* F2)
 {
-  fdafdsa
 }
 
 #if 1
