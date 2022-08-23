@@ -32,6 +32,7 @@ struct bar_struct
   int fda;
 };
 
+#if 0
 meta(
   func (foo_enum Type)
   {
@@ -42,7 +43,6 @@ meta(
 )
 #include <tests/integration/generated/anonymous_function_foo_1.h>
 
-#if 1
 meta(
   func (foo_struct Type)
   {

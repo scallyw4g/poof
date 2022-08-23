@@ -8004,6 +8004,14 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
           }
 
           Result.struct_member_anonymous.Body = ParseStructBody(Ctx, TypeNameT);
+          if (T->Type == CTokenType_Union)
+          {
+            Result.struct_member_anonymous.Body.IsUnion = True;
+          }
+          else
+          {
+            Assert(T->Type == CTokenType_Struct);
+          }
 
           if (c_token *NameT = OptionalToken(Ctx->CurrentParser, CTokenType_Identifier))
           {
@@ -8473,7 +8481,6 @@ ParseDatatypeDef(parse_context *Ctx)
     {
       c_token *UnionNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
       struct_def S = ParseStructBody(Ctx, UnionNameT);
-      S.IsUnion = True;
       Push(&Ctx->Datatypes.Structs, S, Ctx->Memory);
     } break;
 
@@ -8544,9 +8551,7 @@ ParseTypedef(parse_context *Ctx)
 
   // @optimize_call_advance_instead_of_being_dumb
   c_token *Peek = PeekTokenPointer(Parser);
-  if ( Peek->Type == CTokenType_Struct ||
-       Peek->Type == CTokenType_Union
-     )
+  if ( Peek->Type == CTokenType_Struct || Peek->Type == CTokenType_Union )
   {
     RequireToken(Parser, Peek);
     if (PeekToken(Parser).Type == CTokenType_OpenBrace)
@@ -10259,8 +10264,6 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
                 case type_struct_def:
                 {
-                  // TODO(Jesse): Does this path actually work, or even make sense?
-                  /* NotImplemented; */
                   struct_def *Def = SafeAccessObj(struct_def, Replace->Data);
                   if (Def->IsUnion)
                   {

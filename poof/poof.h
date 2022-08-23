@@ -456,7 +456,6 @@ struct struct_member_stream
 struct struct_def
 {
   c_token *Type;
-  counted_string DefinedInFile;
   struct_member_stream Members;
 
   b32 IsUnion;

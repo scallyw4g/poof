@@ -7,13 +7,13 @@ TEST_LOG_LEVEL="--log-level LogLevel_Error"
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
 # POOF_LOG_LEVEL="--log-level LogLevel_Shush"
-POOF_LOG_LEVEL="--log-level LogLevel_Error"
-# POOF_LOG_LEVEL="--log-level LogLevel_Debug"
+# POOF_LOG_LEVEL="--log-level LogLevel_Error"
+POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
 BUILD_EVERYTHING=0
 
 BuildPoof=1
-# RunPoof=1
+RunPoof=1
 # POOF_DEBUGGER="gdb --args"
 
 # BuildParserTests=1
