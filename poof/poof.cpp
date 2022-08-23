@@ -2499,6 +2499,7 @@ RequireOperatorToken(parser* Parser)
       case CTokenType_Star:
       case CTokenType_Arrow:
       case CTokenType_Dot:
+      case CTokenType_Bool:
       case CTokenType_Equals: // Assignment
       {
         RequireToken(Parser, Result->Type);
@@ -2512,8 +2513,8 @@ RequireOperatorToken(parser* Parser)
 
       default:
       {
+        ParseError(Parser, FormatCountedString(TranArena, CSz("Expected operator, got %S(%S)"), ToString(Result->Type), Result->Value), Result);
         Result = 0;
-        ParseError(Parser, FormatCountedString(TranArena, CSz("Expected operator, got %S(%S)"), ToString(Result->Type), Result->Value) ); 
       } break;
     }
   }
@@ -6887,6 +6888,11 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
     // Assert(Result.Datatype.Type != type_datatype_noop);
   }
 
+  if (OptionalToken(Parser, CTokenType_OperatorKeyword))
+  {
+    Result.Qualifier |= TypeQual_Operator;
+  }
+
   TryEatAttributes(Parser); // Value Attribute
 
   Result.HasTemplateArguments = TryAndEatTemplateParameterList(Parser, &Ctx->Datatypes);
@@ -6905,6 +6911,12 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
   {
     Result.Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
   }
+
+  if (OptionalToken(Parser, CTokenType_OperatorKeyword))
+  {
+    Result.Qualifier |= TypeQual_Operator;
+  }
+
 
   return Result;
 }

@@ -328,13 +328,11 @@ struct c_token
   };
 
   // TODO(Jesse)(correctness): The preprocessor doesn't support this for some reason..
-#ifndef BONSAI_PREPROCESSOR
   operator bool()
   {
     b32 Result = (b32)((u64)Type | Value.Count);
     return Result;
   }
-#endif
 
 };
 

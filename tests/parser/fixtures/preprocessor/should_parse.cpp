@@ -13,7 +13,15 @@ class Obj {
   Obj() = delete;
   Obj() = default;
 
-  operator==()
+  operator bool()
+  {
+  }
+
+  int operator==()
+  {
+  }
+
+  Obj &operator+(Obj o2)
   {
   }
 
