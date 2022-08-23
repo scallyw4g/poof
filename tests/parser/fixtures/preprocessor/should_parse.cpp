@@ -1,4 +1,8 @@
 
+namespace foo
+{
+};
+
 b32 whatever()
 {
   b32 thing = 1 < 2;
@@ -26,6 +30,9 @@ class Obj {
  private:
   constexpr Obj() : _foo(0) {}
   explicit Obj() : _foo(Tag::Opaque, kZeroMask, 0){};
+
+  virtual void foofunc3() = 0;
+  virtual void foofunc3() override;
 
   Obj() {}
 

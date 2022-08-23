@@ -19,7 +19,7 @@ global_variable memory_arena Global_PermMemory = {};
 
 
 
-#define DEBUG_PRINT (1)
+#define DEBUG_PRINT (0)
 #if DEBUG_PRINT
 #include <bonsai_stdlib/headers/debug_print.h>
 
@@ -4322,6 +4322,14 @@ TryTransmuteKeywordToken(c_token *T, c_token *LastTokenPushed)
   {
     T->Type = CT_Keyword_Protected;
   }
+  else if ( StringsMatch(T->Value, CSz("override")) )
+  {
+    T->Type = CT_Keyword_Override;
+  }
+  else if ( StringsMatch(T->Value, CSz("virtual")) )
+  {
+    T->Type = CT_Keyword_Virtual;
+  }
   else if ( StringsMatch(T->Value, CSz("noexcept")) )
   {
     T->Type = CT_Keyword_Noexcept;
@@ -6726,6 +6734,11 @@ ParsePrimitivesAndQualifiers(parser *Parser, type_spec *Result)
         }
       } break;
 
+      case CT_Keyword_Virtual:
+      {
+        RequireToken(Parser, CT_Keyword_Virtual);
+        Result->Qualifier |= TypeQual_Virtual;
+      } break;
       case CT_Keyword_Explicit:
       {
         RequireToken(Parser, CT_Keyword_Explicit);
@@ -7928,12 +7941,14 @@ ParseStructMemberConstructorFn(parse_context *Ctx, type_spec *DeclType, struct_m
     {
       /* Push(&Ctx->Datatypes.Functions, Result->function_decl, Ctx->Memory); */
     }
+#if 0
     else
     {
       ParseError(Parser,
           CSz("Constructor function must have a body"),
           FuncNameT);
     }
+#endif
   }
   else
   {
@@ -8072,6 +8087,7 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
         EatNameQualifiers(Parser);
       } [[fallthrough]];
 
+      case CT_Keyword_Virtual:
       case CTokenType_OperatorKeyword:
       case CT_Keyword_Constexpr:
       case CT_Keyword_Explicit:
@@ -8098,6 +8114,17 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
         {
           ParseStructMemberConstructorFn(Ctx, &DeclType, &Result, StructNameT);
         }
+        else if (DeclType.Qualifier & TypeQual_Virtual)
+        {
+          Result.Type = type_function_decl;
+          Result.function_decl = ParseFunctionOrVariableDecl(Ctx, &DeclType).function_decl;
+
+          if (OptionalToken(Parser, CTokenType_Equals))
+          {
+            RequireToken(Parser, CToken(0u));
+            RequireToken(Parser, CTokenType_Semicolon);
+          }
+        }
         else // operator, regular function, or variable decl
         {
           declaration Decl = ParseFunctionOrVariableDecl(Ctx, &DeclType);
@@ -8114,6 +8141,9 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
               Result.Type = type_function_decl;
               Result.function_decl = Decl.function_decl;
 
+
+              // This is handled by ParseStructMemberConstructorFn now.. but
+              // leaving it here as a sanity check for the moment
               if (IsConstructorOrDestructorName(StructNameT, Result.function_decl.NameT))
               {
                 if (OptionalToken(Parser, CTokenType_Colon)) // Member initializers
@@ -9412,9 +9442,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         RequireToken(Parser, CT_StaticAssert);
         EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
         RequireToken(Parser, CTokenType_Semicolon);
-        /* EraseBetweenExcluding(Result, T, Result->Tokens->At); */
       } break;
-
 
       case CTokenType_Semicolon:
       {
@@ -9493,7 +9521,24 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         EatAdditionalCommaSeperatedNames(Ctx);
       } break;
 
-      InvalidDefaultWhileParsing(Parser, CSz("Invalid token encountered while parsing a datatype."));
+      case CT_Keyword_Namespace:
+      {
+        RequireToken(Parser, CT_Keyword_Namespace);
+        RequireToken(Parser, CTokenType_Identifier);
+        RequireToken(Parser, CTokenType_OpenBrace);
+      } break;
+
+      // Closing namespace
+      //
+      // NOTE(Jesse): Pretty jank-tacular, but whatever.  Hopefully this code
+      // goes away soon.
+      //
+      case CTokenType_CloseBrace:
+      {
+        RequireToken(Parser, CTokenType_CloseBrace);
+      } break;
+
+      InvalidDefaultError(Parser, CSz("Invalid token encountered while parsing a datatype."), T);
     }
 
     EatWhitespaceAndComments(Parser);

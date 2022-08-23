@@ -31,6 +31,7 @@
             case TypeQual_Explicit: { Result = CSz("TypeQual_Explicit"); } break;
             case TypeQual_Operator: { Result = CSz("TypeQual_Operator"); } break;
             case TypeQual_Constructor: { Result = CSz("TypeQual_Constructor"); } break;
+            case TypeQual_Virtual: { Result = CSz("TypeQual_Virtual"); } break;
 
       }
       return Result;
@@ -68,6 +69,7 @@
           if (StringsMatch(S, CSz("TypeQual_Explicit"))) { return TypeQual_Explicit; }
           if (StringsMatch(S, CSz("TypeQual_Operator"))) { return TypeQual_Operator; }
           if (StringsMatch(S, CSz("TypeQual_Constructor"))) { return TypeQual_Constructor; }
+          if (StringsMatch(S, CSz("TypeQual_Virtual"))) { return TypeQual_Virtual; }
 
 
       return Result;

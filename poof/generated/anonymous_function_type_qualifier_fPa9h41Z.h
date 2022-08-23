@@ -106,5 +106,9 @@
           {
             Append(&Builder, CSz("constructor "));
           }
+          if (Type->Qualifier & TypeQual_Virtual)
+          {
+            Append(&Builder, CSz("virtual "));
+          }
 
 

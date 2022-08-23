@@ -80,6 +80,8 @@
             case CTokenType_DoubleLiteral: { Result = CSz("CTokenType_DoubleLiteral"); } break;
             case CTokenType_FloatLiteral: { Result = CSz("CTokenType_FloatLiteral"); } break;
             case CTokenType_Meta: { Result = CSz("CTokenType_Meta"); } break;
+            case CT_Keyword_Override: { Result = CSz("CT_Keyword_Override"); } break;
+            case CT_Keyword_Virtual: { Result = CSz("CT_Keyword_Virtual"); } break;
             case CT_Keyword_Noexcept: { Result = CSz("CT_Keyword_Noexcept"); } break;
             case CT_Keyword_Explicit: { Result = CSz("CT_Keyword_Explicit"); } break;
             case CT_Keyword_Constexpr: { Result = CSz("CT_Keyword_Constexpr"); } break;
