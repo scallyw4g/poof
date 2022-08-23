@@ -978,11 +978,16 @@ TestAst(memory_arena *Memory)
 
       if (Func->ReturnType.TemplateSource.Count) { continue; }
 
-      Func->Ast = ParseAllStatements_ast_node(&Ctx);
-      /* WalkAst(Func->Ast); */
+      /* Func->Ast = ParseAllStatements_ast_node(&Ctx); */
       /* DebugPrint(Func->Ast); */
 
-      /* DebugLine("Function Name(%S) Type(%S)", Func->NameT->Value, ToString(Func->Type)); */
+      /* Ctx.CurrentParser = &Func->Body; */
+      /* auto Fing = ParseAllStatements(&Ctx); */
+      /* DebugPrint(Fing); */
+
+      /* WalkAst(Func->Ast); */
+      DebugLine("Function Name(%S) Type(%S)", Func->NameT->Value, ToString(Func->Type));
+      DumpCursorSimple(Func->Body.Tokens);
     }
   }
   else

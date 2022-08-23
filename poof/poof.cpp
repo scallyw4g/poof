@@ -114,7 +114,7 @@ bonsai_function void EraseBetweenExcluding(parser *Parser, c_token *StartToken, 
 
 bonsai_function void DumpLocalTokens(parser *Parser);
 bonsai_function void PrintTray(char_cursor *Dest, c_token *T, u32 Columns, counted_string Color);
-bonsai_function void PrintTraySimple(c_token *T);
+bonsai_function void PrintTraySimple(c_token *T, b32 Force = False);
 
 
 bonsai_function void PoofTypeError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken);
@@ -874,15 +874,22 @@ DumpCursorSimple(c_token_cursor* Tokens, c_token *AbsoluteAt = 0, u32 Depth = 0)
 {
   DebugLine("\n%*s>> Dumping Cursor %S", Depth*4, "", Tokens->Filename);
 
-  PrintTraySimple(Tokens->Start);
+  b32 Force = True;
+  PrintTraySimple(Tokens->Start, Force);
 
-  for (umm TIndex = 0; TIndex < TotalElements(Tokens); ++TIndex)
+  c_token *LastToken = 0;
+  umm TotalTokens = TotalElements(Tokens);
+  for (umm TIndex = 0; TIndex < TotalTokens; ++TIndex)
   {
     c_token *T = Tokens->Start + TIndex;
 
+#if 1
     PrintToken(T);
-    PrintTraySimple(T);
-    /* PrintTokenVerbose(Tokens, T, AbsoluteAt, Depth); */
+    if (TIndex+1 < TotalTokens) { PrintTraySimple(T); }
+    else { LastToken = T; }
+#else
+    PrintTokenVerbose(Tokens, T, AbsoluteAt, Depth);
+#endif
 
     switch (T->Type)
     {
@@ -907,7 +914,11 @@ DumpCursorSimple(c_token_cursor* Tokens, c_token *AbsoluteAt = 0, u32 Depth = 0)
     PrintTokenVerbose(Tokens, &UnknownMarkerToken, &UnknownMarkerToken, Depth);
   }
 
-  DebugLine("\n%*s>> done", Depth*4, "");
+  if (LastToken->Type != CTokenType_Newline)
+  {
+    DebugChars("\n");
+  }
+  DebugLine("%*s>> done", Depth*4, "");
 }
 
 #if 0
@@ -1134,11 +1145,11 @@ OutputIdentifierUnderline(char_cursor *Dest, u32 IdentifierLength, counted_strin
 }
 
 bonsai_function void
-PrintTraySimple(c_token *T)
+PrintTraySimple(c_token *T, b32 Force)
 {
   if (T)
   {
-    if (T->Type == CTokenType_Newline || T->Type == CTokenType_EscapedNewline)
+    if (Force || T->Type == CTokenType_Newline || T->Type == CTokenType_EscapedNewline)
     {
       DebugChars(CSz("%*d |"), 6, T->LineNumber);
     }
@@ -8686,8 +8697,8 @@ ParseSingleStatement(parse_context *Ctx, ast_node_statement *Result)
   b32 Done = False;
   while (!Done && TokensRemain(Parser))
   {
-    const c_token T = PeekToken(Parser);
-    switch (T.Type)
+    c_token *T = PeekTokenPointer(Parser);
+    switch (T->Type)
     {
       case CTokenType_IntLiteral:
       case CTokenType_DoubleLiteral:
@@ -8698,13 +8709,19 @@ ParseSingleStatement(parse_context *Ctx, ast_node_statement *Result)
 
       case CTokenType_Identifier:
       {
-        Assert(!Result->LHS);
+        if (Result->LHS)
+        {
+          DebugPrint(Result);
+          ParseError(Parser, CSz("Unable to parse L-value, LHS of expression already set!"), T);
+          RuntimeBreak();
+        }
+
         Result->LHS = ParseExpression(Ctx);
       } break;
 
       case CTokenType_Equals:
       {
-        RequireToken(Parser, T.Type);
+        RequireToken(Parser, T->Type);
         if (PeekToken(Parser).Type == CTokenType_OpenBrace)
         {
           // Initializer List
@@ -8721,7 +8738,7 @@ ParseSingleStatement(parse_context *Ctx, ast_node_statement *Result)
 
       case CTokenType_For:
       {
-        RequireToken(Parser, T.Type);
+        RequireToken(Parser, T->Type);
 #if 0
         RequireToken(Parser, CTokenType_OpenParen);
         Result->Next = AllocateProtection(ast_node_statement, Memory, 1, False);
@@ -8740,7 +8757,7 @@ ParseSingleStatement(parse_context *Ctx, ast_node_statement *Result)
       case CTokenType_While:
       case CTokenType_Switch:
       {
-        RequireToken(Parser, T.Type);
+        RequireToken(Parser, T->Type);
         Result->LHS = ParseExpression(Ctx);
         Done = True;
       } break;
@@ -8763,12 +8780,12 @@ ParseSingleStatement(parse_context *Ctx, ast_node_statement *Result)
       case CTokenType_Else:
       case CTokenType_Continue:
       {
-        RequireToken(Parser, T.Type);
+        RequireToken(Parser, T->Type);
       } break;
 
       case CTokenType_Return:
       {
-        RequireToken(Parser, T.Type);
+        RequireToken(Parser, T->Type);
         Result->LHS = ParseExpression(Ctx);
       } break;
 
@@ -8812,11 +8829,13 @@ ParseSingleStatement(parse_context *Ctx, ast_node_statement *Result)
         if (Result->LHS)
         {
           DebugPrint(Result);
-          ParseError(Parser, CSz(""));
+          ParseError(Parser, CSz("Unable to parse L-value, LHS of expression already set!"), T);
           RuntimeBreak();
         }
-
-        Result->LHS = ParseExpression(Ctx);
+        else
+        {
+          Result->LHS = ParseExpression(Ctx);
+        }
         Done = True;
       } break;
 
@@ -8826,30 +8845,30 @@ ParseSingleStatement(parse_context *Ctx, ast_node_statement *Result)
       case CTokenType_CloseBrace:
       case CTokenType_Semicolon:
       {
-        RequireToken(Parser, T.Type);
+        RequireToken(Parser, T->Type);
         Done = True;
       } break;
 
       case CTokenType_Goto:
       {
-        RequireToken(Parser, T.Type);
+        RequireToken(Parser, T->Type);
         RequireToken(Parser, CTokenType_Identifier);
       } break;
 
       case CTokenType_Meta:
       {
-        RequireToken(Parser, T.Type);
+        RequireToken(Parser, T->Type);
         EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
       } break;
 
       case CTokenType_Asm:
       {
-        RequireToken(Parser, T.Type);
+        RequireToken(Parser, T->Type);
         OptionalToken(Parser, CTokenType_Volatile);
         EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
       } break;
 
-      InvalidDefaultWhileParsing(Parser, CSz("Invalid token encountered while parsing statement."));
+      InvalidDefaultError(Parser, CSz("Invalid token encountered while parsing statement."), T);
     }
   }
 
@@ -8863,12 +8882,23 @@ ParseSingleStatement(parse_context *Ctx)
   return Result;
 }
 
+bonsai_function b32
+IsAtBeginning(parser *Parser)
+{
+  b32 Result = Parser->Tokens->At == Parser->Tokens->Start && Parser->Tokens->Up.Tokens == 0;
+  return Result;
+}
+
 bonsai_function ast_node_statement*
 ParseAllStatements(parse_context *Ctx)
 {
   ast_node_statement *Result = 0;
 
   ast_node_statement **Current = &Result;
+
+  parser *Parser = Ctx->CurrentParser;
+
+  Assert(IsAtBeginning(Parser));
 
   while ( TokensRemain(Ctx->CurrentParser) )
   {
