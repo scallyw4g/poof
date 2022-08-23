@@ -1,4 +1,11 @@
 
+b32 whatever()
+{
+  b32 thing = 1 < 2;
+}
+
+#if 0
+
 class foo : public bar
 {
 };
@@ -542,4 +549,5 @@ int aff[]()();         // an array of functions returning functions returning an
 int af[]();            // an array of functions returning an int (ILLEGAL)
 #endif
 
+#endif
 #endif

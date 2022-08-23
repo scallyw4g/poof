@@ -977,10 +977,11 @@ TestAst(memory_arena *Memory)
 
       if (Func->ReturnType.TemplateSource.Count) { continue; }
 
-      Func->Ast = ParseAllStatements(&Ctx);
-      WalkAst(Func->Ast);
+      Func->Ast = ParseAllStatements_ast_node(&Ctx);
+      /* WalkAst(Func->Ast); */
+      PrintAstNode(Func->Ast, Ctx.Memory);
 
-      DebugLine("Function Name(%S) Type(%S)", Func->NameT->Value, ToString(Func->Type));
+      /* DebugLine("Function Name(%S) Type(%S)", Func->NameT->Value, ToString(Func->Type)); */
     }
   }
   else

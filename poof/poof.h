@@ -638,7 +638,7 @@ struct function_decl
   b32 ImplIsDeleted;
 
   parser Body;
-  ast_node_statement *Ast;
+  ast_node *Ast;
 };
 
 meta(generate_stream(function_decl))

@@ -71,6 +71,22 @@ PrintAstNode(ast_node *Node, string_builder *Builder)
         PrintAstNode(Child, Builder);
       } break;
 
+      case type_ast_node_variable_def:
+      {
+        auto Child = SafeAccess(ast_node_variable_def, Node);
+        /* DebugPrint(Child->Type); */
+        /* DebugPrint(Child->Decl); */
+
+        PrintAstNode(Child->Value, Builder);
+      } break;
+
+      case type_ast_node_statement:
+      {
+        auto Child = SafeAccess(ast_node_statement, Node);
+        PrintAstNode(Child, Builder);
+      } break;
+
+
 
 
 
@@ -86,20 +102,6 @@ PrintAstNode(ast_node *Node, string_builder *Builder)
       {
         NotImplemented;
         auto Child = SafeAccess(ast_node_function_call, Node);
-      } break;
-
-      case type_ast_node_statement:
-      {
-        NotImplemented;
-        auto Child = SafeAccess(ast_node_statement, Node);
-        PrintAstNode(Child, Builder);
-      } break;
-
-      case type_ast_node_variable_def:
-      {
-        NotImplemented;
-        auto Child = SafeAccess(ast_node_variable_def, Node);
-        PrintAstNode(Child->Value, Builder);
       } break;
 
       case type_ast_node_access:

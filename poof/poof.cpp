@@ -7,6 +7,7 @@
 
 #include <poof/functions.h>
 #include <poof/poof.h>
+#include <poof/print_ast_node.h>
 
 global_variable memory_arena Global_PermMemory = {};
 
@@ -6274,7 +6275,7 @@ EatBetween(parser* Parser, c_token_type Open, c_token_type Close)
   if (Parser->ErrorCode == ParseErrorCode_None)
   {
     u32 Depth = 0;
-    RequireToken(Parser, Open);
+    c_token *TErr = RequireTokenPointer(Parser, Open);
 
     while ( c_token *T = PopTokenPointer(Parser) )
     {
@@ -6297,7 +6298,7 @@ EatBetween(parser* Parser, c_token_type Open, c_token_type Close)
 
     if (!Success)
     {
-      ParseError(Parser, FormatCountedString(TranArena, CSz("Unable to find closing token %S"), ToString(Close)));
+      ParseError(Parser, FormatCountedString(TranArena, CSz("Unable to find closing token %S"), ToString(Close)), TErr);
     }
   }
 }
@@ -6911,7 +6912,11 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
 
   TryEatAttributes(Parser); // Value Attribute
 
-  Result.HasTemplateArguments = TryEatTemplateParameterList(Parser, &Ctx->Datatypes);
+  if (PeekToken(Parser).Type == CTokenType_LT)
+  {
+    Result.HasTemplateArguments = TryEatTemplateParameterList(Parser, &Ctx->Datatypes);
+    /* EatBetween(Parser, CTokenType_LT, CTokenType_GT); */
+  }
 
   b32 IsConstructor = (IsConstructorOrDestructorName(Result.DatatypeToken) ||
                        IsConstructorOrDestructorName(Result.DatatypeToken, StructNameT)) && PeekToken(Parser).Type == CTokenType_OpenParen;
@@ -6981,6 +6986,7 @@ ParseVariableDecl(parse_context *Ctx)
   }
   else
   {
+    // Handles unnamed arguments : void foo(char[42]);
     if ( PeekToken(Parser).Type == CTokenType_OpenBracket )
     {
       ParseExpression(Ctx, &Result.StaticBufferSize);
@@ -8863,6 +8869,28 @@ ParseAllStatements(parse_context *Ctx)
 }
 
 bonsai_function ast_node*
+ParseAllStatements_ast_node(parse_context *Ctx)
+{
+  ast_node *Result = Allocate(ast_node, Ctx->Memory, 1);
+  Result->Type = type_ast_node_statement;
+
+  ast_node_statement *Foo = &Result->ast_node_statement;
+  ast_node_statement **Current = &Foo;
+
+  while ( TokensRemain(Ctx->CurrentParser) )
+  {
+    Assert(*Current == 0);
+
+    *Current = ParseSingleStatement(Ctx);
+    while (*Current) { Current = &(*Current)->Next; } // Walk to the end of the statement chain.
+  }
+
+  return Result;
+}
+
+
+
+bonsai_function ast_node*
 ParseFunctionCall(parse_context *Ctx, counted_string FunctionName);
 
 bonsai_function void
@@ -9928,8 +9956,6 @@ CopyStream(meta_func_arg_stream* Stream, memory_arena* Memory)
 
 bonsai_function counted_string
 Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory);
-
-#include <poof/print_ast_node.h>
 
 bonsai_function counted_string
 PrintType(type_spec *Type, memory_arena *Memory)
