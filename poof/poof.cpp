@@ -8351,13 +8351,13 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
     }
 
     struct_member Declaration = ParseStructMember(Ctx, Result.Type);
-    if (Declaration.Type == type_struct_member_noop)
+    if (Declaration.Type)
     {
-      break;
+      Push(&Result.Members, Declaration, Ctx->Memory);
     }
     else
     {
-      Push(&Result.Members, Declaration, Ctx->Memory);
+      break;
     }
 
     //  Parse comma-separated definitions .. ie `struct fing { int foo, bar, baz; };`
