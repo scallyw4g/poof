@@ -31,8 +31,8 @@ class foo : public bar
 template <classname T>
 class foo { };
 
-/* struct List {}; */
-/* struct Str {}; */
+struct List {};
+struct Str {};
 
 class Obj {
 
@@ -510,14 +510,14 @@ typedef foo bar[42];
 
 #endif // switch at top, {0, 1}
 
-/* void (*__routine) (void *); */
+void (*__routine) (void *);
 
 struct _pthread_cleanup_buffer
 {
   void (*__routine) (void *);
-  /* void *__arg;                            /1* Its argument.  *1/ */
-  /* int __canceltype;                       /1* Saved cancellation type. *1/ */
-  /* struct _pthread_cleanup_buffer *__prev; /1* Chaining of cleanup functions.  *1/ */
+  void *__arg;                            /* Its argument.  */
+  int __canceltype;                       /* Saved cancellation type. */
+  struct _pthread_cleanup_buffer *__prev; /* Chaining of cleanup functions.  */
 };
 
 
