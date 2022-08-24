@@ -340,6 +340,8 @@ struct c_token
 
 };
 
+global_variable c_token NullToken = {};
+
 struct peek_result
 {
   c_token_cursor *Tokens;
@@ -465,6 +467,11 @@ struct struct_def
 meta(stream_and_cursor(struct_def))
 #include <poof/generated/stream_and_cursor_struct_def.h>
 
+struct struct_decl
+{
+  struct_def Body;
+};
+
 struct struct_member_anonymous
 {
   struct_def Body;
@@ -547,6 +554,8 @@ struct type_indirection_info
   counted_string FunctionPointerTypeName;
 };
 
+global_variable type_indirection_info NullIndirection = {};
+
 // TODO(Jesse): Adding an index feature to map_values would let us generate
 // bitfields like this.  We could also do stuff like statically ensure a
 // particular width, or quickly re-order fields without having to manually
@@ -586,17 +595,17 @@ enum type_qualifier
 meta(string_and_value_tables(type_qualifier))
 #include <poof/generated/string_and_value_tables_type_qualifier.h>
 
-
-global_variable c_token NullToken = {};
+struct top_level_declaration
+{
+};
 
 struct type_spec
 {
-  c_token *DatatypeToken = &NullToken; // TODO(Jesse): Do we actually want this?
+  c_token *DatatypeToken; // = &NullToken; // TODO(Jesse): Do we actually want this?
   datatype Datatype;
 
-  u32 Qualifier; // enum type_qualifier TODO(Jesse): How do we fix this?
+  type_qualifier Qualifier; // enum type_qualifier TODO(Jesse): How do we fix this?
 
-  type_indirection_info Indirection;
   b32 HasTemplateArguments;
   counted_string TemplateSource;
 
@@ -613,6 +622,8 @@ struct variable_decl
   counted_string Name;
   ast_node *StaticBufferSize;
   ast_node *Value;
+
+  type_indirection_info Indirection;
 };
 meta(generate_stream(variable_decl))
 #include <poof/generated/generate_stream_variable_decl.h>
@@ -664,6 +675,8 @@ enum declaration_type
   type_declaration_noop,
   type_declaration_function_decl,
   type_declaration_variable_decl,
+  type_declaration_struct_decl,
+  // type_declaration_enum_decl,
 };
 
 struct declaration
@@ -674,6 +687,8 @@ struct declaration
   {
     function_decl function_decl;
     variable_decl variable_decl;
+    struct_decl struct_decl;
+    // enum_decl enum_decl;
   };
 };
 
@@ -720,6 +735,8 @@ struct enum_def
 };
 meta(stream_and_cursor(enum_def))
 #include <poof/generated/stream_and_cursor_enum_def.h>
+
+// typedef enum_def enum_decl;
 
 struct type_def
 {
@@ -927,6 +944,7 @@ struct ast_node_type_specifier
 {
   datatype Datatype;
   type_spec TypeSpec;
+  type_indirection_info Indirection;
   ast_node_expression *Name;
 };
 

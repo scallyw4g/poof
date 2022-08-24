@@ -1550,6 +1550,19 @@ PoofTypeError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
   PoofTypeError(Parser, ParseErrorCode_Unknown, ErrorMessage, ErrorToken);
 }
 
+bonsai_function void
+ParseWarn(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
+{
+  Warn("%S", ErrorMessage);
+}
+
+bonsai_function void
+InternalCompilerError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
+{
+  ParseError(Parser, ParseErrorCode_Unknown, ErrorMessage, ErrorToken);
+  RuntimeBreak();
+}
+
 #if 0
 bonsai_function counted_string
 ParseError_StreamEndedUnexpectedly(parser *Parser)
@@ -5729,10 +5742,13 @@ GetStructByType(struct_def_stream* ProgramStructs, counted_string StructType)
       Advance(&Iter))
   {
     struct_def* Struct = &Iter.At->Element;
-    if (StringsMatch(Struct->Type->Value, StructType))
+    if (Struct->Type)
     {
-      Result = Struct;
-      break;
+      if (StringsMatch(Struct->Type->Value, StructType))
+      {
+        Result = Struct;
+        break;
+      }
     }
   }
 
@@ -6446,10 +6462,6 @@ ParseReferencesIndirectionAndPossibleFunctionPointerness(parser *Parser)
   type_indirection_info Result = {};
 
   b32 Done = False;
-  if (OptionalToken(Parser, CTokenType_Const))
-  {
-    Result.ConstPointer = True;
-  }
 
   while (TokensRemain(Parser) && Done == False)
   {
@@ -6483,8 +6495,8 @@ ParseReferencesIndirectionAndPossibleFunctionPointerness(parser *Parser)
 
       case CTokenType_LogicalAnd:
       {
-        RequireToken(Parser, CTokenType_LogicalAnd);
         Assert(Result.ReferenceLevel == 0);
+        RequireToken(Parser, CTokenType_LogicalAnd);
         Result.ReferenceLevel += 2;
       } break;
 
@@ -6502,8 +6514,8 @@ ParseReferencesIndirectionAndPossibleFunctionPointerness(parser *Parser)
 
       case CTokenType_Const:
       {
-        // Ignore const .. for now .. probably forever
         RequireToken(Parser, CTokenType_Const);
+        Result.ConstPointer = True;
       } break;
 
       case CTokenType_Arrow: // Structs can have members with the same name as a type,
@@ -6521,7 +6533,9 @@ ParseReferencesIndirectionAndPossibleFunctionPointerness(parser *Parser)
         Done = True;
       } break;
 
-      InvalidDefaultWhileParsing(Parser, CSz("Unexpected token while parsing indirection and reference levels"));
+      default: { Done = True; }
+
+      /* InvalidDefaultWhileParsing(Parser, CSz("Unexpected token while parsing indirection and reference levels")); */
     }
   }
 
@@ -6644,13 +6658,13 @@ bonsai_function void
 ParseLongness(parser *Parser, type_spec *Result)
 {
   RequireToken(Parser, CTokenType_Long);
-  Result->Qualifier |= TypeQual_Long;
+  SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Long);
 
-  if (OptionalToken(Parser, CTokenType_Double)) { Result->Qualifier |= TypeQual_Double; }
+  if (OptionalToken(Parser, CTokenType_Double)) { SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Double); }
   else
   {
-    if (OptionalToken(Parser, CTokenType_Long)) { Result->Qualifier |= TypeQual_Long_Long; }
-    if (OptionalToken(Parser, CTokenType_Int)) { Result->Qualifier |= TypeQual_Int; }
+    if (OptionalToken(Parser, CTokenType_Long)) { SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Long_Long); }
+    if (OptionalToken(Parser, CTokenType_Int)) { SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Int); }
   }
 }
 
@@ -6718,7 +6732,7 @@ ParsePrimitivesAndQualifiers(parser *Parser, type_spec *Result)
       case CTokenType_ThreadLocal:
       {
         RequireToken(Parser, CTokenType_ThreadLocal);
-        Result->Qualifier |= TypeQual_ThreadLocal;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_ThreadLocal);
       } break;
 
       case CTokenType_Const:
@@ -6730,64 +6744,64 @@ ParsePrimitivesAndQualifiers(parser *Parser, type_spec *Result)
         else
         {
           RequireToken(Parser, CTokenType_Const);
-          Result->Qualifier |= TypeQual_Const;
+          SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Const);
         }
       } break;
 
       case CT_Keyword_Virtual:
       {
         RequireToken(Parser, CT_Keyword_Virtual);
-        Result->Qualifier |= TypeQual_Virtual;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Virtual);
       } break;
       case CT_Keyword_Explicit:
       {
         RequireToken(Parser, CT_Keyword_Explicit);
-        Result->Qualifier |= TypeQual_Explicit;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Explicit);
       } break;
       case CT_Keyword_Constexpr:
       {
         RequireToken(Parser, CT_Keyword_Constexpr);
-        Result->Qualifier |= TypeQual_Constexpr;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Constexpr);
       } break;
       case CTokenType_Static:
       {
         RequireToken(Parser, CTokenType_Static);
-        Result->Qualifier |= TypeQual_Static;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Static);
       } break;
       case CTokenType_Volatile:
       {
         RequireToken(Parser, CTokenType_Volatile);
-        Result->Qualifier |= TypeQual_Volatile;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Volatile);
       } break;
       case CTokenType_Signed:
       {
         RequireToken(Parser, T);
-        Result->Qualifier |= TypeQual_Signed;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Signed);
       } break;
       case CTokenType_Unsigned:
       {
         RequireToken(Parser, T);
-        Result->Qualifier |= TypeQual_Unsigned;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Unsigned);
       } break;
       case CTokenType_Enum:
       {
         RequireToken(Parser, CTokenType_Enum);
-        Result->Qualifier |= TypeQual_Enum;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Enum);
       } break;
       case CT_Keyword_Class:
       {
         RequireToken(Parser, CT_Keyword_Class);
-        Result->Qualifier |= TypeQual_Class;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Class);
       } break;
       case CTokenType_Struct:
       {
         RequireToken(Parser, CTokenType_Struct);
-        Result->Qualifier |= TypeQual_Struct;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Struct);
       } break;
       case CTokenType_Union:
       {
         RequireToken(Parser, CTokenType_Union);
-        Result->Qualifier |= TypeQual_Union;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Union);
       } break;
 
       case CTokenType_TemplateKeyword:
@@ -6815,7 +6829,7 @@ ParsePrimitivesAndQualifiers(parser *Parser, type_spec *Result)
       case CTokenType_Inline:
       {
         RequireToken(Parser, T.Type);
-        Result->Qualifier |= TypeQual_Inline;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Inline);
       } break;
 
       case CTokenType_Long:
@@ -6823,53 +6837,56 @@ ParsePrimitivesAndQualifiers(parser *Parser, type_spec *Result)
         RequireToken(Parser, CTokenType_Long);
         if (Result->Qualifier & TypeQual_Long)
         {
-          Result->Qualifier |= TypeQual_Long_Long;
+          SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Long_Long);
         }
-        Result->Qualifier |= TypeQual_Long;
+        else
+        {
+          SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Long);
+        }
       } break;
 
       case CTokenType_Short:
       {
         RequireToken(Parser, CTokenType_Short);
-        Result->Qualifier |= TypeQual_Short;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Short);
       } break;
 
       case CTokenType_Int:
       {
         RequireToken(Parser, T.Type);
-        Result->Qualifier |= TypeQual_Int;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Int);
       } break;
 
       case CTokenType_Double:
       {
         RequireToken(Parser, T.Type);
-        Result->Qualifier |= TypeQual_Double;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Double);
       } break;
       case CTokenType_Float:
       {
         RequireToken(Parser, T.Type);
-        Result->Qualifier |= TypeQual_Float;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Float);
       } break;
       case CTokenType_Char:
       {
         RequireToken(Parser, T.Type);
-        Result->Qualifier |= TypeQual_Char;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Char);
       } break;
       case CTokenType_Void:
       {
         RequireToken(Parser, T.Type);
-        Result->Qualifier |= TypeQual_Void;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Void);
       } break;
       case CTokenType_Bool:
       {
         RequireToken(Parser, T.Type);
-        Result->Qualifier |= TypeQual_Bool;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Bool);
       } break;
 
       case CTokenType_Auto:
       {
         RequireToken(Parser, T.Type);
-        Result->Qualifier |= TypeQual_Auto;
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Auto);
       } break;
 
       case CT_NameQualifier:
@@ -6919,68 +6936,35 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
   if (IsPrimitiveType(&Result))
   {
   }
-  else if (OptionalToken(Parser, CTokenType_OperatorKeyword))
+  else if (PeekToken(Parser).Type == CTokenType_OperatorKeyword)
   {
-    // NOTE(Jesse): It's nuts we have to do this check three times but that's
-    // just the world we live in when we're trying to tolerate unknown types
-    //
-    // This case is for a struct member such as : operator bool()
-    //
-    // @operator_qual_triple_check
-    //
-    Result.Qualifier |= TypeQual_Operator;
   }
   else
   {
-    Result.DatatypeToken = RequireTokenPointer(Parser, CTokenType_Identifier);
-    Result.Datatype = GetDatatypeByName(&Ctx->Datatypes, Result.DatatypeToken->Value);
-    // TODO(Jesse, id: 296, tags: immediate): When we properly traverse
-    // include graphs, this assert should not fail.
-    //
-    // Assert(Result.Datatype.Type != type_datatype_noop);
-  }
-
-  if (OptionalToken(Parser, CTokenType_OperatorKeyword))
-  {
-    // @operator_qual_triple_check : this case is for: u32 operator *()
-    Result.Qualifier |= TypeQual_Operator;
+    if (c_token *TypeName = OptionalToken(Parser, CTokenType_Identifier))
+    {
+      Result.DatatypeToken = TypeName;
+      Result.Datatype = GetDatatypeByName(&Ctx->Datatypes, TypeName->Value);
+      // TODO(Jesse, id: 296, tags: immediate): When we properly traverse include graphs, this assert should not fail.
+      // Assert(Result.Datatype.Type != type_datatype_noop);
+    }
   }
 
   TryEatAttributes(Parser); // Value Attribute
 
   if (PeekToken(Parser).Type == CTokenType_LT)
   {
-    if (Result.Qualifier & TypeQual_Operator)
-    {
-    }
-    else
-    {
-      /* Result.HasTemplateArguments = TryEatTemplateParameterList(Parser, &Ctx->Datatypes); */
-      EatBetween(Parser, CTokenType_LT, CTokenType_GT);
-    }
+    EatBetween(Parser, CTokenType_LT, CTokenType_GT);
   }
 
   b32 IsConstructor = (IsConstructorOrDestructorName(Result.DatatypeToken) ||
-                       IsConstructorOrDestructorName(Result.DatatypeToken, StructNameT)) && PeekToken(Parser).Type == CTokenType_OpenParen;
+                       IsConstructorOrDestructorName(Result.DatatypeToken, StructNameT)) &&
+                       PeekToken(Parser).Type == CTokenType_OpenParen;
 
   if (IsConstructor)
   {
-    Result.Qualifier |= TypeQual_Constructor;
+    SetBitfield(type_qualifier, Result.Qualifier, TypeQual_Constructor);
   }
-  else if (Result.Qualifier & TypeQual_Operator)
-  {
-  }
-  else
-  {
-    Result.Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
-  }
-
-  // @operator_qual_triple_check : this case is for : foo *operator &()
-  if (OptionalToken(Parser, CTokenType_OperatorKeyword))
-  {
-    Result.Qualifier |= TypeQual_Operator;
-  }
-
 
   return Result;
 }
@@ -6995,15 +6979,21 @@ ParseInitializerList(parser *Parser, memory_arena *Memory)
 }
 
 bonsai_function variable_decl
-ParseVariableDecl(parse_context *Ctx)
+ParseVariableDecl(parse_context *Ctx, type_spec *TypeSpec)
 {
   parser *Parser = Ctx->CurrentParser;
 
-  variable_decl Result = {
-    .Type = ParseTypeSpecifier(Ctx),
-  };
+  variable_decl Result = {};
 
-  if (PeekToken(Parser).Type == CTokenType_Identifier)
+  Result.Type = *TypeSpec;
+  Result.Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
+
+  if (OptionalToken(Parser, CTokenType_OperatorKeyword))
+  {
+    // Parsing an operator as a variable should be an internal error ...?
+    InvalidCodePath();
+  }
+  else if (PeekToken(Parser).Type == CTokenType_Identifier)
   {
     Result.Name = RequireToken(Parser, CTokenType_Identifier).Value;
 
@@ -7095,11 +7085,6 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
 
   switch (Type)
   {
-    case function_type_destructor:
-    {
-      InvalidCodePath();
-    } break;
-
     case function_type_constructor:
     case function_type_operator:
     case function_type_normal:
@@ -7114,7 +7099,8 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
 
       while ( !DoneParsingArguments && TokensRemain(Parser) )
       {
-        variable_decl Arg = ParseVariableDecl(Ctx);
+        type_spec TypeSpec = ParseTypeSpecifier(Ctx);
+        variable_decl Arg = ParseVariableDecl(Ctx, &TypeSpec);
         Push(&Result.Args, Arg, Ctx->Memory);
 
         if (!OptionalToken(Parser, CTokenType_Comma))
@@ -7132,39 +7118,21 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
       }
 
       RequireToken(Parser, CTokenType_CloseParen); // Ending paren for arguments
-
     } break;
 
-    InvalidDefaultWhileParsing(Parser, FormatCountedString(TranArena, CSz("ParseFunctionParameterList called with unsupported function type (%S)."), ToString(Type)) );
-  }
+    case function_type_noop:
+    {
+      InternalCompilerError( Parser, CSz("ParseFunctionParameterList called with function_type_noop!"), FuncNameT);
+    } break;
 
-  switch (Type)
-  {
     case function_type_destructor:
     {
-      InvalidCodePath();
+      InternalCompilerError( Parser, CSz("ParseFunctionParameterList called on function_type_destructor, which has no arguments!"), FuncNameT );
     } break;
 
-    case function_type_operator:
-    {
-    } break;
-
-    case function_type_constructor:
-    case function_type_normal: {} break;
-    case function_type_noop: { ParseError(Parser, CSz("Got function_type_noop during ParseFunctionParameterList") ); } break;
   }
-
 
   MaybeParseAttributes(Parser);
-
-#if 0
-  if (PeekToken(Parser).Type == CTokenType_OpenBrace)
-  {
-    // void FunctionName( arg A1, arg, A2) { .. body text .. }
-    Result.Body = GetBodyTextForNextScope(Parser, Ctx->Memory);
-  }
-#endif
-
 
   return Result;
 }
@@ -7195,36 +7163,47 @@ ParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest)
 // NOTE(Jesse): This function is not meant to parse struct-member specific
 // functions such as constructors and destructors.  It parses variables or free functions
 bonsai_function declaration
-ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *DeclType)
+ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indirection_info *Indirection)
 {
   parser *Parser = Ctx->CurrentParser;
 
   declaration Result = {};
 
-  if (DeclType->Indirection.IsFunctionPointer)
+  if (OptionalToken(Parser, CTokenType_OperatorKeyword))
+  {
+    c_token *OperatorNameT = RequireOperatorToken(Parser);
+
+    if ( PeekToken(Parser).Type == CTokenType_OpenParen )
+    {
+      Result.Type = type_declaration_function_decl;
+      Result.function_decl = ParseFunctionParameterList(Ctx, TypeSpec, OperatorNameT, function_type_operator);
+      MaybeParseDeleteOrDefault(Parser, &Result.function_decl);
+      Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
+    }
+  }
+  else if (Indirection->IsFunctionPointer)
   {
     Result.Type = type_declaration_variable_decl;
-    Result.variable_decl.Type = *DeclType;
+    Result.variable_decl.Type = *TypeSpec;
   }
   else
   {
-    if ( DeclType->Qualifier & TypeQual_Operator ) // operator==(foo *F1, foo *F2)
+#if 0
+    if ( TypeSpec->Qualifier & TypeQual_Operator ) // operator==(foo *F1, foo *F2)
     {
-      c_token *OperatorNameT = RequireOperatorToken(Parser);
-
-      if ( PeekToken(Parser).Type == CTokenType_OpenParen )
-      {
-        Result.Type = type_declaration_function_decl;
-        Result.function_decl = ParseFunctionParameterList(Ctx, DeclType, OperatorNameT, function_type_operator);
-        MaybeParseDeleteOrDefault(Parser, &Result.function_decl);
-        Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
-      }
+      InvalidCodePath();
     }
-    else if (DeclType->Qualifier & TypeQual_Constructor) // my_thing::my_thing(...) {...}
+#endif
+
+    if (TypeSpec->Qualifier & TypeQual_Constructor) // my_thing::my_thing(...) {...}
     {
+      // NOTE(Jesse): Moved this path outside this function
+      InvalidCodePath();
+#if 0
       Result.Type = type_declaration_function_decl;
-      Result.function_decl = ParseFunctionParameterList(Ctx, DeclType, DeclType->DatatypeToken, function_type_constructor, DeclType->DatatypeToken->QualifierName);
+      Result.function_decl = ParseFunctionParameterList(Ctx, TypeSpec, TypeSpec->DatatypeToken, function_type_constructor, TypeSpec->DatatypeToken->QualifierName);
       Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
+#endif
     }
     else if ( OptionalToken(Parser, CTokenType_Semicolon) ) // template<typename T> class foo;
     {
@@ -7245,15 +7224,15 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *DeclType)
       if ( IsFunction )
       {
         Result.Type = type_declaration_function_decl;
-        Result.function_decl = ParseFunctionParameterList(Ctx, DeclType, DeclNameToken, function_type_normal);
+        Result.function_decl = ParseFunctionParameterList(Ctx, TypeSpec, DeclNameToken, function_type_normal);
         Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
       }
       else // Variable decl
       {
         // TODO(Jesse): Call ParseVariableDecl here!!
         Result.Type = type_declaration_variable_decl;
-        Result.variable_decl.Type = *DeclType;
-        Result.variable_decl.Name = DeclNameToken->Value;
+        Result.variable_decl.Type = *TypeSpec;
+        if (DeclNameToken) { Result.variable_decl.Name = DeclNameToken->Value; } // Can be 0 if RequireToken failed
 
         TryEatAttributes(Parser);
 
@@ -7279,6 +7258,9 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *DeclType)
         else if ( PeekToken(Parser).Type == CTokenType_OpenBrace )
         {
           Result.variable_decl.Value = ParseInitializerList(Parser, Ctx->Memory);
+        }
+        else if (DeclNameToken == 0) // Already hit an error, no need to report again
+        {
         }
         else
         {
@@ -7915,11 +7897,11 @@ ParseStructMemberOperatorFn(parse_context *Ctx, struct_member *Result, c_token *
 }
 
 bonsai_function void
-ParseStructMemberConstructorFn(parse_context *Ctx, type_spec *DeclType, struct_member *Result, c_token *StructNameT)
+ParseStructMemberConstructorFn(parse_context *Ctx, type_spec *TypeSpec, struct_member *Result, c_token *StructNameT)
 {
   parser *Parser = Ctx->CurrentParser;
 
-  c_token *FuncNameT = DeclType->DatatypeToken;
+  c_token *FuncNameT = TypeSpec->DatatypeToken;
 
   if (IsConstructorOrDestructorName(StructNameT, FuncNameT))
   {
@@ -8021,8 +8003,9 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
       case CTokenType_Enum:
       {
         RequireToken(Parser, T->Type);
+        type_spec TypeSpec = ParseTypeSpecifier(Ctx);
         Result.Type = type_variable_decl;
-        Result.variable_decl = ParseVariableDecl(Ctx);
+        Result.variable_decl = ParseVariableDecl(Ctx, &TypeSpec);
       } break;
 
       case CTokenType_Union:
@@ -8041,8 +8024,9 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
           }
           else
           {
-            Result.variable_decl = ParseVariableDecl(Ctx);
-            Result.variable_decl.Type.Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
+            type_spec TypeSpec = ParseTypeSpecifier(Ctx);
+            Result.variable_decl = ParseVariableDecl(Ctx, &TypeSpec);
+            Result.variable_decl.Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
           }
         }
 
@@ -8113,16 +8097,16 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
       case CTokenType_Signed:
       case CTokenType_Identifier:
       {
-        type_spec DeclType = ParseTypeSpecifier(Ctx, StructNameT);
+        type_spec TypeSpec = ParseTypeSpecifier(Ctx, StructNameT);
 
-        if (DeclType.Qualifier & TypeQual_Constructor)
+        if (TypeSpec.Qualifier & TypeQual_Constructor)
         {
-          ParseStructMemberConstructorFn(Ctx, &DeclType, &Result, StructNameT);
+          ParseStructMemberConstructorFn(Ctx, &TypeSpec, &Result, StructNameT);
         }
-        else if (DeclType.Qualifier & TypeQual_Virtual)
+        else if (TypeSpec.Qualifier & TypeQual_Virtual)
         {
           Result.Type = type_function_decl;
-          Result.function_decl = ParseFunctionOrVariableDecl(Ctx, &DeclType).function_decl;
+          Result.function_decl = ParseFunctionOrVariableDecl(Ctx, &TypeSpec, &NullIndirection).function_decl;
 
           if (OptionalToken(Parser, CTokenType_Equals))
           {
@@ -8134,9 +8118,18 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
         }
         else // operator, regular function, or variable decl
         {
-          declaration Decl = ParseFunctionOrVariableDecl(Ctx, &DeclType);
+          type_indirection_info Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
+          declaration Decl = ParseFunctionOrVariableDecl(Ctx, &TypeSpec, &Indirection);
           switch (Decl.Type)
           {
+            case type_declaration_struct_decl:
+            {
+              // NOTE(Jesse): ParseFunctionOrVariableDecl doesn't directly
+              // produce this case yet.  It _could_ produce this case (I think)
+              // but it's buried.  Eventually this path should turn on I think.
+              InvalidCodePath();
+            } break;
+
             case type_declaration_variable_decl:
             {
               Result.Type = type_variable_decl;
@@ -8148,29 +8141,9 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
               Result.Type = type_function_decl;
               Result.function_decl = Decl.function_decl;
 
-
-              // This is handled by ParseStructMemberConstructorFn now.. but
-              // leaving it here as a sanity check for the moment
-              if (IsConstructorOrDestructorName(StructNameT, Result.function_decl.NameT))
-              {
-                if (OptionalToken(Parser, CTokenType_Colon)) // Member initializers
-                {
-                  InvalidCodePath();
-#if 0
-                  while (OptionalToken(Parser, CTokenType_Identifier))
-                  {
-                    EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
-                    OptionalToken(Parser, CTokenType_Comma);
-                  }
-#endif
-                }
-              }
-
               if (PeekToken(Parser).Type == '{')
               {
-                /* InvalidCodePath(); */
                 Result.function_decl.Body = GetBodyTextForNextScope(Parser, Ctx->Memory);
-                /* Push(&Ctx->Datatypes.Functions, Result.function_decl, Ctx->Memory); */
               }
             } break;
 
@@ -8276,15 +8249,19 @@ ParseCommaSeperatedDecl(parse_context *Ctx)
   return Result;
 }
 
-bonsai_function void
-EatAdditionalCommaSeperatedNames(parse_context *Ctx)
+bonsai_function b32
+MaybeEatAdditionalCommaSeperatedNames(parse_context *Ctx)
 {
   parser *Parser = Ctx->CurrentParser;
 
+  b32 Result = False;
   while (OptionalToken(Parser, CTokenType_Comma))
   {
     ParseCommaSeperatedDecl(Ctx);
+    Result = True;
   }
+
+  return Result;
 }
 
 bonsai_function b32
@@ -8350,10 +8327,10 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
       continue;
     }
 
-    struct_member Declaration = ParseStructMember(Ctx, Result.Type);
-    if (Declaration.Type)
+    struct_member Member = ParseStructMember(Ctx, Result.Type);
+    if (Member.Type)
     {
-      Push(&Result.Members, Declaration, Ctx->Memory);
+      Push(&Result.Members, Member, Ctx->Memory);
     }
     else
     {
@@ -8363,7 +8340,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
     //  Parse comma-separated definitions .. ie `struct fing { int foo, bar, baz; };`
     while (OptionalToken(Parser, CTokenType_Comma))
     {
-      switch (Declaration.Type)
+      switch (Member.Type)
       {
         // NOTE(Jesse): This is weird, but we use the variable_decl type for
         // struct declarations..?
@@ -8372,13 +8349,13 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
         {
           // NOTE(Jesse): Because we use variable_decl for structs we can't use
           // SafeAccess()
-          // auto Var = SafeAccessObj(variable_decl, Declaration);
+          // auto Var = SafeAccessObj(variable_decl, Member);
 
-          auto Var =  &Declaration.variable_decl;
+          auto Var =  &Member.variable_decl;
           comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
 
           Var->Name = Decl.NameT->Value;
-          Var->Type.Indirection = Decl.Indirection;
+          Var->Indirection = Decl.Indirection;
           Var->StaticBufferSize = Decl.StaticBufferSize;
           Var->Value = Decl.Value;
         } break;
@@ -8395,11 +8372,11 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
         } break;
 
       }
-      Push(&Result.Members, Declaration, Ctx->Memory);
+      Push(&Result.Members, Member, Ctx->Memory);
     }
 
 
-    if (Declaration.Type == type_function_decl)
+    if (Member.Type == type_function_decl)
     {
       OptionalToken(Parser, CTokenType_Semicolon);
     }
@@ -8482,14 +8459,14 @@ ParseEnumBody(parse_context *Ctx, parser *Parser, enum_def *Enum, memory_arena *
 }
 
 bonsai_function enum_def
-ParseEnum(parse_context *Ctx)
+ParseEnum(parse_context *Ctx, type_spec *TypeSpec)
 {
   TIMED_FUNCTION();
 
   parser *Parser = Ctx->CurrentParser;
   program_datatypes *Datatypes = &Ctx->Datatypes;
 
-  c_token *EnumNameT = OptionalToken(Parser, CTokenType_Identifier);
+  c_token *EnumNameT = TypeSpec->DatatypeToken;
   counted_string EnumName = EnumNameT ? EnumNameT->Value : CSz("(anonymous enum)");
 
   enum_def Enum = {
@@ -8543,48 +8520,53 @@ OptionalPostfixOperator(parser *Parser)
   }
 }
 
-bonsai_function void
-ParseDatatypeDef(parse_context *Ctx)
+bonsai_function declaration
+ParseDatatypeDef(parse_context *Ctx, type_spec *TypeSpec)
 {
+  declaration Result = {};
+
   parser *Parser = Ctx->CurrentParser;
-  c_token TypeSpecifier = PopToken(Parser);
 
-  switch(TypeSpecifier.Type)
+  if (TypeSpec->Qualifier & TypeQual_Union)
   {
-    case CTokenType_Enum:
-    {
-      enum_def Enum = ParseEnum(Ctx);
-      Push(&Ctx->Datatypes.Enums, Enum, Ctx->Memory);
-    } break;
+    // TODO(Jesse): Should we store unions and structs seperately? Probably? Maybe?
+    // At least unions should have a typedef-d container so we don't have to call
+    // them struct_def ..
+    NotImplemented;
 
-    case CT_Keyword_Class:
-    case CTokenType_Struct:
-    {
-      c_token *StructNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
-
-      if ( PeekToken(Parser).Type == CTokenType_Colon )
-      {
-        EatUntilExcluding(Parser, CTokenType_OpenBrace);
-      }
-
-      if ( PeekToken(Parser).Type == CTokenType_OpenBrace )
-      {
-        struct_def S = ParseStructBody(Ctx, StructNameT);
-        Push(&Ctx->Datatypes.Structs, S, Ctx->Memory);
-      }
-    } break;
-
-    case CTokenType_Union:
-    {
-      c_token *UnionNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
-      struct_def S = ParseStructBody(Ctx, UnionNameT);
-      Push(&Ctx->Datatypes.Structs, S, Ctx->Memory);
-    } break;
-
-    InvalidDefaultWhileParsing(Parser, CSz("Tried parsing a datatypes that wasn't a struct, enum or union!"));
+#if 0
+    c_token *UnionNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
+    struct_def S = ParseStructBody(Ctx, UnionNameT);
+    Push(&Ctx->Datatypes.Structs, S, Ctx->Memory);
+#endif
   }
 
+  if (TypeSpec->Qualifier & TypeQual_Enum)
+  {
+    InvalidCodePath();
+  }
+
+  if ( TypeSpec->Qualifier & TypeQual_Struct ||
+       TypeSpec->Qualifier & TypeQual_Class   )
+  {
+    if ( PeekToken(Parser).Type == CTokenType_Colon )
+    {
+      EatUntilExcluding(Parser, CTokenType_OpenBrace);
+    }
+
+    if ( PeekToken(Parser).Type == CTokenType_OpenBrace )
+    {
+      /* RuntimeBreak(); */
+      Result.Type = type_declaration_struct_decl;
+      Result.struct_decl.Body = ParseStructBody(Ctx, TypeSpec->DatatypeToken);
+    }
+  }
+
+  /* InvalidDefaultWhileParsing(Parser, CSz("Tried parsing a datatypes that wasn't a struct, enum or union!")); */
+
   RequireToken(Parser, CTokenType_Semicolon);
+
+  return Result;
 }
 
 bonsai_function void
@@ -8593,12 +8575,14 @@ ParseAndPushTypedef(parse_context *Ctx)
   parser *Parser = Ctx->CurrentParser;
 
   type_spec Type = ParseTypeSpecifier(Ctx);
-  counted_string Alias = {};
-  b32 IsFunction = Type.Indirection.IsFunctionPointer;
+  type_indirection_info Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
 
-  if (Type.Indirection.IsFunctionPointer)
+  counted_string Alias = {};
+  b32 IsFunction = Indirection.IsFunctionPointer;
+
+  if (Indirection.IsFunctionPointer)
   {
-    Alias = Type.Indirection.FunctionPointerTypeName;
+    Alias = Indirection.FunctionPointerTypeName;
   }
   else
   {
@@ -8617,7 +8601,7 @@ ParseAndPushTypedef(parse_context *Ctx)
     }
   }
 
-  EatAdditionalCommaSeperatedNames(Ctx);
+  MaybeEatAdditionalCommaSeperatedNames(Ctx);
 
   TryEatAttributes(Parser);
 
@@ -8659,7 +8643,7 @@ ParseTypedef(parse_context *Ctx)
       S.Type = Decl.NameT;
       TryEatAttributes(Parser);
 
-      EatAdditionalCommaSeperatedNames(Ctx);
+      MaybeEatAdditionalCommaSeperatedNames(Ctx);
       RequireToken(Parser, CTokenType_Semicolon);
 
       Push(&Ctx->Datatypes.Structs, S, Ctx->Memory);
@@ -8671,7 +8655,7 @@ ParseTypedef(parse_context *Ctx)
       struct_def S = ParseStructBody(Ctx, Decl.NameT);
 
       /* comma_separated_decl ActualName = */ ParseCommaSeperatedDecl(Ctx);
-      EatAdditionalCommaSeperatedNames(Ctx);
+      MaybeEatAdditionalCommaSeperatedNames(Ctx);
 
       RequireToken(Parser, CTokenType_Semicolon);
       Push(&Ctx->Datatypes.Structs, S, Ctx->Memory);
@@ -9010,6 +8994,7 @@ ParseTypeSpecifierNode(parse_context *Ctx, ast_node_expression *Result, datatype
   ast_node_type_specifier *Node = AllocateAndCastTo(ast_node_type_specifier, &Result->Value, Ctx->Memory);
 
   Node->TypeSpec = ParseTypeSpecifier(Ctx);
+  Node->Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Ctx->CurrentParser);
 
   if (Data)
   {
@@ -9018,7 +9003,8 @@ ParseTypeSpecifierNode(parse_context *Ctx, ast_node_expression *Result, datatype
   }
   else
   {
-    if (Node->TypeSpec.DatatypeToken->Type == CTokenType_Identifier)
+    c_token *DatatypeToken = Node->TypeSpec.DatatypeToken;
+    if (DatatypeToken && DatatypeToken->Type == CTokenType_Identifier)
     {
       Node->Datatype = GetDatatypeByName(&Ctx->Datatypes, Node->TypeSpec.DatatypeToken->Value);
       if (Node->Datatype.Type == type_datatype_noop)
@@ -9448,6 +9434,60 @@ ParseFunctionCall(parse_context *Ctx, counted_string FunctionName)
   return Result;
 }
 
+bonsai_function declaration
+ParseTopLevelDatatype(parse_context *Ctx)
+{
+  parser *Parser = Ctx->CurrentParser;
+
+  type_spec TypeSpec = ParseTypeSpecifier(Ctx);
+
+  declaration Result = {};
+
+  if ( TypeSpec.Qualifier & TypeQual_Struct ||
+       TypeSpec.Qualifier & TypeQual_Class   )
+  {
+    if ( PeekToken(Parser).Type == CTokenType_OpenBrace    ||
+         PeekToken(Parser).Type == CTokenType_Colon         )
+    {
+      Result = ParseDatatypeDef(Ctx, &TypeSpec);
+    }
+    else
+    {
+      ParseVariableDecl(Ctx, &TypeSpec); // Globally-scoped variable : `struct foo = { .bar = 1 }`
+    }
+  }
+  else if (TypeSpec.Qualifier & TypeQual_Union) // union { ... }
+  {
+    c_token *UnionNameT = TypeSpec.DatatypeToken;
+    struct_def S = ParseStructBody(Ctx, UnionNameT);
+    Push(&Ctx->Datatypes.Structs, S, Ctx->Memory);
+  }
+  else if (TypeSpec.Qualifier & TypeQual_Enum) // enum { ... }
+  {
+    enum_def Enum = ParseEnum(Ctx, &TypeSpec);
+    Push(&Ctx->Datatypes.Enums, Enum, Ctx->Memory);
+  }
+  else if (TypeSpec.Qualifier & TypeQual_Constructor)  // my_thing::my_thing(...) {...}
+  {
+    Result.Type = type_declaration_function_decl;
+
+    Result.function_decl = ParseFunctionParameterList( Ctx,
+                                                       &TypeSpec,
+                                                       TypeSpec.DatatypeToken,
+                                                       function_type_constructor,
+                                                       TypeSpec.DatatypeToken->QualifierName);
+
+    Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
+  }
+  else // Regular variable or function
+  {
+    type_indirection_info Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
+    Result = ParseFunctionOrVariableDecl(Ctx, &TypeSpec, &Indirection);
+  }
+
+  return Result;
+}
+
 bonsai_function void
 ParseDatatypes(parse_context *Ctx, parser *Parser)
 {
@@ -9487,6 +9527,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         EatBetween(Parser, CTokenType_LT, CTokenType_GT);
       } break;
 
+#if 0
       case CT_Keyword_Class:
       case CTokenType_Struct:
       case CTokenType_Enum:
@@ -9504,6 +9545,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
           ParseVariableDecl(Ctx);
         }
       } break;
+#endif
 
       case CTokenType_Typedef:
       {
@@ -9519,6 +9561,11 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
       {
         EatNameQualifiers(Parser);
       } break;
+
+      case CTokenType_Struct:
+      case CTokenType_Enum:
+      case CTokenType_Union:
+      case CT_Keyword_Class:
 
       case CTokenType_OperatorKeyword:
       case CT_Keyword_Explicit:
@@ -9542,15 +9589,41 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
       case CTokenType_Signed:
       case CTokenType_Identifier:
       {
-        type_spec DeclType = ParseTypeSpecifier(Ctx);
-        declaration Decl = ParseFunctionOrVariableDecl(Ctx, &DeclType);
+        declaration Decl = ParseTopLevelDatatype(Ctx);
 
-        if (Decl.Type == type_declaration_function_decl)
+        switch (Decl.Type)
         {
-          Push(&Ctx->Datatypes.Functions, Decl.function_decl, Ctx->Memory); // Free function
+          case type_declaration_function_decl:
+          {
+            Push(&Ctx->Datatypes.Functions, Decl.function_decl, Ctx->Memory); // Free function
+          } break;
+
+          case type_declaration_struct_decl:
+          {
+            struct_decl S = Decl.struct_decl;
+            struct_def Struct = S.Body;
+
+            Push(&Ctx->Datatypes.Structs, Struct, Ctx->Memory);
+
+            Info("Got struct decl! (%S)", Struct.Type ? Struct.Type->Value : CSz("anonymous"));
+          } break;
+
+          case type_declaration_variable_decl:
+          {
+          } break;
+
+          case type_declaration_noop:
+          {
+            // right now a few things don't come through .. including variable decls and enums
+            /* ParseError(Parser, CSz("While scanning for datatypes"), T); */
+          } break;
         }
 
-        EatAdditionalCommaSeperatedNames(Ctx);
+        if (MaybeEatAdditionalCommaSeperatedNames(Ctx))
+        {
+          ParseWarn(Parser, CSz("Silently ate additional variable name."), T);
+        }
+
       } break;
 
       case CT_Keyword_Namespace:
@@ -9570,10 +9643,9 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         RequireToken(Parser, CTokenType_CloseBrace);
       } break;
 
-      InvalidDefaultError(Parser, CSz("Invalid token encountered while parsing a datatype."), T);
+      InvalidDefaultError(Parser, CSz("Unexpected token encountered while scanning for datatypes"), T);
     }
 
-    EatWhitespaceAndComments(Parser);
     continue;
   }
 
@@ -11613,7 +11685,7 @@ main(s32 ArgCount_, const char** ArgStrings)
     }
   }
 
-  b32 Success = True;
+  b32 Success = False;
   if (ArgCount > 1)
   {
     // TODO(Jesse): Make ParseArgs operate on the parse context directly?
@@ -11663,6 +11735,11 @@ main(s32 ArgCount_, const char** ArgStrings)
 /*         } */
 /*       } */
 
+
+      if (Parser->ErrorCode == ParseErrorCode_None)
+      {
+        Success = True;
+      }
     }
     else
     {

@@ -8,15 +8,15 @@
 
 # POOF_LOG_LEVEL="--log-level LogLevel_Shush"
 POOF_LOG_LEVEL="--log-level LogLevel_Error"
-# POOF_LOG_LEVEL="--log-level LogLevel_Debug"
+POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
 BUILD_EVERYTHING=0
 
-# BuildPoof=1
-# RunPoof=1
+BuildPoof=1
+RunPoof=1
 # POOF_DEBUGGER="gdb --args"
 
-# BuildParserTests=1
+BuildParserTests=1
 RunParserTests=1
 # TEST_DEBUGGER="gdb --args"
 
@@ -76,7 +76,11 @@ function RunPoof {
     -I "include"               \
     -o $META_OUT
 
-  [ $? -eq 0 ] && echo -e "$Success Poofed"
+  if [ $? -eq 0 ]; then
+    echo -e "$Success Poofed"
+  else
+    echo -e "$Failed Poofing"
+  fi
 
   echo -e ""
   echo -e "$Delimeter"

@@ -1,3 +1,6 @@
+struct __attribute__ ((__packed__)) sdshdr5
+{
+};
 
 void Foo<int>()
 {
@@ -498,6 +501,11 @@ struct foo
   {
     int bar;
   } baz[42];
+};
+
+struct
+{
+  int foo;
 };
 
 enum

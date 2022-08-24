@@ -1352,8 +1352,8 @@ TestIncludeGuards(memory_arena *Memory)
       Ctx.CurrentParser = Parser;
       /* DumpEntireParser(Parser); */
       /* RuntimeBreak(); */
-      ast_node_statement *Ast = ParseAllStatements(&Ctx);
-      WalkAst(Ast);
+      /* ast_node_statement *Ast = ParseAllStatements(&Ctx); */
+      /* WalkAst(Ast); */
       /* DebugPrint(Ast); */
     }
     else
