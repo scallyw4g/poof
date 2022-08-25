@@ -7068,6 +7068,10 @@ FinalizeVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indirection_i
     {
       Result.Value = ParseInitializerList(Parser, Ctx->Memory);
     }
+    else if ( OptionalToken(Parser, CTokenType_Colon) )
+    {
+      Result.StrictBitWidth = RequireToken(Parser, CTokenType_IntLiteral);
+    }
   }
   else
   {
@@ -8273,6 +8277,9 @@ ParseCommaSeperatedDecl(parse_context *Ctx)
 {
   parser *Parser = Ctx->CurrentParser;
   comma_separated_decl Result = {};
+
+  TryEatAttributes(Parser);
+
   Result.Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
 
   Result.NameT = RequireTokenPointer(Parser, CTokenType_Identifier);
@@ -8285,7 +8292,12 @@ ParseCommaSeperatedDecl(parse_context *Ctx)
 
   if ( OptionalToken(Parser, CTokenType_Equals) )
   {
-    ParseExpression(Ctx, &Result.Value);
+    // NOTE(Jesse): We probably _should_ call ParseExpression here, or
+    // internally in ParseInitializerList.  ParseInitializerList just eats and
+    // ignores everything between braces .. so.. not great..
+    //
+    // ParseExpression(Ctx, &Result.Value);
+    Result.Value = ParseInitializerList(Ctx->CurrentParser, Ctx->Memory);
   }
 
   return Result;
@@ -9501,7 +9513,6 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
     }
     else
     {
-      // FinalizeVariableDecl(Ctx, TypeSpec, Indirection, NameT);
       Result.Type = type_declaration_variable_decl;
       Result.variable_decl = FinalizeVariableDecl(Ctx, TypeSpec, Indirection, NameT); // Globally-scoped variable : `struct foo = { .bar = 1 }`
     }
@@ -9537,10 +9548,10 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
     }
     else
     {
+      // TODO(Jesse): This path seems a bit sus to me..
+      //
       // template<typename foo> struct bar;
       RequireToken(Parser, CTokenType_Semicolon);
-      /* InvalidCodePath(); */
-      // FinalizeVariableDecl(Ctx, &TypeSpec, &Indirection); // Globally-scoped variable : `struct foo = { .bar = 1 }`
     }
   }
   else if (TypeSpec->Qualifier & TypeQual_Union) // union { ... }

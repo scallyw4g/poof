@@ -1,4 +1,18 @@
 
+struct foo
+
+fooInst = {
+  .bar = {
+    .baz = 1,
+  },
+},
+__attribute__((whatever))
+fooInst2 = {
+  .bar = {
+    .baz = 2,
+  },
+}
+
 struct sequence *foofunc(void);
 enum   sequence *foofunc(void);
 union  sequence *foofunc(void);
@@ -122,6 +136,11 @@ struct foo
 
   /* struct foo * GetFoo(); */
 };
+
+struct foo
+{
+  int foo_bool : 1;
+}
 
 
 static int foo {};

@@ -626,6 +626,7 @@ struct variable_decl
   ast_node *StaticBufferSize;
   ast_node *Value;
 
+  u32 StrictBitWidth; // For declarations in structs like : `int foo_bool : 1`
   type_indirection_info Indirection;
 };
 meta(generate_stream(variable_decl))
