@@ -1,7 +1,7 @@
     -- all members start --
 
           foobar_dunion_type Type 
-      union (anonymous) (anonymous)
+      union (anonymous) (value unsupported for compound declaration types)
 
 
     -- all members end --
