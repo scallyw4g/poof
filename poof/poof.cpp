@@ -8292,12 +8292,14 @@ ParseCommaSeperatedDecl(parse_context *Ctx)
 
   if ( OptionalToken(Parser, CTokenType_Equals) )
   {
-    // NOTE(Jesse): We probably _should_ call ParseExpression here, or
-    // internally in ParseInitializerList.  ParseInitializerList just eats and
-    // ignores everything between braces .. so.. not great..
-    //
-    // ParseExpression(Ctx, &Result.Value);
-    Result.Value = ParseInitializerList(Ctx->CurrentParser, Ctx->Memory);
+    if (PeekToken(Parser).Type == CTokenType_OpenBrace)
+    {
+      Result.Value = ParseInitializerList(Ctx->CurrentParser, Ctx->Memory);
+    }
+    else
+    {
+      ParseExpression(Ctx, &Result.Value);
+    }
   }
 
   return Result;
