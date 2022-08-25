@@ -1,3 +1,8 @@
+
+/* struct sequence *createSparklineSequence(void); */
+/* enum sequence *createSparklineSequence(void); */
+/* union sequence *createSparklineSequence(void); */
+
 struct foo {
   foo(): _foof(1) {  }
 
@@ -7,9 +12,6 @@ struct foo {
 
   int _foof;
 };
-
-
-struct sequence *createSparklineSequence(void);
 
 struct __attribute__ ((__packed__)) sdshdr5
 {

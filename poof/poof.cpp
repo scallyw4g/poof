@@ -130,6 +130,7 @@ bonsai_function void                 ParseExpression(parse_context *Ctx, ast_nod
 bonsai_function struct_def ParseStructBody(parse_context *, c_token *);
 
 bonsai_function parser MaybeParseFunctionBody(parser *Parser, memory_arena *Memory);
+bonsai_function void MaybeParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest);
 
 bonsai_function counted_string GetTypeNameForDatatype(datatype *Data, memory_arena *Memory);
 
@@ -7030,7 +7031,7 @@ ParseInitializerList(parser *Parser, memory_arena *Memory)
 }
 
 bonsai_function variable_decl
-ParseVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indirection_info *Indirection)
+ParseVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indirection_info *Indirection, c_token *IdentifierToken = 0)
 {
   parser *Parser = Ctx->CurrentParser;
 
@@ -7038,21 +7039,18 @@ ParseVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indirection_info
 
   Result.Type = *TypeSpec;
 
-  if (OptionalToken(Parser, CTokenType_OperatorKeyword))
+  if (IdentifierToken == 0)
   {
-    // Parsing an operator as a variable should be an internal error ...?
-    InvalidCodePath();
+    IdentifierToken = OptionalToken(Parser, CTokenType_Identifier);
   }
-  else if (PeekToken(Parser).Type == CTokenType_Identifier)
+
+  if (IdentifierToken)
   {
-    Result.Name = RequireToken(Parser, CTokenType_Identifier).Value;
+    Result.Name = IdentifierToken->Value;
 
     TryEatAttributes(Parser);
 
-    if ( PeekToken(Parser).Type == CTokenType_OpenBracket )
-    {
-      ParseExpression(Ctx, &Result.StaticBufferSize);
-    }
+    MaybeParseStaticBuffers(Ctx, Parser, &Result.StaticBufferSize);
 
     if (OptionalToken(Parser, CTokenType_Equals))
     {
@@ -7064,6 +7062,10 @@ ParseVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indirection_info
       {
         ParseExpression(Ctx, &Result.Value);
       }
+    }
+    else if ( PeekToken(Parser).Type == CTokenType_OpenBrace )
+    {
+      Result.Value = ParseInitializerList(Parser, Ctx->Memory);
     }
   }
   else
@@ -7189,7 +7191,7 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
 }
 
 bonsai_function void
-ParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest)
+MaybeParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest)
 {
   ast_node_expression *Current = {};
 
@@ -7241,85 +7243,65 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indire
   }
   else
   {
-#if 0
-    if ( TypeSpec->Qualifier & TypeQual_Operator ) // operator==(foo *F1, foo *F2)
-    {
-      InvalidCodePath();
-    }
-#endif
+    EatNameQualifiers(Parser);
 
-#if 0
-    if (TypeSpec->Qualifier & TypeQual_Constructor) // my_thing::my_thing(...) {...}
+    c_token *DeclNameToken = RequireTokenPointer(Parser, CTokenType_Identifier);
+
+    if (OptionalToken(Parser, CTokenType_LT))
     {
-      // NOTE(Jesse): Moved this path outside this function
-      InvalidCodePath();
+      EatUntilIncluding(Parser, CTokenType_GT);
+    }
+
+    b32 IsFunction = PeekToken(Parser).Type == CTokenType_OpenParen;
+    if ( IsFunction )
+    {
       Result.Type = type_declaration_function_decl;
-      Result.function_decl = ParseFunctionParameterList(Ctx, TypeSpec, TypeSpec->DatatypeToken, function_type_constructor, TypeSpec->DatatypeToken->QualifierName);
+      Result.function_decl = ParseFunctionParameterList(Ctx, TypeSpec, DeclNameToken, function_type_normal);
       Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
     }
-#endif
-    if ( OptionalToken(Parser, CTokenType_Semicolon) ) // template<typename T> class foo;
+    else // Variable decl
     {
-      // TODO(Jesse): Do we actually need this still?
-    }
-    else // could be variable or fn
-    {
-      EatNameQualifiers(Parser);
+      Result.Type = type_declaration_variable_decl;
+      /* Result.variable_decl.Type = *TypeSpec; */
 
-      c_token *DeclNameToken = RequireTokenPointer(Parser, CTokenType_Identifier);
+      Result.variable_decl = ParseVariableDecl(Ctx, TypeSpec, Indirection, DeclNameToken);
 
-      if (OptionalToken(Parser, CTokenType_LT))
+#if 0
+      if (DeclNameToken) { Result.variable_decl.Name = DeclNameToken->Value; } // Can be 0 if RequireToken failed
+
+      TryEatAttributes(Parser);
+
+      MaybeParseStaticBuffers(Ctx, Parser, &Result.variable_decl.StaticBufferSize);
+
+      if ( OptionalToken(Parser, CTokenType_Equals) )
       {
-        EatUntilIncluding(Parser, CTokenType_GT);
-      }
-
-      b32 IsFunction = PeekToken(Parser).Type == CTokenType_OpenParen;
-      if ( IsFunction )
-      {
-        Result.Type = type_declaration_function_decl;
-        Result.function_decl = ParseFunctionParameterList(Ctx, TypeSpec, DeclNameToken, function_type_normal);
-        Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
-      }
-      else // Variable decl
-      {
-        // TODO(Jesse): Call ParseVariableDecl here!!
-        Result.Type = type_declaration_variable_decl;
-        Result.variable_decl.Type = *TypeSpec;
-        if (DeclNameToken) { Result.variable_decl.Name = DeclNameToken->Value; } // Can be 0 if RequireToken failed
-
-        TryEatAttributes(Parser);
-
-        ParseStaticBuffers(Ctx, Parser, &Result.variable_decl.StaticBufferSize);
-
-        if ( OptionalToken(Parser, CTokenType_Equals) )
-        {
-          if (PeekToken(Parser).Type == CTokenType_OpenBrace)
-          {
-            Result.variable_decl.Value = ParseInitializerList(Parser, Ctx->Memory);
-          }
-          else
-          {
-            ParseExpression(Ctx, &Result.variable_decl.Value);
-          }
-        }
-        else if ( PeekToken(Parser).Type == CTokenType_Semicolon )
-        {
-        }
-        else if ( PeekToken(Parser).Type == CTokenType_Comma )
-        {
-        }
-        else if ( PeekToken(Parser).Type == CTokenType_OpenBrace )
+        if (PeekToken(Parser).Type == CTokenType_OpenBrace)
         {
           Result.variable_decl.Value = ParseInitializerList(Parser, Ctx->Memory);
         }
-        else if (DeclNameToken == 0) // Already hit an error, no need to report again
-        {
-        }
         else
         {
-          ParseError_ExpectedSemicolonEqualsCommaOrOpenBrace(Parser, PeekTokenPointer(Parser));
+          ParseExpression(Ctx, &Result.variable_decl.Value);
         }
       }
+      else if ( PeekToken(Parser).Type == CTokenType_Semicolon )
+      {
+      }
+      else if ( PeekToken(Parser).Type == CTokenType_Comma )
+      {
+      }
+      else if ( PeekToken(Parser).Type == CTokenType_OpenBrace )
+      {
+        Result.variable_decl.Value = ParseInitializerList(Parser, Ctx->Memory);
+      }
+      else if (DeclNameToken == 0) // Already hit an error, no need to report again
+      {
+      }
+      else
+      {
+        ParseError_ExpectedSemicolonEqualsCommaOrOpenBrace(Parser, PeekTokenPointer(Parser));
+      }
+#endif
     }
   }
 
@@ -9531,7 +9513,7 @@ ParseTopLevelDatatype(parse_context *Ctx)
         EatUntilExcluding(Parser, CTokenType_OpenBrace);
       }
 
-      if (PeekToken(Parser, CTokenType_OpenBrace ))
+      if ( PeekToken(Parser).Type == CTokenType_OpenBrace )
       {
         Result.Type = type_declaration_struct_decl;
         Result.struct_decl.Body = ParseStructBody(Ctx, TypeSpec.DatatypeToken);
@@ -9539,7 +9521,15 @@ ParseTopLevelDatatype(parse_context *Ctx)
     }
     else
     {
-      ParseVariableDecl(Ctx, &TypeSpec, &Indirection); // Globally-scoped variable : `struct foo = { .bar = 1 }`
+      if (PeekToken(Parser).Type == CTokenType_OpenParen)
+      {
+        // Function
+      }
+      else
+      {
+        ParseVariableDecl(Ctx, &TypeSpec, &Indirection); // Globally-scoped variable : `struct foo = { .bar = 1 }`
+      }
+
     }
   }
   else if (TypeSpec.Qualifier & TypeQual_Union) // union { ... }
@@ -9572,7 +9562,6 @@ ParseTopLevelDatatype(parse_context *Ctx)
   }
   else // Regular variable or function
   {
-    /* type_indirection_info Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser); */
     Result = ParseFunctionOrVariableDecl(Ctx, &TypeSpec, &Indirection);
   }
 
@@ -9618,26 +9607,6 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         EatBetween(Parser, CTokenType_LT, CTokenType_GT);
       } break;
 
-#if 0
-      case CT_Keyword_Class:
-      case CTokenType_Struct:
-      case CTokenType_Enum:
-      case CTokenType_Union:
-      {
-        if (PeekToken(Parser, 1).Type == CTokenType_OpenBrace ||
-            PeekToken(Parser, 2).Type == CTokenType_OpenBrace ||
-            PeekToken(Parser, 2).Type == CTokenType_Colon)
-        {
-          ParseDatatypeDef(Ctx);
-        }
-        else
-        {
-          // NOTE(Jesse): Globally-scoped variable : `global_variable struct foo = { .bar = 1 }`
-          ParseVariableDecl(Ctx);
-        }
-      } break;
-#endif
-
       case CTokenType_Typedef:
       {
         ParseTypedef(Ctx);
@@ -9682,6 +9651,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         {
           case type_declaration_function_decl:
           {
+            /* Info("Pushing function decl (%S)", Struct.Type ? Struct.Type->Value : CSz("anonymous")); */
             Push(&Ctx->Datatypes.Functions, Decl.function_decl, Ctx->Memory); // Free function
           } break;
 
@@ -9690,9 +9660,8 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
             struct_decl S = Decl.struct_decl;
             struct_def Struct = S.Body;
 
+            Info("Pushing struct decl (%S)", Struct.Type ? Struct.Type->Value : CSz("anonymous"));
             Push(&Ctx->Datatypes.Structs, Struct, Ctx->Memory);
-
-            Info("Got struct decl! (%S)", Struct.Type ? Struct.Type->Value : CSz("anonymous"));
           } break;
 
           case type_declaration_variable_decl:
