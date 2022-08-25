@@ -1,7 +1,7 @@
 
-/* struct sequence *createSparklineSequence(void); */
-/* enum sequence *createSparklineSequence(void); */
-/* union sequence *createSparklineSequence(void); */
+struct sequence *foofunc(void);
+enum   sequence *foofunc(void);
+union  sequence *foofunc(void);
 
 struct foo {
   foo(): _foof(1) {  }
@@ -102,6 +102,8 @@ operator==(foo * F1, foo* F2)
 }
 
 #if 1
+
+struct foo;
 
 template <classname T>
 struct foo;

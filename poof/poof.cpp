@@ -7031,7 +7031,7 @@ ParseInitializerList(parser *Parser, memory_arena *Memory)
 }
 
 bonsai_function variable_decl
-ParseVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indirection_info *Indirection, c_token *IdentifierToken = 0)
+FinalizeVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indirection_info *Indirection, c_token *IdentifierToken = 0)
 {
   parser *Parser = Ctx->CurrentParser;
 
@@ -7048,7 +7048,7 @@ ParseVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indirection_info
   {
     Result.Name = IdentifierToken->Value;
 
-    TryEatAttributes(Parser);
+    TryEatAttributes(Parser); // Possibly garbage.  At least some of the code that calls this eats these already
 
     MaybeParseStaticBuffers(Ctx, Parser, &Result.StaticBufferSize);
 
@@ -7153,7 +7153,7 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
       {
         type_spec TypeSpec = ParseTypeSpecifier(Ctx);
         type_indirection_info Indirection = ParseIndirectionInfo(Ctx->CurrentParser);
-        variable_decl Arg = ParseVariableDecl(Ctx, &TypeSpec, &Indirection);
+        variable_decl Arg = FinalizeVariableDecl(Ctx, &TypeSpec, &Indirection);
         Push(&Result.Args, Arg, Ctx->Memory);
 
         if (!OptionalToken(Parser, CTokenType_Comma))
@@ -7213,6 +7213,36 @@ MaybeParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest)
   }
 }
 
+// TODO(Jesse): This doesn't record indirection information on the return value.
+link_internal function_decl
+FinalizeFunctionDecl(parse_context *Ctx, type_spec *TypeSpec, c_token *FuncNameT, function_type Type)
+{
+  function_decl Result = {};
+
+  Result = ParseFunctionParameterList(Ctx, TypeSpec, FuncNameT, Type);
+  Result.Body = MaybeParseFunctionBody(Ctx->CurrentParser, Ctx->Memory);
+
+  return Result;
+}
+
+link_internal function_decl
+FinalizeOperatorFunction(parse_context *Ctx, type_spec *TypeSpec)
+{
+  parser *Parser = Ctx->CurrentParser;
+
+  function_decl Result = {};
+
+  c_token *OperatorNameT = RequireOperatorToken(Parser);
+  if ( PeekToken(Parser).Type == CTokenType_OpenParen )
+  {
+    Result = ParseFunctionParameterList(Ctx, TypeSpec, OperatorNameT, function_type_operator);
+    MaybeParseDeleteOrDefault(Parser, &Result);
+    Result.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
+  }
+
+  return Result;
+}
+
 // NOTE(Jesse): This function is not meant to parse struct-member specific
 // functions such as constructors and destructors.  It parses variables or free functions
 bonsai_function declaration
@@ -7224,15 +7254,9 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indire
 
   if (OptionalToken(Parser, CTokenType_OperatorKeyword))
   {
-    c_token *OperatorNameT = RequireOperatorToken(Parser);
+    Result.Type = type_declaration_function_decl;
+    Result.function_decl = FinalizeOperatorFunction(Ctx, TypeSpec);
 
-    if ( PeekToken(Parser).Type == CTokenType_OpenParen )
-    {
-      Result.Type = type_declaration_function_decl;
-      Result.function_decl = ParseFunctionParameterList(Ctx, TypeSpec, OperatorNameT, function_type_operator);
-      MaybeParseDeleteOrDefault(Parser, &Result.function_decl);
-      Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
-    }
   }
   else if (Indirection->IsFunction || Indirection->IsFunctionPtr)
   {
@@ -7243,10 +7267,7 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indire
   }
   else
   {
-    EatNameQualifiers(Parser);
-
     c_token *DeclNameToken = RequireTokenPointer(Parser, CTokenType_Identifier);
-
     if (OptionalToken(Parser, CTokenType_LT))
     {
       EatUntilIncluding(Parser, CTokenType_GT);
@@ -7256,52 +7277,12 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indire
     if ( IsFunction )
     {
       Result.Type = type_declaration_function_decl;
-      Result.function_decl = ParseFunctionParameterList(Ctx, TypeSpec, DeclNameToken, function_type_normal);
-      Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
+      Result.function_decl = FinalizeFunctionDecl(Ctx, TypeSpec, DeclNameToken, function_type_normal);
     }
     else // Variable decl
     {
       Result.Type = type_declaration_variable_decl;
-      /* Result.variable_decl.Type = *TypeSpec; */
-
-      Result.variable_decl = ParseVariableDecl(Ctx, TypeSpec, Indirection, DeclNameToken);
-
-#if 0
-      if (DeclNameToken) { Result.variable_decl.Name = DeclNameToken->Value; } // Can be 0 if RequireToken failed
-
-      TryEatAttributes(Parser);
-
-      MaybeParseStaticBuffers(Ctx, Parser, &Result.variable_decl.StaticBufferSize);
-
-      if ( OptionalToken(Parser, CTokenType_Equals) )
-      {
-        if (PeekToken(Parser).Type == CTokenType_OpenBrace)
-        {
-          Result.variable_decl.Value = ParseInitializerList(Parser, Ctx->Memory);
-        }
-        else
-        {
-          ParseExpression(Ctx, &Result.variable_decl.Value);
-        }
-      }
-      else if ( PeekToken(Parser).Type == CTokenType_Semicolon )
-      {
-      }
-      else if ( PeekToken(Parser).Type == CTokenType_Comma )
-      {
-      }
-      else if ( PeekToken(Parser).Type == CTokenType_OpenBrace )
-      {
-        Result.variable_decl.Value = ParseInitializerList(Parser, Ctx->Memory);
-      }
-      else if (DeclNameToken == 0) // Already hit an error, no need to report again
-      {
-      }
-      else
-      {
-        ParseError_ExpectedSemicolonEqualsCommaOrOpenBrace(Parser, PeekTokenPointer(Parser));
-      }
-#endif
+      Result.variable_decl = FinalizeVariableDecl(Ctx, TypeSpec, Indirection, DeclNameToken);
     }
   }
 
@@ -8059,7 +8040,7 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
         type_spec TypeSpec = ParseTypeSpecifier(Ctx);
         type_indirection_info Indirection = ParseIndirectionInfo(Ctx->CurrentParser);
         Result.Type = type_variable_decl;
-        Result.variable_decl = ParseVariableDecl(Ctx, &TypeSpec, &Indirection);
+        Result.variable_decl = FinalizeVariableDecl(Ctx, &TypeSpec, &Indirection);
       } break;
 
       case CTokenType_Union:
@@ -8080,7 +8061,7 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
           {
             type_spec TypeSpec = ParseTypeSpecifier(Ctx);
             type_indirection_info Indirection = ParseIndirectionInfo(Ctx->CurrentParser);
-            Result.variable_decl = ParseVariableDecl(Ctx, &TypeSpec, &Indirection);
+            Result.variable_decl = FinalizeVariableDecl(Ctx, &TypeSpec, &Indirection);
             Result.variable_decl.Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
           }
         }
@@ -9502,34 +9483,63 @@ ParseTopLevelDatatype(parse_context *Ctx)
 
   declaration Result = {};
 
-  if ( TypeSpec.Qualifier & TypeQual_Struct ||
-       TypeSpec.Qualifier & TypeQual_Class   )
+  // We know anything with a name is either a variable or function
+  if (c_token *NameT = OptionalToken(Parser, CTokenType_Identifier))
   {
-    if ( PeekToken(Parser).Type == CTokenType_OpenBrace    ||
-         PeekToken(Parser).Type == CTokenType_Colon         )
+    if (PeekToken(Parser).Type == CTokenType_LT)
     {
+      EatBetween(Parser, CTokenType_LT, CTokenType_GT);
+    }
+
+    if (PeekToken(Parser).Type == CTokenType_OpenParen)
+    {
+      Result.Type = type_declaration_function_decl;
+      function_type Type = IsConstructor ? function_type_constructor : function_type_normal;
+
+      // TODO(Jesse): Fix this function such that it records indirection info from return value.
+      // Result.function_decl = FinalizeFunctionDecl(Ctx, &TypeSpec, &Indirection, NameT, Type);
+      Result.function_decl = FinalizeFunctionDecl(Ctx, &TypeSpec, NameT, Type);
+    }
+    else
+    {
+      FinalizeVariableDecl(Ctx, &TypeSpec, &Indirection, NameT); // Globally-scoped variable : `struct foo = { .bar = 1 }`
+    }
+
+  }
+  else if (OptionalToken(Parser, CTokenType_OperatorKeyword))
+  {
+    Result.Type = type_declaration_function_decl;
+    Result.function_decl = FinalizeOperatorFunction(Ctx, &TypeSpec);
+  }
+  else if ( TypeSpec.Qualifier & TypeQual_Struct ||
+            TypeSpec.Qualifier & TypeQual_Class   )
+  {
+    if ( PeekToken(Parser).Type == CTokenType_OpenBrace ||
+         PeekToken(Parser).Type == CTokenType_Colon      )
+    {
+
+      // TODO(Jesse): Is this garbage now?
       if (OptionalToken(Parser, CTokenType_Colon))
       {
         EatUntilExcluding(Parser, CTokenType_OpenBrace);
       }
 
-      if ( PeekToken(Parser).Type == CTokenType_OpenBrace )
+      if ( PeekToken(Parser).Type == CTokenType_OpenBrace ) // struct foo { ... };
       {
         Result.Type = type_declaration_struct_decl;
         Result.struct_decl.Body = ParseStructBody(Ctx, TypeSpec.DatatypeToken);
       }
+      else
+      {
+        // struct foo;
+      }
     }
     else
     {
-      if (PeekToken(Parser).Type == CTokenType_OpenParen)
-      {
-        // Function
-      }
-      else
-      {
-        ParseVariableDecl(Ctx, &TypeSpec, &Indirection); // Globally-scoped variable : `struct foo = { .bar = 1 }`
-      }
-
+      // template<typename foo> struct bar;
+      RequireToken(Parser, CTokenType_Semicolon);
+      /* InvalidCodePath(); */
+      // FinalizeVariableDecl(Ctx, &TypeSpec, &Indirection); // Globally-scoped variable : `struct foo = { .bar = 1 }`
     }
   }
   else if (TypeSpec.Qualifier & TypeQual_Union) // union { ... }
@@ -9545,6 +9555,7 @@ ParseTopLevelDatatype(parse_context *Ctx)
   }
   else if (IsConstructor)  // my_thing::my_thing(...) {...}
   {
+    // TODO(Jesse): Maybe this should be handled above ?
     Result.Type = type_declaration_function_decl;
 
     c_token *ConstructorNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
@@ -9560,9 +9571,9 @@ ParseTopLevelDatatype(parse_context *Ctx)
 
     Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
   }
-  else // Regular variable or function
+  else // function or function pointer decl
   {
-    Result = ParseFunctionOrVariableDecl(Ctx, &TypeSpec, &Indirection);
+    RequireToken(Parser, CTokenType_Semicolon);
   }
 
   return Result;
