@@ -8020,6 +8020,28 @@ ParsingConstructor(parser *Parser, type_spec *TypeSpec)
   return Result;
 }
 
+link_internal function_decl
+FinalizeVirtualFunctionDecl(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, type_indirection_info *Indirection)
+{
+  function_decl Result = {};
+
+  c_token *FuncNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
+
+  // TODO(Jesse, correctness): I think this might actually belong in the else block below.
+  Result = FinalizeFunctionDecl(Ctx, TypeSpec, FuncNameT, function_type_normal);
+
+  if (OptionalToken(Parser, CTokenType_Equals))
+  {
+    RequireToken(Parser, CToken(0u)); // TODO(Jesse): is this legit, or can we see other values here?
+  }
+  else
+  {
+    OptionalToken(Parser, CT_Keyword_Override);
+  }
+
+  return Result;
+}
+
 bonsai_function struct_member
 ParseStructMember(parse_context *Ctx, c_token *StructNameT)
 {
@@ -8150,18 +8172,8 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
         }
         else if (TypeSpec.Qualifier & TypeQual_Virtual)
         {
-          c_token *FuncNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
-
           Result.Type = type_function_decl;
-          Result.function_decl = FinalizeFunctionDecl(Ctx, &TypeSpec, FuncNameT, function_type_normal);
-
-          if (OptionalToken(Parser, CTokenType_Equals))
-          {
-            RequireToken(Parser, CToken(0u));
-          }
-          else if (OptionalToken(Parser, CT_Keyword_Override))
-          {
-          }
+          Result.function_decl = FinalizeVirtualFunctionDecl(Ctx, Parser, &TypeSpec, &Indirection);
         }
         else // operator, regular function, or variable decl
         {

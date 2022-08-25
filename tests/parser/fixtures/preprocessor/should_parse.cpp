@@ -1,17 +1,23 @@
+struct foo
+{
+  struct {
+  } bar;
+};
+
+
 
 struct foo
-
-fooInst = {
-  .bar = {
-    .baz = 1,
+  fooInst = {
+    .bar = {
+      .baz = 1,
+    },
   },
-},
-__attribute__((whatever))
-fooInst2 = {
-  .bar = {
-    .baz = 2,
-  },
-}
+  __attribute__((whatever))
+  fooInst2 = {
+    .bar = {
+      .baz = 2,
+    },
+  }
 
 struct sequence *foofunc(void);
 enum   sequence *foofunc(void);
