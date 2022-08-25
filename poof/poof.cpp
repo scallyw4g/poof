@@ -7141,7 +7141,7 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
     case function_type_operator:
     case function_type_normal:
     {
-      // TODO(Jesse): Is this valid for constructors?
+      // TODO(Jesse, correctness): Is this valid for constructors?
       if ( PeekToken(Parser).Type == CTokenType_Void &&
            PeekToken(Parser, 1).Type == CTokenType_CloseParen )
       {
@@ -7180,7 +7180,7 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
 
     case function_type_destructor:
     {
-      InternalCompilerError( Parser, CSz("ParseFunctionParameterList called on function_type_destructor, which has no arguments!"), FuncNameT );
+      InternalCompilerError( Parser, CSz("ParseFunctionParameterList called on function_type_destructor!"), FuncNameT );
     } break;
 
   }
@@ -7213,12 +7213,11 @@ MaybeParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest)
   }
 }
 
-// TODO(Jesse): This doesn't record indirection information on the return value.
+// TODO(Jesse, correctness): This doesn't record indirection information for the return value.
 link_internal function_decl
 FinalizeFunctionDecl(parse_context *Ctx, type_spec *TypeSpec, c_token *FuncNameT, function_type Type)
 {
   function_decl Result = {};
-
   Result = ParseFunctionParameterList(Ctx, TypeSpec, FuncNameT, Type);
   Result.Body = MaybeParseFunctionBody(Ctx->CurrentParser, Ctx->Memory);
 
@@ -7915,7 +7914,6 @@ ParseStructMemberOperatorFn(parse_context *Ctx, struct_member *Result, c_token *
 bonsai_function void
 ParseStructMemberConstructorFn(parse_context *Ctx, type_spec *TypeSpec, struct_member *Result, c_token *ConstructorNameT)
 {
-
   parser *Parser = Ctx->CurrentParser;
 
   c_token *StructNameT = TypeSpec->QualifierNameT;
@@ -8140,13 +8138,15 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
 
         if (IsConstructor)
         {
-          c_token *ConstructorNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
-          ParseStructMemberConstructorFn(Ctx, &TypeSpec, &Result, ConstructorNameT);
+          c_token *FuncNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
+          ParseStructMemberConstructorFn(Ctx, &TypeSpec, &Result, FuncNameT);
         }
         else if (TypeSpec.Qualifier & TypeQual_Virtual)
         {
+          c_token *FuncNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
+
           Result.Type = type_function_decl;
-          Result.function_decl = ParseFunctionOrVariableDecl(Ctx, &TypeSpec, &NullIndirection).function_decl;
+          Result.function_decl = FinalizeFunctionDecl(Ctx, &TypeSpec, FuncNameT, function_type_normal);
 
           if (OptionalToken(Parser, CTokenType_Equals))
           {
