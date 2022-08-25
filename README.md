@@ -185,8 +185,10 @@ before releasing a 0.1.0-alpha version of `poof`.
   - [✓] C++ https://github.com/HandmadeHero
   - [o] C++ https://github.com/oil/oil
   - [✓] C https://github.com/ndilieto/uacme
-  - [o] C https://github.com/redis/redis
-  - [\_] C https://github.com/sqlite/sqlite
+  - [✓] C https://github.com/redis/redis
+  - [✓] C https://github.com/sqlite/sqlite
+
+[\_] collate the above projects into an extended integration test suite to ensure we don't break the parser.
 
 ### UX
 [✓] Fix a laundry list of issues I have logged that result in unnecessary friction
