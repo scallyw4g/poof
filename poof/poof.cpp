@@ -8128,6 +8128,12 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
               Result.struct_decl = Decl.struct_decl;
             } break;
 
+            case type_declaration_union_decl:
+            {
+              Result.Type = type_struct_decl;
+              Result.struct_decl = Decl.struct_decl;
+            } break;
+
             case type_declaration_variable_decl:
             {
               Result.Type = type_variable_decl;
@@ -8147,7 +8153,7 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
 
             case type_declaration_noop:
             {
-              InvalidCodePath();
+              InternalCompilerError(Parser, CSz("Unhandled case during ParseStructMember near here"), T);
             } break;
           }
 
@@ -9573,9 +9579,9 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
   }
   else if (TypeSpec->Qualifier & TypeQual_Union) // union { ... }
   {
-    c_token *UnionNameT = TypeSpec->DatatypeToken;
-    struct_def S = ParseStructBody(Ctx, UnionNameT);
-    Push(&Ctx->Datatypes.Structs, S, Ctx->Memory);
+
+    Result.Type = type_declaration_union_decl;
+    Result.struct_decl.Body = ParseStructBody(Ctx, TypeSpec->DatatypeToken); // ParseStructBody(Ctx, TypeSpec->DatatypeToken);
   }
   else if (TypeSpec->Qualifier & TypeQual_Enum) // enum { ... }
   {
@@ -9714,6 +9720,25 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
             Push(&Ctx->Datatypes.Functions, Decl.function_decl, Ctx->Memory); // Free function
           } break;
 
+          case type_declaration_union_decl:
+          {
+            union_decl U = Decl.union_decl;
+            struct_def Union = U.Body;
+
+            Info("Pushing union decl (%S)", Union.Type ? Union.Type->Value : CSz("anonymous"));
+            Push(&Ctx->Datatypes.Structs, Union, Ctx->Memory);
+
+            if (OptionalToken(Parser, CTokenType_Semicolon))
+            {
+            }
+            else
+            {
+              comma_separated_decl Var = ParseCommaSeperatedDecl(Ctx);
+              MaybeEatAdditionalCommaSeperatedNames(Ctx);
+              RequireToken(Parser, CTokenType_Semicolon);
+            }
+          } break;
+
           case type_declaration_struct_decl:
           {
             struct_decl S = Decl.struct_decl;
@@ -9731,7 +9756,6 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
               MaybeEatAdditionalCommaSeperatedNames(Ctx);
               RequireToken(Parser, CTokenType_Semicolon);
             }
-
           } break;
 
           case type_declaration_variable_decl:

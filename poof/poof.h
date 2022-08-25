@@ -685,6 +685,7 @@ enum declaration_type
   type_declaration_function_decl,
   type_declaration_variable_decl,
   type_declaration_struct_decl,
+  type_declaration_union_decl,
   // type_declaration_enum_decl,
 };
 
@@ -697,6 +698,7 @@ struct declaration
     function_decl function_decl;
     variable_decl variable_decl;
     struct_decl struct_decl;
+    union_decl union_decl;
     // enum_decl enum_decl;
   };
 };
