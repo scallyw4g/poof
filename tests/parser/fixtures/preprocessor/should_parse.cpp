@@ -119,6 +119,8 @@ struct foo
   constexpr foo(){}
   foo() {}
   foo * foo_ptr;
+
+  /* struct foo * GetFoo(); */
 };
 
 
