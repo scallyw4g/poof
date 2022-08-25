@@ -1,7 +1,13 @@
 #! /bin/bash
 
-# git checkout $META_OUT
+# set -o nounset
+# set -o pipefail
+# set -o errexit
 
+# NOTE(Jesse): The following are switches for twiddling during development.
+# Calling functions by name on the command line shouldn't be affected by these.
+
+# git checkout $META_OUT
 
 # TEST_LOG_LEVEL="--log-level LogLevel_Error"
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
@@ -12,13 +18,17 @@ POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
 BUILD_EVERYTHING=0
 
+RunPreemptivePoof=1
+
 RunPoof=1
 BuildPoof=1
-# POOF_DEBUGGER="gdb --args"
+POOF_DEBUGGER="gdb --args"
 
 # RunParserTests=1
 # BuildParserTests=1
 # TEST_DEBUGGER="gdb --args" 
+
+# BuildAndRunAllExamples=1
 
 # RunIntegrationTests=1
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
@@ -66,14 +76,17 @@ function RunPoof {
   #   git checkout poof/generated/generate_cursor_c_token.h
   # fi
 
-  $POOF_DEBUGGER bin/poof      \
-    $POOF_LOG_LEVEL            \
-    poof/poof.cpp              \
-    $COLORFLAG                 \
-    -D BONSAI_PREPROCESSOR     \
-    -D BONSAI_LINUX            \
-    -I "."                     \
-    -I "include"               \
+  : "${POOF_EXECUTABLE:=./bin/poof}"
+
+  $POOF_DEBUGGER $POOF_EXECUTABLE \
+                                  \
+    $POOF_LOG_LEVEL               \
+    poof/poof.cpp                 \
+    $COLORFLAG                    \
+    -D BONSAI_PREPROCESSOR        \
+    -D BONSAI_LINUX               \
+    -I "."                        \
+    -I "include"                  \
     -o $META_OUT
 
   if [ $? -eq 0 ]; then
@@ -225,6 +238,14 @@ function BuildAndRunAll
   RunAllTests
 }
 
+function BuildAndRunAllExamples
+{
+  pushd examples
+  ./make_all_examples.sh
+  # ./run_all_examples.sh
+  popd
+}
+
 
 if [ ! -d "$BIN" ]; then
   mkdir "$BIN"
@@ -256,6 +277,14 @@ if [ $# -eq 1 ]; then
 
 else
 
+  if [[ $RunPreemptivePoof == 1 || $BUILD_EVERYTHING == 1 ]]; then
+    # TODO(Jesse): Cache and reset these?
+    POOF_EXECUTABLE=poof
+    POOF_DEBUGGER=
+    POOF_LOG_LEVEL="--log-level LogLevel_Error"
+    RunPoof
+  fi
+
   if [[ $BuildPoof == 1 || $BUILD_EVERYTHING == 1 ]]; then
     BuildPoof
   fi
@@ -267,6 +296,11 @@ else
   if [[ $BuildParserTests == 1 || $BUILD_EVERYTHING == 1 ]]; then
     BuildParserTests
   fi
+
+  if [[ $BuildAndRunAllExamples == 1 || $BUILD_EVERYTHING == 1 ]]; then
+    BuildAndRunAllExamples
+  fi
+
 
 
   if [[ $RunParserTests == 1 || $BUILD_EVERYTHING == 1 ]]; then

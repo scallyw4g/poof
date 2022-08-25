@@ -6,12 +6,15 @@ set -o errexit
 
 [ -d generated ] && rm -Rf generated
 
-  # --log-level LogLevel_Error \
+# --log-level LogLevel_Error \
 
-# gdb --args ../../bin/poof    \
-../../bin/poof               \
-  -I "."                     \
-  --output-path ./generated  \
+DEBUGGER="gdb --args"
+DEBUGGER=""
+
+$DEBUGGER                   \
+  ../../bin/poof            \
+  -I "."                    \
+  --output-path ./generated \
   main.c
 
 clang main.c      \

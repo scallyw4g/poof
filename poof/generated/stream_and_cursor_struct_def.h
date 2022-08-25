@@ -1,15 +1,15 @@
-        struct struct_def_cursor
+        struct compound_decl_cursor
     {
-      struct_def* Start;
-      struct_def* At;
-      struct_def* End;
+      compound_decl* Start;
+      compound_decl* At;
+      compound_decl* End;
     };
 
-    bonsai_function struct_def_cursor
-    StructDefCursor(umm ElementCount, memory_arena* Memory)
+    bonsai_function compound_decl_cursor
+    CompoundDeclCursor(umm ElementCount, memory_arena* Memory)
     {
-      struct_def* Start = (struct_def*)PushStruct(Memory, sizeof( struct_def ), 1, 0);
-      struct_def_cursor Result = {
+      compound_decl* Start = (compound_decl*)PushStruct(Memory, sizeof( compound_decl ), 1, 0);
+      compound_decl_cursor Result = {
         .Start = Start,
         .End = Start+ElementCount,
         .At = Start,
@@ -17,29 +17,29 @@
       return Result;
     }
 
-            struct struct_def_stream_chunk
+            struct compound_decl_stream_chunk
     {
-      struct_def Element;
-      struct_def_stream_chunk* Next;
+      compound_decl Element;
+      compound_decl_stream_chunk* Next;
     };
 
-        struct struct_def_stream
+        struct compound_decl_stream
     {
-      struct_def_stream_chunk* FirstChunk;
-      struct_def_stream_chunk* LastChunk;
+      compound_decl_stream_chunk* FirstChunk;
+      compound_decl_stream_chunk* LastChunk;
     };
 
 
-        struct struct_def_iterator
+        struct compound_decl_iterator
     {
-      struct_def_stream* Stream;
-      struct_def_stream_chunk* At;
+      compound_decl_stream* Stream;
+      compound_decl_stream_chunk* At;
     };
 
-    bonsai_function struct_def_iterator
-    Iterator(struct_def_stream* Stream)
+    bonsai_function compound_decl_iterator
+    Iterator(compound_decl_stream* Stream)
     {
-      struct_def_iterator Iterator = {
+      compound_decl_iterator Iterator = {
         .Stream = Stream,
         .At = Stream->FirstChunk
       };
@@ -47,30 +47,30 @@
     }
 
     bonsai_function b32
-    IsValid(struct_def_iterator* Iter)
+    IsValid(compound_decl_iterator* Iter)
     {
       b32 Result = Iter->At != 0;
       return Result;
     }
 
     bonsai_function void
-    Advance(struct_def_iterator* Iter)
+    Advance(compound_decl_iterator* Iter)
     {
       Iter->At = Iter->At->Next;
     }
 
     bonsai_function b32
-    IsLastElement(struct_def_iterator* Iter)
+    IsLastElement(compound_decl_iterator* Iter)
     {
       b32 Result = Iter->At->Next == 0;
       return Result;
     }
 
 
-        bonsai_function struct_def *
-    Push(struct_def_stream* Stream, struct_def Element, memory_arena* Memory)
+        bonsai_function compound_decl *
+    Push(compound_decl_stream* Stream, compound_decl Element, memory_arena* Memory)
     {
-      struct_def_stream_chunk* NextChunk = (struct_def_stream_chunk*)PushStruct(Memory, sizeof( struct_def_stream_chunk ), 1, 0);
+      compound_decl_stream_chunk* NextChunk = (compound_decl_stream_chunk*)PushStruct(Memory, sizeof( compound_decl_stream_chunk ), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)
@@ -88,12 +88,12 @@
       Assert(NextChunk->Next == 0);
       Assert(Stream->LastChunk->Next == 0);
 
-      struct_def *Result = &NextChunk->Element;
+      compound_decl *Result = &NextChunk->Element;
       return Result;
     }
 
     bonsai_function void
-    ConcatStreams( struct_def_stream *S1, struct_def_stream *S2)
+    ConcatStreams( compound_decl_stream *S1, compound_decl_stream *S2)
     {
       if (S1->LastChunk)
       {

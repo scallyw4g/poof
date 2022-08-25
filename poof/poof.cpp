@@ -129,7 +129,7 @@ bonsai_function ast_node_expression* ParseExpression(parse_context *Ctx);
 bonsai_function void                 ParseExpression(parse_context *Ctx, ast_node_expression *Result);
 bonsai_function void                 ParseExpression(parse_context *Ctx, ast_node** Result);
 
-bonsai_function struct_def ParseStructBody(parse_context *, c_token *);
+bonsai_function compound_decl ParseStructBody(parse_context *, c_token *);
 
 bonsai_function parser MaybeParseFunctionBody(parser *Parser, memory_arena *Memory);
 bonsai_function void MaybeParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest);
@@ -5735,17 +5735,17 @@ GetEnumByType(enum_def_stream* ProgramEnums, counted_string EnumType)
   return Result;
 }
 
-bonsai_function struct_def*
-GetStructByType(struct_def_stream* ProgramStructs, counted_string StructType)
+bonsai_function compound_decl*
+GetStructByType(compound_decl_stream* ProgramStructs, counted_string StructType)
 {
   TIMED_FUNCTION();
 
-  struct_def* Result = 0;
-  for (struct_def_iterator Iter = Iterator(ProgramStructs);
+  compound_decl* Result = 0;
+  for (compound_decl_iterator Iter = Iterator(ProgramStructs);
       IsValid(&Iter);
       Advance(&Iter))
   {
-    struct_def* Struct = &Iter.At->Element;
+    compound_decl* Struct = &Iter.At->Element;
     if (Struct->Type)
     {
       if (StringsMatch(Struct->Type->Value, StructType))
@@ -5765,7 +5765,7 @@ GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
   TIMED_FUNCTION();
 
   // TODO(Jesse id: 295, tags: speed): This could be optimized significantly by shuffling the logic around, not to mention using hashtables.
-  struct_def *S = GetStructByType(&Datatypes->Structs, Name);
+  compound_decl *S = GetStructByType(&Datatypes->Structs, Name);
   enum_def   *E = GetEnumByType(&Datatypes->Enums, Name);
   type_def   *T = GetTypedefByAlias(&Datatypes->Typedefs, Name);
 
@@ -6354,10 +6354,10 @@ EatBetween(parser* Parser, c_token_type Open, c_token_type Close)
   }
 }
 
-bonsai_function struct_def
+bonsai_function compound_decl
 StructDef(c_token *StructNameT) // , counted_string Sourcefile)
 {
-  struct_def Result = {
+  compound_decl Result = {
     .Type = StructNameT,
     /* .DefinedInFile = Sourcefile */
   };
@@ -8122,16 +8122,10 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
           declaration Decl = FinalizeDeclaration(Ctx, Parser, &TypeSpec, &Indirection);
           switch (Decl.Type)
           {
-            case type_declaration_struct_decl:
+            case type_declaration_compound_decl:
             {
-              Result.Type = type_struct_decl;
-              Result.struct_decl = Decl.struct_decl;
-            } break;
-
-            case type_declaration_union_decl:
-            {
-              Result.Type = type_struct_decl;
-              Result.struct_decl = Decl.struct_decl;
+              Result.Type = type_compound_decl;
+              Result.compound_decl = Decl.compound_decl;
             } break;
 
             case type_declaration_variable_decl:
@@ -8200,7 +8194,7 @@ ConcatTokensUntilNewline(parser* Parser, memory_arena* Memory)
 }
 
 bonsai_function struct_member_stream
-MembersOfType(struct_def* Struct, counted_string MemberType, memory_arena *Memory)
+MembersOfType(compound_decl* Struct, counted_string MemberType, memory_arena *Memory)
 {
   struct_member_stream Result = {};
   if (MemberType.Start)
@@ -8320,12 +8314,12 @@ MaybeEatStaticAssert(parser *Parser)
 // This would clean up the calling code quite a bit and get rid of a
 // bunch of redundant RequireTokens on Semicolons.
 
-bonsai_function struct_def
+bonsai_function compound_decl
 ParseStructBody(parse_context *Ctx, c_token *StructNameT)
 {
   TIMED_FUNCTION();
   parser *Parser = Ctx->CurrentParser;
-  struct_def Result = StructDef(StructNameT); //, Parser->Filename);
+  compound_decl Result = StructDef(StructNameT); //, Parser->Filename);
 
   RequireToken(Parser, CTokenType_OpenBrace);
 
@@ -8346,21 +8340,20 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
 
     switch (Member.Type)
     {
+      case type_compound_decl:
       case type_variable_decl:
       case type_function_decl:
       {
         Push(&Result.Members, Member, Ctx->Memory);
       } break;
 
-      case type_struct_decl:
-      case type_union_decl:
-      {
-        // TODO(Jesse): Track these either on the struct def or in the global
-        // hashtable?  Currently there isn't a reason to do this, but when we
-        // start doing static analysis this'll come up PDQ.
-        //
-        // Actually there is a reason to do this already : @snap_pointer_to_struct_member_struct_decl
-      } break;
+      /* { */
+      /*   // TODO(Jesse): Track these either on the struct def or in the global */
+      /*   // hashtable?  Currently there isn't a reason to do this, but when we */
+      /*   // start doing static analysis this'll come up PDQ. */
+      /*   // */
+      /*   // Actually there is a reason to do this already : @snap_pointer_to_struct_member_struct_decl */
+      /* } break; */
 
       default: { Continue = False; } break;
     }
@@ -8369,18 +8362,13 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
 
     switch (Member.Type)
     {
-      case type_union_decl:
-      {
-        NotImplemented;
-      } break;
-
       case type_function_decl:
       {
         OptionalToken(Parser, CTokenType_Semicolon);
       } break;
 
       case type_variable_decl:
-      case type_struct_decl:
+      case type_compound_decl:
       {
         if (OptionalToken(Parser, CTokenType_Semicolon)) //  int foo;
         {
@@ -8413,14 +8401,14 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
                 Push(&Result.Members, Member, Ctx->Memory);
               } break;
 
-              case type_struct_decl:
+              case type_compound_decl:
               {
-                auto StructDecl = SafeAccessObjPtr(struct_decl, Member);
+                auto StructDecl = SafeAccessObjPtr(compound_decl, Member);
 
                 struct_member TmpMember = {};
                 TmpMember.Type = type_variable_decl;
 
-                // TODO(Jesse): The struct_decl here is all stored on the stack
+                // TODO(Jesse): The compound_decl here is all stored on the stack
                 // .. we've got to store it in a hashtable somewhere such that
                 // we can snap pointers to it here.
                 //
@@ -8438,11 +8426,6 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
               case type_function_decl:
               {
                 InternalCompilerError(Parser, CSz(""), PeekTokenPointer(Parser));
-              } break;
-
-              case type_union_decl:
-              {
-                NotImplemented;
               } break;
 
               case type_struct_member_noop:
@@ -8597,58 +8580,6 @@ OptionalPostfixOperator(parser *Parser)
   }
 }
 
-bonsai_function declaration
-ParseDatatypeDef(parse_context *Ctx, type_spec *TypeSpec)
-{
-  declaration Result = {};
-
-  parser *Parser = Ctx->CurrentParser;
-
-  if (TypeSpec->Qualifier & TypeQual_Union)
-  {
-    // TODO(Jesse): Should we store unions and structs seperately? Probably? Maybe?
-    // At least unions should have a typedef-d container so we don't have to call
-    // them struct_def ..
-    NotImplemented;
-
-#if 0
-    c_token *UnionNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
-    struct_def S = ParseStructBody(Ctx, UnionNameT);
-    Push(&Ctx->Datatypes.Structs, S, Ctx->Memory);
-#endif
-  }
-
-  if (TypeSpec->Qualifier & TypeQual_Enum)
-  {
-    InvalidCodePath();
-  }
-
-  if ( TypeSpec->Qualifier & TypeQual_Struct ||
-       TypeSpec->Qualifier & TypeQual_Class   )
-  {
-    InvalidCodePath();
-#if 0
-    if ( PeekToken(Parser).Type == CTokenType_Colon )
-    {
-      EatUntilExcluding(Parser, CTokenType_OpenBrace);
-    }
-
-    if ( PeekToken(Parser).Type == CTokenType_OpenBrace )
-    {
-      /* RuntimeBreak(); */
-      Result.Type = type_declaration_struct_decl;
-      Result.struct_decl.Body = ParseStructBody(Ctx, TypeSpec->DatatypeToken);
-    }
-#endif
-  }
-
-  /* InvalidDefaultWhileParsing(Parser, CSz("Tried parsing a datatypes that wasn't a struct, enum or union!")); */
-
-  RequireToken(Parser, CTokenType_Semicolon);
-
-  return Result;
-}
-
 bonsai_function void
 ParseAndPushTypedef(parse_context *Ctx)
 {
@@ -8713,7 +8644,7 @@ ParseTypedef(parse_context *Ctx)
     RequireToken(Parser, Peek);
     if (PeekToken(Parser).Type == CTokenType_OpenBrace)
     {
-      struct_def S = ParseStructBody(Ctx, 0);
+      compound_decl S = ParseStructBody(Ctx, 0);
 
       comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
       S.Type = Decl.NameT;
@@ -8728,7 +8659,7 @@ ParseTypedef(parse_context *Ctx)
               PeekToken(Parser, 1).Type == CTokenType_OpenBrace )
     {
       comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
-      struct_def S = ParseStructBody(Ctx, Decl.NameT);
+      compound_decl S = ParseStructBody(Ctx, Decl.NameT);
 
       /* comma_separated_decl ActualName = */ ParseCommaSeperatedDecl(Ctx);
       MaybeEatAdditionalCommaSeperatedNames(Ctx);
@@ -9561,8 +9492,8 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
 
       if ( PeekToken(Parser).Type == CTokenType_OpenBrace ) // struct foo { ... };
       {
-        Result.Type = type_declaration_struct_decl;
-        Result.struct_decl.Body = ParseStructBody(Ctx, TypeSpec->DatatypeToken);
+        Result.Type = type_declaration_compound_decl;
+        Result.compound_decl = ParseStructBody(Ctx, TypeSpec->DatatypeToken);
       }
       else
       {
@@ -9579,9 +9510,9 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
   }
   else if (TypeSpec->Qualifier & TypeQual_Union) // union { ... }
   {
-
-    Result.Type = type_declaration_union_decl;
-    Result.struct_decl.Body = ParseStructBody(Ctx, TypeSpec->DatatypeToken); // ParseStructBody(Ctx, TypeSpec->DatatypeToken);
+    Result.Type = type_declaration_compound_decl;
+    Result.compound_decl = ParseStructBody(Ctx, TypeSpec->DatatypeToken); // ParseStructBody(Ctx, TypeSpec->DatatypeToken);
+    Result.compound_decl.IsUnion = True;
   }
   else if (TypeSpec->Qualifier & TypeQual_Enum) // enum { ... }
   {
@@ -9716,44 +9647,20 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         {
           case type_declaration_function_decl:
           {
-            /* Info("Pushing function decl (%S)", Struct.Type ? Struct.Type->Value : CSz("anonymous")); */
+            /* Info("Pushing function decl (%S)", Function.Type ? Function.Type->Value : CSz("anonymous")); */
             Push(&Ctx->Datatypes.Functions, Decl.function_decl, Ctx->Memory); // Free function
           } break;
 
-          // NOTE(Jesse): This is an almost exact duplicate of the
-          // type_declaration_struct_decl path.. there's got to be a better way
-          // of doing this.  Might finally need to implement the feature in
-          // poof that generates the switches for us..
-          //
-          // @duplicate_case_for_pushing_structs_and_unions
-          //
-          case type_declaration_union_decl:
+
+          case type_declaration_compound_decl:
           {
-            union_decl U = Decl.union_decl;
-            struct_def Union = U.Body;
+            compound_decl StructOrUnion = Decl.compound_decl;
 
-            Info("Pushing union decl (%S)", Union.Type ? Union.Type->Value : CSz("anonymous"));
-            Push(&Ctx->Datatypes.Structs, Union, Ctx->Memory);
+            Info( "Pushing %S decl (%S)",
+                  StructOrUnion.IsUnion ? CSz("union") : CSz("struct"),
+                  StructOrUnion.Type ? StructOrUnion.Type->Value : CSz("anonymous") );
 
-            if (OptionalToken(Parser, CTokenType_Semicolon))
-            {
-            }
-            else
-            {
-              comma_separated_decl Var = ParseCommaSeperatedDecl(Ctx);
-              MaybeEatAdditionalCommaSeperatedNames(Ctx);
-              RequireToken(Parser, CTokenType_Semicolon);
-            }
-          } break;
-
-          // @duplicate_case_for_pushing_structs_and_unions
-          case type_declaration_struct_decl:
-          {
-            struct_decl S = Decl.struct_decl;
-            struct_def Struct = S.Body;
-
-            Info("Pushing struct decl (%S)", Struct.Type ? Struct.Type->Value : CSz("anonymous"));
-            Push(&Ctx->Datatypes.Structs, Struct, Ctx->Memory);
+            Push(&Ctx->Datatypes.Structs, StructOrUnion, Ctx->Memory);
 
             if (OptionalToken(Parser, CTokenType_Semicolon))
             {
@@ -10185,13 +10092,12 @@ GetTypeNameForStructMember(struct_member* Decl, memory_arena *Memory)
       }
     } break;
 
-    case type_struct_decl:
-    case type_union_decl:
+    case type_compound_decl:
     {
-      // TODO(Jesse): Do we call GetStructName or something here?
-      NotImplemented;
-      Result = CSz("(anonymous)");
-    } break;
+      Result = Decl->compound_decl.IsUnion ?
+               CSz("union") :
+               CSz("struct");
+    } break;;
 
     InvalidDefaultCase;
   }
@@ -10217,12 +10123,12 @@ GetNameForStructMember(struct_member* Decl)
       Result = Decl->variable_decl.Name;
     } break;
 
-    case type_struct_decl:
-    case type_union_decl:
+    case type_compound_decl:
     {
-      // TODO(Jesse): Do we call GetStructName or something here?
-      NotImplemented;
-      Result = CSz("(anonymous)");
+      c_token *NameT = Decl->compound_decl.Type;
+      if (NameT) { Result = NameT->Value; }
+      else { Result = CSz("(anonymous)"); }
+
     } break;
 
     InvalidDefaultCase;
@@ -10401,7 +10307,7 @@ GetValueForDatatype(datatype Data, memory_arena *Memory)
       InvalidCodePath();
     } break;
 
-    case type_struct_def:
+    case type_d_compound_decl:
     case type_enum_def:
     case type_type_def:
     case type_primitive_def:
@@ -10427,11 +10333,14 @@ GetValueForDatatype(datatype Data, memory_arena *Memory)
           InvalidCodePath();
         } break;
 
-        case type_struct_decl:
-        case type_union_decl:
+        case type_compound_decl:
+        {
+          Result = CSz("(value unsupported for compound declaration types)");
+        } break;
+
         case type_function_decl:
         {
-          // TODO(Jesse): Do we call GetStructName or something here?
+          // Very questionable what we do for each of these cases..
           NotImplemented;
           Result = CSz("(anonymous)");
         } break;
@@ -10480,9 +10389,9 @@ GetNameForDatatype(datatype *Data)
       Result = Data->enum_def->Name;
     } break;
 
-    case type_struct_def:
+    case type_d_compound_decl:
     {
-      Result = Data->struct_def->Type->Value;
+      Result = Data->d_compound_decl->Type->Value;
     } break;
 
     InvalidDefaultCase;
@@ -10516,9 +10425,10 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
       // Result = Data->primitive_def->Type.SourceText;
     } break;
 
-    case type_struct_def:
+    case type_d_compound_decl:
     {
-      Result = Data->struct_def->Type->Value;
+      Result = Data->d_compound_decl->Type->Value;
+      Assert(Result.Count);
     } break;
 
     case type_enum_def:
@@ -10549,14 +10459,11 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
           Result = Data->struct_member->function_decl.NameT->Value;
         } break;
 
-        case type_struct_decl:
+        case type_compound_decl:
         {
-          Result = CSz("struct");
-        } break;
-
-        case type_union_decl:
-        {
-          Result = CSz("union");
+          Result = Member->compound_decl.IsUnion ?
+            CSz("union") :
+            CSz("struct");
         } break;
       }
 
@@ -10572,9 +10479,9 @@ GetMembersFor(datatype *Data)
   struct_member_stream *Result = {};
   switch (Data->Type)
   {
-    case type_struct_def:
+    case type_d_compound_decl:
     {
-      auto S = SafeAccessPtr(struct_def, Data);
+      auto S = SafeAccessPtr(d_compound_decl, Data);
       Result = &S->Members;
     } break;
 
@@ -10584,16 +10491,10 @@ GetMembersFor(datatype *Data)
 
       switch(S->Type)
       {
-        case type_union_decl:
+        case type_compound_decl:
         {
-          auto Anon = SafeAccessPtr(union_decl, S);
-          Result = &Anon.Body.Members;
-        } break;
-
-        case type_struct_decl:
-        {
-          auto Anon = SafeAccessPtr(struct_decl, S);
-          Result = &Anon.Body.Members;
+          compound_decl *Anon = SafeAccess(compound_decl, S);
+          Result = &Anon->Members;
         } break;
 
         default: {} break;;
@@ -10601,10 +10502,6 @@ GetMembersFor(datatype *Data)
 
 
     } break;
-
-    /* case type_struct_def: */
-    /* { */
-    /* } break; */
 
     default:
     {
@@ -10677,17 +10574,16 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
                   switch(Member->Type)
                   {
-                    case type_union_decl:
+                    case type_compound_decl:
                     {
-                      auto Anon = SafeAccess(union_decl, Member);
-                      if (Anon->Body.IsUnion)
+                      auto Anon = SafeAccess(compound_decl, Member);
+                      if (Anon->IsUnion)
                       {
                         counted_string Code = Execute(FuncName, StructScope, ReplacePatterns, Ctx, Memory);
                         Append(&OutputBuilder, Code);
                       }
                     } break;
 
-                    case type_struct_decl:
                     case type_variable_decl:
                     case type_function_decl:
                     {
@@ -10701,9 +10597,9 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
                 } break;
 
-                case type_struct_def:
+                case type_d_compound_decl:
                 {
-                  struct_def *Def = SafeAccessObj(struct_def, Replace->Data);
+                  compound_decl *Def = SafeAccessObj(d_compound_decl, Replace->Data);
                   if (Def->IsUnion)
                   {
                     counted_string Code = Execute(FuncName, StructScope, ReplacePatterns, Ctx, Memory);
@@ -10723,10 +10619,13 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
             {
               RequireToken(&Scope, CTokenType_Question);
               parser StructScope = GetBodyTextForNextScope(&Scope, Memory);
-              if (Replace->Data.Type == type_struct_def)
+              if (Replace->Data.Type == type_d_compound_decl)
               {
-                counted_string Code = Execute(FuncName, StructScope, ReplacePatterns, Ctx, Memory);
-                Append(&OutputBuilder, Code);
+                if (Replace->Data.d_compound_decl->IsUnion == False)
+                {
+                  counted_string Code = Execute(FuncName, StructScope, ReplacePatterns, Ctx, Memory);
+                  Append(&OutputBuilder, Code);
+                }
               }
             } break;
 
@@ -10749,7 +10648,11 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                   {
                     case type_variable_decl:
                     {
-                      enum_def *E = GetEnumByType(&Datatypes->Enums, Replace->Data.struct_member->variable_decl.Type.DatatypeToken->Value);
+                      struct_member *SM = Replace->Data.struct_member;
+                      // NOTE(Jesse): The data access that feed into GetEnumByType requires this to be true.
+                      Assert(SM->Type == type_variable_decl);
+
+                      enum_def *E = GetEnumByType(&Datatypes->Enums, SM->variable_decl.Type.DatatypeToken->Value);
                       if (E)
                       {
                         meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
@@ -10768,8 +10671,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                     } break;
 
                     case type_struct_member_noop:
-                    case type_union_decl:
-                    case type_struct_decl:
+                    case type_compound_decl:
                     case type_function_decl:
                     {
                       NotImplemented;
@@ -10778,11 +10680,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                 } break;
 
                 case type_primitive_def:
-                case type_struct_def:
-                {
-                  NotImplemented;
-                } break;
-
+                case type_d_compound_decl:
                 case type_stl_container_def:
                 case type_type_def:
                 {
@@ -10898,8 +10796,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
                     } break;
 
-                    case type_struct_decl:
-                    case type_union_decl:
+                    case type_compound_decl:
                     {
                       meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
                       Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)), Memory);
@@ -11051,7 +10948,7 @@ ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_s
   {
     counted_string DatatypeName    = RequireToken(Parser, CTokenType_Identifier).Value;
 
-    struct_def* Struct                 = GetStructByType(&Datatypes->Structs, DatatypeName);
+    compound_decl* Struct                 = GetStructByType(&Datatypes->Structs, DatatypeName);
     enum_def* Enum                     = GetEnumByType(&Datatypes->Enums, DatatypeName);
     tagged_counted_string_stream* List = StreamContains(NameLists, DatatypeName);
 
@@ -11437,11 +11334,11 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
             string_builder OutputBuilder = {};
 
-            for (struct_def_iterator Iter = Iterator(&Datatypes->Structs);
+            for (compound_decl_iterator Iter = Iterator(&Datatypes->Structs);
                 IsValid(&Iter);
                 Advance(&Iter))
             {
-              struct_def* Struct = &Iter.At->Element;
+              compound_decl* Struct = &Iter.At->Element;
 
               if (!StreamContains(&Excludes, Struct->Type->Value))
               {

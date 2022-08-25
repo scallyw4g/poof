@@ -457,30 +457,14 @@ struct struct_member_stream
   struct_member_stream_chunk *LastChunk;
 };
 
-struct struct_def
+struct compound_decl // structs and unions
 {
   c_token *Type;
   struct_member_stream Members;
-
   b32 IsUnion;
 };
-meta(stream_and_cursor(struct_def))
-#include <poof/generated/stream_and_cursor_struct_def.h>
-
-struct union_decl
-{
-  struct_def Body;
-};
-
-struct struct_decl
-{
-  struct_def Body;
-};
-
-struct struct_member_anonymous
-{
-  struct_def Body;
-};
+meta(stream_and_cursor(compound_decl))
+#include <poof/generated/stream_and_cursor_struct_def.h> // TODO(Jesse): Change this name
 
 // Note(Jesse): These are just placeholder names such that we can do correct
 // type resolution when we see STL containers.
@@ -495,7 +479,7 @@ enum datatype_type
 {
   type_datatype_noop,
 
-  type_struct_def,
+  type_d_compound_decl, // TODO(Jesse): Get rid of struct_def so we can change this to type_compound_decl
   type_struct_member,
 
   type_enum_def,
@@ -511,7 +495,7 @@ meta(generate_string_table(datatype_type))
 #include <poof/generated/generate_string_table_datatype_type.h>
 
 struct struct_member;
-struct struct_def;
+struct compound_decl;
 struct enum_def;
 struct enum_member;
 struct type_def;
@@ -527,7 +511,7 @@ struct datatype
 
   union
   {
-    struct_def         *struct_def;
+    compound_decl      *d_compound_decl;
     struct_member      *struct_member;
 
     enum_def           *enum_def;
@@ -684,8 +668,7 @@ enum declaration_type
   type_declaration_noop,
   type_declaration_function_decl,
   type_declaration_variable_decl,
-  type_declaration_struct_decl,
-  type_declaration_union_decl,
+  type_declaration_compound_decl,
   // type_declaration_enum_decl,
 };
 
@@ -697,8 +680,7 @@ struct declaration
   {
     function_decl function_decl;
     variable_decl variable_decl;
-    struct_decl struct_decl;
-    union_decl union_decl;
+    compound_decl compound_decl;
     // enum_decl enum_decl;
   };
 };
@@ -708,8 +690,7 @@ meta(
   d_union struct_member
   {
     variable_decl
-    struct_decl
-    union_decl
+    compound_decl
     function_decl
   }
 )
@@ -789,11 +770,11 @@ Datatype(enum_member* E)
 
 
 bonsai_function datatype
-Datatype(struct_def* S)
+Datatype(compound_decl* S)
 {
   datatype Result = {
-    .Type = type_struct_def,
-    .struct_def = S,
+    .Type = type_d_compound_decl,
+    .d_compound_decl = S,
   };
   return Result;
 }
@@ -1066,7 +1047,7 @@ struct program_datatypes
   macro_def_hashtable      Macros;
   counted_string_hashtable FilesParsed;
 
-  struct_def_stream        Structs;
+  compound_decl_stream        Structs;
   enum_def_stream          Enums;
   function_decl_stream     Functions;
   type_def_stream          Typedefs;
