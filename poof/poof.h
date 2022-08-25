@@ -428,39 +428,28 @@ MakeParser(c_token_cursor *Tokens)
   return Result;
 }
 
-meta(
-  d_union struct_member_function
-  {
-    struct_member_function_normal      enum_only
-    struct_member_function_operator    enum_only
-    struct_member_function_constructor enum_only
-    struct_member_function_destructor  enum_only
-  }
-)
-#include <poof/generated/d_union_c_decl_function.h>
-
-struct struct_member_stream_chunk;
+struct declaration_stream_chunk;
 
 /* TODO(Jesse id: 191, tags: metaprogramming): This can be generated, but it
  * requires lazily evaluating functions once their dependant types have been
  * generated.  Not sure if this is a good idea or not, but we could do it.
  *
- * meta( generate_stream_struct(struct_member) )
+ * meta( generate_stream_struct(declaration) )
  *
  * Currently the invariant of being able to remove and re-generate all meta
  * output in a single run of the metaprogramming system is broken by this.
  */
 
-struct struct_member_stream
+struct declaration_stream
 {
-  struct_member_stream_chunk *FirstChunk;
-  struct_member_stream_chunk *LastChunk;
+  declaration_stream_chunk *FirstChunk;
+  declaration_stream_chunk *LastChunk;
 };
 
 struct compound_decl // structs and unions
 {
   c_token *Type;
-  struct_member_stream Members;
+  declaration_stream Members;
   b32 IsUnion;
 };
 meta(stream_and_cursor(compound_decl))
@@ -480,7 +469,7 @@ enum datatype_type
   type_datatype_noop,
 
   type_d_compound_decl, // TODO(Jesse): Get rid of struct_def so we can change this to type_compound_decl
-  type_struct_member,
+  type_declaration,
 
   type_enum_def,
   type_enum_member,
@@ -494,7 +483,7 @@ enum datatype_type
 meta(generate_string_table(datatype_type))
 #include <poof/generated/generate_string_table_datatype_type.h>
 
-struct struct_member;
+struct declaration;
 struct compound_decl;
 struct enum_def;
 struct enum_member;
@@ -512,7 +501,7 @@ struct datatype
   union
   {
     compound_decl      *d_compound_decl;
-    struct_member      *struct_member;
+    declaration        *declaration;
 
     enum_def           *enum_def;
     enum_member        *enum_member;
@@ -586,10 +575,6 @@ enum type_qualifier
 meta(string_and_value_tables(type_qualifier))
 #include <poof/generated/string_and_value_tables_type_qualifier.h>
 
-struct top_level_declaration
-{
-};
-
 struct type_spec
 {
   c_token *QualifierNameT;
@@ -662,13 +647,17 @@ meta(generate_stream(function_decl))
  * won't happen.  I'd prefer an override to keep the tag names as concise as
  * possible, but maybe once the preprocessor generates the switch statements
  * for us it won't matter if they're overly verbose.
+ *
+ *
+ * UPDATE(Jesse): Should have struct_member remvoed soon so we can clean this up!!
+ *
  */
 enum declaration_type
 {
-  type_declaration_noop,
-  type_declaration_function_decl,
-  type_declaration_variable_decl,
-  type_declaration_compound_decl,
+  type_noop,
+  type_function_decl,
+  type_variable_decl,
+  type_compound_decl,
   // type_declaration_enum_decl,
 };
 
@@ -686,21 +675,11 @@ struct declaration
 };
 
 
-meta(
-  d_union struct_member
-  {
-    variable_decl
-    compound_decl
-    function_decl
-  }
-)
-#include <poof/generated/d_union_c_decl.h>
+meta(generate_cursor(declaration))
+#include <poof/generated/generate_cursor_declaration.h>
 
-meta(generate_cursor(struct_member))
-#include <poof/generated/generate_cursor_c_decl.h>
-
-meta( generate_stream_chunk_struct(struct_member) )
-#include <poof/generated/generate_stream_chunk_struct_c_decl.h>
+meta( generate_stream_chunk_struct(declaration) )
+#include <poof/generated/generate_stream_chunk_declaration.h>
 
 struct ast_node_expression;
 struct enum_member
@@ -749,11 +728,11 @@ meta(generate_stream(primitive_def))
 
 
 bonsai_function datatype
-Datatype(struct_member* M)
+Datatype(declaration* M)
 {
   datatype Result = {
-    .Type = type_struct_member,
-    .struct_member = M,
+    .Type = type_declaration,
+    .declaration = M,
   };
   return Result;
 }
@@ -831,7 +810,7 @@ struct d_union_decl
   counted_string Name;
 
   d_union_member_stream Members;
-  struct_member_stream CommonMembers;
+  declaration_stream CommonMembers;
 
   counted_string CustomEnumType;
 };
@@ -1444,11 +1423,11 @@ PeekToken(ansi_stream* Stream, u32 Lookahead = 0)
   return Result;
 }
 
-meta(generate_stream_iterator(struct_member))
-#include <poof/generated/generate_stream_iterator_c_decl.h>
+meta(generate_stream_iterator(declaration))
+#include <poof/generated/generate_stream_iterator_datatype.h>
 
-meta(generate_stream_push(struct_member))
-#include <poof/generated/generate_stream_push_c_decl.h>
+meta(generate_stream_push(declaration))
+#include <poof/generated/generate_stream_push_datatype.h>
 
 bonsai_function b32
 Contains(parser *Parser, c_token *T)

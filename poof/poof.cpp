@@ -5872,7 +5872,7 @@ ParseDiscriminatedUnion(parser* Parser, program_datatypes* Datatypes, counted_st
     RequireToken(Parser, CTokenType_OpenBrace);
     while (!OptionalToken(Parser, CTokenType_CloseBrace))
     {
-      struct_member Decl = {
+      declaration Decl = {
         .Type = type_variable_decl,
         .variable_decl = {
           .Type.DatatypeToken = RequireTokenPointer(Parser, CTokenType_Identifier),
