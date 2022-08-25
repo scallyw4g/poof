@@ -9720,6 +9720,13 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
             Push(&Ctx->Datatypes.Functions, Decl.function_decl, Ctx->Memory); // Free function
           } break;
 
+          // NOTE(Jesse): This is an almost exact duplicate of the
+          // type_declaration_struct_decl path.. there's got to be a better way
+          // of doing this.  Might finally need to implement the feature in
+          // poof that generates the switches for us..
+          //
+          // @duplicate_case_for_pushing_structs_and_unions
+          //
           case type_declaration_union_decl:
           {
             union_decl U = Decl.union_decl;
@@ -9739,6 +9746,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
             }
           } break;
 
+          // @duplicate_case_for_pushing_structs_and_unions
           case type_declaration_struct_decl:
           {
             struct_decl S = Decl.struct_decl;
