@@ -10,7 +10,7 @@
 # git checkout $META_OUT
 
 # TEST_LOG_LEVEL="--log-level LogLevel_Error"
-# TEST_LOG_LEVEL="--log-level LogLevel_Debug"
+TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
 # POOF_LOG_LEVEL="--log-level LogLevel_Shush"
 POOF_LOG_LEVEL="--log-level LogLevel_Error"
@@ -18,10 +18,10 @@ POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
 BUILD_EVERYTHING=0
 
-RunPreemptivePoof=1
+# RunPreemptivePoof=1
 
 # RunPoof=1
-BuildPoof=1
+# BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
 
 # RunParserTests=1
@@ -30,7 +30,7 @@ BuildPoof=1
 
 # BuildAndRunAllExamples=1
 
-# RunIntegrationTests=1
+RunIntegrationTests=1
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 
 OPTIMIZATION_LEVEL="-O0"
