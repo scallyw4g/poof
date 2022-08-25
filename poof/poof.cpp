@@ -8188,7 +8188,7 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
           {
             case type_declaration_struct_decl:
             {
-              Result.Type = type_struct_dec;
+              Result.Type = type_struct_decl;
               Result.struct_decl = Decl.struct_decl;
             } break;
 
@@ -8414,16 +8414,11 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
     {
       switch (Member.Type)
       {
-        // NOTE(Jesse): This is weird, but we use the variable_decl type for
-        // struct declarations..?
-        case type_struct_decl:
         case type_variable_decl:
         {
-          // NOTE(Jesse): Because we use variable_decl for structs we can't use
-          // SafeAccess()
-          // auto Var = SafeAccessObj(variable_decl, Member);
+          auto Var = SafeAccessObjPtr(variable_decl, Member);
 
-          auto Var =  &Member.variable_decl;
+          /* auto Var =  &Member.variable_decl; */
           comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
 
           Var->Name = Decl.NameT->Value;
@@ -8432,8 +8427,9 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
           Var->Value = Decl.Value;
         } break;
 
+        case type_struct_decl:
         case type_function_decl:
-        case type_struct_member_anonymous:
+        case type_union_decl:
         {
           NotImplemented;
         } break;
@@ -10144,8 +10140,11 @@ GetTypeNameForStructMember(struct_member* Decl, memory_arena *Memory)
       }
     } break;
 
-    case type_struct_member_anonymous:
+    case type_struct_decl:
+    case type_union_decl:
     {
+      // TODO(Jesse): Do we call GetStructName or something here?
+      NotImplemented;
       Result = CSz("(anonymous)");
     } break;
 
@@ -10173,8 +10172,11 @@ GetNameForStructMember(struct_member* Decl)
       Result = Decl->variable_decl.Name;
     } break;
 
-    case type_struct_member_anonymous:
+    case type_struct_decl:
+    case type_union_decl:
     {
+      // TODO(Jesse): Do we call GetStructName or something here?
+      NotImplemented;
       Result = CSz("(anonymous)");
     } break;
 
@@ -10380,15 +10382,13 @@ GetValueForDatatype(datatype Data, memory_arena *Memory)
           InvalidCodePath();
         } break;
 
-        case type_struct_member_anonymous:
-        {
-          Result = CSz("(anonymous)");
-        } break;
-
         case type_struct_decl:
+        case type_union_decl:
         case type_function_decl:
         {
+          // TODO(Jesse): Do we call GetStructName or something here?
           NotImplemented;
+          Result = CSz("(anonymous)");
         } break;
 
         case type_variable_decl:
@@ -10506,13 +10506,12 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
 
         case type_struct_decl:
         {
-          Result = CSz("TODO(Jesse): Preserve the struct name here.");
+          Result = CSz("struct");
         } break;
 
-        case type_struct_member_anonymous:
+        case type_union_decl:
         {
-          auto Anon = SafeAccessPtr(struct_member_anonymous, Member);
-          Result = Anon.Body.IsUnion ? CSz("union") : CSz("struct");
+          Result = CSz("union");
         } break;
       }
 
@@ -10540,9 +10539,15 @@ GetMembersFor(datatype *Data)
 
       switch(S->Type)
       {
-        case type_struct_member_anonymous:
+        case type_union_decl:
         {
-          auto Anon = SafeAccessPtr(struct_member_anonymous, S);
+          auto Anon = SafeAccessPtr(union_decl, S);
+          Result = &Anon.Body.Members;
+        } break;
+
+        case type_struct_decl:
+        {
+          auto Anon = SafeAccessPtr(struct_decl, S);
           Result = &Anon.Body.Members;
         } break;
 
@@ -10627,9 +10632,9 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
                   switch(Member->Type)
                   {
-                    case type_struct_member_anonymous:
+                    case type_union_decl:
                     {
-                      auto Anon = SafeAccess(struct_member_anonymous, Member);
+                      auto Anon = SafeAccess(union_decl, Member);
                       if (Anon->Body.IsUnion)
                       {
                         counted_string Code = Execute(FuncName, StructScope, ReplacePatterns, Ctx, Memory);
@@ -10637,8 +10642,8 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                       }
                     } break;
 
-                    case type_variable_decl:
                     case type_struct_decl:
+                    case type_variable_decl:
                     case type_function_decl:
                     {
                     } break;
@@ -10718,7 +10723,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                     } break;
 
                     case type_struct_member_noop:
-                    case type_struct_member_anonymous:
+                    case type_union_decl:
                     case type_struct_decl:
                     case type_function_decl:
                     {
@@ -10849,7 +10854,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                     } break;
 
                     case type_struct_decl:
-                    case type_struct_member_anonymous:
+                    case type_union_decl:
                     {
                       meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
                       Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)), Memory);
