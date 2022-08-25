@@ -1,8 +1,22 @@
 struct foo
 {
+} Foo;
+
+struct
+{
+} Foo;
+
+#if 0
+thing::~thing()
+{
+}
+
+struct foo
+{
   struct {
   } *bar;
 };
+#endif
 
 
 
@@ -146,7 +160,7 @@ struct foo
 struct foo
 {
   int foo_bool : 1;
-}
+};
 
 
 static int foo {};
@@ -175,7 +189,7 @@ int foo, *bar;
 struct foo
 {
   int bar, *bazz;
-};
+} *bar, *baz;
 
 struct foo
 {
@@ -188,8 +202,8 @@ struct foo
   struct bar {
   } baz;
 
-  union booz {
-  } fooz;
+  /* union booz { */
+  /* } fooz; */
 };
 
 struct sockaddr_in
@@ -519,9 +533,9 @@ TestFunc(int foo)
 
 struct fingy
 {
-  union {
-    int foo;
-  } fing;
+  /* union { */
+  /*   int foo; */
+  /* } fing; */
 };
 
 struct __locale_data

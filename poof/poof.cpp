@@ -9,7 +9,9 @@
 #include <poof/poof.h>
 #include <poof/print_ast_node.h>
 
+
 global_variable memory_arena Global_PermMemory = {};
+
 
 #define InvalidDefaultWhileParsing(P, ErrorMessage) \
     default: { ParseError(P, ErrorMessage, PeekTokenPointer(P)); } break;
@@ -8070,72 +8072,6 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
         Result.variable_decl = FinalizeVariableDecl(Ctx, &TypeSpec, &Indirection);
       } break;
 
-#if 0
-      case CTokenType_Union:
-      case CTokenType_Struct:
-      {
-        RequireToken(Parser, T);
-
-        c_token *TypeNameT = {};
-        if (PeekToken(Parser).Type == CTokenType_Identifier)
-        {
-          Result.Type = type_variable_decl;
-
-          if (PeekToken(Parser, 1).Type == CTokenType_OpenBrace)
-          {
-            TypeNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
-          }
-          else
-          {
-            type_spec TypeSpec = ParseTypeSpecifier(Ctx);
-            type_indirection_info Indirection = ParseIndirectionInfo(Ctx->CurrentParser);
-            Result.variable_decl = FinalizeVariableDecl(Ctx, &TypeSpec, &Indirection);
-            Result.variable_decl.Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
-          }
-        }
-
-        if (PeekToken(Parser).Type == CTokenType_OpenBrace)
-        {
-          if (TypeNameT)
-          {
-            Result.Type = type_struct_decl;
-          }
-          else
-          {
-            Result.Type = type_struct_member_anonymous;
-            /* TypeName = T->Type == CTokenType_Struct ? CSz("anonymous_struct") :  CSz("anonymous_union"); */
-          }
-
-          Result.struct_member_anonymous.Body = ParseStructBody(Ctx, TypeNameT);
-          if (T->Type == CTokenType_Union)
-          {
-            Result.struct_member_anonymous.Body.IsUnion = True;
-          }
-          else
-          {
-            Assert(T->Type == CTokenType_Struct);
-          }
-
-          if (c_token *NameT = OptionalToken(Ctx->CurrentParser, CTokenType_Identifier))
-          {
-            // TODO(Jesse, correctness): This is the actual member name.. what do we do with this?
-            /* Result.struct_member_anonymous.Body.Type = NameT->Value; */
-
-            if ( OptionalToken(Parser, CTokenType_OpenBracket) )
-            {
-              variable_decl Tmp = {};
-              ParseExpression(Ctx, &Tmp.StaticBufferSize );
-              RequireToken(Parser, CTokenType_CloseBracket);
-            }
-
-            Assert(PeekToken(Ctx->CurrentParser).Type == CTokenType_Semicolon ||
-                   PeekToken(Ctx->CurrentParser).Type == CTokenType_Comma);
-          }
-        }
-
-      } break;
-#endif
-
       case CT_NameQualifier:
       {
         EatNameQualifiers(Parser);
@@ -8387,7 +8323,8 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
 
   RequireToken(Parser, CTokenType_OpenBrace);
 
-  for (;;)
+  b32 Continue = True;
+  while (Continue)
   {
     if (MaybeEatStaticAssert(Parser))
     {
@@ -8400,58 +8337,124 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
     }
 
     struct_member Member = ParseStructMember(Ctx, Result.Type);
-    if (Member.Type)
-    {
-      Push(&Result.Members, Member, Ctx->Memory);
-    }
-    else
-    {
-      break;
-    }
 
-    //  Parse comma-separated definitions .. ie `struct fing { int foo, bar, baz; };`
-    while (OptionalToken(Parser, CTokenType_Comma))
+    switch (Member.Type)
     {
-      switch (Member.Type)
+      case type_variable_decl:
+      case type_function_decl:
       {
-        case type_variable_decl:
-        {
-          auto Var = SafeAccessObjPtr(variable_decl, Member);
+        Push(&Result.Members, Member, Ctx->Memory);
+      } break;
 
-          /* auto Var =  &Member.variable_decl; */
-          comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
+      case type_struct_decl:
+      case type_union_decl:
+      {
+        // TODO(Jesse): Track these either on the struct def or in the global
+        // hashtable?  Currently there isn't a reason to do this, but when we
+        // start doing static analysis this'll come up PDQ.
+        //
+        // Actually there is a reason to do this already : @snap_pointer_to_struct_member_struct_decl
+      } break;
 
-          Var->Name = Decl.NameT->Value;
-          Var->Indirection = Decl.Indirection;
-          Var->StaticBufferSize = Decl.StaticBufferSize;
-          Var->Value = Decl.Value;
-        } break;
-
-        case type_struct_decl:
-        case type_function_decl:
-        case type_union_decl:
-        {
-          NotImplemented;
-        } break;
-
-        case type_struct_member_noop:
-        {
-          InvalidCodePath();
-        } break;
-
-      }
-      Push(&Result.Members, Member, Ctx->Memory);
+      default: { Continue = False; } break;
     }
 
+    if (Continue == False) break;
 
-    if (Member.Type == type_function_decl)
+    switch (Member.Type)
     {
-      OptionalToken(Parser, CTokenType_Semicolon);
+      case type_union_decl:
+      {
+        NotImplemented;
+      } break;
+
+      case type_function_decl:
+      {
+        OptionalToken(Parser, CTokenType_Semicolon);
+      } break;
+
+      case type_variable_decl:
+      case type_struct_decl:
+      {
+        if (OptionalToken(Parser, CTokenType_Semicolon)) //  int foo;
+        {
+        }
+        else //  Parse comma-separated definitions .. ie:
+             //  `int *foo, bar[42], baz = 0;`     or
+             //  `struct { int foo; } bar, *baz;`
+        {
+
+          if (Member.Type == type_variable_decl)
+          {
+            RequireToken(Parser, CTokenType_Comma);
+          }
+
+          while (OptionalToken(Parser, CTokenType_Semicolon) == 0)
+          {
+            comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
+
+            switch (Member.Type)
+            {
+              case type_variable_decl:
+              {
+                auto Var = SafeAccessObjPtr(variable_decl, Member);
+
+                Var->Name = Decl.NameT->Value;
+                Var->Indirection = Decl.Indirection;
+                Var->StaticBufferSize = Decl.StaticBufferSize;
+                Var->Value = Decl.Value;
+
+                Push(&Result.Members, Member, Ctx->Memory);
+              } break;
+
+              case type_struct_decl:
+              {
+                auto StructDecl = SafeAccessObjPtr(struct_decl, Member);
+
+                struct_member TmpMember = {};
+                TmpMember.Type = type_variable_decl;
+
+                // TODO(Jesse): The struct_decl here is all stored on the stack
+                // .. we've got to store it in a hashtable somewhere such that
+                // we can snap pointers to it here.
+                //
+                // @snap_pointer_to_struct_member_struct_decl
+                // TmpMember.variable_decl.TypeSpec.Datatype = Datatype(StructDecl);
+
+                TmpMember.variable_decl.Name = Decl.NameT->Value;
+                TmpMember.variable_decl.Indirection = Decl.Indirection;
+                TmpMember.variable_decl.StaticBufferSize = Decl.StaticBufferSize;
+                TmpMember.variable_decl.Value = Decl.Value;
+
+                Push(&Result.Members, TmpMember, Ctx->Memory);
+              } break;
+
+              case type_function_decl:
+              {
+                InternalCompilerError(Parser, CSz(""), PeekTokenPointer(Parser));
+              } break;
+
+              case type_union_decl:
+              {
+                NotImplemented;
+              } break;
+
+              case type_struct_member_noop:
+              {
+                ParseError(Parser, CSz("Error parsing struct member"), PeekTokenPointer(Parser));
+              } break;
+            }
+
+            OptionalToken(Parser, CTokenType_Comma);
+          }
+        }
+      } break;
+
+      default: { Continue = False; } break;
     }
-    else
-    {
-      RequireToken(Parser, CTokenType_Semicolon);
-    }
+
+
+
   }
 
   RequireToken(Parser, CTokenType_CloseBrace);
@@ -9605,7 +9608,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
   }
   else
   {
-    InvalidCodePath(); // Something unexpected happened
+    InternalCompilerError(Parser, CSz("Something very bad happened near here..."), PeekTokenPointer(Parser));
   }
 
   return Result;
@@ -9718,10 +9721,25 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
 
             Info("Pushing struct decl (%S)", Struct.Type ? Struct.Type->Value : CSz("anonymous"));
             Push(&Ctx->Datatypes.Structs, Struct, Ctx->Memory);
+
+            if (OptionalToken(Parser, CTokenType_Semicolon))
+            {
+            }
+            else
+            {
+              comma_separated_decl Var = ParseCommaSeperatedDecl(Ctx);
+              MaybeEatAdditionalCommaSeperatedNames(Ctx);
+              RequireToken(Parser, CTokenType_Semicolon);
+            }
+
           } break;
 
           case type_declaration_variable_decl:
           {
+            if (MaybeEatAdditionalCommaSeperatedNames(Ctx))
+            {
+              ParseWarn(Parser, CSz("Silently ate additional variable name."), T);
+            }
           } break;
 
           case type_declaration_noop:
@@ -9729,11 +9747,6 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
             // right now a few things don't come through .. including variable decls and enums
             /* ParseError(Parser, CSz("While scanning for datatypes"), T); */
           } break;
-        }
-
-        if (MaybeEatAdditionalCommaSeperatedNames(Ctx))
-        {
-          ParseWarn(Parser, CSz("Silently ate additional variable name."), T);
         }
 
       } break;

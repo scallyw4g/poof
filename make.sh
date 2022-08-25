@@ -12,12 +12,12 @@ POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
 BUILD_EVERYTHING=0
 
-# BuildPoof=1
 # RunPoof=1
+# BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
 
-# RunParserTests=1
-# BuildParserTests=1
+RunParserTests=1
+BuildParserTests=1
 # TEST_DEBUGGER="gdb --args" 
 
 # RunIntegrationTests=1
@@ -241,6 +241,16 @@ echo -e ""
 # If someone supplied a command line argument, call the function, otherwise
 # respect the runflags
 if [ $# -eq 1 ]; then
+
+  # If someone's just trying to run the build/tests from the CLI normally don't
+  # throw a bunch of garbage output
+  TEST_LOG_LEVEL="--log-level LogLevel_Error"
+  POOF_LOG_LEVEL="--log-level LogLevel_Error"
+
+  # If someone's just trying to run the build/tests from the CLI normally don't
+  # throw them into a debugging environment
+  POOF_DEBUGGER=""
+  TEST_DEBUGGER=""
 
   "$@"
 
