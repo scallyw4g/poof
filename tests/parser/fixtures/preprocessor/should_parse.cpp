@@ -1,5 +1,19 @@
+struct foo {
+  foo(): _foof(1) {  }
+
+
+  // TODO(Jesse): Is this legal?
+  // foo<int>() {}
+
+  int _foof;
+};
+
+
+struct sequence *createSparklineSequence(void);
+
 struct __attribute__ ((__packed__)) sdshdr5
 {
+  int foo;
 };
 
 void Foo<int>()
@@ -39,11 +53,12 @@ struct Str {};
 
 class Obj {
 
- void foofunc2(foo<Obj*> *foof);
+  void foofunc2(foo<Obj*> *foof);
 
- private:
- public:
- private:
+  private:
+  public:
+  private:
+
   constexpr Obj() : _foo(0) {}
   explicit Obj() : _foo(Tag::Opaque, kZeroMask, 0){};
 
@@ -115,6 +130,10 @@ struct foo
 
 // unnamed function pointer
 b32 foo( b32 (*) ( int*, int) );
+
+/* b32 (foo)(char[42]); */
+
+b32 (*foo)(char[42]);
 
 b32 foo(char[42]);
 
@@ -405,13 +424,11 @@ struct thing
 };
 
 
-thing::thing() // Constructor bonsai_function
+thing::thing()
 {
   std::vector<int> IntVectorInAFunction;
 }
 
-// Apparently constructor functions are allowed to have template arguments ..
-// so this is legal if thing takes a template parameter
 thing::thing<int>()
 {
 }

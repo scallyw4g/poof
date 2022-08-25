@@ -550,8 +550,10 @@ struct type_indirection_info
   u32 ReferenceLevel;
   u32 IndirectionLevel;
 
-  b32 IsFunctionPointer;
-  counted_string FunctionPointerTypeName;
+  b32 IsFunction;
+  b32 IsFunctionPtr;
+
+  c_token *FunctionNameT;
 };
 
 global_variable type_indirection_info NullIndirection = {};
@@ -589,8 +591,8 @@ enum type_qualifier
   TypeQual_Constexpr   = (1 << 22),
   TypeQual_Explicit    = (1 << 23),
   TypeQual_Operator    = (1 << 24),
-  TypeQual_Constructor = (1 << 25),
-  TypeQual_Virtual     = (1 << 26),
+  /* TypeQual_Constructor = (1 << 25), */
+  TypeQual_Virtual     = (1 << 25),
 };
 meta(string_and_value_tables(type_qualifier))
 #include <poof/generated/string_and_value_tables_type_qualifier.h>
@@ -601,10 +603,11 @@ struct top_level_declaration
 
 struct type_spec
 {
-  c_token *DatatypeToken; // = &NullToken; // TODO(Jesse): Do we actually want this?
+  c_token *QualifierNameT;
+  c_token *DatatypeToken;
   datatype Datatype;
 
-  type_qualifier Qualifier; // enum type_qualifier TODO(Jesse): How do we fix this?
+  type_qualifier Qualifier;
 
   b32 HasTemplateArguments;
   counted_string TemplateSource;

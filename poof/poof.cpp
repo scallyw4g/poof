@@ -6471,19 +6471,19 @@ ParseReferencesIndirectionAndPossibleFunctionPointerness(parser *Parser)
     {
       case CTokenType_OpenParen:
       {
+        Result.IsFunction = True;
         RequireToken(Parser, CTokenType_OpenParen);
-        RequireToken(Parser, CTokenType_Star);
-
-        if (c_token *FunctionPointerTypeNameToken = OptionalToken(Parser, CTokenType_Identifier))
+        if (OptionalToken(Parser, CTokenType_Star))
         {
-          Result.FunctionPointerTypeName = FunctionPointerTypeNameToken->Value;
+          Result.IsFunctionPtr = True;
         }
+
+        Result.FunctionNameT = OptionalToken(Parser, CTokenType_Identifier);
 
         if (PeekToken(Parser).Type == CTokenType_OpenParen)
            { EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen); }
         RequireToken(Parser, CTokenType_CloseParen);
         EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
-        Result.IsFunctionPointer = True;
         Done = True;
       } break;
 
@@ -6520,13 +6520,12 @@ ParseReferencesIndirectionAndPossibleFunctionPointerness(parser *Parser)
 
       case CTokenType_Arrow: // Structs can have members with the same name as a type,
       case CTokenType_Dot:   // so these are valid
-
       case CTokenType_Comma: // This gets called on macro-functions too, so this is valid
       case CTokenType_CloseParen: // Valid closing token during a cast
       case CTokenType_Identifier:
       case CT_NameQualifier:
       case CTokenType_OperatorKeyword: // Finish parsing the return type of an operator funciton
-      case CTokenType_OpenBracket: // Parsing an un-named followed by [], such as in `void myfunc(char[42])`
+      case CTokenType_OpenBracket: // Parsing an un-named argument followed by [], such as in `void myfunc(char[42])`
       case CTokenType_Ellipsis:
       case CTokenType_Semicolon:
       {
@@ -6540,6 +6539,12 @@ ParseReferencesIndirectionAndPossibleFunctionPointerness(parser *Parser)
   }
 
   return Result;
+}
+
+bonsai_function type_indirection_info
+ParseIndirectionInfo(parser *Parser)
+{
+  return ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
 }
 
 bonsai_function b32
@@ -6668,14 +6673,15 @@ ParseLongness(parser *Parser, type_spec *Result)
   }
 }
 
-bonsai_function void
+bonsai_function c_token *
 EatNameQualifiers(parser *Parser)
 {
+  c_token *Result = {};
   while (c_token *T = PeekTokenPointer(Parser))
   {
     if (T->Type == CT_NameQualifier)
     {
-      RequireToken(Parser, *T);
+      Result = RequireTokenPointer(Parser, T);
       RequireToken(Parser, CT_ScopeResolutionOperator);
     }
     else
@@ -6684,6 +6690,7 @@ EatNameQualifiers(parser *Parser)
       break;
     }
   }
+  return Result;
 }
 
 bonsai_function void
@@ -6891,7 +6898,7 @@ ParsePrimitivesAndQualifiers(parser *Parser, type_spec *Result)
 
       case CT_NameQualifier:
       {
-        EatNameQualifiers(Parser);
+        Result->QualifierNameT = EatNameQualifiers(Parser);
       } break;
 
       default:
@@ -6908,7 +6915,7 @@ bonsai_function b32
 IsPrimitiveType(type_spec *Type)
 {
   u32 Mask =
-    TypeQual_Auto      | // Questionable
+    TypeQual_Auto      |  // Questionable that auto belongs here
     TypeQual_Bool      |
     TypeQual_Signed    |
     TypeQual_Unsigned  |
@@ -6941,12 +6948,56 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
   }
   else
   {
-    if (c_token *TypeName = OptionalToken(Parser, CTokenType_Identifier))
+    // NOTE(Jesse): This is super tortured but it's for differentiating between
+    // parsing constructors in structs ie:
+    //
+    // struct foo { foo() {} };
+    //
+    // and constructors declared in the global namespace ie:
+    //
+    // foo::foo() {}
+    //
+    // The idea is that we don't want to eat the actual constructor function
+    // name token because it's annoying to have to check if we're parsing a
+    // constructor function before calling ParseIndirectionInfo().
+    //
+    // Without these checks we eat the constructor name in the former case then
+    // ParseIndirectionInfo() thinks it's parsing a function pointer.
+    //
+
+    b32 ParsingConstructorInsideStruct = False;
+
+    c_token *NameT = PeekTokenPointer(Parser);
+    c_token *OpenParen = PeekTokenPointer(Parser, 1);
+    if (OpenParen && StructNameT && NameT)
     {
-      Result.DatatypeToken = TypeName;
-      Result.Datatype = GetDatatypeByName(&Ctx->Datatypes, TypeName->Value);
-      // TODO(Jesse, id: 296, tags: immediate): When we properly traverse include graphs, this assert should not fail.
-      // Assert(Result.Datatype.Type != type_datatype_noop);
+      if (OpenParen->Type == CTokenType_OpenParen)
+      {
+        if (IsConstructorOrDestructorName(StructNameT, NameT))
+        {
+          Result.QualifierNameT = StructNameT; // NOTE(Jesse): Pretty gross, but so is C++, so..
+          ParsingConstructorInsideStruct = True;
+        }
+      }
+    }
+
+    // NOTE(Jesse): If we were parsing a foo::foo() constructor the
+    // Result.NameQualifierT had already been set, so we compare that here.
+    b32 ParsingConstructor = ParsingConstructorInsideStruct;
+    if (IsConstructorOrDestructorName(Result.QualifierNameT, NameT))
+    {
+      ParsingConstructor |= True;
+    }
+
+    if (ParsingConstructor == False)
+    {
+      if (c_token *TypeName = OptionalToken(Parser, CTokenType_Identifier))
+      {
+        Result.DatatypeToken = TypeName;
+        Result.Datatype = GetDatatypeByName(&Ctx->Datatypes, TypeName->Value);
+        // TODO(Jesse, id: 296, tags: immediate): When we properly traverse include graphs, this assert should not fail.
+        // Assert(Result.Datatype.Type != type_datatype_noop);
+      }
     }
   }
 
@@ -6957,14 +7008,14 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
     EatBetween(Parser, CTokenType_LT, CTokenType_GT);
   }
 
-  b32 IsConstructor = (IsConstructorOrDestructorName(Result.DatatypeToken) ||
-                       IsConstructorOrDestructorName(Result.DatatypeToken, StructNameT)) &&
-                       PeekToken(Parser).Type == CTokenType_OpenParen;
+  /* b32 IsConstructor = (IsConstructorOrDestructorName(Result.DatatypeToken) || */
+  /*                      IsConstructorOrDestructorName(Result.DatatypeToken, StructNameT)) && */
+  /*                      PeekToken(Parser).Type == CTokenType_OpenParen; */
 
-  if (IsConstructor)
-  {
-    SetBitfield(type_qualifier, Result.Qualifier, TypeQual_Constructor);
-  }
+  /* if (IsConstructor) */
+  /* { */
+  /*   SetBitfield(type_qualifier, Result.Qualifier, TypeQual_Constructor); */
+  /* } */
 
   return Result;
 }
@@ -6979,14 +7030,13 @@ ParseInitializerList(parser *Parser, memory_arena *Memory)
 }
 
 bonsai_function variable_decl
-ParseVariableDecl(parse_context *Ctx, type_spec *TypeSpec)
+ParseVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indirection_info *Indirection)
 {
   parser *Parser = Ctx->CurrentParser;
 
   variable_decl Result = {};
 
   Result.Type = *TypeSpec;
-  Result.Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
 
   if (OptionalToken(Parser, CTokenType_OperatorKeyword))
   {
@@ -7100,7 +7150,8 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
       while ( !DoneParsingArguments && TokensRemain(Parser) )
       {
         type_spec TypeSpec = ParseTypeSpecifier(Ctx);
-        variable_decl Arg = ParseVariableDecl(Ctx, &TypeSpec);
+        type_indirection_info Indirection = ParseIndirectionInfo(Ctx->CurrentParser);
+        variable_decl Arg = ParseVariableDecl(Ctx, &TypeSpec, &Indirection);
         Push(&Result.Args, Arg, Ctx->Memory);
 
         if (!OptionalToken(Parser, CTokenType_Comma))
@@ -7181,10 +7232,12 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indire
       Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
     }
   }
-  else if (Indirection->IsFunctionPointer)
+  else if (Indirection->IsFunction || Indirection->IsFunctionPtr)
   {
+    // TODO(Jesse): We know this statically when we call this function so it should go outside.
     Result.Type = type_declaration_variable_decl;
     Result.variable_decl.Type = *TypeSpec;
+    Result.variable_decl.Indirection = *Indirection;
   }
   else
   {
@@ -7195,17 +7248,17 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indire
     }
 #endif
 
+#if 0
     if (TypeSpec->Qualifier & TypeQual_Constructor) // my_thing::my_thing(...) {...}
     {
       // NOTE(Jesse): Moved this path outside this function
       InvalidCodePath();
-#if 0
       Result.Type = type_declaration_function_decl;
       Result.function_decl = ParseFunctionParameterList(Ctx, TypeSpec, TypeSpec->DatatypeToken, function_type_constructor, TypeSpec->DatatypeToken->QualifierName);
       Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
-#endif
     }
-    else if ( OptionalToken(Parser, CTokenType_Semicolon) ) // template<typename T> class foo;
+#endif
+    if ( OptionalToken(Parser, CTokenType_Semicolon) ) // template<typename T> class foo;
     {
       // TODO(Jesse): Do we actually need this still?
     }
@@ -7897,17 +7950,21 @@ ParseStructMemberOperatorFn(parse_context *Ctx, struct_member *Result, c_token *
 }
 
 bonsai_function void
-ParseStructMemberConstructorFn(parse_context *Ctx, type_spec *TypeSpec, struct_member *Result, c_token *StructNameT)
+ParseStructMemberConstructorFn(parse_context *Ctx, type_spec *TypeSpec, struct_member *Result, c_token *ConstructorNameT)
 {
+
   parser *Parser = Ctx->CurrentParser;
 
-  c_token *FuncNameT = TypeSpec->DatatypeToken;
+  c_token *StructNameT = TypeSpec->QualifierNameT;
 
-  if (IsConstructorOrDestructorName(StructNameT, FuncNameT))
+  Assert(StructNameT);
+  Assert(ConstructorNameT);
+
+  if (IsConstructorOrDestructorName(StructNameT, ConstructorNameT))
   {
     Result->Type = type_function_decl;
     type_spec ReturnType = {};
-    Result->function_decl = ParseFunctionParameterList(Ctx, &ReturnType, FuncNameT, function_type_constructor, StructNameT);
+    Result->function_decl = ParseFunctionParameterList(Ctx, &ReturnType, ConstructorNameT, function_type_constructor, StructNameT);
 
     if (OptionalToken(Parser, CTokenType_Colon) )
     {
@@ -7933,15 +7990,15 @@ ParseStructMemberConstructorFn(parse_context *Ctx, type_spec *TypeSpec, struct_m
     {
       ParseError(Parser,
           CSz("Constructor function must have a body"),
-          FuncNameT);
+          ConstructorNameT);
     }
 #endif
   }
   else
   {
     ParseError(Parser,
-        FormatCountedString(TranArena, CSz("Constructor (%S) name must match the struct name (%S)"), FuncNameT->Value, StructNameT->Value),
-        FuncNameT );
+        FormatCountedString(TranArena, CSz("Constructor (%S) name must match the struct name (%S)"), ConstructorNameT->Value, StructNameT->Value),
+        ConstructorNameT );
   }
 }
 
@@ -7980,6 +8037,20 @@ ParseStructMemberDestructorFn(parse_context *Ctx, struct_member *Result, c_token
   Result->function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
 }
 
+bonsai_function b32
+ParsingConstructor(parser *Parser, type_spec *TypeSpec)
+{
+  b32 Result = False;
+  if (TypeSpec->QualifierNameT)
+  {
+    c_token *NextT = PeekTokenPointer(Parser);
+    if (IsConstructorOrDestructorName(TypeSpec->QualifierNameT, NextT))
+    {
+      Result = True;
+    }
+  }
+  return Result;
+}
 
 bonsai_function struct_member
 ParseStructMember(parse_context *Ctx, c_token *StructNameT)
@@ -8004,8 +8075,9 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
       {
         RequireToken(Parser, T->Type);
         type_spec TypeSpec = ParseTypeSpecifier(Ctx);
+        type_indirection_info Indirection = ParseIndirectionInfo(Ctx->CurrentParser);
         Result.Type = type_variable_decl;
-        Result.variable_decl = ParseVariableDecl(Ctx, &TypeSpec);
+        Result.variable_decl = ParseVariableDecl(Ctx, &TypeSpec, &Indirection);
       } break;
 
       case CTokenType_Union:
@@ -8025,7 +8097,8 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
           else
           {
             type_spec TypeSpec = ParseTypeSpecifier(Ctx);
-            Result.variable_decl = ParseVariableDecl(Ctx, &TypeSpec);
+            type_indirection_info Indirection = ParseIndirectionInfo(Ctx->CurrentParser);
+            Result.variable_decl = ParseVariableDecl(Ctx, &TypeSpec, &Indirection);
             Result.variable_decl.Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
           }
         }
@@ -8099,9 +8172,13 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
       {
         type_spec TypeSpec = ParseTypeSpecifier(Ctx, StructNameT);
 
-        if (TypeSpec.Qualifier & TypeQual_Constructor)
+        type_indirection_info Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
+        b32 IsConstructor = ParsingConstructor(Parser, &TypeSpec);
+
+        if (IsConstructor)
         {
-          ParseStructMemberConstructorFn(Ctx, &TypeSpec, &Result, StructNameT);
+          c_token *ConstructorNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
+          ParseStructMemberConstructorFn(Ctx, &TypeSpec, &Result, ConstructorNameT);
         }
         else if (TypeSpec.Qualifier & TypeQual_Virtual)
         {
@@ -8118,7 +8195,6 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
         }
         else // operator, regular function, or variable decl
         {
-          type_indirection_info Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
           declaration Decl = ParseFunctionOrVariableDecl(Ctx, &TypeSpec, &Indirection);
           switch (Decl.Type)
           {
@@ -8549,6 +8625,8 @@ ParseDatatypeDef(parse_context *Ctx, type_spec *TypeSpec)
   if ( TypeSpec->Qualifier & TypeQual_Struct ||
        TypeSpec->Qualifier & TypeQual_Class   )
   {
+    InvalidCodePath();
+#if 0
     if ( PeekToken(Parser).Type == CTokenType_Colon )
     {
       EatUntilExcluding(Parser, CTokenType_OpenBrace);
@@ -8560,6 +8638,7 @@ ParseDatatypeDef(parse_context *Ctx, type_spec *TypeSpec)
       Result.Type = type_declaration_struct_decl;
       Result.struct_decl.Body = ParseStructBody(Ctx, TypeSpec->DatatypeToken);
     }
+#endif
   }
 
   /* InvalidDefaultWhileParsing(Parser, CSz("Tried parsing a datatypes that wasn't a struct, enum or union!")); */
@@ -8578,11 +8657,11 @@ ParseAndPushTypedef(parse_context *Ctx)
   type_indirection_info Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
 
   counted_string Alias = {};
-  b32 IsFunction = Indirection.IsFunctionPointer;
+  b32 IsFunction = Indirection.IsFunction;
 
-  if (Indirection.IsFunctionPointer)
+  if (IsFunction)
   {
-    Alias = Indirection.FunctionPointerTypeName;
+    Alias = Indirection.FunctionNameT->Value;
   }
   else
   {
@@ -8592,11 +8671,7 @@ ParseAndPushTypedef(parse_context *Ctx)
     {
       // TODO(Jesse): This is pretty half-baked and probably should be represented
       // differently.  I just hacked it in here to get typedef'd funcs to parse.
-      //
-      // I guess we could just eat the function arguments and discard them like we
-      // do for function pointers..
       IsFunction = True;
-
       EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
     }
   }
@@ -9440,6 +9515,8 @@ ParseTopLevelDatatype(parse_context *Ctx)
   parser *Parser = Ctx->CurrentParser;
 
   type_spec TypeSpec = ParseTypeSpecifier(Ctx);
+  type_indirection_info Indirection = ParseIndirectionInfo(Ctx->CurrentParser);
+  b32 IsConstructor = ParsingConstructor(Parser, &TypeSpec);
 
   declaration Result = {};
 
@@ -9449,11 +9526,20 @@ ParseTopLevelDatatype(parse_context *Ctx)
     if ( PeekToken(Parser).Type == CTokenType_OpenBrace    ||
          PeekToken(Parser).Type == CTokenType_Colon         )
     {
-      Result = ParseDatatypeDef(Ctx, &TypeSpec);
+      if (OptionalToken(Parser, CTokenType_Colon))
+      {
+        EatUntilExcluding(Parser, CTokenType_OpenBrace);
+      }
+
+      if (PeekToken(Parser, CTokenType_OpenBrace ))
+      {
+        Result.Type = type_declaration_struct_decl;
+        Result.struct_decl.Body = ParseStructBody(Ctx, TypeSpec.DatatypeToken);
+      }
     }
     else
     {
-      ParseVariableDecl(Ctx, &TypeSpec); // Globally-scoped variable : `struct foo = { .bar = 1 }`
+      ParseVariableDecl(Ctx, &TypeSpec, &Indirection); // Globally-scoped variable : `struct foo = { .bar = 1 }`
     }
   }
   else if (TypeSpec.Qualifier & TypeQual_Union) // union { ... }
@@ -9467,21 +9553,26 @@ ParseTopLevelDatatype(parse_context *Ctx)
     enum_def Enum = ParseEnum(Ctx, &TypeSpec);
     Push(&Ctx->Datatypes.Enums, Enum, Ctx->Memory);
   }
-  else if (TypeSpec.Qualifier & TypeQual_Constructor)  // my_thing::my_thing(...) {...}
+  else if (IsConstructor)  // my_thing::my_thing(...) {...}
   {
     Result.Type = type_declaration_function_decl;
 
+    c_token *ConstructorNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
+    if (PeekToken(Parser).Type == CTokenType_LT)
+    {
+      EatBetween(Parser, CTokenType_LT, CTokenType_GT);
+    }
     Result.function_decl = ParseFunctionParameterList( Ctx,
                                                        &TypeSpec,
-                                                       TypeSpec.DatatypeToken,
+                                                       ConstructorNameT,
                                                        function_type_constructor,
-                                                       TypeSpec.DatatypeToken->QualifierName);
+                                                       TypeSpec.QualifierNameT);
 
     Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
   }
   else // Regular variable or function
   {
-    type_indirection_info Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
+    /* type_indirection_info Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser); */
     Result = ParseFunctionOrVariableDecl(Ctx, &TypeSpec, &Indirection);
   }
 
@@ -9558,10 +9649,6 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
       } break;
 
       case CT_NameQualifier:
-      {
-        EatNameQualifiers(Parser);
-      } break;
-
       case CTokenType_Struct:
       case CTokenType_Enum:
       case CTokenType_Union:
