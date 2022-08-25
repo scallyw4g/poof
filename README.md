@@ -154,10 +154,16 @@ before releasing a 0.1.0-alpha version of `poof`.
 
 ---
 
+### Documentation
+[o] Write example code
+
 [o] Formally specify feature set for 0.1.0-alpha
 
-- this was somewhat self-informed by the features required to build `poof`
-- still somewhat TBD, but I have a mostly-complete list
+- self-informed by the features required to build `poof`
+
+[\_] Write language documentation
+
+- For alpha this may be the same as example code, TBD
 
 ### Behavior
 [✓] Parse include graph of `poof` (excluding CRT headers)
@@ -173,12 +179,14 @@ before releasing a 0.1.0-alpha version of `poof`.
 
 [o] parse all C headers on my windows system
 
-[o] parse some popular C projects
-  - [✓] https://github.com/ndilieto/uacme
-  - [✓] https://github.com/HandmadeHero
-  - [o] https://github.com/redis/redis
-  - [o] https://github.com/sqlite/sqlite
-  - [o] https://github.com/oil/oil -- C++, but I have a use-case
+[o] parse some open-source C and C++ projects
+  - [✓] C++ https://github.com/jjbandit/poof
+  - [✓] C++ https://github.com/jjbandit/bonsai
+  - [✓] C++ https://github.com/HandmadeHero
+  - [o] C++ https://github.com/oil/oil
+  - [✓] C https://github.com/ndilieto/uacme
+  - [o] C https://github.com/redis/redis
+  - [\_] C https://github.com/sqlite/sqlite
 
 ### UX
 [✓] Fix a laundry list of issues I have logged that result in unnecessary friction
@@ -187,12 +195,6 @@ before releasing a 0.1.0-alpha version of `poof`.
 
 [\_] Consider options for controlling whitespace in generated code.
 
-### Documentation
-[o] Write example code
-
-[\_] Write language documentation
-- For alpha this may be the same as example code, although a formal language
-  specification should probably exist somewhere.
 
 
 # Examples
