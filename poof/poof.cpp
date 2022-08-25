@@ -8070,6 +8070,7 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
         Result.variable_decl = FinalizeVariableDecl(Ctx, &TypeSpec, &Indirection);
       } break;
 
+#if 0
       case CTokenType_Union:
       case CTokenType_Struct:
       {
@@ -8133,16 +8134,21 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
         }
 
       } break;
+#endif
 
       case CT_NameQualifier:
       {
         EatNameQualifiers(Parser);
       } [[fallthrough]];
 
+      case CTokenType_Union:
+      case CTokenType_Struct:
+
       case CT_Keyword_Virtual:
-      case CTokenType_OperatorKeyword:
       case CT_Keyword_Constexpr:
       case CT_Keyword_Explicit:
+      case CTokenType_OperatorKeyword:
+
       case CTokenType_ThreadLocal:
       case CTokenType_Const:
       case CTokenType_Static:
@@ -8182,10 +8188,8 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
           {
             case type_declaration_struct_decl:
             {
-              // NOTE(Jesse): FinalizeDeclaration doesn't directly
-              // produce this case yet.  It _could_ produce this case (I think)
-              // but it's buried.  Eventually this path should turn on I think.
-              InvalidCodePath();
+              Result.Type = type_struct_dec;
+              Result.struct_decl = Decl.struct_decl;
             } break;
 
             case type_declaration_variable_decl:

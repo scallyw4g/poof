@@ -1,7 +1,7 @@
 struct foo
 {
   struct {
-  } bar;
+  } *bar;
 };
 
 

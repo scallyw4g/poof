@@ -467,6 +467,11 @@ struct struct_def
 meta(stream_and_cursor(struct_def))
 #include <poof/generated/stream_and_cursor_struct_def.h>
 
+struct union_decl
+{
+  struct_def Body;
+};
+
 struct struct_decl
 {
   struct_def Body;
@@ -701,9 +706,9 @@ meta(
   d_union struct_member
   {
     variable_decl
-    struct_decl              enum_only
+    struct_decl
+    union_decl
     function_decl
-    struct_member_anonymous
   }
 )
 #include <poof/generated/d_union_c_decl.h>
