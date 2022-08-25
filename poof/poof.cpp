@@ -5642,7 +5642,7 @@ GenerateStructDef(d_union_decl* dUnion, memory_arena* Memory)
 
   ITERATE_OVER(&dUnion->CommonMembers)
   {
-    struct_member* Member = GET_ELEMENT(Iter);
+    declaration* Member = GET_ELEMENT(Iter);
     Assert(Member->Type == type_variable_decl);
     Result =
       Concat(Result,
@@ -7261,14 +7261,14 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indire
 
   if (OptionalToken(Parser, CTokenType_OperatorKeyword))
   {
-    Result.Type = type_declaration_function_decl;
+    Result.Type = type_function_decl;
     Result.function_decl = FinalizeOperatorFunction(Ctx, TypeSpec);
 
   }
   else if (Indirection->IsFunction || Indirection->IsFunctionPtr)
   {
     // TODO(Jesse): We know this statically when we call this function so it should go outside.
-    Result.Type = type_declaration_variable_decl;
+    Result.Type = type_variable_decl;
     Result.variable_decl.Type = *TypeSpec;
     Result.variable_decl.Indirection = *Indirection;
   }
@@ -7283,12 +7283,12 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indire
     b32 IsFunction = PeekToken(Parser).Type == CTokenType_OpenParen;
     if ( IsFunction )
     {
-      Result.Type = type_declaration_function_decl;
+      Result.Type = type_function_decl;
       Result.function_decl = FinalizeFunctionDecl(Ctx, TypeSpec, DeclNameToken, function_type_normal);
     }
     else // Variable decl
     {
-      Result.Type = type_declaration_variable_decl;
+      Result.Type = type_variable_decl;
       Result.variable_decl = FinalizeVariableDecl(Ctx, TypeSpec, Indirection, DeclNameToken);
     }
   }
@@ -7916,12 +7916,12 @@ MaybeParseFunctionBody(parser *Parser, memory_arena *Memory)
 }
 
 bonsai_function void
-ParseStructMemberOperatorFn(parse_context *Ctx, struct_member *Result, c_token *StructNameT)
+ParseStructMemberOperatorFn(parse_context *Ctx, declaration *Result, c_token *StructNameT)
 {
 }
 
 bonsai_function void
-ParseStructMemberConstructorFn(parse_context *Ctx, type_spec *TypeSpec, struct_member *Result, c_token *ConstructorNameT)
+ParseStructMemberConstructorFn(parse_context *Ctx, type_spec *TypeSpec, declaration *Result, c_token *ConstructorNameT)
 {
   parser *Parser = Ctx->CurrentParser;
 
@@ -7973,9 +7973,9 @@ ParseStructMemberConstructorFn(parse_context *Ctx, type_spec *TypeSpec, struct_m
 }
 
 bonsai_function void
-ParseStructMemberDestructorFn(parse_context *Ctx, struct_member *Result, c_token *StructNameT)
+ParseStructMemberDestructorFn(parse_context *Ctx, declaration *Result, c_token *StructNameT)
 {
-  Assert(Result->Type == type_struct_member_noop);
+  Assert(Result->Type == type_declaration_noop);
 
   parser *Parser = Ctx->CurrentParser;
   RequireToken(Parser, CTokenType_Tilde);
@@ -8044,13 +8044,13 @@ FinalizeVirtualFunctionDecl(parse_context *Ctx, parser *Parser, type_spec *TypeS
   return Result;
 }
 
-bonsai_function struct_member
+bonsai_function declaration
 ParseStructMember(parse_context *Ctx, c_token *StructNameT)
 {
   TIMED_FUNCTION();
   parser *Parser = Ctx->CurrentParser;
 
-  struct_member Result = {};
+  declaration Result = {};
 
   c_token *T = PeekTokenPointer(Parser);
   if (T)
@@ -8122,19 +8122,19 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
           declaration Decl = FinalizeDeclaration(Ctx, Parser, &TypeSpec, &Indirection);
           switch (Decl.Type)
           {
-            case type_declaration_compound_decl:
+            case type_compound_decl:
             {
               Result.Type = type_compound_decl;
               Result.compound_decl = Decl.compound_decl;
             } break;
 
-            case type_declaration_variable_decl:
+            case type_variable_decl:
             {
               Result.Type = type_variable_decl;
               Result.variable_decl = Decl.variable_decl;
             } break;
 
-            case type_declaration_function_decl:
+            case type_function_decl:
             {
               Result.Type = type_function_decl;
               Result.function_decl = Decl.function_decl;
@@ -8193,15 +8193,15 @@ ConcatTokensUntilNewline(parser* Parser, memory_arena* Memory)
   return Result;
 }
 
-bonsai_function struct_member_stream
+bonsai_function declaration_stream
 MembersOfType(compound_decl* Struct, counted_string MemberType, memory_arena *Memory)
 {
-  struct_member_stream Result = {};
+  declaration_stream Result = {};
   if (MemberType.Start)
   {
     ITERATE_OVER(&Struct->Members)
     {
-      struct_member *Member = GET_ELEMENT(Iter);
+      declaration *Member = GET_ELEMENT(Iter);
       switch (Member->Type)
       {
         case type_variable_decl:
@@ -8336,7 +8336,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
       continue;
     }
 
-    struct_member Member = ParseStructMember(Ctx, Result.Type);
+    declaration Member = ParseStructMember(Ctx, Result.Type);
 
     switch (Member.Type)
     {
@@ -8405,7 +8405,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
               {
                 auto StructDecl = SafeAccessObjPtr(compound_decl, Member);
 
-                struct_member TmpMember = {};
+                declaration TmpMember = {};
                 TmpMember.Type = type_variable_decl;
 
                 // TODO(Jesse): The compound_decl here is all stored on the stack
@@ -8428,7 +8428,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
                 InternalCompilerError(Parser, CSz(""), PeekTokenPointer(Parser));
               } break;
 
-              case type_struct_member_noop:
+              case type_declaration_noop:
               {
                 ParseError(Parser, CSz("Error parsing struct member"), PeekTokenPointer(Parser));
               } break;
@@ -9458,7 +9458,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
 
     if (PeekToken(Parser).Type == CTokenType_OpenParen)
     {
-      Result.Type = type_declaration_function_decl;
+      Result.Type = type_function_decl;
       function_type Type = IsConstructor ? function_type_constructor : function_type_normal;
 
       // TODO(Jesse): Fix this function such that it records indirection info from return value.
@@ -9467,14 +9467,14 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
     }
     else
     {
-      Result.Type = type_declaration_variable_decl;
+      Result.Type = type_variable_decl;
       Result.variable_decl = FinalizeVariableDecl(Ctx, TypeSpec, Indirection, NameT); // Globally-scoped variable : `struct foo = { .bar = 1 }`
     }
 
   }
   else if (OptionalToken(Parser, CTokenType_OperatorKeyword))
   {
-    Result.Type = type_declaration_function_decl;
+    Result.Type = type_function_decl;
     Result.function_decl = FinalizeOperatorFunction(Ctx, TypeSpec);
   }
   else if ( TypeSpec->Qualifier & TypeQual_Struct ||
@@ -9492,7 +9492,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
 
       if ( PeekToken(Parser).Type == CTokenType_OpenBrace ) // struct foo { ... };
       {
-        Result.Type = type_declaration_compound_decl;
+        Result.Type = type_compound_decl;
         Result.compound_decl = ParseStructBody(Ctx, TypeSpec->DatatypeToken);
       }
       else
@@ -9510,7 +9510,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
   }
   else if (TypeSpec->Qualifier & TypeQual_Union) // union { ... }
   {
-    Result.Type = type_declaration_compound_decl;
+    Result.Type = type_compound_decl;
     Result.compound_decl = ParseStructBody(Ctx, TypeSpec->DatatypeToken); // ParseStructBody(Ctx, TypeSpec->DatatypeToken);
     Result.compound_decl.IsUnion = True;
   }
@@ -9522,7 +9522,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
   else if (IsConstructor)  // my_thing::my_thing(...) {...}
   {
     // TODO(Jesse): Maybe this should be handled above ?
-    Result.Type = type_declaration_function_decl;
+    Result.Type = type_function_decl;
 
     c_token *ConstructorNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
     if (PeekToken(Parser).Type == CTokenType_LT)
@@ -9539,7 +9539,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
   }
   else if ( Indirection->IsFunctionPtr )
   {
-    Result.Type = type_declaration_variable_decl;
+    Result.Type = type_variable_decl;
     Result.variable_decl.Type = *TypeSpec;
     Result.variable_decl.Indirection = *Indirection;
   }
@@ -9645,14 +9645,14 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
 
         switch (Decl.Type)
         {
-          case type_declaration_function_decl:
+          case type_function_decl:
           {
             /* Info("Pushing function decl (%S)", Function.Type ? Function.Type->Value : CSz("anonymous")); */
             Push(&Ctx->Datatypes.Functions, Decl.function_decl, Ctx->Memory); // Free function
           } break;
 
 
-          case type_declaration_compound_decl:
+          case type_compound_decl:
           {
             compound_decl StructOrUnion = Decl.compound_decl;
 
@@ -9673,7 +9673,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
             }
           } break;
 
-          case type_declaration_variable_decl:
+          case type_variable_decl:
           {
             if (MaybeEatAdditionalCommaSeperatedNames(Ctx))
             {
@@ -10072,7 +10072,7 @@ GenerateOutfileNameFor(counted_string Name, counted_string DatatypeName, memory_
 }
 
 bonsai_function counted_string
-GetTypeNameForStructMember(struct_member* Decl, memory_arena *Memory)
+GetTypeNameForStructMember(declaration* Decl, memory_arena *Memory)
 {
   counted_string Result = {};
 
@@ -10107,7 +10107,7 @@ GetTypeNameForStructMember(struct_member* Decl, memory_arena *Memory)
 
 
 bonsai_function counted_string
-GetNameForStructMember(struct_member* Decl)
+GetNameForStructMember(declaration* Decl)
 {
   counted_string Result = {};
 
@@ -10300,7 +10300,7 @@ bonsai_function counted_string
 GetValueForDatatype(datatype Data, memory_arena *Memory)
 {
   counted_string Result = {};
-  switch (Data.Type )
+  switch (Data.Type)
   {
     case type_datatype_noop:
     {
@@ -10323,12 +10323,12 @@ GetValueForDatatype(datatype Data, memory_arena *Memory)
     } break;
 
 
-    case type_struct_member:
+    case type_declaration:
     {
-      struct_member *Member = SafeAccessObj(struct_member, Data);
+      auto *Member = SafeAccessObj(declaration, Data);
       switch (Member->Type)
       {
-        case type_struct_member_noop:
+        case type_declaration_noop:
         {
           InvalidCodePath();
         } break;
@@ -10352,16 +10352,6 @@ GetValueForDatatype(datatype Data, memory_arena *Memory)
         } break;
       }
 
-      auto Datatype = SafeAccessObj(struct_member, Data);
-
-#if 0
-      string_builder Builder = {};
-      PrintAstNode(Datatype->Expr->Value, &Builder);
-
-      counted_string Value = Finalize(&Builder, Memory);
-      Append(&OutputBuilder, Value);
-#endif
-
     } break;
   }
 
@@ -10374,9 +10364,9 @@ GetNameForDatatype(datatype *Data)
   counted_string Result = {};
   switch (Data->Type)
   {
-    case type_struct_member:
+    case type_declaration:
     {
-      Result = GetNameForStructMember(Data->struct_member);
+      Result = GetNameForStructMember(Data->declaration);
     } break;
 
     case type_enum_member:
@@ -10441,12 +10431,12 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
       Result = Data->enum_member->Name;
     } break;
 
-    case type_struct_member:
+    case type_declaration:
     {
-      auto Member = SafeAccessPtr(struct_member, Data);
+      auto Member = SafeAccessPtr(declaration, Data);
       switch (Member->Type)
       {
-        case type_struct_member_noop: { InvalidCodePath(); } break;
+        case type_declaration_noop: { InvalidCodePath(); } break;
 
         case type_variable_decl:
         {
@@ -10456,7 +10446,7 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
 
         case type_function_decl:
         {
-          Result = Data->struct_member->function_decl.NameT->Value;
+          Result = Member->function_decl.NameT->Value;
         } break;
 
         case type_compound_decl:
@@ -10473,10 +10463,10 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
   return Result;
 }
 
-bonsai_function struct_member_stream*
+bonsai_function declaration_stream*
 GetMembersFor(datatype *Data)
 {
-  struct_member_stream *Result = {};
+  declaration_stream *Result = {};
   switch (Data->Type)
   {
     case type_d_compound_decl:
@@ -10485,9 +10475,9 @@ GetMembersFor(datatype *Data)
       Result = &S->Members;
     } break;
 
-    case type_struct_member:
+    case type_declaration:
     {
-      auto S = SafeAccessPtr(struct_member, Data);
+      auto S = SafeAccessPtr(declaration, Data);
 
       switch(S->Type)
       {
@@ -10568,9 +10558,9 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               parser StructScope = GetBodyTextForNextScope(&Scope, Memory);
               switch (Replace->Data.Type)
               {
-                case type_struct_member:
+                case type_declaration:
                 {
-                  auto Member = SafeAccessObj(struct_member, Replace->Data);
+                  auto Member = SafeAccessObj(declaration, Replace->Data);
 
                   switch(Member->Type)
                   {
@@ -10589,7 +10579,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                     {
                     } break;
 
-                    case type_struct_member_noop:
+                    case type_declaration_noop:
                     {
                       ParseError(&Scope, CSz("Infinite sadness"));
                     } break;
@@ -10642,13 +10632,13 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                   Append(&OutputBuilder, Code);
                 } break;
 
-                case type_struct_member:
+                case type_declaration:
                 {
-                  switch (Replace->Data.struct_member->Type)
+                  switch (Replace->Data.declaration->Type)
                   {
                     case type_variable_decl:
                     {
-                      struct_member *SM = Replace->Data.struct_member;
+                      auto *SM = Replace->Data.declaration;
                       // NOTE(Jesse): The data access that feed into GetEnumByType requires this to be true.
                       Assert(SM->Type == type_variable_decl);
 
@@ -10670,7 +10660,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                       }
                     } break;
 
-                    case type_struct_member_noop:
+                    case type_declaration_noop:
                     case type_compound_decl:
                     case type_function_decl:
                     {
@@ -10740,17 +10730,17 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               }
 
               parser MapMemberScope = GetBodyTextForNextScope(&Scope, Memory);
-              struct_member_stream *Members = GetMembersFor(&Replace->Data);
+              declaration_stream *Members = GetMembersFor(&Replace->Data);
 
               if (Members)
               {
                 ITERATE_OVER_AS(Member, Members)
                 {
-                  struct_member* Member = GET_ELEMENT(MemberIter);
+                  declaration* Member = GET_ELEMENT(MemberIter);
 
                   switch (Member->Type)
                   {
-                    case type_struct_member_noop:
+                    case type_declaration_noop:
                     {
                       InvalidCodePath();
                     } break;
@@ -10773,7 +10763,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                         {
                           ITERATE_OVER_AS(VarMember, VarMembers)
                           {
-                            struct_member* VarMember = GET_ELEMENT(VarMemberIter);
+                            declaration* VarMember = GET_ELEMENT(VarMemberIter);
                             counted_string MemberName = GetTypeNameForStructMember(VarMember, Memory);
 
                             if (StringsMatch( MemberName, ContainingConstraint))

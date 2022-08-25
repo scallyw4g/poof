@@ -654,7 +654,7 @@ meta(generate_stream(function_decl))
  */
 enum declaration_type
 {
-  type_noop,
+  type_declaration_noop,
   type_function_decl,
   type_variable_decl,
   type_compound_decl,
