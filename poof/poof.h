@@ -581,6 +581,23 @@ struct function_decl
 meta(generate_stream(function_decl))
 #include <poof/generated/generate_stream_function_decl.h>
 
+struct ast_node_expression;
+struct enum_member
+{
+  counted_string Name;
+  ast_node_expression *Expr;
+};
+meta(generate_stream(enum_member))
+#include <poof/generated/generate_stream_enum_member.h>
+
+struct enum_decl
+{
+  counted_string Name;
+  enum_member_stream Members;
+};
+meta(stream_and_cursor(enum_decl))
+#include <poof/generated/stream_and_cursor_enum_def.h>
+
 /* TODO(Jesse, id: 290, tags: metaprogramming, improvement): generating this:
  * meta( d_union declaration { function_decl variable_decl })
  * results in a name collision with the struct_member union tag.
@@ -601,7 +618,7 @@ enum declaration_type
   type_function_decl,
   type_variable_decl,
   type_compound_decl,
-  // type_declaration_enum_decl,
+  type_enum_decl,
 };
 
 struct declaration
@@ -610,10 +627,10 @@ struct declaration
 
   union
   {
+    enum_decl     enum_decl;
     function_decl function_decl;
     variable_decl variable_decl;
     compound_decl compound_decl;
-    // enum_decl enum_decl;
   };
 };
 meta(generate_cursor(declaration))
@@ -628,7 +645,6 @@ enum datatype_type
 
   type_declaration,
 
-  type_enum_decl,
   type_enum_member,
 
   type_type_def,
@@ -636,7 +652,6 @@ enum datatype_type
 meta(generate_string_table(datatype_type))
 #include <poof/generated/generate_string_table_datatype_type.h>
 
-struct enum_decl;
 struct enum_member;
 struct type_def;
 
@@ -648,21 +663,11 @@ struct datatype
   {
     declaration declaration;
 
-    enum_decl    *enum_decl;
     enum_member *enum_member;
 
     type_def    *type_def;
   };
 };
-
-struct ast_node_expression;
-struct enum_member
-{
-  counted_string Name;
-  ast_node_expression *Expr;
-};
-meta(generate_stream(enum_member))
-#include <poof/generated/generate_stream_enum_field.h>
 
 struct d_union_member
 {
@@ -672,16 +677,6 @@ struct d_union_member
 };
 meta(generate_stream(d_union_member))
 #include <poof/generated/generate_stream_d_union_member.h>
-
-struct enum_decl
-{
-  counted_string Name;
-  enum_member_stream Members;
-};
-meta(stream_and_cursor(enum_decl))
-#include <poof/generated/stream_and_cursor_enum_def.h>
-
-// typedef enum_decl enum_decl;
 
 struct type_def
 {
@@ -749,13 +744,21 @@ Datatype(type_def* E)
   return Result;
 }
 
+bonsai_function declaration
+Declaration(enum_decl* E)
+{
+  declaration Result = {};
+  Result.Type = type_enum_decl;
+  Result.enum_decl = *E;
+  return Result;
+}
+
 bonsai_function datatype
 Datatype(enum_decl* E)
 {
-  datatype Result = {
-    .Type = type_enum_decl,
-    .enum_decl = E,
-  };
+  datatype Result = {};
+  Result.Type = type_declaration;
+  Result.declaration = Declaration(E);
   return Result;
 }
 

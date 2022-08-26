@@ -8107,6 +8107,11 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
           declaration Decl = FinalizeDeclaration(Ctx, Parser, &TypeSpec, &Indirection);
           switch (Decl.Type)
           {
+            case type_enum_decl:
+            {
+              NotImplemented;
+            } break;
+
             case type_compound_decl:
             {
               Result.Type = type_compound_decl;
@@ -8408,14 +8413,19 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
                 Push(&Result.Members, TmpMember, Ctx->Memory);
               } break;
 
+              case type_enum_decl:
+              {
+                InternalCompilerError(Parser, CSz("Somehow parsed an enum while parsing comma seperated values"), PeekTokenPointer(Parser));
+              } break;
+
               case type_function_decl:
               {
-                InternalCompilerError(Parser, CSz(""), PeekTokenPointer(Parser));
+                InternalCompilerError(Parser, CSz("Somehow parsed a function while parsing comma seperated values"), PeekTokenPointer(Parser));
               } break;
 
               case type_declaration_noop:
               {
-                ParseError(Parser, CSz("Error parsing struct member"), PeekTokenPointer(Parser));
+                InternalCompilerError(Parser, CSz("Yikes"), PeekTokenPointer(Parser));
               } break;
             }
 
@@ -9630,6 +9640,12 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
 
         switch (Decl.Type)
         {
+          case type_enum_decl:
+          {
+            // TODO(Jesse): Push here.
+            NotImplemented;
+          } break;
+
           case type_function_decl:
           {
             /* Info("Pushing function decl (%S)", Function.Type ? Function.Type->Value : CSz("anonymous")); */
@@ -10132,6 +10148,12 @@ GetNameForDecl(declaration* Decl)
 
     } break;
 
+    case type_enum_decl:
+    {
+      Result = Decl->enum_decl.Name;
+    } break;
+
+    // TODO(Jesse): Throw actual error messages here?
     InvalidDefaultCase;
   }
 
@@ -10305,7 +10327,6 @@ GetValueForDatatype(datatype *Data, memory_arena *Memory)
       InvalidCodePath();
     } break;
 
-    case type_enum_decl:
     case type_type_def:
     {
       NotImplemented;
@@ -10323,6 +10344,13 @@ GetValueForDatatype(datatype *Data, memory_arena *Memory)
       declaration *Member = SafeAccess(declaration, Data);
       switch (Member->Type)
       {
+        case type_enum_decl:
+        {
+          // What should we do here?
+          NotImplemented;
+          Result = CSz("(enum decl)");
+        } break;
+
         case type_declaration_noop:
         {
           InvalidCodePath();
@@ -10369,11 +10397,6 @@ GetNameForDatatype(datatype *Data)
       Result = Data->enum_member->Name;
     } break;
 
-    case type_enum_decl:
-    {
-      Result = Data->enum_decl->Name;
-    } break;
-
     InvalidDefaultCase;
   }
 
@@ -10393,11 +10416,6 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
       NotImplemented;
     } break;
 
-    case type_enum_decl:
-    {
-      Result = Data->enum_decl->Name;
-    } break;
-
     case type_enum_member:
     {
       // This is actually wrong.. shouldn't we print the _name_ of the enum the
@@ -10408,27 +10426,33 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
 
     case type_declaration:
     {
-      declaration *Member = SafeAccess(declaration, Data);
-      switch (Member->Type)
+      declaration *Decl = SafeAccess(declaration, Data);
+      switch (Decl->Type)
       {
         case type_declaration_noop: { InvalidCodePath(); } break;
 
         case type_variable_decl:
         {
-          auto Decl = SafeAccess(variable_decl, Member);
-          Result = PrintType(&Decl->Type, Memory);
+          auto VDecl = SafeAccess(variable_decl, Decl);
+          Result = PrintType(&VDecl->Type, Memory);
         } break;
 
         case type_function_decl:
         {
-          Result = Member->function_decl.NameT->Value;
+          Result = Decl->function_decl.NameT->Value;
         } break;
 
         case type_compound_decl:
         {
-          compound_decl *CDecl = SafeAccess(compound_decl, Member);
+          compound_decl *CDecl = SafeAccess(compound_decl, Decl);
           Result = GetTypeNameForCompoundDecl(CDecl);
         } break;
+
+        case type_enum_decl:
+        {
+          Result = Decl->enum_decl.Name;
+        } break;
+
       }
 
     } break;
@@ -10489,6 +10513,13 @@ DatatypeIsUnion(parser *Scope, datatype *Data, c_token *MetaOperatorT)
         } break;
 
         case type_variable_decl:
+        {
+          // NOTE(Jesse): This could definitely be a union.. should implement
+          // the matching logic
+          // NotImplemented;
+        } break;
+
+        case type_enum_decl:
         case type_function_decl:
         {
         } break;
@@ -10585,7 +10616,6 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               switch (Replace->Data.Type)
               {
                 case type_enum_member:
-                case type_enum_decl:
                 {
                   counted_string Code = Execute(FuncName, EnumScope, ReplacePatterns, Ctx, Memory);
                   Append(&OutputBuilder, Code);
@@ -10595,6 +10625,12 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                 {
                   switch (Replace->Data.declaration.Type)
                   {
+                    case type_enum_decl:
+                    {
+                      counted_string Code = Execute(FuncName, EnumScope, ReplacePatterns, Ctx, Memory);
+                      Append(&OutputBuilder, Code);
+                    } break;
+
                     case type_variable_decl:
                     {
                       declaration *SM = &Replace->Data.declaration;
@@ -10701,8 +10737,10 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                       InvalidCodePath();
                     } break;
 
+                    case type_enum_decl:
                     case type_function_decl:
                     {
+                      InternalCompilerError(&Scope, CSz("enum_decl or function_decl apparently reported having members"), MetaOperatorToken);
                     } break;
 
                     case type_variable_decl:
@@ -10775,19 +10813,22 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               RequireToken(&Scope, CTokenType_CloseParen);
               parser NextScope = GetBodyTextForNextScope(&Scope, Memory);
 
-              if (Replace->Data.Type == type_enum_decl)
+              if (Replace->Data.Type == type_declaration)
               {
-                ITERATE_OVER(&Replace->Data.enum_decl->Members)
+                declaration *D = SafeAccess(declaration, &Replace->Data);
+                if (D->Type == type_enum_decl)
                 {
-                  enum_member* EnumMember = GET_ELEMENT(Iter);
-                  meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
-                  Push(&NewArgs, ReplacementPattern(EnumValueMatch->Value, Datatype(EnumMember)), Memory);
-                  Rewind(NextScope.Tokens);
-                  counted_string EnumFieldOutput = Execute(FuncName, NextScope, &NewArgs, Ctx, Memory);
-                  Append(&OutputBuilder, EnumFieldOutput);
-                  continue;
+                  ITERATE_OVER(&D->enum_decl.Members)
+                  {
+                    enum_member* EnumMember = GET_ELEMENT(Iter);
+                    meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
+                    Push(&NewArgs, ReplacementPattern(EnumValueMatch->Value, Datatype(EnumMember)), Memory);
+                    Rewind(NextScope.Tokens);
+                    counted_string EnumFieldOutput = Execute(FuncName, NextScope, &NewArgs, Ctx, Memory);
+                    Append(&OutputBuilder, EnumFieldOutput);
+                    continue;
+                  }
                 }
-
               }
               else
               {
