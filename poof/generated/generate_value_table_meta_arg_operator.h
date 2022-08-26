@@ -12,6 +12,7 @@
           if (StringsMatch(S, CSz("is_enum"))) { return is_enum; }
           if (StringsMatch(S, CSz("is_struct"))) { return is_struct; }
           if (StringsMatch(S, CSz("is_union"))) { return is_union; }
+          if (StringsMatch(S, CSz("is_defined"))) { return is_defined; }
 
 
       return Result;

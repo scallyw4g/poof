@@ -135,7 +135,8 @@ bonsai_function parser MaybeParseFunctionBody(parser *Parser, memory_arena *Memo
 bonsai_function void MaybeParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest);
 bonsai_function declaration FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, type_indirection_info *Indirection);
 
-bonsai_function counted_string GetTypeNameForDatatype(datatype *Data, memory_arena *Memory);
+bonsai_function counted_string GetTypeTypeForDatatype(datatype *Data, memory_arena *);
+bonsai_function counted_string GetTypeNameForDatatype(datatype *Data, memory_arena *);
 
 inline c_token_cursor *
 HasValidDownPointer(c_token *T)
@@ -8618,6 +8619,7 @@ ParseAndPushTypedef(parse_context *Ctx)
 
   if ( OptionalToken(Parser, CTokenType_OpenBracket) )
   {
+    // lol
     variable_decl Tmp = {};
     ParseExpression(Ctx, &Tmp.StaticBufferSize );
     RequireToken(Parser, CTokenType_CloseBracket);
@@ -10288,7 +10290,7 @@ bonsai_function counted_string
 Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory);
 
 bonsai_function counted_string
-PrintType(type_spec *Type, memory_arena *Memory)
+PrintTypeSpec(type_spec *Type, memory_arena *Memory)
 {
   counted_string Result = {};
   string_builder Builder = {};
@@ -10334,6 +10336,7 @@ GetValueForDatatype(datatype *Data, memory_arena *Memory)
       InvalidCodePath();
     } break;
 
+    case type_primitive_def:
     case type_type_def:
     {
       NotImplemented;
@@ -10404,6 +10407,7 @@ GetNameForDatatype(datatype *Data)
       Result = Data->enum_member->Name;
     } break;
 
+    case type_primitive_def:
     case type_type_def:
     {
       NotImplemented;
@@ -10419,6 +10423,37 @@ GetNameForDatatype(datatype *Data)
 }
 
 bonsai_function counted_string
+GetTypeTypeForDatatype(datatype *Data, memory_arena *Memory)
+{
+  counted_string Result = {};
+  switch (Data->Type)
+  {
+    case type_datatype_noop:
+    case type_enum_member:
+    case type_type_def:
+    case type_primitive_def:
+    {
+      Result = ToString(Data->Type);
+    } break;
+
+    case type_declaration:
+    {
+      declaration *Decl = SafeAccess(declaration, Data);
+      string_builder Builder = {};
+
+      Append(&Builder, ToString(Data->Type));
+      Append(&Builder, CSz(" & "));
+      Append(&Builder, ToString(Decl->Type));
+
+      Result = Finalize(&Builder, Memory);
+
+    } break;
+  }
+
+  return Result;
+}
+
+bonsai_function counted_string
 GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
 {
   counted_string Result = {};
@@ -10427,6 +10462,12 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
     case type_datatype_noop: { InvalidCodePath(); } break;
 
     case type_type_def:
+    {
+      type_def *TD = SafeAccessPtr(type_def, Data);
+      Result = PrintTypeSpec(&TD->Type, Memory);
+    } break;
+
+    case type_primitive_def:
     {
       NotImplemented;
     } break;
@@ -10449,7 +10490,7 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
         case type_variable_decl:
         {
           auto VDecl = SafeAccess(variable_decl, Decl);
-          Result = PrintType(&VDecl->Type, Memory);
+          Result = PrintTypeSpec(&VDecl->Type, Memory);
         } break;
 
         case type_function_decl:
@@ -10515,6 +10556,11 @@ DatatypeIsVariableDecl(datatype *Data)
     case type_datatype_noop:
     case type_enum_member:
     {
+    } break;
+
+    case type_primitive_def:
+    {
+      NotImplemented;
     } break;
 
     case type_type_def:
@@ -10607,6 +10653,138 @@ DatatypeIsUnion(parse_context *Ctx, parser *Scope, datatype *Data, c_token *Meta
   return Result;
 }
 
+
+// This resolves typedefs and tells us if we've got a primitive type, complex type, or undefined type
+//
+link_internal datatype
+ResolveTypedefToBaseType(parse_context *Ctx, datatype *Data)
+{
+  datatype Result = {};
+
+  {
+    counted_string S = GetTypeNameForDatatype(Data, TranArena);
+    DebugLine("Querying typedef for %S", S);
+  }
+
+  type_def *TD = SafeAccessPtr(type_def, Data);
+
+  if (TD->Type.DatatypeToken)
+  {
+    datatype Resolved = GetDatatypeByName(Ctx, TD->Type.DatatypeToken->Value);
+    if (Resolved.Type == type_type_def)
+    {
+      Result = ResolveTypedefToBaseType(Ctx, &Resolved);
+    }
+    else
+    {
+      Result = Resolved;
+    }
+  }
+  else
+  {
+    Result = Datatype(TD->Type);
+  }
+
+  return Result;
+}
+
+link_internal datatype
+ResolveToBaseType(parse_context *Ctx, type_spec TypeSpec)
+{
+  datatype Result = {};
+
+  if ( TypeSpec.DatatypeToken &&
+       TypeSpec.DatatypeToken->Type == CTokenType_Identifier )
+  {
+    DebugLine("-- 1 -- (%S)", TypeSpec.DatatypeToken->Value);
+    Result = GetDatatypeByName(Ctx, TypeSpec.DatatypeToken->Value);
+    if (Result.Type == type_type_def)
+    {
+      Result = ResolveTypedefToBaseType(Ctx, &Result);
+    }
+  }
+  else
+  {
+    Result = Datatype(TypeSpec);
+  }
+
+  return Result;
+}
+
+link_internal datatype
+ResolveToBaseType(parse_context *Ctx, datatype *Data)
+{
+  datatype Result = {};
+  switch (Data->Type)
+  {
+    case type_datatype_noop: { InvalidCodePath(); } break;
+
+    case type_type_def:
+    case type_primitive_def:
+    case type_enum_member:
+    {
+      NotImplemented;
+    } break;
+
+    case type_declaration:
+    {
+      declaration *Decl = SafeAccess(declaration, Data);
+      switch (Decl->Type)
+      {
+        case type_declaration_noop: { InvalidCodePath(); } break;
+
+        case type_variable_decl:
+        {
+          auto VDecl = SafeAccess(variable_decl, Decl);
+          Result = ResolveToBaseType(Ctx, VDecl->Type);
+        } break;
+
+        case type_function_decl:
+        case type_compound_decl:
+        case type_enum_decl:
+        {
+          NotImplemented;
+        } break;
+
+      }
+
+    } break;
+  }
+
+  return Result;
+
+
+
+
+
+
+
+#if 0
+  meta(
+    match (Data->Type)
+    {
+      declaration: D
+      {
+      }
+
+      primitive_def: P
+      {
+      }
+
+      enum_member: E
+      {
+      }
+
+      type_def: T
+      {
+      }
+    }
+  )
+#endif
+
+}
+
+
 // TODO(Jesse id: 222, tags: immediate, parsing, metaprogramming) : Re-add [[nodiscard]] here
 bonsai_function counted_string
 Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx, memory_arena* Memory)
@@ -10659,6 +10837,58 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                           MetaOperatorToken);
             } break;
 
+            case is_defined:
+            {
+              RequireToken(&Scope, CTokenType_Question);
+              parser TrueScope = GetBodyTextForNextScope(&Scope, Memory);
+              parser FalseScope = {};
+              if (PeekToken(&Scope).Type == CTokenType_OpenBrace)
+              {
+                FalseScope = GetBodyTextForNextScope(&Scope, Memory);
+              }
+
+              auto S1 = GetTypeTypeForDatatype(&Replace->Data, TranArena);
+              auto S2 = GetTypeNameForDatatype(&Replace->Data, TranArena);
+              DebugLine("checking is_defined (%S)(%S)", S1, S2);
+
+              b32 DoTrueBranch = False;
+              switch(Replace->Data.Type)
+              {
+                case type_datatype_noop:
+                {
+                  DoTrueBranch = False;
+                } break;
+
+                case type_declaration:
+                case type_enum_member:
+                case type_primitive_def:
+                {
+                  datatype ResolvedT = ResolveToBaseType(Ctx, &Replace->Data);
+                  DoTrueBranch = (ResolvedT.Type != type_datatype_noop);
+                } break;
+
+                case type_type_def:
+                {
+                  InvalidCodePath();
+                } break;
+              }
+
+              if (DoTrueBranch)
+              {
+                counted_string Code = Execute(FuncName, TrueScope, ReplacePatterns, Ctx, Memory);
+                Append(&OutputBuilder, Code);
+              }
+              else
+              {
+                if (FalseScope.Tokens)
+                {
+                  counted_string Code = Execute(FuncName, FalseScope, ReplacePatterns, Ctx, Memory);
+                  Append(&OutputBuilder, Code);
+                }
+              }
+
+            } break;
+
             case is_struct:
             case is_union:
             {
@@ -10680,6 +10910,15 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               parser EnumScope = GetBodyTextForNextScope(&Scope, Memory);
               switch (Replace->Data.Type)
               {
+                case type_type_def:
+                {
+                  NotImplemented;
+                } break;
+
+                case type_primitive_def:
+                {
+                } break;
+
                 case type_enum_member:
                 {
                   counted_string Code = Execute(FuncName, EnumScope, ReplacePatterns, Ctx, Memory);
@@ -10727,11 +10966,6 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                       NotImplemented;
                     }
                   }
-                } break;
-
-                case type_type_def:
-                {
-                  NotImplemented;
                 } break;
 
                 case type_datatype_noop:
@@ -10805,7 +11039,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                     case type_enum_decl:
                     case type_function_decl:
                     {
-                      InternalCompilerError(&Scope, CSz("enum_decl or function_decl apparently reported having members"), MetaOperatorToken);
+                      // What do we do for functions and enum declaratons ..?  Maybe the same thing as compound_decl?
                     } break;
 
                     case type_variable_decl:

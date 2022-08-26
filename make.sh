@@ -16,19 +16,22 @@ TEST_LOG_LEVEL="--log-level LogLevel_Error"
 POOF_LOG_LEVEL="--log-level LogLevel_Error"
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
+INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Error"
+INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
+
 BUILD_EVERYTHING=0
 
 RunPreemptivePoof=1
 
 # RunPoof=1
-# BuildPoof=1
+BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
 
-RunParserTests=1
-BuildParserTests=1
+# RunParserTests=1
+# BuildParserTests=1
 # TEST_DEBUGGER="gdb --args"
 
-BuildAndRunAllExamples=1
+# BuildAndRunAllExamples=1
 
 RunIntegrationTests=1
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
@@ -69,12 +72,12 @@ function RunPoof {
   # to special-case that one file.
   #
 
-  # if [ -d $META_OUT ]; then
-  #   rm -Rf $META_OUT
-  #   mkdir -p $META_OUT
-  #   mkdir -p $META_OUT/tmp
-  #   git checkout poof/generated/generate_cursor_c_token.h
-  # fi
+  if [ -d $META_OUT ]; then
+    rm -Rf $META_OUT
+    git checkout poof/generated/generate_cursor_c_token.h
+    git checkout poof/generated/for_all_datatypes_debug_print_functions.h
+    git checkout poof/generated/for_all_datatypes_debug_print_prototypes.h
+  fi
 
   : "${POOF_EXECUTABLE:=./bin/poof}"
 
@@ -158,7 +161,7 @@ function RunIntegrationTests()
     # whole directory to confirm/deny the output is identical for that test file
 
     $INTEGRATION_TEST_DEBUGGER bin/poof \
-      --log-level LogLevel_Error        \
+      $INTEGRATION_TEST_LOG_LEVEL       \
       $filename                         \
       $COLORFLAG                        \
       -o $INTEGRATION_OUTPUT_DIR/$basename_stripped
@@ -167,8 +170,10 @@ function RunIntegrationTests()
 
     if [[ $DIFF_CHANGED == 0 ]]; then
       echo -e "$Success $filename"
+      echo -e ""
     else
       echo -e "$Failed $filename"
+      echo -e ""
     fi
   done
 
@@ -284,7 +289,7 @@ else
   if [[ $RunPreemptivePoof == 1 || $BUILD_EVERYTHING == 1 ]]; then
     # TODO(Jesse): Cache and reset these?
     POOF_EXECUTABLE=poof
-    POOF_DEBUGGER=
+    # POOF_DEBUGGER=
     POOF_LOG_LEVEL="--log-level LogLevel_Error"
     RunPoof
   fi

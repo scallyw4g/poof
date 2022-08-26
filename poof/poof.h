@@ -31,6 +31,7 @@ enum meta_arg_operator
   is_enum,
   is_struct,
   is_union,
+  is_defined,
 };
 meta( generate_value_table(meta_arg_operator) )
 #include <poof/generated/generate_value_table_meta_arg_operator.h>
@@ -42,7 +43,7 @@ enum meta_transform_op
   to_capital_case     = (1 << 0),
   to_lowercase        = (1 << 1),
   strip_single_prefix = (1 << 2),
-  strip_all_prefix    = (1 << 3),
+  strip_all_prefix    = (1 << 3), // TODO(Jesse): Change name to strip_all_prefixes
 };
 meta(generate_value_table(meta_transform_op))
 #include <poof/generated/generate_value_table_meta_transform_op.h>
@@ -521,7 +522,6 @@ enum type_qualifier
   TypeQual_Constexpr   = (1 << 22),
   TypeQual_Explicit    = (1 << 23),
   TypeQual_Operator    = (1 << 24),
-  /* TypeQual_Constructor = (1 << 25), */
   TypeQual_Virtual     = (1 << 25),
 };
 meta(string_and_value_tables(type_qualifier))
@@ -531,7 +531,7 @@ struct type_spec
 {
   c_token *QualifierNameT;
   c_token *DatatypeToken;
-  // datatype Datatype; // TODO(Jesse): Put this back in when we get rid of datatype?  It actually wasn't very useful at all and bloats the struct a lot
+  // datatype Datatype;
 
   type_qualifier Qualifier;
 
@@ -539,9 +539,6 @@ struct type_spec
   counted_string TemplateSource;
 
   linkage_type Linkage;
-
-  /* b32 IsMetaTemplateVar; */
-  /* counted_string SourceText; */
 };
 
 struct ast_node;
@@ -618,12 +615,20 @@ meta(
 )
 #include <poof/generated/d_union_declaration.h>
 
+meta(string_and_value_tables(declaration_type))
+#include <poof/generated/string_and_value_tables_declaration_type.h>
+
 meta(generate_cursor(declaration))
 #include <poof/generated/generate_cursor_declaration.h>
 
 meta(generate_stream_chunk_struct(declaration))
 #include <poof/generated/generate_stream_chunk_declaration.h>
 
+// TODO(Jesse): Should type_spec actually be representative of primitive types?
+struct primitive_def
+{
+  type_spec TypeSpec;
+};
 
 enum datatype_type
 {
@@ -631,6 +636,7 @@ enum datatype_type
   type_declaration,
   type_enum_member,
   type_type_def,
+  type_primitive_def,
 };
 meta(generate_string_table(datatype_type))
 #include <poof/generated/generate_string_table_datatype_type.h>
@@ -644,9 +650,10 @@ struct datatype
 
   union
   {
-    declaration  declaration;
-    enum_member *enum_member;
-    type_def    *type_def;
+    declaration    declaration;
+    primitive_def  primitive_def;
+    enum_member   *enum_member;
+    type_def      *type_def;
   };
 };
 
@@ -734,6 +741,16 @@ Datatype(enum_decl* E)
   Result.declaration = Declaration(E);
   return Result;
 }
+
+bonsai_function datatype
+Datatype(type_spec S)
+{
+  datatype Result = {};
+  Result.Type = type_primitive_def;
+  Result.primitive_def.TypeSpec = S;
+  return Result;
+}
+
 
 struct meta_func_arg
 {

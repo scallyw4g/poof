@@ -8,6 +8,7 @@
             case type_declaration: { Result = CSz("type_declaration"); } break;
             case type_enum_member: { Result = CSz("type_enum_member"); } break;
             case type_type_def: { Result = CSz("type_type_def"); } break;
+            case type_primitive_def: { Result = CSz("type_primitive_def"); } break;
 
       }
       return Result;
