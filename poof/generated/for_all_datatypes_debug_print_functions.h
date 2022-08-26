@@ -131,6 +131,84 @@
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
     }
+    bonsai_function void DebugPrint( XVisualInfo S, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("XVisualInfo {\n", Depth);
+      }
+
+                            // NOTE(Jesse): we've got no definition for this type.. print a placeholder
+            DebugPrint("undefined type : (Visual visual)\n", Depth+2);
+
+                      // NOTE(Jesse): we've got no definition for this type.. print a placeholder
+            DebugPrint("undefined type : (VisualID visualid)\n", Depth+2);
+
+                                    DebugPrint("s32 screen {\n", Depth+2);
+              DebugPrint(S.screen, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("s32 depth {\n", Depth+2);
+              DebugPrint(S.depth, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("s32 c_class {\n", Depth+2);
+              DebugPrint(S.c_class, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u64 red_mask {\n", Depth+2);
+              DebugPrint(S.red_mask, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u64 green_mask {\n", Depth+2);
+              DebugPrint(S.green_mask, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u64 blue_mask {\n", Depth+2);
+              DebugPrint(S.blue_mask, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("s32 colormap_size {\n", Depth+2);
+              DebugPrint(S.colormap_size, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("s32 bits_per_rgb {\n", Depth+2);
+              DebugPrint(S.bits_per_rgb, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+
+      DebugPrint("}\n", Depth);
+    }
+
+    bonsai_function void DebugPrint( XVisualInfo *S, u32 Depth)
+    {
+      if (S) { DebugPrint(*S, Depth); }
+      else { DebugPrint("ptr(0)", Depth); }
+    }
     bonsai_function void DebugPrint( os S, u32 Depth)
     {
       if (Depth == 0)

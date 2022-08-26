@@ -2,6 +2,8 @@
       bonsai_function void DebugPrint( terminal_colors  S, u32 Depth = 0);
       bonsai_function void DebugPrint( native_file* S, u32 Depth = 0);
       bonsai_function void DebugPrint( native_file  S, u32 Depth = 0);
+      bonsai_function void DebugPrint( XVisualInfo* S, u32 Depth = 0);
+      bonsai_function void DebugPrint( XVisualInfo  S, u32 Depth = 0);
       bonsai_function void DebugPrint( os* S, u32 Depth = 0);
       bonsai_function void DebugPrint( os  S, u32 Depth = 0);
       bonsai_function void DebugPrint( v2i* S, u32 Depth = 0);
