@@ -639,24 +639,19 @@ meta(generate_string_table(datatype_type))
 struct enum_def;
 struct enum_member;
 struct type_def;
-/* TODO(Jesse, id: 188, tags: cleanup) This should have the name property,
- * instead of having the struct and enum defs have seperate names.
- *
- * Actually .. it's unclear if this is true or not anymore since we've added
- * a bunch more stuff to the union.
- */
+
 struct datatype
 {
   datatype_type Type;
 
   union
   {
-    declaration        declaration;
+    declaration declaration;
 
-    enum_def           *enum_def;
-    enum_member        *enum_member;
+    enum_def    *enum_def;
+    enum_member *enum_member;
 
-    type_def           *type_def;
+    type_def    *type_def;
   };
 };
 

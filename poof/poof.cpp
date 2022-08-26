@@ -10294,14 +10294,11 @@ PrintType(type_spec *Type, memory_arena *Memory)
   return Result;
 }
 
-// NOTE(Jesse): We have to pass by value here not for any specific reason other
-// than the SafeAccess macros don't support a pointer type accessing a pointer
-// member.  fml.
 bonsai_function counted_string
-GetValueForDatatype(datatype Data, memory_arena *Memory)
+GetValueForDatatype(datatype *Data, memory_arena *Memory)
 {
   counted_string Result = {};
-  switch (Data.Type)
+  switch (Data->Type)
   {
     case type_datatype_noop:
     {
@@ -10316,14 +10313,14 @@ GetValueForDatatype(datatype Data, memory_arena *Memory)
 
     case type_enum_member:
     {
-      enum_member *Datatype = SafeAccessObj(enum_member, Data);
-      Result = PrintAstNode(Datatype->Expr->Value, Memory);
+      enum_member *EM = SafeAccessPtr(enum_member, Data);
+      Result = PrintAstNode(EM->Expr->Value, Memory);
     } break;
 
 
     case type_declaration:
     {
-      declaration *Member = SafeAccessObjPtr(declaration, Data);
+      declaration *Member = SafeAccess(declaration, Data);
       switch (Member->Type)
       {
         case type_declaration_noop:
@@ -10403,6 +10400,9 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
 
     case type_enum_member:
     {
+      // This is actually wrong.. shouldn't we print the _name_ of the enum the
+      // member belongs to?
+      NotImplemented;
       Result = Data->enum_member->Name;
     } break;
 
@@ -10643,7 +10643,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
             case value:
             {
-              counted_string Value = GetValueForDatatype(Replace->Data, Memory);
+              counted_string Value = GetValueForDatatype(&Replace->Data, Memory);
               Append(&OutputBuilder, Value);
             } break;
 
