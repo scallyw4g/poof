@@ -667,7 +667,7 @@ struct datatype
   union
   {
     compound_decl      *d_compound_decl;
-    declaration        *declaration;
+    declaration        declaration;
 
     enum_def           *enum_def;
     enum_member        *enum_member;
@@ -729,7 +729,7 @@ Datatype(declaration* M)
 {
   datatype Result = {
     .Type = type_declaration,
-    .declaration = M,
+    .declaration = *M,
   };
   return Result;
 }

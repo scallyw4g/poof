@@ -10333,7 +10333,7 @@ GetValueForDatatype(datatype Data, memory_arena *Memory)
 
     case type_declaration:
     {
-      auto *Member = SafeAccessObj(declaration, Data);
+      declaration *Member = SafeAccessObjPtr(declaration, Data);
       switch (Member->Type)
       {
         case type_declaration_noop:
@@ -10374,7 +10374,7 @@ GetNameForDatatype(datatype *Data)
   {
     case type_declaration:
     {
-      Result = GetNameForStructMember(Data->declaration);
+      Result = GetNameForStructMember(&Data->declaration);
     } break;
 
     case type_enum_member:
@@ -10441,7 +10441,7 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
 
     case type_declaration:
     {
-      auto Member = SafeAccessPtr(declaration, Data);
+      declaration *Member = SafeAccess(declaration, Data);
       switch (Member->Type)
       {
         case type_declaration_noop: { InvalidCodePath(); } break;
@@ -10485,7 +10485,7 @@ GetMembersFor(datatype *Data)
 
     case type_declaration:
     {
-      auto S = SafeAccessPtr(declaration, Data);
+      declaration *S = SafeAccess(declaration, Data);
 
       switch(S->Type)
       {
@@ -10568,7 +10568,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               {
                 case type_declaration:
                 {
-                  auto Member = SafeAccessObj(declaration, Replace->Data);
+                  declaration *Member = SafeAccess(declaration, &Replace->Data);
 
                   switch(Member->Type)
                   {
@@ -10642,11 +10642,11 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
                 case type_declaration:
                 {
-                  switch (Replace->Data.declaration->Type)
+                  switch (Replace->Data.declaration.Type)
                   {
                     case type_variable_decl:
                     {
-                      auto *SM = Replace->Data.declaration;
+                      declaration *SM = &Replace->Data.declaration;
                       // NOTE(Jesse): The data access that feed into GetEnumByType requires this to be true.
                       Assert(SM->Type == type_variable_decl);
 
