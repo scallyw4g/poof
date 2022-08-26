@@ -389,17 +389,29 @@ meta(generate_stream(c_token_buffer))
 enum parse_error_code
 {
   ParseErrorCode_None,
+
+  // C parsing errors
   ParseErrorCode_ExpectedSemicolonOrEquals,
   ParseErrorCode_StreamEndedUnexpectedly,
   ParseErrorCode_RequireTokenFailed,
   ParseErrorCode_InvalidTokenGenerated,
 
+
+  // Poof errors
   ParseErrorCode_DUnionParse,
   ParseErrorCode_UndefinedDatatype,
+  ParseErrorCode_PoofTypeError,
 
+
+  // General errors
   ParseErrorCode_InputStreamNull,
 
 
+  // Well, shit.
+  ParseErrorCode_InternalCompilerError,
+
+
+  // We hit an error, but didn't classify it.
   ParseErrorCode_Unknown,
 };
 meta(generate_string_table(parse_error_code))

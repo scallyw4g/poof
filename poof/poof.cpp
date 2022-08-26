@@ -1253,8 +1253,10 @@ PrintContext(c_token_cursor_up *Up)
 }
 
 bonsai_function void
-ParseError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken)
+OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string MessageContext, counted_string Message, c_token* ErrorToken)
 {
+  c_token *OriginalAtToken = PeekTokenRawPointer(Parser);
+
   parse_error_code PrevErrorCode = Parser->ErrorCode;
   Parser->ErrorCode = ParseErrorCode_None;
 
@@ -1401,7 +1403,7 @@ ParseError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessa
       CopyToDest(ParseErrorCursor, ' ');
       CopyToDest(ParseErrorCursor, ' ');
 
-      Highlight(ParseErrorCursor, CSz("Parse Error"), TerminalColors.Yellow);
+      Highlight(ParseErrorCursor, MessageContext, TerminalColors.Yellow);
       CopyToDest(ParseErrorCursor, CSz(" :: "));
       CopyToDest(ParseErrorCursor, ToString(ErrorCode));
       CopyToDest(ParseErrorCursor, '\n');
@@ -1416,10 +1418,10 @@ ParseError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessa
       CopyToDest(ParseErrorCursor, ' ');
 
       for (u32 ECharIndex = 0;
-          ECharIndex < ErrorMessage.Count;
+          ECharIndex < Message.Count;
           ++ECharIndex)
       {
-        char C = ErrorMessage.Start[ECharIndex];
+        char C = Message.Start[ECharIndex];
         CopyToDest(ParseErrorCursor, C);
 
         if (C == '\n')
@@ -1434,7 +1436,7 @@ ParseError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessa
 
 
       { // Output the final underline
-        char_cursor ErrorCursor = CharCursor(ErrorMessage);
+        char_cursor ErrorCursor = CharCursor(Message);
         u64 LongestLine = GetLongestLineInCursor(&ErrorCursor);
 
         PrintTray(ParseErrorCursor, 0, MaxTrayWidth, TerminalColors.Yellow);
@@ -1519,18 +1521,38 @@ ParseError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessa
     Assert(Parser->Tokens->At == ErrorToken);
     Assert(Parser->Tokens->At->LineNumber == ErrorLineNumber);
 
-    Parser->ErrorMessage = ErrorMessage;
+    Parser->ErrorMessage = Message;
     Parser->ErrorCode = ErrorCode;
     Parser->ErrorToken = ErrorToken;
   }
   else
   {
     FormatCountedString_(ParseErrorCursor, CSz("Error determining where the error occurred\n"));
-    FormatCountedString_(ParseErrorCursor, CSz("Error messsage was : %S\n"), ErrorMessage);
+    FormatCountedString_(ParseErrorCursor, CSz("Error messsage was : %S\n"), Message);
     LogDirect("%S", CS(ParseErrorCursor));
   }
 
+  if (OriginalAtToken)
+  {
+    if (AdvanceTo(Parser, OriginalAtToken))
+    {
+    }
+    else if (RewindTo(Parser, OriginalAtToken))
+    {
+    }
+    else
+    {
+      Error("Couldn't find original token on parser.");
+    }
+  }
+
   return;
+}
+
+bonsai_function void
+ParseError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken)
+{
+  OutputContextMessage(Parser, ErrorCode, CSz("Parse Error"), ErrorMessage, ErrorToken);
 }
 
 bonsai_function void
@@ -1539,31 +1561,22 @@ ParseError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
   ParseError(Parser, ParseErrorCode_Unknown, ErrorMessage, ErrorToken);
 }
 
-// TODO(Jesse): Make a generic error function that has more-parameterzied messages
-//
-// ie. Now every error says "Parse Error ::", but we'd rather be able to say "Poof Type Error ::" in addition.
-bonsai_function void
-PoofTypeError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken)
-{
-  ParseError(Parser, ErrorCode, ErrorMessage, ErrorToken);
-}
-
 bonsai_function void
 PoofTypeError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
 {
-  PoofTypeError(Parser, ParseErrorCode_Unknown, ErrorMessage, ErrorToken);
+  OutputContextMessage(Parser, ParseErrorCode_PoofTypeError, CSz("Poof Type Error"), ErrorMessage, ErrorToken);
 }
 
 bonsai_function void
 ParseWarn(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
 {
-  Warn("%S", ErrorMessage);
+  OutputContextMessage(Parser, ParseErrorCode_None, CSz("Poof Warning"), ErrorMessage, ErrorToken);
 }
 
 bonsai_function void
 InternalCompilerError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
 {
-  ParseError(Parser, ParseErrorCode_Unknown, ErrorMessage, ErrorToken);
+  OutputContextMessage(Parser, ParseErrorCode_InternalCompilerError, CSz("XX INTERNAL COMPILER ERROR XX"), ErrorMessage, ErrorToken);
   RuntimeBreak();
 }
 
@@ -9663,10 +9676,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
 
           case type_variable_decl:
           {
-            if (MaybeEatAdditionalCommaSeperatedNames(Ctx))
-            {
-              ParseWarn(Parser, CSz("Silently ate additional variable name."), T);
-            }
+            MaybeEatAdditionalCommaSeperatedNames(Ctx);
 
             if (OptionalToken(Parser, CTokenType_Semicolon) == False)
             {
