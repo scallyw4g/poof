@@ -5678,23 +5678,6 @@ GenerateStructDef(d_union_decl* dUnion, memory_arena* Memory)
   return Result;
 }
 
-bonsai_function stl_container_def*
-GetStlContainer(stl_container_def_stream* Stream, counted_string Name)
-{
-  stl_container_def *Result = 0;
-  ITERATE_OVER(Stream)
-  {
-    auto* T = GET_ELEMENT(Iter);
-    if (StringsMatch(T->Name, Name))
-    {
-      Result = T;
-      break;
-    }
-  }
-
-  return Result;
-}
-
 bonsai_function type_def*
 GetTypedefByAlias(type_def_stream* Typedefs, counted_string Alias)
 {
@@ -5769,13 +5752,13 @@ GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
   enum_def   *E = GetEnumByType(&Datatypes->Enums, Name);
   type_def   *T = GetTypedefByAlias(&Datatypes->Typedefs, Name);
 
-  stl_container_def   *StlContainer = GetStlContainer(&Datatypes->StlContainers, Name);
+  /* stl_container_def   *StlContainer = GetStlContainer(&Datatypes->StlContainers, Name); */
 
   datatype Result = {};
 
   if (S)
   {
-    if (T || E ||StlContainer)
+    if (T || E)
     {
       // TODO(Jesse, correctness): Not sure what the solution to this is, but
       // this is definitely incorrect.
@@ -5785,18 +5768,13 @@ GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
   }
   else if (E)
   {
-    Assert(!T && !S && !StlContainer);
+    Assert(!T && !S);
     Result = Datatype(E);
   }
   else if (T)
   {
-    Assert(!E && !S && !StlContainer);
+    Assert(!E && !S);
     Result = Datatype(T);
-  }
-  else if (StlContainer)
-  {
-    Assert(!E && !S && !T);
-    Result = Datatype(StlContainer);
   }
 
   return Result;
@@ -10332,8 +10310,6 @@ GetValueForDatatype(datatype Data, memory_arena *Memory)
 
     case type_enum_def:
     case type_type_def:
-    case type_primitive_def:
-    case type_stl_container_def:
     {
       NotImplemented;
     } break;
@@ -10362,9 +10338,9 @@ GetValueForDatatype(datatype Data, memory_arena *Memory)
 
         case type_function_decl:
         {
-          // Very questionable what we do for each of these cases..
+          // Very questionable what we do for this ..?
           NotImplemented;
-          Result = CSz("(anonymous)");
+          Result = CSz("(function)");
         } break;
 
         case type_variable_decl:
@@ -10418,18 +10394,6 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
     case type_type_def:
     {
       NotImplemented;
-    } break;
-
-    case type_stl_container_def:
-    {
-      NotImplemented;
-    } break;
-
-    case type_primitive_def:
-    {
-      NotImplemented;
-      // Does this actually work?
-      // Result = Data->primitive_def->Type.SourceText;
     } break;
 
     case type_enum_def:
@@ -10664,8 +10628,6 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                   }
                 } break;
 
-                case type_primitive_def:
-                case type_stl_container_def:
                 case type_type_def:
                 {
                   NotImplemented;
@@ -11597,102 +11559,6 @@ WalkAst(ast_node* Ast)
   }
 }
 
-#if 0
-bonsai_function void
-RegisterPrimitiveDatatypes(program_datatypes *Datatypes, memory_arena *Memory)
-{
-  primitive_def P = {};
-
-  type_spec *Type = &P.Type;
-
-  //
-  // Integral Types
-  //
-
-#if 0
-  Type->Name = CSz("short"); Type->SourceText = CSz("short");
-  Push(&Datatypes->Primitives, P, Memory); Type->Signed = true;
-
-  Type->SourceText = CSz("short int");
-  Push(&Datatypes->Primitives, P, Memory);
-
-  Type->SourceText = CSz("signed short int");
-  Push(&Datatypes->Primitives, P, Memory);
-
-  Type->SourceText = CSz("signed short int");
-  Push(&Datatypes->Primitives, P, Memory);
-
-  Type->Token.Value = CSz("float"); Type->SourceText = CSz("float");
-  Push(&Datatypes->Primitives, P, Memory);
-
-  Type->Name = CSz("double"); Type->SourceText = CSz("double");
-  Push(&Datatypes->Primitives, P, Memory);
-#endif
-
-
-}
-#endif
-
-bonsai_function void
-RegisterUnparsedCxxTypes(program_datatypes *Datatypes, memory_arena *Memory)
-{
-  stl_container_def Container = {};
-
-  // Got this list of STL containers from : http://www.cplusplus.com/reference/stl/
-  // I have no real idea if it's complete, or accurate, and I don't really care.
-
-  Container.Name = CSz("array");
-  Push(&Datatypes->StlContainers, Container, Memory);
-
-  Container.Name = CSz("list");
-  Push(&Datatypes->StlContainers, Container, Memory);
-
-  Container.Name = CSz("forward_list");
-  Push(&Datatypes->StlContainers, Container, Memory);
-
-  Container.Name = CSz("dequeue");
-  Push(&Datatypes->StlContainers, Container, Memory);
-
-  Container.Name = CSz("vector");
-  Push(&Datatypes->StlContainers, Container, Memory);
-
-  Container.Name = CSz("stack");
-  Push(&Datatypes->StlContainers, Container, Memory);
-
-  Container.Name = CSz("queue");
-  Push(&Datatypes->StlContainers, Container, Memory);
-
-  Container.Name = CSz("priority_queue");
-  Push(&Datatypes->StlContainers, Container, Memory);
-
-  Container.Name = CSz("multiset");
-  Push(&Datatypes->StlContainers, Container, Memory);
-
-  Container.Name = CSz("multimap");
-  Push(&Datatypes->StlContainers, Container, Memory);
-
-  Container.Name = CSz("unordered_set");
-  Push(&Datatypes->StlContainers, Container, Memory);
-
-  Container.Name = CSz("unordered_map");
-  Push(&Datatypes->StlContainers, Container, Memory);
-
-  Container.Name = CSz("unordered_multiset");
-  Push(&Datatypes->StlContainers, Container, Memory);
-
-  Container.Name = CSz("unordered_multimap");
-  Push(&Datatypes->StlContainers, Container, Memory);
-
-  Container.Name = CSz("map");
-  Push(&Datatypes->StlContainers, Container, Memory);
-
-  Container.Name = CSz("set");
-  Push(&Datatypes->StlContainers, Container, Memory);
-
-  Container.Name = CSz("default_random_engine");
-  Push(&Datatypes->StlContainers, Container, Memory);
-}
-
 #ifndef EXCLUDE_PREPROCESSOR_MAIN
 #define SUCCESS_EXIT_CODE 0
 #define FAILURE_EXIT_CODE 1
@@ -11745,8 +11611,6 @@ main(s32 ArgCount_, const char** ArgStrings)
     /* todo_list_info TodoInfo = { */
     /*   .People = ParseAllTodosFromFile(CSz("todos.md"), Memory), */
     /* }; */
-
-    RegisterUnparsedCxxTypes(&Ctx.Datatypes, Memory);
 
     Assert(TotalElements(&Args.Files) == 1);
     Assert(Args.Files.Start == Args.Files.At);

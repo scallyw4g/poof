@@ -455,16 +455,6 @@ struct compound_decl // structs and unions
 meta(stream_and_cursor(compound_decl))
 #include <poof/generated/stream_and_cursor_struct_def.h> // TODO(Jesse): Change this name
 
-// Note(Jesse): These are just placeholder names such that we can do correct
-// type resolution when we see STL containers.
-struct stl_container_def
-{
-  counted_string Name;
-};
-meta(generate_stream(stl_container_def))
-#include <poof/generated/generate_stream_stl_container_def.h>
-
-
 enum linkage_type
 {
   linkage_noop,
@@ -642,10 +632,6 @@ enum datatype_type
   type_enum_member,
 
   type_type_def,
-
-  type_primitive_def,
-
-  type_stl_container_def,
 };
 meta(generate_string_table(datatype_type))
 #include <poof/generated/generate_string_table_datatype_type.h>
@@ -671,8 +657,6 @@ struct datatype
     enum_member        *enum_member;
 
     type_def           *type_def;
-
-    stl_container_def  *stl_container_def;
   };
 };
 
@@ -766,16 +750,6 @@ Datatype(type_def* E)
   datatype Result = {
     .Type = type_type_def,
     .type_def = E,
-  };
-  return Result;
-}
-
-bonsai_function datatype
-Datatype(stl_container_def* E)
-{
-  datatype Result = {
-    .Type = type_stl_container_def,
-    .stl_container_def = E,
   };
   return Result;
 }
@@ -1033,7 +1007,6 @@ struct program_datatypes
   function_decl_stream     Functions;
   type_def_stream          Typedefs;
   primitive_def_stream     Primitives;
-  stl_container_def_stream StlContainers;
 };
 
 struct for_enum_constraints
