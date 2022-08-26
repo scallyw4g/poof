@@ -10314,7 +10314,7 @@ PrintTypeSpec(type_spec *Type, memory_arena *Memory)
         })
       }
     )
-#include <poof/generated/anonymous_function_type_qualifier_fPa9h41Z.h>
+#include <poof/generated/anonymous_function_type_qualifier_fPa8h41Z.h>
   }
 
   if (Result.Count == 0)
@@ -10739,11 +10739,11 @@ ResolveToBaseType(parse_context *Ctx, datatype *Data)
           Result = ResolveToBaseType(Ctx, VDecl->Type);
         } break;
 
-        case type_function_decl:
         case type_compound_decl:
+        case type_function_decl:
         case type_enum_decl:
         {
-          NotImplemented;
+          Result = *Data;
         } break;
 
       }

@@ -33,7 +33,7 @@ BuildPoof=1
 
 # BuildAndRunAllExamples=1
 
-RunIntegrationTests=1
+# RunIntegrationTests=1
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 
 # OPTIMIZATION_LEVEL="-O2"
