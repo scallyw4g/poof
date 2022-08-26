@@ -18,7 +18,7 @@ POOF_LOG_LEVEL="--log-level LogLevel_Error"
 
 BUILD_EVERYTHING=0
 
-# RunPreemptivePoof=1
+RunPreemptivePoof=1
 
 RunPoof=1
 BuildPoof=1
@@ -155,9 +155,9 @@ function RunIntegrationTests()
     # whole directory to confirm/deny the output is identical for that test file
 
     $INTEGRATION_TEST_DEBUGGER bin/poof \
+      --log-level LogLevel_Error        \
       $filename                         \
       $COLORFLAG                        \
-      --log-level LogLevel_Error        \
       -o $INTEGRATION_OUTPUT_DIR/$basename_stripped
 
     DIFF_CHANGED=$(git diff --ignore-all-space --ignore-blank-lines $INTEGRATION_OUTPUT_DIR/$basename_stripped | wc -l)

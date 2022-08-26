@@ -39,6 +39,7 @@ struct bar_struct
   int fda;
 };
 
+
 #if 1
 meta(
   func (foo_enum Type)
@@ -60,7 +61,6 @@ meta(
 )
 #include <tests/integration/generated/anonymous_function_foo_2.h>
 #endif
-
 
 meta (d_union foobar_dunion { foo_struct bar_struct } )
 #include <tests/integration/generated/d_union_foobar_union.h>

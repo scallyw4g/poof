@@ -464,25 +464,6 @@ struct stl_container_def
 meta(generate_stream(stl_container_def))
 #include <poof/generated/generate_stream_stl_container_def.h>
 
-enum datatype_type
-{
-  type_datatype_noop,
-
-  type_d_compound_decl, // TODO(Jesse): Get rid of struct_def so we can change this to type_compound_decl
-  type_declaration,
-
-  type_enum_def,
-  type_enum_member,
-
-  type_type_def,
-
-  type_primitive_def,
-
-  type_stl_container_def,
-};
-meta(generate_string_table(datatype_type))
-#include <poof/generated/generate_string_table_datatype_type.h>
-
 
 enum linkage_type
 {
@@ -651,6 +632,24 @@ meta( generate_stream_chunk_struct(declaration) )
 #include <poof/generated/generate_stream_chunk_declaration.h>
 
 
+enum datatype_type
+{
+  type_datatype_noop,
+
+  type_declaration,
+
+  type_enum_def,
+  type_enum_member,
+
+  type_type_def,
+
+  type_primitive_def,
+
+  type_stl_container_def,
+};
+meta(generate_string_table(datatype_type))
+#include <poof/generated/generate_string_table_datatype_type.h>
+
 struct enum_def;
 struct enum_member;
 struct type_def;
@@ -666,7 +665,6 @@ struct datatype
 
   union
   {
-    compound_decl      *d_compound_decl;
     declaration        declaration;
 
     enum_def           *enum_def;
@@ -744,14 +742,21 @@ Datatype(enum_member* E)
   return Result;
 }
 
+bonsai_function declaration
+Declaration(compound_decl* S)
+{
+  declaration Result = {};
+  Result.Type = type_compound_decl;
+  Result.compound_decl = *S;
+  return Result;
+}
 
 bonsai_function datatype
 Datatype(compound_decl* S)
 {
-  datatype Result = {
-    .Type = type_d_compound_decl,
-    .d_compound_decl = S,
-  };
+  datatype Result = {};
+  Result.Type = type_declaration;
+  Result.declaration = Declaration(S);
   return Result;
 }
 

@@ -2012,7 +2012,7 @@ PeekTokenCursor(c_token_cursor *Tokens, s32 Skip)
   }
 
   // TODO(Jesse): Pack the conditional up above into a function we can call
-  // here.. ? 
+  // here.. ?
   if (IsValid(&Current) && (Current.At->Erased || IsWhitespace(Current.At) || IsComment(Current.At))) { Invalidate(&Current); } // Fires if the stream ends with whitespace/comment
 
 
@@ -2359,7 +2359,7 @@ RequireTokenPointer(parser* Parser, c_token *ExpectedToken)
     c_token* PeekedToken = PeekTokenPointer(Parser);
 
     // TODO(Jesse, id: 348, tags: immediate, id_347) : This should go into an AreEqual bonsai_function I think..
-    if (PeekedToken && 
+    if (PeekedToken &&
          (PeekedToken->Type != ExpectedToken->Type ||
          (ExpectedToken->Value.Count > 0 && !StringsMatch(ExpectedToken->Value, PeekedToken->Value) ))
        )
@@ -6713,7 +6713,7 @@ TryEatAttributes(parser *Parser)
   }
 }
 
-bonsai_function counted_string 
+bonsai_function counted_string
 StringFromTokenSpan(parser *Parser, c_token *StartToken, c_token *EndToken, memory_arena *Memory)
 {
   Assert(IsValidForCursor(Parser->Tokens, StartToken));
@@ -10078,6 +10078,22 @@ GenerateOutfileNameFor(counted_string Name, counted_string DatatypeName, memory_
   return Result;
 }
 
+link_internal counted_string
+GetTypeNameForCompoundDecl(compound_decl *CDecl)
+{
+  counted_string Result = {};
+  if (CDecl->Type)
+  {
+    Result = CDecl->Type->Value;
+  }
+  else
+  {
+    Result = CDecl->IsUnion ? CSz("union") :
+                              CSz("struct");
+  }
+  return Result;
+}
+
 bonsai_function counted_string
 GetTypeNameForStructMember(parse_context *Ctx, declaration* Decl, memory_arena *Memory)
 {
@@ -10102,10 +10118,9 @@ GetTypeNameForStructMember(parse_context *Ctx, declaration* Decl, memory_arena *
 
     case type_compound_decl:
     {
-      Result = Decl->compound_decl.IsUnion ?
-               CSz("union") :
-               CSz("struct");
-    } break;;
+      compound_decl *CDecl = SafeAccess(compound_decl, Decl);
+      Result = GetTypeNameForCompoundDecl(CDecl);
+    } break;
 
     InvalidDefaultCase;
   }
@@ -10115,7 +10130,7 @@ GetTypeNameForStructMember(parse_context *Ctx, declaration* Decl, memory_arena *
 
 
 bonsai_function counted_string
-GetNameForStructMember(declaration* Decl)
+GetNameForDecl(declaration* Decl)
 {
   counted_string Result = {};
 
@@ -10315,7 +10330,6 @@ GetValueForDatatype(datatype Data, memory_arena *Memory)
       InvalidCodePath();
     } break;
 
-    case type_d_compound_decl:
     case type_enum_def:
     case type_type_def:
     case type_primitive_def:
@@ -10374,7 +10388,7 @@ GetNameForDatatype(datatype *Data)
   {
     case type_declaration:
     {
-      Result = GetNameForStructMember(&Data->declaration);
+      Result = GetNameForDecl(&Data->declaration);
     } break;
 
     case type_enum_member:
@@ -10385,11 +10399,6 @@ GetNameForDatatype(datatype *Data)
     case type_enum_def:
     {
       Result = Data->enum_def->Name;
-    } break;
-
-    case type_d_compound_decl:
-    {
-      Result = Data->d_compound_decl->Type->Value;
     } break;
 
     InvalidDefaultCase;
@@ -10423,12 +10432,6 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
       // Result = Data->primitive_def->Type.SourceText;
     } break;
 
-    case type_d_compound_decl:
-    {
-      Result = Data->d_compound_decl->Type->Value;
-      Assert(Result.Count);
-    } break;
-
     case type_enum_def:
     {
       Result = Data->enum_def->Name;
@@ -10459,9 +10462,8 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
 
         case type_compound_decl:
         {
-          Result = Member->compound_decl.IsUnion ?
-            CSz("union") :
-            CSz("struct");
+          compound_decl *CDecl = SafeAccess(compound_decl, Member);
+          Result = GetTypeNameForCompoundDecl(CDecl);
         } break;
       }
 
@@ -10477,12 +10479,6 @@ GetMembersFor(datatype *Data)
   declaration_stream *Result = {};
   switch (Data->Type)
   {
-    case type_d_compound_decl:
-    {
-      auto S = SafeAccessPtr(d_compound_decl, Data);
-      Result = &S->Members;
-    } break;
-
     case type_declaration:
     {
       declaration *S = SafeAccess(declaration, Data);
@@ -10498,13 +10494,56 @@ GetMembersFor(datatype *Data)
         default: {} break;;
       }
 
-
     } break;
 
     default:
     {
     } break;
   }
+  return Result;
+}
+
+link_internal b32
+DatatypeIsUnion(parser *Scope, datatype *Data, c_token *MetaOperatorT)
+{
+  b32 Result = False;
+  switch (Data->Type)
+  {
+    case type_declaration:
+    {
+      declaration *Decl = SafeAccess(declaration, Data);
+
+      switch(Decl->Type)
+      {
+        case type_compound_decl:
+        {
+          compound_decl *CDecl = SafeAccess(compound_decl, Decl);
+          if (CDecl->IsUnion)
+          {
+            Result = True;
+          }
+        } break;
+
+        case type_variable_decl:
+        case type_function_decl:
+        {
+        } break;
+
+        case type_declaration_noop:
+        {
+          InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT);
+        } break;
+      }
+
+    } break;
+
+    InvalidDefaultError(Scope,
+        FormatCountedString( TranArena,
+                             CSz("%S called on invalid type (%S) with name (%S)"),
+                             MetaOperatorT->Value, ToString(Data->Type), GetNameForDatatype(Data) ),
+        MetaOperatorT);
+  }
+
   return Result;
 }
 
@@ -10560,70 +10599,18 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                           MetaOperatorToken);
             } break;
 
+            case is_struct:
             case is_union:
             {
               RequireToken(&Scope, CTokenType_Question);
               parser StructScope = GetBodyTextForNextScope(&Scope, Memory);
-              switch (Replace->Data.Type)
+
+              b32 NegateMask = (Operator == is_struct);
+              b32 IsUnion = DatatypeIsUnion(&Scope, &Replace->Data, MetaOperatorToken);
+              if (IsUnion ^ NegateMask)
               {
-                case type_declaration:
-                {
-                  declaration *Member = SafeAccess(declaration, &Replace->Data);
-
-                  switch(Member->Type)
-                  {
-                    case type_compound_decl:
-                    {
-                      auto Anon = SafeAccess(compound_decl, Member);
-                      if (Anon->IsUnion)
-                      {
-                        counted_string Code = Execute(FuncName, StructScope, ReplacePatterns, Ctx, Memory);
-                        Append(&OutputBuilder, Code);
-                      }
-                    } break;
-
-                    case type_variable_decl:
-                    case type_function_decl:
-                    {
-                    } break;
-
-                    case type_declaration_noop:
-                    {
-                      ParseError(&Scope, CSz("Infinite sadness"));
-                    } break;
-                  }
-
-                } break;
-
-                case type_d_compound_decl:
-                {
-                  compound_decl *Def = SafeAccessObj(d_compound_decl, Replace->Data);
-                  if (Def->IsUnion)
-                  {
-                    counted_string Code = Execute(FuncName, StructScope, ReplacePatterns, Ctx, Memory);
-                    Append(&OutputBuilder, Code);
-                  }
-                } break;
-
-                InvalidDefaultError(&Scope,
-                    FormatCountedString( TranArena,
-                                         CSz("%S called on invalid type (%S) with name (%S)"),
-                                         MetaOperatorToken->Value, ToString(Replace->Data.Type), GetNameForDatatype(&Replace->Data) ),
-                    MetaOperatorToken);
-              }
-            } break;
-
-            case is_struct:
-            {
-              RequireToken(&Scope, CTokenType_Question);
-              parser StructScope = GetBodyTextForNextScope(&Scope, Memory);
-              if (Replace->Data.Type == type_d_compound_decl)
-              {
-                if (Replace->Data.d_compound_decl->IsUnion == False)
-                {
-                  counted_string Code = Execute(FuncName, StructScope, ReplacePatterns, Ctx, Memory);
-                  Append(&OutputBuilder, Code);
-                }
+                counted_string Code = Execute(FuncName, StructScope, ReplacePatterns, Ctx, Memory);
+                Append(&OutputBuilder, Code);
               }
             } break;
 
@@ -10678,7 +10665,6 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                 } break;
 
                 case type_primitive_def:
-                case type_d_compound_decl:
                 case type_stl_container_def:
                 case type_type_def:
                 {
@@ -10776,8 +10762,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                           {
                             declaration* VarMember = GET_ELEMENT(VarMemberIter);
                             counted_string MemberName = GetTypeNameForStructMember(Ctx, VarMember, Memory);
-
-                            if (StringsMatch( MemberName, ContainingConstraint))
+                            if (StringsMatch(MemberName, ContainingConstraint))
                             {
                               ConstraintPassed = True;
                             }
@@ -10812,7 +10797,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               }
               else
               {
-                PoofTypeError( &Scope, 
+                PoofTypeError( &Scope,
                                FormatCountedString( TranArena,
                                                     CSz("Called map_members on a datatype that didn't have members (%S)"),
                                                     GetNameForDatatype(&Replace->Data)),
@@ -10844,7 +10829,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               }
               else
               {
-                PoofTypeError( &Scope, 
+                PoofTypeError( &Scope,
                                FormatCountedString( TranArena,
                                                     CSz("Called map_values on a datatype that wasn't an enum (%S)"),
                                                     GetNameForDatatype(&Replace->Data)),
