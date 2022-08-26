@@ -9473,28 +9473,20 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
          PeekToken(Parser).Type == CTokenType_Colon      )
     {
 
-      // TODO(Jesse): Is this garbage now?
       if (OptionalToken(Parser, CTokenType_Colon))
       {
         EatUntilExcluding(Parser, CTokenType_OpenBrace);
       }
 
-      if ( PeekToken(Parser).Type == CTokenType_OpenBrace ) // struct foo { ... };
-      {
-        Result.Type = type_compound_decl;
-        Result.compound_decl = ParseStructBody(Ctx, TypeSpec->DatatypeToken);
-      }
-      else
-      {
-        // struct foo;
-      }
+      Result.Type = type_compound_decl;
+      Result.compound_decl = ParseStructBody(Ctx, TypeSpec->DatatypeToken);
     }
     else
     {
-      // TODO(Jesse): This path seems a bit sus to me..
+      // struct foo;
       //
-      // template<typename foo> struct bar;
-      RequireToken(Parser, CTokenType_Semicolon);
+      // template<typename foo>
+      // struct bar;
     }
   }
   else if (TypeSpec->Qualifier & TypeQual_Union) // union { ... }
@@ -9534,7 +9526,9 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
   }
   else
   {
-    InternalCompilerError(Parser, CSz("Something very bad happened near here..."), PeekTokenPointer(Parser));
+    InternalCompilerError( Parser,
+                           CSz("Unhandled case during FinalizeDeclaration"),
+                           PeekTokenPointer(Parser));
   }
 
   return Result;
