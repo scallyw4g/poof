@@ -5697,17 +5697,17 @@ GetTypedefByAlias(type_def_stream* Typedefs, counted_string Alias)
 
 
 // TODO(Jesse id: 301, tags: metaprogramming):  These functions are super repetitive, generate them!
-bonsai_function enum_def*
-GetEnumByType(enum_def_stream* ProgramEnums, counted_string EnumType)
+bonsai_function enum_decl*
+GetEnumByType(enum_decl_stream* ProgramEnums, counted_string EnumType)
 {
   TIMED_FUNCTION();
 
-  enum_def* Result = 0;
-  for (enum_def_iterator Iter = Iterator(ProgramEnums);
+  enum_decl* Result = 0;
+  for (auto Iter = Iterator(ProgramEnums);
       IsValid(&Iter);
       Advance(&Iter))
   {
-    enum_def* Enum = &Iter.At->Element;
+    enum_decl* Enum = &Iter.At->Element;
     if (StringsMatch(Enum->Name, EnumType))
     {
       Result = Enum;
@@ -5749,7 +5749,7 @@ GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
 
   // TODO(Jesse id: 295, tags: speed): This could be optimized significantly by shuffling the logic around, not to mention using hashtables.
   compound_decl *S = GetStructByType(&Datatypes->Structs, Name);
-  enum_def   *E = GetEnumByType(&Datatypes->Enums, Name);
+  enum_decl   *E = GetEnumByType(&Datatypes->Enums, Name);
   type_def   *T = GetTypedefByAlias(&Datatypes->Typedefs, Name);
 
   /* stl_container_def   *StlContainer = GetStlContainer(&Datatypes->StlContainers, Name); */
@@ -5836,7 +5836,7 @@ ParseDiscriminatedUnion(parser* Parser, program_datatypes* Datatypes, counted_st
   {
     dUnion.CustomEnumType = RequireToken(Parser, CTokenType_Identifier).Value;;
 
-    enum_def* EnumDef = GetEnumByType(&Datatypes->Enums, dUnion.CustomEnumType);
+    enum_decl* EnumDef = GetEnumByType(&Datatypes->Enums, dUnion.CustomEnumType);
     if (EnumDef)
     {
       ITERATE_OVER(&EnumDef->Members)
@@ -8469,7 +8469,7 @@ ParseIntegerConstant(parser* Parser)
 }
 
 bonsai_function void
-ParseEnumBody(parse_context *Ctx, parser *Parser, enum_def *Enum, memory_arena *Memory)
+ParseEnumBody(parse_context *Ctx, parser *Parser, enum_decl *Enum, memory_arena *Memory)
 {
   RequireToken(Parser, CTokenType_OpenBrace);
 
@@ -8503,7 +8503,7 @@ ParseEnumBody(parse_context *Ctx, parser *Parser, enum_def *Enum, memory_arena *
   return;
 }
 
-bonsai_function enum_def
+bonsai_function enum_decl
 ParseEnum(parse_context *Ctx, type_spec *TypeSpec)
 {
   TIMED_FUNCTION();
@@ -8514,7 +8514,7 @@ ParseEnum(parse_context *Ctx, type_spec *TypeSpec)
   c_token *EnumNameT = TypeSpec->DatatypeToken;
   counted_string EnumName = EnumNameT ? EnumNameT->Value : CSz("(anonymous enum)");
 
-  enum_def Enum = {
+  enum_decl Enum = {
     .Name = EnumName
   };
 
@@ -8661,7 +8661,7 @@ ParseTypedef(parse_context *Ctx)
   {
     RequireToken(Parser, *Peek);
 
-    enum_def Enum = {};
+    enum_decl Enum = {};
 
     {
       c_token Name = PeekToken(Parser);
@@ -9501,7 +9501,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
   }
   else if (TypeSpec->Qualifier & TypeQual_Enum) // enum { ... }
   {
-    enum_def Enum = ParseEnum(Ctx, TypeSpec);
+    enum_decl Enum = ParseEnum(Ctx, TypeSpec);
     Push(&Ctx->Datatypes.Enums, Enum, Ctx->Memory);
   }
   else if (IsConstructor)  // my_thing::my_thing(...) {...}
@@ -10305,7 +10305,7 @@ GetValueForDatatype(datatype *Data, memory_arena *Memory)
       InvalidCodePath();
     } break;
 
-    case type_enum_def:
+    case type_enum_decl:
     case type_type_def:
     {
       NotImplemented;
@@ -10369,9 +10369,9 @@ GetNameForDatatype(datatype *Data)
       Result = Data->enum_member->Name;
     } break;
 
-    case type_enum_def:
+    case type_enum_decl:
     {
-      Result = Data->enum_def->Name;
+      Result = Data->enum_decl->Name;
     } break;
 
     InvalidDefaultCase;
@@ -10393,9 +10393,9 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
       NotImplemented;
     } break;
 
-    case type_enum_def:
+    case type_enum_decl:
     {
-      Result = Data->enum_def->Name;
+      Result = Data->enum_decl->Name;
     } break;
 
     case type_enum_member:
@@ -10585,7 +10585,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               switch (Replace->Data.Type)
               {
                 case type_enum_member:
-                case type_enum_def:
+                case type_enum_decl:
                 {
                   counted_string Code = Execute(FuncName, EnumScope, ReplacePatterns, Ctx, Memory);
                   Append(&OutputBuilder, Code);
@@ -10601,7 +10601,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                       // NOTE(Jesse): The data access that feed into GetEnumByType requires this to be true.
                       Assert(SM->Type == type_variable_decl);
 
-                      enum_def *E = GetEnumByType(&Datatypes->Enums, SM->variable_decl.Type.DatatypeToken->Value);
+                      enum_decl *E = GetEnumByType(&Datatypes->Enums, SM->variable_decl.Type.DatatypeToken->Value);
                       if (E)
                       {
                         meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
@@ -10775,9 +10775,9 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               RequireToken(&Scope, CTokenType_CloseParen);
               parser NextScope = GetBodyTextForNextScope(&Scope, Memory);
 
-              if (Replace->Data.Type == type_enum_def)
+              if (Replace->Data.Type == type_enum_decl)
               {
-                ITERATE_OVER(&Replace->Data.enum_def->Members)
+                ITERATE_OVER(&Replace->Data.enum_decl->Members)
                 {
                   enum_member* EnumMember = GET_ELEMENT(Iter);
                   meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
@@ -10897,7 +10897,7 @@ ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_s
     counted_string DatatypeName    = RequireToken(Parser, CTokenType_Identifier).Value;
 
     compound_decl* Struct                 = GetStructByType(&Datatypes->Structs, DatatypeName);
-    enum_def* Enum                     = GetEnumByType(&Datatypes->Enums, DatatypeName);
+    enum_decl* Enum                     = GetEnumByType(&Datatypes->Enums, DatatypeName);
     tagged_counted_string_stream* List = StreamContains(NameLists, DatatypeName);
 
     if (Struct || Enum)
@@ -11297,11 +11297,11 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               }
             }
 
-            for (enum_def_iterator Iter = Iterator(&Datatypes->Enums);
+            for (auto Iter = Iterator(&Datatypes->Enums);
                 IsValid(&Iter);
                 Advance(&Iter))
             {
-              enum_def* Enum = &Iter.At->Element;
+              enum_decl* Enum = &Iter.At->Element;
               if (!StreamContains(&Excludes, Enum->Name))
               {
                 meta_func_arg_stream Args = {};

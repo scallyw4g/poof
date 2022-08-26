@@ -20,17 +20,17 @@ BUILD_EVERYTHING=0
 
 RunPreemptivePoof=1
 
-# RunPoof=1
-# BuildPoof=1
+RunPoof=1
+BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
 
-# RunParserTests=1
+RunParserTests=1
 BuildParserTests=1
 # TEST_DEBUGGER="gdb --args" 
 
-# BuildAndRunAllExamples=1
+BuildAndRunAllExamples=1
 
-# RunIntegrationTests=1
+RunIntegrationTests=1
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 
 OPTIMIZATION_LEVEL="-O0"

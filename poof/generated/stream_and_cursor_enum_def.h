@@ -1,15 +1,15 @@
-        struct enum_def_cursor
+        struct enum_decl_cursor
     {
-      enum_def* Start;
-      enum_def* At;
-      enum_def* End;
+      enum_decl* Start;
+      enum_decl* At;
+      enum_decl* End;
     };
 
-    bonsai_function enum_def_cursor
-    EnumDefCursor(umm ElementCount, memory_arena* Memory)
+    bonsai_function enum_decl_cursor
+    EnumDeclCursor(umm ElementCount, memory_arena* Memory)
     {
-      enum_def* Start = (enum_def*)PushStruct(Memory, sizeof( enum_def ), 1, 0);
-      enum_def_cursor Result = {
+      enum_decl* Start = (enum_decl*)PushStruct(Memory, sizeof( enum_decl ), 1, 0);
+      enum_decl_cursor Result = {
         .Start = Start,
         .End = Start+ElementCount,
         .At = Start,
@@ -17,29 +17,29 @@
       return Result;
     }
 
-            struct enum_def_stream_chunk
+            struct enum_decl_stream_chunk
     {
-      enum_def Element;
-      enum_def_stream_chunk* Next;
+      enum_decl Element;
+      enum_decl_stream_chunk* Next;
     };
 
-        struct enum_def_stream
+        struct enum_decl_stream
     {
-      enum_def_stream_chunk* FirstChunk;
-      enum_def_stream_chunk* LastChunk;
+      enum_decl_stream_chunk* FirstChunk;
+      enum_decl_stream_chunk* LastChunk;
     };
 
 
-        struct enum_def_iterator
+        struct enum_decl_iterator
     {
-      enum_def_stream* Stream;
-      enum_def_stream_chunk* At;
+      enum_decl_stream* Stream;
+      enum_decl_stream_chunk* At;
     };
 
-    bonsai_function enum_def_iterator
-    Iterator(enum_def_stream* Stream)
+    bonsai_function enum_decl_iterator
+    Iterator(enum_decl_stream* Stream)
     {
-      enum_def_iterator Iterator = {
+      enum_decl_iterator Iterator = {
         .Stream = Stream,
         .At = Stream->FirstChunk
       };
@@ -47,30 +47,30 @@
     }
 
     bonsai_function b32
-    IsValid(enum_def_iterator* Iter)
+    IsValid(enum_decl_iterator* Iter)
     {
       b32 Result = Iter->At != 0;
       return Result;
     }
 
     bonsai_function void
-    Advance(enum_def_iterator* Iter)
+    Advance(enum_decl_iterator* Iter)
     {
       Iter->At = Iter->At->Next;
     }
 
     bonsai_function b32
-    IsLastElement(enum_def_iterator* Iter)
+    IsLastElement(enum_decl_iterator* Iter)
     {
       b32 Result = Iter->At->Next == 0;
       return Result;
     }
 
 
-        bonsai_function enum_def *
-    Push(enum_def_stream* Stream, enum_def Element, memory_arena* Memory)
+        bonsai_function enum_decl *
+    Push(enum_decl_stream* Stream, enum_decl Element, memory_arena* Memory)
     {
-      enum_def_stream_chunk* NextChunk = (enum_def_stream_chunk*)PushStruct(Memory, sizeof( enum_def_stream_chunk ), 1, 0);
+      enum_decl_stream_chunk* NextChunk = (enum_decl_stream_chunk*)PushStruct(Memory, sizeof( enum_decl_stream_chunk ), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)
@@ -88,12 +88,12 @@
       Assert(NextChunk->Next == 0);
       Assert(Stream->LastChunk->Next == 0);
 
-      enum_def *Result = &NextChunk->Element;
+      enum_decl *Result = &NextChunk->Element;
       return Result;
     }
 
     bonsai_function void
-    ConcatStreams( enum_def_stream *S1, enum_def_stream *S2)
+    ConcatStreams( enum_decl_stream *S1, enum_decl_stream *S2)
     {
       if (S1->LastChunk)
       {

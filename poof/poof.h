@@ -628,7 +628,7 @@ enum datatype_type
 
   type_declaration,
 
-  type_enum_def,
+  type_enum_decl,
   type_enum_member,
 
   type_type_def,
@@ -636,7 +636,7 @@ enum datatype_type
 meta(generate_string_table(datatype_type))
 #include <poof/generated/generate_string_table_datatype_type.h>
 
-struct enum_def;
+struct enum_decl;
 struct enum_member;
 struct type_def;
 
@@ -648,7 +648,7 @@ struct datatype
   {
     declaration declaration;
 
-    enum_def    *enum_def;
+    enum_decl    *enum_decl;
     enum_member *enum_member;
 
     type_def    *type_def;
@@ -673,15 +673,15 @@ struct d_union_member
 meta(generate_stream(d_union_member))
 #include <poof/generated/generate_stream_d_union_member.h>
 
-struct enum_def
+struct enum_decl
 {
   counted_string Name;
   enum_member_stream Members;
 };
-meta(stream_and_cursor(enum_def))
+meta(stream_and_cursor(enum_decl))
 #include <poof/generated/stream_and_cursor_enum_def.h>
 
-// typedef enum_def enum_decl;
+// typedef enum_decl enum_decl;
 
 struct type_def
 {
@@ -750,11 +750,11 @@ Datatype(type_def* E)
 }
 
 bonsai_function datatype
-Datatype(enum_def* E)
+Datatype(enum_decl* E)
 {
   datatype Result = {
-    .Type = type_enum_def,
-    .enum_def = E,
+    .Type = type_enum_decl,
+    .enum_decl = E,
   };
   return Result;
 }
@@ -997,8 +997,8 @@ struct program_datatypes
   macro_def_hashtable      Macros;
   counted_string_hashtable FilesParsed;
 
-  compound_decl_stream        Structs;
-  enum_def_stream          Enums;
+  compound_decl_stream     Structs;
+  enum_decl_stream         Enums;
   function_decl_stream     Functions;
   type_def_stream          Typedefs;
   primitive_def_stream     Primitives;
