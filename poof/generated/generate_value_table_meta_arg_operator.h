@@ -13,6 +13,7 @@
           if (StringsMatch(S, CSz("is_struct"))) { return is_struct; }
           if (StringsMatch(S, CSz("is_union"))) { return is_union; }
           if (StringsMatch(S, CSz("is_defined"))) { return is_defined; }
+          if (StringsMatch(S, CSz("is_compound"))) { return is_compound; }
 
 
       return Result;

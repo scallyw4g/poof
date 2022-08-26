@@ -7,7 +7,7 @@
 # NOTE(Jesse): The following are switches for twiddling during development.
 # Calling functions by name on the command line shouldn't be affected by these.
 
-# git checkout $META_OUT
+git checkout $META_OUT
 
 TEST_LOG_LEVEL="--log-level LogLevel_Error"
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
@@ -17,7 +17,7 @@ POOF_LOG_LEVEL="--log-level LogLevel_Error"
 POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
 INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Error"
-INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
+# INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
 BUILD_EVERYTHING=0
 
@@ -288,10 +288,20 @@ else
 
   if [[ $RunPreemptivePoof == 1 || $BUILD_EVERYTHING == 1 ]]; then
     # TODO(Jesse): Cache and reset these?
+    old_poof_executable=$POOF_EXECUTABLE
     POOF_EXECUTABLE=poof
-    # POOF_DEBUGGER=
+
+    old_poof_debugger=$POOF_DEBUGGER
+    POOF_DEBUGGER=
+
+    old_poof_log_level=$POOF_LOG_LEVEL
     POOF_LOG_LEVEL="--log-level LogLevel_Error"
+
     RunPoof
+
+    POOF_LOG_LEVEL=$old_poof_log_level
+    POOF_DEBUGGER=$old_poof_debugger
+    POOF_EXECUTABLE=$old_poof_executable
   fi
 
   if [[ $BuildPoof == 1 || $BUILD_EVERYTHING == 1 ]]; then

@@ -21,7 +21,7 @@ global_variable memory_arena Global_PermMemory = {};
 
 
 
-#define DEBUG_PRINT (1)
+#define DEBUG_PRINT (0)
 #if DEBUG_PRINT
 #include <bonsai_stdlib/headers/debug_print.h>
 
@@ -137,6 +137,11 @@ bonsai_function declaration FinalizeDeclaration(parse_context *Ctx, parser *Pars
 
 bonsai_function counted_string GetTypeTypeForDatatype(datatype *Data, memory_arena *);
 bonsai_function counted_string GetTypeNameForDatatype(datatype *Data, memory_arena *);
+
+
+bonsai_function counted_string Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory);
+bonsai_function void           DoTrueFalse( parse_context *Ctx, parser *Scope, meta_func_arg_stream* ReplacePatterns, b32 DoTrueBranch, string_builder *OutputBuilder, memory_arena *Memory);
+
 
 inline c_token_cursor *
 HasValidDownPointer(c_token *T)
@@ -10287,9 +10292,6 @@ CopyStream(meta_func_arg_stream* Stream, memory_arena* Memory)
 }
 
 bonsai_function counted_string
-Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory);
-
-bonsai_function counted_string
 PrintTypeSpec(type_spec *Type, memory_arena *Memory)
 {
   counted_string Result = {};
@@ -10596,12 +10598,10 @@ DatatypeIsVariableDecl(datatype *Data)
   return Result;
 }
 
-// TODO(Jesse, cleanup): invent an either type with (error | value) so that we
-// don't have to pass the scope and MetaOperatorT just to report errors
-link_internal b32
-DatatypeIsUnion(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
+link_internal compound_decl *
+DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
 {
-  b32 Result = False;
+  compound_decl *Result = {};
   switch (Data->Type)
   {
     case type_declaration:
@@ -10610,13 +10610,20 @@ DatatypeIsUnion(parse_context *Ctx, parser *Scope, datatype *Data, c_token *Meta
 
       switch(Decl->Type)
       {
+        case type_declaration_noop:
+        {
+          // TODO(Jesse) ?
+          InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT);
+        } break;
+
+        case type_enum_decl:
+        case type_function_decl:
+        {
+        } break;
+
         case type_compound_decl:
         {
-          compound_decl *CDecl = SafeAccess(compound_decl, Decl);
-          if (CDecl->IsUnion)
-          {
-            Result = True;
-          }
+          Result = SafeAccess(compound_decl, Decl);
         } break;
 
         case type_variable_decl:
@@ -10626,18 +10633,8 @@ DatatypeIsUnion(parse_context *Ctx, parser *Scope, datatype *Data, c_token *Meta
           Assert(DatatypeIsVariableDecl(&DT) == False);
           if (DT.Type)
           {
-            Result = DatatypeIsUnion(Ctx, Scope, &DT, MetaOperatorT);
+            Result = DatatypeIsCompoundDecl(Ctx, Scope, &DT, MetaOperatorT);
           }
-        } break;
-
-        case type_enum_decl:
-        case type_function_decl:
-        {
-        } break;
-
-        case type_declaration_noop:
-        {
-          InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT);
         } break;
       }
 
@@ -10889,18 +10886,32 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
             } break;
 
+            case is_compound:
+            {
+              RequireToken(&Scope, CTokenType_Question);
+              compound_decl *CD = DatatypeIsCompoundDecl(Ctx, &Scope, &Replace->Data, MetaOperatorToken);
+
+              b32 DoTrueBranch = (CD != 0);
+              DoTrueFalse(Ctx, &Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
+            } break;
+
             case is_struct:
             case is_union:
             {
               RequireToken(&Scope, CTokenType_Question);
               parser StructScope = GetBodyTextForNextScope(&Scope, Memory);
 
-              b32 NegateMask = (Operator == is_struct);
-              b32 IsUnion = DatatypeIsUnion(Ctx, &Scope, &Replace->Data, MetaOperatorToken);
-              if (IsUnion ^ NegateMask)
+              compound_decl *D = DatatypeIsCompoundDecl(Ctx, &Scope, &Replace->Data, MetaOperatorToken);
+
+              if (D)
               {
-                counted_string Code = Execute(FuncName, StructScope, ReplacePatterns, Ctx, Memory);
-                Append(&OutputBuilder, Code);
+                b32 Negate = (Operator == is_struct);
+                b32 IsUnion = D->IsUnion;
+                if (IsUnion ^ Negate)
+                {
+                  counted_string Code = Execute(FuncName, StructScope, ReplacePatterns, Ctx, Memory);
+                  Append(&OutputBuilder, Code);
+                }
               }
             } break;
 
@@ -10992,7 +11003,6 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
             case name:
             {
-              DebugPrint(Replace);
               counted_string Name = GetNameForDatatype(&Replace->Data);
               if (OptionalToken(&Scope, CTokenType_Question))
               {
@@ -11232,6 +11242,37 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
   counted_string Result = Finalize(&OutputBuilder, Memory);
   return Result;
+}
+
+link_internal void
+DoTrueFalse( parse_context *Ctx,
+             parser *Scope,
+             meta_func_arg_stream* ReplacePatterns,
+             b32 DoTrueBranch,
+             string_builder *OutputBuilder,
+             memory_arena *Memory)
+{
+  parser TrueScope = GetBodyTextForNextScope(Scope, Memory);
+  parser FalseScope = {};
+
+  if (PeekToken(Scope).Type == CTokenType_OpenBrace)
+  {
+    FalseScope = GetBodyTextForNextScope(Scope, Memory);
+  }
+
+  if (DoTrueBranch)
+  {
+    counted_string Code = Execute(CSz(""), TrueScope, ReplacePatterns, Ctx, Memory);
+    Append(OutputBuilder, Code);
+  }
+  else
+  {
+    if (FalseScope.Tokens)
+    {
+      counted_string Code = Execute(CSz(""), FalseScope, ReplacePatterns, Ctx, Memory);
+      Append(OutputBuilder, Code);
+    }
+  }
 }
 
 bonsai_function counted_string
@@ -12093,6 +12134,8 @@ main(s32 ArgCount_, const char** ArgStrings)
   }
 
   TryDeleteDirectory(TMP_DIR_ROOT);
+
+  DebugPrint(Ctx);
 
   s32 Result = !Success; // ? SUCCESS_EXIT_CODE : FAILURE_EXIT_CODE ;
   return Result;
