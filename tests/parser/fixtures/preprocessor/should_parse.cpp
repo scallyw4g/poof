@@ -31,7 +31,7 @@ struct foo
     .bar = {
       .baz = 2,
     },
-  }
+  };
 
 struct sequence *foofunc(void);
 enum   sequence *foofunc(void);

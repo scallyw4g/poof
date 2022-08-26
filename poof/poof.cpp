@@ -9019,11 +9019,7 @@ ParseTypeSpecifierNode(parse_context *Ctx, ast_node_expression *Result, datatype
     }
     else
     {
-      //
       // Primitive type .. whadda we do?
-      //
-
-      /* primitive_def TempDatatype = GetPrimitiveType(&Datatypes->Primitives, Node->TypeSpec); */
     }
   }
 
@@ -9677,6 +9673,11 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
             if (MaybeEatAdditionalCommaSeperatedNames(Ctx))
             {
               ParseWarn(Parser, CSz("Silently ate additional variable name."), T);
+            }
+
+            if (OptionalToken(Parser, CTokenType_Semicolon) == False)
+            {
+              ParseError_ExpectedSemicolonEqualsCommaOrOpenBrace(Parser, PeekTokenPointer(Parser));
             }
           } break;
 

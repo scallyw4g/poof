@@ -598,55 +598,29 @@ struct enum_decl
 meta(stream_and_cursor(enum_decl))
 #include <poof/generated/stream_and_cursor_enum_def.h>
 
-/* TODO(Jesse, id: 290, tags: metaprogramming, improvement): generating this:
- * meta( d_union declaration { function_decl variable_decl })
- * results in a name collision with the struct_member union tag.
- *
- * Should we have some way of overriding the tag name it generates?  Or
- * potentially modify the way we generate type tags such that name collisions
- * won't happen.  I'd prefer an override to keep the tag names as concise as
- * possible, but maybe once the preprocessor generates the switch statements
- * for us it won't matter if they're overly verbose.
- *
- *
- * UPDATE(Jesse): Should have struct_member remvoed soon so we can clean this up!!
- *
- */
-enum declaration_type
-{
-  type_declaration_noop,
-  type_function_decl,
-  type_variable_decl,
-  type_compound_decl,
-  type_enum_decl,
-};
-
-struct declaration
-{
-  declaration_type Type;
-
-  union
+meta(
+  d_union declaration
   {
-    enum_decl     enum_decl;
-    function_decl function_decl;
-    variable_decl variable_decl;
-    compound_decl compound_decl;
-  };
-};
+    enum_decl
+    function_decl
+    compound_decl
+    variable_decl
+  }
+)
+#include <poof/generated/d_union_declaration.h>
+
 meta(generate_cursor(declaration))
 #include <poof/generated/generate_cursor_declaration.h>
-meta( generate_stream_chunk_struct(declaration) )
+
+meta(generate_stream_chunk_struct(declaration))
 #include <poof/generated/generate_stream_chunk_declaration.h>
 
 
 enum datatype_type
 {
   type_datatype_noop,
-
   type_declaration,
-
   type_enum_member,
-
   type_type_def,
 };
 meta(generate_string_table(datatype_type))
@@ -661,7 +635,7 @@ struct datatype
 
   union
   {
-    declaration declaration;
+    declaration  declaration;
     enum_member *enum_member;
     type_def    *type_def;
   };
@@ -684,14 +658,6 @@ struct type_def
 };
 meta(generate_stream(type_def))
 #include <poof/generated/generate_stream_type_def.h>
-
-
-struct primitive_def
-{
-  type_spec Type;
-};
-meta(generate_stream(primitive_def))
-#include <poof/generated/generate_stream_primitive_def.h>
 
 
 bonsai_function datatype
@@ -1002,7 +968,6 @@ struct program_datatypes
   enum_decl_stream         Enums;
   function_decl_stream     Functions;
   type_def_stream          Typedefs;
-  primitive_def_stream     Primitives;
 };
 
 struct for_enum_constraints

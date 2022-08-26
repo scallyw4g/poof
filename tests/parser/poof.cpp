@@ -2564,10 +2564,10 @@ main(s32 ArgCount, const char** Args)
   TestLogicalOperators(Memory);
   TestLineNumbers(Memory);
 
-  /* auto PrevLogLevel = Global_LogLevel; */
-  /* Global_LogLevel = LogLevel_Shush; */
-  /* TestErrors(Memory); */
-  /* Global_LogLevel = PrevLogLevel; */
+  auto PrevLogLevel = Global_LogLevel;
+  Global_LogLevel = LogLevel_Shush;
+  TestErrors(Memory);
+  Global_LogLevel = PrevLogLevel;
 #endif
 
   TestAst(Memory);
