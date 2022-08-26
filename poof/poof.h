@@ -419,10 +419,7 @@ meta(generate_string_table(parse_error_code))
 
 struct parser
 {
-  counted_string ErrorMessage;
   parse_error_code ErrorCode;
-  c_token *ErrorToken;
-
   c_token_cursor *Tokens;
 };
 meta(generate_cursor(parser))

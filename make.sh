@@ -20,8 +20,8 @@ BUILD_EVERYTHING=0
 
 RunPreemptivePoof=1
 
-RunPoof=1
-BuildPoof=1
+# RunPoof=1
+# BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
 
 RunParserTests=1

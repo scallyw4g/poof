@@ -10,13 +10,13 @@ struct
 thing::~thing()
 {
 }
+#endif
 
 struct foo
 {
   struct {
   } *bar;
 };
-#endif
 
 
 

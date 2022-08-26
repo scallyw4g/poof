@@ -1403,19 +1403,11 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
       CopyToDest(ParseErrorCursor, ' ');
       CopyToDest(ParseErrorCursor, ' ');
 
-      Highlight(ParseErrorCursor, MessageContext, TerminalColors.Yellow);
-      CopyToDest(ParseErrorCursor, CSz(" :: "));
-      CopyToDest(ParseErrorCursor, ToString(ErrorCode));
-      CopyToDest(ParseErrorCursor, '\n');
-
-
-      PrintTray(ParseErrorCursor, 0, MaxTrayWidth, TerminalColors.Yellow);
-      CopyToDest(ParseErrorCursor, '\n');
-
-
-      PrintTray(ParseErrorCursor, 0, MaxTrayWidth, TerminalColors.Yellow);
-      CopyToDest(ParseErrorCursor, ' ');
-      CopyToDest(ParseErrorCursor, ' ');
+      if (MessageContext.Count)
+      {
+        Highlight(ParseErrorCursor, MessageContext, TerminalColors.Yellow);
+        CopyToDest(ParseErrorCursor, CSz(" :: "));
+      }
 
       for (u32 ECharIndex = 0;
           ECharIndex < Message.Count;
@@ -1423,7 +1415,6 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
       {
         char C = Message.Start[ECharIndex];
         CopyToDest(ParseErrorCursor, C);
-
         if (C == '\n')
         {
           PrintTray(ParseErrorCursor, 0, MaxTrayWidth, TerminalColors.Yellow);
@@ -1432,13 +1423,29 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
         }
       }
 
-      CopyToDest(ParseErrorCursor, '\n');
+      if (MessageContext.Count)
+      {
+        if (ErrorCode)
+        {
+          CopyToDest(ParseErrorCursor, '\n');
+          PrintTray(ParseErrorCursor, 0, MaxTrayWidth, TerminalColors.Yellow);
+          CopyToDest(ParseErrorCursor, ' ');
+          CopyToDest(ParseErrorCursor, ' ');
+
+          CopyToDest(ParseErrorCursor, '\n');
+          PrintTray(ParseErrorCursor, 0, MaxTrayWidth, TerminalColors.Yellow);
+          CopyToDest(ParseErrorCursor, ' ');
+          CopyToDest(ParseErrorCursor, ' ');
+          CopyToDest(ParseErrorCursor, ToString(ErrorCode));
+        }
+      }
 
 
       { // Output the final underline
         char_cursor ErrorCursor = CharCursor(Message);
         u64 LongestLine = GetLongestLineInCursor(&ErrorCursor);
 
+        CopyToDest(ParseErrorCursor, '\n');
         PrintTray(ParseErrorCursor, 0, MaxTrayWidth, TerminalColors.Yellow);
         CopyToDest(ParseErrorCursor, TerminalColors.Yellow);
         for (u32 DashIndex = 0;
@@ -1520,9 +1527,16 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
     RewindTo(Parser, OriginalAtToken);
     Assert(PeekTokenRawPointer(Parser) == OriginalAtToken);
 
-    Parser->ErrorMessage = Message;
-    Parser->ErrorCode = ErrorCode;
-    Parser->ErrorToken = ErrorToken;
+
+    // Don't overwrite the error code if we call this with an info message (and pass ParseErrorCode_None)
+    if (ErrorCode)
+    {
+      Parser->ErrorCode = ErrorCode;
+    }
+    else if (PrevErrorCode)
+    {
+      Parser->ErrorCode = PrevErrorCode;
+    }
   }
   else
   {
@@ -1532,6 +1546,12 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
   }
 
   return;
+}
+
+bonsai_function void
+ParseInfoMessage(parser* Parser, counted_string Message, c_token* T)
+{
+  OutputContextMessage(Parser, ParseErrorCode_None, CSz(""), Message, T);
 }
 
 bonsai_function void
@@ -2902,10 +2922,9 @@ ExpandMacro( parse_context *Ctx,
               }
               else
               {
-                ParseError( FirstPass,
-                            Expanded->ErrorCode,
-                            FormatCountedString(TranArena, CSz("While Expanding %S"), ArgToken->Value),
-                            ArgToken);
+                ParseInfoMessage( FirstPass,
+                                  FormatCountedString(TranArena, CSz("While Expanding %S"), ArgToken->Value),
+                                  ArgToken);
               }
             }
             else
@@ -2950,10 +2969,9 @@ ExpandMacro( parse_context *Ctx,
             {
               // TOOD(Jesse, tags: immediate): Write a test that exercises this
               // path.  Right now there's a bug blocking it
-              ParseError( &Temp,
-                          Expanded->ErrorCode,
-                          FormatCountedString(TranArena, CSz("0 While Expanding %S"), Next->Value),
-                          Next);
+              ParseInfoMessage( &Temp,
+                                FormatCountedString(TranArena, CSz("0 While Expanding %S"), Next->Value),
+                                Next);
             }
             else
             {
@@ -3034,10 +3052,10 @@ ExpandMacro( parse_context *Ctx,
               /* umm NewSize = TotalSize(&FirstPass->Tokens); */
               /* Reallocate((u8*)FirstPass->Tokens->Start, TranArena, CurrentSize, NewSize); */
 
-              ParseError(FirstPass,
-                         ParseErrorCode_InvalidTokenGenerated,
-                         FormatCountedString(TranArena, CSz("Invalid token generated during paste (%S)"), Prev->Value),
-                         Prev);
+              ParseError( FirstPass,
+                          ParseErrorCode_InvalidTokenGenerated,
+                          FormatCountedString(TranArena, CSz("Invalid token generated during paste (%S)"), Prev->Value),
+                          Prev);
             }
 
           }
@@ -3103,10 +3121,9 @@ ExpandMacro( parse_context *Ctx,
             parser *Expanded = ExpandMacro(Ctx, FirstPass, T->Macro.Def, PermMemory, TempMemory);
             if (Expanded->ErrorCode)
             {
-              ParseError( FirstPass,
-                          Expanded->ErrorCode,
-                          FormatCountedString(TranArena, CSz("While Expanding %S"), T->Value),
-                          T);
+              ParseInfoMessage( FirstPass,
+                                FormatCountedString(TranArena, CSz("While Expanding %S"), T->Value),
+                                T);
             }
             else
             {
@@ -3127,10 +3144,9 @@ ExpandMacro( parse_context *Ctx,
           parser *Expanded = ExpandMacro(Ctx, FirstPass, T->Macro.Def, PermMemory, TempMemory);
           if (Expanded->ErrorCode)
           {
-            ParseError( FirstPass,
-                        Expanded->ErrorCode,
-                        FormatCountedString(TranArena, CSz("While Expanding %S"), T->Value),
-                        T);
+            ParseInfoMessage( FirstPass,
+                              FormatCountedString(TranArena, CSz("While Expanding %S"), T->Value),
+                              T);
           }
           else
           {
@@ -3175,8 +3191,7 @@ ExpandMacro( parse_context *Ctx,
   /* LogDirect("\n"); */
 
   Result->ErrorCode = FirstPass->ErrorCode;
-  Result->ErrorToken = FirstPass->ErrorToken;
-  Result->ErrorMessage = FirstPass->ErrorMessage;
+  Parser->ErrorCode = FirstPass->ErrorCode;
 
   return Result;
 }
@@ -5205,10 +5220,9 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, memory_arena *Memory)
             parser *Expanded = ExpandMacro(Ctx, Parser, Macro, Memory, &TempMemory, True);
             if (Expanded->ErrorCode)
             {
-              ParseError( Parser,
-                          Expanded->ErrorCode,
-                          FormatCountedString(TranArena, CSz("While Expanding %S"), T->Value),
-                          T);
+              ParseInfoMessage( Parser,
+                                FormatCountedString(TranArena, CSz("While Expanding %S"), T->Value),
+                                T);
             }
             else
             {
@@ -7593,10 +7607,9 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
             parser *Expanded = ExpandMacro(Ctx, Parser, Macro, PermMemory, TempMemory);
             if (Expanded->ErrorCode)
             {
-              ParseError( Parser,
-                          Expanded->ErrorCode,
-                          FormatCountedString(TranArena, CSz("While Expanding %S"), pT->Value),
-                          pT);
+              ParseInfoMessage( Parser,
+                                FormatCountedString(TranArena, CSz("While Expanding %S"), pT->Value),
+                                pT);
             }
             else
             {
@@ -9434,6 +9447,11 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
   declaration Result = {};
 
   b32 IsConstructor = ParsingConstructor(Parser, TypeSpec);
+
+  if (OptionalToken(Parser, CT_ScopeResolutionOperator))
+  {
+    NotImplemented;
+  }
 
   // We know anything with a name is either a variable or function
   if (c_token *NameT = OptionalToken(Parser, CTokenType_Identifier))
