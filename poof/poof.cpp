@@ -1517,9 +1517,8 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
     }
 
 
-    RewindTo(Parser, ErrorToken);
-    Assert(Parser->Tokens->At == ErrorToken);
-    Assert(Parser->Tokens->At->LineNumber == ErrorLineNumber);
+    RewindTo(Parser, OriginalAtToken);
+    Assert(PeekTokenRawPointer(Parser) == OriginalAtToken);
 
     Parser->ErrorMessage = Message;
     Parser->ErrorCode = ErrorCode;
@@ -1530,20 +1529,6 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
     FormatCountedString_(ParseErrorCursor, CSz("Error determining where the error occurred\n"));
     FormatCountedString_(ParseErrorCursor, CSz("Error messsage was : %S\n"), Message);
     LogDirect("%S", CS(ParseErrorCursor));
-  }
-
-  if (OriginalAtToken)
-  {
-    if (AdvanceTo(Parser, OriginalAtToken))
-    {
-    }
-    else if (RewindTo(Parser, OriginalAtToken))
-    {
-    }
-    else
-    {
-      Error("Couldn't find original token on parser.");
-    }
   }
 
   return;
@@ -9686,8 +9671,10 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
 
           case type_declaration_noop:
           {
-            // right now a few things don't come through .. including variable decls and enums
-            /* ParseError(Parser, CSz("While scanning for datatypes"), T); */
+            // This hits when we parse something like `struct foo;`
+            //
+            // We never do anything with pre-declarations like that, so the
+            // parser just completely ignores them.
           } break;
         }
 

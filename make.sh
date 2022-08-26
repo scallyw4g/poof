@@ -33,7 +33,7 @@ BuildAndRunAllExamples=1
 RunIntegrationTests=1
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 
-OPTIMIZATION_LEVEL="-O0"
+# OPTIMIZATION_LEVEL="-O2"
 
 
 
@@ -102,6 +102,9 @@ function RunPoof {
 }
 
 function BuildPoof {
+
+  : "${OPTIMIZATION_LEVEL:="-O0"}"
+
   which clang++ > /dev/null
   [ $? -ne 0 ] && echo -e "Please install clang++" && exit 1
 
@@ -236,6 +239,7 @@ function BuildAndRunAll
 {
   BuildAll
   RunAllTests
+  BuildAndRunAllExamples
 }
 
 function BuildAndRunAllExamples
