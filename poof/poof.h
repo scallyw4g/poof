@@ -483,34 +483,6 @@ enum datatype_type
 meta(generate_string_table(datatype_type))
 #include <poof/generated/generate_string_table_datatype_type.h>
 
-struct declaration;
-struct compound_decl;
-struct enum_def;
-struct enum_member;
-struct type_def;
-/* TODO(Jesse, id: 188, tags: cleanup) This should have the name property,
- * instead of having the struct and enum defs have seperate names.
- *
- * Actually .. it's unclear if this is true or not anymore since we've added
- * a bunch more stuff to the union.
- */
-struct datatype
-{
-  datatype_type Type;
-
-  union
-  {
-    compound_decl      *d_compound_decl;
-    declaration        *declaration;
-
-    enum_def           *enum_def;
-    enum_member        *enum_member;
-
-    type_def           *type_def;
-
-    stl_container_def  *stl_container_def;
-  };
-};
 
 enum linkage_type
 {
@@ -579,7 +551,7 @@ struct type_spec
 {
   c_token *QualifierNameT;
   c_token *DatatypeToken;
-  datatype Datatype;
+  // datatype Datatype; // TODO(Jesse): Put this back in when we get rid of datatype?  It actually wasn't very useful at all and bloats the struct a lot
 
   type_qualifier Qualifier;
 
@@ -673,13 +645,38 @@ struct declaration
     // enum_decl enum_decl;
   };
 };
-
-
 meta(generate_cursor(declaration))
 #include <poof/generated/generate_cursor_declaration.h>
-
 meta( generate_stream_chunk_struct(declaration) )
 #include <poof/generated/generate_stream_chunk_declaration.h>
+
+
+struct enum_def;
+struct enum_member;
+struct type_def;
+/* TODO(Jesse, id: 188, tags: cleanup) This should have the name property,
+ * instead of having the struct and enum defs have seperate names.
+ *
+ * Actually .. it's unclear if this is true or not anymore since we've added
+ * a bunch more stuff to the union.
+ */
+struct datatype
+{
+  datatype_type Type;
+
+  union
+  {
+    compound_decl      *d_compound_decl;
+    declaration        *declaration;
+
+    enum_def           *enum_def;
+    enum_member        *enum_member;
+
+    type_def           *type_def;
+
+    stl_container_def  *stl_container_def;
+  };
+};
 
 struct ast_node_expression;
 struct enum_member

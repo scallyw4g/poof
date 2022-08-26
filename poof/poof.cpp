@@ -5802,6 +5802,13 @@ GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
   return Result;
 }
 
+bonsai_function datatype
+GetDatatypeByName(parse_context *Ctx, counted_string Name)
+{
+  datatype Result = GetDatatypeByName(&Ctx->Datatypes, Name);
+  return Result;
+}
+
 d_union_decl
 ParseDiscriminatedUnion(parser* Parser, program_datatypes* Datatypes, counted_string Name, memory_arena* Memory)
 {
@@ -6998,7 +7005,7 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
       if (c_token *TypeName = OptionalToken(Parser, CTokenType_Identifier))
       {
         Result.DatatypeToken = TypeName;
-        Result.Datatype = GetDatatypeByName(&Ctx->Datatypes, TypeName->Value);
+        /* Result.Datatype = GetDatatypeByName(&Ctx->Datatypes, TypeName->Value); */
         // TODO(Jesse, id: 296, tags: immediate): When we properly traverse include graphs, this assert should not fail.
         // Assert(Result.Datatype.Type != type_datatype_noop);
       }
@@ -10072,7 +10079,7 @@ GenerateOutfileNameFor(counted_string Name, counted_string DatatypeName, memory_
 }
 
 bonsai_function counted_string
-GetTypeNameForStructMember(declaration* Decl, memory_arena *Memory)
+GetTypeNameForStructMember(parse_context *Ctx, declaration* Decl, memory_arena *Memory)
 {
   counted_string Result = {};
 
@@ -10086,9 +10093,10 @@ GetTypeNameForStructMember(declaration* Decl, memory_arena *Memory)
     case type_variable_decl:
     {
       auto Var = SafeAccess(variable_decl, Decl);
-      if (Var->Type.Datatype.Type) // TODO(Jesse): Yikes
+      if (Var->Type.DatatypeToken)
       {
-        Result = GetTypeNameForDatatype(&Var->Type.Datatype, Memory);
+        datatype DT = GetDatatypeByName(&Ctx->Datatypes, Var->Type.DatatypeToken->Value);
+        Result = GetTypeNameForDatatype(&DT, Memory);
       }
     } break;
 
@@ -10263,7 +10271,7 @@ PrintType(type_spec *Type, memory_arena *Memory)
   counted_string Result = {};
   string_builder Builder = {};
 
-  if (Type->Datatype.Type)
+  if (Type->DatatypeToken)
   {
     Result = Type->DatatypeToken->Value;
   }
@@ -10757,14 +10765,17 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                       if (HaveConstraint)
                       {
                         auto Var = SafeAccess(variable_decl, Member);
-                        auto VarMembers = GetMembersFor(&Var->Type.Datatype);
+                        Assert(Var->Type.DatatypeToken);
+                        auto DT = GetDatatypeByName(Ctx, Var->Type.DatatypeToken->Value);
+                        Assert(DT.Type);
+                        auto VarMembers = GetMembersFor(&DT);
 
                         if (VarMembers)
                         {
                           ITERATE_OVER_AS(VarMember, VarMembers)
                           {
                             declaration* VarMember = GET_ELEMENT(VarMemberIter);
-                            counted_string MemberName = GetTypeNameForStructMember(VarMember, Memory);
+                            counted_string MemberName = GetTypeNameForStructMember(Ctx, VarMember, Memory);
 
                             if (StringsMatch( MemberName, ContainingConstraint))
                             {
