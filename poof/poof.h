@@ -662,9 +662,7 @@ struct datatype
   union
   {
     declaration declaration;
-
     enum_member *enum_member;
-
     type_def    *type_def;
   };
 };

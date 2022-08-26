@@ -5749,10 +5749,8 @@ GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
 
   // TODO(Jesse id: 295, tags: speed): This could be optimized significantly by shuffling the logic around, not to mention using hashtables.
   compound_decl *S = GetStructByType(&Datatypes->Structs, Name);
-  enum_decl   *E = GetEnumByType(&Datatypes->Enums, Name);
-  type_def   *T = GetTypedefByAlias(&Datatypes->Typedefs, Name);
-
-  /* stl_container_def   *StlContainer = GetStlContainer(&Datatypes->StlContainers, Name); */
+  enum_decl     *E = GetEnumByType(&Datatypes->Enums, Name);
+  type_def      *T = GetTypedefByAlias(&Datatypes->Typedefs, Name);
 
   datatype Result = {};
 
@@ -10397,7 +10395,15 @@ GetNameForDatatype(datatype *Data)
       Result = Data->enum_member->Name;
     } break;
 
-    InvalidDefaultCase;
+    case type_type_def:
+    {
+      NotImplemented;
+    } break;
+
+    case type_datatype_noop:
+    {
+      Result = CSz("type_datatype_noop");
+    } break;
   }
 
   return Result;
@@ -10492,7 +10498,53 @@ GetMembersFor(datatype *Data)
 }
 
 link_internal b32
-DatatypeIsUnion(parser *Scope, datatype *Data, c_token *MetaOperatorT)
+DatatypeIsVariableDecl(datatype *Data)
+{
+  b32 Result = False;
+  switch (Data->Type)
+  {
+    case type_datatype_noop:
+    case type_enum_member:
+    {
+    } break;
+
+    case type_type_def:
+    {
+      // NOTE(Jesse): This could be .. a variable .. questionmark?
+      NotImplemented;
+    } break;
+
+    case type_declaration:
+    {
+      declaration *Decl = SafeAccess(declaration, Data);
+      switch (Decl->Type)
+      {
+        case type_declaration_noop:
+        case type_compound_decl:
+        case type_enum_decl:
+        {
+        } break;
+
+        case type_function_decl:
+        {
+          // NOTE(Jesse): This could be .. a variable .. questionmark?
+          NotImplemented;
+        } break;
+
+        case type_variable_decl:
+        {
+          Result = True;
+        } break;
+      }
+    }
+  }
+  return Result;
+}
+
+// TODO(Jesse, cleanup): invent an either type with (error | value) so that we
+// don't have to pass the scope and MetaOperatorT just to report errors
+link_internal b32
+DatatypeIsUnion(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
 {
   b32 Result = False;
   switch (Data->Type)
@@ -10514,9 +10566,13 @@ DatatypeIsUnion(parser *Scope, datatype *Data, c_token *MetaOperatorT)
 
         case type_variable_decl:
         {
-          // NOTE(Jesse): This could definitely be a union.. should implement
-          // the matching logic
-          // NotImplemented;
+          variable_decl *VDecl = SafeAccess(variable_decl, Decl);
+          datatype DT = GetDatatypeByName(Ctx, VDecl->Name);
+          Assert(DatatypeIsVariableDecl(&DT) == False);
+          if (DT.Type)
+          {
+            Result = DatatypeIsUnion(Ctx, Scope, &DT, MetaOperatorT);
+          }
         } break;
 
         case type_enum_decl:
@@ -10601,7 +10657,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               parser StructScope = GetBodyTextForNextScope(&Scope, Memory);
 
               b32 NegateMask = (Operator == is_struct);
-              b32 IsUnion = DatatypeIsUnion(&Scope, &Replace->Data, MetaOperatorToken);
+              b32 IsUnion = DatatypeIsUnion(Ctx, &Scope, &Replace->Data, MetaOperatorToken);
               if (IsUnion ^ NegateMask)
               {
                 counted_string Code = Execute(FuncName, StructScope, ReplacePatterns, Ctx, Memory);
