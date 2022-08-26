@@ -5,71 +5,97 @@
         DebugPrint("terminal_colors {\n", Depth);
       }
 
-                DebugPrint("counted_string Red {\n", Depth+2);
-          DebugPrint(S.Red, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string BrightRed {\n", Depth+2);
-          DebugPrint(S.BrightRed, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string DarkRed {\n", Depth+2);
-          DebugPrint(S.DarkRed, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string Blue {\n", Depth+2);
-          DebugPrint(S.Blue, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string BrightBlue {\n", Depth+2);
-          DebugPrint(S.BrightBlue, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string Purple {\n", Depth+2);
-          DebugPrint(S.Purple, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string BrightPurple {\n", Depth+2);
-          DebugPrint(S.BrightPurple, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string Green {\n", Depth+2);
-          DebugPrint(S.Green, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string BrightGreen {\n", Depth+2);
-          DebugPrint(S.BrightGreen, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string Yellow {\n", Depth+2);
-          DebugPrint(S.Yellow, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string BrightYellow {\n", Depth+2);
-          DebugPrint(S.BrightYellow, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string White {\n", Depth+2);
-          DebugPrint(S.White, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string Grey {\n", Depth+2);
-          DebugPrint(S.Grey, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string Red {\n", Depth+2);
+              DebugPrint(S.Red, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string BrightRed {\n", Depth+2);
+              DebugPrint(S.BrightRed, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string DarkRed {\n", Depth+2);
+              DebugPrint(S.DarkRed, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string Blue {\n", Depth+2);
+              DebugPrint(S.Blue, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string BrightBlue {\n", Depth+2);
+              DebugPrint(S.BrightBlue, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string Purple {\n", Depth+2);
+              DebugPrint(S.Purple, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string BrightPurple {\n", Depth+2);
+              DebugPrint(S.BrightPurple, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string Green {\n", Depth+2);
+              DebugPrint(S.Green, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string BrightGreen {\n", Depth+2);
+              DebugPrint(S.BrightGreen, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string Yellow {\n", Depth+2);
+              DebugPrint(S.Yellow, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string BrightYellow {\n", Depth+2);
+              DebugPrint(S.BrightYellow, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string White {\n", Depth+2);
+              DebugPrint(S.White, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string Grey {\n", Depth+2);
+              DebugPrint(S.Grey, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -86,16 +112,16 @@
         DebugPrint("native_file {\n", Depth);
       }
 
-                DebugPrint(" Handle {\n", Depth+2);
-          DebugPrint(S.Handle, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string Path {\n", Depth+2);
-          DebugPrint(S.Path, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                            // NOTE(Jesse): we've got no definition for this type.. print a placeholder
+            DebugPrint("undefined type : (FILE Handle)\n", Depth+2);
+
+                                    DebugPrint("counted_string Path {\n", Depth+2);
+              DebugPrint(S.Path, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -112,26 +138,22 @@
         DebugPrint("os {\n", Depth);
       }
 
-                DebugPrint("window Window {\n", Depth+2);
-          DebugPrint((void*)&S.Window, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("display Display {\n", Depth+2);
-          DebugPrint(S.Display, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("gl_context GlContext {\n", Depth+2);
-          DebugPrint(S.GlContext, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 ContinueRunning {\n", Depth+2);
-          DebugPrint(S.ContinueRunning, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                            // NOTE(Jesse): we've got no definition for this type.. print a placeholder
+            DebugPrint("undefined type : (window Window)\n", Depth+2);
+
+                      // NOTE(Jesse): we've got no definition for this type.. print a placeholder
+            DebugPrint("undefined type : (display Display)\n", Depth+2);
+
+                      // NOTE(Jesse): we've got no definition for this type.. print a placeholder
+            DebugPrint("undefined type : (gl_context GlContext)\n", Depth+2);
+
+                                    DebugPrint("b32 ContinueRunning {\n", Depth+2);
+              DebugPrint(S.ContinueRunning, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -148,16 +170,20 @@
         DebugPrint("v2i {\n", Depth);
       }
 
-                DebugPrint("s32 x {\n", Depth+2);
-          DebugPrint(S.x, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("s32 y {\n", Depth+2);
-          DebugPrint(S.y, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("s32 x {\n", Depth+2);
+              DebugPrint(S.x, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("s32 y {\n", Depth+2);
+              DebugPrint(S.y, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -174,16 +200,20 @@
         DebugPrint("v2 {\n", Depth);
       }
 
-                DebugPrint("r32 x {\n", Depth+2);
-          DebugPrint(S.x, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("r32 y {\n", Depth+2);
-          DebugPrint(S.y, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("r32 x {\n", Depth+2);
+              DebugPrint(S.x, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("r32 y {\n", Depth+2);
+              DebugPrint(S.y, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -200,11 +230,29 @@
         DebugPrint("v3i {\n", Depth);
       }
 
-                DebugPrint("s32 E {\n", Depth+2);
-          DebugPrint(S.E, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+
+
+                                    // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+
+
+                                    // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+
+
+                                    // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+
+
+                                    DebugPrint("s32 E {\n", Depth+2);
+              DebugPrint(S.E, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -221,11 +269,29 @@
         DebugPrint("v3 {\n", Depth);
       }
 
-                DebugPrint("r32 E {\n", Depth+2);
-          DebugPrint(S.E, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+
+
+                                    // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+
+
+                                    // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+
+
+                                    // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+
+
+                                    DebugPrint("r32 E {\n", Depth+2);
+              DebugPrint(S.E, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -242,11 +308,37 @@
         DebugPrint("v4 {\n", Depth);
       }
 
-                DebugPrint("r32 E {\n", Depth+2);
-          DebugPrint(S.E, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+
+
+                                    // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+
+
+                                    // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+
+
+                                    // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+
+
+                                    // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+
+
+                                    // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+
+
+                                    DebugPrint("r32 E {\n", Depth+2);
+              DebugPrint(S.E, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -263,11 +355,17 @@
         DebugPrint("voxel_position {\n", Depth);
       }
 
-                DebugPrint("s32 E {\n", Depth+2);
-          DebugPrint(S.E, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+
+
+                                    DebugPrint("s32 E {\n", Depth+2);
+              DebugPrint(S.E, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -284,16 +382,16 @@
         DebugPrint("f32_reg {\n", Depth);
       }
 
-                DebugPrint("r32 F {\n", Depth+2);
-          DebugPrint(S.F, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Sse {\n", Depth+2);
-          DebugPrint(S.Sse, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("r32 F {\n", Depth+2);
+              DebugPrint(S.F, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                      // NOTE(Jesse): we've got no definition for this type.. print a placeholder
+            DebugPrint("undefined type : (__m128 Sse)\n", Depth+2);
+
 
       DebugPrint("}\n", Depth);
     }
@@ -310,11 +408,13 @@
         DebugPrint("random_series {\n", Depth);
       }
 
-                DebugPrint("u64 Seed {\n", Depth+2);
-          DebugPrint(S.Seed, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u64 Seed {\n", Depth+2);
+              DebugPrint(S.Seed, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -331,16 +431,20 @@
         DebugPrint("input_event {\n", Depth);
       }
 
-                DebugPrint("b32 Clicked {\n", Depth+2);
-          DebugPrint(S.Clicked, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 Pressed {\n", Depth+2);
-          DebugPrint(S.Pressed, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("b32 Clicked {\n", Depth+2);
+              DebugPrint(S.Clicked, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 Pressed {\n", Depth+2);
+              DebugPrint(S.Pressed, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -357,136 +461,188 @@
         DebugPrint("input {\n", Depth);
       }
 
-                DebugPrint("input_event Escape {\n", Depth+2);
-          DebugPrint(S.Escape, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event Space {\n", Depth+2);
-          DebugPrint(S.Space, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event Shift {\n", Depth+2);
-          DebugPrint(S.Shift, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event Ctrl {\n", Depth+2);
-          DebugPrint(S.Ctrl, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event Alt {\n", Depth+2);
-          DebugPrint(S.Alt, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event F12 {\n", Depth+2);
-          DebugPrint(S.F12, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event F11 {\n", Depth+2);
-          DebugPrint(S.F11, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event F10 {\n", Depth+2);
-          DebugPrint(S.F10, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event F9 {\n", Depth+2);
-          DebugPrint(S.F9, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event F8 {\n", Depth+2);
-          DebugPrint(S.F8, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event F7 {\n", Depth+2);
-          DebugPrint(S.F7, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event F6 {\n", Depth+2);
-          DebugPrint(S.F6, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event F5 {\n", Depth+2);
-          DebugPrint(S.F5, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event F4 {\n", Depth+2);
-          DebugPrint(S.F4, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event F3 {\n", Depth+2);
-          DebugPrint(S.F3, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event F2 {\n", Depth+2);
-          DebugPrint(S.F2, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event F1 {\n", Depth+2);
-          DebugPrint(S.F1, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event RMB {\n", Depth+2);
-          DebugPrint(S.RMB, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event LMB {\n", Depth+2);
-          DebugPrint(S.LMB, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event MMB {\n", Depth+2);
-          DebugPrint(S.MMB, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event W {\n", Depth+2);
-          DebugPrint(S.W, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event A {\n", Depth+2);
-          DebugPrint(S.A, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event S {\n", Depth+2);
-          DebugPrint(S.S, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event D {\n", Depth+2);
-          DebugPrint(S.D, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event Q {\n", Depth+2);
-          DebugPrint(S.Q, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input_event E {\n", Depth+2);
-          DebugPrint(S.E, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("input_event Escape {\n", Depth+2);
+              DebugPrint(S.Escape, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event Space {\n", Depth+2);
+              DebugPrint(S.Space, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event Shift {\n", Depth+2);
+              DebugPrint(S.Shift, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event Ctrl {\n", Depth+2);
+              DebugPrint(S.Ctrl, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event Alt {\n", Depth+2);
+              DebugPrint(S.Alt, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event F12 {\n", Depth+2);
+              DebugPrint(S.F12, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event F11 {\n", Depth+2);
+              DebugPrint(S.F11, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event F10 {\n", Depth+2);
+              DebugPrint(S.F10, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event F9 {\n", Depth+2);
+              DebugPrint(S.F9, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event F8 {\n", Depth+2);
+              DebugPrint(S.F8, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event F7 {\n", Depth+2);
+              DebugPrint(S.F7, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event F6 {\n", Depth+2);
+              DebugPrint(S.F6, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event F5 {\n", Depth+2);
+              DebugPrint(S.F5, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event F4 {\n", Depth+2);
+              DebugPrint(S.F4, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event F3 {\n", Depth+2);
+              DebugPrint(S.F3, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event F2 {\n", Depth+2);
+              DebugPrint(S.F2, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event F1 {\n", Depth+2);
+              DebugPrint(S.F1, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event RMB {\n", Depth+2);
+              DebugPrint(S.RMB, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event LMB {\n", Depth+2);
+              DebugPrint(S.LMB, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event MMB {\n", Depth+2);
+              DebugPrint(S.MMB, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event W {\n", Depth+2);
+              DebugPrint(S.W, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event A {\n", Depth+2);
+              DebugPrint(S.A, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event S {\n", Depth+2);
+              DebugPrint(S.S, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event D {\n", Depth+2);
+              DebugPrint(S.D, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event Q {\n", Depth+2);
+              DebugPrint(S.Q, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input_event E {\n", Depth+2);
+              DebugPrint(S.E, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -503,41 +659,55 @@
         DebugPrint("hotkeys {\n", Depth);
       }
 
-                DebugPrint("b32 Left {\n", Depth+2);
-          DebugPrint(S.Left, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 Right {\n", Depth+2);
-          DebugPrint(S.Right, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 Forward {\n", Depth+2);
-          DebugPrint(S.Forward, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 Backward {\n", Depth+2);
-          DebugPrint(S.Backward, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 Player_Fire {\n", Depth+2);
-          DebugPrint(S.Player_Fire, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 Player_Proton {\n", Depth+2);
-          DebugPrint(S.Player_Proton, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 Player_Spawn {\n", Depth+2);
-          DebugPrint(S.Player_Spawn, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("b32 Left {\n", Depth+2);
+              DebugPrint(S.Left, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 Right {\n", Depth+2);
+              DebugPrint(S.Right, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 Forward {\n", Depth+2);
+              DebugPrint(S.Forward, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 Backward {\n", Depth+2);
+              DebugPrint(S.Backward, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 Player_Fire {\n", Depth+2);
+              DebugPrint(S.Player_Fire, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 Player_Proton {\n", Depth+2);
+              DebugPrint(S.Player_Proton, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 Player_Spawn {\n", Depth+2);
+              DebugPrint(S.Player_Spawn, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -554,26 +724,26 @@
         DebugPrint("work_queue {\n", Depth);
       }
 
-                DebugPrint("u32 EnqueueIndex {\n", Depth+2);
-          DebugPrint(S.EnqueueIndex, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 DequeueIndex {\n", Depth+2);
-          DebugPrint(S.DequeueIndex, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Entries {\n", Depth+2);
-          DebugPrint(S.Entries, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("semaphore GlobalQueueSemaphore {\n", Depth+2);
-          DebugPrint(S.GlobalQueueSemaphore, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u32 EnqueueIndex {\n", Depth+2);
+              DebugPrint(S.EnqueueIndex, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 DequeueIndex {\n", Depth+2);
+              DebugPrint(S.DequeueIndex, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                      // NOTE(Jesse): we've got no definition for this type.. print a placeholder
+            DebugPrint("undefined type : (work_queue_entry Entries)\n", Depth+2);
+
+                      // NOTE(Jesse): we've got no definition for this type.. print a placeholder
+            DebugPrint("undefined type : (semaphore GlobalQueueSemaphore)\n", Depth+2);
+
 
       DebugPrint("}\n", Depth);
     }
@@ -590,31 +760,41 @@
         DebugPrint("memory_arena {\n", Depth);
       }
 
-                DebugPrint("u8 Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u8 At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u8 End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("umm NextBlockSize {\n", Depth+2);
-          DebugPrint(S.NextBlockSize, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Prev {\n", Depth+2);
-          DebugPrint(S.Prev, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u8 Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u8 At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u8 End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("umm NextBlockSize {\n", Depth+2);
+              DebugPrint(S.NextBlockSize, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("memory_arena Prev {\n", Depth+2);
+              DebugPrint(S.Prev, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -631,36 +811,48 @@
         DebugPrint("push_metadata {\n", Depth);
       }
 
-                DebugPrint("const char  Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("umm ArenaHash {\n", Depth+2);
-          DebugPrint(S.ArenaHash, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("umm HeadArenaHash {\n", Depth+2);
-          DebugPrint(S.HeadArenaHash, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("umm StructSize {\n", Depth+2);
-          DebugPrint(S.StructSize, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("umm StructCount {\n", Depth+2);
-          DebugPrint(S.StructCount, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 PushCount {\n", Depth+2);
-          DebugPrint(S.PushCount, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("const char  Name {\n", Depth+2);
+              DebugPrint(S.Name, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("umm ArenaHash {\n", Depth+2);
+              DebugPrint(S.ArenaHash, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("umm HeadArenaHash {\n", Depth+2);
+              DebugPrint(S.HeadArenaHash, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("umm StructSize {\n", Depth+2);
+              DebugPrint(S.StructSize, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("umm StructCount {\n", Depth+2);
+              DebugPrint(S.StructCount, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 PushCount {\n", Depth+2);
+              DebugPrint(S.PushCount, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -677,61 +869,75 @@
         DebugPrint("platform {\n", Depth);
       }
 
-                DebugPrint("work_queue LowPriority {\n", Depth+2);
-          DebugPrint(S.LowPriority, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("work_queue HighPriority {\n", Depth+2);
-          DebugPrint(S.HighPriority, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("semaphore QueueSemaphore {\n", Depth+2);
-          DebugPrint((void*)&S.QueueSemaphore, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Threads {\n", Depth+2);
-          DebugPrint(S.Threads, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("v2 MouseP {\n", Depth+2);
-          DebugPrint(S.MouseP, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("v2 MouseDP {\n", Depth+2);
-          DebugPrint(S.MouseDP, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("memory_arena Memory {\n", Depth+2);
-          DebugPrint(S.Memory, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("r32 dt {\n", Depth+2);
-          DebugPrint(S.dt, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("s32 WindowWidth {\n", Depth+2);
-          DebugPrint(S.WindowWidth, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("s32 WindowHeight {\n", Depth+2);
-          DebugPrint(S.WindowHeight, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("input Input {\n", Depth+2);
-          DebugPrint(S.Input, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("work_queue LowPriority {\n", Depth+2);
+              DebugPrint(S.LowPriority, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("work_queue HighPriority {\n", Depth+2);
+              DebugPrint(S.HighPriority, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                      // NOTE(Jesse): we've got no definition for this type.. print a placeholder
+            DebugPrint("undefined type : (semaphore QueueSemaphore)\n", Depth+2);
+
+                      // NOTE(Jesse): we've got no definition for this type.. print a placeholder
+            DebugPrint("undefined type : (thread_startup_params Threads)\n", Depth+2);
+
+                                    DebugPrint("v2 MouseP {\n", Depth+2);
+              DebugPrint(S.MouseP, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("v2 MouseDP {\n", Depth+2);
+              DebugPrint(S.MouseDP, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(S.Memory, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("r32 dt {\n", Depth+2);
+              DebugPrint(S.dt, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("s32 WindowWidth {\n", Depth+2);
+              DebugPrint(S.WindowWidth, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("s32 WindowHeight {\n", Depth+2);
+              DebugPrint(S.WindowHeight, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("input Input {\n", Depth+2);
+              DebugPrint(S.Input, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -748,21 +954,27 @@
         DebugPrint("heap_allocation_block {\n", Depth);
       }
 
-                DebugPrint("heap_allocation_type Type {\n", Depth+2);
-          DebugPrint(S.Type, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("umm Size {\n", Depth+2);
-          DebugPrint(S.Size, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("umm PrevAllocationSize {\n", Depth+2);
-          DebugPrint(S.PrevAllocationSize, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("heap_allocation_type Type {\n", Depth+2);
+              DebugPrint(S.Type, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("umm Size {\n", Depth+2);
+              DebugPrint(S.Size, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("umm PrevAllocationSize {\n", Depth+2);
+              DebugPrint(S.PrevAllocationSize, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -779,16 +991,20 @@
         DebugPrint("heap_allocator {\n", Depth);
       }
 
-                DebugPrint("heap_allocation_block Heap {\n", Depth+2);
-          DebugPrint(S.Heap, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("umm Size {\n", Depth+2);
-          DebugPrint(S.Size, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("heap_allocation_block Heap {\n", Depth+2);
+              DebugPrint(S.Heap, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("umm Size {\n", Depth+2);
+              DebugPrint(S.Size, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -805,16 +1021,20 @@
         DebugPrint("tagged_counted_string_stream {\n", Depth);
       }
 
-                DebugPrint("counted_string Tag {\n", Depth+2);
-          DebugPrint(S.Tag, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string Tag {\n", Depth+2);
+              DebugPrint(S.Tag, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -831,26 +1051,34 @@
         DebugPrint("char_cursor {\n", Depth);
       }
 
-                DebugPrint("char  Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("char  At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("char  End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("memory_arena Memory {\n", Depth+2);
-          DebugPrint(S.Memory, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("char  Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("char  At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("char  End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(S.Memory, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -867,16 +1095,20 @@
         DebugPrint("linei {\n", Depth);
       }
 
-                DebugPrint("v3i MinP {\n", Depth+2);
-          DebugPrint(S.MinP, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("v3i MaxP {\n", Depth+2);
-          DebugPrint(S.MaxP, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("v3i MinP {\n", Depth+2);
+              DebugPrint(S.MinP, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("v3i MaxP {\n", Depth+2);
+              DebugPrint(S.MaxP, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -893,16 +1125,20 @@
         DebugPrint("line {\n", Depth);
       }
 
-                DebugPrint("v3 MinP {\n", Depth+2);
-          DebugPrint(S.MinP, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("v3 MaxP {\n", Depth+2);
-          DebugPrint(S.MaxP, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("v3 MinP {\n", Depth+2);
+              DebugPrint(S.MinP, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("v3 MaxP {\n", Depth+2);
+              DebugPrint(S.MaxP, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -919,11 +1155,21 @@
         DebugPrint("Quaternion {\n", Depth);
       }
 
-                DebugPrint("float  E {\n", Depth+2);
-          DebugPrint(S.E, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+
+
+                                    // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+
+
+                                    DebugPrint("float  E {\n", Depth+2);
+              DebugPrint(S.E, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -940,16 +1186,20 @@
         DebugPrint("string_builder {\n", Depth);
       }
 
-                DebugPrint("memory_arena Memory {\n", Depth+2);
-          DebugPrint(S.Memory, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Chunks {\n", Depth+2);
-          DebugPrint(S.Chunks, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(S.Memory, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string_stream Chunks {\n", Depth+2);
+              DebugPrint(S.Chunks, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -966,21 +1216,27 @@
         DebugPrint("u32_stream {\n", Depth);
       }
 
-                DebugPrint("u32 Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u32 Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -997,21 +1253,27 @@
         DebugPrint("u8_stream {\n", Depth);
       }
 
-                DebugPrint("u8 Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u8 At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u8 End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u8 Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u8 At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u8 End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1028,31 +1290,41 @@
         DebugPrint("ansi_stream {\n", Depth);
       }
 
-                DebugPrint("const char  Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("const char  At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("const char  End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string Filename {\n", Depth+2);
-          DebugPrint(S.Filename, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("text_encoding Encoding {\n", Depth+2);
-          DebugPrint(S.Encoding, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("const char  Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("const char  At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("const char  End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string Filename {\n", Depth+2);
+              DebugPrint(S.Filename, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("text_encoding Encoding {\n", Depth+2);
+              DebugPrint(S.Encoding, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1069,21 +1341,27 @@
         DebugPrint("r32_stream {\n", Depth);
       }
 
-                DebugPrint("r32 Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("r32 At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("r32 End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("r32 Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("r32 At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("r32 End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1100,11 +1378,13 @@
         DebugPrint("m4 {\n", Depth);
       }
 
-                DebugPrint("v4 E {\n", Depth+2);
-          DebugPrint(S.E, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("v4 E {\n", Depth+2);
+              DebugPrint(S.E, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1121,31 +1401,41 @@
         DebugPrint("m_nxn {\n", Depth);
       }
 
-                DebugPrint("r32 Elements {\n", Depth+2);
-          DebugPrint(S.Elements, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 Rows {\n", Depth+2);
-          DebugPrint(S.Rows, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 Columns {\n", Depth+2);
-          DebugPrint(S.Columns, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("r32 Elements {\n", Depth+2);
+              DebugPrint(S.Elements, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 Rows {\n", Depth+2);
+              DebugPrint(S.Rows, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 Columns {\n", Depth+2);
+              DebugPrint(S.Columns, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1162,11 +1452,9 @@
         DebugPrint("mutex {\n", Depth);
       }
 
-                DebugPrint("native_mutex M {\n", Depth+2);
-          DebugPrint((void*)&S.M, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                            // NOTE(Jesse): we've got no definition for this type.. print a placeholder
+            DebugPrint("undefined type : (native_mutex M)\n", Depth+2);
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1183,21 +1471,27 @@
         DebugPrint("mutex_op_record {\n", Depth);
       }
 
-                DebugPrint("mutex Mutex {\n", Depth+2);
-          DebugPrint(S.Mutex, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u64 Cycle {\n", Depth+2);
-          DebugPrint(S.Cycle, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("mutex_op Op {\n", Depth+2);
-          DebugPrint(S.Op, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("mutex Mutex {\n", Depth+2);
+              DebugPrint(S.Mutex, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u64 Cycle {\n", Depth+2);
+              DebugPrint(S.Cycle, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("mutex_op Op {\n", Depth+2);
+              DebugPrint(S.Op, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1214,16 +1508,20 @@
         DebugPrint("mutex_op_array {\n", Depth);
       }
 
-                DebugPrint("u32 NextRecord {\n", Depth+2);
-          DebugPrint(S.NextRecord, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("mutex_op_record Records {\n", Depth+2);
-          DebugPrint(S.Records, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u32 NextRecord {\n", Depth+2);
+              DebugPrint(S.NextRecord, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("mutex_op_record Records {\n", Depth+2);
+              DebugPrint(S.Records, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1240,16 +1538,20 @@
         DebugPrint("rect2 {\n", Depth);
       }
 
-                DebugPrint("v2 Min {\n", Depth+2);
-          DebugPrint(S.Min, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("v2 Max {\n", Depth+2);
-          DebugPrint(S.Max, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("v2 Min {\n", Depth+2);
+              DebugPrint(S.Min, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("v2 Max {\n", Depth+2);
+              DebugPrint(S.Max, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1266,16 +1568,20 @@
         DebugPrint("aabb {\n", Depth);
       }
 
-                DebugPrint("v3 Center {\n", Depth+2);
-          DebugPrint(S.Center, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("v3 Radius {\n", Depth+2);
-          DebugPrint(S.Radius, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("v3 Center {\n", Depth+2);
+              DebugPrint(S.Center, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("v3 Radius {\n", Depth+2);
+              DebugPrint(S.Radius, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1292,16 +1598,20 @@
         DebugPrint("ray {\n", Depth);
       }
 
-                DebugPrint("v3 Origin {\n", Depth+2);
-          DebugPrint(S.Origin, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("v3 Dir {\n", Depth+2);
-          DebugPrint(S.Dir, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("v3 Origin {\n", Depth+2);
+              DebugPrint(S.Origin, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("v3 Dir {\n", Depth+2);
+              DebugPrint(S.Dir, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1318,21 +1628,27 @@
         DebugPrint("xml_property {\n", Depth);
       }
 
-                DebugPrint("counted_string Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string Value {\n", Depth+2);
-          DebugPrint(S.Value, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(S.Name, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string Value {\n", Depth+2);
+              DebugPrint(S.Value, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("xml_property Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1349,16 +1665,20 @@
         DebugPrint("xml_token {\n", Depth);
       }
 
-                DebugPrint("xml_token_type Type {\n", Depth+2);
-          DebugPrint(S.Type, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("xml_property Property {\n", Depth+2);
-          DebugPrint(S.Property, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("xml_token_type Type {\n", Depth+2);
+              DebugPrint(S.Type, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("xml_property Property {\n", Depth+2);
+              DebugPrint(S.Property, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1375,36 +1695,48 @@
         DebugPrint("xml_tag {\n", Depth);
       }
 
-                DebugPrint("xml_token Open {\n", Depth+2);
-          DebugPrint(S.Open, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Parent {\n", Depth+2);
-          DebugPrint(S.Parent, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Sibling {\n", Depth+2);
-          DebugPrint(S.Sibling, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string Value {\n", Depth+2);
-          DebugPrint(S.Value, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("xml_property Properties {\n", Depth+2);
-          DebugPrint(S.Properties, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("xml_property NextPropertySlot {\n", Depth+2);
-          DebugPrint(S.NextPropertySlot, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("xml_token Open {\n", Depth+2);
+              DebugPrint(S.Open, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("xml_tag Parent {\n", Depth+2);
+              DebugPrint(S.Parent, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("xml_tag Sibling {\n", Depth+2);
+              DebugPrint(S.Sibling, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string Value {\n", Depth+2);
+              DebugPrint(S.Value, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("xml_property Properties {\n", Depth+2);
+              DebugPrint(S.Properties, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("xml_property NextPropertySlot {\n", Depth+2);
+              DebugPrint(S.NextPropertySlot, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1421,26 +1753,34 @@
         DebugPrint("xml_token_stream {\n", Depth);
       }
 
-                DebugPrint("xml_token Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("xml_token At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("xml_token End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Hashes {\n", Depth+2);
-          DebugPrint(S.Hashes, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("xml_token Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("xml_token At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("xml_token End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("xml_tag_hashtable Hashes {\n", Depth+2);
+              DebugPrint(S.Hashes, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1457,21 +1797,27 @@
         DebugPrint("xml_tag_stream {\n", Depth);
       }
 
-                DebugPrint("xml_tag Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("xml_tag At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("xml_tag End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("xml_tag Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("xml_tag At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("xml_tag End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1488,16 +1834,20 @@
         DebugPrint("xml_parsing_at_indicators {\n", Depth);
       }
 
-                DebugPrint("xml_tag LastClosedTag {\n", Depth+2);
-          DebugPrint(S.LastClosedTag, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("xml_tag CurrentlyOpenTag {\n", Depth+2);
-          DebugPrint(S.CurrentlyOpenTag, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("xml_tag LastClosedTag {\n", Depth+2);
+              DebugPrint(S.LastClosedTag, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("xml_tag CurrentlyOpenTag {\n", Depth+2);
+              DebugPrint(S.CurrentlyOpenTag, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1514,26 +1864,38 @@
         DebugPrint("shader_uniform {\n", Depth);
       }
 
-                DebugPrint("shader_uniform_type Type {\n", Depth+2);
-          DebugPrint(S.Type, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("s32 ID {\n", Depth+2);
-          DebugPrint(S.ID, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("const char  Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("shader_uniform_type Type {\n", Depth+2);
+              DebugPrint(S.Type, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (union (anonymous))\n", Depth+2);
+
+
+                                    DebugPrint("s32 ID {\n", Depth+2);
+              DebugPrint(S.ID, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("const char  Name {\n", Depth+2);
+              DebugPrint(S.Name, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("shader_uniform Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1550,16 +1912,20 @@
         DebugPrint("shader {\n", Depth);
       }
 
-                DebugPrint("u32 ID {\n", Depth+2);
-          DebugPrint(S.ID, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("shader_uniform FirstUniform {\n", Depth+2);
-          DebugPrint(S.FirstUniform, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u32 ID {\n", Depth+2);
+              DebugPrint(S.ID, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("shader_uniform FirstUniform {\n", Depth+2);
+              DebugPrint(S.FirstUniform, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1576,16 +1942,20 @@
         DebugPrint("texture {\n", Depth);
       }
 
-                DebugPrint("u32 ID {\n", Depth+2);
-          DebugPrint(S.ID, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("v2i Dim {\n", Depth+2);
-          DebugPrint(S.Dim, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u32 ID {\n", Depth+2);
+              DebugPrint(S.ID, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("v2i Dim {\n", Depth+2);
+              DebugPrint(S.Dim, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1602,31 +1972,41 @@
         DebugPrint("textured_2d_geometry_buffer {\n", Depth);
       }
 
-                DebugPrint("v3 Verts {\n", Depth+2);
-          DebugPrint(S.Verts, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("v3 Colors {\n", Depth+2);
-          DebugPrint(S.Colors, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("v3 UVs {\n", Depth+2);
-          DebugPrint(S.UVs, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("v3 Verts {\n", Depth+2);
+              DebugPrint(S.Verts, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("v3 Colors {\n", Depth+2);
+              DebugPrint(S.Colors, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("v3 UVs {\n", Depth+2);
+              DebugPrint(S.UVs, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1643,26 +2023,34 @@
         DebugPrint("untextured_2d_geometry_buffer {\n", Depth);
       }
 
-                DebugPrint("v3 Verts {\n", Depth+2);
-          DebugPrint(S.Verts, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("v3 Colors {\n", Depth+2);
-          DebugPrint(S.Colors, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("v3 Verts {\n", Depth+2);
+              DebugPrint(S.Verts, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("v3 Colors {\n", Depth+2);
+              DebugPrint(S.Colors, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1679,31 +2067,41 @@
         DebugPrint("untextured_3d_geometry_buffer {\n", Depth);
       }
 
-                DebugPrint("v3 Verts {\n", Depth+2);
-          DebugPrint(S.Verts, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("v4 Colors {\n", Depth+2);
-          DebugPrint(S.Colors, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("v3 Normals {\n", Depth+2);
-          DebugPrint(S.Normals, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("v3 Verts {\n", Depth+2);
+              DebugPrint(S.Verts, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("v4 Colors {\n", Depth+2);
+              DebugPrint(S.Colors, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("v3 Normals {\n", Depth+2);
+              DebugPrint(S.Normals, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1720,26 +2118,34 @@
         DebugPrint("gpu_mapped_element_buffer {\n", Depth);
       }
 
-                DebugPrint("u32 VertexHandle {\n", Depth+2);
-          DebugPrint(S.VertexHandle, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 NormalHandle {\n", Depth+2);
-          DebugPrint(S.NormalHandle, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 ColorHandle {\n", Depth+2);
-          DebugPrint(S.ColorHandle, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("untextured_3d_geometry_buffer Buffer {\n", Depth+2);
-          DebugPrint(S.Buffer, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u32 VertexHandle {\n", Depth+2);
+              DebugPrint(S.VertexHandle, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 NormalHandle {\n", Depth+2);
+              DebugPrint(S.NormalHandle, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 ColorHandle {\n", Depth+2);
+              DebugPrint(S.ColorHandle, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("untextured_3d_geometry_buffer Buffer {\n", Depth+2);
+              DebugPrint(S.Buffer, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1756,16 +2162,20 @@
         DebugPrint("framebuffer {\n", Depth);
       }
 
-                DebugPrint("u32 ID {\n", Depth+2);
-          DebugPrint(S.ID, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 Attachments {\n", Depth+2);
-          DebugPrint(S.Attachments, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u32 ID {\n", Depth+2);
+              DebugPrint(S.ID, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 Attachments {\n", Depth+2);
+              DebugPrint(S.Attachments, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1782,16 +2192,20 @@
         DebugPrint("cycle_range {\n", Depth);
       }
 
-                DebugPrint("u64 StartCycle {\n", Depth+2);
-          DebugPrint(S.StartCycle, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u64 TotalCycles {\n", Depth+2);
-          DebugPrint(S.TotalCycles, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u64 StartCycle {\n", Depth+2);
+              DebugPrint(S.StartCycle, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u64 TotalCycles {\n", Depth+2);
+              DebugPrint(S.TotalCycles, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1808,26 +2222,34 @@
         DebugPrint("memory_arena_stats {\n", Depth);
       }
 
-                DebugPrint("u64 Allocations {\n", Depth+2);
-          DebugPrint(S.Allocations, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u64 Pushes {\n", Depth+2);
-          DebugPrint(S.Pushes, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u64 TotalAllocated {\n", Depth+2);
-          DebugPrint(S.TotalAllocated, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u64 Remaining {\n", Depth+2);
-          DebugPrint(S.Remaining, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u64 Allocations {\n", Depth+2);
+              DebugPrint(S.Allocations, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u64 Pushes {\n", Depth+2);
+              DebugPrint(S.Pushes, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u64 TotalAllocated {\n", Depth+2);
+              DebugPrint(S.TotalAllocated, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u64 Remaining {\n", Depth+2);
+              DebugPrint(S.Remaining, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1844,21 +2266,27 @@
         DebugPrint("min_max_avg_dt {\n", Depth);
       }
 
-                DebugPrint("r64 Min {\n", Depth+2);
-          DebugPrint(S.Min, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("r64 Max {\n", Depth+2);
-          DebugPrint(S.Max, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("r64 Avg {\n", Depth+2);
-          DebugPrint(S.Avg, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("r64 Min {\n", Depth+2);
+              DebugPrint(S.Min, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("r64 Max {\n", Depth+2);
+              DebugPrint(S.Max, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("r64 Avg {\n", Depth+2);
+              DebugPrint(S.Avg, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1875,41 +2303,55 @@
         DebugPrint("debug_profile_scope {\n", Depth);
       }
 
-                DebugPrint("u64 CycleCount {\n", Depth+2);
-          DebugPrint(S.CycleCount, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u64 StartingCycle {\n", Depth+2);
-          DebugPrint(S.StartingCycle, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("const char  Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 Expanded {\n", Depth+2);
-          DebugPrint(S.Expanded, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Sibling {\n", Depth+2);
-          DebugPrint(S.Sibling, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Child {\n", Depth+2);
-          DebugPrint(S.Child, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Parent {\n", Depth+2);
-          DebugPrint(S.Parent, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u64 CycleCount {\n", Depth+2);
+              DebugPrint(S.CycleCount, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u64 StartingCycle {\n", Depth+2);
+              DebugPrint(S.StartingCycle, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("const char  Name {\n", Depth+2);
+              DebugPrint(S.Name, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 Expanded {\n", Depth+2);
+              DebugPrint(S.Expanded, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("debug_profile_scope Sibling {\n", Depth+2);
+              DebugPrint(S.Sibling, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("debug_profile_scope Child {\n", Depth+2);
+              DebugPrint(S.Child, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("debug_profile_scope Parent {\n", Depth+2);
+              DebugPrint(S.Parent, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1926,41 +2368,55 @@
         DebugPrint("unique_debug_profile_scope {\n", Depth);
       }
 
-                DebugPrint("const char  Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 CallCount {\n", Depth+2);
-          DebugPrint(S.CallCount, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u64 TotalCycles {\n", Depth+2);
-          DebugPrint(S.TotalCycles, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u64 MinCycles {\n", Depth+2);
-          DebugPrint(S.MinCycles, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u64 MaxCycles {\n", Depth+2);
-          DebugPrint(S.MaxCycles, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("debug_profile_scope Scope {\n", Depth+2);
-          DebugPrint(S.Scope, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" NextUnique {\n", Depth+2);
-          DebugPrint(S.NextUnique, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("const char  Name {\n", Depth+2);
+              DebugPrint(S.Name, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 CallCount {\n", Depth+2);
+              DebugPrint(S.CallCount, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u64 TotalCycles {\n", Depth+2);
+              DebugPrint(S.TotalCycles, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u64 MinCycles {\n", Depth+2);
+              DebugPrint(S.MinCycles, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u64 MaxCycles {\n", Depth+2);
+              DebugPrint(S.MaxCycles, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("debug_profile_scope Scope {\n", Depth+2);
+              DebugPrint(S.Scope, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("unique_debug_profile_scope NextUnique {\n", Depth+2);
+              DebugPrint(S.NextUnique, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -1977,26 +2433,34 @@
         DebugPrint("debug_scope_tree {\n", Depth);
       }
 
-                DebugPrint("debug_profile_scope Root {\n", Depth+2);
-          DebugPrint(S.Root, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("debug_profile_scope WriteScope {\n", Depth+2);
-          DebugPrint(S.WriteScope, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("debug_profile_scope ParentOfNextScope {\n", Depth+2);
-          DebugPrint(S.ParentOfNextScope, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u64 FrameRecorded {\n", Depth+2);
-          DebugPrint(S.FrameRecorded, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("debug_profile_scope Root {\n", Depth+2);
+              DebugPrint(S.Root, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("debug_profile_scope WriteScope {\n", Depth+2);
+              DebugPrint(S.WriteScope, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("debug_profile_scope ParentOfNextScope {\n", Depth+2);
+              DebugPrint(S.ParentOfNextScope, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u64 FrameRecorded {\n", Depth+2);
+              DebugPrint(S.FrameRecorded, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2013,46 +2477,62 @@
         DebugPrint("debug_thread_state {\n", Depth);
       }
 
-                DebugPrint("memory_arena Memory {\n", Depth+2);
-          DebugPrint(S.Memory, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("memory_arena MemoryFor_debug_profile_scope {\n", Depth+2);
-          DebugPrint(S.MemoryFor_debug_profile_scope, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("push_metadata MetaTable {\n", Depth+2);
-          DebugPrint(S.MetaTable, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("debug_scope_tree ScopeTrees {\n", Depth+2);
-          DebugPrint(S.ScopeTrees, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("debug_profile_scope FirstFreeScope {\n", Depth+2);
-          DebugPrint(S.FirstFreeScope, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("mutex_op_array MutexOps {\n", Depth+2);
-          DebugPrint(S.MutexOps, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 WriteIndex {\n", Depth+2);
-          DebugPrint(S.WriteIndex, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u8 Pad {\n", Depth+2);
-          DebugPrint(S.Pad, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(S.Memory, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("memory_arena MemoryFor_debug_profile_scope {\n", Depth+2);
+              DebugPrint(S.MemoryFor_debug_profile_scope, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("push_metadata MetaTable {\n", Depth+2);
+              DebugPrint(S.MetaTable, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("debug_scope_tree ScopeTrees {\n", Depth+2);
+              DebugPrint(S.ScopeTrees, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("debug_profile_scope FirstFreeScope {\n", Depth+2);
+              DebugPrint(S.FirstFreeScope, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("mutex_op_array MutexOps {\n", Depth+2);
+              DebugPrint(S.MutexOps, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 WriteIndex {\n", Depth+2);
+              DebugPrint(S.WriteIndex, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u8 Pad {\n", Depth+2);
+              DebugPrint(S.Pad, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2069,21 +2549,27 @@
         DebugPrint("registered_memory_arena {\n", Depth);
       }
 
-                DebugPrint("memory_arena Arena {\n", Depth+2);
-          DebugPrint(S.Arena, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("const char  Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 Expanded {\n", Depth+2);
-          DebugPrint(S.Expanded, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("memory_arena Arena {\n", Depth+2);
+              DebugPrint(S.Arena, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("const char  Name {\n", Depth+2);
+              DebugPrint(S.Name, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 Expanded {\n", Depth+2);
+              DebugPrint(S.Expanded, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2100,16 +2586,20 @@
         DebugPrint("selected_memory_arena {\n", Depth);
       }
 
-                DebugPrint("umm ArenaHash {\n", Depth+2);
-          DebugPrint(S.ArenaHash, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("umm HeadArenaHash {\n", Depth+2);
-          DebugPrint(S.HeadArenaHash, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("umm ArenaHash {\n", Depth+2);
+              DebugPrint(S.ArenaHash, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("umm HeadArenaHash {\n", Depth+2);
+              DebugPrint(S.HeadArenaHash, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2126,16 +2616,20 @@
         DebugPrint("selected_arenas {\n", Depth);
       }
 
-                DebugPrint("u32 Count {\n", Depth+2);
-          DebugPrint(S.Count, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("selected_memory_arena Arenas {\n", Depth+2);
-          DebugPrint(S.Arenas, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u32 Count {\n", Depth+2);
+              DebugPrint(S.Count, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("selected_memory_arena Arenas {\n", Depth+2);
+              DebugPrint(S.Arenas, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2152,21 +2646,27 @@
         DebugPrint("frame_stats {\n", Depth);
       }
 
-                DebugPrint("u64 TotalCycles {\n", Depth+2);
-          DebugPrint(S.TotalCycles, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u64 StartingCycle {\n", Depth+2);
-          DebugPrint(S.StartingCycle, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("r64 FrameMs {\n", Depth+2);
-          DebugPrint(S.FrameMs, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u64 TotalCycles {\n", Depth+2);
+              DebugPrint(S.TotalCycles, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u64 StartingCycle {\n", Depth+2);
+              DebugPrint(S.StartingCycle, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("r64 FrameMs {\n", Depth+2);
+              DebugPrint(S.FrameMs, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2183,16 +2683,20 @@
         DebugPrint("called_function {\n", Depth);
       }
 
-                DebugPrint("const char  Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 CallCount {\n", Depth+2);
-          DebugPrint(S.CallCount, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("const char  Name {\n", Depth+2);
+              DebugPrint(S.Name, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 CallCount {\n", Depth+2);
+              DebugPrint(S.CallCount, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2209,21 +2713,27 @@
         DebugPrint("debug_draw_call {\n", Depth);
       }
 
-                DebugPrint("const char  Caller {\n", Depth+2);
-          DebugPrint(S.Caller, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 N {\n", Depth+2);
-          DebugPrint(S.N, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 Calls {\n", Depth+2);
-          DebugPrint(S.Calls, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("const char  Caller {\n", Depth+2);
+              DebugPrint(S.Caller, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 N {\n", Depth+2);
+              DebugPrint(S.N, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 Calls {\n", Depth+2);
+              DebugPrint(S.Calls, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2240,81 +2750,111 @@
         DebugPrint("bitmap_image_header {\n", Depth);
       }
 
-                DebugPrint("u32 SizeOfImageHeader {\n", Depth+2);
-          DebugPrint(S.SizeOfImageHeader, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("s32 WidthInPixels {\n", Depth+2);
-          DebugPrint(S.WidthInPixels, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("s32 HeightInPixels {\n", Depth+2);
-          DebugPrint(S.HeightInPixels, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u16 ColorPlanes {\n", Depth+2);
-          DebugPrint(S.ColorPlanes, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u16 BPP {\n", Depth+2);
-          DebugPrint(S.BPP, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 CompressionType {\n", Depth+2);
-          DebugPrint(S.CompressionType, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 SizeInBytes {\n", Depth+2);
-          DebugPrint(S.SizeInBytes, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 xPixelsPerMeter {\n", Depth+2);
-          DebugPrint(S.xPixelsPerMeter, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 yPixelsPerMeter {\n", Depth+2);
-          DebugPrint(S.yPixelsPerMeter, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 ColorMapsUsed {\n", Depth+2);
-          DebugPrint(S.ColorMapsUsed, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 NumSignificantColors {\n", Depth+2);
-          DebugPrint(S.NumSignificantColors, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 RedMask {\n", Depth+2);
-          DebugPrint(S.RedMask, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 GreenMask {\n", Depth+2);
-          DebugPrint(S.GreenMask, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 BlueMask {\n", Depth+2);
-          DebugPrint(S.BlueMask, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 AlphaMask {\n", Depth+2);
-          DebugPrint(S.AlphaMask, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u32 SizeOfImageHeader {\n", Depth+2);
+              DebugPrint(S.SizeOfImageHeader, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("s32 WidthInPixels {\n", Depth+2);
+              DebugPrint(S.WidthInPixels, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("s32 HeightInPixels {\n", Depth+2);
+              DebugPrint(S.HeightInPixels, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u16 ColorPlanes {\n", Depth+2);
+              DebugPrint(S.ColorPlanes, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u16 BPP {\n", Depth+2);
+              DebugPrint(S.BPP, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 CompressionType {\n", Depth+2);
+              DebugPrint(S.CompressionType, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 SizeInBytes {\n", Depth+2);
+              DebugPrint(S.SizeInBytes, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 xPixelsPerMeter {\n", Depth+2);
+              DebugPrint(S.xPixelsPerMeter, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 yPixelsPerMeter {\n", Depth+2);
+              DebugPrint(S.yPixelsPerMeter, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 ColorMapsUsed {\n", Depth+2);
+              DebugPrint(S.ColorMapsUsed, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 NumSignificantColors {\n", Depth+2);
+              DebugPrint(S.NumSignificantColors, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 RedMask {\n", Depth+2);
+              DebugPrint(S.RedMask, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 GreenMask {\n", Depth+2);
+              DebugPrint(S.GreenMask, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 BlueMask {\n", Depth+2);
+              DebugPrint(S.BlueMask, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 AlphaMask {\n", Depth+2);
+              DebugPrint(S.AlphaMask, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2331,31 +2871,41 @@
         DebugPrint("bitmap_header {\n", Depth);
       }
 
-                DebugPrint("u16 Type {\n", Depth+2);
-          DebugPrint(S.Type, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 FileSizeInBytes {\n", Depth+2);
-          DebugPrint(S.FileSizeInBytes, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 Ignored {\n", Depth+2);
-          DebugPrint(S.Ignored, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 OffsetToPixelData {\n", Depth+2);
-          DebugPrint(S.OffsetToPixelData, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("bitmap_image_header Image {\n", Depth+2);
-          DebugPrint(S.Image, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u16 Type {\n", Depth+2);
+              DebugPrint(S.Type, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 FileSizeInBytes {\n", Depth+2);
+              DebugPrint(S.FileSizeInBytes, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 Ignored {\n", Depth+2);
+              DebugPrint(S.Ignored, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 OffsetToPixelData {\n", Depth+2);
+              DebugPrint(S.OffsetToPixelData, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("bitmap_image_header Image {\n", Depth+2);
+              DebugPrint(S.Image, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2372,16 +2922,20 @@
         DebugPrint("bitmap {\n", Depth);
       }
 
-                DebugPrint("v2i Dim {\n", Depth+2);
-          DebugPrint(S.Dim, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32_stream Pixels {\n", Depth+2);
-          DebugPrint(S.Pixels, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("v2i Dim {\n", Depth+2);
+              DebugPrint(S.Dim, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32_stream Pixels {\n", Depth+2);
+              DebugPrint(S.Pixels, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2398,16 +2952,20 @@
         DebugPrint("macro_expansion {\n", Depth);
       }
 
-                DebugPrint(" Expansion {\n", Depth+2);
-          DebugPrint(S.Expansion, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Def {\n", Depth+2);
-          DebugPrint(S.Def, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("c_token_cursor Expansion {\n", Depth+2);
+              DebugPrint(S.Expansion, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("macro_def Def {\n", Depth+2);
+              DebugPrint(S.Def, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2424,36 +2982,52 @@
         DebugPrint("c_token {\n", Depth);
       }
 
-                DebugPrint("c_token_type Type {\n", Depth+2);
-          DebugPrint(S.Type, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string Value {\n", Depth+2);
-          DebugPrint(S.Value, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string Filename {\n", Depth+2);
-          DebugPrint(S.Filename, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 LineNumber {\n", Depth+2);
-          DebugPrint(S.LineNumber, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 Erased {\n", Depth+2);
-          DebugPrint(S.Erased, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u8 Flags {\n", Depth+2);
-          DebugPrint(S.Flags, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("c_token_type Type {\n", Depth+2);
+              DebugPrint(S.Type, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string Value {\n", Depth+2);
+              DebugPrint(S.Value, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string Filename {\n", Depth+2);
+              DebugPrint(S.Filename, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 LineNumber {\n", Depth+2);
+              DebugPrint(S.LineNumber, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 Erased {\n", Depth+2);
+              DebugPrint(S.Erased, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u8 Flags {\n", Depth+2);
+              DebugPrint(S.Flags, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (union (anonymous))\n", Depth+2);
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2470,21 +3044,27 @@
         DebugPrint("peek_result {\n", Depth);
       }
 
-                DebugPrint(" Tokens {\n", Depth+2);
-          DebugPrint(S.Tokens, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("c_token At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 DoNotDescend {\n", Depth+2);
-          DebugPrint(S.DoNotDescend, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("c_token_cursor Tokens {\n", Depth+2);
+              DebugPrint(S.Tokens, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("c_token At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 DoNotDescend {\n", Depth+2);
+              DebugPrint(S.DoNotDescend, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2501,16 +3081,20 @@
         DebugPrint("c_token_cursor_up {\n", Depth);
       }
 
-                DebugPrint(" Tokens {\n", Depth+2);
-          DebugPrint(S.Tokens, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("c_token At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("c_token_cursor Tokens {\n", Depth+2);
+              DebugPrint(S.Tokens, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("c_token At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2527,36 +3111,48 @@
         DebugPrint("c_token_cursor {\n", Depth);
       }
 
-                DebugPrint("token_cursor_source Source {\n", Depth+2);
-          DebugPrint(S.Source, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("c_token Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("c_token End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("c_token At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("c_token_cursor_up Up {\n", Depth+2);
-          DebugPrint(S.Up, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string Filename {\n", Depth+2);
-          DebugPrint(S.Filename, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("token_cursor_source Source {\n", Depth+2);
+              DebugPrint(S.Source, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("c_token Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("c_token End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("c_token At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("c_token_cursor_up Up {\n", Depth+2);
+              DebugPrint(S.Up, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string Filename {\n", Depth+2);
+              DebugPrint(S.Filename, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2573,26 +3169,20 @@
         DebugPrint("parser {\n", Depth);
       }
 
-                DebugPrint("counted_string ErrorMessage {\n", Depth+2);
-          DebugPrint(S.ErrorMessage, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("parse_error_code ErrorCode {\n", Depth+2);
-          DebugPrint(S.ErrorCode, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("c_token ErrorToken {\n", Depth+2);
-          DebugPrint(S.ErrorToken, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("c_token_cursor Tokens {\n", Depth+2);
-          DebugPrint(S.Tokens, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("parse_error_code ErrorCode {\n", Depth+2);
+              DebugPrint(S.ErrorCode, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("c_token_cursor Tokens {\n", Depth+2);
+              DebugPrint(S.Tokens, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2602,122 +3192,69 @@
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
     }
-    bonsai_function void DebugPrint( struct_member_stream S, u32 Depth)
+    bonsai_function void DebugPrint( declaration_stream S, u32 Depth)
     {
       if (Depth == 0)
       {
-        DebugPrint("struct_member_stream {\n", Depth);
+        DebugPrint("declaration_stream {\n", Depth);
       }
 
-                DebugPrint(" FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("declaration_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("declaration_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
 
-    bonsai_function void DebugPrint( struct_member_stream *S, u32 Depth)
+    bonsai_function void DebugPrint( declaration_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
     }
-    bonsai_function void DebugPrint( struct_def S, u32 Depth)
+    bonsai_function void DebugPrint( compound_decl S, u32 Depth)
     {
       if (Depth == 0)
       {
-        DebugPrint("struct_def {\n", Depth);
+        DebugPrint("compound_decl {\n", Depth);
       }
 
-                DebugPrint("c_token Type {\n", Depth+2);
-          DebugPrint(S.Type, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("struct_member_stream Members {\n", Depth+2);
-          DebugPrint(S.Members, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 IsUnion {\n", Depth+2);
-          DebugPrint(S.IsUnion, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("c_token Type {\n", Depth+2);
+              DebugPrint(S.Type, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("declaration_stream Members {\n", Depth+2);
+              DebugPrint(S.Members, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 IsUnion {\n", Depth+2);
+              DebugPrint(S.IsUnion, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
 
-    bonsai_function void DebugPrint( struct_def *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( struct_member_anonymous S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("struct_member_anonymous {\n", Depth);
-      }
-
-                DebugPrint("struct_def Body {\n", Depth+2);
-          DebugPrint(S.Body, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( struct_member_anonymous *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( stl_container_def S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("stl_container_def {\n", Depth);
-      }
-
-                DebugPrint("counted_string Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( stl_container_def *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( datatype S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("datatype {\n", Depth);
-      }
-
-                DebugPrint("datatype_type Type {\n", Depth+2);
-          DebugPrint(S.Type, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( datatype *S, u32 Depth)
+    bonsai_function void DebugPrint( compound_decl *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
@@ -2729,36 +3266,55 @@
         DebugPrint("type_indirection_info {\n", Depth);
       }
 
-                DebugPrint("b32 ConstPointer {\n", Depth+2);
-          DebugPrint(S.ConstPointer, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 VolatileValue {\n", Depth+2);
-          DebugPrint(S.VolatileValue, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 ReferenceLevel {\n", Depth+2);
-          DebugPrint(S.ReferenceLevel, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 IndirectionLevel {\n", Depth+2);
-          DebugPrint(S.IndirectionLevel, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 IsFunctionPointer {\n", Depth+2);
-          DebugPrint(S.IsFunctionPointer, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string FunctionPointerTypeName {\n", Depth+2);
-          DebugPrint(S.FunctionPointerTypeName, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("b32 ConstPointer {\n", Depth+2);
+              DebugPrint(S.ConstPointer, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 VolatileValue {\n", Depth+2);
+              DebugPrint(S.VolatileValue, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 ReferenceLevel {\n", Depth+2);
+              DebugPrint(S.ReferenceLevel, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 IndirectionLevel {\n", Depth+2);
+              DebugPrint(S.IndirectionLevel, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 IsFunction {\n", Depth+2);
+              DebugPrint(S.IsFunction, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 IsFunctionPtr {\n", Depth+2);
+              DebugPrint(S.IsFunctionPtr, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("c_token FunctionNameT {\n", Depth+2);
+              DebugPrint(S.FunctionNameT, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2775,41 +3331,48 @@
         DebugPrint("type_spec {\n", Depth);
       }
 
-                DebugPrint("c_token DatatypeToken {\n", Depth+2);
-          DebugPrint(S.DatatypeToken, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("datatype Datatype {\n", Depth+2);
-          DebugPrint(S.Datatype, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("u32 Qualifier {\n", Depth+2);
-          DebugPrint(S.Qualifier, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("type_indirection_info Indirection {\n", Depth+2);
-          DebugPrint(S.Indirection, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 HasTemplateArguments {\n", Depth+2);
-          DebugPrint(S.HasTemplateArguments, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string TemplateSource {\n", Depth+2);
-          DebugPrint(S.TemplateSource, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("linkage_type Linkage {\n", Depth+2);
-          DebugPrint(S.Linkage, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("c_token QualifierNameT {\n", Depth+2);
+              DebugPrint(S.QualifierNameT, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("c_token DatatypeToken {\n", Depth+2);
+              DebugPrint(S.DatatypeToken, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("type_qualifier Qualifier {\n", Depth+2);
+              DebugPrint(S.Qualifier, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 HasTemplateArguments {\n", Depth+2);
+              DebugPrint(S.HasTemplateArguments, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string TemplateSource {\n", Depth+2);
+              DebugPrint(S.TemplateSource, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("linkage_type Linkage {\n", Depth+2);
+              DebugPrint(S.Linkage, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2826,26 +3389,48 @@
         DebugPrint("variable_decl {\n", Depth);
       }
 
-                DebugPrint("type_spec Type {\n", Depth+2);
-          DebugPrint(S.Type, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" StaticBufferSize {\n", Depth+2);
-          DebugPrint(S.StaticBufferSize, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Value {\n", Depth+2);
-          DebugPrint(S.Value, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("type_spec Type {\n", Depth+2);
+              DebugPrint(S.Type, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(S.Name, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node StaticBufferSize {\n", Depth+2);
+              DebugPrint(S.StaticBufferSize, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node Value {\n", Depth+2);
+              DebugPrint(S.Value, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("u32 StrictBitWidth {\n", Depth+2);
+              DebugPrint(S.StrictBitWidth, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("type_indirection_info Indirection {\n", Depth+2);
+              DebugPrint(S.Indirection, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2862,77 +3447,74 @@
         DebugPrint("function_decl {\n", Depth);
       }
 
-                DebugPrint("function_type Type {\n", Depth+2);
-          DebugPrint(S.Type, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("type_spec ReturnType {\n", Depth+2);
-          DebugPrint(S.ReturnType, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("c_token NameT {\n", Depth+2);
-          DebugPrint(S.NameT, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Args {\n", Depth+2);
-          DebugPrint(S.Args, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 IsVariadic {\n", Depth+2);
-          DebugPrint(S.IsVariadic, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 ImplIsDefault {\n", Depth+2);
-          DebugPrint(S.ImplIsDefault, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 ImplIsDeleted {\n", Depth+2);
-          DebugPrint(S.ImplIsDeleted, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("parser Body {\n", Depth+2);
-          DebugPrint(S.Body, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Ast {\n", Depth+2);
-          DebugPrint(S.Ast, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("function_type Type {\n", Depth+2);
+              DebugPrint(S.Type, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("type_spec ReturnType {\n", Depth+2);
+              DebugPrint(S.ReturnType, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("c_token NameT {\n", Depth+2);
+              DebugPrint(S.NameT, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("variable_decl_stream Args {\n", Depth+2);
+              DebugPrint(S.Args, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 IsVariadic {\n", Depth+2);
+              DebugPrint(S.IsVariadic, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 ImplIsDefault {\n", Depth+2);
+              DebugPrint(S.ImplIsDefault, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 ImplIsDeleted {\n", Depth+2);
+              DebugPrint(S.ImplIsDeleted, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("parser Body {\n", Depth+2);
+              DebugPrint(S.Body, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node Ast {\n", Depth+2);
+              DebugPrint(S.Ast, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
 
     bonsai_function void DebugPrint( function_decl *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( declaration S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("declaration {\n", Depth);
-      }
-
-                DebugPrint("declaration_type Type {\n", Depth+2);
-          DebugPrint(S.Type, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( declaration *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
@@ -2944,16 +3526,20 @@
         DebugPrint("enum_member {\n", Depth);
       }
 
-                DebugPrint("counted_string Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Expr {\n", Depth+2);
-          DebugPrint(S.Expr, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(S.Name, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_expression Expr {\n", Depth+2);
+              DebugPrint(S.Expr, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -2963,90 +3549,32 @@
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
     }
-    bonsai_function void DebugPrint( d_union_member S, u32 Depth)
+    bonsai_function void DebugPrint( enum_decl S, u32 Depth)
     {
       if (Depth == 0)
       {
-        DebugPrint("d_union_member {\n", Depth);
+        DebugPrint("enum_decl {\n", Depth);
       }
 
-                DebugPrint("counted_string Type {\n", Depth+2);
-          DebugPrint(S.Type, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("d_union_flags Flags {\n", Depth+2);
-          DebugPrint(S.Flags, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(S.Name, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("enum_member_stream Members {\n", Depth+2);
+              DebugPrint(S.Members, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
 
-    bonsai_function void DebugPrint( d_union_member *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( enum_def S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("enum_def {\n", Depth);
-      }
-
-                DebugPrint("counted_string Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Members {\n", Depth+2);
-          DebugPrint(S.Members, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( enum_def *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( type_def S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("type_def {\n", Depth);
-      }
-
-                DebugPrint("type_spec Type {\n", Depth+2);
-          DebugPrint(S.Type, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string Alias {\n", Depth+2);
-          DebugPrint(S.Alias, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 IsFunction {\n", Depth+2);
-          DebugPrint(S.IsFunction, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( type_def *S, u32 Depth)
+    bonsai_function void DebugPrint( enum_decl *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
@@ -3058,16 +3586,119 @@
         DebugPrint("primitive_def {\n", Depth);
       }
 
-                DebugPrint("type_spec Type {\n", Depth+2);
-          DebugPrint(S.Type, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("type_spec TypeSpec {\n", Depth+2);
+              DebugPrint(S.TypeSpec, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
 
     bonsai_function void DebugPrint( primitive_def *S, u32 Depth)
+    {
+      if (S) { DebugPrint(*S, Depth); }
+      else { DebugPrint("ptr(0)", Depth); }
+    }
+    bonsai_function void DebugPrint( datatype S, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("datatype {\n", Depth);
+      }
+
+                                          DebugPrint("datatype_type Type {\n", Depth+2);
+              DebugPrint(S.Type, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (union (anonymous))\n", Depth+2);
+
+
+
+      DebugPrint("}\n", Depth);
+    }
+
+    bonsai_function void DebugPrint( datatype *S, u32 Depth)
+    {
+      if (S) { DebugPrint(*S, Depth); }
+      else { DebugPrint("ptr(0)", Depth); }
+    }
+    bonsai_function void DebugPrint( d_union_member S, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("d_union_member {\n", Depth);
+      }
+
+                                          DebugPrint("counted_string Type {\n", Depth+2);
+              DebugPrint(S.Type, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(S.Name, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("d_union_flags Flags {\n", Depth+2);
+              DebugPrint(S.Flags, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+
+      DebugPrint("}\n", Depth);
+    }
+
+    bonsai_function void DebugPrint( d_union_member *S, u32 Depth)
+    {
+      if (S) { DebugPrint(*S, Depth); }
+      else { DebugPrint("ptr(0)", Depth); }
+    }
+    bonsai_function void DebugPrint( type_def S, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("type_def {\n", Depth);
+      }
+
+                                          DebugPrint("type_spec Type {\n", Depth+2);
+              DebugPrint(S.Type, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string Alias {\n", Depth+2);
+              DebugPrint(S.Alias, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 IsFunction {\n", Depth+2);
+              DebugPrint(S.IsFunction, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+
+      DebugPrint("}\n", Depth);
+    }
+
+    bonsai_function void DebugPrint( type_def *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
@@ -3079,16 +3710,20 @@
         DebugPrint("meta_func_arg {\n", Depth);
       }
 
-                DebugPrint("counted_string Match {\n", Depth+2);
-          DebugPrint(S.Match, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("datatype Data {\n", Depth+2);
-          DebugPrint(S.Data, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string Match {\n", Depth+2);
+              DebugPrint(S.Match, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("datatype Data {\n", Depth+2);
+              DebugPrint(S.Data, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3105,26 +3740,34 @@
         DebugPrint("d_union_decl {\n", Depth);
       }
 
-                DebugPrint("counted_string Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Members {\n", Depth+2);
-          DebugPrint(S.Members, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("struct_member_stream CommonMembers {\n", Depth+2);
-          DebugPrint(S.CommonMembers, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string CustomEnumType {\n", Depth+2);
-          DebugPrint(S.CustomEnumType, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(S.Name, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("d_union_member_stream Members {\n", Depth+2);
+              DebugPrint(S.Members, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("declaration_stream CommonMembers {\n", Depth+2);
+              DebugPrint(S.CommonMembers, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string CustomEnumType {\n", Depth+2);
+              DebugPrint(S.CustomEnumType, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3141,36 +3784,48 @@
         DebugPrint("macro_def {\n", Depth);
       }
 
-                DebugPrint("macro_type Type {\n", Depth+2);
-          DebugPrint(S.Type, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("c_token_cursor Body {\n", Depth+2);
-          DebugPrint(S.Body, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" NamedArguments {\n", Depth+2);
-          DebugPrint(S.NamedArguments, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 Variadic {\n", Depth+2);
-          DebugPrint(S.Variadic, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 Undefed {\n", Depth+2);
-          DebugPrint(S.Undefed, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("macro_type Type {\n", Depth+2);
+              DebugPrint(S.Type, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(S.Name, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("c_token_cursor Body {\n", Depth+2);
+              DebugPrint(S.Body, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string_buffer NamedArguments {\n", Depth+2);
+              DebugPrint(S.NamedArguments, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 Variadic {\n", Depth+2);
+              DebugPrint(S.Variadic, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 Undefed {\n", Depth+2);
+              DebugPrint(S.Undefed, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3187,21 +3842,27 @@
         DebugPrint("meta_func {\n", Depth);
       }
 
-                DebugPrint("counted_string Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string ArgName {\n", Depth+2);
-          DebugPrint(S.ArgName, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("parser Body {\n", Depth+2);
-          DebugPrint(S.Body, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(S.Name, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string ArgName {\n", Depth+2);
+              DebugPrint(S.ArgName, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("parser Body {\n", Depth+2);
+              DebugPrint(S.Body, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3218,21 +3879,27 @@
         DebugPrint("todo {\n", Depth);
       }
 
-                DebugPrint("counted_string Id {\n", Depth+2);
-          DebugPrint(S.Id, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string Value {\n", Depth+2);
-          DebugPrint(S.Value, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 FoundInCodebase {\n", Depth+2);
-          DebugPrint(S.FoundInCodebase, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string Id {\n", Depth+2);
+              DebugPrint(S.Id, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string Value {\n", Depth+2);
+              DebugPrint(S.Value, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 FoundInCodebase {\n", Depth+2);
+              DebugPrint(S.FoundInCodebase, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3249,16 +3916,20 @@
         DebugPrint("tag {\n", Depth);
       }
 
-                DebugPrint("counted_string Tag {\n", Depth+2);
-          DebugPrint(S.Tag, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Todos {\n", Depth+2);
-          DebugPrint(S.Todos, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string Tag {\n", Depth+2);
+              DebugPrint(S.Tag, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("todo_stream Todos {\n", Depth+2);
+              DebugPrint(S.Todos, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3275,16 +3946,20 @@
         DebugPrint("person {\n", Depth);
       }
 
-                DebugPrint("counted_string Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Tags {\n", Depth+2);
-          DebugPrint(S.Tags, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(S.Name, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("tag_stream Tags {\n", Depth+2);
+              DebugPrint(S.Tags, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3301,16 +3976,20 @@
         DebugPrint("ast_node_expression {\n", Depth);
       }
 
-                DebugPrint(" Value {\n", Depth+2);
-          DebugPrint(S.Value, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("ast_node Value {\n", Depth+2);
+              DebugPrint(S.Value, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_expression Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3327,21 +4006,27 @@
         DebugPrint("ast_node_statement {\n", Depth);
       }
 
-                DebugPrint("ast_node_expression LHS {\n", Depth+2);
-          DebugPrint(S.LHS, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" RHS {\n", Depth+2);
-          DebugPrint(S.RHS, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("ast_node_expression LHS {\n", Depth+2);
+              DebugPrint(S.LHS, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_statement RHS {\n", Depth+2);
+              DebugPrint(S.RHS, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_statement Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3358,21 +4043,27 @@
         DebugPrint("ast_node_function_call {\n", Depth);
       }
 
-                DebugPrint("counted_string Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("function_decl Prototype {\n", Depth+2);
-          DebugPrint(S.Prototype, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Args {\n", Depth+2);
-          DebugPrint(S.Args, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(S.Name, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("function_decl Prototype {\n", Depth+2);
+              DebugPrint(S.Prototype, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_expression_stream Args {\n", Depth+2);
+              DebugPrint(S.Args, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3389,21 +4080,34 @@
         DebugPrint("ast_node_type_specifier {\n", Depth);
       }
 
-                DebugPrint("datatype Datatype {\n", Depth+2);
-          DebugPrint(S.Datatype, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("type_spec TypeSpec {\n", Depth+2);
-          DebugPrint(S.TypeSpec, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("ast_node_expression Name {\n", Depth+2);
-          DebugPrint(S.Name, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("datatype Datatype {\n", Depth+2);
+              DebugPrint(S.Datatype, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("type_spec TypeSpec {\n", Depth+2);
+              DebugPrint(S.TypeSpec, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("type_indirection_info Indirection {\n", Depth+2);
+              DebugPrint(S.Indirection, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_expression Name {\n", Depth+2);
+              DebugPrint(S.Name, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3420,21 +4124,27 @@
         DebugPrint("ast_node_variable_def {\n", Depth);
       }
 
-                DebugPrint("datatype Type {\n", Depth+2);
-          DebugPrint(S.Type, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("variable_decl Decl {\n", Depth+2);
-          DebugPrint(S.Decl, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Value {\n", Depth+2);
-          DebugPrint(S.Value, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("datatype Type {\n", Depth+2);
+              DebugPrint(S.Type, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("variable_decl Decl {\n", Depth+2);
+              DebugPrint(S.Decl, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node Value {\n", Depth+2);
+              DebugPrint(S.Value, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3451,16 +4161,20 @@
         DebugPrint("ast_node_access {\n", Depth);
       }
 
-                DebugPrint("c_token AccessType {\n", Depth+2);
-          DebugPrint(S.AccessType, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("ast_node_expression Symbol {\n", Depth+2);
-          DebugPrint(S.Symbol, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("c_token AccessType {\n", Depth+2);
+              DebugPrint(S.AccessType, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_expression Symbol {\n", Depth+2);
+              DebugPrint(S.Symbol, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3477,21 +4191,27 @@
         DebugPrint("ast_node_parenthesized {\n", Depth);
       }
 
-                DebugPrint("ast_node_expression Expr {\n", Depth+2);
-          DebugPrint(S.Expr, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 IsCast {\n", Depth+2);
-          DebugPrint(S.IsCast, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("ast_node_expression CastValue {\n", Depth+2);
-          DebugPrint(S.CastValue, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("ast_node_expression Expr {\n", Depth+2);
+              DebugPrint(S.Expr, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 IsCast {\n", Depth+2);
+              DebugPrint(S.IsCast, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_expression CastValue {\n", Depth+2);
+              DebugPrint(S.CastValue, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3508,11 +4228,13 @@
         DebugPrint("ast_node_initializer_list {\n", Depth);
       }
 
-                DebugPrint("u32 Ignored {\n", Depth+2);
-          DebugPrint(S.Ignored, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("u32 Ignored {\n", Depth+2);
+              DebugPrint(S.Ignored, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3529,16 +4251,20 @@
         DebugPrint("ast_node_operator {\n", Depth);
       }
 
-                DebugPrint("ast_node_expression Operand {\n", Depth+2);
-          DebugPrint(S.Operand, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("c_token Token {\n", Depth+2);
-          DebugPrint(S.Token, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("ast_node_expression Operand {\n", Depth+2);
+              DebugPrint(S.Operand, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("c_token Token {\n", Depth+2);
+              DebugPrint(S.Token, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3555,11 +4281,13 @@
         DebugPrint("ast_node_literal {\n", Depth);
       }
 
-                DebugPrint("c_token Token {\n", Depth+2);
-          DebugPrint(S.Token, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("c_token Token {\n", Depth+2);
+              DebugPrint(S.Token, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3576,11 +4304,13 @@
         DebugPrint("ast_node_symbol {\n", Depth);
       }
 
-                DebugPrint("c_token Token {\n", Depth+2);
-          DebugPrint(S.Token, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("c_token Token {\n", Depth+2);
+              DebugPrint(S.Token, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3597,11 +4327,13 @@
         DebugPrint("ast_node_return {\n", Depth);
       }
 
-                DebugPrint("ast_node_expression Value {\n", Depth+2);
-          DebugPrint(S.Value, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("ast_node_expression Value {\n", Depth+2);
+              DebugPrint(S.Value, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3618,16 +4350,20 @@
         DebugPrint("ast_node_predicated {\n", Depth);
       }
 
-                DebugPrint("c_token Token {\n", Depth+2);
-          DebugPrint(S.Token, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("ast_node_expression Predicate {\n", Depth+2);
-          DebugPrint(S.Predicate, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("c_token Token {\n", Depth+2);
+              DebugPrint(S.Token, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_expression Predicate {\n", Depth+2);
+              DebugPrint(S.Predicate, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3644,26 +4380,34 @@
         DebugPrint("arguments {\n", Depth);
       }
 
-                DebugPrint("counted_string Outpath {\n", Depth+2);
-          DebugPrint(S.Outpath, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Files {\n", Depth+2);
-          DebugPrint(S.Files, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" IncludePaths {\n", Depth+2);
-          DebugPrint(S.IncludePaths, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("b32 DoDebugWindow {\n", Depth+2);
-          DebugPrint(S.DoDebugWindow, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string Outpath {\n", Depth+2);
+              DebugPrint(S.Outpath, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string_cursor Files {\n", Depth+2);
+              DebugPrint(S.Files, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string_cursor IncludePaths {\n", Depth+2);
+              DebugPrint(S.IncludePaths, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("b32 DoDebugWindow {\n", Depth+2);
+              DebugPrint(S.DoDebugWindow, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3680,46 +4424,48 @@
         DebugPrint("program_datatypes {\n", Depth);
       }
 
-                DebugPrint(" Macros {\n", Depth+2);
-          DebugPrint(S.Macros, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" FilesParsed {\n", Depth+2);
-          DebugPrint(S.FilesParsed, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Structs {\n", Depth+2);
-          DebugPrint(S.Structs, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Enums {\n", Depth+2);
-          DebugPrint(S.Enums, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Functions {\n", Depth+2);
-          DebugPrint(S.Functions, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Typedefs {\n", Depth+2);
-          DebugPrint(S.Typedefs, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Primitives {\n", Depth+2);
-          DebugPrint(S.Primitives, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" StlContainers {\n", Depth+2);
-          DebugPrint(S.StlContainers, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("macro_def_hashtable Macros {\n", Depth+2);
+              DebugPrint(S.Macros, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string_hashtable FilesParsed {\n", Depth+2);
+              DebugPrint(S.FilesParsed, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("compound_decl_stream Structs {\n", Depth+2);
+              DebugPrint(S.Structs, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("enum_decl_stream Enums {\n", Depth+2);
+              DebugPrint(S.Enums, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("function_decl_stream Functions {\n", Depth+2);
+              DebugPrint(S.Functions, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("type_def_stream Typedefs {\n", Depth+2);
+              DebugPrint(S.Typedefs, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3736,16 +4482,20 @@
         DebugPrint("for_enum_constraints {\n", Depth);
       }
 
-                DebugPrint("counted_string TypeName {\n", Depth+2);
-          DebugPrint(S.TypeName, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string ValueName {\n", Depth+2);
-          DebugPrint(S.ValueName, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string TypeName {\n", Depth+2);
+              DebugPrint(S.TypeName, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string ValueName {\n", Depth+2);
+              DebugPrint(S.ValueName, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3762,26 +4512,34 @@
         DebugPrint("body_text_constraints {\n", Depth);
       }
 
-                DebugPrint("counted_string MemberContains {\n", Depth+2);
-          DebugPrint(S.MemberContains, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string TypeTag {\n", Depth+2);
-          DebugPrint(S.TypeTag, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string TypeName {\n", Depth+2);
-          DebugPrint(S.TypeName, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string ValueName {\n", Depth+2);
-          DebugPrint(S.ValueName, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string MemberContains {\n", Depth+2);
+              DebugPrint(S.MemberContains, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string TypeTag {\n", Depth+2);
+              DebugPrint(S.TypeTag, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string TypeName {\n", Depth+2);
+              DebugPrint(S.TypeName, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string ValueName {\n", Depth+2);
+              DebugPrint(S.ValueName, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3798,16 +4556,20 @@
         DebugPrint("todo_list_info {\n", Depth);
       }
 
-                DebugPrint(" People {\n", Depth+2);
-          DebugPrint(S.People, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" NameLists {\n", Depth+2);
-          DebugPrint(S.NameLists, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("person_stream People {\n", Depth+2);
+              DebugPrint(S.People, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("tagged_counted_string_stream_stream NameLists {\n", Depth+2);
+              DebugPrint(S.NameLists, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3824,16 +4586,20 @@
         DebugPrint("string_from_parser {\n", Depth);
       }
 
-                DebugPrint("parser Parser {\n", Depth+2);
-          DebugPrint(S.Parser, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("c_token StartToken {\n", Depth+2);
-          DebugPrint(S.StartToken, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("parser Parser {\n", Depth+2);
+              DebugPrint(S.Parser, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("c_token StartToken {\n", Depth+2);
+              DebugPrint(S.StartToken, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3850,36 +4616,48 @@
         DebugPrint("parse_context {\n", Depth);
       }
 
-                DebugPrint("parser CurrentParser {\n", Depth+2);
-          DebugPrint(S.CurrentParser, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("program_datatypes Datatypes {\n", Depth+2);
-          DebugPrint(S.Datatypes, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" IncludePaths {\n", Depth+2);
-          DebugPrint(S.IncludePaths, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" MetaFunctions {\n", Depth+2);
-          DebugPrint(S.MetaFunctions, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("memory_arena Memory {\n", Depth+2);
-          DebugPrint(S.Memory, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("arguments Args {\n", Depth+2);
-          DebugPrint(S.Args, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("parser CurrentParser {\n", Depth+2);
+              DebugPrint(S.CurrentParser, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("program_datatypes Datatypes {\n", Depth+2);
+              DebugPrint(S.Datatypes, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string_cursor IncludePaths {\n", Depth+2);
+              DebugPrint(S.IncludePaths, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("meta_func_stream MetaFunctions {\n", Depth+2);
+              DebugPrint(S.MetaFunctions, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(S.Memory, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("arguments Args {\n", Depth+2);
+              DebugPrint(S.Args, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3896,26 +4674,34 @@
         DebugPrint("comma_separated_decl {\n", Depth);
       }
 
-                DebugPrint("c_token NameT {\n", Depth+2);
-          DebugPrint(S.NameT, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("type_indirection_info Indirection {\n", Depth+2);
-          DebugPrint(S.Indirection, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" StaticBufferSize {\n", Depth+2);
-          DebugPrint(S.StaticBufferSize, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Value {\n", Depth+2);
-          DebugPrint(S.Value, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("c_token NameT {\n", Depth+2);
+              DebugPrint(S.NameT, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("type_indirection_info Indirection {\n", Depth+2);
+              DebugPrint(S.Indirection, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node StaticBufferSize {\n", Depth+2);
+              DebugPrint(S.StaticBufferSize, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node Value {\n", Depth+2);
+              DebugPrint(S.Value, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3932,16 +4718,20 @@
         DebugPrint("d_list {\n", Depth);
       }
 
-                DebugPrint(" Prev {\n", Depth+2);
-          DebugPrint(S.Prev, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("d_list Prev {\n", Depth+2);
+              DebugPrint(S.Prev, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("d_list Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3958,21 +4748,27 @@
         DebugPrint("counted_string_cursor {\n", Depth);
       }
 
-                DebugPrint("counted_string Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -3989,16 +4785,20 @@
         DebugPrint("counted_string_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("counted_string Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4015,16 +4815,20 @@
         DebugPrint("counted_string_stream {\n", Depth);
       }
 
-                DebugPrint("counted_string_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4041,16 +4845,20 @@
         DebugPrint("counted_string_iterator {\n", Depth);
       }
 
-                DebugPrint("counted_string_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4067,16 +4875,20 @@
         DebugPrint("tagged_counted_string_stream_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("tagged_counted_string_stream Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("tagged_counted_string_stream Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("tagged_counted_string_stream_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4093,16 +4905,20 @@
         DebugPrint("tagged_counted_string_stream_stream {\n", Depth);
       }
 
-                DebugPrint("tagged_counted_string_stream_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("tagged_counted_string_stream_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("tagged_counted_string_stream_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("tagged_counted_string_stream_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4119,16 +4935,20 @@
         DebugPrint("tagged_counted_string_stream_iterator {\n", Depth);
       }
 
-                DebugPrint("tagged_counted_string_stream_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("tagged_counted_string_stream_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("tagged_counted_string_stream_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("tagged_counted_string_stream_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4145,16 +4965,20 @@
         DebugPrint("xml_tag_linked_list_node {\n", Depth);
       }
 
-                DebugPrint("xml_tag Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("xml_tag Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("xml_tag_linked_list_node Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4171,16 +4995,20 @@
         DebugPrint("xml_tag_hashtable {\n", Depth);
       }
 
-                DebugPrint("umm Size {\n", Depth+2);
-          DebugPrint(S.Size, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("xml_tag_linked_list_node Elements {\n", Depth+2);
-          DebugPrint(S.Elements, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("umm Size {\n", Depth+2);
+              DebugPrint(S.Size, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("xml_tag_linked_list_node Elements {\n", Depth+2);
+              DebugPrint(S.Elements, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4197,16 +5025,20 @@
         DebugPrint("counted_string_buffer {\n", Depth);
       }
 
-                DebugPrint("counted_string Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("umm Count {\n", Depth+2);
-          DebugPrint(S.Count, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("umm Count {\n", Depth+2);
+              DebugPrint(S.Count, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4223,16 +5055,20 @@
         DebugPrint("counted_string_linked_list_node {\n", Depth);
       }
 
-                DebugPrint("counted_string Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("counted_string Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string_linked_list_node Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4249,16 +5085,20 @@
         DebugPrint("counted_string_hashtable {\n", Depth);
       }
 
-                DebugPrint("umm Size {\n", Depth+2);
-          DebugPrint(S.Size, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("counted_string_linked_list_node Elements {\n", Depth+2);
-          DebugPrint(S.Elements, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("umm Size {\n", Depth+2);
+              DebugPrint(S.Size, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("counted_string_linked_list_node Elements {\n", Depth+2);
+              DebugPrint(S.Elements, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4275,21 +5115,27 @@
         DebugPrint("v3_cursor {\n", Depth);
       }
 
-                DebugPrint("v3 Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("v3 At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("v3 End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("v3 Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("v3 At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("v3 End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4306,16 +5152,20 @@
         DebugPrint("c_token_buffer {\n", Depth);
       }
 
-                DebugPrint("c_token Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("umm Count {\n", Depth+2);
-          DebugPrint(S.Count, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("c_token Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("umm Count {\n", Depth+2);
+              DebugPrint(S.Count, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4332,16 +5182,20 @@
         DebugPrint("c_token_buffer_buffer {\n", Depth);
       }
 
-                DebugPrint("c_token_buffer Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("umm Count {\n", Depth+2);
-          DebugPrint(S.Count, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("c_token_buffer Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("umm Count {\n", Depth+2);
+              DebugPrint(S.Count, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4358,16 +5212,20 @@
         DebugPrint("c_token_buffer_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("c_token_buffer Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("c_token_buffer Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("c_token_buffer_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4384,16 +5242,20 @@
         DebugPrint("c_token_buffer_stream {\n", Depth);
       }
 
-                DebugPrint("c_token_buffer_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("c_token_buffer_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("c_token_buffer_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("c_token_buffer_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4410,16 +5272,20 @@
         DebugPrint("c_token_buffer_iterator {\n", Depth);
       }
 
-                DebugPrint("c_token_buffer_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("c_token_buffer_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("c_token_buffer_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("c_token_buffer_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4436,21 +5302,27 @@
         DebugPrint("parser_cursor {\n", Depth);
       }
 
-                DebugPrint("parser Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("parser At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("parser End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("parser Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("parser At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("parser End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4467,16 +5339,20 @@
         DebugPrint("parser_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("parser Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("parser Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("parser_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4493,16 +5369,20 @@
         DebugPrint("parser_stream {\n", Depth);
       }
 
-                DebugPrint("parser_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("parser_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("parser_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("parser_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4519,16 +5399,20 @@
         DebugPrint("parser_iterator {\n", Depth);
       }
 
-                DebugPrint("parser_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("parser_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("parser_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("parser_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4538,210 +5422,129 @@
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
     }
-    bonsai_function void DebugPrint( struct_member_function S, u32 Depth)
+    bonsai_function void DebugPrint( compound_decl_cursor S, u32 Depth)
     {
       if (Depth == 0)
       {
-        DebugPrint("struct_member_function {\n", Depth);
+        DebugPrint("compound_decl_cursor {\n", Depth);
       }
 
-                DebugPrint("struct_member_function_type Type {\n", Depth+2);
-          DebugPrint(S.Type, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("compound_decl Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("compound_decl At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("compound_decl End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
 
-    bonsai_function void DebugPrint( struct_member_function *S, u32 Depth)
+    bonsai_function void DebugPrint( compound_decl_cursor *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
     }
-    bonsai_function void DebugPrint( struct_def_cursor S, u32 Depth)
+    bonsai_function void DebugPrint( compound_decl_stream_chunk S, u32 Depth)
     {
       if (Depth == 0)
       {
-        DebugPrint("struct_def_cursor {\n", Depth);
+        DebugPrint("compound_decl_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("struct_def Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("struct_def At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("struct_def End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("compound_decl Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("compound_decl_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
 
-    bonsai_function void DebugPrint( struct_def_cursor *S, u32 Depth)
+    bonsai_function void DebugPrint( compound_decl_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
     }
-    bonsai_function void DebugPrint( struct_def_stream_chunk S, u32 Depth)
+    bonsai_function void DebugPrint( compound_decl_stream S, u32 Depth)
     {
       if (Depth == 0)
       {
-        DebugPrint("struct_def_stream_chunk {\n", Depth);
+        DebugPrint("compound_decl_stream {\n", Depth);
       }
 
-                DebugPrint("struct_def Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("compound_decl_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("compound_decl_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
 
-    bonsai_function void DebugPrint( struct_def_stream_chunk *S, u32 Depth)
+    bonsai_function void DebugPrint( compound_decl_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
     }
-    bonsai_function void DebugPrint( struct_def_stream S, u32 Depth)
+    bonsai_function void DebugPrint( compound_decl_iterator S, u32 Depth)
     {
       if (Depth == 0)
       {
-        DebugPrint("struct_def_stream {\n", Depth);
+        DebugPrint("compound_decl_iterator {\n", Depth);
       }
 
-                DebugPrint("struct_def_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("struct_def_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("compound_decl_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("compound_decl_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
 
-    bonsai_function void DebugPrint( struct_def_stream *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( struct_def_iterator S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("struct_def_iterator {\n", Depth);
-      }
-
-                DebugPrint("struct_def_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("struct_def_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( struct_def_iterator *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( stl_container_def_stream_chunk S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("stl_container_def_stream_chunk {\n", Depth);
-      }
-
-                DebugPrint("stl_container_def Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( stl_container_def_stream_chunk *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( stl_container_def_stream S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("stl_container_def_stream {\n", Depth);
-      }
-
-                DebugPrint("stl_container_def_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("stl_container_def_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( stl_container_def_stream *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( stl_container_def_iterator S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("stl_container_def_iterator {\n", Depth);
-      }
-
-                DebugPrint("stl_container_def_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("stl_container_def_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( stl_container_def_iterator *S, u32 Depth)
+    bonsai_function void DebugPrint( compound_decl_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
@@ -4753,16 +5556,20 @@
         DebugPrint("variable_decl_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("variable_decl Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("variable_decl Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("variable_decl_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4779,16 +5586,20 @@
         DebugPrint("variable_decl_stream {\n", Depth);
       }
 
-                DebugPrint("variable_decl_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("variable_decl_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("variable_decl_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("variable_decl_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4805,16 +5616,20 @@
         DebugPrint("variable_decl_iterator {\n", Depth);
       }
 
-                DebugPrint("variable_decl_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("variable_decl_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("variable_decl_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("variable_decl_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4831,16 +5646,20 @@
         DebugPrint("function_decl_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("function_decl Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("function_decl Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("function_decl_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4857,16 +5676,20 @@
         DebugPrint("function_decl_stream {\n", Depth);
       }
 
-                DebugPrint("function_decl_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("function_decl_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("function_decl_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("function_decl_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -4883,99 +5706,25 @@
         DebugPrint("function_decl_iterator {\n", Depth);
       }
 
-                DebugPrint("function_decl_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("function_decl_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("function_decl_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("function_decl_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
 
     bonsai_function void DebugPrint( function_decl_iterator *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( struct_member S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("struct_member {\n", Depth);
-      }
-
-                DebugPrint("struct_member_type Type {\n", Depth+2);
-          DebugPrint(S.Type, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( struct_member *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( struct_member_cursor S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("struct_member_cursor {\n", Depth);
-      }
-
-                DebugPrint("struct_member Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("struct_member At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("struct_member End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( struct_member_cursor *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( struct_member_stream_chunk S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("struct_member_stream_chunk {\n", Depth);
-      }
-
-                DebugPrint("struct_member Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( struct_member_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
@@ -4987,16 +5736,20 @@
         DebugPrint("enum_member_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("enum_member Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("enum_member Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("enum_member_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5013,16 +5766,20 @@
         DebugPrint("enum_member_stream {\n", Depth);
       }
 
-                DebugPrint("enum_member_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("enum_member_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("enum_member_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("enum_member_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5039,21 +5796,246 @@
         DebugPrint("enum_member_iterator {\n", Depth);
       }
 
-                DebugPrint("enum_member_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("enum_member_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("enum_member_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("enum_member_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
 
     bonsai_function void DebugPrint( enum_member_iterator *S, u32 Depth)
+    {
+      if (S) { DebugPrint(*S, Depth); }
+      else { DebugPrint("ptr(0)", Depth); }
+    }
+    bonsai_function void DebugPrint( enum_decl_cursor S, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("enum_decl_cursor {\n", Depth);
+      }
+
+                                          DebugPrint("enum_decl Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("enum_decl At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("enum_decl End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+
+      DebugPrint("}\n", Depth);
+    }
+
+    bonsai_function void DebugPrint( enum_decl_cursor *S, u32 Depth)
+    {
+      if (S) { DebugPrint(*S, Depth); }
+      else { DebugPrint("ptr(0)", Depth); }
+    }
+    bonsai_function void DebugPrint( enum_decl_stream_chunk S, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("enum_decl_stream_chunk {\n", Depth);
+      }
+
+                                          DebugPrint("enum_decl Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("enum_decl_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+
+      DebugPrint("}\n", Depth);
+    }
+
+    bonsai_function void DebugPrint( enum_decl_stream_chunk *S, u32 Depth)
+    {
+      if (S) { DebugPrint(*S, Depth); }
+      else { DebugPrint("ptr(0)", Depth); }
+    }
+    bonsai_function void DebugPrint( enum_decl_stream S, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("enum_decl_stream {\n", Depth);
+      }
+
+                                          DebugPrint("enum_decl_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("enum_decl_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+
+      DebugPrint("}\n", Depth);
+    }
+
+    bonsai_function void DebugPrint( enum_decl_stream *S, u32 Depth)
+    {
+      if (S) { DebugPrint(*S, Depth); }
+      else { DebugPrint("ptr(0)", Depth); }
+    }
+    bonsai_function void DebugPrint( enum_decl_iterator S, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("enum_decl_iterator {\n", Depth);
+      }
+
+                                          DebugPrint("enum_decl_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("enum_decl_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+
+      DebugPrint("}\n", Depth);
+    }
+
+    bonsai_function void DebugPrint( enum_decl_iterator *S, u32 Depth)
+    {
+      if (S) { DebugPrint(*S, Depth); }
+      else { DebugPrint("ptr(0)", Depth); }
+    }
+    bonsai_function void DebugPrint( declaration S, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("declaration {\n", Depth);
+      }
+
+                                          DebugPrint("declaration_type Type {\n", Depth+2);
+              DebugPrint(S.Type, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    // NOTE(Jesse): there was an anonymous struct or union here
+              DebugPrint("anonymous type : (union (anonymous))\n", Depth+2);
+
+
+
+      DebugPrint("}\n", Depth);
+    }
+
+    bonsai_function void DebugPrint( declaration *S, u32 Depth)
+    {
+      if (S) { DebugPrint(*S, Depth); }
+      else { DebugPrint("ptr(0)", Depth); }
+    }
+    bonsai_function void DebugPrint( declaration_cursor S, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("declaration_cursor {\n", Depth);
+      }
+
+                                          DebugPrint("declaration Start {\n", Depth+2);
+              DebugPrint(S.Start, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("declaration At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("declaration End {\n", Depth+2);
+              DebugPrint(S.End, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+
+      DebugPrint("}\n", Depth);
+    }
+
+    bonsai_function void DebugPrint( declaration_cursor *S, u32 Depth)
+    {
+      if (S) { DebugPrint(*S, Depth); }
+      else { DebugPrint("ptr(0)", Depth); }
+    }
+    bonsai_function void DebugPrint( declaration_stream_chunk S, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("declaration_stream_chunk {\n", Depth);
+      }
+
+                                          DebugPrint("declaration Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("declaration_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+
+      DebugPrint("}\n", Depth);
+    }
+
+    bonsai_function void DebugPrint( declaration_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
@@ -5065,16 +6047,20 @@
         DebugPrint("d_union_member_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("d_union_member Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("d_union_member Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("d_union_member_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5091,16 +6077,20 @@
         DebugPrint("d_union_member_stream {\n", Depth);
       }
 
-                DebugPrint("d_union_member_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("d_union_member_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("d_union_member_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("d_union_member_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5117,130 +6107,25 @@
         DebugPrint("d_union_member_iterator {\n", Depth);
       }
 
-                DebugPrint("d_union_member_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("d_union_member_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("d_union_member_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("d_union_member_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
 
     bonsai_function void DebugPrint( d_union_member_iterator *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( enum_def_cursor S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("enum_def_cursor {\n", Depth);
-      }
-
-                DebugPrint("enum_def Start {\n", Depth+2);
-          DebugPrint(S.Start, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("enum_def At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("enum_def End {\n", Depth+2);
-          DebugPrint(S.End, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( enum_def_cursor *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( enum_def_stream_chunk S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("enum_def_stream_chunk {\n", Depth);
-      }
-
-                DebugPrint("enum_def Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( enum_def_stream_chunk *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( enum_def_stream S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("enum_def_stream {\n", Depth);
-      }
-
-                DebugPrint("enum_def_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("enum_def_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( enum_def_stream *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( enum_def_iterator S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("enum_def_iterator {\n", Depth);
-      }
-
-                DebugPrint("enum_def_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("enum_def_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( enum_def_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
@@ -5252,16 +6137,20 @@
         DebugPrint("type_def_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("type_def Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("type_def Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("type_def_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5278,16 +6167,20 @@
         DebugPrint("type_def_stream {\n", Depth);
       }
 
-                DebugPrint("type_def_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("type_def_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("type_def_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("type_def_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5304,99 +6197,25 @@
         DebugPrint("type_def_iterator {\n", Depth);
       }
 
-                DebugPrint("type_def_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("type_def_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("type_def_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("type_def_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
 
     bonsai_function void DebugPrint( type_def_iterator *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( primitive_def_stream_chunk S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("primitive_def_stream_chunk {\n", Depth);
-      }
-
-                DebugPrint("primitive_def Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( primitive_def_stream_chunk *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( primitive_def_stream S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("primitive_def_stream {\n", Depth);
-      }
-
-                DebugPrint("primitive_def_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("primitive_def_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( primitive_def_stream *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( primitive_def_iterator S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("primitive_def_iterator {\n", Depth);
-      }
-
-                DebugPrint("primitive_def_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("primitive_def_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-
-      DebugPrint("}\n", Depth);
-    }
-
-    bonsai_function void DebugPrint( primitive_def_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
@@ -5408,16 +6227,20 @@
         DebugPrint("meta_func_arg_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("meta_func_arg Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("meta_func_arg Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("meta_func_arg_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5434,16 +6257,20 @@
         DebugPrint("meta_func_arg_stream {\n", Depth);
       }
 
-                DebugPrint("meta_func_arg_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("meta_func_arg_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("meta_func_arg_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("meta_func_arg_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5460,16 +6287,20 @@
         DebugPrint("meta_func_arg_iterator {\n", Depth);
       }
 
-                DebugPrint("meta_func_arg_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("meta_func_arg_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("meta_func_arg_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("meta_func_arg_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5486,16 +6317,20 @@
         DebugPrint("macro_def_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("macro_def Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("macro_def Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("macro_def_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5512,16 +6347,20 @@
         DebugPrint("macro_def_stream {\n", Depth);
       }
 
-                DebugPrint("macro_def_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("macro_def_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("macro_def_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("macro_def_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5538,16 +6377,20 @@
         DebugPrint("macro_def_iterator {\n", Depth);
       }
 
-                DebugPrint("macro_def_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("macro_def_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("macro_def_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("macro_def_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5564,16 +6407,20 @@
         DebugPrint("macro_def_linked_list_node {\n", Depth);
       }
 
-                DebugPrint("macro_def Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("macro_def Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("macro_def_linked_list_node Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5590,16 +6437,20 @@
         DebugPrint("macro_def_hashtable {\n", Depth);
       }
 
-                DebugPrint("umm Size {\n", Depth+2);
-          DebugPrint(S.Size, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("macro_def_linked_list_node Elements {\n", Depth+2);
-          DebugPrint(S.Elements, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("umm Size {\n", Depth+2);
+              DebugPrint(S.Size, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("macro_def_linked_list_node Elements {\n", Depth+2);
+              DebugPrint(S.Elements, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5616,16 +6467,20 @@
         DebugPrint("meta_func_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("meta_func Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("meta_func Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("meta_func_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5642,16 +6497,20 @@
         DebugPrint("meta_func_stream {\n", Depth);
       }
 
-                DebugPrint("meta_func_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("meta_func_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("meta_func_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("meta_func_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5668,16 +6527,20 @@
         DebugPrint("meta_func_iterator {\n", Depth);
       }
 
-                DebugPrint("meta_func_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("meta_func_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("meta_func_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("meta_func_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5694,16 +6557,20 @@
         DebugPrint("todo_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("todo Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("todo Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("todo_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5720,16 +6587,20 @@
         DebugPrint("todo_stream {\n", Depth);
       }
 
-                DebugPrint("todo_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("todo_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("todo_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("todo_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5746,16 +6617,20 @@
         DebugPrint("todo_iterator {\n", Depth);
       }
 
-                DebugPrint("todo_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("todo_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("todo_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("todo_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5772,16 +6647,20 @@
         DebugPrint("tag_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("tag Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("tag Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("tag_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5798,16 +6677,20 @@
         DebugPrint("tag_stream {\n", Depth);
       }
 
-                DebugPrint("tag_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("tag_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("tag_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("tag_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5824,16 +6707,20 @@
         DebugPrint("tag_iterator {\n", Depth);
       }
 
-                DebugPrint("tag_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("tag_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("tag_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("tag_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5850,16 +6737,20 @@
         DebugPrint("person_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("person Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("person Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("person_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5876,16 +6767,20 @@
         DebugPrint("person_stream {\n", Depth);
       }
 
-                DebugPrint("person_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("person_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("person_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("person_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5902,16 +6797,20 @@
         DebugPrint("person_iterator {\n", Depth);
       }
 
-                DebugPrint("person_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("person_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("person_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("person_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5928,16 +6827,20 @@
         DebugPrint("ast_node_expression_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("ast_node_expression Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("ast_node_expression Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_expression_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5954,16 +6857,20 @@
         DebugPrint("ast_node_expression_stream {\n", Depth);
       }
 
-                DebugPrint("ast_node_expression_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("ast_node_expression_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("ast_node_expression_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_expression_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -5980,16 +6887,20 @@
         DebugPrint("ast_node_expression_iterator {\n", Depth);
       }
 
-                DebugPrint("ast_node_expression_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("ast_node_expression_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("ast_node_expression_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_expression_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -6006,16 +6917,20 @@
         DebugPrint("ast_node_variable_def_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("ast_node_variable_def Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("ast_node_variable_def Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_variable_def_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -6032,16 +6947,20 @@
         DebugPrint("ast_node_variable_def_stream {\n", Depth);
       }
 
-                DebugPrint("ast_node_variable_def_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("ast_node_variable_def_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("ast_node_variable_def_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_variable_def_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -6058,16 +6977,20 @@
         DebugPrint("ast_node_variable_def_iterator {\n", Depth);
       }
 
-                DebugPrint("ast_node_variable_def_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("ast_node_variable_def_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("ast_node_variable_def_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_variable_def_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -6084,16 +7007,20 @@
         DebugPrint("ast_node_stream_chunk {\n", Depth);
       }
 
-                DebugPrint("ast_node Element {\n", Depth+2);
-          DebugPrint(S.Element, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint(" Next {\n", Depth+2);
-          DebugPrint(S.Next, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("ast_node Element {\n", Depth+2);
+              DebugPrint(S.Element, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_stream_chunk Next {\n", Depth+2);
+              DebugPrint(S.Next, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -6110,16 +7037,20 @@
         DebugPrint("ast_node_stream {\n", Depth);
       }
 
-                DebugPrint("ast_node_stream_chunk FirstChunk {\n", Depth+2);
-          DebugPrint(S.FirstChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("ast_node_stream_chunk LastChunk {\n", Depth+2);
-          DebugPrint(S.LastChunk, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("ast_node_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(S.FirstChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(S.LastChunk, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -6136,16 +7067,20 @@
         DebugPrint("ast_node_iterator {\n", Depth);
       }
 
-                DebugPrint("ast_node_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("ast_node_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("ast_node_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("ast_node_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
@@ -6155,28 +7090,32 @@
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
     }
-    bonsai_function void DebugPrint( struct_member_iterator S, u32 Depth)
+    bonsai_function void DebugPrint( declaration_iterator S, u32 Depth)
     {
       if (Depth == 0)
       {
-        DebugPrint("struct_member_iterator {\n", Depth);
+        DebugPrint("declaration_iterator {\n", Depth);
       }
 
-                DebugPrint("struct_member_stream Stream {\n", Depth+2);
-          DebugPrint(S.Stream, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
-          DebugPrint("struct_member_stream_chunk At {\n", Depth+2);
-          DebugPrint(S.At, Depth+4);
-          DebugPrint("\n");
-          DebugPrint("}", Depth+2);
-          DebugPrint("\n");
+                                          DebugPrint("declaration_stream Stream {\n", Depth+2);
+              DebugPrint(S.Stream, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
+                                    DebugPrint("declaration_stream_chunk At {\n", Depth+2);
+              DebugPrint(S.At, Depth+4);
+              DebugPrint("\n");
+              DebugPrint("}", Depth+2);
+              DebugPrint("\n");
+
+
 
       DebugPrint("}\n", Depth);
     }
 
-    bonsai_function void DebugPrint( struct_member_iterator *S, u32 Depth)
+    bonsai_function void DebugPrint( declaration_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }
@@ -6510,10 +7449,6 @@
             {
               DebugPrint("meta_arg_operator_noop ", Depth);
             } break;
-            case is_union:
-            {
-              DebugPrint("is_union ", Depth);
-            } break;
             case name:
             {
               DebugPrint("name ", Depth);
@@ -6541,6 +7476,14 @@
             case is_struct:
             {
               DebugPrint("is_struct ", Depth);
+            } break;
+            case is_union:
+            {
+              DebugPrint("is_union ", Depth);
+            } break;
+            case is_defined:
+            {
+              DebugPrint("is_defined ", Depth);
             } break;
 
       }
@@ -6879,6 +7822,14 @@
             case CTokenType_Meta:
             {
               DebugPrint("CTokenType_Meta ", Depth);
+            } break;
+            case CT_Keyword_Override:
+            {
+              DebugPrint("CT_Keyword_Override ", Depth);
+            } break;
+            case CT_Keyword_Virtual:
+            {
+              DebugPrint("CT_Keyword_Virtual ", Depth);
             } break;
             case CT_Keyword_Noexcept:
             {
@@ -7352,52 +8303,21 @@
             {
               DebugPrint("ParseErrorCode_UndefinedDatatype ", Depth);
             } break;
+            case ParseErrorCode_PoofTypeError:
+            {
+              DebugPrint("ParseErrorCode_PoofTypeError ", Depth);
+            } break;
             case ParseErrorCode_InputStreamNull:
             {
               DebugPrint("ParseErrorCode_InputStreamNull ", Depth);
             } break;
+            case ParseErrorCode_InternalCompilerError:
+            {
+              DebugPrint("ParseErrorCode_InternalCompilerError ", Depth);
+            } break;
             case ParseErrorCode_Unknown:
             {
               DebugPrint("ParseErrorCode_Unknown ", Depth);
-            } break;
-
-      }
-    }
-    bonsai_function void DebugPrint( datatype_type EnumValue, u32 Depth)
-    {
-      switch (EnumValue)
-      {
-                    case type_datatype_noop:
-            {
-              DebugPrint("type_datatype_noop ", Depth);
-            } break;
-            case type_struct_def:
-            {
-              DebugPrint("type_struct_def ", Depth);
-            } break;
-            case type_struct_member:
-            {
-              DebugPrint("type_struct_member ", Depth);
-            } break;
-            case type_enum_def:
-            {
-              DebugPrint("type_enum_def ", Depth);
-            } break;
-            case type_enum_member:
-            {
-              DebugPrint("type_enum_member ", Depth);
-            } break;
-            case type_type_def:
-            {
-              DebugPrint("type_type_def ", Depth);
-            } break;
-            case type_primitive_def:
-            {
-              DebugPrint("type_primitive_def ", Depth);
-            } break;
-            case type_stl_container_def:
-            {
-              DebugPrint("type_stl_container_def ", Depth);
             } break;
 
       }
@@ -7533,9 +8453,9 @@
             {
               DebugPrint("TypeQual_Operator ", Depth);
             } break;
-            case TypeQual_Constructor:
+            case TypeQual_Virtual:
             {
-              DebugPrint("TypeQual_Constructor ", Depth);
+              DebugPrint("TypeQual_Virtual ", Depth);
             } break;
 
       }
@@ -7567,21 +8487,29 @@
 
       }
     }
-    bonsai_function void DebugPrint( declaration_type EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( datatype_type EnumValue, u32 Depth)
     {
       switch (EnumValue)
       {
-                    case type_declaration_noop:
+                    case type_datatype_noop:
             {
-              DebugPrint("type_declaration_noop ", Depth);
+              DebugPrint("type_datatype_noop ", Depth);
             } break;
-            case type_declaration_function_decl:
+            case type_declaration:
             {
-              DebugPrint("type_declaration_function_decl ", Depth);
+              DebugPrint("type_declaration ", Depth);
             } break;
-            case type_declaration_variable_decl:
+            case type_enum_member:
             {
-              DebugPrint("type_declaration_variable_decl ", Depth);
+              DebugPrint("type_enum_member ", Depth);
+            } break;
+            case type_type_def:
+            {
+              DebugPrint("type_type_def ", Depth);
+            } break;
+            case type_primitive_def:
+            {
+              DebugPrint("type_primitive_def ", Depth);
             } break;
 
       }
@@ -7658,56 +8586,29 @@
 
       }
     }
-    bonsai_function void DebugPrint( struct_member_function_type EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( declaration_type EnumValue, u32 Depth)
     {
       switch (EnumValue)
       {
-                    case type_struct_member_function_noop:
+                    case type_declaration_noop:
             {
-              DebugPrint("type_struct_member_function_noop ", Depth);
+              DebugPrint("type_declaration_noop ", Depth);
             } break;
-            case type_struct_member_function_normal:
+            case type_enum_decl:
             {
-              DebugPrint("type_struct_member_function_normal ", Depth);
-            } break;
-            case type_struct_member_function_operator:
-            {
-              DebugPrint("type_struct_member_function_operator ", Depth);
-            } break;
-            case type_struct_member_function_constructor:
-            {
-              DebugPrint("type_struct_member_function_constructor ", Depth);
-            } break;
-            case type_struct_member_function_destructor:
-            {
-              DebugPrint("type_struct_member_function_destructor ", Depth);
-            } break;
-
-      }
-    }
-    bonsai_function void DebugPrint( struct_member_type EnumValue, u32 Depth)
-    {
-      switch (EnumValue)
-      {
-                    case type_struct_member_noop:
-            {
-              DebugPrint("type_struct_member_noop ", Depth);
-            } break;
-            case type_variable_decl:
-            {
-              DebugPrint("type_variable_decl ", Depth);
-            } break;
-            case type_struct_decl:
-            {
-              DebugPrint("type_struct_decl ", Depth);
+              DebugPrint("type_enum_decl ", Depth);
             } break;
             case type_function_decl:
             {
               DebugPrint("type_function_decl ", Depth);
             } break;
-            case type_struct_member_anonymous:
+            case type_compound_decl:
             {
-              DebugPrint("type_struct_member_anonymous ", Depth);
+              DebugPrint("type_compound_decl ", Depth);
+            } break;
+            case type_variable_decl:
+            {
+              DebugPrint("type_variable_decl ", Depth);
             } break;
 
       }

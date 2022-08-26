@@ -21,7 +21,7 @@ global_variable memory_arena Global_PermMemory = {};
 
 
 
-#define DEBUG_PRINT (0)
+#define DEBUG_PRINT (1)
 #if DEBUG_PRINT
 #include <bonsai_stdlib/headers/debug_print.h>
 
@@ -8532,7 +8532,7 @@ ParseEnum(parse_context *Ctx, type_spec *TypeSpec)
   program_datatypes *Datatypes = &Ctx->Datatypes;
 
   c_token *EnumNameT = TypeSpec->DatatypeToken;
-  counted_string EnumName = EnumNameT ? EnumNameT->Value : CSz("(anonymous enum)");
+  counted_string EnumName = EnumNameT ? EnumNameT->Value : CSz("(anonymous)");
 
   enum_decl Enum = {
     .Name = EnumName
@@ -9664,7 +9664,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
 
             Info( "Pushing %S decl (%S)",
                   StructOrUnion.IsUnion ? CSz("union") : CSz("struct"),
-                  StructOrUnion.Type ? StructOrUnion.Type->Value : CSz("anonymous") );
+                  StructOrUnion.Type ? StructOrUnion.Type->Value : CSz("(anonymous)") );
 
             Push(&Ctx->Datatypes.Structs, StructOrUnion, Ctx->Memory);
 
@@ -10992,10 +10992,46 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
             case name:
             {
+              DebugPrint(Replace);
               counted_string Name = GetNameForDatatype(&Replace->Data);
-              meta_transform_op Transformations = ParseTransformations(&Scope);
-              counted_string TransformedName = ApplyTransformations(Transformations, Name, Memory);
-              Append(&OutputBuilder, TransformedName);
+              if (OptionalToken(&Scope, CTokenType_Question))
+              {
+                parser TrueScope = GetBodyTextForNextScope(&Scope, Memory);
+                parser FalseScope = {};
+
+                b32 DoTrueBranch = True;
+                if (StringsMatch(Name, CSz("(anonymous)")))
+                {
+                  DoTrueBranch = False;
+                }
+
+                if (PeekToken(&Scope).Type == CTokenType_OpenBrace)
+                {
+                  FalseScope = GetBodyTextForNextScope(&Scope, Memory);
+                }
+
+                if (DoTrueBranch)
+                {
+                  counted_string Code = Execute(FuncName, TrueScope, ReplacePatterns, Ctx, Memory);
+                  Append(&OutputBuilder, Code);
+                }
+                else
+                {
+                  if (FalseScope.Tokens)
+                  {
+                    counted_string Code = Execute(FuncName, FalseScope, ReplacePatterns, Ctx, Memory);
+                    Append(&OutputBuilder, Code);
+                  }
+                }
+
+              }
+              else
+              {
+                meta_transform_op Transformations = ParseTransformations(&Scope);
+                counted_string TransformedName = ApplyTransformations(Transformations, Name, Memory);
+                Append(&OutputBuilder, TransformedName);
+              }
+
             } break;
 
             case map_members:
