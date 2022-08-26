@@ -9505,8 +9505,8 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
   }
   else if (TypeSpec->Qualifier & TypeQual_Enum) // enum { ... }
   {
-    enum_decl Enum = ParseEnum(Ctx, TypeSpec);
-    Push(&Ctx->Datatypes.Enums, Enum, Ctx->Memory);
+    Result.Type = type_enum_decl;
+    Result.enum_decl = ParseEnum(Ctx, TypeSpec);
   }
   else if (IsConstructor)  // my_thing::my_thing(...) {...}
   {
@@ -9636,8 +9636,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         {
           case type_enum_decl:
           {
-            // TODO(Jesse): Push here.
-            NotImplemented;
+            Push(&Ctx->Datatypes.Enums, Decl.enum_decl, Ctx->Memory);
           } break;
 
           case type_function_decl:
