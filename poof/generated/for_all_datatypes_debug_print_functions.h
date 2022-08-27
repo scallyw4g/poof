@@ -4555,7 +4555,13 @@
         DebugPrint("program_datatypes {\n", Depth);
       }
 
-                                                          DebugPrint("macro_def_hashtable Macros {\n", Depth+2);
+                                                          DebugPrint("datatype_hashtable Datatypes {\n", Depth+2);
+                DebugPrint(S.Datatypes, Depth+4);
+                DebugPrint("}\n", Depth+2);
+
+
+
+                                                    DebugPrint("macro_def_hashtable Macros {\n", Depth+2);
                 DebugPrint(S.Macros, Depth+4);
                 DebugPrint("}\n", Depth+2);
 
@@ -6250,6 +6256,70 @@
     }
 
     bonsai_function void DebugPrint( declaration_stream_chunk *S, u32 Depth)
+    {
+      if (S) { DebugPrint(*S, Depth); }
+      else { DebugPrint("ptr(0)", Depth); }
+    }
+    bonsai_function void DebugPrint( datatype_linked_list_node S, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("datatype_linked_list_node {\n", Depth);
+      }
+
+                                                          DebugPrint("datatype Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
+
+
+
+                                                    DebugPrint("datatype_linked_list_node Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
+
+
+
+
+
+      if (Depth == 0)
+      {
+        DebugPrint("}\n", Depth);
+      }
+    }
+
+    bonsai_function void DebugPrint( datatype_linked_list_node *S, u32 Depth)
+    {
+      if (S) { DebugPrint(*S, Depth); }
+      else { DebugPrint("ptr(0)", Depth); }
+    }
+    bonsai_function void DebugPrint( datatype_hashtable S, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("datatype_hashtable {\n", Depth);
+      }
+
+                                                          DebugPrint("umm Size =", Depth+2);
+                DebugPrint(S.Size, 1);
+                DebugPrint(";\n");
+
+
+
+                                                    DebugPrint("datatype_linked_list_node Elements {\n", Depth+2);
+                DebugPrint(S.Elements, Depth+4);
+                DebugPrint("}\n", Depth+2);
+
+
+
+
+
+      if (Depth == 0)
+      {
+        DebugPrint("}\n", Depth);
+      }
+    }
+
+    bonsai_function void DebugPrint( datatype_hashtable *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
       else { DebugPrint("ptr(0)", Depth); }

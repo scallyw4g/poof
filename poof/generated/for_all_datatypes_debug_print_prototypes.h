@@ -314,6 +314,10 @@
       bonsai_function void DebugPrint( declaration_cursor  S, u32 Depth = 0);
       bonsai_function void DebugPrint( declaration_stream_chunk* S, u32 Depth = 0);
       bonsai_function void DebugPrint( declaration_stream_chunk  S, u32 Depth = 0);
+      bonsai_function void DebugPrint( datatype_linked_list_node* S, u32 Depth = 0);
+      bonsai_function void DebugPrint( datatype_linked_list_node  S, u32 Depth = 0);
+      bonsai_function void DebugPrint( datatype_hashtable* S, u32 Depth = 0);
+      bonsai_function void DebugPrint( datatype_hashtable  S, u32 Depth = 0);
       bonsai_function void DebugPrint( d_union_member_stream_chunk* S, u32 Depth = 0);
       bonsai_function void DebugPrint( d_union_member_stream_chunk  S, u32 Depth = 0);
       bonsai_function void DebugPrint( d_union_member_stream* S, u32 Depth = 0);

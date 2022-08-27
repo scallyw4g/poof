@@ -10821,8 +10821,6 @@ Execute(parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx,
       Append(&OutputBuilder, CSz("\""));
       Append(&OutputBuilder, EscapeDoubleQuotes(Code, OutputBuilder.Memory));
       Append(&OutputBuilder, CSz("\""));
-
-/*       AppendAndEscapeInteriorOfDoubleQuotedString(&OutputBuilder, Code); */
     }
     else if ( BodyToken->Type == CTokenType_OpenParen )
     {

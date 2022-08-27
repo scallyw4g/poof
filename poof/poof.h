@@ -659,6 +659,15 @@ struct datatype
   };
 };
 
+link_internal umm
+Hash(datatype *D)
+{
+  umm Result = {};
+  return Result;
+}
+meta(hashtable(datatype))
+#include <poof/generated/hashtable_datatype.h>
+
 struct d_union_member
 {
   counted_string Type;
@@ -990,7 +999,9 @@ struct arguments
 
 struct program_datatypes
 {
+  datatype_hashtable       Datatypes;
   macro_def_hashtable      Macros;
+
   counted_string_hashtable FilesParsed;
 
   compound_decl_stream     Structs;
