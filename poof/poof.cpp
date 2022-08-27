@@ -10911,20 +10911,16 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
             case is_union:
             {
               RequireToken(&Scope, CTokenType_Question);
-              parser StructScope = GetBodyTextForNextScope(&Scope, Memory);
-
               compound_decl *D = DatatypeIsCompoundDecl(Ctx, &Scope, &Replace->Data, MetaOperatorToken);
 
+              b32 DoTrueBranch = False;
               if (D)
               {
                 b32 Negate = (Operator == is_struct);
-                b32 IsUnion = D->IsUnion;
-                if (IsUnion ^ Negate)
-                {
-                  counted_string Code = Execute(FuncName, StructScope, ReplacePatterns, Ctx, Memory);
-                  Append(&OutputBuilder, Code);
-                }
+                DoTrueBranch = (D->IsUnion ^ Negate);
               }
+
+              DoTrueFalse( Ctx, &Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
             } break;
 
 
