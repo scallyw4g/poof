@@ -6999,8 +6999,8 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
       if (c_token *TypeName = OptionalToken(Parser, CTokenType_Identifier))
       {
         Result.DatatypeToken = TypeName;
-        /* Result.Datatype = GetDatatypeByName(&Ctx->Datatypes, TypeName->Value); */
         // TODO(Jesse, id: 296, tags: immediate): When we properly traverse include graphs, this assert should not fail.
+        // Result.Datatype = GetDatatypeByName(&Ctx->Datatypes, TypeName->Value);
         // Assert(Result.Datatype.Type != type_datatype_noop);
       }
     }
@@ -9027,17 +9027,12 @@ ParseTypeSpecifierNode(parse_context *Ctx, ast_node_expression *Result, datatype
       Node->Datatype = GetDatatypeByName(&Ctx->Datatypes, Node->TypeSpec.DatatypeToken->Value);
       if (Node->Datatype.Type == type_datatype_noop)
       {
-        // TODO(Jesse id: 319, tags: id_320): Type-checking failed.
-        //
-        // This currently actually fails for stuff like std::vector that we
-        // don't parse out definitions for .. what should be the strategy for
-        // handling this stuff?  There's also a minor hack that can be cleaned
-        // up at id: 320 when this is decided
+        // Type-checking failed.
       }
     }
     else
     {
-      // Primitive type .. whadda we do?
+      // Primitive type
     }
   }
 
@@ -10292,14 +10287,14 @@ CopyStream(meta_func_arg_stream* Stream, memory_arena* Memory)
 }
 
 bonsai_function counted_string
-PrintTypeSpec(type_spec *Type, memory_arena *Memory)
+PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
 {
   counted_string Result = {};
   string_builder Builder = {};
 
-  if (Type->DatatypeToken)
+  if (TypeSpec->DatatypeToken)
   {
-    Result = Type->DatatypeToken->Value;
+    Result = TypeSpec->DatatypeToken->Value;
   }
   else
   {
@@ -10309,7 +10304,7 @@ PrintTypeSpec(type_spec *Type, memory_arena *Memory)
       {
         (Enum.map_values(EnumVal)
         {
-          if (Type->Qualifier & (EnumVal.name))
+          if (TypeSpec->Qualifier & (EnumVal.name))
           {
             Append(&Builder, CSz("(EnumVal.name.strip_all_prefix.to_lowercase) "));
           }
@@ -10932,12 +10927,18 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               }
             } break;
 
+
             case is_enum:
             {
               RequireToken(&Scope, CTokenType_Question);
-              parser EnumScope = GetBodyTextForNextScope(&Scope, Memory);
+              b32 DoTrueBranch = False;
               switch (Replace->Data.Type)
               {
+                case type_datatype_noop:
+                {
+                  InvalidCodePath();
+                } break;
+
                 case type_type_def:
                 {
                   NotImplemented;
@@ -10949,59 +10950,37 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
                 case type_enum_member:
                 {
-                  counted_string Code = Execute(FuncName, EnumScope, ReplacePatterns, Ctx, Memory);
-                  Append(&OutputBuilder, Code);
+                  DoTrueBranch = True;
                 } break;
 
                 case type_declaration:
                 {
+                  declaration *Decl = SafeAccess(declaration, &Replace->Data);
                   switch (Replace->Data.declaration.Type)
                   {
-                    case type_enum_decl:
-                    {
-                      counted_string Code = Execute(FuncName, EnumScope, ReplacePatterns, Ctx, Memory);
-                      Append(&OutputBuilder, Code);
-                    } break;
-
-                    case type_variable_decl:
-                    {
-                      declaration *SM = &Replace->Data.declaration;
-                      // NOTE(Jesse): The data access that feed into GetEnumByType requires this to be true.
-                      Assert(SM->Type == type_variable_decl);
-
-                      enum_decl *E = GetEnumByType(&Datatypes->Enums, SM->variable_decl.Type.DatatypeToken->Value);
-                      if (E)
-                      {
-                        meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
-                        ITERATE_OVER_AS(NewReplace, &NewArgs)
-                        {
-                          meta_func_arg* NewReplace = GET_ELEMENT(NewReplaceIter);
-                          if (StringsMatch(Replace->Match, NewReplace->Match))
-                          {
-                            NewReplace->Data = Datatype(E);
-                          }
-                        }
-
-                        counted_string Code = Execute(FuncName, EnumScope, &NewArgs, Ctx, Memory);
-                        Append(&OutputBuilder, Code);
-                      }
-                    } break;
-
                     case type_declaration_noop:
                     case type_compound_decl:
                     case type_function_decl:
                     {
                       NotImplemented;
-                    }
-                  }
-                } break;
+                    } break;
 
-                case type_datatype_noop:
-                {
-                  InvalidCodePath();
+                    case type_enum_decl:
+                    {
+                      DoTrueBranch = True;
+                    } break;
+
+                    case type_variable_decl:
+                    {
+                      variable_decl *VDecl = SafeAccess(variable_decl, Decl);
+                      enum_decl *E = GetEnumByType(&Datatypes->Enums, VDecl->Type.DatatypeToken->Value);
+                      DoTrueBranch = (E != 0);
+                    } break;
+                  }
                 } break;
               }
 
+              DoTrueFalse( Ctx, &Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
             } break;
 
             case value:

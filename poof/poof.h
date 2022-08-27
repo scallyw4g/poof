@@ -851,8 +851,9 @@ meta(generate_stream(person))
 #include <poof/generated/generate_stream_person.h>
 
 #define SafeAccess(T, Ptr) (&(Ptr)->T); Assert((Ptr)->Type == type_##T)
-
 #define SafeAccessPtr(T, Ptr) ((Ptr)->T); Assert((Ptr)->Type == type_##T)
+
+// TODO(Jesse): Delete these
 #define SafeAccessObj(T, Obj) ((Obj).T); Assert((Obj).Type == type_##T)
 #define SafeAccessObjPtr(T, Obj) (&(Obj).T); Assert((Obj).Type == type_##T)
 

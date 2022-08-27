@@ -1,108 +1,108 @@
-                  if (Type->Qualifier & TypeQual_None)
+                  if (TypeSpec->Qualifier & TypeQual_None)
           {
             Append(&Builder, CSz("none "));
           }
-          if (Type->Qualifier & TypeQual_Void)
+          if (TypeSpec->Qualifier & TypeQual_Void)
           {
             Append(&Builder, CSz("void "));
           }
-          if (Type->Qualifier & TypeQual_Auto)
+          if (TypeSpec->Qualifier & TypeQual_Auto)
           {
             Append(&Builder, CSz("auto "));
           }
-          if (Type->Qualifier & TypeQual_Class)
+          if (TypeSpec->Qualifier & TypeQual_Class)
           {
             Append(&Builder, CSz("class "));
           }
-          if (Type->Qualifier & TypeQual_Struct)
+          if (TypeSpec->Qualifier & TypeQual_Struct)
           {
             Append(&Builder, CSz("struct "));
           }
-          if (Type->Qualifier & TypeQual_Union)
+          if (TypeSpec->Qualifier & TypeQual_Union)
           {
             Append(&Builder, CSz("union "));
           }
-          if (Type->Qualifier & TypeQual_Enum)
+          if (TypeSpec->Qualifier & TypeQual_Enum)
           {
             Append(&Builder, CSz("enum "));
           }
-          if (Type->Qualifier & TypeQual_Bool)
+          if (TypeSpec->Qualifier & TypeQual_Bool)
           {
             Append(&Builder, CSz("bool "));
           }
-          if (Type->Qualifier & TypeQual_Inline)
+          if (TypeSpec->Qualifier & TypeQual_Inline)
           {
             Append(&Builder, CSz("inline "));
           }
-          if (Type->Qualifier & TypeQual_ThreadLocal)
+          if (TypeSpec->Qualifier & TypeQual_ThreadLocal)
           {
             Append(&Builder, CSz("threadlocal "));
           }
-          if (Type->Qualifier & TypeQual_Static)
+          if (TypeSpec->Qualifier & TypeQual_Static)
           {
             Append(&Builder, CSz("static "));
           }
-          if (Type->Qualifier & TypeQual_Extern)
+          if (TypeSpec->Qualifier & TypeQual_Extern)
           {
             Append(&Builder, CSz("extern "));
           }
-          if (Type->Qualifier & TypeQual_Const)
+          if (TypeSpec->Qualifier & TypeQual_Const)
           {
             Append(&Builder, CSz("const "));
           }
-          if (Type->Qualifier & TypeQual_Volatile)
+          if (TypeSpec->Qualifier & TypeQual_Volatile)
           {
             Append(&Builder, CSz("volatile "));
           }
-          if (Type->Qualifier & TypeQual_Signed)
+          if (TypeSpec->Qualifier & TypeQual_Signed)
           {
             Append(&Builder, CSz("signed "));
           }
-          if (Type->Qualifier & TypeQual_Unsigned)
+          if (TypeSpec->Qualifier & TypeQual_Unsigned)
           {
             Append(&Builder, CSz("unsigned "));
           }
-          if (Type->Qualifier & TypeQual_Char)
+          if (TypeSpec->Qualifier & TypeQual_Char)
           {
             Append(&Builder, CSz("char "));
           }
-          if (Type->Qualifier & TypeQual_Long)
+          if (TypeSpec->Qualifier & TypeQual_Long)
           {
             Append(&Builder, CSz("long "));
           }
-          if (Type->Qualifier & TypeQual_Int)
+          if (TypeSpec->Qualifier & TypeQual_Int)
           {
             Append(&Builder, CSz("int "));
           }
-          if (Type->Qualifier & TypeQual_Long_Long)
+          if (TypeSpec->Qualifier & TypeQual_Long_Long)
           {
             Append(&Builder, CSz("long "));
           }
-          if (Type->Qualifier & TypeQual_Double)
+          if (TypeSpec->Qualifier & TypeQual_Double)
           {
             Append(&Builder, CSz("double "));
           }
-          if (Type->Qualifier & TypeQual_Short)
+          if (TypeSpec->Qualifier & TypeQual_Short)
           {
             Append(&Builder, CSz("short "));
           }
-          if (Type->Qualifier & TypeQual_Float)
+          if (TypeSpec->Qualifier & TypeQual_Float)
           {
             Append(&Builder, CSz("float "));
           }
-          if (Type->Qualifier & TypeQual_Constexpr)
+          if (TypeSpec->Qualifier & TypeQual_Constexpr)
           {
             Append(&Builder, CSz("constexpr "));
           }
-          if (Type->Qualifier & TypeQual_Explicit)
+          if (TypeSpec->Qualifier & TypeQual_Explicit)
           {
             Append(&Builder, CSz("explicit "));
           }
-          if (Type->Qualifier & TypeQual_Operator)
+          if (TypeSpec->Qualifier & TypeQual_Operator)
           {
             Append(&Builder, CSz("operator "));
           }
-          if (Type->Qualifier & TypeQual_Virtual)
+          if (TypeSpec->Qualifier & TypeQual_Virtual)
           {
             Append(&Builder, CSz("virtual "));
           }
