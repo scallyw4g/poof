@@ -2,6 +2,12 @@
 
               s32 _s32 not compound
 
+              u32 _u32 not compound
+
+              u64 _u64 not compound
+
+              umm _umm not compound
+
               undefined_type _und0 not compound
 
               foo_struct_0 _foo0 is compound

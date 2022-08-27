@@ -7017,19 +7017,11 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
 
   TryEatAttributes(Parser); // Value Attribute
 
+  // Template parameters
   if (PeekToken(Parser).Type == CTokenType_LT)
   {
     EatBetween(Parser, CTokenType_LT, CTokenType_GT);
   }
-
-  /* b32 IsConstructor = (IsConstructorOrDestructorName(Result.DatatypeToken) || */
-  /*                      IsConstructorOrDestructorName(Result.DatatypeToken, StructNameT)) && */
-  /*                      PeekToken(Parser).Type == CTokenType_OpenParen; */
-
-  /* if (IsConstructor) */
-  /* { */
-  /*   SetBitfield(type_qualifier, Result.Qualifier, TypeQual_Constructor); */
-  /* } */
 
   return Result;
 }
@@ -8105,10 +8097,9 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
       case CTokenType_Identifier:
       {
         type_spec TypeSpec = ParseTypeSpecifier(Ctx, StructNameT);
+        type_indirection_info Indirection = ParseIndirectionInfo(Parser);
 
-        type_indirection_info Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
         b32 IsConstructor = ParsingConstructor(Parser, &TypeSpec);
-
         if (IsConstructor)
         {
           c_token *FuncNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
@@ -8121,31 +8112,12 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
         }
         else // operator, regular function, or variable decl
         {
-          declaration Decl = FinalizeDeclaration(Ctx, Parser, &TypeSpec, &Indirection);
-          switch (Decl.Type)
+          Result = FinalizeDeclaration(Ctx, Parser, &TypeSpec, &Indirection);
+          // TODO(Jesse): Handle this on the outside?
+          switch (Result.Type)
           {
-            case type_enum_decl:
-            {
-              NotImplemented;
-            } break;
-
-            case type_compound_decl:
-            {
-              Result.Type = type_compound_decl;
-              Result.compound_decl = Decl.compound_decl;
-            } break;
-
-            case type_variable_decl:
-            {
-              Result.Type = type_variable_decl;
-              Result.variable_decl = Decl.variable_decl;
-            } break;
-
             case type_function_decl:
             {
-              Result.Type = type_function_decl;
-              Result.function_decl = Decl.function_decl;
-
               if (PeekToken(Parser).Type == '{')
               {
                 Result.function_decl.Body = GetBodyTextForNextScope(Parser, Ctx->Memory);
@@ -8156,6 +8128,8 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
             {
               InternalCompilerError(Parser, CSz("Unhandled case during ParseStructMember near here"), T);
             } break;
+
+            default: {} break;
           }
 
         }

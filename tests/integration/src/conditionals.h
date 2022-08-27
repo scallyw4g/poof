@@ -16,7 +16,8 @@ meta(
   func (foo_struct_0 TFooStruct)
   {
     (TFooStruct.map_members(Member){
-      (Member.is_defined? {
+      (Member.is_defined?
+      {
         (Member.type) (Member.name)
       }
       {
@@ -36,6 +37,9 @@ struct foo_struct_1
 {
   int            _int;
   s32            _s32;
+  u32            _u32;
+  u64            _u64;
+  umm            _umm;
   undefined_type _und0;
   foo_struct_0   _foo0;
 
@@ -70,3 +74,21 @@ meta(
   }
 )
 #include <tests/integration/generated/anonymous_func_1.h>
+
+
+meta(
+  func (foo_struct_1 TFooStruct)
+  {
+    (TFooStruct.map_members(Member){
+      (Member.is_primitive?
+      {
+        (Member.type) (Member.name) is primitive
+      }
+      {
+        (Member.type) (Member.name) not primitive
+      }
+      )
+    })
+  }
+)
+#include <tests/integration/generated/anonymous_func_2.h>
