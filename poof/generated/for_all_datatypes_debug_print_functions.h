@@ -5,81 +5,81 @@
         DebugPrint("terminal_colors {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Red =", Depth+2);
-                DebugPrint(S.Red, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Red {\n", Depth+2);
+                DebugPrint(S.Red, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string BrightRed =", Depth+2);
-                DebugPrint(S.BrightRed, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string BrightRed {\n", Depth+2);
+                DebugPrint(S.BrightRed, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string DarkRed =", Depth+2);
-                DebugPrint(S.DarkRed, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string DarkRed {\n", Depth+2);
+                DebugPrint(S.DarkRed, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Blue =", Depth+2);
-                DebugPrint(S.Blue, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string Blue {\n", Depth+2);
+                DebugPrint(S.Blue, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string BrightBlue =", Depth+2);
-                DebugPrint(S.BrightBlue, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string BrightBlue {\n", Depth+2);
+                DebugPrint(S.BrightBlue, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Purple =", Depth+2);
-                DebugPrint(S.Purple, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string Purple {\n", Depth+2);
+                DebugPrint(S.Purple, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string BrightPurple =", Depth+2);
-                DebugPrint(S.BrightPurple, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string BrightPurple {\n", Depth+2);
+                DebugPrint(S.BrightPurple, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Green =", Depth+2);
-                DebugPrint(S.Green, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string Green {\n", Depth+2);
+                DebugPrint(S.Green, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string BrightGreen =", Depth+2);
-                DebugPrint(S.BrightGreen, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string BrightGreen {\n", Depth+2);
+                DebugPrint(S.BrightGreen, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Yellow =", Depth+2);
-                DebugPrint(S.Yellow, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string Yellow {\n", Depth+2);
+                DebugPrint(S.Yellow, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string BrightYellow =", Depth+2);
-                DebugPrint(S.BrightYellow, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string BrightYellow {\n", Depth+2);
+                DebugPrint(S.BrightYellow, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string White =", Depth+2);
-                DebugPrint(S.White, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string White {\n", Depth+2);
+                DebugPrint(S.White, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Grey =", Depth+2);
-                DebugPrint(S.Grey, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string Grey {\n", Depth+2);
+                DebugPrint(S.Grey, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -104,11 +104,11 @@
       }
 
                             // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (FILE Handle)\n", Depth+2);
+            DebugPrint("undefined type : (FILE Handle)", Depth+2);
 
-                                                    DebugPrint("counted_string Path =", Depth+2);
-                DebugPrint(S.Path, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string Path {\n", Depth+2);
+                DebugPrint(S.Path, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -133,10 +133,10 @@
       }
 
                             // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (Visual visual)\n", Depth+2);
+            DebugPrint("undefined type : (Visual visual)", Depth+2);
 
                       // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (VisualID visualid)\n", Depth+2);
+            DebugPrint("undefined type : (VisualID visualid)", Depth+2);
 
                                                     DebugPrint("s32 screen =", Depth+2);
                 DebugPrint(S.screen, 1);
@@ -207,13 +207,13 @@
       }
 
                             // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (window Window)\n", Depth+2);
+            DebugPrint("undefined type : (window Window)", Depth+2);
 
                       // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (display Display)\n", Depth+2);
+            DebugPrint("undefined type : (display Display)", Depth+2);
 
                       // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (gl_context GlContext)\n", Depth+2);
+            DebugPrint("undefined type : (gl_context GlContext)", Depth+2);
 
                                                     DebugPrint("b32 ContinueRunning =", Depth+2);
                 DebugPrint(S.ContinueRunning, 1);
@@ -306,19 +306,19 @@
       }
 
                                           // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
 
 
                                                     DebugPrint("s32 E =", Depth+2);
@@ -348,19 +348,19 @@
       }
 
                                           // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
 
 
                                                     DebugPrint("r32 E =", Depth+2);
@@ -390,27 +390,27 @@
       }
 
                                           // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
 
 
                                                     DebugPrint("r32 E =", Depth+2);
@@ -440,7 +440,7 @@
       }
 
                                           // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
 
 
                                                     DebugPrint("s32 E =", Depth+2);
@@ -476,7 +476,7 @@
 
 
                       // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (__m128 Sse)\n", Depth+2);
+            DebugPrint("undefined type : (__m128 Sse)", Depth+2);
 
 
 
@@ -556,159 +556,159 @@
         DebugPrint("input {\n", Depth);
       }
 
-                                                          DebugPrint("input_event Escape =", Depth+2);
-                DebugPrint(S.Escape, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("input_event Escape {\n", Depth+2);
+                DebugPrint(S.Escape, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event Space =", Depth+2);
-                DebugPrint(S.Space, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event Space {\n", Depth+2);
+                DebugPrint(S.Space, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event Shift =", Depth+2);
-                DebugPrint(S.Shift, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event Shift {\n", Depth+2);
+                DebugPrint(S.Shift, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event Ctrl =", Depth+2);
-                DebugPrint(S.Ctrl, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event Ctrl {\n", Depth+2);
+                DebugPrint(S.Ctrl, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event Alt =", Depth+2);
-                DebugPrint(S.Alt, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event Alt {\n", Depth+2);
+                DebugPrint(S.Alt, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F12 =", Depth+2);
-                DebugPrint(S.F12, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event F12 {\n", Depth+2);
+                DebugPrint(S.F12, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F11 =", Depth+2);
-                DebugPrint(S.F11, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event F11 {\n", Depth+2);
+                DebugPrint(S.F11, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F10 =", Depth+2);
-                DebugPrint(S.F10, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event F10 {\n", Depth+2);
+                DebugPrint(S.F10, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F9 =", Depth+2);
-                DebugPrint(S.F9, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event F9 {\n", Depth+2);
+                DebugPrint(S.F9, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F8 =", Depth+2);
-                DebugPrint(S.F8, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event F8 {\n", Depth+2);
+                DebugPrint(S.F8, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F7 =", Depth+2);
-                DebugPrint(S.F7, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event F7 {\n", Depth+2);
+                DebugPrint(S.F7, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F6 =", Depth+2);
-                DebugPrint(S.F6, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event F6 {\n", Depth+2);
+                DebugPrint(S.F6, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F5 =", Depth+2);
-                DebugPrint(S.F5, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event F5 {\n", Depth+2);
+                DebugPrint(S.F5, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F4 =", Depth+2);
-                DebugPrint(S.F4, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event F4 {\n", Depth+2);
+                DebugPrint(S.F4, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F3 =", Depth+2);
-                DebugPrint(S.F3, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event F3 {\n", Depth+2);
+                DebugPrint(S.F3, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F2 =", Depth+2);
-                DebugPrint(S.F2, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event F2 {\n", Depth+2);
+                DebugPrint(S.F2, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F1 =", Depth+2);
-                DebugPrint(S.F1, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event F1 {\n", Depth+2);
+                DebugPrint(S.F1, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event RMB =", Depth+2);
-                DebugPrint(S.RMB, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event RMB {\n", Depth+2);
+                DebugPrint(S.RMB, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event LMB =", Depth+2);
-                DebugPrint(S.LMB, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event LMB {\n", Depth+2);
+                DebugPrint(S.LMB, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event MMB =", Depth+2);
-                DebugPrint(S.MMB, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event MMB {\n", Depth+2);
+                DebugPrint(S.MMB, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event W =", Depth+2);
-                DebugPrint(S.W, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event W {\n", Depth+2);
+                DebugPrint(S.W, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event A =", Depth+2);
-                DebugPrint(S.A, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event A {\n", Depth+2);
+                DebugPrint(S.A, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event S =", Depth+2);
-                DebugPrint(S.S, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event S {\n", Depth+2);
+                DebugPrint(S.S, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event D =", Depth+2);
-                DebugPrint(S.D, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event D {\n", Depth+2);
+                DebugPrint(S.D, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event Q =", Depth+2);
-                DebugPrint(S.Q, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event Q {\n", Depth+2);
+                DebugPrint(S.Q, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event E =", Depth+2);
-                DebugPrint(S.E, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input_event E {\n", Depth+2);
+                DebugPrint(S.E, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -807,10 +807,10 @@
 
 
                       // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (work_queue_entry Entries)\n", Depth+2);
+            DebugPrint("undefined type : (work_queue_entry Entries)", Depth+2);
 
                       // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (semaphore GlobalQueueSemaphore)\n", Depth+2);
+            DebugPrint("undefined type : (semaphore GlobalQueueSemaphore)", Depth+2);
 
 
 
@@ -856,9 +856,9 @@
 
 
 
-                                                    DebugPrint("memory_arena Prev =", Depth+2);
-                DebugPrint(S.Prev, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("memory_arena Prev {\n", Depth+2);
+                DebugPrint(S.Prev, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -938,39 +938,39 @@
         DebugPrint("platform {\n", Depth);
       }
 
-                                                          DebugPrint("work_queue LowPriority =", Depth+2);
-                DebugPrint(S.LowPriority, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("work_queue LowPriority {\n", Depth+2);
+                DebugPrint(S.LowPriority, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("work_queue HighPriority =", Depth+2);
-                DebugPrint(S.HighPriority, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("work_queue HighPriority {\n", Depth+2);
+                DebugPrint(S.HighPriority, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
                       // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (semaphore QueueSemaphore)\n", Depth+2);
+            DebugPrint("undefined type : (semaphore QueueSemaphore)", Depth+2);
 
                       // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (thread_startup_params Threads)\n", Depth+2);
+            DebugPrint("undefined type : (thread_startup_params Threads)", Depth+2);
 
-                                                    DebugPrint("v2 MouseP =", Depth+2);
-                DebugPrint(S.MouseP, 1);
-                DebugPrint(";\n");
-
-
-
-                                                    DebugPrint("v2 MouseDP =", Depth+2);
-                DebugPrint(S.MouseDP, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("v2 MouseP {\n", Depth+2);
+                DebugPrint(S.MouseP, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("memory_arena Memory =", Depth+2);
-                DebugPrint(S.Memory, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("v2 MouseDP {\n", Depth+2);
+                DebugPrint(S.MouseDP, Depth+4);
+                DebugPrint("}\n", Depth+2);
+
+
+
+                                                    DebugPrint("memory_arena Memory {\n", Depth+2);
+                DebugPrint(S.Memory, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -992,9 +992,9 @@
 
 
 
-                                                    DebugPrint("input Input =", Depth+2);
-                DebugPrint(S.Input, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("input Input {\n", Depth+2);
+                DebugPrint(S.Input, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1056,9 +1056,9 @@
         DebugPrint("heap_allocator {\n", Depth);
       }
 
-                                                          DebugPrint("heap_allocation_block Heap =", Depth+2);
-                DebugPrint(S.Heap, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("heap_allocation_block Heap {\n", Depth+2);
+                DebugPrint(S.Heap, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1088,15 +1088,15 @@
         DebugPrint("tagged_counted_string_stream {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Tag =", Depth+2);
-                DebugPrint(S.Tag, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Tag {\n", Depth+2);
+                DebugPrint(S.Tag, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1138,9 +1138,9 @@
 
 
 
-                                                    DebugPrint("memory_arena Memory =", Depth+2);
-                DebugPrint(S.Memory, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("memory_arena Memory {\n", Depth+2);
+                DebugPrint(S.Memory, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1164,15 +1164,15 @@
         DebugPrint("linei {\n", Depth);
       }
 
-                                                          DebugPrint("v3i MinP =", Depth+2);
-                DebugPrint(S.MinP, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("v3i MinP {\n", Depth+2);
+                DebugPrint(S.MinP, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3i MaxP =", Depth+2);
-                DebugPrint(S.MaxP, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("v3i MaxP {\n", Depth+2);
+                DebugPrint(S.MaxP, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1196,15 +1196,15 @@
         DebugPrint("line {\n", Depth);
       }
 
-                                                          DebugPrint("v3 MinP =", Depth+2);
-                DebugPrint(S.MinP, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("v3 MinP {\n", Depth+2);
+                DebugPrint(S.MinP, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 MaxP =", Depth+2);
-                DebugPrint(S.MaxP, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("v3 MaxP {\n", Depth+2);
+                DebugPrint(S.MaxP, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1229,11 +1229,11 @@
       }
 
                                           // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
 
 
                                                     DebugPrint("float  E =", Depth+2);
@@ -1262,15 +1262,15 @@
         DebugPrint("string_builder {\n", Depth);
       }
 
-                                                          DebugPrint("memory_arena Memory =", Depth+2);
-                DebugPrint(S.Memory, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("memory_arena Memory {\n", Depth+2);
+                DebugPrint(S.Memory, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_stream Chunks =", Depth+2);
-                DebugPrint(S.Chunks, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string_stream Chunks {\n", Depth+2);
+                DebugPrint(S.Chunks, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1388,9 +1388,9 @@
 
 
 
-                                                    DebugPrint("counted_string Filename =", Depth+2);
-                DebugPrint(S.Filename, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string Filename {\n", Depth+2);
+                DebugPrint(S.Filename, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1458,9 +1458,9 @@
         DebugPrint("m4 {\n", Depth);
       }
 
-                                                          DebugPrint("v4 E =", Depth+2);
-                DebugPrint(S.E, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("v4 E {\n", Depth+2);
+                DebugPrint(S.E, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1535,7 +1535,7 @@
       }
 
                             // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (native_mutex M)\n", Depth+2);
+            DebugPrint("undefined type : (native_mutex M)", Depth+2);
 
 
 
@@ -1557,9 +1557,9 @@
         DebugPrint("mutex_op_record {\n", Depth);
       }
 
-                                                          DebugPrint("mutex Mutex =", Depth+2);
-                DebugPrint(S.Mutex, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("mutex Mutex {\n", Depth+2);
+                DebugPrint(S.Mutex, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1601,9 +1601,9 @@
 
 
 
-                                                    DebugPrint("mutex_op_record Records =", Depth+2);
-                DebugPrint(S.Records, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("mutex_op_record Records {\n", Depth+2);
+                DebugPrint(S.Records, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1627,15 +1627,15 @@
         DebugPrint("rect2 {\n", Depth);
       }
 
-                                                          DebugPrint("v2 Min =", Depth+2);
-                DebugPrint(S.Min, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("v2 Min {\n", Depth+2);
+                DebugPrint(S.Min, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v2 Max =", Depth+2);
-                DebugPrint(S.Max, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("v2 Max {\n", Depth+2);
+                DebugPrint(S.Max, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1659,15 +1659,15 @@
         DebugPrint("aabb {\n", Depth);
       }
 
-                                                          DebugPrint("v3 Center =", Depth+2);
-                DebugPrint(S.Center, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("v3 Center {\n", Depth+2);
+                DebugPrint(S.Center, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 Radius =", Depth+2);
-                DebugPrint(S.Radius, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("v3 Radius {\n", Depth+2);
+                DebugPrint(S.Radius, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1691,15 +1691,15 @@
         DebugPrint("ray {\n", Depth);
       }
 
-                                                          DebugPrint("v3 Origin =", Depth+2);
-                DebugPrint(S.Origin, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("v3 Origin {\n", Depth+2);
+                DebugPrint(S.Origin, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 Dir =", Depth+2);
-                DebugPrint(S.Dir, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("v3 Dir {\n", Depth+2);
+                DebugPrint(S.Dir, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1723,21 +1723,21 @@
         DebugPrint("xml_property {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Name =", Depth+2);
-                DebugPrint(S.Name, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Name {\n", Depth+2);
+                DebugPrint(S.Name, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Value =", Depth+2);
-                DebugPrint(S.Value, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string Value {\n", Depth+2);
+                DebugPrint(S.Value, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_property Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("xml_property Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1767,9 +1767,9 @@
 
 
 
-                                                    DebugPrint("xml_property Property =", Depth+2);
-                DebugPrint(S.Property, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("xml_property Property {\n", Depth+2);
+                DebugPrint(S.Property, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1793,39 +1793,39 @@
         DebugPrint("xml_tag {\n", Depth);
       }
 
-                                                          DebugPrint("xml_token Open =", Depth+2);
-                DebugPrint(S.Open, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("xml_token Open {\n", Depth+2);
+                DebugPrint(S.Open, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_tag Parent =", Depth+2);
-                DebugPrint(S.Parent, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("xml_tag Parent {\n", Depth+2);
+                DebugPrint(S.Parent, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_tag Sibling =", Depth+2);
-                DebugPrint(S.Sibling, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("xml_tag Sibling {\n", Depth+2);
+                DebugPrint(S.Sibling, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Value =", Depth+2);
-                DebugPrint(S.Value, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string Value {\n", Depth+2);
+                DebugPrint(S.Value, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_property Properties =", Depth+2);
-                DebugPrint(S.Properties, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("xml_property Properties {\n", Depth+2);
+                DebugPrint(S.Properties, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_property NextPropertySlot =", Depth+2);
-                DebugPrint(S.NextPropertySlot, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("xml_property NextPropertySlot {\n", Depth+2);
+                DebugPrint(S.NextPropertySlot, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1849,27 +1849,27 @@
         DebugPrint("xml_token_stream {\n", Depth);
       }
 
-                                                          DebugPrint("xml_token Start =", Depth+2);
-                DebugPrint(S.Start, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("xml_token Start {\n", Depth+2);
+                DebugPrint(S.Start, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_token At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("xml_token At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_token End =", Depth+2);
-                DebugPrint(S.End, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("xml_token End {\n", Depth+2);
+                DebugPrint(S.End, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_tag_hashtable Hashes =", Depth+2);
-                DebugPrint(S.Hashes, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("xml_tag_hashtable Hashes {\n", Depth+2);
+                DebugPrint(S.Hashes, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1893,21 +1893,21 @@
         DebugPrint("xml_tag_stream {\n", Depth);
       }
 
-                                                          DebugPrint("xml_tag Start =", Depth+2);
-                DebugPrint(S.Start, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("xml_tag Start {\n", Depth+2);
+                DebugPrint(S.Start, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_tag At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("xml_tag At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_tag End =", Depth+2);
-                DebugPrint(S.End, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("xml_tag End {\n", Depth+2);
+                DebugPrint(S.End, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1931,15 +1931,15 @@
         DebugPrint("xml_parsing_at_indicators {\n", Depth);
       }
 
-                                                          DebugPrint("xml_tag LastClosedTag =", Depth+2);
-                DebugPrint(S.LastClosedTag, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("xml_tag LastClosedTag {\n", Depth+2);
+                DebugPrint(S.LastClosedTag, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_tag CurrentlyOpenTag =", Depth+2);
-                DebugPrint(S.CurrentlyOpenTag, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("xml_tag CurrentlyOpenTag {\n", Depth+2);
+                DebugPrint(S.CurrentlyOpenTag, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -1970,7 +1970,7 @@
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (union (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (union (anonymous))", Depth+2);
 
 
                                                     DebugPrint("s32 ID =", Depth+2);
@@ -1985,9 +1985,9 @@
 
 
 
-                                                    DebugPrint("shader_uniform Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("shader_uniform Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -2017,9 +2017,9 @@
 
 
 
-                                                    DebugPrint("shader_uniform FirstUniform =", Depth+2);
-                DebugPrint(S.FirstUniform, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("shader_uniform FirstUniform {\n", Depth+2);
+                DebugPrint(S.FirstUniform, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -2049,9 +2049,9 @@
 
 
 
-                                                    DebugPrint("v2i Dim =", Depth+2);
-                DebugPrint(S.Dim, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("v2i Dim {\n", Depth+2);
+                DebugPrint(S.Dim, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -2075,21 +2075,21 @@
         DebugPrint("textured_2d_geometry_buffer {\n", Depth);
       }
 
-                                                          DebugPrint("v3 Verts =", Depth+2);
-                DebugPrint(S.Verts, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("v3 Verts {\n", Depth+2);
+                DebugPrint(S.Verts, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 Colors =", Depth+2);
-                DebugPrint(S.Colors, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("v3 Colors {\n", Depth+2);
+                DebugPrint(S.Colors, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 UVs =", Depth+2);
-                DebugPrint(S.UVs, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("v3 UVs {\n", Depth+2);
+                DebugPrint(S.UVs, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -2125,15 +2125,15 @@
         DebugPrint("untextured_2d_geometry_buffer {\n", Depth);
       }
 
-                                                          DebugPrint("v3 Verts =", Depth+2);
-                DebugPrint(S.Verts, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("v3 Verts {\n", Depth+2);
+                DebugPrint(S.Verts, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 Colors =", Depth+2);
-                DebugPrint(S.Colors, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("v3 Colors {\n", Depth+2);
+                DebugPrint(S.Colors, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -2169,21 +2169,21 @@
         DebugPrint("untextured_3d_geometry_buffer {\n", Depth);
       }
 
-                                                          DebugPrint("v3 Verts =", Depth+2);
-                DebugPrint(S.Verts, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("v3 Verts {\n", Depth+2);
+                DebugPrint(S.Verts, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v4 Colors =", Depth+2);
-                DebugPrint(S.Colors, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("v4 Colors {\n", Depth+2);
+                DebugPrint(S.Colors, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 Normals =", Depth+2);
-                DebugPrint(S.Normals, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("v3 Normals {\n", Depth+2);
+                DebugPrint(S.Normals, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -2237,9 +2237,9 @@
 
 
 
-                                                    DebugPrint("untextured_3d_geometry_buffer Buffer =", Depth+2);
-                DebugPrint(S.Buffer, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("untextured_3d_geometry_buffer Buffer {\n", Depth+2);
+                DebugPrint(S.Buffer, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -2433,21 +2433,21 @@
 
 
 
-                                                    DebugPrint("debug_profile_scope Sibling =", Depth+2);
-                DebugPrint(S.Sibling, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("debug_profile_scope Sibling {\n", Depth+2);
+                DebugPrint(S.Sibling, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("debug_profile_scope Child =", Depth+2);
-                DebugPrint(S.Child, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("debug_profile_scope Child {\n", Depth+2);
+                DebugPrint(S.Child, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("debug_profile_scope Parent =", Depth+2);
-                DebugPrint(S.Parent, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("debug_profile_scope Parent {\n", Depth+2);
+                DebugPrint(S.Parent, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -2501,15 +2501,15 @@
 
 
 
-                                                    DebugPrint("debug_profile_scope Scope =", Depth+2);
-                DebugPrint(S.Scope, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("debug_profile_scope Scope {\n", Depth+2);
+                DebugPrint(S.Scope, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("unique_debug_profile_scope NextUnique =", Depth+2);
-                DebugPrint(S.NextUnique, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("unique_debug_profile_scope NextUnique {\n", Depth+2);
+                DebugPrint(S.NextUnique, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -2533,21 +2533,21 @@
         DebugPrint("debug_scope_tree {\n", Depth);
       }
 
-                                                          DebugPrint("debug_profile_scope Root =", Depth+2);
-                DebugPrint(S.Root, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("debug_profile_scope Root {\n", Depth+2);
+                DebugPrint(S.Root, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("debug_profile_scope WriteScope =", Depth+2);
-                DebugPrint(S.WriteScope, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("debug_profile_scope WriteScope {\n", Depth+2);
+                DebugPrint(S.WriteScope, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("debug_profile_scope ParentOfNextScope =", Depth+2);
-                DebugPrint(S.ParentOfNextScope, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("debug_profile_scope ParentOfNextScope {\n", Depth+2);
+                DebugPrint(S.ParentOfNextScope, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -2577,39 +2577,39 @@
         DebugPrint("debug_thread_state {\n", Depth);
       }
 
-                                                          DebugPrint("memory_arena Memory =", Depth+2);
-                DebugPrint(S.Memory, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("memory_arena Memory {\n", Depth+2);
+                DebugPrint(S.Memory, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("memory_arena MemoryFor_debug_profile_scope =", Depth+2);
-                DebugPrint(S.MemoryFor_debug_profile_scope, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("memory_arena MemoryFor_debug_profile_scope {\n", Depth+2);
+                DebugPrint(S.MemoryFor_debug_profile_scope, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("push_metadata MetaTable =", Depth+2);
-                DebugPrint(S.MetaTable, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("push_metadata MetaTable {\n", Depth+2);
+                DebugPrint(S.MetaTable, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("debug_scope_tree ScopeTrees =", Depth+2);
-                DebugPrint(S.ScopeTrees, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("debug_scope_tree ScopeTrees {\n", Depth+2);
+                DebugPrint(S.ScopeTrees, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("debug_profile_scope FirstFreeScope =", Depth+2);
-                DebugPrint(S.FirstFreeScope, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("debug_profile_scope FirstFreeScope {\n", Depth+2);
+                DebugPrint(S.FirstFreeScope, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("mutex_op_array MutexOps =", Depth+2);
-                DebugPrint(S.MutexOps, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("mutex_op_array MutexOps {\n", Depth+2);
+                DebugPrint(S.MutexOps, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -2645,9 +2645,9 @@
         DebugPrint("registered_memory_arena {\n", Depth);
       }
 
-                                                          DebugPrint("memory_arena Arena =", Depth+2);
-                DebugPrint(S.Arena, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("memory_arena Arena {\n", Depth+2);
+                DebugPrint(S.Arena, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -2721,9 +2721,9 @@
 
 
 
-                                                    DebugPrint("selected_memory_arena Arenas =", Depth+2);
-                DebugPrint(S.Arenas, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("selected_memory_arena Arenas {\n", Depth+2);
+                DebugPrint(S.Arenas, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -2989,9 +2989,9 @@
 
 
 
-                                                    DebugPrint("bitmap_image_header Image =", Depth+2);
-                DebugPrint(S.Image, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("bitmap_image_header Image {\n", Depth+2);
+                DebugPrint(S.Image, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3015,15 +3015,15 @@
         DebugPrint("bitmap {\n", Depth);
       }
 
-                                                          DebugPrint("v2i Dim =", Depth+2);
-                DebugPrint(S.Dim, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("v2i Dim {\n", Depth+2);
+                DebugPrint(S.Dim, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("u32_stream Pixels =", Depth+2);
-                DebugPrint(S.Pixels, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("u32_stream Pixels {\n", Depth+2);
+                DebugPrint(S.Pixels, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3047,15 +3047,15 @@
         DebugPrint("macro_expansion {\n", Depth);
       }
 
-                                                          DebugPrint("c_token_cursor Expansion =", Depth+2);
-                DebugPrint(S.Expansion, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("c_token_cursor Expansion {\n", Depth+2);
+                DebugPrint(S.Expansion, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("macro_def Def =", Depth+2);
-                DebugPrint(S.Def, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("macro_def Def {\n", Depth+2);
+                DebugPrint(S.Def, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3085,15 +3085,15 @@
 
 
 
-                                                    DebugPrint("counted_string Value =", Depth+2);
-                DebugPrint(S.Value, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string Value {\n", Depth+2);
+                DebugPrint(S.Value, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Filename =", Depth+2);
-                DebugPrint(S.Filename, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string Filename {\n", Depth+2);
+                DebugPrint(S.Filename, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3116,7 +3116,7 @@
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (union (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (union (anonymous))", Depth+2);
 
 
 
@@ -3139,15 +3139,15 @@
         DebugPrint("peek_result {\n", Depth);
       }
 
-                                                          DebugPrint("c_token_cursor Tokens =", Depth+2);
-                DebugPrint(S.Tokens, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("c_token_cursor Tokens {\n", Depth+2);
+                DebugPrint(S.Tokens, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("c_token At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3177,15 +3177,15 @@
         DebugPrint("c_token_cursor_up {\n", Depth);
       }
 
-                                                          DebugPrint("c_token_cursor Tokens =", Depth+2);
-                DebugPrint(S.Tokens, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("c_token_cursor Tokens {\n", Depth+2);
+                DebugPrint(S.Tokens, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("c_token At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3215,33 +3215,33 @@
 
 
 
-                                                    DebugPrint("c_token Start =", Depth+2);
-                DebugPrint(S.Start, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("c_token Start {\n", Depth+2);
+                DebugPrint(S.Start, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token End =", Depth+2);
-                DebugPrint(S.End, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("c_token End {\n", Depth+2);
+                DebugPrint(S.End, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("c_token At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token_cursor_up Up =", Depth+2);
-                DebugPrint(S.Up, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("c_token_cursor_up Up {\n", Depth+2);
+                DebugPrint(S.Up, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Filename =", Depth+2);
-                DebugPrint(S.Filename, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string Filename {\n", Depth+2);
+                DebugPrint(S.Filename, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3271,9 +3271,9 @@
 
 
 
-                                                    DebugPrint("c_token_cursor Tokens =", Depth+2);
-                DebugPrint(S.Tokens, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("c_token_cursor Tokens {\n", Depth+2);
+                DebugPrint(S.Tokens, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3297,15 +3297,15 @@
         DebugPrint("declaration_stream {\n", Depth);
       }
 
-                                                          DebugPrint("declaration_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("declaration_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("declaration_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("declaration_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3329,15 +3329,15 @@
         DebugPrint("compound_decl {\n", Depth);
       }
 
-                                                          DebugPrint("c_token Type =", Depth+2);
-                DebugPrint(S.Type, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("c_token Type {\n", Depth+2);
+                DebugPrint(S.Type, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("declaration_stream Members =", Depth+2);
-                DebugPrint(S.Members, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("declaration_stream Members {\n", Depth+2);
+                DebugPrint(S.Members, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3403,9 +3403,9 @@
 
 
 
-                                                    DebugPrint("c_token FunctionNameT =", Depth+2);
-                DebugPrint(S.FunctionNameT, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("c_token FunctionNameT {\n", Depth+2);
+                DebugPrint(S.FunctionNameT, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3429,15 +3429,15 @@
         DebugPrint("type_spec {\n", Depth);
       }
 
-                                                          DebugPrint("c_token QualifierNameT =", Depth+2);
-                DebugPrint(S.QualifierNameT, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("c_token QualifierNameT {\n", Depth+2);
+                DebugPrint(S.QualifierNameT, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token DatatypeToken =", Depth+2);
-                DebugPrint(S.DatatypeToken, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("c_token DatatypeToken {\n", Depth+2);
+                DebugPrint(S.DatatypeToken, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3453,9 +3453,9 @@
 
 
 
-                                                    DebugPrint("counted_string TemplateSource =", Depth+2);
-                DebugPrint(S.TemplateSource, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string TemplateSource {\n", Depth+2);
+                DebugPrint(S.TemplateSource, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3485,27 +3485,27 @@
         DebugPrint("variable_decl {\n", Depth);
       }
 
-                                                          DebugPrint("type_spec Type =", Depth+2);
-                DebugPrint(S.Type, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("type_spec Type {\n", Depth+2);
+                DebugPrint(S.Type, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Name =", Depth+2);
-                DebugPrint(S.Name, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string Name {\n", Depth+2);
+                DebugPrint(S.Name, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node StaticBufferSize =", Depth+2);
-                DebugPrint(S.StaticBufferSize, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node StaticBufferSize {\n", Depth+2);
+                DebugPrint(S.StaticBufferSize, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node Value =", Depth+2);
-                DebugPrint(S.Value, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node Value {\n", Depth+2);
+                DebugPrint(S.Value, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3515,9 +3515,9 @@
 
 
 
-                                                    DebugPrint("type_indirection_info Indirection =", Depth+2);
-                DebugPrint(S.Indirection, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("type_indirection_info Indirection {\n", Depth+2);
+                DebugPrint(S.Indirection, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3547,21 +3547,21 @@
 
 
 
-                                                    DebugPrint("type_spec ReturnType =", Depth+2);
-                DebugPrint(S.ReturnType, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("type_spec ReturnType {\n", Depth+2);
+                DebugPrint(S.ReturnType, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token NameT =", Depth+2);
-                DebugPrint(S.NameT, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("c_token NameT {\n", Depth+2);
+                DebugPrint(S.NameT, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("variable_decl_stream Args =", Depth+2);
-                DebugPrint(S.Args, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("variable_decl_stream Args {\n", Depth+2);
+                DebugPrint(S.Args, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3583,15 +3583,15 @@
 
 
 
-                                                    DebugPrint("parser Body =", Depth+2);
-                DebugPrint(S.Body, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("parser Body {\n", Depth+2);
+                DebugPrint(S.Body, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node Ast =", Depth+2);
-                DebugPrint(S.Ast, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node Ast {\n", Depth+2);
+                DebugPrint(S.Ast, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3615,15 +3615,15 @@
         DebugPrint("enum_member {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Name =", Depth+2);
-                DebugPrint(S.Name, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Name {\n", Depth+2);
+                DebugPrint(S.Name, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression Expr =", Depth+2);
-                DebugPrint(S.Expr, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_expression Expr {\n", Depth+2);
+                DebugPrint(S.Expr, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3647,15 +3647,15 @@
         DebugPrint("enum_decl {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Name =", Depth+2);
-                DebugPrint(S.Name, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Name {\n", Depth+2);
+                DebugPrint(S.Name, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_member_stream Members =", Depth+2);
-                DebugPrint(S.Members, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("enum_member_stream Members {\n", Depth+2);
+                DebugPrint(S.Members, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3679,9 +3679,9 @@
         DebugPrint("primitive_def {\n", Depth);
       }
 
-                                                          DebugPrint("type_spec TypeSpec =", Depth+2);
-                DebugPrint(S.TypeSpec, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("type_spec TypeSpec {\n", Depth+2);
+                DebugPrint(S.TypeSpec, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3712,7 +3712,7 @@
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (union (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (union (anonymous))", Depth+2);
 
 
 
@@ -3735,15 +3735,15 @@
         DebugPrint("d_union_member {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Type =", Depth+2);
-                DebugPrint(S.Type, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Type {\n", Depth+2);
+                DebugPrint(S.Type, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Name =", Depth+2);
-                DebugPrint(S.Name, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string Name {\n", Depth+2);
+                DebugPrint(S.Name, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3773,15 +3773,15 @@
         DebugPrint("type_def {\n", Depth);
       }
 
-                                                          DebugPrint("type_spec Type =", Depth+2);
-                DebugPrint(S.Type, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("type_spec Type {\n", Depth+2);
+                DebugPrint(S.Type, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Alias =", Depth+2);
-                DebugPrint(S.Alias, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string Alias {\n", Depth+2);
+                DebugPrint(S.Alias, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3811,15 +3811,15 @@
         DebugPrint("meta_func_arg {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Match =", Depth+2);
-                DebugPrint(S.Match, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Match {\n", Depth+2);
+                DebugPrint(S.Match, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("datatype Data =", Depth+2);
-                DebugPrint(S.Data, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("datatype Data {\n", Depth+2);
+                DebugPrint(S.Data, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3843,27 +3843,27 @@
         DebugPrint("d_union_decl {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Name =", Depth+2);
-                DebugPrint(S.Name, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Name {\n", Depth+2);
+                DebugPrint(S.Name, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("d_union_member_stream Members =", Depth+2);
-                DebugPrint(S.Members, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("d_union_member_stream Members {\n", Depth+2);
+                DebugPrint(S.Members, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("declaration_stream CommonMembers =", Depth+2);
-                DebugPrint(S.CommonMembers, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("declaration_stream CommonMembers {\n", Depth+2);
+                DebugPrint(S.CommonMembers, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string CustomEnumType =", Depth+2);
-                DebugPrint(S.CustomEnumType, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string CustomEnumType {\n", Depth+2);
+                DebugPrint(S.CustomEnumType, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3893,21 +3893,21 @@
 
 
 
-                                                    DebugPrint("counted_string Name =", Depth+2);
-                DebugPrint(S.Name, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string Name {\n", Depth+2);
+                DebugPrint(S.Name, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token_cursor Body =", Depth+2);
-                DebugPrint(S.Body, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("c_token_cursor Body {\n", Depth+2);
+                DebugPrint(S.Body, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_buffer NamedArguments =", Depth+2);
-                DebugPrint(S.NamedArguments, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string_buffer NamedArguments {\n", Depth+2);
+                DebugPrint(S.NamedArguments, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3943,21 +3943,21 @@
         DebugPrint("meta_func {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Name =", Depth+2);
-                DebugPrint(S.Name, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Name {\n", Depth+2);
+                DebugPrint(S.Name, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string ArgName =", Depth+2);
-                DebugPrint(S.ArgName, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string ArgName {\n", Depth+2);
+                DebugPrint(S.ArgName, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("parser Body =", Depth+2);
-                DebugPrint(S.Body, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("parser Body {\n", Depth+2);
+                DebugPrint(S.Body, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -3981,15 +3981,15 @@
         DebugPrint("todo {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Id =", Depth+2);
-                DebugPrint(S.Id, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Id {\n", Depth+2);
+                DebugPrint(S.Id, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Value =", Depth+2);
-                DebugPrint(S.Value, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string Value {\n", Depth+2);
+                DebugPrint(S.Value, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4019,15 +4019,15 @@
         DebugPrint("tag {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Tag =", Depth+2);
-                DebugPrint(S.Tag, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Tag {\n", Depth+2);
+                DebugPrint(S.Tag, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("todo_stream Todos =", Depth+2);
-                DebugPrint(S.Todos, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("todo_stream Todos {\n", Depth+2);
+                DebugPrint(S.Todos, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4051,15 +4051,15 @@
         DebugPrint("person {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Name =", Depth+2);
-                DebugPrint(S.Name, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Name {\n", Depth+2);
+                DebugPrint(S.Name, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("tag_stream Tags =", Depth+2);
-                DebugPrint(S.Tags, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("tag_stream Tags {\n", Depth+2);
+                DebugPrint(S.Tags, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4083,15 +4083,15 @@
         DebugPrint("ast_node_expression {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node Value =", Depth+2);
-                DebugPrint(S.Value, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("ast_node Value {\n", Depth+2);
+                DebugPrint(S.Value, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_expression Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4115,21 +4115,21 @@
         DebugPrint("ast_node_statement {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_expression LHS =", Depth+2);
-                DebugPrint(S.LHS, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("ast_node_expression LHS {\n", Depth+2);
+                DebugPrint(S.LHS, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_statement RHS =", Depth+2);
-                DebugPrint(S.RHS, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_statement RHS {\n", Depth+2);
+                DebugPrint(S.RHS, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_statement Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_statement Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4153,21 +4153,21 @@
         DebugPrint("ast_node_function_call {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Name =", Depth+2);
-                DebugPrint(S.Name, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Name {\n", Depth+2);
+                DebugPrint(S.Name, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("function_decl Prototype =", Depth+2);
-                DebugPrint(S.Prototype, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("function_decl Prototype {\n", Depth+2);
+                DebugPrint(S.Prototype, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression_stream Args =", Depth+2);
-                DebugPrint(S.Args, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_expression_stream Args {\n", Depth+2);
+                DebugPrint(S.Args, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4191,27 +4191,27 @@
         DebugPrint("ast_node_type_specifier {\n", Depth);
       }
 
-                                                          DebugPrint("datatype Datatype =", Depth+2);
-                DebugPrint(S.Datatype, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("datatype Datatype {\n", Depth+2);
+                DebugPrint(S.Datatype, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("type_spec TypeSpec =", Depth+2);
-                DebugPrint(S.TypeSpec, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("type_spec TypeSpec {\n", Depth+2);
+                DebugPrint(S.TypeSpec, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("type_indirection_info Indirection =", Depth+2);
-                DebugPrint(S.Indirection, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("type_indirection_info Indirection {\n", Depth+2);
+                DebugPrint(S.Indirection, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression Name =", Depth+2);
-                DebugPrint(S.Name, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_expression Name {\n", Depth+2);
+                DebugPrint(S.Name, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4235,21 +4235,21 @@
         DebugPrint("ast_node_variable_def {\n", Depth);
       }
 
-                                                          DebugPrint("datatype Type =", Depth+2);
-                DebugPrint(S.Type, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("datatype Type {\n", Depth+2);
+                DebugPrint(S.Type, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("variable_decl Decl =", Depth+2);
-                DebugPrint(S.Decl, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("variable_decl Decl {\n", Depth+2);
+                DebugPrint(S.Decl, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node Value =", Depth+2);
-                DebugPrint(S.Value, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node Value {\n", Depth+2);
+                DebugPrint(S.Value, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4273,15 +4273,15 @@
         DebugPrint("ast_node_access {\n", Depth);
       }
 
-                                                          DebugPrint("c_token AccessType =", Depth+2);
-                DebugPrint(S.AccessType, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("c_token AccessType {\n", Depth+2);
+                DebugPrint(S.AccessType, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression Symbol =", Depth+2);
-                DebugPrint(S.Symbol, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_expression Symbol {\n", Depth+2);
+                DebugPrint(S.Symbol, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4305,9 +4305,9 @@
         DebugPrint("ast_node_parenthesized {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_expression Expr =", Depth+2);
-                DebugPrint(S.Expr, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("ast_node_expression Expr {\n", Depth+2);
+                DebugPrint(S.Expr, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4317,9 +4317,9 @@
 
 
 
-                                                    DebugPrint("ast_node_expression CastValue =", Depth+2);
-                DebugPrint(S.CastValue, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_expression CastValue {\n", Depth+2);
+                DebugPrint(S.CastValue, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4369,15 +4369,15 @@
         DebugPrint("ast_node_operator {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_expression Operand =", Depth+2);
-                DebugPrint(S.Operand, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("ast_node_expression Operand {\n", Depth+2);
+                DebugPrint(S.Operand, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token Token =", Depth+2);
-                DebugPrint(S.Token, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("c_token Token {\n", Depth+2);
+                DebugPrint(S.Token, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4401,9 +4401,9 @@
         DebugPrint("ast_node_literal {\n", Depth);
       }
 
-                                                          DebugPrint("c_token Token =", Depth+2);
-                DebugPrint(S.Token, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("c_token Token {\n", Depth+2);
+                DebugPrint(S.Token, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4427,9 +4427,9 @@
         DebugPrint("ast_node_symbol {\n", Depth);
       }
 
-                                                          DebugPrint("c_token Token =", Depth+2);
-                DebugPrint(S.Token, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("c_token Token {\n", Depth+2);
+                DebugPrint(S.Token, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4453,9 +4453,9 @@
         DebugPrint("ast_node_return {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_expression Value =", Depth+2);
-                DebugPrint(S.Value, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("ast_node_expression Value {\n", Depth+2);
+                DebugPrint(S.Value, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4479,15 +4479,15 @@
         DebugPrint("ast_node_predicated {\n", Depth);
       }
 
-                                                          DebugPrint("c_token Token =", Depth+2);
-                DebugPrint(S.Token, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("c_token Token {\n", Depth+2);
+                DebugPrint(S.Token, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression Predicate =", Depth+2);
-                DebugPrint(S.Predicate, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_expression Predicate {\n", Depth+2);
+                DebugPrint(S.Predicate, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4511,21 +4511,21 @@
         DebugPrint("arguments {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Outpath =", Depth+2);
-                DebugPrint(S.Outpath, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Outpath {\n", Depth+2);
+                DebugPrint(S.Outpath, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_cursor Files =", Depth+2);
-                DebugPrint(S.Files, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string_cursor Files {\n", Depth+2);
+                DebugPrint(S.Files, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_cursor IncludePaths =", Depth+2);
-                DebugPrint(S.IncludePaths, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string_cursor IncludePaths {\n", Depth+2);
+                DebugPrint(S.IncludePaths, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4555,39 +4555,39 @@
         DebugPrint("program_datatypes {\n", Depth);
       }
 
-                                                          DebugPrint("macro_def_hashtable Macros =", Depth+2);
-                DebugPrint(S.Macros, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("macro_def_hashtable Macros {\n", Depth+2);
+                DebugPrint(S.Macros, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_hashtable FilesParsed =", Depth+2);
-                DebugPrint(S.FilesParsed, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string_hashtable FilesParsed {\n", Depth+2);
+                DebugPrint(S.FilesParsed, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("compound_decl_stream Structs =", Depth+2);
-                DebugPrint(S.Structs, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("compound_decl_stream Structs {\n", Depth+2);
+                DebugPrint(S.Structs, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_decl_stream Enums =", Depth+2);
-                DebugPrint(S.Enums, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("enum_decl_stream Enums {\n", Depth+2);
+                DebugPrint(S.Enums, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("function_decl_stream Functions =", Depth+2);
-                DebugPrint(S.Functions, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("function_decl_stream Functions {\n", Depth+2);
+                DebugPrint(S.Functions, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("type_def_stream Typedefs =", Depth+2);
-                DebugPrint(S.Typedefs, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("type_def_stream Typedefs {\n", Depth+2);
+                DebugPrint(S.Typedefs, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4611,15 +4611,15 @@
         DebugPrint("for_enum_constraints {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string TypeName =", Depth+2);
-                DebugPrint(S.TypeName, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string TypeName {\n", Depth+2);
+                DebugPrint(S.TypeName, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string ValueName =", Depth+2);
-                DebugPrint(S.ValueName, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string ValueName {\n", Depth+2);
+                DebugPrint(S.ValueName, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4643,27 +4643,27 @@
         DebugPrint("body_text_constraints {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string MemberContains =", Depth+2);
-                DebugPrint(S.MemberContains, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string MemberContains {\n", Depth+2);
+                DebugPrint(S.MemberContains, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string TypeTag =", Depth+2);
-                DebugPrint(S.TypeTag, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string TypeTag {\n", Depth+2);
+                DebugPrint(S.TypeTag, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string TypeName =", Depth+2);
-                DebugPrint(S.TypeName, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string TypeName {\n", Depth+2);
+                DebugPrint(S.TypeName, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string ValueName =", Depth+2);
-                DebugPrint(S.ValueName, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string ValueName {\n", Depth+2);
+                DebugPrint(S.ValueName, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4687,15 +4687,15 @@
         DebugPrint("todo_list_info {\n", Depth);
       }
 
-                                                          DebugPrint("person_stream People =", Depth+2);
-                DebugPrint(S.People, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("person_stream People {\n", Depth+2);
+                DebugPrint(S.People, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("tagged_counted_string_stream_stream NameLists =", Depth+2);
-                DebugPrint(S.NameLists, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("tagged_counted_string_stream_stream NameLists {\n", Depth+2);
+                DebugPrint(S.NameLists, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4719,15 +4719,15 @@
         DebugPrint("string_from_parser {\n", Depth);
       }
 
-                                                          DebugPrint("parser Parser =", Depth+2);
-                DebugPrint(S.Parser, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("parser Parser {\n", Depth+2);
+                DebugPrint(S.Parser, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token StartToken =", Depth+2);
-                DebugPrint(S.StartToken, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("c_token StartToken {\n", Depth+2);
+                DebugPrint(S.StartToken, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4751,39 +4751,39 @@
         DebugPrint("parse_context {\n", Depth);
       }
 
-                                                          DebugPrint("parser CurrentParser =", Depth+2);
-                DebugPrint(S.CurrentParser, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("parser CurrentParser {\n", Depth+2);
+                DebugPrint(S.CurrentParser, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("program_datatypes Datatypes =", Depth+2);
-                DebugPrint(S.Datatypes, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("program_datatypes Datatypes {\n", Depth+2);
+                DebugPrint(S.Datatypes, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_cursor IncludePaths =", Depth+2);
-                DebugPrint(S.IncludePaths, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string_cursor IncludePaths {\n", Depth+2);
+                DebugPrint(S.IncludePaths, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("meta_func_stream MetaFunctions =", Depth+2);
-                DebugPrint(S.MetaFunctions, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("meta_func_stream MetaFunctions {\n", Depth+2);
+                DebugPrint(S.MetaFunctions, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("memory_arena Memory =", Depth+2);
-                DebugPrint(S.Memory, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("memory_arena Memory {\n", Depth+2);
+                DebugPrint(S.Memory, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("arguments Args =", Depth+2);
-                DebugPrint(S.Args, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("arguments Args {\n", Depth+2);
+                DebugPrint(S.Args, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4807,27 +4807,27 @@
         DebugPrint("comma_separated_decl {\n", Depth);
       }
 
-                                                          DebugPrint("c_token NameT =", Depth+2);
-                DebugPrint(S.NameT, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("c_token NameT {\n", Depth+2);
+                DebugPrint(S.NameT, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("type_indirection_info Indirection =", Depth+2);
-                DebugPrint(S.Indirection, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("type_indirection_info Indirection {\n", Depth+2);
+                DebugPrint(S.Indirection, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node StaticBufferSize =", Depth+2);
-                DebugPrint(S.StaticBufferSize, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node StaticBufferSize {\n", Depth+2);
+                DebugPrint(S.StaticBufferSize, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node Value =", Depth+2);
-                DebugPrint(S.Value, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node Value {\n", Depth+2);
+                DebugPrint(S.Value, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4851,15 +4851,15 @@
         DebugPrint("d_list {\n", Depth);
       }
 
-                                                          DebugPrint("d_list Prev =", Depth+2);
-                DebugPrint(S.Prev, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("d_list Prev {\n", Depth+2);
+                DebugPrint(S.Prev, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("d_list Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("d_list Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4883,21 +4883,21 @@
         DebugPrint("counted_string_cursor {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Start =", Depth+2);
-                DebugPrint(S.Start, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Start {\n", Depth+2);
+                DebugPrint(S.Start, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string End =", Depth+2);
-                DebugPrint(S.End, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string End {\n", Depth+2);
+                DebugPrint(S.End, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4921,15 +4921,15 @@
         DebugPrint("counted_string_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4953,15 +4953,15 @@
         DebugPrint("counted_string_stream {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -4985,15 +4985,15 @@
         DebugPrint("counted_string_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5017,15 +5017,15 @@
         DebugPrint("tagged_counted_string_stream_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("tagged_counted_string_stream Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("tagged_counted_string_stream Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("tagged_counted_string_stream_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("tagged_counted_string_stream_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5049,15 +5049,15 @@
         DebugPrint("tagged_counted_string_stream_stream {\n", Depth);
       }
 
-                                                          DebugPrint("tagged_counted_string_stream_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("tagged_counted_string_stream_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("tagged_counted_string_stream_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("tagged_counted_string_stream_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5081,15 +5081,15 @@
         DebugPrint("tagged_counted_string_stream_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("tagged_counted_string_stream_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("tagged_counted_string_stream_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("tagged_counted_string_stream_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("tagged_counted_string_stream_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5113,15 +5113,15 @@
         DebugPrint("xml_tag_linked_list_node {\n", Depth);
       }
 
-                                                          DebugPrint("xml_tag Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("xml_tag Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_tag_linked_list_node Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("xml_tag_linked_list_node Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5151,9 +5151,9 @@
 
 
 
-                                                    DebugPrint("xml_tag_linked_list_node Elements =", Depth+2);
-                DebugPrint(S.Elements, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("xml_tag_linked_list_node Elements {\n", Depth+2);
+                DebugPrint(S.Elements, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5177,9 +5177,9 @@
         DebugPrint("counted_string_buffer {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Start =", Depth+2);
-                DebugPrint(S.Start, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Start {\n", Depth+2);
+                DebugPrint(S.Start, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5209,15 +5209,15 @@
         DebugPrint("counted_string_linked_list_node {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("counted_string Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_linked_list_node Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string_linked_list_node Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5247,9 +5247,9 @@
 
 
 
-                                                    DebugPrint("counted_string_linked_list_node Elements =", Depth+2);
-                DebugPrint(S.Elements, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("counted_string_linked_list_node Elements {\n", Depth+2);
+                DebugPrint(S.Elements, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5273,21 +5273,21 @@
         DebugPrint("v3_cursor {\n", Depth);
       }
 
-                                                          DebugPrint("v3 Start =", Depth+2);
-                DebugPrint(S.Start, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("v3 Start {\n", Depth+2);
+                DebugPrint(S.Start, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("v3 At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 End =", Depth+2);
-                DebugPrint(S.End, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("v3 End {\n", Depth+2);
+                DebugPrint(S.End, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5311,9 +5311,9 @@
         DebugPrint("c_token_buffer {\n", Depth);
       }
 
-                                                          DebugPrint("c_token Start =", Depth+2);
-                DebugPrint(S.Start, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("c_token Start {\n", Depth+2);
+                DebugPrint(S.Start, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5343,9 +5343,9 @@
         DebugPrint("c_token_buffer_buffer {\n", Depth);
       }
 
-                                                          DebugPrint("c_token_buffer Start =", Depth+2);
-                DebugPrint(S.Start, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("c_token_buffer Start {\n", Depth+2);
+                DebugPrint(S.Start, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5375,15 +5375,15 @@
         DebugPrint("c_token_buffer_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("c_token_buffer Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("c_token_buffer Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token_buffer_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("c_token_buffer_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5407,15 +5407,15 @@
         DebugPrint("c_token_buffer_stream {\n", Depth);
       }
 
-                                                          DebugPrint("c_token_buffer_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("c_token_buffer_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token_buffer_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("c_token_buffer_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5439,15 +5439,15 @@
         DebugPrint("c_token_buffer_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("c_token_buffer_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("c_token_buffer_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token_buffer_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("c_token_buffer_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5471,21 +5471,21 @@
         DebugPrint("parser_cursor {\n", Depth);
       }
 
-                                                          DebugPrint("parser Start =", Depth+2);
-                DebugPrint(S.Start, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("parser Start {\n", Depth+2);
+                DebugPrint(S.Start, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("parser At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("parser At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("parser End =", Depth+2);
-                DebugPrint(S.End, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("parser End {\n", Depth+2);
+                DebugPrint(S.End, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5509,15 +5509,15 @@
         DebugPrint("parser_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("parser Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("parser Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("parser_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("parser_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5541,15 +5541,15 @@
         DebugPrint("parser_stream {\n", Depth);
       }
 
-                                                          DebugPrint("parser_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("parser_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("parser_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("parser_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5573,15 +5573,15 @@
         DebugPrint("parser_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("parser_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("parser_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("parser_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("parser_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5605,21 +5605,21 @@
         DebugPrint("compound_decl_cursor {\n", Depth);
       }
 
-                                                          DebugPrint("compound_decl Start =", Depth+2);
-                DebugPrint(S.Start, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("compound_decl Start {\n", Depth+2);
+                DebugPrint(S.Start, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("compound_decl At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("compound_decl At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("compound_decl End =", Depth+2);
-                DebugPrint(S.End, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("compound_decl End {\n", Depth+2);
+                DebugPrint(S.End, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5643,15 +5643,15 @@
         DebugPrint("compound_decl_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("compound_decl Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("compound_decl Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("compound_decl_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("compound_decl_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5675,15 +5675,15 @@
         DebugPrint("compound_decl_stream {\n", Depth);
       }
 
-                                                          DebugPrint("compound_decl_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("compound_decl_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("compound_decl_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("compound_decl_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5707,15 +5707,15 @@
         DebugPrint("compound_decl_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("compound_decl_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("compound_decl_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("compound_decl_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("compound_decl_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5739,15 +5739,15 @@
         DebugPrint("variable_decl_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("variable_decl Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("variable_decl Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("variable_decl_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("variable_decl_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5771,15 +5771,15 @@
         DebugPrint("variable_decl_stream {\n", Depth);
       }
 
-                                                          DebugPrint("variable_decl_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("variable_decl_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("variable_decl_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("variable_decl_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5803,15 +5803,15 @@
         DebugPrint("variable_decl_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("variable_decl_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("variable_decl_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("variable_decl_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("variable_decl_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5835,15 +5835,15 @@
         DebugPrint("function_decl_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("function_decl Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("function_decl Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("function_decl_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("function_decl_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5867,15 +5867,15 @@
         DebugPrint("function_decl_stream {\n", Depth);
       }
 
-                                                          DebugPrint("function_decl_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("function_decl_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("function_decl_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("function_decl_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5899,15 +5899,15 @@
         DebugPrint("function_decl_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("function_decl_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("function_decl_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("function_decl_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("function_decl_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5931,15 +5931,15 @@
         DebugPrint("enum_member_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("enum_member Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("enum_member Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_member_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("enum_member_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5963,15 +5963,15 @@
         DebugPrint("enum_member_stream {\n", Depth);
       }
 
-                                                          DebugPrint("enum_member_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("enum_member_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_member_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("enum_member_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -5995,15 +5995,15 @@
         DebugPrint("enum_member_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("enum_member_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("enum_member_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_member_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("enum_member_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6027,21 +6027,21 @@
         DebugPrint("enum_decl_cursor {\n", Depth);
       }
 
-                                                          DebugPrint("enum_decl Start =", Depth+2);
-                DebugPrint(S.Start, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("enum_decl Start {\n", Depth+2);
+                DebugPrint(S.Start, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_decl At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("enum_decl At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_decl End =", Depth+2);
-                DebugPrint(S.End, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("enum_decl End {\n", Depth+2);
+                DebugPrint(S.End, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6065,15 +6065,15 @@
         DebugPrint("enum_decl_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("enum_decl Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("enum_decl Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_decl_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("enum_decl_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6097,15 +6097,15 @@
         DebugPrint("enum_decl_stream {\n", Depth);
       }
 
-                                                          DebugPrint("enum_decl_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("enum_decl_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_decl_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("enum_decl_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6129,15 +6129,15 @@
         DebugPrint("enum_decl_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("enum_decl_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("enum_decl_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_decl_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("enum_decl_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6168,7 +6168,7 @@
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (union (anonymous))\n", Depth+2);
+              DebugPrint("anonymous type : (union (anonymous))", Depth+2);
 
 
 
@@ -6191,21 +6191,21 @@
         DebugPrint("declaration_cursor {\n", Depth);
       }
 
-                                                          DebugPrint("declaration Start =", Depth+2);
-                DebugPrint(S.Start, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("declaration Start {\n", Depth+2);
+                DebugPrint(S.Start, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("declaration At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("declaration At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("declaration End =", Depth+2);
-                DebugPrint(S.End, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("declaration End {\n", Depth+2);
+                DebugPrint(S.End, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6229,15 +6229,15 @@
         DebugPrint("declaration_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("declaration Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("declaration Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("declaration_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("declaration_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6261,15 +6261,15 @@
         DebugPrint("d_union_member_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("d_union_member Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("d_union_member Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("d_union_member_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("d_union_member_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6293,15 +6293,15 @@
         DebugPrint("d_union_member_stream {\n", Depth);
       }
 
-                                                          DebugPrint("d_union_member_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("d_union_member_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("d_union_member_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("d_union_member_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6325,15 +6325,15 @@
         DebugPrint("d_union_member_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("d_union_member_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("d_union_member_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("d_union_member_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("d_union_member_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6357,15 +6357,15 @@
         DebugPrint("type_def_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("type_def Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("type_def Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("type_def_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("type_def_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6389,15 +6389,15 @@
         DebugPrint("type_def_stream {\n", Depth);
       }
 
-                                                          DebugPrint("type_def_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("type_def_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("type_def_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("type_def_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6421,15 +6421,15 @@
         DebugPrint("type_def_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("type_def_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("type_def_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("type_def_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("type_def_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6453,15 +6453,15 @@
         DebugPrint("meta_func_arg_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("meta_func_arg Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("meta_func_arg Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("meta_func_arg_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("meta_func_arg_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6485,15 +6485,15 @@
         DebugPrint("meta_func_arg_stream {\n", Depth);
       }
 
-                                                          DebugPrint("meta_func_arg_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("meta_func_arg_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("meta_func_arg_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("meta_func_arg_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6517,15 +6517,15 @@
         DebugPrint("meta_func_arg_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("meta_func_arg_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("meta_func_arg_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("meta_func_arg_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("meta_func_arg_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6549,15 +6549,15 @@
         DebugPrint("macro_def_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("macro_def Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("macro_def Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("macro_def_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("macro_def_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6581,15 +6581,15 @@
         DebugPrint("macro_def_stream {\n", Depth);
       }
 
-                                                          DebugPrint("macro_def_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("macro_def_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("macro_def_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("macro_def_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6613,15 +6613,15 @@
         DebugPrint("macro_def_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("macro_def_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("macro_def_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("macro_def_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("macro_def_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6645,15 +6645,15 @@
         DebugPrint("macro_def_linked_list_node {\n", Depth);
       }
 
-                                                          DebugPrint("macro_def Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("macro_def Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("macro_def_linked_list_node Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("macro_def_linked_list_node Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6683,9 +6683,9 @@
 
 
 
-                                                    DebugPrint("macro_def_linked_list_node Elements =", Depth+2);
-                DebugPrint(S.Elements, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("macro_def_linked_list_node Elements {\n", Depth+2);
+                DebugPrint(S.Elements, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6709,15 +6709,15 @@
         DebugPrint("meta_func_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("meta_func Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("meta_func Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("meta_func_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("meta_func_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6741,15 +6741,15 @@
         DebugPrint("meta_func_stream {\n", Depth);
       }
 
-                                                          DebugPrint("meta_func_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("meta_func_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("meta_func_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("meta_func_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6773,15 +6773,15 @@
         DebugPrint("meta_func_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("meta_func_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("meta_func_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("meta_func_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("meta_func_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6805,15 +6805,15 @@
         DebugPrint("todo_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("todo Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("todo Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("todo_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("todo_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6837,15 +6837,15 @@
         DebugPrint("todo_stream {\n", Depth);
       }
 
-                                                          DebugPrint("todo_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("todo_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("todo_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("todo_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6869,15 +6869,15 @@
         DebugPrint("todo_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("todo_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("todo_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("todo_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("todo_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6901,15 +6901,15 @@
         DebugPrint("tag_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("tag Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("tag Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("tag_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("tag_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6933,15 +6933,15 @@
         DebugPrint("tag_stream {\n", Depth);
       }
 
-                                                          DebugPrint("tag_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("tag_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("tag_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("tag_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6965,15 +6965,15 @@
         DebugPrint("tag_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("tag_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("tag_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("tag_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("tag_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -6997,15 +6997,15 @@
         DebugPrint("person_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("person Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("person Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("person_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("person_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -7029,15 +7029,15 @@
         DebugPrint("person_stream {\n", Depth);
       }
 
-                                                          DebugPrint("person_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("person_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("person_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("person_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -7061,15 +7061,15 @@
         DebugPrint("person_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("person_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("person_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("person_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("person_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -7093,15 +7093,15 @@
         DebugPrint("ast_node_expression_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_expression Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("ast_node_expression Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_expression_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -7125,15 +7125,15 @@
         DebugPrint("ast_node_expression_stream {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_expression_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("ast_node_expression_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_expression_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -7157,15 +7157,15 @@
         DebugPrint("ast_node_expression_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_expression_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("ast_node_expression_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_expression_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -7189,15 +7189,15 @@
         DebugPrint("ast_node_variable_def_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_variable_def Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("ast_node_variable_def Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_variable_def_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_variable_def_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -7221,15 +7221,15 @@
         DebugPrint("ast_node_variable_def_stream {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_variable_def_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("ast_node_variable_def_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_variable_def_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_variable_def_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -7253,15 +7253,15 @@
         DebugPrint("ast_node_variable_def_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_variable_def_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("ast_node_variable_def_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_variable_def_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_variable_def_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -7285,15 +7285,15 @@
         DebugPrint("ast_node_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node Element =", Depth+2);
-                DebugPrint(S.Element, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("ast_node Element {\n", Depth+2);
+                DebugPrint(S.Element, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_stream_chunk Next =", Depth+2);
-                DebugPrint(S.Next, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_stream_chunk Next {\n", Depth+2);
+                DebugPrint(S.Next, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -7317,15 +7317,15 @@
         DebugPrint("ast_node_stream {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_stream_chunk FirstChunk =", Depth+2);
-                DebugPrint(S.FirstChunk, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("ast_node_stream_chunk FirstChunk {\n", Depth+2);
+                DebugPrint(S.FirstChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_stream_chunk LastChunk =", Depth+2);
-                DebugPrint(S.LastChunk, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_stream_chunk LastChunk {\n", Depth+2);
+                DebugPrint(S.LastChunk, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -7349,15 +7349,15 @@
         DebugPrint("ast_node_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("ast_node_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("ast_node_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
@@ -7381,15 +7381,15 @@
         DebugPrint("declaration_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("declaration_stream Stream =", Depth+2);
-                DebugPrint(S.Stream, 1);
-                DebugPrint(";\n");
+                                                          DebugPrint("declaration_stream Stream {\n", Depth+2);
+                DebugPrint(S.Stream, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("declaration_stream_chunk At =", Depth+2);
-                DebugPrint(S.At, 1);
-                DebugPrint(";\n");
+                                                    DebugPrint("declaration_stream_chunk At {\n", Depth+2);
+                DebugPrint(S.At, Depth+4);
+                DebugPrint("}\n", Depth+2);
 
 
 
