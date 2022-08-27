@@ -17,6 +17,7 @@
     bonsai_function xml_tag_linked_list_node *
     GetHashBucket(umm HashValue, xml_tag_hashtable *Table)
     {
+      Assert(Table->Size);
       xml_tag_linked_list_node *Result = Table->Elements[HashValue % Table->Size];
       return Result;
     }
@@ -32,6 +33,7 @@
     bonsai_function void
     Insert(xml_tag_linked_list_node *E, xml_tag_hashtable *Table)
     {
+      Assert(Table->Size);
       umm HashValue = Hash(&E->Element) % Table->Size;
       xml_tag_linked_list_node **Bucket = Table->Elements + HashValue;
       while (*Bucket) Bucket = &(*Bucket)->Next;

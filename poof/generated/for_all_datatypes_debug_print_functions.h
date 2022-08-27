@@ -4555,8 +4555,8 @@
         DebugPrint("program_datatypes {\n", Depth);
       }
 
-                                                          DebugPrint("datatype_hashtable Datatypes {\n", Depth+2);
-                DebugPrint(S.Datatypes, Depth+4);
+                                                          DebugPrint("datatype_hashtable DatatypeHashtable {\n", Depth+2);
+                DebugPrint(S.DatatypeHashtable, Depth+4);
                 DebugPrint("}\n", Depth+2);
 
 

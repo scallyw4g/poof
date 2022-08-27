@@ -40,6 +40,7 @@ meta(
     bonsai_function (Type.name)_linked_list_node *
     GetHashBucket(umm HashValue, (Type.name)_hashtable *Table)
     {
+      Assert(Table->Size);
       (Type.name)_linked_list_node *Result = Table->Elements[HashValue % Table->Size];
       return Result;
     }
@@ -55,6 +56,7 @@ meta(
     bonsai_function void
     Insert((Type.name)_linked_list_node *E, (Type.name)_hashtable *Table)
     {
+      Assert(Table->Size);
       umm HashValue = Hash(&E->Element) % Table->Size;
       (Type.name)_linked_list_node **Bucket = Table->Elements + HashValue;
       while (*Bucket) Bucket = &(*Bucket)->Next;

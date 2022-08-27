@@ -21,7 +21,7 @@ global_variable memory_arena Global_PermMemory = {};
 
 
 
-#define DEBUG_PRINT (0)
+#define DEBUG_PRINT (1)
 #if DEBUG_PRINT
 #include <bonsai_stdlib/headers/debug_print.h>
 
@@ -9644,6 +9644,9 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
       {
         declaration Decl = ParseDeclaration(Ctx);
 
+        datatype DeclDT = Datatype(&Decl);
+        Insert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+
         switch (Decl.Type)
         {
           case type_enum_decl:
@@ -11937,6 +11940,19 @@ WalkAst(ast_node* Ast)
 #define SUCCESS_EXIT_CODE 0
 #define FAILURE_EXIT_CODE 1
 
+link_internal void
+PrintHashtable(datatype_hashtable *Table)
+{
+  for (u32 BucketIndex = 0; BucketIndex < Table->Size; ++BucketIndex)
+  {
+    auto Bucket = Table->Elements[BucketIndex];
+    while (Bucket)
+    {
+      DebugPrint(Bucket->Element);
+      Bucket = Bucket->Next;
+    }
+  }
+}
 
 s32
 main(s32 ArgCount_, const char** ArgStrings)
@@ -12000,6 +12016,8 @@ main(s32 ArgCount_, const char** ArgStrings)
 
       Ctx.CurrentParser = Parser;
       ParseDatatypes(&Ctx, Parser);
+
+      PrintHashtable(&Ctx.Datatypes.DatatypeHashtable);
 
       MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(0);
 

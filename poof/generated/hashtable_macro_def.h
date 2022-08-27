@@ -28,6 +28,7 @@
     bonsai_function macro_def_linked_list_node *
     GetHashBucket(umm HashValue, macro_def_hashtable *Table)
     {
+      Assert(Table->Size);
       macro_def_linked_list_node *Result = Table->Elements[HashValue % Table->Size];
       return Result;
     }
@@ -43,6 +44,7 @@
     bonsai_function void
     Insert(macro_def_linked_list_node *E, macro_def_hashtable *Table)
     {
+      Assert(Table->Size);
       umm HashValue = Hash(&E->Element) % Table->Size;
       macro_def_linked_list_node **Bucket = Table->Elements + HashValue;
       while (*Bucket) Bucket = &(*Bucket)->Next;
