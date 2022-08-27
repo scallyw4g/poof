@@ -11002,34 +11002,8 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
               counted_string Name = GetNameForDatatype(&Replace->Data, Memory);
               if (OptionalToken(&Scope, CTokenType_Question))
               {
-                parser TrueScope = GetBodyTextForNextScope(&Scope, Memory);
-                parser FalseScope = {};
-
-                b32 DoTrueBranch = True;
-                if (StringsMatch(Name, CSz("(anonymous)")))
-                {
-                  DoTrueBranch = False;
-                }
-
-                if (PeekToken(&Scope).Type == CTokenType_OpenBrace)
-                {
-                  FalseScope = GetBodyTextForNextScope(&Scope, Memory);
-                }
-
-                if (DoTrueBranch)
-                {
-                  counted_string Code = Execute(FuncName, TrueScope, ReplacePatterns, Ctx, Memory);
-                  Append(&OutputBuilder, Code);
-                }
-                else
-                {
-                  if (FalseScope.Tokens)
-                  {
-                    counted_string Code = Execute(FuncName, FalseScope, ReplacePatterns, Ctx, Memory);
-                    Append(&OutputBuilder, Code);
-                  }
-                }
-
+                b32 DoTrueBranch = StringsMatch(Name, CSz("(anonymous)")) == False;
+                DoTrueFalse( Ctx, &Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
               }
               else
               {
