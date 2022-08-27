@@ -21,7 +21,7 @@ global_variable memory_arena Global_PermMemory = {};
 
 
 
-#define DEBUG_PRINT (0)
+#define DEBUG_PRINT (1)
 #if DEBUG_PRINT
 #include <bonsai_stdlib/headers/debug_print.h>
 
@@ -137,7 +137,7 @@ bonsai_function declaration FinalizeDeclaration(parse_context *Ctx, parser *Pars
 
 bonsai_function counted_string GetTypeTypeForDatatype(datatype *Data, memory_arena *);
 bonsai_function counted_string GetTypeNameForDatatype(datatype *Data, memory_arena *);
-
+link_internal datatype         ResolveToBaseType(parse_context *Ctx, type_spec TypeSpec);
 
 bonsai_function counted_string Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory);
 bonsai_function void           DoTrueFalse( parse_context *Ctx, parser *Scope, meta_func_arg_stream* ReplacePatterns, b32 DoTrueBranch, string_builder *OutputBuilder, memory_arena *Memory);
@@ -10394,7 +10394,7 @@ GetValueForDatatype(datatype *Data, memory_arena *Memory)
 }
 
 bonsai_function counted_string
-GetNameForDatatype(datatype *Data)
+GetNameForDatatype(datatype *Data, memory_arena *Memory)
 {
   counted_string Result = {};
   switch (Data->Type)
@@ -10410,6 +10410,10 @@ GetNameForDatatype(datatype *Data)
     } break;
 
     case type_primitive_def:
+    {
+      Result = PrintTypeSpec(&Data->primitive_def.TypeSpec, Memory);
+    } break;
+
     case type_type_def:
     {
       NotImplemented;
@@ -10556,13 +10560,9 @@ DatatypeIsVariableDecl(datatype *Data)
   switch (Data->Type)
   {
     case type_datatype_noop:
+    case type_primitive_def:
     case type_enum_member:
     {
-    } break;
-
-    case type_primitive_def:
-    {
-      NotImplemented;
     } break;
 
     case type_type_def:
@@ -10604,6 +10604,17 @@ DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
   compound_decl *Result = {};
   switch (Data->Type)
   {
+    case type_datatype_noop:
+    case type_enum_member:
+    case type_primitive_def:
+    {
+    } break;
+
+    case type_type_def:
+    {
+      NotImplemented;
+    } break;
+
     case type_declaration:
     {
       declaration *Decl = SafeAccess(declaration, Data);
@@ -10629,8 +10640,18 @@ DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
         case type_variable_decl:
         {
           variable_decl *VDecl = SafeAccess(variable_decl, Decl);
-          datatype DT = GetDatatypeByName(Ctx, VDecl->Name);
+
+          {
+            auto Tmp = PrintTypeSpec(&VDecl->Type, TranArena);
+            DebugLine("Getting Datatype for (%S %S)", Tmp, VDecl->Name);
+            DebugPrint(VDecl->Type);
+            /* DebugLine("Getting Datatype for %S", VDecl->Name); */
+          }
+
+          datatype DT = ResolveToBaseType(Ctx, VDecl->Type);
           Assert(DatatypeIsVariableDecl(&DT) == False);
+
+          DebugLine("Got %S", ToString(DT.Type));
           if (DT.Type)
           {
             Result = DatatypeIsCompoundDecl(Ctx, Scope, &DT, MetaOperatorT);
@@ -10640,11 +10661,14 @@ DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
 
     } break;
 
+#if 0
     InvalidDefaultError(Scope,
         FormatCountedString( TranArena,
                              CSz("%S called on invalid type (%S) with name (%S)"),
-                             MetaOperatorT->Value, ToString(Data->Type), GetNameForDatatype(Data) ),
+                             MetaOperatorT->Value, ToString(Data->Type), GetNameForDatatype(Data, TranArena) ),
         MetaOperatorT);
+#endif
+
   }
 
   return Result;
@@ -10657,11 +10681,6 @@ link_internal datatype
 ResolveTypedefToBaseType(parse_context *Ctx, datatype *Data)
 {
   datatype Result = {};
-
-  {
-    counted_string S = GetTypeNameForDatatype(Data, TranArena);
-    DebugLine("Querying typedef for %S", S);
-  }
 
   type_def *TD = SafeAccessPtr(type_def, Data);
 
@@ -10693,7 +10712,6 @@ ResolveToBaseType(parse_context *Ctx, type_spec TypeSpec)
   if ( TypeSpec.DatatypeToken &&
        TypeSpec.DatatypeToken->Type == CTokenType_Identifier )
   {
-    DebugLine("-- 1 -- (%S)", TypeSpec.DatatypeToken->Value);
     Result = GetDatatypeByName(Ctx, TypeSpec.DatatypeToken->Value);
     if (Result.Type == type_type_def)
     {
@@ -10846,7 +10864,6 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
               auto S1 = GetTypeTypeForDatatype(&Replace->Data, TranArena);
               auto S2 = GetTypeNameForDatatype(&Replace->Data, TranArena);
-              DebugLine("checking is_defined (%S)(%S)", S1, S2);
 
               b32 DoTrueBranch = False;
               switch(Replace->Data.Type)
@@ -11003,7 +11020,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
             case name:
             {
-              counted_string Name = GetNameForDatatype(&Replace->Data);
+              counted_string Name = GetNameForDatatype(&Replace->Data, Memory);
               if (OptionalToken(&Scope, CTokenType_Question))
               {
                 parser TrueScope = GetBodyTextForNextScope(&Scope, Memory);
@@ -11145,7 +11162,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                 PoofTypeError( &Scope,
                                FormatCountedString( TranArena,
                                                     CSz("Called map_members on a datatype that didn't have members (%S)"),
-                                                    GetNameForDatatype(&Replace->Data)),
+                                                    GetNameForDatatype(&Replace->Data, TranArena)),
                                MetaOperatorToken);
               }
 
@@ -11180,7 +11197,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                 PoofTypeError( &Scope,
                                FormatCountedString( TranArena,
                                                     CSz("Called map_values on a datatype that wasn't an enum (%S)"),
-                                                    GetNameForDatatype(&Replace->Data)),
+                                                    GetNameForDatatype(&Replace->Data, Memory)),
                                MetaOperatorToken);
               }
 

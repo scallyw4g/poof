@@ -1,20 +1,19 @@
 
-typedef __ undefined_type;
 
-typedef float f32;
+typedef __ undefined_type;
 
 typedef int s32;
 
-struct foo_struct
+struct foo_struct_0
 {
   int            _int;
   s32            _s32;
-  f32            _float;
   undefined_type _und0;
 };
 
+#if 0
 meta(
-  func (foo_struct TFooStruct)
+  func (foo_struct_0 TFooStruct)
   {
     (TFooStruct.map_members(Member){
       (Member.is_defined? {
@@ -28,4 +27,46 @@ meta(
   }
 )
 #include <tests/integration/generated/anonymous_func_0.h>
+#endif
 
+
+
+
+struct foo_struct_1
+{
+  int            _int;
+  s32            _s32;
+  undefined_type _und0;
+  foo_struct_0   _foo0;
+
+  struct
+  {
+    int _int2;
+  } _embedded1, _embedded2;
+
+  union
+  {
+    int _int3;
+  } _embedded3;
+
+  int _foo1;
+
+};
+
+
+meta(
+  func (foo_struct_1 TFooStruct)
+  {
+    (TFooStruct.map_members(Member){
+      (Member.is_compound?
+      {
+        (Member.type) (Member.name) is compound
+      }
+      {
+        (Member.type) (Member.name) not compound
+      }
+      )
+    })
+  }
+)
+#include <tests/integration/generated/anonymous_func_1.h>

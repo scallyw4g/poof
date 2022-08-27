@@ -7,23 +7,23 @@
 # NOTE(Jesse): The following are switches for twiddling during development.
 # Calling functions by name on the command line shouldn't be affected by these.
 
-git checkout $META_OUT
+# git checkout $META_OUT
 
 TEST_LOG_LEVEL="--log-level LogLevel_Error"
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
 # POOF_LOG_LEVEL="--log-level LogLevel_Shush"
 POOF_LOG_LEVEL="--log-level LogLevel_Error"
-POOF_LOG_LEVEL="--log-level LogLevel_Debug"
+# POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
 INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Error"
-# INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
+INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
 BUILD_EVERYTHING=0
 
-RunPreemptivePoof=1
+# RunPreemptivePoof=1
 
-RunPoof=1
+# RunPoof=1
 BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
 
@@ -33,7 +33,7 @@ BuildPoof=1
 
 # BuildAndRunAllExamples=1
 
-# RunIntegrationTests=1
+RunIntegrationTests=1
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 
 # OPTIMIZATION_LEVEL="-O2"

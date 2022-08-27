@@ -531,6 +531,7 @@ meta(string_and_value_tables(type_qualifier))
 struct type_spec
 {
   c_token *QualifierNameT;
+
   c_token *DatatypeToken;
   // datatype Datatype;
 
@@ -545,7 +546,7 @@ struct type_spec
 struct ast_node;
 struct variable_decl
 {
-  type_spec Type;
+  type_spec Type; // TODO(Jesse): Change name to TypeSpec
   counted_string Name;
   ast_node *StaticBufferSize;
   ast_node *Value;
