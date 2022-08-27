@@ -999,7 +999,7 @@ struct arguments
 
 struct program_datatypes
 {
-  datatype_hashtable       Datatypes;
+  datatype_hashtable       DatatypeHashtable;
   macro_def_hashtable      Macros;
 
   counted_string_hashtable FilesParsed;

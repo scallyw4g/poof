@@ -21,7 +21,7 @@ global_variable memory_arena Global_PermMemory = {};
 
 
 
-#define DEBUG_PRINT (1)
+#define DEBUG_PRINT (0)
 #if DEBUG_PRINT
 #include <bonsai_stdlib/headers/debug_print.h>
 
@@ -480,7 +480,6 @@ IsNewline(c_token *T)
   return Result;
 }
 
-
 bonsai_function b32
 IsNBSP(c_token_type Type)
 {
@@ -769,10 +768,10 @@ EatUntilIncluding(parser* Parser, c_token_type Close)
 
 
 
-
 /*****************************                ********************************/
 /*****************************  Error Output  ********************************/
 /*****************************                ********************************/
+
 
 
 bonsai_function void
@@ -1065,7 +1064,6 @@ TruncateAtPreviousLineStart(parser* Parser, u32 Count )
   Parser->Prev = 0;
 }
 #endif
-
 
 
 
@@ -1633,6 +1631,8 @@ ParseError_RequireTokenFailed(parser *Parser, counted_string FuncName, c_token *
   return Result;
 }
 
+
+
 /*****************************                 *******************************/
 /*****************************  Token Control  *******************************/
 /*****************************                 *******************************/
@@ -2055,7 +2055,6 @@ PeekTokenCursor(c_token_cursor *Tokens, s32 Skip)
   return Current;
 }
 
-
 bonsai_function peek_result
 PeekTokenCursor(parser *Parser, s32 Skip)
 {
@@ -2365,7 +2364,6 @@ RequireToken(parser* Parser, c_token *ExpectedToken)
   return Result;
 }
 
-
 bonsai_function c_token
 RequireToken(parser* Parser, c_token_type ExpectedType)
 {
@@ -2417,7 +2415,6 @@ RequireTokenPointer(parser* Parser, c_token_type ExpectedType)
   c_token *Result = RequireTokenPointer(Parser, CToken(ExpectedType));
   return Result;
 }
-
 
 // @duplicated_require_token_raw
 // @optimize_call_advance_instead_of_being_dumb
@@ -2592,6 +2589,9 @@ RequireOperatorToken(parser* Parser)
 
 
 
+/****************************                   ******************************/
+/****************************  Macro Expansion  ******************************/
+/****************************                   ******************************/
 
 
 
@@ -3315,7 +3315,6 @@ EatSpacesTabsAndEscapedNewlines(parser *Parser)
   return Result;
 }
 
-
 // NOTE(Jesse): We could metapgrogram these routines if we had a feature for it
 // @meta_similar_whitespace_routines
 //
@@ -3335,7 +3334,6 @@ EatNBSP(parser* Parser)
 
   return Result;
 }
-
 
 // @meta_similar_whitespace_routines
 //
@@ -3799,6 +3797,7 @@ CountTokensBeforeNext(parser *Parser, c_token_type T1, c_token_type T2)
 
 
 
+#if 0
 bonsai_function c_token_cursor *
 SplitAndInsertTokenCursor(c_token_cursor *CursorToSplit, c_token* SplitStart, c_token_cursor *CursorToInsert, c_token* SplitEnd, memory_arena *Memory)
 {
@@ -3901,6 +3900,7 @@ SplitAndInsertTokenCursor(c_token_cursor *CursorToSplit, c_token_cursor *CursorT
 {
   return SplitAndInsertTokenCursor(CursorToSplit, CursorToSplit->At, CursorToInsert, CursorToSplit->At, Memory);
 }
+#endif
 
 bonsai_function c_token_cursor *
 DuplicateCTokenCursor(c_token_cursor *Tokens, memory_arena *Memory)
@@ -4176,7 +4176,6 @@ TryTransmuteIdentifierToMacro(parse_context *Ctx, parser *Parser, c_token *T, ma
 
   return Result;
 }
-
 
 bonsai_function b32
 TryTransmuteIdentifierToken(c_token *T)
@@ -5453,11 +5452,6 @@ PreprocessedParserForFile(parse_context *Ctx, counted_string Filename, token_cur
   return Result;
 }
 
-
-
-
-
-
 #if 0
 // TODO(Jesse id: 302, tags: id_301)
 bonsai_function parser*
@@ -5604,6 +5598,10 @@ ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
 
 
 
+
+//
+// Looks like this pretty much delineates the parser from the actual implementation of poof
+//
 
 
 
@@ -5759,6 +5757,18 @@ GetStructByType(compound_decl_stream* ProgramStructs, counted_string StructType)
 
   return Result;
 }
+
+#if 0
+link_internal datatype
+GetDatatypeByTypeSpec(program_datatypes *Datatypes, type_spec *Type)
+{
+  datatype_hashtable *DHash = &Datatypes->DatatypeHashtable;
+
+  umm HashValue = Hash(Type);
+  /* datatype */
+
+}
+#endif
 
 bonsai_function datatype
 GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
@@ -6651,7 +6661,6 @@ IsConstructorOrDestructorName(counted_string *ClassName, counted_string *FnName)
   return Result;
 }
 
-
 bonsai_function b32
 IsConstructorOrDestructorName(c_token *T)
 {
@@ -7088,7 +7097,6 @@ FinalizeVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indirection_i
   return Result;
 }
 
-
 bonsai_function void
 MaybeParseDeleteOrDefault(parser *Parser, function_decl *Result)
 {
@@ -7298,12 +7306,6 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indire
   /* Assert(Result.Type); */
   return Result;
 }
-#endif
-
-#define _a_TEST 'a'
-
-#if _a_TEST
-
 #endif
 
 bonsai_function u64
@@ -9000,8 +9002,6 @@ ParseAllStatements_ast_node(parse_context *Ctx)
 
   return Result;
 }
-
-
 
 bonsai_function ast_node*
 ParseFunctionCall(parse_context *Ctx, counted_string FunctionName);
@@ -10770,6 +10770,8 @@ ResolveToBaseType(parse_context *Ctx, datatype *Data)
 
 
 #if 0
+  // @meta_match
+
   meta(
     match (Data->Type)
     {
@@ -10793,7 +10795,6 @@ ResolveToBaseType(parse_context *Ctx, datatype *Data)
 #endif
 
 }
-
 
 // TODO(Jesse id: 222, tags: immediate, parsing, metaprogramming) : Re-add [[nodiscard]] here
 bonsai_function counted_string
@@ -11267,10 +11268,10 @@ ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_s
   counted_string_stream Result = {};
   while (PeekToken(Parser).Type == CTokenType_Identifier)
   {
-    counted_string DatatypeName    = RequireToken(Parser, CTokenType_Identifier).Value;
+    counted_string DatatypeName = RequireToken(Parser, CTokenType_Identifier).Value;
 
-    compound_decl* Struct                 = GetStructByType(&Datatypes->Structs, DatatypeName);
-    enum_decl* Enum                     = GetEnumByType(&Datatypes->Enums, DatatypeName);
+    compound_decl* Struct              = GetStructByType(&Datatypes->Structs, DatatypeName);
+    enum_decl* Enum                    = GetEnumByType(&Datatypes->Enums, DatatypeName);
     tagged_counted_string_stream* List = StreamContains(NameLists, DatatypeName);
 
     if (Struct || Enum)
