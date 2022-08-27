@@ -1465,6 +1465,7 @@ AllocateParseContext(memory_arena *Memory)
   };
   Ctx.Datatypes.Macros = Allocate_macro_def_hashtable(4096, Memory);
   Ctx.Datatypes.FilesParsed = Allocate_counted_string_hashtable(512, Memory);
+  Ctx.Datatypes.DatatypeHashtable = Allocate_datatype_hashtable(512, Memory);
   return Ctx;
 }
 

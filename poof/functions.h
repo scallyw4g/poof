@@ -74,28 +74,36 @@ meta(
 )
 
 meta(
-  func dunion_debug_print(DUnionType)
+  func dunion_debug_print_prototype(DUnion)
+  {
+    bonsai_function void DebugPrint( (DUnion.type) *Struct, u32 Depth = 0);
+    bonsai_function void DebugPrint( (DUnion.type) Struct, u32 Depth = 0);
+  }
+)
+
+meta(
+  func dunion_debug_print(DUnion)
   {
     bonsai_function void
-    DebugPrint( (DUnionType.type) *UnionStruct, u32 Depth)
+    DebugPrint( (DUnion.type) *Struct, u32 Depth)
     {
-      if (UnionStruct)
+      if (Struct)
       {
-        DebugPrint(*UnionStruct, Depth+4);
+        DebugPrint(*Struct, Depth+4);
       }
     }
 
     bonsai_function void
-    DebugPrint( (DUnionType.type) UnionStruct, u32 Depth)
+    DebugPrint( (DUnion.type) Struct, u32 Depth)
     {
-      switch(UnionStruct.Type)
+      switch(Struct.Type)
       {
-        (DUnionType.map_members (M) {
+        (DUnion.map_members (M) {
           (M.is_union? {
             (M.map_members (UnionMember) {
               case type_(UnionMember.type):
               {
-                DebugPrint(UnionStruct.(UnionMember.type), Depth+4);
+                DebugPrint(Struct.(UnionMember.type), Depth+4);
               } break;
             })
           })

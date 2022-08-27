@@ -7,8 +7,6 @@
 # NOTE(Jesse): The following are switches for twiddling during development.
 # Calling functions by name on the command line shouldn't be affected by these.
 
-# git checkout $META_OUT
-
 TEST_LOG_LEVEL="--log-level LogLevel_Error"
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
@@ -56,6 +54,8 @@ BIN="$ROOT/bin"
 BIN_TEST="$BIN/tests"
 META_OUT="$ROOT/poof/generated"
 
+# git checkout $META_OUT
+
 
 function RunPoof {
   ColorizeTitle "Poofing!"
@@ -96,6 +96,7 @@ function RunPoof {
     echo -e "$Success Poofed"
   else
     echo -e "$Failed Poofing"
+    git checkout $META_OUT
   fi
 
   echo -e ""

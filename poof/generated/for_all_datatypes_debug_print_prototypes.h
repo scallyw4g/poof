@@ -166,8 +166,6 @@
       bonsai_function void DebugPrint( enum_decl  S, u32 Depth = 0);
       bonsai_function void DebugPrint( primitive_def* S, u32 Depth = 0);
       bonsai_function void DebugPrint( primitive_def  S, u32 Depth = 0);
-      bonsai_function void DebugPrint( datatype* S, u32 Depth = 0);
-      bonsai_function void DebugPrint( datatype  S, u32 Depth = 0);
       bonsai_function void DebugPrint( d_union_member* S, u32 Depth = 0);
       bonsai_function void DebugPrint( d_union_member  S, u32 Depth = 0);
       bonsai_function void DebugPrint( type_def* S, u32 Depth = 0);
@@ -308,8 +306,6 @@
       bonsai_function void DebugPrint( enum_decl_stream  S, u32 Depth = 0);
       bonsai_function void DebugPrint( enum_decl_iterator* S, u32 Depth = 0);
       bonsai_function void DebugPrint( enum_decl_iterator  S, u32 Depth = 0);
-      bonsai_function void DebugPrint( declaration* S, u32 Depth = 0);
-      bonsai_function void DebugPrint( declaration  S, u32 Depth = 0);
       bonsai_function void DebugPrint( declaration_cursor* S, u32 Depth = 0);
       bonsai_function void DebugPrint( declaration_cursor  S, u32 Depth = 0);
       bonsai_function void DebugPrint( declaration_stream_chunk* S, u32 Depth = 0);

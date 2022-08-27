@@ -94,7 +94,7 @@
     bonsai_function void DebugPrint( terminal_colors *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( native_file S, u32 Depth)
     {
@@ -104,7 +104,7 @@
       }
 
                             // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (FILE Handle)", Depth+2);
+            DebugPrint("undefined(FILE Handle)\n", Depth+2);
 
                                                     DebugPrint("counted_string Path {\n", Depth+2);
                 DebugPrint(S.Path, Depth+4);
@@ -123,7 +123,7 @@
     bonsai_function void DebugPrint( native_file *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( XVisualInfo S, u32 Depth)
     {
@@ -133,10 +133,10 @@
       }
 
                             // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (Visual visual)", Depth+2);
+            DebugPrint("undefined(Visual visual)\n", Depth+2);
 
                       // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (VisualID visualid)", Depth+2);
+            DebugPrint("undefined(VisualID visualid)\n", Depth+2);
 
                                                     DebugPrint("s32 screen =", Depth+2);
                 DebugPrint(S.screen, 1);
@@ -197,7 +197,7 @@
     bonsai_function void DebugPrint( XVisualInfo *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( os S, u32 Depth)
     {
@@ -207,13 +207,13 @@
       }
 
                             // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (window Window)", Depth+2);
+            DebugPrint("undefined(window Window)\n", Depth+2);
 
                       // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (display Display)", Depth+2);
+            DebugPrint("undefined(display Display)\n", Depth+2);
 
                       // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (gl_context GlContext)", Depth+2);
+            DebugPrint("undefined(gl_context GlContext)\n", Depth+2);
 
                                                     DebugPrint("b32 ContinueRunning =", Depth+2);
                 DebugPrint(S.ContinueRunning, 1);
@@ -232,7 +232,7 @@
     bonsai_function void DebugPrint( os *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( v2i S, u32 Depth)
     {
@@ -264,7 +264,7 @@
     bonsai_function void DebugPrint( v2i *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( v2 S, u32 Depth)
     {
@@ -296,7 +296,7 @@
     bonsai_function void DebugPrint( v2 *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( v3i S, u32 Depth)
     {
@@ -306,19 +306,19 @@
       }
 
                                           // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
+              DebugPrint("struct (anonymous)\n", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
+              DebugPrint("struct (anonymous)\n", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
+              DebugPrint("struct (anonymous)\n", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
+              DebugPrint("struct (anonymous)\n", Depth+2);
 
 
                                                     DebugPrint("s32 E =", Depth+2);
@@ -338,7 +338,7 @@
     bonsai_function void DebugPrint( v3i *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( v3 S, u32 Depth)
     {
@@ -348,19 +348,19 @@
       }
 
                                           // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
+              DebugPrint("struct (anonymous)\n", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
+              DebugPrint("struct (anonymous)\n", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
+              DebugPrint("struct (anonymous)\n", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
+              DebugPrint("struct (anonymous)\n", Depth+2);
 
 
                                                     DebugPrint("r32 E =", Depth+2);
@@ -380,7 +380,7 @@
     bonsai_function void DebugPrint( v3 *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( v4 S, u32 Depth)
     {
@@ -390,27 +390,27 @@
       }
 
                                           // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
+              DebugPrint("struct (anonymous)\n", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
+              DebugPrint("struct (anonymous)\n", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
+              DebugPrint("struct (anonymous)\n", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
+              DebugPrint("struct (anonymous)\n", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
+              DebugPrint("struct (anonymous)\n", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
+              DebugPrint("struct (anonymous)\n", Depth+2);
 
 
                                                     DebugPrint("r32 E =", Depth+2);
@@ -430,7 +430,7 @@
     bonsai_function void DebugPrint( v4 *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( voxel_position S, u32 Depth)
     {
@@ -440,7 +440,7 @@
       }
 
                                           // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
+              DebugPrint("struct (anonymous)\n", Depth+2);
 
 
                                                     DebugPrint("s32 E =", Depth+2);
@@ -460,7 +460,7 @@
     bonsai_function void DebugPrint( voxel_position *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( f32_reg S, u32 Depth)
     {
@@ -476,7 +476,7 @@
 
 
                       // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (__m128 Sse)", Depth+2);
+            DebugPrint("undefined(__m128 Sse)\n", Depth+2);
 
 
 
@@ -489,7 +489,7 @@
     bonsai_function void DebugPrint( f32_reg *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( random_series S, u32 Depth)
     {
@@ -515,7 +515,7 @@
     bonsai_function void DebugPrint( random_series *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( input_event S, u32 Depth)
     {
@@ -547,7 +547,7 @@
     bonsai_function void DebugPrint( input_event *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( input S, u32 Depth)
     {
@@ -723,7 +723,7 @@
     bonsai_function void DebugPrint( input *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( hotkeys S, u32 Depth)
     {
@@ -785,7 +785,7 @@
     bonsai_function void DebugPrint( hotkeys *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( work_queue S, u32 Depth)
     {
@@ -807,10 +807,10 @@
 
 
                       // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (work_queue_entry Entries)", Depth+2);
+            DebugPrint("undefined(work_queue_entry Entries)\n", Depth+2);
 
                       // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (semaphore GlobalQueueSemaphore)", Depth+2);
+            DebugPrint("undefined(semaphore GlobalQueueSemaphore)\n", Depth+2);
 
 
 
@@ -823,7 +823,7 @@
     bonsai_function void DebugPrint( work_queue *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( memory_arena S, u32 Depth)
     {
@@ -873,7 +873,7 @@
     bonsai_function void DebugPrint( memory_arena *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( push_metadata S, u32 Depth)
     {
@@ -929,7 +929,7 @@
     bonsai_function void DebugPrint( push_metadata *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( platform S, u32 Depth)
     {
@@ -951,10 +951,10 @@
 
 
                       // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (semaphore QueueSemaphore)", Depth+2);
+            DebugPrint("undefined(semaphore QueueSemaphore)\n", Depth+2);
 
                       // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (thread_startup_params Threads)", Depth+2);
+            DebugPrint("undefined(thread_startup_params Threads)\n", Depth+2);
 
                                                     DebugPrint("v2 MouseP {\n", Depth+2);
                 DebugPrint(S.MouseP, Depth+4);
@@ -1009,7 +1009,7 @@
     bonsai_function void DebugPrint( platform *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( heap_allocation_block S, u32 Depth)
     {
@@ -1047,7 +1047,7 @@
     bonsai_function void DebugPrint( heap_allocation_block *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( heap_allocator S, u32 Depth)
     {
@@ -1079,7 +1079,7 @@
     bonsai_function void DebugPrint( heap_allocator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( tagged_counted_string_stream S, u32 Depth)
     {
@@ -1111,7 +1111,7 @@
     bonsai_function void DebugPrint( tagged_counted_string_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( char_cursor S, u32 Depth)
     {
@@ -1155,7 +1155,7 @@
     bonsai_function void DebugPrint( char_cursor *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( linei S, u32 Depth)
     {
@@ -1187,7 +1187,7 @@
     bonsai_function void DebugPrint( linei *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( line S, u32 Depth)
     {
@@ -1219,7 +1219,7 @@
     bonsai_function void DebugPrint( line *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( Quaternion S, u32 Depth)
     {
@@ -1229,11 +1229,11 @@
       }
 
                                           // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
+              DebugPrint("struct (anonymous)\n", Depth+2);
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (struct (anonymous))", Depth+2);
+              DebugPrint("struct (anonymous)\n", Depth+2);
 
 
                                                     DebugPrint("float  E =", Depth+2);
@@ -1253,7 +1253,7 @@
     bonsai_function void DebugPrint( Quaternion *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( string_builder S, u32 Depth)
     {
@@ -1285,7 +1285,7 @@
     bonsai_function void DebugPrint( string_builder *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( u32_stream S, u32 Depth)
     {
@@ -1323,7 +1323,7 @@
     bonsai_function void DebugPrint( u32_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( u8_stream S, u32 Depth)
     {
@@ -1361,7 +1361,7 @@
     bonsai_function void DebugPrint( u8_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ansi_stream S, u32 Depth)
     {
@@ -1411,7 +1411,7 @@
     bonsai_function void DebugPrint( ansi_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( r32_stream S, u32 Depth)
     {
@@ -1449,7 +1449,7 @@
     bonsai_function void DebugPrint( r32_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( m4 S, u32 Depth)
     {
@@ -1475,7 +1475,7 @@
     bonsai_function void DebugPrint( m4 *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( m_nxn S, u32 Depth)
     {
@@ -1525,7 +1525,7 @@
     bonsai_function void DebugPrint( m_nxn *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( mutex S, u32 Depth)
     {
@@ -1535,7 +1535,7 @@
       }
 
                             // NOTE(Jesse): we've got no definition for this type.. print a placeholder
-            DebugPrint("undefined type : (native_mutex M)", Depth+2);
+            DebugPrint("undefined(native_mutex M)\n", Depth+2);
 
 
 
@@ -1548,7 +1548,7 @@
     bonsai_function void DebugPrint( mutex *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( mutex_op_record S, u32 Depth)
     {
@@ -1586,7 +1586,7 @@
     bonsai_function void DebugPrint( mutex_op_record *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( mutex_op_array S, u32 Depth)
     {
@@ -1618,7 +1618,7 @@
     bonsai_function void DebugPrint( mutex_op_array *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( rect2 S, u32 Depth)
     {
@@ -1650,7 +1650,7 @@
     bonsai_function void DebugPrint( rect2 *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( aabb S, u32 Depth)
     {
@@ -1682,7 +1682,7 @@
     bonsai_function void DebugPrint( aabb *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ray S, u32 Depth)
     {
@@ -1714,7 +1714,7 @@
     bonsai_function void DebugPrint( ray *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( xml_property S, u32 Depth)
     {
@@ -1752,7 +1752,7 @@
     bonsai_function void DebugPrint( xml_property *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( xml_token S, u32 Depth)
     {
@@ -1784,7 +1784,7 @@
     bonsai_function void DebugPrint( xml_token *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( xml_tag S, u32 Depth)
     {
@@ -1840,7 +1840,7 @@
     bonsai_function void DebugPrint( xml_tag *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( xml_token_stream S, u32 Depth)
     {
@@ -1884,7 +1884,7 @@
     bonsai_function void DebugPrint( xml_token_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( xml_tag_stream S, u32 Depth)
     {
@@ -1922,7 +1922,7 @@
     bonsai_function void DebugPrint( xml_tag_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( xml_parsing_at_indicators S, u32 Depth)
     {
@@ -1954,7 +1954,7 @@
     bonsai_function void DebugPrint( xml_parsing_at_indicators *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( shader_uniform S, u32 Depth)
     {
@@ -1970,7 +1970,7 @@
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (union (anonymous))", Depth+2);
+              DebugPrint("union (anonymous)\n", Depth+2);
 
 
                                                     DebugPrint("s32 ID =", Depth+2);
@@ -2002,7 +2002,7 @@
     bonsai_function void DebugPrint( shader_uniform *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( shader S, u32 Depth)
     {
@@ -2034,7 +2034,7 @@
     bonsai_function void DebugPrint( shader *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( texture S, u32 Depth)
     {
@@ -2066,7 +2066,7 @@
     bonsai_function void DebugPrint( texture *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( textured_2d_geometry_buffer S, u32 Depth)
     {
@@ -2116,7 +2116,7 @@
     bonsai_function void DebugPrint( textured_2d_geometry_buffer *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( untextured_2d_geometry_buffer S, u32 Depth)
     {
@@ -2160,7 +2160,7 @@
     bonsai_function void DebugPrint( untextured_2d_geometry_buffer *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( untextured_3d_geometry_buffer S, u32 Depth)
     {
@@ -2210,7 +2210,7 @@
     bonsai_function void DebugPrint( untextured_3d_geometry_buffer *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( gpu_mapped_element_buffer S, u32 Depth)
     {
@@ -2254,7 +2254,7 @@
     bonsai_function void DebugPrint( gpu_mapped_element_buffer *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( framebuffer S, u32 Depth)
     {
@@ -2286,7 +2286,7 @@
     bonsai_function void DebugPrint( framebuffer *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( cycle_range S, u32 Depth)
     {
@@ -2318,7 +2318,7 @@
     bonsai_function void DebugPrint( cycle_range *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( memory_arena_stats S, u32 Depth)
     {
@@ -2362,7 +2362,7 @@
     bonsai_function void DebugPrint( memory_arena_stats *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( min_max_avg_dt S, u32 Depth)
     {
@@ -2400,7 +2400,7 @@
     bonsai_function void DebugPrint( min_max_avg_dt *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( debug_profile_scope S, u32 Depth)
     {
@@ -2462,7 +2462,7 @@
     bonsai_function void DebugPrint( debug_profile_scope *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( unique_debug_profile_scope S, u32 Depth)
     {
@@ -2524,7 +2524,7 @@
     bonsai_function void DebugPrint( unique_debug_profile_scope *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( debug_scope_tree S, u32 Depth)
     {
@@ -2568,7 +2568,7 @@
     bonsai_function void DebugPrint( debug_scope_tree *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( debug_thread_state S, u32 Depth)
     {
@@ -2636,7 +2636,7 @@
     bonsai_function void DebugPrint( debug_thread_state *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( registered_memory_arena S, u32 Depth)
     {
@@ -2674,7 +2674,7 @@
     bonsai_function void DebugPrint( registered_memory_arena *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( selected_memory_arena S, u32 Depth)
     {
@@ -2706,7 +2706,7 @@
     bonsai_function void DebugPrint( selected_memory_arena *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( selected_arenas S, u32 Depth)
     {
@@ -2738,7 +2738,7 @@
     bonsai_function void DebugPrint( selected_arenas *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( frame_stats S, u32 Depth)
     {
@@ -2776,7 +2776,7 @@
     bonsai_function void DebugPrint( frame_stats *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( called_function S, u32 Depth)
     {
@@ -2808,7 +2808,7 @@
     bonsai_function void DebugPrint( called_function *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( debug_draw_call S, u32 Depth)
     {
@@ -2846,7 +2846,7 @@
     bonsai_function void DebugPrint( debug_draw_call *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( bitmap_image_header S, u32 Depth)
     {
@@ -2956,7 +2956,7 @@
     bonsai_function void DebugPrint( bitmap_image_header *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( bitmap_header S, u32 Depth)
     {
@@ -3006,7 +3006,7 @@
     bonsai_function void DebugPrint( bitmap_header *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( bitmap S, u32 Depth)
     {
@@ -3038,7 +3038,7 @@
     bonsai_function void DebugPrint( bitmap *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( macro_expansion S, u32 Depth)
     {
@@ -3070,7 +3070,7 @@
     bonsai_function void DebugPrint( macro_expansion *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( c_token S, u32 Depth)
     {
@@ -3116,7 +3116,7 @@
 
 
                                     // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (union (anonymous))", Depth+2);
+              DebugPrint("union (anonymous)\n", Depth+2);
 
 
 
@@ -3130,7 +3130,7 @@
     bonsai_function void DebugPrint( c_token *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( peek_result S, u32 Depth)
     {
@@ -3168,7 +3168,7 @@
     bonsai_function void DebugPrint( peek_result *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( c_token_cursor_up S, u32 Depth)
     {
@@ -3200,7 +3200,7 @@
     bonsai_function void DebugPrint( c_token_cursor_up *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( c_token_cursor S, u32 Depth)
     {
@@ -3256,7 +3256,7 @@
     bonsai_function void DebugPrint( c_token_cursor *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( parser S, u32 Depth)
     {
@@ -3288,7 +3288,7 @@
     bonsai_function void DebugPrint( parser *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( declaration_stream S, u32 Depth)
     {
@@ -3320,7 +3320,7 @@
     bonsai_function void DebugPrint( declaration_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( compound_decl S, u32 Depth)
     {
@@ -3358,7 +3358,7 @@
     bonsai_function void DebugPrint( compound_decl *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( type_indirection_info S, u32 Depth)
     {
@@ -3420,7 +3420,7 @@
     bonsai_function void DebugPrint( type_indirection_info *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( type_spec S, u32 Depth)
     {
@@ -3476,7 +3476,7 @@
     bonsai_function void DebugPrint( type_spec *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( variable_decl S, u32 Depth)
     {
@@ -3532,7 +3532,7 @@
     bonsai_function void DebugPrint( variable_decl *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( function_decl S, u32 Depth)
     {
@@ -3606,7 +3606,7 @@
     bonsai_function void DebugPrint( function_decl *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( enum_member S, u32 Depth)
     {
@@ -3638,7 +3638,7 @@
     bonsai_function void DebugPrint( enum_member *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( enum_decl S, u32 Depth)
     {
@@ -3670,7 +3670,7 @@
     bonsai_function void DebugPrint( enum_decl *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( primitive_def S, u32 Depth)
     {
@@ -3696,37 +3696,7 @@
     bonsai_function void DebugPrint( primitive_def *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( datatype S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("datatype {\n", Depth);
-      }
-
-                                                          DebugPrint("datatype_type Type =", Depth+2);
-                DebugPrint(S.Type, 1);
-                DebugPrint(";\n");
-
-
-
-                                    // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (union (anonymous))", Depth+2);
-
-
-
-
-      if (Depth == 0)
-      {
-        DebugPrint("}\n", Depth);
-      }
-    }
-
-    bonsai_function void DebugPrint( datatype *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( d_union_member S, u32 Depth)
     {
@@ -3764,7 +3734,7 @@
     bonsai_function void DebugPrint( d_union_member *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( type_def S, u32 Depth)
     {
@@ -3802,7 +3772,7 @@
     bonsai_function void DebugPrint( type_def *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( meta_func_arg S, u32 Depth)
     {
@@ -3834,7 +3804,7 @@
     bonsai_function void DebugPrint( meta_func_arg *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( d_union_decl S, u32 Depth)
     {
@@ -3878,7 +3848,7 @@
     bonsai_function void DebugPrint( d_union_decl *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( macro_def S, u32 Depth)
     {
@@ -3934,7 +3904,7 @@
     bonsai_function void DebugPrint( macro_def *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( meta_func S, u32 Depth)
     {
@@ -3972,7 +3942,7 @@
     bonsai_function void DebugPrint( meta_func *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( todo S, u32 Depth)
     {
@@ -4010,7 +3980,7 @@
     bonsai_function void DebugPrint( todo *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( tag S, u32 Depth)
     {
@@ -4042,7 +4012,7 @@
     bonsai_function void DebugPrint( tag *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( person S, u32 Depth)
     {
@@ -4074,7 +4044,7 @@
     bonsai_function void DebugPrint( person *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_expression S, u32 Depth)
     {
@@ -4106,7 +4076,7 @@
     bonsai_function void DebugPrint( ast_node_expression *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_statement S, u32 Depth)
     {
@@ -4144,7 +4114,7 @@
     bonsai_function void DebugPrint( ast_node_statement *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_function_call S, u32 Depth)
     {
@@ -4182,7 +4152,7 @@
     bonsai_function void DebugPrint( ast_node_function_call *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_type_specifier S, u32 Depth)
     {
@@ -4226,7 +4196,7 @@
     bonsai_function void DebugPrint( ast_node_type_specifier *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_variable_def S, u32 Depth)
     {
@@ -4264,7 +4234,7 @@
     bonsai_function void DebugPrint( ast_node_variable_def *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_access S, u32 Depth)
     {
@@ -4296,7 +4266,7 @@
     bonsai_function void DebugPrint( ast_node_access *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_parenthesized S, u32 Depth)
     {
@@ -4334,7 +4304,7 @@
     bonsai_function void DebugPrint( ast_node_parenthesized *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_initializer_list S, u32 Depth)
     {
@@ -4360,7 +4330,7 @@
     bonsai_function void DebugPrint( ast_node_initializer_list *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_operator S, u32 Depth)
     {
@@ -4392,7 +4362,7 @@
     bonsai_function void DebugPrint( ast_node_operator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_literal S, u32 Depth)
     {
@@ -4418,7 +4388,7 @@
     bonsai_function void DebugPrint( ast_node_literal *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_symbol S, u32 Depth)
     {
@@ -4444,7 +4414,7 @@
     bonsai_function void DebugPrint( ast_node_symbol *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_return S, u32 Depth)
     {
@@ -4470,7 +4440,7 @@
     bonsai_function void DebugPrint( ast_node_return *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_predicated S, u32 Depth)
     {
@@ -4502,7 +4472,7 @@
     bonsai_function void DebugPrint( ast_node_predicated *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( arguments S, u32 Depth)
     {
@@ -4546,7 +4516,7 @@
     bonsai_function void DebugPrint( arguments *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( program_datatypes S, u32 Depth)
     {
@@ -4608,7 +4578,7 @@
     bonsai_function void DebugPrint( program_datatypes *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( for_enum_constraints S, u32 Depth)
     {
@@ -4640,7 +4610,7 @@
     bonsai_function void DebugPrint( for_enum_constraints *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( body_text_constraints S, u32 Depth)
     {
@@ -4684,7 +4654,7 @@
     bonsai_function void DebugPrint( body_text_constraints *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( todo_list_info S, u32 Depth)
     {
@@ -4716,7 +4686,7 @@
     bonsai_function void DebugPrint( todo_list_info *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( string_from_parser S, u32 Depth)
     {
@@ -4748,7 +4718,7 @@
     bonsai_function void DebugPrint( string_from_parser *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( parse_context S, u32 Depth)
     {
@@ -4804,7 +4774,7 @@
     bonsai_function void DebugPrint( parse_context *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( comma_separated_decl S, u32 Depth)
     {
@@ -4848,7 +4818,7 @@
     bonsai_function void DebugPrint( comma_separated_decl *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( d_list S, u32 Depth)
     {
@@ -4880,7 +4850,7 @@
     bonsai_function void DebugPrint( d_list *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( counted_string_cursor S, u32 Depth)
     {
@@ -4918,7 +4888,7 @@
     bonsai_function void DebugPrint( counted_string_cursor *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( counted_string_stream_chunk S, u32 Depth)
     {
@@ -4950,7 +4920,7 @@
     bonsai_function void DebugPrint( counted_string_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( counted_string_stream S, u32 Depth)
     {
@@ -4982,7 +4952,7 @@
     bonsai_function void DebugPrint( counted_string_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( counted_string_iterator S, u32 Depth)
     {
@@ -5014,7 +4984,7 @@
     bonsai_function void DebugPrint( counted_string_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( tagged_counted_string_stream_stream_chunk S, u32 Depth)
     {
@@ -5046,7 +5016,7 @@
     bonsai_function void DebugPrint( tagged_counted_string_stream_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( tagged_counted_string_stream_stream S, u32 Depth)
     {
@@ -5078,7 +5048,7 @@
     bonsai_function void DebugPrint( tagged_counted_string_stream_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( tagged_counted_string_stream_iterator S, u32 Depth)
     {
@@ -5110,7 +5080,7 @@
     bonsai_function void DebugPrint( tagged_counted_string_stream_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( xml_tag_linked_list_node S, u32 Depth)
     {
@@ -5142,7 +5112,7 @@
     bonsai_function void DebugPrint( xml_tag_linked_list_node *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( xml_tag_hashtable S, u32 Depth)
     {
@@ -5174,7 +5144,7 @@
     bonsai_function void DebugPrint( xml_tag_hashtable *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( counted_string_buffer S, u32 Depth)
     {
@@ -5206,7 +5176,7 @@
     bonsai_function void DebugPrint( counted_string_buffer *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( counted_string_linked_list_node S, u32 Depth)
     {
@@ -5238,7 +5208,7 @@
     bonsai_function void DebugPrint( counted_string_linked_list_node *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( counted_string_hashtable S, u32 Depth)
     {
@@ -5270,7 +5240,7 @@
     bonsai_function void DebugPrint( counted_string_hashtable *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( v3_cursor S, u32 Depth)
     {
@@ -5308,7 +5278,7 @@
     bonsai_function void DebugPrint( v3_cursor *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( c_token_buffer S, u32 Depth)
     {
@@ -5340,7 +5310,7 @@
     bonsai_function void DebugPrint( c_token_buffer *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( c_token_buffer_buffer S, u32 Depth)
     {
@@ -5372,7 +5342,7 @@
     bonsai_function void DebugPrint( c_token_buffer_buffer *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( c_token_buffer_stream_chunk S, u32 Depth)
     {
@@ -5404,7 +5374,7 @@
     bonsai_function void DebugPrint( c_token_buffer_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( c_token_buffer_stream S, u32 Depth)
     {
@@ -5436,7 +5406,7 @@
     bonsai_function void DebugPrint( c_token_buffer_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( c_token_buffer_iterator S, u32 Depth)
     {
@@ -5468,7 +5438,7 @@
     bonsai_function void DebugPrint( c_token_buffer_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( parser_cursor S, u32 Depth)
     {
@@ -5506,7 +5476,7 @@
     bonsai_function void DebugPrint( parser_cursor *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( parser_stream_chunk S, u32 Depth)
     {
@@ -5538,7 +5508,7 @@
     bonsai_function void DebugPrint( parser_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( parser_stream S, u32 Depth)
     {
@@ -5570,7 +5540,7 @@
     bonsai_function void DebugPrint( parser_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( parser_iterator S, u32 Depth)
     {
@@ -5602,7 +5572,7 @@
     bonsai_function void DebugPrint( parser_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( compound_decl_cursor S, u32 Depth)
     {
@@ -5640,7 +5610,7 @@
     bonsai_function void DebugPrint( compound_decl_cursor *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( compound_decl_stream_chunk S, u32 Depth)
     {
@@ -5672,7 +5642,7 @@
     bonsai_function void DebugPrint( compound_decl_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( compound_decl_stream S, u32 Depth)
     {
@@ -5704,7 +5674,7 @@
     bonsai_function void DebugPrint( compound_decl_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( compound_decl_iterator S, u32 Depth)
     {
@@ -5736,7 +5706,7 @@
     bonsai_function void DebugPrint( compound_decl_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( variable_decl_stream_chunk S, u32 Depth)
     {
@@ -5768,7 +5738,7 @@
     bonsai_function void DebugPrint( variable_decl_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( variable_decl_stream S, u32 Depth)
     {
@@ -5800,7 +5770,7 @@
     bonsai_function void DebugPrint( variable_decl_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( variable_decl_iterator S, u32 Depth)
     {
@@ -5832,7 +5802,7 @@
     bonsai_function void DebugPrint( variable_decl_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( function_decl_stream_chunk S, u32 Depth)
     {
@@ -5864,7 +5834,7 @@
     bonsai_function void DebugPrint( function_decl_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( function_decl_stream S, u32 Depth)
     {
@@ -5896,7 +5866,7 @@
     bonsai_function void DebugPrint( function_decl_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( function_decl_iterator S, u32 Depth)
     {
@@ -5928,7 +5898,7 @@
     bonsai_function void DebugPrint( function_decl_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( enum_member_stream_chunk S, u32 Depth)
     {
@@ -5960,7 +5930,7 @@
     bonsai_function void DebugPrint( enum_member_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( enum_member_stream S, u32 Depth)
     {
@@ -5992,7 +5962,7 @@
     bonsai_function void DebugPrint( enum_member_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( enum_member_iterator S, u32 Depth)
     {
@@ -6024,7 +5994,7 @@
     bonsai_function void DebugPrint( enum_member_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( enum_decl_cursor S, u32 Depth)
     {
@@ -6062,7 +6032,7 @@
     bonsai_function void DebugPrint( enum_decl_cursor *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( enum_decl_stream_chunk S, u32 Depth)
     {
@@ -6094,7 +6064,7 @@
     bonsai_function void DebugPrint( enum_decl_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( enum_decl_stream S, u32 Depth)
     {
@@ -6126,7 +6096,7 @@
     bonsai_function void DebugPrint( enum_decl_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( enum_decl_iterator S, u32 Depth)
     {
@@ -6158,37 +6128,7 @@
     bonsai_function void DebugPrint( enum_decl_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
-    }
-    bonsai_function void DebugPrint( declaration S, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("declaration {\n", Depth);
-      }
-
-                                                          DebugPrint("declaration_type Type =", Depth+2);
-                DebugPrint(S.Type, 1);
-                DebugPrint(";\n");
-
-
-
-                                    // NOTE(Jesse): there was an anonymous struct or union here
-              DebugPrint("anonymous type : (union (anonymous))", Depth+2);
-
-
-
-
-      if (Depth == 0)
-      {
-        DebugPrint("}\n", Depth);
-      }
-    }
-
-    bonsai_function void DebugPrint( declaration *S, u32 Depth)
-    {
-      if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( declaration_cursor S, u32 Depth)
     {
@@ -6226,7 +6166,7 @@
     bonsai_function void DebugPrint( declaration_cursor *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( declaration_stream_chunk S, u32 Depth)
     {
@@ -6258,7 +6198,7 @@
     bonsai_function void DebugPrint( declaration_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( datatype_linked_list_node S, u32 Depth)
     {
@@ -6290,7 +6230,7 @@
     bonsai_function void DebugPrint( datatype_linked_list_node *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( datatype_hashtable S, u32 Depth)
     {
@@ -6322,7 +6262,7 @@
     bonsai_function void DebugPrint( datatype_hashtable *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( d_union_member_stream_chunk S, u32 Depth)
     {
@@ -6354,7 +6294,7 @@
     bonsai_function void DebugPrint( d_union_member_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( d_union_member_stream S, u32 Depth)
     {
@@ -6386,7 +6326,7 @@
     bonsai_function void DebugPrint( d_union_member_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( d_union_member_iterator S, u32 Depth)
     {
@@ -6418,7 +6358,7 @@
     bonsai_function void DebugPrint( d_union_member_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( type_def_stream_chunk S, u32 Depth)
     {
@@ -6450,7 +6390,7 @@
     bonsai_function void DebugPrint( type_def_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( type_def_stream S, u32 Depth)
     {
@@ -6482,7 +6422,7 @@
     bonsai_function void DebugPrint( type_def_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( type_def_iterator S, u32 Depth)
     {
@@ -6514,7 +6454,7 @@
     bonsai_function void DebugPrint( type_def_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( meta_func_arg_stream_chunk S, u32 Depth)
     {
@@ -6546,7 +6486,7 @@
     bonsai_function void DebugPrint( meta_func_arg_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( meta_func_arg_stream S, u32 Depth)
     {
@@ -6578,7 +6518,7 @@
     bonsai_function void DebugPrint( meta_func_arg_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( meta_func_arg_iterator S, u32 Depth)
     {
@@ -6610,7 +6550,7 @@
     bonsai_function void DebugPrint( meta_func_arg_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( macro_def_stream_chunk S, u32 Depth)
     {
@@ -6642,7 +6582,7 @@
     bonsai_function void DebugPrint( macro_def_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( macro_def_stream S, u32 Depth)
     {
@@ -6674,7 +6614,7 @@
     bonsai_function void DebugPrint( macro_def_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( macro_def_iterator S, u32 Depth)
     {
@@ -6706,7 +6646,7 @@
     bonsai_function void DebugPrint( macro_def_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( macro_def_linked_list_node S, u32 Depth)
     {
@@ -6738,7 +6678,7 @@
     bonsai_function void DebugPrint( macro_def_linked_list_node *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( macro_def_hashtable S, u32 Depth)
     {
@@ -6770,7 +6710,7 @@
     bonsai_function void DebugPrint( macro_def_hashtable *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( meta_func_stream_chunk S, u32 Depth)
     {
@@ -6802,7 +6742,7 @@
     bonsai_function void DebugPrint( meta_func_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( meta_func_stream S, u32 Depth)
     {
@@ -6834,7 +6774,7 @@
     bonsai_function void DebugPrint( meta_func_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( meta_func_iterator S, u32 Depth)
     {
@@ -6866,7 +6806,7 @@
     bonsai_function void DebugPrint( meta_func_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( todo_stream_chunk S, u32 Depth)
     {
@@ -6898,7 +6838,7 @@
     bonsai_function void DebugPrint( todo_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( todo_stream S, u32 Depth)
     {
@@ -6930,7 +6870,7 @@
     bonsai_function void DebugPrint( todo_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( todo_iterator S, u32 Depth)
     {
@@ -6962,7 +6902,7 @@
     bonsai_function void DebugPrint( todo_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( tag_stream_chunk S, u32 Depth)
     {
@@ -6994,7 +6934,7 @@
     bonsai_function void DebugPrint( tag_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( tag_stream S, u32 Depth)
     {
@@ -7026,7 +6966,7 @@
     bonsai_function void DebugPrint( tag_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( tag_iterator S, u32 Depth)
     {
@@ -7058,7 +6998,7 @@
     bonsai_function void DebugPrint( tag_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( person_stream_chunk S, u32 Depth)
     {
@@ -7090,7 +7030,7 @@
     bonsai_function void DebugPrint( person_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( person_stream S, u32 Depth)
     {
@@ -7122,7 +7062,7 @@
     bonsai_function void DebugPrint( person_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( person_iterator S, u32 Depth)
     {
@@ -7154,7 +7094,7 @@
     bonsai_function void DebugPrint( person_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_expression_stream_chunk S, u32 Depth)
     {
@@ -7186,7 +7126,7 @@
     bonsai_function void DebugPrint( ast_node_expression_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_expression_stream S, u32 Depth)
     {
@@ -7218,7 +7158,7 @@
     bonsai_function void DebugPrint( ast_node_expression_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_expression_iterator S, u32 Depth)
     {
@@ -7250,7 +7190,7 @@
     bonsai_function void DebugPrint( ast_node_expression_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_variable_def_stream_chunk S, u32 Depth)
     {
@@ -7282,7 +7222,7 @@
     bonsai_function void DebugPrint( ast_node_variable_def_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_variable_def_stream S, u32 Depth)
     {
@@ -7314,7 +7254,7 @@
     bonsai_function void DebugPrint( ast_node_variable_def_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_variable_def_iterator S, u32 Depth)
     {
@@ -7346,7 +7286,7 @@
     bonsai_function void DebugPrint( ast_node_variable_def_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_stream_chunk S, u32 Depth)
     {
@@ -7378,7 +7318,7 @@
     bonsai_function void DebugPrint( ast_node_stream_chunk *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_stream S, u32 Depth)
     {
@@ -7410,7 +7350,7 @@
     bonsai_function void DebugPrint( ast_node_stream *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( ast_node_iterator S, u32 Depth)
     {
@@ -7442,7 +7382,7 @@
     bonsai_function void DebugPrint( ast_node_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( declaration_iterator S, u32 Depth)
     {
@@ -7474,7 +7414,7 @@
     bonsai_function void DebugPrint( declaration_iterator *S, u32 Depth)
     {
       if (S) { DebugPrint(*S, Depth); }
-      else { DebugPrint("ptr(0)", Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
     }
     bonsai_function void DebugPrint( log_level EnumValue, u32 Depth)
     {

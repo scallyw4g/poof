@@ -10641,15 +10641,15 @@ DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
 
           {
             auto Tmp = PrintTypeSpec(&VDecl->Type, TranArena);
-            DebugLine("Getting Datatype for (%S %S)", Tmp, VDecl->Name);
-            DebugPrint(VDecl->Type);
+            /* DebugLine("Getting Datatype for (%S %S)", Tmp, VDecl->Name); */
+            /* DebugPrint(VDecl->Type); */
             /* DebugLine("Getting Datatype for %S", VDecl->Name); */
           }
 
           datatype DT = ResolveToBaseType(Ctx, VDecl->Type);
           Assert(DatatypeIsVariableDecl(&DT) == False);
 
-          DebugLine("Got %S", ToString(DT.Type));
+          /* DebugLine("Got %S", ToString(DT.Type)); */
           if (DT.Type)
           {
             Result = DatatypeIsCompoundDecl(Ctx, Scope, &DT, MetaOperatorT);
@@ -11949,6 +11949,7 @@ PrintHashtable(datatype_hashtable *Table)
     while (Bucket)
     {
       DebugPrint(Bucket->Element);
+      DebugLine("--------------------------------------------------------------------------------------------------------------------------");
       Bucket = Bucket->Next;
     }
   }
@@ -12110,7 +12111,7 @@ main(s32 ArgCount_, const char** ArgStrings)
 
   TryDeleteDirectory(TMP_DIR_ROOT);
 
-  DebugPrint(Ctx);
+  /* DebugPrint(Ctx); */
 
   s32 Result = !Success; // ? SUCCESS_EXIT_CODE : FAILURE_EXIT_CODE ;
   return Result;
