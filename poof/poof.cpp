@@ -10797,7 +10797,7 @@ ResolveToBaseType(parse_context *Ctx, datatype *Data)
 
 // TODO(Jesse id: 222, tags: immediate, parsing, metaprogramming) : Re-add [[nodiscard]] here
 bonsai_function counted_string
-Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx, memory_arena* Memory)
+Execute(parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx, memory_arena* Memory)
 {
   TIMED_FUNCTION();
 
@@ -10816,7 +10816,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
       TempStr = StripQuotes(TempStr);
 
       parser *StringParse = ParserForAnsiStream(Ctx, AnsiStream(TempStr), TokenCursorSource_MetaprogrammingExpansion);
-      counted_string Code = Execute(FuncName, *StringParse, ReplacePatterns, Ctx, Memory);
+      counted_string Code = Execute(*StringParse, ReplacePatterns, Ctx, Memory);
 
       Append(&OutputBuilder, CSz("\""));
       Append(&OutputBuilder, EscapeDoubleQuotes(Code, OutputBuilder.Memory));
@@ -10842,9 +10842,9 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
           {
             case meta_arg_operator_noop:
             {
-              ParseError( &Scope,
-                          FormatCountedString(TranArena, CSz("Unknown meta operator (%S)"), MetaOperatorToken->Value),
-                          MetaOperatorToken);
+              PoofTypeError( &Scope,
+                             FormatCountedString(TranArena, CSz("Unknown meta operator (%S)"), MetaOperatorToken->Value),
+                             MetaOperatorToken);
             } break;
 
             case is_defined:
@@ -10884,14 +10884,14 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
               if (DoTrueBranch)
               {
-                counted_string Code = Execute(FuncName, TrueScope, ReplacePatterns, Ctx, Memory);
+                counted_string Code = Execute(TrueScope, ReplacePatterns, Ctx, Memory);
                 Append(&OutputBuilder, Code);
               }
               else
               {
                 if (FalseScope.Tokens)
                 {
-                  counted_string Code = Execute(FuncName, FalseScope, ReplacePatterns, Ctx, Memory);
+                  counted_string Code = Execute(FalseScope, ReplacePatterns, Ctx, Memory);
                   Append(&OutputBuilder, Code);
                 }
               }
@@ -10922,7 +10922,6 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
 
               DoTrueFalse( Ctx, &Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
             } break;
-
 
             case is_enum:
             {
@@ -11087,7 +11086,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                         meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
                         Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)), Memory);
                         Rewind(MapMemberScope.Tokens);
-                        counted_string StructFieldOutput = Execute(FuncName, MapMemberScope, &NewArgs, Ctx, Memory);
+                        counted_string StructFieldOutput = Execute(MapMemberScope, &NewArgs, Ctx, Memory);
                         Append(&OutputBuilder, StructFieldOutput);
                       }
 
@@ -11098,7 +11097,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                       meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
                       Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)), Memory);
                       Rewind(MapMemberScope.Tokens);
-                      counted_string StructFieldOutput = Execute(FuncName, MapMemberScope, &NewArgs, Ctx, Memory);
+                      counted_string StructFieldOutput = Execute(MapMemberScope, &NewArgs, Ctx, Memory);
                       Append(&OutputBuilder, StructFieldOutput);
                     } break;
                   }
@@ -11135,7 +11134,7 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
                     meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
                     Push(&NewArgs, ReplacementPattern(EnumValueMatch->Value, Datatype(EnumMember)), Memory);
                     Rewind(NextScope.Tokens);
-                    counted_string EnumFieldOutput = Execute(FuncName, NextScope, &NewArgs, Ctx, Memory);
+                    counted_string EnumFieldOutput = Execute(NextScope, &NewArgs, Ctx, Memory);
                     Append(&OutputBuilder, EnumFieldOutput);
                     continue;
                   }
@@ -11172,17 +11171,10 @@ Execute(counted_string FuncName, parser Scope, meta_func_arg_stream* ReplacePatt
           RequireToken(&Scope, CTokenType_CloseParen);
           RequireToken(&Scope, CTokenType_CloseParen);
 
-          if (!StringsMatch(NestedFunc->Name, FuncName))
-          {
-            meta_func_arg_stream NewArgs = {};
-            Push(&NewArgs, ReplacementPattern(NestedFunc->ArgName, Arg->Data), Memory);
-            counted_string NestedCode = Execute(NestedFunc, &NewArgs, Ctx, Memory);
-            Append(&OutputBuilder, NestedCode);
-          }
-          else
-          {
-            Error("Recursive bonsai_function calls not supported.");
-          }
+          meta_func_arg_stream NewArgs = {};
+          Push(&NewArgs, ReplacementPattern(NestedFunc->ArgName, Arg->Data), Memory);
+          counted_string NestedCode = Execute(NestedFunc, &NewArgs, Ctx, Memory);
+          Append(&OutputBuilder, NestedCode);
         }
         else
         {
@@ -11228,14 +11220,14 @@ DoTrueFalse( parse_context *Ctx,
 
   if (DoTrueBranch)
   {
-    counted_string Code = Execute(CSz(""), TrueScope, ReplacePatterns, Ctx, Memory);
+    counted_string Code = Execute(TrueScope, ReplacePatterns, Ctx, Memory);
     Append(OutputBuilder, Code);
   }
   else
   {
     if (FalseScope.Tokens)
     {
-      counted_string Code = Execute(CSz(""), FalseScope, ReplacePatterns, Ctx, Memory);
+      counted_string Code = Execute(FalseScope, ReplacePatterns, Ctx, Memory);
       Append(OutputBuilder, Code);
     }
   }
@@ -11246,7 +11238,7 @@ Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_
 {
   Assert(Func->Body.Tokens->At == Func->Body.Tokens->Start);
 
-  counted_string Result = Execute(Func->Name, Func->Body, Args, Ctx, Memory);
+  counted_string Result = Execute(Func->Body, Args, Ctx, Memory);
 
   Assert(Func->Body.Tokens->At == Func->Body.Tokens->End);
   Rewind(Func->Body.Tokens);
