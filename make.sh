@@ -21,15 +21,15 @@ BUILD_EVERYTHING=0
 
 RunPreemptivePoof=1
 
-RunPoof=1
+# RunPoof=1
 BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
 
-RunParserTests=1
-BuildParserTests=1
+# RunParserTests=1
+# BuildParserTests=1
 # TEST_DEBUGGER="gdb --args"
 
-BuildAndRunAllExamples=1
+# BuildAndRunAllExamples=1
 
 RunIntegrationTests=1
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
@@ -77,6 +77,12 @@ function RunPoof {
     git checkout poof/generated/generate_cursor_c_token.h
     git checkout poof/generated/for_all_datatypes_debug_print_functions.h
     git checkout poof/generated/for_all_datatypes_debug_print_prototypes.h
+    git checkout poof/generated/debug_print_ast_node.h
+    git checkout poof/generated/debug_print_datatype.h
+    git checkout poof/generated/debug_print_declaration.h
+    git checkout poof/generated/debug_print_prototype_datatype.h
+    git checkout poof/generated/debug_print_prototype_declaration.h
+
   fi
 
   : "${POOF_EXECUTABLE:=./bin/poof}"

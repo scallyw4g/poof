@@ -11,7 +11,7 @@ struct foo_struct_0
   undefined_type _und0;
 };
 
-#if 0
+#if 1
 meta(
   func (foo_struct_0 TFooStruct)
   {
