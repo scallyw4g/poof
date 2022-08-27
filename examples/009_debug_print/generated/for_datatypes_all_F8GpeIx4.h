@@ -82,7 +82,7 @@
         DebugPrint_str(" }");
       }
 
-      // Print an enum value as a string
+      // Print an enum value as a string.  In real code this would be a thunk to ToString(enum)
       void DebugPrint_my_discriminated_union_type( enum my_discriminated_union_type EnumValue)
       {
         switch (EnumValue)
