@@ -4,7 +4,7 @@ Features may change or be removed without warning.  Features documented in the
 examples folder are sorted in (roughly) descending order from most-stable to
 least-stable.
 
-If you to take `poof` for a test-drive I'd love to hear about it :)
+If you to take `poof` for a test-drive I'd love to hear about it!
 
 
 # About
@@ -114,8 +114,9 @@ issue if you're interested in OSX support.
 `poof` is currently undergoing a hardening phase before a 0.1.0-alpha release.
 
 At the time of this writing, the tool relies on itself to generate ~3.5k LoC
-and makes use of every documented feature.  [Bonsai](https://github.com/jjbandit/bonsai)
-relies on `poof` to generate ~15k LoC.
+(14k if you count debug printing code) and makes use of every documented
+feature.  [Bonsai](https://github.com/jjbandit/bonsai) relies on `poof` to
+generate ~15k LoC (>30k including DebugPrint).
 
 At the moment, error messages are sometimes misleading or missing.  Generally,
 UX is reasonable in some places, and highly questionable in others.
