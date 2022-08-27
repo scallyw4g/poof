@@ -14,6 +14,7 @@
           if (StringsMatch(S, CSz("is_union"))) { return is_union; }
           if (StringsMatch(S, CSz("is_defined"))) { return is_defined; }
           if (StringsMatch(S, CSz("is_compound"))) { return is_compound; }
+          if (StringsMatch(S, CSz("is_primitive"))) { return is_primitive; }
 
 
       return Result;

@@ -10672,7 +10672,6 @@ DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
   return Result;
 }
 
-
 // This resolves typedefs and tells us if we've got a primitive type, complex type, or undefined type
 //
 link_internal datatype
@@ -10898,6 +10897,14 @@ Execute(parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx,
                 }
               }
 
+            } break;
+
+            case is_primitive:
+            {
+              RequireToken(&Scope, CTokenType_Question);
+              datatype Dt = ResolveToBaseType(Ctx, &Replace->Data);
+              b32 DoTrueBranch = (Dt.Type == type_primitive_def);
+              DoTrueFalse(Ctx, &Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
             } break;
 
             case is_compound:
@@ -11949,11 +11956,18 @@ PrintHashtable(datatype_hashtable *Table)
     while (Bucket)
     {
       DebugPrint(Bucket->Element);
-      DebugLine("--------------------------------------------------------------------------------------------------------------------------");
+      DebugLine("bucket(%u) --------------------------------------------------------------------------------------------------------------------------", BucketIndex);
       Bucket = Bucket->Next;
     }
   }
 }
+
+/* struct whatever___ */
+/* { */
+/*   int foo; */
+/*   f32 bar; */
+/*   umm baz; */
+/* }; */
 
 s32
 main(s32 ArgCount_, const char** ArgStrings)

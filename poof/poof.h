@@ -33,6 +33,7 @@ enum meta_arg_operator
   is_union,
   is_defined,
   is_compound,
+  is_primitive,
 };
 meta( generate_value_table(meta_arg_operator) )
 #include <poof/generated/generate_value_table_meta_arg_operator.h>

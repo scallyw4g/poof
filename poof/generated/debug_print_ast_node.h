@@ -65,7 +65,7 @@
 
 
 
-        InvalidDefaultCase;
+        default : { DebugPrint("default while printing (UnionMember.type) (UnionMember.name)"); } break;
       }
     }
 

@@ -7785,6 +7785,10 @@
             {
               DebugPrint("is_compound ", Depth);
             } break;
+            case is_primitive:
+            {
+              DebugPrint("is_primitive ", Depth);
+            } break;
 
       }
     }
