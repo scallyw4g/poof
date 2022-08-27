@@ -3,9 +3,4 @@ tags
 
 breakpoints
 
-examples/002_named_function_syntax/main
-examples/003_anonymous_function_syntax/main
-examples/004_enum_iteration/main
-examples/005_struct_iteration/main
-examples/006_discriminated_unions/main
-examples/007_type_constraints/main
+examples/*/main
