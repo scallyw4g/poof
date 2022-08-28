@@ -28,7 +28,7 @@
 
                _embedded3 not primitive
 
-              counted_string S1 not primitive
+              counted_string S1 is primitive
 
 
 

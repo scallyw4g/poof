@@ -10653,16 +10653,6 @@ DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
         {
           Result = SafeAccess(compound_decl, Decl);
 
-#if 1
-          // NOTE(Jesse): Pretty sure this should work but it doesn't.. curious, very curious
-          //
-          // TODO(Jesse): Let users define arbitrary types as 'primitive'
-          if (Result->Type && StringsMatch(CSz("counted_string"), Result->Type->Value))
-          {
-            Result = 0;
-          }
-#endif
-
         } break;
 
         case type_variable_decl:
@@ -10770,6 +10760,11 @@ ResolveToBaseType(parse_context *Ctx, datatype *Data)
         } break;
 
         case type_compound_decl:
+        {
+          compound_decl *CDecl = SafeAccess(compound_decl, Decl);
+          Result = *Data;
+        } break;
+
         case type_function_decl:
         case type_enum_decl:
         {
@@ -10920,8 +10915,17 @@ Execute(parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx,
             case is_primitive:
             {
               RequireToken(&Scope, CTokenType_Question);
+
               datatype Dt = ResolveToBaseType(Ctx, &Replace->Data);
               b32 DoTrueBranch = (Dt.Type == type_primitive_def);
+
+              counted_string DTName = GetNameForDatatype(&Dt, TranArena);
+
+              // @counted_string_primitive_hack
+              if (StringsMatch(DTName, CSz("counted_string")))
+              {
+                DoTrueBranch = True;
+              }
               DoTrueFalse(Ctx, &Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
             } break;
 
@@ -10931,6 +10935,18 @@ Execute(parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx,
               compound_decl *CD = DatatypeIsCompoundDecl(Ctx, &Scope, &Replace->Data, MetaOperatorToken);
 
               b32 DoTrueBranch = (CD != 0);
+
+              // @counted_string_primitive_hack
+              if (CD)
+              {
+                datatype TmpDt = Datatype(CD);
+                counted_string DTName = GetNameForDatatype(&TmpDt, TranArena);
+                if (StringsMatch(DTName, CSz("counted_string")))
+                {
+                  DoTrueBranch = False;
+                }
+              }
+
               DoTrueFalse(Ctx, &Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
             } break;
 
