@@ -10494,7 +10494,7 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
     {
       // This is actually wrong.. shouldn't we print the _name_ of the enum the
       // member belongs to?
-      NotImplemented;
+      // NotImplemented;
       Result = Data->enum_member->Name;
     } break;
 
@@ -10624,7 +10624,12 @@ DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
 
     case type_type_def:
     {
+      // NOTE(Jesse): Pretty sure this path is roughly the following, but I didn't test it.
       NotImplemented;
+
+      type_def *TDef = SafeAccessPtr(type_def, Data);
+      datatype DT = ResolveToBaseType(Ctx, TDef->Type);
+      Result = DatatypeIsCompoundDecl(Ctx, Scope, &DT, MetaOperatorT);
     } break;
 
     case type_declaration:
@@ -10647,40 +10652,29 @@ DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
         case type_compound_decl:
         {
           Result = SafeAccess(compound_decl, Decl);
+
+#if 0
+          // NOTE(Jesse): Pretty sure this should work but it doesn't.. curious, very curious
+          //
+          // TODO(Jesse): Let users define arbitrary types as 'primitive'
+          if (Result->Type && StringsMatch(CSz("counted_string"), Result->Type->Value))
+          {
+            Result = 0;
+          }
+#endif
+
         } break;
 
         case type_variable_decl:
         {
           variable_decl *VDecl = SafeAccess(variable_decl, Decl);
-
-          {
-            auto Tmp = PrintTypeSpec(&VDecl->Type, TranArena);
-            /* DebugLine("Getting Datatype for (%S %S)", Tmp, VDecl->Name); */
-            /* DebugPrint(VDecl->Type); */
-            /* DebugLine("Getting Datatype for %S", VDecl->Name); */
-          }
-
           datatype DT = ResolveToBaseType(Ctx, VDecl->Type);
           Assert(DatatypeIsVariableDecl(&DT) == False);
-
-          /* DebugLine("Got %S", ToString(DT.Type)); */
-          if (DT.Type)
-          {
-            Result = DatatypeIsCompoundDecl(Ctx, Scope, &DT, MetaOperatorT);
-          }
+          Result = DatatypeIsCompoundDecl(Ctx, Scope, &DT, MetaOperatorT);
         } break;
       }
 
     } break;
-
-#if 0
-    InvalidDefaultError(Scope,
-        FormatCountedString( TranArena,
-                             CSz("%S called on invalid type (%S) with name (%S)"),
-                             MetaOperatorT->Value, ToString(Data->Type), GetNameForDatatype(Data, TranArena) ),
-        MetaOperatorT);
-#endif
-
   }
 
   return Result;
@@ -11978,7 +11972,7 @@ PrintHashtable(datatype_hashtable *Table)
     auto Bucket = Table->Elements[BucketIndex];
     while (Bucket)
     {
-      /* DebugPrint(Bucket->Element); */
+      DebugPrint(Bucket->Element);
       /* DebugLine("bucket(%u) --------------------------------------------------------------------------------------------------------------------------", BucketIndex); */
       Bucket = Bucket->Next;
     }
