@@ -28,5 +28,7 @@
 
                _embedded3 is compound
 
+              counted_string S1 not compound
+
 
 

@@ -10653,7 +10653,7 @@ DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
         {
           Result = SafeAccess(compound_decl, Decl);
 
-#if 0
+#if 1
           // NOTE(Jesse): Pretty sure this should work but it doesn't.. curious, very curious
           //
           // TODO(Jesse): Let users define arbitrary types as 'primitive'
@@ -10717,18 +10717,15 @@ ResolveToBaseType(parse_context *Ctx, type_spec TypeSpec)
 
   if ( TypeSpec.BaseType )
   {
-    /* Info("~~~~~~~~~~~~~~~~~~~~~~~~~~~"); */
+    Assert(TypeSpec.BaseType->Type == type_declaration);
     Result = *TypeSpec.BaseType;
   }
   else if ( TypeSpec.DatatypeToken &&
-       TypeSpec.DatatypeToken->Type == CTokenType_Identifier )
+            TypeSpec.DatatypeToken->Type == CTokenType_Identifier )
   {
     Result = GetDatatypeByName(Ctx, TypeSpec.DatatypeToken->Value);
     if (Result.Type == type_type_def)
     {
-      /* DebugLine("------------------------"); */
-      /* DebugPrint(Result); */
-      /* DebugLine("------------------------"); */
       Result = ResolveTypedefToBaseType(Ctx, &Result);
     }
   }
@@ -10749,10 +10746,14 @@ ResolveToBaseType(parse_context *Ctx, datatype *Data)
     case type_datatype_noop: { InvalidCodePath(); } break;
 
     case type_type_def:
-    case type_primitive_def:
     case type_enum_member:
     {
       NotImplemented;
+    } break;
+
+    case type_primitive_def:
+    {
+      Result = *Data;
     } break;
 
     case type_declaration:

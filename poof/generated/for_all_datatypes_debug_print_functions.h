@@ -5,81 +5,81 @@
         DebugPrint("terminal_colors {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Red {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Red, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Red =", Depth+2);
+              DebugPrint(RuntimeStruct.Red, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string BrightRed {\n", Depth+2);
-              DebugPrint(RuntimeStruct.BrightRed, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string BrightRed =", Depth+2);
+              DebugPrint(RuntimeStruct.BrightRed, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string DarkRed {\n", Depth+2);
-              DebugPrint(RuntimeStruct.DarkRed, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string DarkRed =", Depth+2);
+              DebugPrint(RuntimeStruct.DarkRed, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string Blue {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Blue, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Blue =", Depth+2);
+              DebugPrint(RuntimeStruct.Blue, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string BrightBlue {\n", Depth+2);
-              DebugPrint(RuntimeStruct.BrightBlue, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string BrightBlue =", Depth+2);
+              DebugPrint(RuntimeStruct.BrightBlue, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string Purple {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Purple, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Purple =", Depth+2);
+              DebugPrint(RuntimeStruct.Purple, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string BrightPurple {\n", Depth+2);
-              DebugPrint(RuntimeStruct.BrightPurple, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string BrightPurple =", Depth+2);
+              DebugPrint(RuntimeStruct.BrightPurple, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string Green {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Green, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Green =", Depth+2);
+              DebugPrint(RuntimeStruct.Green, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string BrightGreen {\n", Depth+2);
-              DebugPrint(RuntimeStruct.BrightGreen, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string BrightGreen =", Depth+2);
+              DebugPrint(RuntimeStruct.BrightGreen, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string Yellow {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Yellow, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Yellow =", Depth+2);
+              DebugPrint(RuntimeStruct.Yellow, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string BrightYellow {\n", Depth+2);
-              DebugPrint(RuntimeStruct.BrightYellow, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string BrightYellow =", Depth+2);
+              DebugPrint(RuntimeStruct.BrightYellow, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string White {\n", Depth+2);
-              DebugPrint(RuntimeStruct.White, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string White =", Depth+2);
+              DebugPrint(RuntimeStruct.White, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string Grey {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Grey, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Grey =", Depth+2);
+              DebugPrint(RuntimeStruct.Grey, 1);
+              DebugPrint(";\n");
 
 
 
@@ -106,9 +106,9 @@
                         // NOTE(Jesse): found no definition for this type.. probably from stdlib
           DebugPrint("undefined(FILE Handle)\n", Depth+2);
 
-                                            DebugPrint("counted_string Path {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Path, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Path =", Depth+2);
+              DebugPrint(RuntimeStruct.Path, 1);
+              DebugPrint(";\n");
 
 
 
@@ -1088,9 +1088,9 @@
         DebugPrint("tagged_counted_string_stream {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Tag {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Tag, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Tag =", Depth+2);
+              DebugPrint(RuntimeStruct.Tag, 1);
+              DebugPrint(";\n");
 
 
 
@@ -1388,9 +1388,9 @@
 
 
 
-                                            DebugPrint("counted_string Filename {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Filename, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Filename =", Depth+2);
+              DebugPrint(RuntimeStruct.Filename, 1);
+              DebugPrint(";\n");
 
 
 
@@ -1723,15 +1723,15 @@
         DebugPrint("xml_property {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Name {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Name, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Name =", Depth+2);
+              DebugPrint(RuntimeStruct.Name, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string Value {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Value, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Value =", Depth+2);
+              DebugPrint(RuntimeStruct.Value, 1);
+              DebugPrint(";\n");
 
 
 
@@ -1811,9 +1811,9 @@
 
 
 
-                                            DebugPrint("counted_string Value {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Value, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Value =", Depth+2);
+              DebugPrint(RuntimeStruct.Value, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3085,15 +3085,15 @@
 
 
 
-                                            DebugPrint("counted_string Value {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Value, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Value =", Depth+2);
+              DebugPrint(RuntimeStruct.Value, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string Filename {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Filename, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Filename =", Depth+2);
+              DebugPrint(RuntimeStruct.Filename, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3239,9 +3239,9 @@
 
 
 
-                                            DebugPrint("counted_string Filename {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Filename, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Filename =", Depth+2);
+              DebugPrint(RuntimeStruct.Filename, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3459,9 +3459,9 @@
 
 
 
-                                            DebugPrint("counted_string TemplateSource {\n", Depth+2);
-              DebugPrint(RuntimeStruct.TemplateSource, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string TemplateSource =", Depth+2);
+              DebugPrint(RuntimeStruct.TemplateSource, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3497,9 +3497,9 @@
 
 
 
-                                            DebugPrint("counted_string Name {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Name, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Name =", Depth+2);
+              DebugPrint(RuntimeStruct.Name, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3621,9 +3621,9 @@
         DebugPrint("enum_member {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Name {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Name, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Name =", Depth+2);
+              DebugPrint(RuntimeStruct.Name, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3653,9 +3653,9 @@
         DebugPrint("enum_decl {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Name {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Name, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Name =", Depth+2);
+              DebugPrint(RuntimeStruct.Name, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3711,15 +3711,15 @@
         DebugPrint("d_union_member {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Type {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Type, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Type =", Depth+2);
+              DebugPrint(RuntimeStruct.Type, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string Name {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Name, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Name =", Depth+2);
+              DebugPrint(RuntimeStruct.Name, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3755,9 +3755,9 @@
 
 
 
-                                            DebugPrint("counted_string Alias {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Alias, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Alias =", Depth+2);
+              DebugPrint(RuntimeStruct.Alias, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3787,9 +3787,9 @@
         DebugPrint("meta_func_arg {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Match {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Match, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Match =", Depth+2);
+              DebugPrint(RuntimeStruct.Match, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3819,9 +3819,9 @@
         DebugPrint("d_union_decl {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Name {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Name, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Name =", Depth+2);
+              DebugPrint(RuntimeStruct.Name, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3837,9 +3837,9 @@
 
 
 
-                                            DebugPrint("counted_string CustomEnumType {\n", Depth+2);
-              DebugPrint(RuntimeStruct.CustomEnumType, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string CustomEnumType =", Depth+2);
+              DebugPrint(RuntimeStruct.CustomEnumType, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3869,9 +3869,9 @@
 
 
 
-                                            DebugPrint("counted_string Name {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Name, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Name =", Depth+2);
+              DebugPrint(RuntimeStruct.Name, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3919,15 +3919,15 @@
         DebugPrint("meta_func {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Name {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Name, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Name =", Depth+2);
+              DebugPrint(RuntimeStruct.Name, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string ArgName {\n", Depth+2);
-              DebugPrint(RuntimeStruct.ArgName, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string ArgName =", Depth+2);
+              DebugPrint(RuntimeStruct.ArgName, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3957,15 +3957,15 @@
         DebugPrint("todo {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Id {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Id, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Id =", Depth+2);
+              DebugPrint(RuntimeStruct.Id, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string Value {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Value, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Value =", Depth+2);
+              DebugPrint(RuntimeStruct.Value, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3995,9 +3995,9 @@
         DebugPrint("tag {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Tag {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Tag, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Tag =", Depth+2);
+              DebugPrint(RuntimeStruct.Tag, 1);
+              DebugPrint(";\n");
 
 
 
@@ -4027,9 +4027,9 @@
         DebugPrint("person {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Name {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Name, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Name =", Depth+2);
+              DebugPrint(RuntimeStruct.Name, 1);
+              DebugPrint(";\n");
 
 
 
@@ -4129,9 +4129,9 @@
         DebugPrint("ast_node_function_call {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Name {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Name, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Name =", Depth+2);
+              DebugPrint(RuntimeStruct.Name, 1);
+              DebugPrint(";\n");
 
 
 
@@ -4487,9 +4487,9 @@
         DebugPrint("arguments {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Outpath {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Outpath, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Outpath =", Depth+2);
+              DebugPrint(RuntimeStruct.Outpath, 1);
+              DebugPrint(";\n");
 
 
 
@@ -4593,15 +4593,15 @@
         DebugPrint("for_enum_constraints {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string TypeName {\n", Depth+2);
-              DebugPrint(RuntimeStruct.TypeName, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string TypeName =", Depth+2);
+              DebugPrint(RuntimeStruct.TypeName, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string ValueName {\n", Depth+2);
-              DebugPrint(RuntimeStruct.ValueName, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string ValueName =", Depth+2);
+              DebugPrint(RuntimeStruct.ValueName, 1);
+              DebugPrint(";\n");
 
 
 
@@ -4625,27 +4625,27 @@
         DebugPrint("body_text_constraints {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string MemberContains {\n", Depth+2);
-              DebugPrint(RuntimeStruct.MemberContains, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string MemberContains =", Depth+2);
+              DebugPrint(RuntimeStruct.MemberContains, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string TypeTag {\n", Depth+2);
-              DebugPrint(RuntimeStruct.TypeTag, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string TypeTag =", Depth+2);
+              DebugPrint(RuntimeStruct.TypeTag, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string TypeName {\n", Depth+2);
-              DebugPrint(RuntimeStruct.TypeName, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string TypeName =", Depth+2);
+              DebugPrint(RuntimeStruct.TypeName, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string ValueName {\n", Depth+2);
-              DebugPrint(RuntimeStruct.ValueName, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string ValueName =", Depth+2);
+              DebugPrint(RuntimeStruct.ValueName, 1);
+              DebugPrint(";\n");
 
 
 
@@ -4865,21 +4865,21 @@
         DebugPrint("counted_string_cursor {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Start {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Start, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Start =", Depth+2);
+              DebugPrint(RuntimeStruct.Start, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string At {\n", Depth+2);
-              DebugPrint(RuntimeStruct.At, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string At =", Depth+2);
+              DebugPrint(RuntimeStruct.At, 1);
+              DebugPrint(";\n");
 
 
 
-                                            DebugPrint("counted_string End {\n", Depth+2);
-              DebugPrint(RuntimeStruct.End, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string End =", Depth+2);
+              DebugPrint(RuntimeStruct.End, 1);
+              DebugPrint(";\n");
 
 
 
@@ -4903,9 +4903,9 @@
         DebugPrint("counted_string_stream_chunk {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Element {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Element, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Element =", Depth+2);
+              DebugPrint(RuntimeStruct.Element, 1);
+              DebugPrint(";\n");
 
 
 
@@ -5159,9 +5159,9 @@
         DebugPrint("counted_string_buffer {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Start {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Start, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Start =", Depth+2);
+              DebugPrint(RuntimeStruct.Start, 1);
+              DebugPrint(";\n");
 
 
 
@@ -5191,9 +5191,9 @@
         DebugPrint("counted_string_linked_list_node {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string Element {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Element, Depth+4);
-              DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Element =", Depth+2);
+              DebugPrint(RuntimeStruct.Element, 1);
+              DebugPrint(";\n");
 
 
 

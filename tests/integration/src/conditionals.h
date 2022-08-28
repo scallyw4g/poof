@@ -36,6 +36,11 @@ struct foo_struct_0
   undefined_type _und0;
 };
 
+struct counted_string {
+  int count;
+  const char* data;
+};
+
 #if 1
 meta(
   func (foo_struct_0 TFooStruct)
@@ -83,6 +88,8 @@ struct foo_struct_1
     int _int3;
   } _embedded3;
 
+
+  counted_string S1;
 };
 
 
