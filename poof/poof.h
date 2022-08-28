@@ -529,13 +529,30 @@ enum type_qualifier
 meta(string_and_value_tables(type_qualifier))
 #include <poof/generated/string_and_value_tables_type_qualifier.h>
 
+#if 0
+enum type_spec_type
+{
+  type_type_spec_type_noop,
+
+  type_named,     // DatatypeToken is set, Datatype is set , Qualifier maybe
+                  // typedef, struct, enum, union
+
+  type_primitive, // DatatypeToken is   0, Datatype is set?, Qualifier is set
+                  // int, float, const long double, etc..
+
+  type_undefined, // DatatypeToken is set, Datatype is   0 , Qualifier maybe
+                  // something that came from outside our codebase
+                  // probably from stdlib .. FILE* .. whatever
+};
+#endif
+
 struct datatype;
 struct type_spec
 {
   c_token *QualifierNameT;
 
   c_token *DatatypeToken;
-  datatype *Datatype;
+  datatype *BaseType;     // ATM only used by variable instances that are defined using an anonymous compound decl
 
   type_qualifier Qualifier;
 

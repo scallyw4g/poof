@@ -83,8 +83,6 @@ struct foo_struct_1
     int _int3;
   } _embedded3;
 
-  int _foo1;
-
 };
 
 

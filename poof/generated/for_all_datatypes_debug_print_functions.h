@@ -2970,8 +2970,8 @@
 
 
 
-                                                    DebugPrint("datatype Datatype {\n", Depth+2);
-                DebugPrint(S.Datatype, Depth+4);
+                                                    DebugPrint("datatype BaseType {\n", Depth+2);
+                DebugPrint(S.BaseType, Depth+4);
                 DebugPrint("}\n", Depth+2);
 
 

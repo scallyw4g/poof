@@ -8267,6 +8267,14 @@ MaybeEatStaticAssert(parser *Parser)
   return Result;
 }
 
+
+link_internal b32
+IsAnonymous(compound_decl *Decl)
+{
+  b32 Result = (Decl->Type == 0);
+  return Result;
+}
+
 // TODO(Jesse id: 299): This could be improved by not taking the StructName, and
 // filling it out internally.  It would have to check where the struct name is
 //
@@ -8276,7 +8284,7 @@ MaybeEatStaticAssert(parser *Parser)
 //
 // This would clean up the calling code quite a bit and get rid of a
 // bunch of redundant RequireTokens on Semicolons.
-
+//
 bonsai_function compound_decl
 ParseStructBody(parse_context *Ctx, c_token *StructNameT)
 {
@@ -8301,6 +8309,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
 
     declaration Member = ParseStructMember(Ctx, Result.Type);
 
+    datatype *AnonymousDecl = {};
     switch (Member.Type)
     {
       case type_function_decl:
@@ -8313,8 +8322,26 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
       } break;
 
       case type_variable_decl:
+      {
+        Push(&Result.Members, Member, Ctx->Memory);
+      } break;
+
       case type_compound_decl:
       {
+        // NOTE(Jesse): This is a pretty gross hack to make sure variables
+        // declared after an anonymous compound decl can get back to their
+        // declaration somehow. ie.
+        //
+        // struct
+        // {
+        //   int foo;
+        // } bar, *baz;
+        if (IsAnonymous(&Member.compound_decl))
+        {
+          /* Info("Pushed anonymous compound decl in (%S)", StructNameT->Value); */
+          AnonymousDecl = Insert(Datatype(&Member), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+        }
+
         Push(&Result.Members, Member, Ctx->Memory);
       } break;
 
@@ -8386,10 +8413,19 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
                 // @snap_pointer_to_struct_member_struct_decl
                 // TmpMember.variable_decl.TypeSpec.Datatype = Datatype(StructDecl);
 
-                TmpMember.variable_decl.Name = Decl.NameT->Value;
-                TmpMember.variable_decl.Indirection = Decl.Indirection;
+                TmpMember.variable_decl.Name             = Decl.NameT->Value;
+                TmpMember.variable_decl.Indirection      = Decl.Indirection;
                 TmpMember.variable_decl.StaticBufferSize = Decl.StaticBufferSize;
-                TmpMember.variable_decl.Value = Decl.Value;
+                TmpMember.variable_decl.Value            = Decl.Value;
+                TmpMember.variable_decl.Value            = Decl.Value;
+
+                if (AnonymousDecl)
+                {
+                  Assert(AnonymousDecl->Type == type_declaration);
+                  Assert(AnonymousDecl->declaration.Type == type_compound_decl);
+                  Assert(IsAnonymous(&AnonymousDecl->declaration.compound_decl));
+                }
+                TmpMember.variable_decl.Type.BaseType    = AnonymousDecl;
 
                 Push(&Result.Members, TmpMember, Ctx->Memory);
               } break;
@@ -10685,7 +10721,12 @@ ResolveToBaseType(parse_context *Ctx, type_spec TypeSpec)
 {
   datatype Result = {};
 
-  if ( TypeSpec.DatatypeToken &&
+  if ( TypeSpec.BaseType )
+  {
+    /* Info("~~~~~~~~~~~~~~~~~~~~~~~~~~~"); */
+    Result = *TypeSpec.BaseType;
+  }
+  else if ( TypeSpec.DatatypeToken &&
        TypeSpec.DatatypeToken->Type == CTokenType_Identifier )
   {
     Result = GetDatatypeByName(Ctx, TypeSpec.DatatypeToken->Value);

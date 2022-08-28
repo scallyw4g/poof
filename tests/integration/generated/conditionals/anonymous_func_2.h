@@ -20,15 +20,13 @@
 
               struct (anonymous) not primitive
 
-               _embedded1 is primitive
+               _embedded1 not primitive
 
-               _embedded2 is primitive
+               _embedded2 not primitive
 
               union (anonymous) not primitive
 
-               _embedded3 is primitive
-
-              int  _foo1 is primitive
+               _embedded3 not primitive
 
 
 

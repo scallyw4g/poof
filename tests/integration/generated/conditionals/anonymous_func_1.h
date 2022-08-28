@@ -20,15 +20,13 @@
 
               struct (anonymous) is compound
 
-               _embedded1 not compound
+               _embedded1 is compound
 
-               _embedded2 not compound
+               _embedded2 is compound
 
               union (anonymous) is compound
 
-               _embedded3 not compound
-
-              int  _foo1 not compound
+               _embedded3 is compound
 
 
 
