@@ -5,81 +5,81 @@
         DebugPrint("terminal_colors {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Red {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Red, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Red {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Red, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string BrightRed {\n", Depth+2);
-                DebugPrint(RuntimeStruct.BrightRed, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string BrightRed {\n", Depth+2);
+              DebugPrint(RuntimeStruct.BrightRed, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string DarkRed {\n", Depth+2);
-                DebugPrint(RuntimeStruct.DarkRed, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string DarkRed {\n", Depth+2);
+              DebugPrint(RuntimeStruct.DarkRed, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Blue {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Blue, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Blue {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Blue, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string BrightBlue {\n", Depth+2);
-                DebugPrint(RuntimeStruct.BrightBlue, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string BrightBlue {\n", Depth+2);
+              DebugPrint(RuntimeStruct.BrightBlue, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Purple {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Purple, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Purple {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Purple, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string BrightPurple {\n", Depth+2);
-                DebugPrint(RuntimeStruct.BrightPurple, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string BrightPurple {\n", Depth+2);
+              DebugPrint(RuntimeStruct.BrightPurple, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Green {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Green, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Green {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Green, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string BrightGreen {\n", Depth+2);
-                DebugPrint(RuntimeStruct.BrightGreen, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string BrightGreen {\n", Depth+2);
+              DebugPrint(RuntimeStruct.BrightGreen, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Yellow {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Yellow, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Yellow {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Yellow, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string BrightYellow {\n", Depth+2);
-                DebugPrint(RuntimeStruct.BrightYellow, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string BrightYellow {\n", Depth+2);
+              DebugPrint(RuntimeStruct.BrightYellow, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string White {\n", Depth+2);
-                DebugPrint(RuntimeStruct.White, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string White {\n", Depth+2);
+              DebugPrint(RuntimeStruct.White, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Grey {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Grey, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Grey {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Grey, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -103,12 +103,12 @@
         DebugPrint("native_file {\n", Depth);
       }
 
-                            // NOTE(Jesse): found no definition for this type.. probably from stdlib
-            DebugPrint("undefined(FILE Handle)\n", Depth+2);
+                        // NOTE(Jesse): found no definition for this type.. probably from stdlib
+          DebugPrint("undefined(FILE Handle)\n", Depth+2);
 
-                                                    DebugPrint("counted_string Path {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Path, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Path {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Path, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -132,57 +132,57 @@
         DebugPrint("XVisualInfo {\n", Depth);
       }
 
-                            // NOTE(Jesse): found no definition for this type.. probably from stdlib
-            DebugPrint("undefined(Visual visual)\n", Depth+2);
+                        // NOTE(Jesse): found no definition for this type.. probably from stdlib
+          DebugPrint("undefined(Visual visual)\n", Depth+2);
 
-                      // NOTE(Jesse): found no definition for this type.. probably from stdlib
-            DebugPrint("undefined(VisualID visualid)\n", Depth+2);
+                  // NOTE(Jesse): found no definition for this type.. probably from stdlib
+          DebugPrint("undefined(VisualID visualid)\n", Depth+2);
 
-                                                    DebugPrint("s32 screen =", Depth+2);
-                DebugPrint(RuntimeStruct.screen, 1);
-                DebugPrint(";\n");
-
-
-
-                                                    DebugPrint("s32 depth =", Depth+2);
-                DebugPrint(RuntimeStruct.depth, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("s32 screen =", Depth+2);
+              DebugPrint(RuntimeStruct.screen, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("s32 c_class =", Depth+2);
-                DebugPrint(RuntimeStruct.c_class, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("s32 depth =", Depth+2);
+              DebugPrint(RuntimeStruct.depth, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u64 red_mask =", Depth+2);
-                DebugPrint(RuntimeStruct.red_mask, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("s32 c_class =", Depth+2);
+              DebugPrint(RuntimeStruct.c_class, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u64 green_mask =", Depth+2);
-                DebugPrint(RuntimeStruct.green_mask, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u64 red_mask =", Depth+2);
+              DebugPrint(RuntimeStruct.red_mask, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u64 blue_mask =", Depth+2);
-                DebugPrint(RuntimeStruct.blue_mask, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u64 green_mask =", Depth+2);
+              DebugPrint(RuntimeStruct.green_mask, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("s32 colormap_size =", Depth+2);
-                DebugPrint(RuntimeStruct.colormap_size, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u64 blue_mask =", Depth+2);
+              DebugPrint(RuntimeStruct.blue_mask, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("s32 bits_per_rgb =", Depth+2);
-                DebugPrint(RuntimeStruct.bits_per_rgb, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("s32 colormap_size =", Depth+2);
+              DebugPrint(RuntimeStruct.colormap_size, 1);
+              DebugPrint(";\n");
+
+
+
+                                            DebugPrint("s32 bits_per_rgb =", Depth+2);
+              DebugPrint(RuntimeStruct.bits_per_rgb, 1);
+              DebugPrint(";\n");
 
 
 
@@ -206,18 +206,18 @@
         DebugPrint("os {\n", Depth);
       }
 
-                            // NOTE(Jesse): found no definition for this type.. probably from stdlib
-            DebugPrint("undefined(window Window)\n", Depth+2);
+                        // NOTE(Jesse): found no definition for this type.. probably from stdlib
+          DebugPrint("undefined(window Window)\n", Depth+2);
 
-                      // NOTE(Jesse): found no definition for this type.. probably from stdlib
-            DebugPrint("undefined(display Display)\n", Depth+2);
+                  // NOTE(Jesse): found no definition for this type.. probably from stdlib
+          DebugPrint("undefined(display Display)\n", Depth+2);
 
-                      // NOTE(Jesse): found no definition for this type.. probably from stdlib
-            DebugPrint("undefined(gl_context GlContext)\n", Depth+2);
+                  // NOTE(Jesse): found no definition for this type.. probably from stdlib
+          DebugPrint("undefined(gl_context GlContext)\n", Depth+2);
 
-                                                    DebugPrint("b32 ContinueRunning =", Depth+2);
-                DebugPrint(RuntimeStruct.ContinueRunning, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 ContinueRunning =", Depth+2);
+              DebugPrint(RuntimeStruct.ContinueRunning, 1);
+              DebugPrint(";\n");
 
 
 
@@ -241,15 +241,15 @@
         DebugPrint("v2i {\n", Depth);
       }
 
-                                                          DebugPrint("s32 x =", Depth+2);
-                DebugPrint(RuntimeStruct.x, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("s32 x =", Depth+2);
+              DebugPrint(RuntimeStruct.x, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("s32 y =", Depth+2);
-                DebugPrint(RuntimeStruct.y, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("s32 y =", Depth+2);
+              DebugPrint(RuntimeStruct.y, 1);
+              DebugPrint(";\n");
 
 
 
@@ -273,15 +273,15 @@
         DebugPrint("v2 {\n", Depth);
       }
 
-                                                          DebugPrint("r32 x =", Depth+2);
-                DebugPrint(RuntimeStruct.x, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("r32 x =", Depth+2);
+              DebugPrint(RuntimeStruct.x, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("r32 y =", Depth+2);
-                DebugPrint(RuntimeStruct.y, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("r32 y =", Depth+2);
+              DebugPrint(RuntimeStruct.y, 1);
+              DebugPrint(";\n");
 
 
 
@@ -305,25 +305,25 @@
         DebugPrint("v3i {\n", Depth);
       }
 
-                                          // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("struct (anonymous)\n", Depth+2);
-
-
                                     // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("struct (anonymous)\n", Depth+2);
+            DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-                                    // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("struct (anonymous)\n", Depth+2);
+                              // NOTE(Jesse): an anonymous struct or union
+            DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-                                    // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("struct (anonymous)\n", Depth+2);
+                              // NOTE(Jesse): an anonymous struct or union
+            DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-                                                    DebugPrint("s32 E =", Depth+2);
-                DebugPrint(RuntimeStruct.E, 1);
-                DebugPrint(";\n");
+                              // NOTE(Jesse): an anonymous struct or union
+            DebugPrint("struct (anonymous)\n", Depth+2);
+
+
+                                            DebugPrint("s32 E =", Depth+2);
+              DebugPrint(RuntimeStruct.E, 1);
+              DebugPrint(";\n");
 
 
 
@@ -347,25 +347,25 @@
         DebugPrint("v3 {\n", Depth);
       }
 
-                                          // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("struct (anonymous)\n", Depth+2);
-
-
                                     // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("struct (anonymous)\n", Depth+2);
+            DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-                                    // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("struct (anonymous)\n", Depth+2);
+                              // NOTE(Jesse): an anonymous struct or union
+            DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-                                    // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("struct (anonymous)\n", Depth+2);
+                              // NOTE(Jesse): an anonymous struct or union
+            DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-                                                    DebugPrint("r32 E =", Depth+2);
-                DebugPrint(RuntimeStruct.E, 1);
-                DebugPrint(";\n");
+                              // NOTE(Jesse): an anonymous struct or union
+            DebugPrint("struct (anonymous)\n", Depth+2);
+
+
+                                            DebugPrint("r32 E =", Depth+2);
+              DebugPrint(RuntimeStruct.E, 1);
+              DebugPrint(";\n");
 
 
 
@@ -389,33 +389,33 @@
         DebugPrint("v4 {\n", Depth);
       }
 
-                                          // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("struct (anonymous)\n", Depth+2);
-
-
                                     // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("struct (anonymous)\n", Depth+2);
+            DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-                                    // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("struct (anonymous)\n", Depth+2);
+                              // NOTE(Jesse): an anonymous struct or union
+            DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-                                    // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("struct (anonymous)\n", Depth+2);
+                              // NOTE(Jesse): an anonymous struct or union
+            DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-                                    // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("struct (anonymous)\n", Depth+2);
+                              // NOTE(Jesse): an anonymous struct or union
+            DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-                                    // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("struct (anonymous)\n", Depth+2);
+                              // NOTE(Jesse): an anonymous struct or union
+            DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-                                                    DebugPrint("r32 E =", Depth+2);
-                DebugPrint(RuntimeStruct.E, 1);
-                DebugPrint(";\n");
+                              // NOTE(Jesse): an anonymous struct or union
+            DebugPrint("struct (anonymous)\n", Depth+2);
+
+
+                                            DebugPrint("r32 E =", Depth+2);
+              DebugPrint(RuntimeStruct.E, 1);
+              DebugPrint(";\n");
 
 
 
@@ -439,13 +439,13 @@
         DebugPrint("voxel_position {\n", Depth);
       }
 
-                                          // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("struct (anonymous)\n", Depth+2);
+                                    // NOTE(Jesse): an anonymous struct or union
+            DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-                                                    DebugPrint("s32 E =", Depth+2);
-                DebugPrint(RuntimeStruct.E, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("s32 E =", Depth+2);
+              DebugPrint(RuntimeStruct.E, 1);
+              DebugPrint(";\n");
 
 
 
@@ -469,14 +469,14 @@
         DebugPrint("f32_reg {\n", Depth);
       }
 
-                                                          DebugPrint("r32 F =", Depth+2);
-                DebugPrint(RuntimeStruct.F, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("r32 F =", Depth+2);
+              DebugPrint(RuntimeStruct.F, 1);
+              DebugPrint(";\n");
 
 
 
-                      // NOTE(Jesse): found no definition for this type.. probably from stdlib
-            DebugPrint("undefined(__m128 Sse)\n", Depth+2);
+                  // NOTE(Jesse): found no definition for this type.. probably from stdlib
+          DebugPrint("undefined(__m128 Sse)\n", Depth+2);
 
 
 
@@ -498,9 +498,9 @@
         DebugPrint("random_series {\n", Depth);
       }
 
-                                                          DebugPrint("u64 Seed =", Depth+2);
-                DebugPrint(RuntimeStruct.Seed, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u64 Seed =", Depth+2);
+              DebugPrint(RuntimeStruct.Seed, 1);
+              DebugPrint(";\n");
 
 
 
@@ -524,15 +524,15 @@
         DebugPrint("input_event {\n", Depth);
       }
 
-                                                          DebugPrint("b32 Clicked =", Depth+2);
-                DebugPrint(RuntimeStruct.Clicked, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("b32 Clicked =", Depth+2);
+              DebugPrint(RuntimeStruct.Clicked, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("b32 Pressed =", Depth+2);
-                DebugPrint(RuntimeStruct.Pressed, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 Pressed =", Depth+2);
+              DebugPrint(RuntimeStruct.Pressed, 1);
+              DebugPrint(";\n");
 
 
 
@@ -556,159 +556,159 @@
         DebugPrint("input {\n", Depth);
       }
 
-                                                          DebugPrint("input_event Escape {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Escape, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("input_event Escape {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Escape, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event Space {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Space, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event Space {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Space, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event Shift {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Shift, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event Shift {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Shift, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event Ctrl {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Ctrl, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event Ctrl {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Ctrl, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event Alt {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Alt, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event Alt {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Alt, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F12 {\n", Depth+2);
-                DebugPrint(RuntimeStruct.F12, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event F12 {\n", Depth+2);
+              DebugPrint(RuntimeStruct.F12, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F11 {\n", Depth+2);
-                DebugPrint(RuntimeStruct.F11, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event F11 {\n", Depth+2);
+              DebugPrint(RuntimeStruct.F11, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F10 {\n", Depth+2);
-                DebugPrint(RuntimeStruct.F10, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event F10 {\n", Depth+2);
+              DebugPrint(RuntimeStruct.F10, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F9 {\n", Depth+2);
-                DebugPrint(RuntimeStruct.F9, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event F9 {\n", Depth+2);
+              DebugPrint(RuntimeStruct.F9, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F8 {\n", Depth+2);
-                DebugPrint(RuntimeStruct.F8, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event F8 {\n", Depth+2);
+              DebugPrint(RuntimeStruct.F8, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F7 {\n", Depth+2);
-                DebugPrint(RuntimeStruct.F7, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event F7 {\n", Depth+2);
+              DebugPrint(RuntimeStruct.F7, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F6 {\n", Depth+2);
-                DebugPrint(RuntimeStruct.F6, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event F6 {\n", Depth+2);
+              DebugPrint(RuntimeStruct.F6, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F5 {\n", Depth+2);
-                DebugPrint(RuntimeStruct.F5, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event F5 {\n", Depth+2);
+              DebugPrint(RuntimeStruct.F5, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F4 {\n", Depth+2);
-                DebugPrint(RuntimeStruct.F4, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event F4 {\n", Depth+2);
+              DebugPrint(RuntimeStruct.F4, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F3 {\n", Depth+2);
-                DebugPrint(RuntimeStruct.F3, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event F3 {\n", Depth+2);
+              DebugPrint(RuntimeStruct.F3, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F2 {\n", Depth+2);
-                DebugPrint(RuntimeStruct.F2, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event F2 {\n", Depth+2);
+              DebugPrint(RuntimeStruct.F2, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event F1 {\n", Depth+2);
-                DebugPrint(RuntimeStruct.F1, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event F1 {\n", Depth+2);
+              DebugPrint(RuntimeStruct.F1, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event RMB {\n", Depth+2);
-                DebugPrint(RuntimeStruct.RMB, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event RMB {\n", Depth+2);
+              DebugPrint(RuntimeStruct.RMB, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event LMB {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LMB, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event LMB {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LMB, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event MMB {\n", Depth+2);
-                DebugPrint(RuntimeStruct.MMB, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event MMB {\n", Depth+2);
+              DebugPrint(RuntimeStruct.MMB, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event W {\n", Depth+2);
-                DebugPrint(RuntimeStruct.W, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event W {\n", Depth+2);
+              DebugPrint(RuntimeStruct.W, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event A {\n", Depth+2);
-                DebugPrint(RuntimeStruct.A, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event A {\n", Depth+2);
+              DebugPrint(RuntimeStruct.A, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event S {\n", Depth+2);
-                DebugPrint(RuntimeStruct.S, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event S {\n", Depth+2);
+              DebugPrint(RuntimeStruct.S, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event D {\n", Depth+2);
-                DebugPrint(RuntimeStruct.D, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event D {\n", Depth+2);
+              DebugPrint(RuntimeStruct.D, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event Q {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Q, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event Q {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Q, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("input_event E {\n", Depth+2);
-                DebugPrint(RuntimeStruct.E, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("input_event E {\n", Depth+2);
+              DebugPrint(RuntimeStruct.E, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -732,45 +732,45 @@
         DebugPrint("hotkeys {\n", Depth);
       }
 
-                                                          DebugPrint("b32 Left =", Depth+2);
-                DebugPrint(RuntimeStruct.Left, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("b32 Left =", Depth+2);
+              DebugPrint(RuntimeStruct.Left, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("b32 Right =", Depth+2);
-                DebugPrint(RuntimeStruct.Right, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 Right =", Depth+2);
+              DebugPrint(RuntimeStruct.Right, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("b32 Forward =", Depth+2);
-                DebugPrint(RuntimeStruct.Forward, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 Forward =", Depth+2);
+              DebugPrint(RuntimeStruct.Forward, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("b32 Backward =", Depth+2);
-                DebugPrint(RuntimeStruct.Backward, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 Backward =", Depth+2);
+              DebugPrint(RuntimeStruct.Backward, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("b32 Player_Fire =", Depth+2);
-                DebugPrint(RuntimeStruct.Player_Fire, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 Player_Fire =", Depth+2);
+              DebugPrint(RuntimeStruct.Player_Fire, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("b32 Player_Proton =", Depth+2);
-                DebugPrint(RuntimeStruct.Player_Proton, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 Player_Proton =", Depth+2);
+              DebugPrint(RuntimeStruct.Player_Proton, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("b32 Player_Spawn =", Depth+2);
-                DebugPrint(RuntimeStruct.Player_Spawn, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 Player_Spawn =", Depth+2);
+              DebugPrint(RuntimeStruct.Player_Spawn, 1);
+              DebugPrint(";\n");
 
 
 
@@ -794,23 +794,23 @@
         DebugPrint("work_queue {\n", Depth);
       }
 
-                                                          DebugPrint("u32 EnqueueIndex =", Depth+2);
-                DebugPrint(RuntimeStruct.EnqueueIndex, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u32 EnqueueIndex =", Depth+2);
+              DebugPrint(RuntimeStruct.EnqueueIndex, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 DequeueIndex =", Depth+2);
-                DebugPrint(RuntimeStruct.DequeueIndex, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 DequeueIndex =", Depth+2);
+              DebugPrint(RuntimeStruct.DequeueIndex, 1);
+              DebugPrint(";\n");
 
 
 
-                      // NOTE(Jesse): found no definition for this type.. probably from stdlib
-            DebugPrint("undefined(work_queue_entry Entries)\n", Depth+2);
+                  // NOTE(Jesse): found no definition for this type.. probably from stdlib
+          DebugPrint("undefined(work_queue_entry Entries)\n", Depth+2);
 
-                      // NOTE(Jesse): found no definition for this type.. probably from stdlib
-            DebugPrint("undefined(semaphore GlobalQueueSemaphore)\n", Depth+2);
+                  // NOTE(Jesse): found no definition for this type.. probably from stdlib
+          DebugPrint("undefined(semaphore GlobalQueueSemaphore)\n", Depth+2);
 
 
 
@@ -832,33 +832,33 @@
         DebugPrint("memory_arena {\n", Depth);
       }
 
-                                                          DebugPrint("u8 Start =", Depth+2);
-                DebugPrint(RuntimeStruct.Start, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u8 Start =", Depth+2);
+              DebugPrint(RuntimeStruct.Start, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u8 At =", Depth+2);
-                DebugPrint(RuntimeStruct.At, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u8 At =", Depth+2);
+              DebugPrint(RuntimeStruct.At, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u8 End =", Depth+2);
-                DebugPrint(RuntimeStruct.End, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u8 End =", Depth+2);
+              DebugPrint(RuntimeStruct.End, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("umm NextBlockSize =", Depth+2);
-                DebugPrint(RuntimeStruct.NextBlockSize, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("umm NextBlockSize =", Depth+2);
+              DebugPrint(RuntimeStruct.NextBlockSize, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("memory_arena Prev {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Prev, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("memory_arena Prev {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Prev, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -882,39 +882,39 @@
         DebugPrint("push_metadata {\n", Depth);
       }
 
-                                                          DebugPrint("const char  Name =", Depth+2);
-                DebugPrint(RuntimeStruct.Name, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("const char  Name =", Depth+2);
+              DebugPrint(RuntimeStruct.Name, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("umm ArenaHash =", Depth+2);
-                DebugPrint(RuntimeStruct.ArenaHash, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("umm ArenaHash =", Depth+2);
+              DebugPrint(RuntimeStruct.ArenaHash, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("umm HeadArenaHash =", Depth+2);
-                DebugPrint(RuntimeStruct.HeadArenaHash, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("umm HeadArenaHash =", Depth+2);
+              DebugPrint(RuntimeStruct.HeadArenaHash, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("umm StructSize =", Depth+2);
-                DebugPrint(RuntimeStruct.StructSize, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("umm StructSize =", Depth+2);
+              DebugPrint(RuntimeStruct.StructSize, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("umm StructCount =", Depth+2);
-                DebugPrint(RuntimeStruct.StructCount, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("umm StructCount =", Depth+2);
+              DebugPrint(RuntimeStruct.StructCount, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 PushCount =", Depth+2);
-                DebugPrint(RuntimeStruct.PushCount, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 PushCount =", Depth+2);
+              DebugPrint(RuntimeStruct.PushCount, 1);
+              DebugPrint(";\n");
 
 
 
@@ -938,63 +938,63 @@
         DebugPrint("platform {\n", Depth);
       }
 
-                                                          DebugPrint("work_queue LowPriority {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LowPriority, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("work_queue LowPriority {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LowPriority, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("work_queue HighPriority {\n", Depth+2);
-                DebugPrint(RuntimeStruct.HighPriority, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("work_queue HighPriority {\n", Depth+2);
+              DebugPrint(RuntimeStruct.HighPriority, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                      // NOTE(Jesse): found no definition for this type.. probably from stdlib
-            DebugPrint("undefined(semaphore QueueSemaphore)\n", Depth+2);
+                  // NOTE(Jesse): found no definition for this type.. probably from stdlib
+          DebugPrint("undefined(semaphore QueueSemaphore)\n", Depth+2);
 
-                      // NOTE(Jesse): found no definition for this type.. probably from stdlib
-            DebugPrint("undefined(thread_startup_params Threads)\n", Depth+2);
+                  // NOTE(Jesse): found no definition for this type.. probably from stdlib
+          DebugPrint("undefined(thread_startup_params Threads)\n", Depth+2);
 
-                                                    DebugPrint("v2 MouseP {\n", Depth+2);
-                DebugPrint(RuntimeStruct.MouseP, Depth+4);
-                DebugPrint("}\n", Depth+2);
-
-
-
-                                                    DebugPrint("v2 MouseDP {\n", Depth+2);
-                DebugPrint(RuntimeStruct.MouseDP, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("v2 MouseP {\n", Depth+2);
+              DebugPrint(RuntimeStruct.MouseP, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("memory_arena Memory {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Memory, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("v2 MouseDP {\n", Depth+2);
+              DebugPrint(RuntimeStruct.MouseDP, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("r32 dt =", Depth+2);
-                DebugPrint(RuntimeStruct.dt, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("s32 WindowWidth =", Depth+2);
-                DebugPrint(RuntimeStruct.WindowWidth, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("r32 dt =", Depth+2);
+              DebugPrint(RuntimeStruct.dt, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("s32 WindowHeight =", Depth+2);
-                DebugPrint(RuntimeStruct.WindowHeight, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("s32 WindowWidth =", Depth+2);
+              DebugPrint(RuntimeStruct.WindowWidth, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("input Input {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Input, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("s32 WindowHeight =", Depth+2);
+              DebugPrint(RuntimeStruct.WindowHeight, 1);
+              DebugPrint(";\n");
+
+
+
+                                            DebugPrint("input Input {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Input, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -1018,21 +1018,21 @@
         DebugPrint("heap_allocation_block {\n", Depth);
       }
 
-                                                          DebugPrint("heap_allocation_type Type =", Depth+2);
-                DebugPrint(RuntimeStruct.Type, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("heap_allocation_type Type =", Depth+2);
+              DebugPrint(RuntimeStruct.Type, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("umm Size =", Depth+2);
-                DebugPrint(RuntimeStruct.Size, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("umm Size =", Depth+2);
+              DebugPrint(RuntimeStruct.Size, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("umm PrevAllocationSize =", Depth+2);
-                DebugPrint(RuntimeStruct.PrevAllocationSize, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("umm PrevAllocationSize =", Depth+2);
+              DebugPrint(RuntimeStruct.PrevAllocationSize, 1);
+              DebugPrint(";\n");
 
 
 
@@ -1056,15 +1056,15 @@
         DebugPrint("heap_allocator {\n", Depth);
       }
 
-                                                          DebugPrint("heap_allocation_block Heap {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Heap, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("heap_allocation_block Heap {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Heap, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("umm Size =", Depth+2);
-                DebugPrint(RuntimeStruct.Size, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("umm Size =", Depth+2);
+              DebugPrint(RuntimeStruct.Size, 1);
+              DebugPrint(";\n");
 
 
 
@@ -1088,15 +1088,15 @@
         DebugPrint("tagged_counted_string_stream {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Tag {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Tag, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Tag {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Tag, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -1120,27 +1120,27 @@
         DebugPrint("char_cursor {\n", Depth);
       }
 
-                                                          DebugPrint("char  Start =", Depth+2);
-                DebugPrint(RuntimeStruct.Start, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("char  Start =", Depth+2);
+              DebugPrint(RuntimeStruct.Start, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("char  At =", Depth+2);
-                DebugPrint(RuntimeStruct.At, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("char  At =", Depth+2);
+              DebugPrint(RuntimeStruct.At, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("char  End =", Depth+2);
-                DebugPrint(RuntimeStruct.End, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("char  End =", Depth+2);
+              DebugPrint(RuntimeStruct.End, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("memory_arena Memory {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Memory, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -1164,15 +1164,15 @@
         DebugPrint("linei {\n", Depth);
       }
 
-                                                          DebugPrint("v3i MinP {\n", Depth+2);
-                DebugPrint(RuntimeStruct.MinP, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("v3i MinP {\n", Depth+2);
+              DebugPrint(RuntimeStruct.MinP, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3i MaxP {\n", Depth+2);
-                DebugPrint(RuntimeStruct.MaxP, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("v3i MaxP {\n", Depth+2);
+              DebugPrint(RuntimeStruct.MaxP, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -1196,15 +1196,15 @@
         DebugPrint("line {\n", Depth);
       }
 
-                                                          DebugPrint("v3 MinP {\n", Depth+2);
-                DebugPrint(RuntimeStruct.MinP, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("v3 MinP {\n", Depth+2);
+              DebugPrint(RuntimeStruct.MinP, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 MaxP {\n", Depth+2);
-                DebugPrint(RuntimeStruct.MaxP, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("v3 MaxP {\n", Depth+2);
+              DebugPrint(RuntimeStruct.MaxP, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -1228,17 +1228,17 @@
         DebugPrint("Quaternion {\n", Depth);
       }
 
-                                          // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("struct (anonymous)\n", Depth+2);
-
-
                                     // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("struct (anonymous)\n", Depth+2);
+            DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-                                                    DebugPrint("float  E =", Depth+2);
-                DebugPrint(RuntimeStruct.E, 1);
-                DebugPrint(";\n");
+                              // NOTE(Jesse): an anonymous struct or union
+            DebugPrint("struct (anonymous)\n", Depth+2);
+
+
+                                            DebugPrint("float  E =", Depth+2);
+              DebugPrint(RuntimeStruct.E, 1);
+              DebugPrint(";\n");
 
 
 
@@ -1262,15 +1262,15 @@
         DebugPrint("string_builder {\n", Depth);
       }
 
-                                                          DebugPrint("memory_arena Memory {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Memory, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_stream Chunks {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Chunks, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string_stream Chunks {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Chunks, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -1294,21 +1294,21 @@
         DebugPrint("u32_stream {\n", Depth);
       }
 
-                                                          DebugPrint("u32 Start =", Depth+2);
-                DebugPrint(RuntimeStruct.Start, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u32 Start =", Depth+2);
+              DebugPrint(RuntimeStruct.Start, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 At =", Depth+2);
-                DebugPrint(RuntimeStruct.At, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 At =", Depth+2);
+              DebugPrint(RuntimeStruct.At, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 End =", Depth+2);
-                DebugPrint(RuntimeStruct.End, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 End =", Depth+2);
+              DebugPrint(RuntimeStruct.End, 1);
+              DebugPrint(";\n");
 
 
 
@@ -1332,21 +1332,21 @@
         DebugPrint("u8_stream {\n", Depth);
       }
 
-                                                          DebugPrint("u8 Start =", Depth+2);
-                DebugPrint(RuntimeStruct.Start, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u8 Start =", Depth+2);
+              DebugPrint(RuntimeStruct.Start, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u8 At =", Depth+2);
-                DebugPrint(RuntimeStruct.At, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u8 At =", Depth+2);
+              DebugPrint(RuntimeStruct.At, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u8 End =", Depth+2);
-                DebugPrint(RuntimeStruct.End, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u8 End =", Depth+2);
+              DebugPrint(RuntimeStruct.End, 1);
+              DebugPrint(";\n");
 
 
 
@@ -1370,33 +1370,33 @@
         DebugPrint("ansi_stream {\n", Depth);
       }
 
-                                                          DebugPrint("const char  Start =", Depth+2);
-                DebugPrint(RuntimeStruct.Start, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("const char  Start =", Depth+2);
+              DebugPrint(RuntimeStruct.Start, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("const char  At =", Depth+2);
-                DebugPrint(RuntimeStruct.At, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("const char  At =", Depth+2);
+              DebugPrint(RuntimeStruct.At, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("const char  End =", Depth+2);
-                DebugPrint(RuntimeStruct.End, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("const char  End =", Depth+2);
+              DebugPrint(RuntimeStruct.End, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("counted_string Filename {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Filename, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Filename {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Filename, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("text_encoding Encoding =", Depth+2);
-                DebugPrint(RuntimeStruct.Encoding, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("text_encoding Encoding =", Depth+2);
+              DebugPrint(RuntimeStruct.Encoding, 1);
+              DebugPrint(";\n");
 
 
 
@@ -1420,21 +1420,21 @@
         DebugPrint("r32_stream {\n", Depth);
       }
 
-                                                          DebugPrint("r32 Start =", Depth+2);
-                DebugPrint(RuntimeStruct.Start, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("r32 Start =", Depth+2);
+              DebugPrint(RuntimeStruct.Start, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("r32 At =", Depth+2);
-                DebugPrint(RuntimeStruct.At, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("r32 At =", Depth+2);
+              DebugPrint(RuntimeStruct.At, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("r32 End =", Depth+2);
-                DebugPrint(RuntimeStruct.End, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("r32 End =", Depth+2);
+              DebugPrint(RuntimeStruct.End, 1);
+              DebugPrint(";\n");
 
 
 
@@ -1458,9 +1458,9 @@
         DebugPrint("m4 {\n", Depth);
       }
 
-                                                          DebugPrint("v4 E {\n", Depth+2);
-                DebugPrint(RuntimeStruct.E, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("v4 E {\n", Depth+2);
+              DebugPrint(RuntimeStruct.E, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -1484,33 +1484,33 @@
         DebugPrint("m_nxn {\n", Depth);
       }
 
-                                                          DebugPrint("r32 Elements =", Depth+2);
-                DebugPrint(RuntimeStruct.Elements, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("r32 Elements =", Depth+2);
+              DebugPrint(RuntimeStruct.Elements, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 Rows =", Depth+2);
-                DebugPrint(RuntimeStruct.Rows, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 Rows =", Depth+2);
+              DebugPrint(RuntimeStruct.Rows, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 Columns =", Depth+2);
-                DebugPrint(RuntimeStruct.Columns, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 Columns =", Depth+2);
+              DebugPrint(RuntimeStruct.Columns, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 At =", Depth+2);
-                DebugPrint(RuntimeStruct.At, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 At =", Depth+2);
+              DebugPrint(RuntimeStruct.At, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 End =", Depth+2);
-                DebugPrint(RuntimeStruct.End, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 End =", Depth+2);
+              DebugPrint(RuntimeStruct.End, 1);
+              DebugPrint(";\n");
 
 
 
@@ -1534,8 +1534,8 @@
         DebugPrint("mutex {\n", Depth);
       }
 
-                            // NOTE(Jesse): found no definition for this type.. probably from stdlib
-            DebugPrint("undefined(native_mutex M)\n", Depth+2);
+                        // NOTE(Jesse): found no definition for this type.. probably from stdlib
+          DebugPrint("undefined(native_mutex M)\n", Depth+2);
 
 
 
@@ -1557,21 +1557,21 @@
         DebugPrint("mutex_op_record {\n", Depth);
       }
 
-                                                          DebugPrint("mutex Mutex {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Mutex, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("mutex Mutex {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Mutex, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("u64 Cycle =", Depth+2);
-                DebugPrint(RuntimeStruct.Cycle, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u64 Cycle =", Depth+2);
+              DebugPrint(RuntimeStruct.Cycle, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("mutex_op Op =", Depth+2);
-                DebugPrint(RuntimeStruct.Op, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("mutex_op Op =", Depth+2);
+              DebugPrint(RuntimeStruct.Op, 1);
+              DebugPrint(";\n");
 
 
 
@@ -1595,15 +1595,15 @@
         DebugPrint("mutex_op_array {\n", Depth);
       }
 
-                                                          DebugPrint("u32 NextRecord =", Depth+2);
-                DebugPrint(RuntimeStruct.NextRecord, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u32 NextRecord =", Depth+2);
+              DebugPrint(RuntimeStruct.NextRecord, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("mutex_op_record Records {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Records, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("mutex_op_record Records {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Records, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -1627,15 +1627,15 @@
         DebugPrint("rect2 {\n", Depth);
       }
 
-                                                          DebugPrint("v2 Min {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Min, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("v2 Min {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Min, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v2 Max {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Max, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("v2 Max {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Max, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -1659,15 +1659,15 @@
         DebugPrint("aabb {\n", Depth);
       }
 
-                                                          DebugPrint("v3 Center {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Center, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("v3 Center {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Center, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 Radius {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Radius, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("v3 Radius {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Radius, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -1691,15 +1691,15 @@
         DebugPrint("ray {\n", Depth);
       }
 
-                                                          DebugPrint("v3 Origin {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Origin, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("v3 Origin {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Origin, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 Dir {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Dir, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("v3 Dir {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Dir, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -1723,21 +1723,21 @@
         DebugPrint("xml_property {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Name {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Name, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Name, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Value {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Value, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Value {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Value, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_property Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("xml_property Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -1761,15 +1761,15 @@
         DebugPrint("xml_token {\n", Depth);
       }
 
-                                                          DebugPrint("xml_token_type Type =", Depth+2);
-                DebugPrint(RuntimeStruct.Type, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("xml_token_type Type =", Depth+2);
+              DebugPrint(RuntimeStruct.Type, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("xml_property Property {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Property, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("xml_property Property {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Property, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -1793,39 +1793,39 @@
         DebugPrint("xml_tag {\n", Depth);
       }
 
-                                                          DebugPrint("xml_token Open {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Open, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("xml_token Open {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Open, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_tag Parent {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Parent, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("xml_tag Parent {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Parent, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_tag Sibling {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Sibling, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("xml_tag Sibling {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Sibling, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Value {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Value, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Value {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Value, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_property Properties {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Properties, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("xml_property Properties {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Properties, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_property NextPropertySlot {\n", Depth+2);
-                DebugPrint(RuntimeStruct.NextPropertySlot, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("xml_property NextPropertySlot {\n", Depth+2);
+              DebugPrint(RuntimeStruct.NextPropertySlot, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -1849,27 +1849,27 @@
         DebugPrint("xml_token_stream {\n", Depth);
       }
 
-                                                          DebugPrint("xml_token Start {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Start, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("xml_token Start {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Start, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_token At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("xml_token At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_token End {\n", Depth+2);
-                DebugPrint(RuntimeStruct.End, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("xml_token End {\n", Depth+2);
+              DebugPrint(RuntimeStruct.End, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_tag_hashtable Hashes {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Hashes, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("xml_tag_hashtable Hashes {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Hashes, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -1893,21 +1893,21 @@
         DebugPrint("xml_tag_stream {\n", Depth);
       }
 
-                                                          DebugPrint("xml_tag Start {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Start, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("xml_tag Start {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Start, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_tag At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("xml_tag At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_tag End {\n", Depth+2);
-                DebugPrint(RuntimeStruct.End, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("xml_tag End {\n", Depth+2);
+              DebugPrint(RuntimeStruct.End, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -1931,15 +1931,15 @@
         DebugPrint("xml_parsing_at_indicators {\n", Depth);
       }
 
-                                                          DebugPrint("xml_tag LastClosedTag {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastClosedTag, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("xml_tag LastClosedTag {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastClosedTag, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_tag CurrentlyOpenTag {\n", Depth+2);
-                DebugPrint(RuntimeStruct.CurrentlyOpenTag, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("xml_tag CurrentlyOpenTag {\n", Depth+2);
+              DebugPrint(RuntimeStruct.CurrentlyOpenTag, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -1963,31 +1963,31 @@
         DebugPrint("shader_uniform {\n", Depth);
       }
 
-                                                          DebugPrint("shader_uniform_type Type =", Depth+2);
-                DebugPrint(RuntimeStruct.Type, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("shader_uniform_type Type =", Depth+2);
+              DebugPrint(RuntimeStruct.Type, 1);
+              DebugPrint(";\n");
 
 
 
-                                    // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("union (anonymous)\n", Depth+2);
+                              // NOTE(Jesse): an anonymous struct or union
+            DebugPrint("union (anonymous)\n", Depth+2);
 
 
-                                                    DebugPrint("s32 ID =", Depth+2);
-                DebugPrint(RuntimeStruct.ID, 1);
-                DebugPrint(";\n");
-
-
-
-                                                    DebugPrint("const char  Name =", Depth+2);
-                DebugPrint(RuntimeStruct.Name, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("s32 ID =", Depth+2);
+              DebugPrint(RuntimeStruct.ID, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("shader_uniform Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("const char  Name =", Depth+2);
+              DebugPrint(RuntimeStruct.Name, 1);
+              DebugPrint(";\n");
+
+
+
+                                            DebugPrint("shader_uniform Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -2011,15 +2011,15 @@
         DebugPrint("shader {\n", Depth);
       }
 
-                                                          DebugPrint("u32 ID =", Depth+2);
-                DebugPrint(RuntimeStruct.ID, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u32 ID =", Depth+2);
+              DebugPrint(RuntimeStruct.ID, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("shader_uniform FirstUniform {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstUniform, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("shader_uniform FirstUniform {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstUniform, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -2043,15 +2043,15 @@
         DebugPrint("texture {\n", Depth);
       }
 
-                                                          DebugPrint("u32 ID =", Depth+2);
-                DebugPrint(RuntimeStruct.ID, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u32 ID =", Depth+2);
+              DebugPrint(RuntimeStruct.ID, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("v2i Dim {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Dim, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("v2i Dim {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Dim, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -2075,33 +2075,33 @@
         DebugPrint("textured_2d_geometry_buffer {\n", Depth);
       }
 
-                                                          DebugPrint("v3 Verts {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Verts, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("v3 Verts {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Verts, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 Colors {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Colors, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("v3 Colors {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Colors, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 UVs {\n", Depth+2);
-                DebugPrint(RuntimeStruct.UVs, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("v3 UVs {\n", Depth+2);
+              DebugPrint(RuntimeStruct.UVs, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("u32 End =", Depth+2);
-                DebugPrint(RuntimeStruct.End, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 End =", Depth+2);
+              DebugPrint(RuntimeStruct.End, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 At =", Depth+2);
-                DebugPrint(RuntimeStruct.At, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 At =", Depth+2);
+              DebugPrint(RuntimeStruct.At, 1);
+              DebugPrint(";\n");
 
 
 
@@ -2125,27 +2125,27 @@
         DebugPrint("untextured_2d_geometry_buffer {\n", Depth);
       }
 
-                                                          DebugPrint("v3 Verts {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Verts, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("v3 Verts {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Verts, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 Colors {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Colors, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("v3 Colors {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Colors, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("u32 End =", Depth+2);
-                DebugPrint(RuntimeStruct.End, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 End =", Depth+2);
+              DebugPrint(RuntimeStruct.End, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 At =", Depth+2);
-                DebugPrint(RuntimeStruct.At, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 At =", Depth+2);
+              DebugPrint(RuntimeStruct.At, 1);
+              DebugPrint(";\n");
 
 
 
@@ -2169,33 +2169,33 @@
         DebugPrint("untextured_3d_geometry_buffer {\n", Depth);
       }
 
-                                                          DebugPrint("v3 Verts {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Verts, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("v3 Verts {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Verts, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v4 Colors {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Colors, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("v4 Colors {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Colors, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 Normals {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Normals, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("v3 Normals {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Normals, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("u32 End =", Depth+2);
-                DebugPrint(RuntimeStruct.End, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 End =", Depth+2);
+              DebugPrint(RuntimeStruct.End, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 At =", Depth+2);
-                DebugPrint(RuntimeStruct.At, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 At =", Depth+2);
+              DebugPrint(RuntimeStruct.At, 1);
+              DebugPrint(";\n");
 
 
 
@@ -2219,27 +2219,27 @@
         DebugPrint("gpu_mapped_element_buffer {\n", Depth);
       }
 
-                                                          DebugPrint("u32 VertexHandle =", Depth+2);
-                DebugPrint(RuntimeStruct.VertexHandle, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u32 VertexHandle =", Depth+2);
+              DebugPrint(RuntimeStruct.VertexHandle, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 NormalHandle =", Depth+2);
-                DebugPrint(RuntimeStruct.NormalHandle, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 NormalHandle =", Depth+2);
+              DebugPrint(RuntimeStruct.NormalHandle, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 ColorHandle =", Depth+2);
-                DebugPrint(RuntimeStruct.ColorHandle, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 ColorHandle =", Depth+2);
+              DebugPrint(RuntimeStruct.ColorHandle, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("untextured_3d_geometry_buffer Buffer {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Buffer, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("untextured_3d_geometry_buffer Buffer {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Buffer, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -2263,15 +2263,15 @@
         DebugPrint("framebuffer {\n", Depth);
       }
 
-                                                          DebugPrint("u32 ID =", Depth+2);
-                DebugPrint(RuntimeStruct.ID, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u32 ID =", Depth+2);
+              DebugPrint(RuntimeStruct.ID, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 Attachments =", Depth+2);
-                DebugPrint(RuntimeStruct.Attachments, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 Attachments =", Depth+2);
+              DebugPrint(RuntimeStruct.Attachments, 1);
+              DebugPrint(";\n");
 
 
 
@@ -2295,15 +2295,15 @@
         DebugPrint("cycle_range {\n", Depth);
       }
 
-                                                          DebugPrint("u64 StartCycle =", Depth+2);
-                DebugPrint(RuntimeStruct.StartCycle, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u64 StartCycle =", Depth+2);
+              DebugPrint(RuntimeStruct.StartCycle, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u64 TotalCycles =", Depth+2);
-                DebugPrint(RuntimeStruct.TotalCycles, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u64 TotalCycles =", Depth+2);
+              DebugPrint(RuntimeStruct.TotalCycles, 1);
+              DebugPrint(";\n");
 
 
 
@@ -2327,27 +2327,27 @@
         DebugPrint("memory_arena_stats {\n", Depth);
       }
 
-                                                          DebugPrint("u64 Allocations =", Depth+2);
-                DebugPrint(RuntimeStruct.Allocations, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u64 Allocations =", Depth+2);
+              DebugPrint(RuntimeStruct.Allocations, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u64 Pushes =", Depth+2);
-                DebugPrint(RuntimeStruct.Pushes, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u64 Pushes =", Depth+2);
+              DebugPrint(RuntimeStruct.Pushes, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u64 TotalAllocated =", Depth+2);
-                DebugPrint(RuntimeStruct.TotalAllocated, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u64 TotalAllocated =", Depth+2);
+              DebugPrint(RuntimeStruct.TotalAllocated, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u64 Remaining =", Depth+2);
-                DebugPrint(RuntimeStruct.Remaining, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u64 Remaining =", Depth+2);
+              DebugPrint(RuntimeStruct.Remaining, 1);
+              DebugPrint(";\n");
 
 
 
@@ -2371,21 +2371,21 @@
         DebugPrint("min_max_avg_dt {\n", Depth);
       }
 
-                                                          DebugPrint("r64 Min =", Depth+2);
-                DebugPrint(RuntimeStruct.Min, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("r64 Min =", Depth+2);
+              DebugPrint(RuntimeStruct.Min, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("r64 Max =", Depth+2);
-                DebugPrint(RuntimeStruct.Max, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("r64 Max =", Depth+2);
+              DebugPrint(RuntimeStruct.Max, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("r64 Avg =", Depth+2);
-                DebugPrint(RuntimeStruct.Avg, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("r64 Avg =", Depth+2);
+              DebugPrint(RuntimeStruct.Avg, 1);
+              DebugPrint(";\n");
 
 
 
@@ -2409,45 +2409,45 @@
         DebugPrint("debug_profile_scope {\n", Depth);
       }
 
-                                                          DebugPrint("u64 CycleCount =", Depth+2);
-                DebugPrint(RuntimeStruct.CycleCount, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u64 CycleCount =", Depth+2);
+              DebugPrint(RuntimeStruct.CycleCount, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u64 StartingCycle =", Depth+2);
-                DebugPrint(RuntimeStruct.StartingCycle, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u64 StartingCycle =", Depth+2);
+              DebugPrint(RuntimeStruct.StartingCycle, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("const char  Name =", Depth+2);
-                DebugPrint(RuntimeStruct.Name, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("const char  Name =", Depth+2);
+              DebugPrint(RuntimeStruct.Name, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("b32 Expanded =", Depth+2);
-                DebugPrint(RuntimeStruct.Expanded, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 Expanded =", Depth+2);
+              DebugPrint(RuntimeStruct.Expanded, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("debug_profile_scope Sibling {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Sibling, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("debug_profile_scope Sibling {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Sibling, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("debug_profile_scope Child {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Child, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("debug_profile_scope Child {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Child, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("debug_profile_scope Parent {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Parent, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("debug_profile_scope Parent {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Parent, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -2471,45 +2471,45 @@
         DebugPrint("unique_debug_profile_scope {\n", Depth);
       }
 
-                                                          DebugPrint("const char  Name =", Depth+2);
-                DebugPrint(RuntimeStruct.Name, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("const char  Name =", Depth+2);
+              DebugPrint(RuntimeStruct.Name, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 CallCount =", Depth+2);
-                DebugPrint(RuntimeStruct.CallCount, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 CallCount =", Depth+2);
+              DebugPrint(RuntimeStruct.CallCount, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u64 TotalCycles =", Depth+2);
-                DebugPrint(RuntimeStruct.TotalCycles, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u64 TotalCycles =", Depth+2);
+              DebugPrint(RuntimeStruct.TotalCycles, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u64 MinCycles =", Depth+2);
-                DebugPrint(RuntimeStruct.MinCycles, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u64 MinCycles =", Depth+2);
+              DebugPrint(RuntimeStruct.MinCycles, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u64 MaxCycles =", Depth+2);
-                DebugPrint(RuntimeStruct.MaxCycles, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u64 MaxCycles =", Depth+2);
+              DebugPrint(RuntimeStruct.MaxCycles, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("debug_profile_scope Scope {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Scope, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("debug_profile_scope Scope {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Scope, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("unique_debug_profile_scope NextUnique {\n", Depth+2);
-                DebugPrint(RuntimeStruct.NextUnique, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("unique_debug_profile_scope NextUnique {\n", Depth+2);
+              DebugPrint(RuntimeStruct.NextUnique, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -2533,27 +2533,27 @@
         DebugPrint("debug_scope_tree {\n", Depth);
       }
 
-                                                          DebugPrint("debug_profile_scope Root {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Root, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("debug_profile_scope Root {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Root, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("debug_profile_scope WriteScope {\n", Depth+2);
-                DebugPrint(RuntimeStruct.WriteScope, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("debug_profile_scope WriteScope {\n", Depth+2);
+              DebugPrint(RuntimeStruct.WriteScope, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("debug_profile_scope ParentOfNextScope {\n", Depth+2);
-                DebugPrint(RuntimeStruct.ParentOfNextScope, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("debug_profile_scope ParentOfNextScope {\n", Depth+2);
+              DebugPrint(RuntimeStruct.ParentOfNextScope, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("u64 FrameRecorded =", Depth+2);
-                DebugPrint(RuntimeStruct.FrameRecorded, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u64 FrameRecorded =", Depth+2);
+              DebugPrint(RuntimeStruct.FrameRecorded, 1);
+              DebugPrint(";\n");
 
 
 
@@ -2577,51 +2577,51 @@
         DebugPrint("debug_thread_state {\n", Depth);
       }
 
-                                                          DebugPrint("memory_arena Memory {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Memory, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("memory_arena MemoryFor_debug_profile_scope {\n", Depth+2);
-                DebugPrint(RuntimeStruct.MemoryFor_debug_profile_scope, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("memory_arena MemoryFor_debug_profile_scope {\n", Depth+2);
+              DebugPrint(RuntimeStruct.MemoryFor_debug_profile_scope, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("push_metadata MetaTable {\n", Depth+2);
-                DebugPrint(RuntimeStruct.MetaTable, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("push_metadata MetaTable {\n", Depth+2);
+              DebugPrint(RuntimeStruct.MetaTable, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("debug_scope_tree ScopeTrees {\n", Depth+2);
-                DebugPrint(RuntimeStruct.ScopeTrees, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("debug_scope_tree ScopeTrees {\n", Depth+2);
+              DebugPrint(RuntimeStruct.ScopeTrees, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("debug_profile_scope FirstFreeScope {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstFreeScope, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("debug_profile_scope FirstFreeScope {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstFreeScope, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("mutex_op_array MutexOps {\n", Depth+2);
-                DebugPrint(RuntimeStruct.MutexOps, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("mutex_op_array MutexOps {\n", Depth+2);
+              DebugPrint(RuntimeStruct.MutexOps, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("u32 WriteIndex =", Depth+2);
-                DebugPrint(RuntimeStruct.WriteIndex, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 WriteIndex =", Depth+2);
+              DebugPrint(RuntimeStruct.WriteIndex, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u8 Pad =", Depth+2);
-                DebugPrint(RuntimeStruct.Pad, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u8 Pad =", Depth+2);
+              DebugPrint(RuntimeStruct.Pad, 1);
+              DebugPrint(";\n");
 
 
 
@@ -2645,21 +2645,21 @@
         DebugPrint("registered_memory_arena {\n", Depth);
       }
 
-                                                          DebugPrint("memory_arena Arena {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Arena, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("memory_arena Arena {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Arena, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("const char  Name =", Depth+2);
-                DebugPrint(RuntimeStruct.Name, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("const char  Name =", Depth+2);
+              DebugPrint(RuntimeStruct.Name, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("b32 Expanded =", Depth+2);
-                DebugPrint(RuntimeStruct.Expanded, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 Expanded =", Depth+2);
+              DebugPrint(RuntimeStruct.Expanded, 1);
+              DebugPrint(";\n");
 
 
 
@@ -2683,15 +2683,15 @@
         DebugPrint("selected_memory_arena {\n", Depth);
       }
 
-                                                          DebugPrint("umm ArenaHash =", Depth+2);
-                DebugPrint(RuntimeStruct.ArenaHash, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("umm ArenaHash =", Depth+2);
+              DebugPrint(RuntimeStruct.ArenaHash, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("umm HeadArenaHash =", Depth+2);
-                DebugPrint(RuntimeStruct.HeadArenaHash, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("umm HeadArenaHash =", Depth+2);
+              DebugPrint(RuntimeStruct.HeadArenaHash, 1);
+              DebugPrint(";\n");
 
 
 
@@ -2715,15 +2715,15 @@
         DebugPrint("selected_arenas {\n", Depth);
       }
 
-                                                          DebugPrint("u32 Count =", Depth+2);
-                DebugPrint(RuntimeStruct.Count, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u32 Count =", Depth+2);
+              DebugPrint(RuntimeStruct.Count, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("selected_memory_arena Arenas {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Arenas, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("selected_memory_arena Arenas {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Arenas, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -2747,21 +2747,21 @@
         DebugPrint("frame_stats {\n", Depth);
       }
 
-                                                          DebugPrint("u64 TotalCycles =", Depth+2);
-                DebugPrint(RuntimeStruct.TotalCycles, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u64 TotalCycles =", Depth+2);
+              DebugPrint(RuntimeStruct.TotalCycles, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u64 StartingCycle =", Depth+2);
-                DebugPrint(RuntimeStruct.StartingCycle, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u64 StartingCycle =", Depth+2);
+              DebugPrint(RuntimeStruct.StartingCycle, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("r64 FrameMs =", Depth+2);
-                DebugPrint(RuntimeStruct.FrameMs, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("r64 FrameMs =", Depth+2);
+              DebugPrint(RuntimeStruct.FrameMs, 1);
+              DebugPrint(";\n");
 
 
 
@@ -2785,15 +2785,15 @@
         DebugPrint("called_function {\n", Depth);
       }
 
-                                                          DebugPrint("const char  Name =", Depth+2);
-                DebugPrint(RuntimeStruct.Name, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("const char  Name =", Depth+2);
+              DebugPrint(RuntimeStruct.Name, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 CallCount =", Depth+2);
-                DebugPrint(RuntimeStruct.CallCount, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 CallCount =", Depth+2);
+              DebugPrint(RuntimeStruct.CallCount, 1);
+              DebugPrint(";\n");
 
 
 
@@ -2817,21 +2817,21 @@
         DebugPrint("debug_draw_call {\n", Depth);
       }
 
-                                                          DebugPrint("const char  Caller =", Depth+2);
-                DebugPrint(RuntimeStruct.Caller, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("const char  Caller =", Depth+2);
+              DebugPrint(RuntimeStruct.Caller, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 N =", Depth+2);
-                DebugPrint(RuntimeStruct.N, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 N =", Depth+2);
+              DebugPrint(RuntimeStruct.N, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 Calls =", Depth+2);
-                DebugPrint(RuntimeStruct.Calls, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 Calls =", Depth+2);
+              DebugPrint(RuntimeStruct.Calls, 1);
+              DebugPrint(";\n");
 
 
 
@@ -2855,93 +2855,93 @@
         DebugPrint("bitmap_image_header {\n", Depth);
       }
 
-                                                          DebugPrint("u32 SizeOfImageHeader =", Depth+2);
-                DebugPrint(RuntimeStruct.SizeOfImageHeader, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u32 SizeOfImageHeader =", Depth+2);
+              DebugPrint(RuntimeStruct.SizeOfImageHeader, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("s32 WidthInPixels =", Depth+2);
-                DebugPrint(RuntimeStruct.WidthInPixels, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("s32 WidthInPixels =", Depth+2);
+              DebugPrint(RuntimeStruct.WidthInPixels, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("s32 HeightInPixels =", Depth+2);
-                DebugPrint(RuntimeStruct.HeightInPixels, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("s32 HeightInPixels =", Depth+2);
+              DebugPrint(RuntimeStruct.HeightInPixels, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u16 ColorPlanes =", Depth+2);
-                DebugPrint(RuntimeStruct.ColorPlanes, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u16 ColorPlanes =", Depth+2);
+              DebugPrint(RuntimeStruct.ColorPlanes, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u16 BPP =", Depth+2);
-                DebugPrint(RuntimeStruct.BPP, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u16 BPP =", Depth+2);
+              DebugPrint(RuntimeStruct.BPP, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 CompressionType =", Depth+2);
-                DebugPrint(RuntimeStruct.CompressionType, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 CompressionType =", Depth+2);
+              DebugPrint(RuntimeStruct.CompressionType, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 SizeInBytes =", Depth+2);
-                DebugPrint(RuntimeStruct.SizeInBytes, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 SizeInBytes =", Depth+2);
+              DebugPrint(RuntimeStruct.SizeInBytes, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 xPixelsPerMeter =", Depth+2);
-                DebugPrint(RuntimeStruct.xPixelsPerMeter, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 xPixelsPerMeter =", Depth+2);
+              DebugPrint(RuntimeStruct.xPixelsPerMeter, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 yPixelsPerMeter =", Depth+2);
-                DebugPrint(RuntimeStruct.yPixelsPerMeter, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 yPixelsPerMeter =", Depth+2);
+              DebugPrint(RuntimeStruct.yPixelsPerMeter, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 ColorMapsUsed =", Depth+2);
-                DebugPrint(RuntimeStruct.ColorMapsUsed, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 ColorMapsUsed =", Depth+2);
+              DebugPrint(RuntimeStruct.ColorMapsUsed, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 NumSignificantColors =", Depth+2);
-                DebugPrint(RuntimeStruct.NumSignificantColors, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 NumSignificantColors =", Depth+2);
+              DebugPrint(RuntimeStruct.NumSignificantColors, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 RedMask =", Depth+2);
-                DebugPrint(RuntimeStruct.RedMask, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 RedMask =", Depth+2);
+              DebugPrint(RuntimeStruct.RedMask, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 GreenMask =", Depth+2);
-                DebugPrint(RuntimeStruct.GreenMask, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 GreenMask =", Depth+2);
+              DebugPrint(RuntimeStruct.GreenMask, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 BlueMask =", Depth+2);
-                DebugPrint(RuntimeStruct.BlueMask, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 BlueMask =", Depth+2);
+              DebugPrint(RuntimeStruct.BlueMask, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 AlphaMask =", Depth+2);
-                DebugPrint(RuntimeStruct.AlphaMask, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 AlphaMask =", Depth+2);
+              DebugPrint(RuntimeStruct.AlphaMask, 1);
+              DebugPrint(";\n");
 
 
 
@@ -2965,33 +2965,33 @@
         DebugPrint("bitmap_header {\n", Depth);
       }
 
-                                                          DebugPrint("u16 Type =", Depth+2);
-                DebugPrint(RuntimeStruct.Type, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u16 Type =", Depth+2);
+              DebugPrint(RuntimeStruct.Type, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 FileSizeInBytes =", Depth+2);
-                DebugPrint(RuntimeStruct.FileSizeInBytes, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 FileSizeInBytes =", Depth+2);
+              DebugPrint(RuntimeStruct.FileSizeInBytes, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 Ignored =", Depth+2);
-                DebugPrint(RuntimeStruct.Ignored, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 Ignored =", Depth+2);
+              DebugPrint(RuntimeStruct.Ignored, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 OffsetToPixelData =", Depth+2);
-                DebugPrint(RuntimeStruct.OffsetToPixelData, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 OffsetToPixelData =", Depth+2);
+              DebugPrint(RuntimeStruct.OffsetToPixelData, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("bitmap_image_header Image {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Image, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("bitmap_image_header Image {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Image, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -3015,15 +3015,15 @@
         DebugPrint("bitmap {\n", Depth);
       }
 
-                                                          DebugPrint("v2i Dim {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Dim, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("v2i Dim {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Dim, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("u32_stream Pixels {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Pixels, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("u32_stream Pixels {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Pixels, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -3047,15 +3047,15 @@
         DebugPrint("macro_expansion {\n", Depth);
       }
 
-                                                          DebugPrint("c_token_cursor Expansion {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Expansion, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("c_token_cursor Expansion {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Expansion, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("macro_def Def {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Def, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("macro_def Def {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Def, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -3079,44 +3079,44 @@
         DebugPrint("c_token {\n", Depth);
       }
 
-                                                          DebugPrint("c_token_type Type =", Depth+2);
-                DebugPrint(RuntimeStruct.Type, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("c_token_type Type =", Depth+2);
+              DebugPrint(RuntimeStruct.Type, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("counted_string Value {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Value, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Value {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Value, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Filename {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Filename, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Filename {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Filename, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("u32 LineNumber =", Depth+2);
-                DebugPrint(RuntimeStruct.LineNumber, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 LineNumber =", Depth+2);
+              DebugPrint(RuntimeStruct.LineNumber, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("b32 Erased =", Depth+2);
-                DebugPrint(RuntimeStruct.Erased, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 Erased =", Depth+2);
+              DebugPrint(RuntimeStruct.Erased, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u8 Flags =", Depth+2);
-                DebugPrint(RuntimeStruct.Flags, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u8 Flags =", Depth+2);
+              DebugPrint(RuntimeStruct.Flags, 1);
+              DebugPrint(";\n");
 
 
 
-                                    // NOTE(Jesse): an anonymous struct or union
-              DebugPrint("union (anonymous)\n", Depth+2);
+                              // NOTE(Jesse): an anonymous struct or union
+            DebugPrint("union (anonymous)\n", Depth+2);
 
 
 
@@ -3139,21 +3139,21 @@
         DebugPrint("peek_result {\n", Depth);
       }
 
-                                                          DebugPrint("c_token_cursor Tokens {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Tokens, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("c_token_cursor Tokens {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Tokens, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("c_token At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("b32 DoNotDescend =", Depth+2);
-                DebugPrint(RuntimeStruct.DoNotDescend, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 DoNotDescend =", Depth+2);
+              DebugPrint(RuntimeStruct.DoNotDescend, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3177,15 +3177,15 @@
         DebugPrint("c_token_cursor_up {\n", Depth);
       }
 
-                                                          DebugPrint("c_token_cursor Tokens {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Tokens, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("c_token_cursor Tokens {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Tokens, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("c_token At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -3209,39 +3209,39 @@
         DebugPrint("c_token_cursor {\n", Depth);
       }
 
-                                                          DebugPrint("token_cursor_source Source =", Depth+2);
-                DebugPrint(RuntimeStruct.Source, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("token_cursor_source Source =", Depth+2);
+              DebugPrint(RuntimeStruct.Source, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("c_token Start {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Start, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("c_token Start {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Start, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token End {\n", Depth+2);
-                DebugPrint(RuntimeStruct.End, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("c_token End {\n", Depth+2);
+              DebugPrint(RuntimeStruct.End, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("c_token At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token_cursor_up Up {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Up, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("c_token_cursor_up Up {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Up, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Filename {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Filename, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Filename {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Filename, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -3265,15 +3265,15 @@
         DebugPrint("parser {\n", Depth);
       }
 
-                                                          DebugPrint("parse_error_code ErrorCode =", Depth+2);
-                DebugPrint(RuntimeStruct.ErrorCode, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("parse_error_code ErrorCode =", Depth+2);
+              DebugPrint(RuntimeStruct.ErrorCode, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("c_token_cursor Tokens {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Tokens, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("c_token_cursor Tokens {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Tokens, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -3297,15 +3297,15 @@
         DebugPrint("declaration_stream {\n", Depth);
       }
 
-                                                          DebugPrint("declaration_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("declaration_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("declaration_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("declaration_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -3329,21 +3329,21 @@
         DebugPrint("compound_decl {\n", Depth);
       }
 
-                                                          DebugPrint("c_token Type {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Type, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("c_token Type {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Type, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("declaration_stream Members {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Members, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("declaration_stream Members {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Members, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("b32 IsUnion =", Depth+2);
-                DebugPrint(RuntimeStruct.IsUnion, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 IsUnion =", Depth+2);
+              DebugPrint(RuntimeStruct.IsUnion, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3367,45 +3367,45 @@
         DebugPrint("type_indirection_info {\n", Depth);
       }
 
-                                                          DebugPrint("b32 ConstPointer =", Depth+2);
-                DebugPrint(RuntimeStruct.ConstPointer, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("b32 ConstPointer =", Depth+2);
+              DebugPrint(RuntimeStruct.ConstPointer, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("b32 VolatileValue =", Depth+2);
-                DebugPrint(RuntimeStruct.VolatileValue, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 VolatileValue =", Depth+2);
+              DebugPrint(RuntimeStruct.VolatileValue, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 ReferenceLevel =", Depth+2);
-                DebugPrint(RuntimeStruct.ReferenceLevel, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 ReferenceLevel =", Depth+2);
+              DebugPrint(RuntimeStruct.ReferenceLevel, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("u32 IndirectionLevel =", Depth+2);
-                DebugPrint(RuntimeStruct.IndirectionLevel, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 IndirectionLevel =", Depth+2);
+              DebugPrint(RuntimeStruct.IndirectionLevel, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("b32 IsFunction =", Depth+2);
-                DebugPrint(RuntimeStruct.IsFunction, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 IsFunction =", Depth+2);
+              DebugPrint(RuntimeStruct.IsFunction, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("b32 IsFunctionPtr =", Depth+2);
-                DebugPrint(RuntimeStruct.IsFunctionPtr, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 IsFunctionPtr =", Depth+2);
+              DebugPrint(RuntimeStruct.IsFunctionPtr, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("c_token FunctionNameT {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FunctionNameT, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("c_token FunctionNameT {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FunctionNameT, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -3429,45 +3429,45 @@
         DebugPrint("type_spec {\n", Depth);
       }
 
-                                                          DebugPrint("c_token QualifierNameT {\n", Depth+2);
-                DebugPrint(RuntimeStruct.QualifierNameT, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("c_token QualifierNameT {\n", Depth+2);
+              DebugPrint(RuntimeStruct.QualifierNameT, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token DatatypeToken {\n", Depth+2);
-                DebugPrint(RuntimeStruct.DatatypeToken, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("c_token DatatypeToken {\n", Depth+2);
+              DebugPrint(RuntimeStruct.DatatypeToken, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("datatype BaseType {\n", Depth+2);
-                DebugPrint(RuntimeStruct.BaseType, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("datatype BaseType {\n", Depth+2);
+              DebugPrint(RuntimeStruct.BaseType, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("type_qualifier Qualifier =", Depth+2);
-                DebugPrint(RuntimeStruct.Qualifier, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("type_qualifier Qualifier =", Depth+2);
+              DebugPrint(RuntimeStruct.Qualifier, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("b32 HasTemplateArguments =", Depth+2);
-                DebugPrint(RuntimeStruct.HasTemplateArguments, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 HasTemplateArguments =", Depth+2);
+              DebugPrint(RuntimeStruct.HasTemplateArguments, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("counted_string TemplateSource {\n", Depth+2);
-                DebugPrint(RuntimeStruct.TemplateSource, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string TemplateSource {\n", Depth+2);
+              DebugPrint(RuntimeStruct.TemplateSource, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("linkage_type Linkage =", Depth+2);
-                DebugPrint(RuntimeStruct.Linkage, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("linkage_type Linkage =", Depth+2);
+              DebugPrint(RuntimeStruct.Linkage, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3491,39 +3491,39 @@
         DebugPrint("variable_decl {\n", Depth);
       }
 
-                                                          DebugPrint("type_spec Type {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Type, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("type_spec Type {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Type, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Name {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Name, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Name, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node StaticBufferSize {\n", Depth+2);
-                DebugPrint(RuntimeStruct.StaticBufferSize, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node StaticBufferSize {\n", Depth+2);
+              DebugPrint(RuntimeStruct.StaticBufferSize, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node Value {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Value, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node Value {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Value, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("u32 StrictBitWidth =", Depth+2);
-                DebugPrint(RuntimeStruct.StrictBitWidth, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("u32 StrictBitWidth =", Depth+2);
+              DebugPrint(RuntimeStruct.StrictBitWidth, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("type_indirection_info Indirection {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Indirection, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("type_indirection_info Indirection {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Indirection, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -3547,57 +3547,57 @@
         DebugPrint("function_decl {\n", Depth);
       }
 
-                                                          DebugPrint("function_type Type =", Depth+2);
-                DebugPrint(RuntimeStruct.Type, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("function_type Type =", Depth+2);
+              DebugPrint(RuntimeStruct.Type, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("type_spec ReturnType {\n", Depth+2);
-                DebugPrint(RuntimeStruct.ReturnType, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("type_spec ReturnType {\n", Depth+2);
+              DebugPrint(RuntimeStruct.ReturnType, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token NameT {\n", Depth+2);
-                DebugPrint(RuntimeStruct.NameT, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("c_token NameT {\n", Depth+2);
+              DebugPrint(RuntimeStruct.NameT, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("variable_decl_stream Args {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Args, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("variable_decl_stream Args {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Args, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("b32 IsVariadic =", Depth+2);
-                DebugPrint(RuntimeStruct.IsVariadic, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 IsVariadic =", Depth+2);
+              DebugPrint(RuntimeStruct.IsVariadic, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("b32 ImplIsDefault =", Depth+2);
-                DebugPrint(RuntimeStruct.ImplIsDefault, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 ImplIsDefault =", Depth+2);
+              DebugPrint(RuntimeStruct.ImplIsDefault, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("b32 ImplIsDeleted =", Depth+2);
-                DebugPrint(RuntimeStruct.ImplIsDeleted, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 ImplIsDeleted =", Depth+2);
+              DebugPrint(RuntimeStruct.ImplIsDeleted, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("parser Body {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Body, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("parser Body {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Body, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node Ast {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Ast, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node Ast {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Ast, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -3621,15 +3621,15 @@
         DebugPrint("enum_member {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Name {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Name, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Name, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression Expr {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Expr, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_expression Expr {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Expr, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -3653,15 +3653,15 @@
         DebugPrint("enum_decl {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Name {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Name, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Name, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_member_stream Members {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Members, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("enum_member_stream Members {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Members, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -3685,9 +3685,9 @@
         DebugPrint("primitive_def {\n", Depth);
       }
 
-                                                          DebugPrint("type_spec TypeSpec {\n", Depth+2);
-                DebugPrint(RuntimeStruct.TypeSpec, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("type_spec TypeSpec {\n", Depth+2);
+              DebugPrint(RuntimeStruct.TypeSpec, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -3711,21 +3711,21 @@
         DebugPrint("d_union_member {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Type {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Type, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Type {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Type, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Name {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Name, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Name, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("d_union_flags Flags =", Depth+2);
-                DebugPrint(RuntimeStruct.Flags, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("d_union_flags Flags =", Depth+2);
+              DebugPrint(RuntimeStruct.Flags, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3749,21 +3749,21 @@
         DebugPrint("type_def {\n", Depth);
       }
 
-                                                          DebugPrint("type_spec Type {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Type, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("type_spec Type {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Type, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Alias {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Alias, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Alias {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Alias, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("b32 IsFunction =", Depth+2);
-                DebugPrint(RuntimeStruct.IsFunction, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 IsFunction =", Depth+2);
+              DebugPrint(RuntimeStruct.IsFunction, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3787,15 +3787,15 @@
         DebugPrint("meta_func_arg {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Match {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Match, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Match {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Match, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("datatype Data {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Data, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("datatype Data {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Data, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -3819,27 +3819,27 @@
         DebugPrint("d_union_decl {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Name {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Name, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Name, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("d_union_member_stream Members {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Members, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("d_union_member_stream Members {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Members, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("declaration_stream CommonMembers {\n", Depth+2);
-                DebugPrint(RuntimeStruct.CommonMembers, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("declaration_stream CommonMembers {\n", Depth+2);
+              DebugPrint(RuntimeStruct.CommonMembers, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string CustomEnumType {\n", Depth+2);
-                DebugPrint(RuntimeStruct.CustomEnumType, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string CustomEnumType {\n", Depth+2);
+              DebugPrint(RuntimeStruct.CustomEnumType, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -3863,39 +3863,39 @@
         DebugPrint("macro_def {\n", Depth);
       }
 
-                                                          DebugPrint("macro_type Type =", Depth+2);
-                DebugPrint(RuntimeStruct.Type, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("macro_type Type =", Depth+2);
+              DebugPrint(RuntimeStruct.Type, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("counted_string Name {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Name, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Name, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token_cursor Body {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Body, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("c_token_cursor Body {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Body, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_buffer NamedArguments {\n", Depth+2);
-                DebugPrint(RuntimeStruct.NamedArguments, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string_buffer NamedArguments {\n", Depth+2);
+              DebugPrint(RuntimeStruct.NamedArguments, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("b32 Variadic =", Depth+2);
-                DebugPrint(RuntimeStruct.Variadic, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 Variadic =", Depth+2);
+              DebugPrint(RuntimeStruct.Variadic, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("b32 Undefed =", Depth+2);
-                DebugPrint(RuntimeStruct.Undefed, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 Undefed =", Depth+2);
+              DebugPrint(RuntimeStruct.Undefed, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3919,21 +3919,21 @@
         DebugPrint("meta_func {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Name {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Name, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Name, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string ArgName {\n", Depth+2);
-                DebugPrint(RuntimeStruct.ArgName, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string ArgName {\n", Depth+2);
+              DebugPrint(RuntimeStruct.ArgName, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("parser Body {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Body, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("parser Body {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Body, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -3957,21 +3957,21 @@
         DebugPrint("todo {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Id {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Id, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Id {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Id, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string Value {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Value, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string Value {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Value, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("b32 FoundInCodebase =", Depth+2);
-                DebugPrint(RuntimeStruct.FoundInCodebase, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 FoundInCodebase =", Depth+2);
+              DebugPrint(RuntimeStruct.FoundInCodebase, 1);
+              DebugPrint(";\n");
 
 
 
@@ -3995,15 +3995,15 @@
         DebugPrint("tag {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Tag {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Tag, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Tag {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Tag, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("todo_stream Todos {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Todos, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("todo_stream Todos {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Todos, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4027,15 +4027,15 @@
         DebugPrint("person {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Name {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Name, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Name, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("tag_stream Tags {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Tags, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("tag_stream Tags {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Tags, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4059,15 +4059,15 @@
         DebugPrint("ast_node_expression {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node Value {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Value, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("ast_node Value {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Value, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_expression Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4091,21 +4091,21 @@
         DebugPrint("ast_node_statement {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_expression LHS {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LHS, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("ast_node_expression LHS {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LHS, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_statement RHS {\n", Depth+2);
-                DebugPrint(RuntimeStruct.RHS, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_statement RHS {\n", Depth+2);
+              DebugPrint(RuntimeStruct.RHS, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_statement Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_statement Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4129,21 +4129,21 @@
         DebugPrint("ast_node_function_call {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Name {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Name, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Name {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Name, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("function_decl Prototype {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Prototype, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("function_decl Prototype {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Prototype, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression_stream Args {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Args, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_expression_stream Args {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Args, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4167,27 +4167,27 @@
         DebugPrint("ast_node_type_specifier {\n", Depth);
       }
 
-                                                          DebugPrint("datatype Datatype {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Datatype, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("datatype Datatype {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Datatype, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("type_spec TypeSpec {\n", Depth+2);
-                DebugPrint(RuntimeStruct.TypeSpec, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("type_spec TypeSpec {\n", Depth+2);
+              DebugPrint(RuntimeStruct.TypeSpec, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("type_indirection_info Indirection {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Indirection, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("type_indirection_info Indirection {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Indirection, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression Name {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Name, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_expression Name {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Name, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4211,21 +4211,21 @@
         DebugPrint("ast_node_variable_def {\n", Depth);
       }
 
-                                                          DebugPrint("datatype Type {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Type, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("datatype Type {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Type, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("variable_decl Decl {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Decl, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("variable_decl Decl {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Decl, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node Value {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Value, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node Value {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Value, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4249,15 +4249,15 @@
         DebugPrint("ast_node_access {\n", Depth);
       }
 
-                                                          DebugPrint("c_token AccessType {\n", Depth+2);
-                DebugPrint(RuntimeStruct.AccessType, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("c_token AccessType {\n", Depth+2);
+              DebugPrint(RuntimeStruct.AccessType, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression Symbol {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Symbol, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_expression Symbol {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Symbol, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4281,21 +4281,21 @@
         DebugPrint("ast_node_parenthesized {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_expression Expr {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Expr, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("ast_node_expression Expr {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Expr, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("b32 IsCast =", Depth+2);
-                DebugPrint(RuntimeStruct.IsCast, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 IsCast =", Depth+2);
+              DebugPrint(RuntimeStruct.IsCast, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("ast_node_expression CastValue {\n", Depth+2);
-                DebugPrint(RuntimeStruct.CastValue, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_expression CastValue {\n", Depth+2);
+              DebugPrint(RuntimeStruct.CastValue, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4319,9 +4319,9 @@
         DebugPrint("ast_node_initializer_list {\n", Depth);
       }
 
-                                                          DebugPrint("u32 Ignored =", Depth+2);
-                DebugPrint(RuntimeStruct.Ignored, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("u32 Ignored =", Depth+2);
+              DebugPrint(RuntimeStruct.Ignored, 1);
+              DebugPrint(";\n");
 
 
 
@@ -4345,15 +4345,15 @@
         DebugPrint("ast_node_operator {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_expression Operand {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Operand, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("ast_node_expression Operand {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Operand, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token Token {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Token, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("c_token Token {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Token, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4377,9 +4377,9 @@
         DebugPrint("ast_node_literal {\n", Depth);
       }
 
-                                                          DebugPrint("c_token Token {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Token, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("c_token Token {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Token, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4403,9 +4403,9 @@
         DebugPrint("ast_node_symbol {\n", Depth);
       }
 
-                                                          DebugPrint("c_token Token {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Token, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("c_token Token {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Token, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4429,9 +4429,9 @@
         DebugPrint("ast_node_return {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_expression Value {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Value, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("ast_node_expression Value {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Value, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4455,15 +4455,15 @@
         DebugPrint("ast_node_predicated {\n", Depth);
       }
 
-                                                          DebugPrint("c_token Token {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Token, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("c_token Token {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Token, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression Predicate {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Predicate, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_expression Predicate {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Predicate, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4487,27 +4487,27 @@
         DebugPrint("arguments {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Outpath {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Outpath, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Outpath {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Outpath, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_cursor Files {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Files, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string_cursor Files {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Files, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_cursor IncludePaths {\n", Depth+2);
-                DebugPrint(RuntimeStruct.IncludePaths, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string_cursor IncludePaths {\n", Depth+2);
+              DebugPrint(RuntimeStruct.IncludePaths, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("b32 DoDebugWindow =", Depth+2);
-                DebugPrint(RuntimeStruct.DoDebugWindow, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("b32 DoDebugWindow =", Depth+2);
+              DebugPrint(RuntimeStruct.DoDebugWindow, 1);
+              DebugPrint(";\n");
 
 
 
@@ -4531,45 +4531,45 @@
         DebugPrint("program_datatypes {\n", Depth);
       }
 
-                                                          DebugPrint("datatype_hashtable DatatypeHashtable {\n", Depth+2);
-                DebugPrint(RuntimeStruct.DatatypeHashtable, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("datatype_hashtable DatatypeHashtable {\n", Depth+2);
+              DebugPrint(RuntimeStruct.DatatypeHashtable, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("macro_def_hashtable Macros {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Macros, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("macro_def_hashtable Macros {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Macros, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_hashtable FilesParsed {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FilesParsed, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string_hashtable FilesParsed {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FilesParsed, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("compound_decl_stream Structs {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Structs, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("compound_decl_stream Structs {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Structs, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_decl_stream Enums {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Enums, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("enum_decl_stream Enums {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Enums, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("function_decl_stream Functions {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Functions, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("function_decl_stream Functions {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Functions, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("type_def_stream Typedefs {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Typedefs, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("type_def_stream Typedefs {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Typedefs, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4593,15 +4593,15 @@
         DebugPrint("for_enum_constraints {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string TypeName {\n", Depth+2);
-                DebugPrint(RuntimeStruct.TypeName, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string TypeName {\n", Depth+2);
+              DebugPrint(RuntimeStruct.TypeName, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string ValueName {\n", Depth+2);
-                DebugPrint(RuntimeStruct.ValueName, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string ValueName {\n", Depth+2);
+              DebugPrint(RuntimeStruct.ValueName, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4625,27 +4625,27 @@
         DebugPrint("body_text_constraints {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string MemberContains {\n", Depth+2);
-                DebugPrint(RuntimeStruct.MemberContains, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string MemberContains {\n", Depth+2);
+              DebugPrint(RuntimeStruct.MemberContains, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string TypeTag {\n", Depth+2);
-                DebugPrint(RuntimeStruct.TypeTag, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string TypeTag {\n", Depth+2);
+              DebugPrint(RuntimeStruct.TypeTag, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string TypeName {\n", Depth+2);
-                DebugPrint(RuntimeStruct.TypeName, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string TypeName {\n", Depth+2);
+              DebugPrint(RuntimeStruct.TypeName, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string ValueName {\n", Depth+2);
-                DebugPrint(RuntimeStruct.ValueName, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string ValueName {\n", Depth+2);
+              DebugPrint(RuntimeStruct.ValueName, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4669,15 +4669,15 @@
         DebugPrint("todo_list_info {\n", Depth);
       }
 
-                                                          DebugPrint("person_stream People {\n", Depth+2);
-                DebugPrint(RuntimeStruct.People, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("person_stream People {\n", Depth+2);
+              DebugPrint(RuntimeStruct.People, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("tagged_counted_string_stream_stream NameLists {\n", Depth+2);
-                DebugPrint(RuntimeStruct.NameLists, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("tagged_counted_string_stream_stream NameLists {\n", Depth+2);
+              DebugPrint(RuntimeStruct.NameLists, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4701,15 +4701,15 @@
         DebugPrint("string_from_parser {\n", Depth);
       }
 
-                                                          DebugPrint("parser Parser {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Parser, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("parser Parser {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Parser, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token StartToken {\n", Depth+2);
-                DebugPrint(RuntimeStruct.StartToken, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("c_token StartToken {\n", Depth+2);
+              DebugPrint(RuntimeStruct.StartToken, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4733,39 +4733,39 @@
         DebugPrint("parse_context {\n", Depth);
       }
 
-                                                          DebugPrint("parser CurrentParser {\n", Depth+2);
-                DebugPrint(RuntimeStruct.CurrentParser, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("parser CurrentParser {\n", Depth+2);
+              DebugPrint(RuntimeStruct.CurrentParser, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("program_datatypes Datatypes {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Datatypes, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("program_datatypes Datatypes {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Datatypes, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_cursor IncludePaths {\n", Depth+2);
-                DebugPrint(RuntimeStruct.IncludePaths, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string_cursor IncludePaths {\n", Depth+2);
+              DebugPrint(RuntimeStruct.IncludePaths, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("meta_func_stream MetaFunctions {\n", Depth+2);
-                DebugPrint(RuntimeStruct.MetaFunctions, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("meta_func_stream MetaFunctions {\n", Depth+2);
+              DebugPrint(RuntimeStruct.MetaFunctions, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("memory_arena Memory {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Memory, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("arguments Args {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Args, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("arguments Args {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Args, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4789,27 +4789,27 @@
         DebugPrint("comma_separated_decl {\n", Depth);
       }
 
-                                                          DebugPrint("c_token NameT {\n", Depth+2);
-                DebugPrint(RuntimeStruct.NameT, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("c_token NameT {\n", Depth+2);
+              DebugPrint(RuntimeStruct.NameT, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("type_indirection_info Indirection {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Indirection, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("type_indirection_info Indirection {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Indirection, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node StaticBufferSize {\n", Depth+2);
-                DebugPrint(RuntimeStruct.StaticBufferSize, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node StaticBufferSize {\n", Depth+2);
+              DebugPrint(RuntimeStruct.StaticBufferSize, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node Value {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Value, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node Value {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Value, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4833,15 +4833,15 @@
         DebugPrint("d_list {\n", Depth);
       }
 
-                                                          DebugPrint("d_list Prev {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Prev, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("d_list Prev {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Prev, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("d_list Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("d_list Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4865,21 +4865,21 @@
         DebugPrint("counted_string_cursor {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Start {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Start, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Start {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Start, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string End {\n", Depth+2);
-                DebugPrint(RuntimeStruct.End, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string End {\n", Depth+2);
+              DebugPrint(RuntimeStruct.End, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4903,15 +4903,15 @@
         DebugPrint("counted_string_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4935,15 +4935,15 @@
         DebugPrint("counted_string_stream {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4967,15 +4967,15 @@
         DebugPrint("counted_string_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -4999,15 +4999,15 @@
         DebugPrint("tagged_counted_string_stream_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("tagged_counted_string_stream Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("tagged_counted_string_stream Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("tagged_counted_string_stream_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("tagged_counted_string_stream_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5031,15 +5031,15 @@
         DebugPrint("tagged_counted_string_stream_stream {\n", Depth);
       }
 
-                                                          DebugPrint("tagged_counted_string_stream_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("tagged_counted_string_stream_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("tagged_counted_string_stream_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("tagged_counted_string_stream_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5063,15 +5063,15 @@
         DebugPrint("tagged_counted_string_stream_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("tagged_counted_string_stream_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("tagged_counted_string_stream_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("tagged_counted_string_stream_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("tagged_counted_string_stream_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5095,15 +5095,15 @@
         DebugPrint("xml_tag_linked_list_node {\n", Depth);
       }
 
-                                                          DebugPrint("xml_tag Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("xml_tag Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("xml_tag_linked_list_node Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("xml_tag_linked_list_node Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5127,15 +5127,15 @@
         DebugPrint("xml_tag_hashtable {\n", Depth);
       }
 
-                                                          DebugPrint("umm Size =", Depth+2);
-                DebugPrint(RuntimeStruct.Size, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("umm Size =", Depth+2);
+              DebugPrint(RuntimeStruct.Size, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("xml_tag_linked_list_node Elements {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Elements, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("xml_tag_linked_list_node Elements {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Elements, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5159,15 +5159,15 @@
         DebugPrint("counted_string_buffer {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Start {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Start, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Start {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Start, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("umm Count =", Depth+2);
-                DebugPrint(RuntimeStruct.Count, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("umm Count =", Depth+2);
+              DebugPrint(RuntimeStruct.Count, 1);
+              DebugPrint(";\n");
 
 
 
@@ -5191,15 +5191,15 @@
         DebugPrint("counted_string_linked_list_node {\n", Depth);
       }
 
-                                                          DebugPrint("counted_string Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("counted_string Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("counted_string_linked_list_node Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string_linked_list_node Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5223,15 +5223,15 @@
         DebugPrint("counted_string_hashtable {\n", Depth);
       }
 
-                                                          DebugPrint("umm Size =", Depth+2);
-                DebugPrint(RuntimeStruct.Size, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("umm Size =", Depth+2);
+              DebugPrint(RuntimeStruct.Size, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("counted_string_linked_list_node Elements {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Elements, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("counted_string_linked_list_node Elements {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Elements, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5255,21 +5255,21 @@
         DebugPrint("v3_cursor {\n", Depth);
       }
 
-                                                          DebugPrint("v3 Start {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Start, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("v3 Start {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Start, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("v3 At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("v3 End {\n", Depth+2);
-                DebugPrint(RuntimeStruct.End, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("v3 End {\n", Depth+2);
+              DebugPrint(RuntimeStruct.End, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5293,15 +5293,15 @@
         DebugPrint("c_token_buffer {\n", Depth);
       }
 
-                                                          DebugPrint("c_token Start {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Start, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("c_token Start {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Start, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("umm Count =", Depth+2);
-                DebugPrint(RuntimeStruct.Count, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("umm Count =", Depth+2);
+              DebugPrint(RuntimeStruct.Count, 1);
+              DebugPrint(";\n");
 
 
 
@@ -5325,15 +5325,15 @@
         DebugPrint("c_token_buffer_buffer {\n", Depth);
       }
 
-                                                          DebugPrint("c_token_buffer Start {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Start, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("c_token_buffer Start {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Start, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("umm Count =", Depth+2);
-                DebugPrint(RuntimeStruct.Count, 1);
-                DebugPrint(";\n");
+                                            DebugPrint("umm Count =", Depth+2);
+              DebugPrint(RuntimeStruct.Count, 1);
+              DebugPrint(";\n");
 
 
 
@@ -5357,15 +5357,15 @@
         DebugPrint("c_token_buffer_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("c_token_buffer Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("c_token_buffer Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token_buffer_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("c_token_buffer_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5389,15 +5389,15 @@
         DebugPrint("c_token_buffer_stream {\n", Depth);
       }
 
-                                                          DebugPrint("c_token_buffer_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("c_token_buffer_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token_buffer_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("c_token_buffer_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5421,15 +5421,15 @@
         DebugPrint("c_token_buffer_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("c_token_buffer_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("c_token_buffer_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("c_token_buffer_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("c_token_buffer_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5453,21 +5453,21 @@
         DebugPrint("parser_cursor {\n", Depth);
       }
 
-                                                          DebugPrint("parser Start {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Start, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("parser Start {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Start, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("parser At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("parser At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("parser End {\n", Depth+2);
-                DebugPrint(RuntimeStruct.End, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("parser End {\n", Depth+2);
+              DebugPrint(RuntimeStruct.End, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5491,15 +5491,15 @@
         DebugPrint("parser_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("parser Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("parser Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("parser_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("parser_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5523,15 +5523,15 @@
         DebugPrint("parser_stream {\n", Depth);
       }
 
-                                                          DebugPrint("parser_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("parser_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("parser_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("parser_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5555,15 +5555,15 @@
         DebugPrint("parser_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("parser_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("parser_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("parser_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("parser_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5587,21 +5587,21 @@
         DebugPrint("compound_decl_cursor {\n", Depth);
       }
 
-                                                          DebugPrint("compound_decl Start {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Start, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("compound_decl Start {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Start, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("compound_decl At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("compound_decl At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("compound_decl End {\n", Depth+2);
-                DebugPrint(RuntimeStruct.End, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("compound_decl End {\n", Depth+2);
+              DebugPrint(RuntimeStruct.End, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5625,15 +5625,15 @@
         DebugPrint("compound_decl_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("compound_decl Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("compound_decl Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("compound_decl_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("compound_decl_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5657,15 +5657,15 @@
         DebugPrint("compound_decl_stream {\n", Depth);
       }
 
-                                                          DebugPrint("compound_decl_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("compound_decl_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("compound_decl_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("compound_decl_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5689,15 +5689,15 @@
         DebugPrint("compound_decl_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("compound_decl_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("compound_decl_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("compound_decl_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("compound_decl_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5721,15 +5721,15 @@
         DebugPrint("variable_decl_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("variable_decl Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("variable_decl Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("variable_decl_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("variable_decl_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5753,15 +5753,15 @@
         DebugPrint("variable_decl_stream {\n", Depth);
       }
 
-                                                          DebugPrint("variable_decl_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("variable_decl_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("variable_decl_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("variable_decl_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5785,15 +5785,15 @@
         DebugPrint("variable_decl_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("variable_decl_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("variable_decl_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("variable_decl_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("variable_decl_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5817,15 +5817,15 @@
         DebugPrint("function_decl_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("function_decl Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("function_decl Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("function_decl_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("function_decl_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5849,15 +5849,15 @@
         DebugPrint("function_decl_stream {\n", Depth);
       }
 
-                                                          DebugPrint("function_decl_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("function_decl_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("function_decl_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("function_decl_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5881,15 +5881,15 @@
         DebugPrint("function_decl_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("function_decl_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("function_decl_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("function_decl_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("function_decl_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5913,15 +5913,15 @@
         DebugPrint("enum_member_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("enum_member Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("enum_member Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_member_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("enum_member_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5945,15 +5945,15 @@
         DebugPrint("enum_member_stream {\n", Depth);
       }
 
-                                                          DebugPrint("enum_member_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("enum_member_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_member_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("enum_member_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -5977,15 +5977,15 @@
         DebugPrint("enum_member_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("enum_member_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("enum_member_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_member_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("enum_member_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6009,21 +6009,21 @@
         DebugPrint("enum_decl_cursor {\n", Depth);
       }
 
-                                                          DebugPrint("enum_decl Start {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Start, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("enum_decl Start {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Start, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_decl At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("enum_decl At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_decl End {\n", Depth+2);
-                DebugPrint(RuntimeStruct.End, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("enum_decl End {\n", Depth+2);
+              DebugPrint(RuntimeStruct.End, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6047,15 +6047,15 @@
         DebugPrint("enum_decl_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("enum_decl Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("enum_decl Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_decl_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("enum_decl_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6079,15 +6079,15 @@
         DebugPrint("enum_decl_stream {\n", Depth);
       }
 
-                                                          DebugPrint("enum_decl_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("enum_decl_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_decl_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("enum_decl_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6111,15 +6111,15 @@
         DebugPrint("enum_decl_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("enum_decl_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("enum_decl_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("enum_decl_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("enum_decl_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6143,21 +6143,21 @@
         DebugPrint("declaration_cursor {\n", Depth);
       }
 
-                                                          DebugPrint("declaration Start {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Start, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("declaration Start {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Start, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("declaration At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("declaration At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("declaration End {\n", Depth+2);
-                DebugPrint(RuntimeStruct.End, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("declaration End {\n", Depth+2);
+              DebugPrint(RuntimeStruct.End, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6181,15 +6181,15 @@
         DebugPrint("declaration_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("declaration Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("declaration Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("declaration_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("declaration_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6213,15 +6213,15 @@
         DebugPrint("datatype_linked_list_node {\n", Depth);
       }
 
-                                                          DebugPrint("datatype Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("datatype Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("datatype_linked_list_node Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("datatype_linked_list_node Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6245,15 +6245,15 @@
         DebugPrint("datatype_hashtable {\n", Depth);
       }
 
-                                                          DebugPrint("umm Size =", Depth+2);
-                DebugPrint(RuntimeStruct.Size, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("umm Size =", Depth+2);
+              DebugPrint(RuntimeStruct.Size, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("datatype_linked_list_node Elements {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Elements, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("datatype_linked_list_node Elements {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Elements, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6277,15 +6277,15 @@
         DebugPrint("d_union_member_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("d_union_member Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("d_union_member Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("d_union_member_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("d_union_member_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6309,15 +6309,15 @@
         DebugPrint("d_union_member_stream {\n", Depth);
       }
 
-                                                          DebugPrint("d_union_member_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("d_union_member_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("d_union_member_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("d_union_member_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6341,15 +6341,15 @@
         DebugPrint("d_union_member_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("d_union_member_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("d_union_member_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("d_union_member_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("d_union_member_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6373,15 +6373,15 @@
         DebugPrint("type_def_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("type_def Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("type_def Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("type_def_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("type_def_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6405,15 +6405,15 @@
         DebugPrint("type_def_stream {\n", Depth);
       }
 
-                                                          DebugPrint("type_def_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("type_def_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("type_def_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("type_def_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6437,15 +6437,15 @@
         DebugPrint("type_def_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("type_def_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("type_def_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("type_def_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("type_def_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6469,15 +6469,15 @@
         DebugPrint("meta_func_arg_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("meta_func_arg Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("meta_func_arg Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("meta_func_arg_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("meta_func_arg_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6501,15 +6501,15 @@
         DebugPrint("meta_func_arg_stream {\n", Depth);
       }
 
-                                                          DebugPrint("meta_func_arg_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("meta_func_arg_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("meta_func_arg_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("meta_func_arg_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6533,15 +6533,15 @@
         DebugPrint("meta_func_arg_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("meta_func_arg_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("meta_func_arg_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("meta_func_arg_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("meta_func_arg_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6565,15 +6565,15 @@
         DebugPrint("macro_def_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("macro_def Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("macro_def Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("macro_def_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("macro_def_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6597,15 +6597,15 @@
         DebugPrint("macro_def_stream {\n", Depth);
       }
 
-                                                          DebugPrint("macro_def_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("macro_def_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("macro_def_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("macro_def_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6629,15 +6629,15 @@
         DebugPrint("macro_def_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("macro_def_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("macro_def_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("macro_def_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("macro_def_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6661,15 +6661,15 @@
         DebugPrint("macro_def_linked_list_node {\n", Depth);
       }
 
-                                                          DebugPrint("macro_def Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("macro_def Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("macro_def_linked_list_node Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("macro_def_linked_list_node Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6693,15 +6693,15 @@
         DebugPrint("macro_def_hashtable {\n", Depth);
       }
 
-                                                          DebugPrint("umm Size =", Depth+2);
-                DebugPrint(RuntimeStruct.Size, 1);
-                DebugPrint(";\n");
+                                                  DebugPrint("umm Size =", Depth+2);
+              DebugPrint(RuntimeStruct.Size, 1);
+              DebugPrint(";\n");
 
 
 
-                                                    DebugPrint("macro_def_linked_list_node Elements {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Elements, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("macro_def_linked_list_node Elements {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Elements, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6725,15 +6725,15 @@
         DebugPrint("meta_func_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("meta_func Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("meta_func Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("meta_func_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("meta_func_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6757,15 +6757,15 @@
         DebugPrint("meta_func_stream {\n", Depth);
       }
 
-                                                          DebugPrint("meta_func_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("meta_func_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("meta_func_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("meta_func_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6789,15 +6789,15 @@
         DebugPrint("meta_func_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("meta_func_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("meta_func_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("meta_func_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("meta_func_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6821,15 +6821,15 @@
         DebugPrint("todo_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("todo Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("todo Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("todo_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("todo_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6853,15 +6853,15 @@
         DebugPrint("todo_stream {\n", Depth);
       }
 
-                                                          DebugPrint("todo_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("todo_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("todo_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("todo_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6885,15 +6885,15 @@
         DebugPrint("todo_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("todo_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("todo_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("todo_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("todo_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6917,15 +6917,15 @@
         DebugPrint("tag_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("tag Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("tag Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("tag_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("tag_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6949,15 +6949,15 @@
         DebugPrint("tag_stream {\n", Depth);
       }
 
-                                                          DebugPrint("tag_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("tag_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("tag_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("tag_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -6981,15 +6981,15 @@
         DebugPrint("tag_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("tag_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("tag_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("tag_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("tag_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -7013,15 +7013,15 @@
         DebugPrint("person_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("person Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("person Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("person_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("person_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -7045,15 +7045,15 @@
         DebugPrint("person_stream {\n", Depth);
       }
 
-                                                          DebugPrint("person_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("person_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("person_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("person_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -7077,15 +7077,15 @@
         DebugPrint("person_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("person_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("person_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("person_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("person_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -7109,15 +7109,15 @@
         DebugPrint("ast_node_expression_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_expression Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("ast_node_expression Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_expression_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -7141,15 +7141,15 @@
         DebugPrint("ast_node_expression_stream {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_expression_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("ast_node_expression_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_expression_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -7173,15 +7173,15 @@
         DebugPrint("ast_node_expression_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_expression_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("ast_node_expression_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_expression_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_expression_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -7205,15 +7205,15 @@
         DebugPrint("ast_node_variable_def_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_variable_def Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("ast_node_variable_def Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_variable_def_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_variable_def_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -7237,15 +7237,15 @@
         DebugPrint("ast_node_variable_def_stream {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_variable_def_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("ast_node_variable_def_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_variable_def_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_variable_def_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -7269,15 +7269,15 @@
         DebugPrint("ast_node_variable_def_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_variable_def_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("ast_node_variable_def_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_variable_def_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_variable_def_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -7301,15 +7301,15 @@
         DebugPrint("ast_node_stream_chunk {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node Element {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Element, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("ast_node Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_stream_chunk Next {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Next, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -7333,15 +7333,15 @@
         DebugPrint("ast_node_stream {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_stream_chunk FirstChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("ast_node_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_stream_chunk LastChunk {\n", Depth+2);
-                DebugPrint(RuntimeStruct.LastChunk, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -7365,15 +7365,15 @@
         DebugPrint("ast_node_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("ast_node_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("ast_node_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("ast_node_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("ast_node_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -7397,15 +7397,15 @@
         DebugPrint("declaration_iterator {\n", Depth);
       }
 
-                                                          DebugPrint("declaration_stream Stream {\n", Depth+2);
-                DebugPrint(RuntimeStruct.Stream, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                                  DebugPrint("declaration_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
-                                                    DebugPrint("declaration_stream_chunk At {\n", Depth+2);
-                DebugPrint(RuntimeStruct.At, Depth+4);
-                DebugPrint("}\n", Depth+2);
+                                            DebugPrint("declaration_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
