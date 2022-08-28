@@ -8,6 +8,12 @@
 
               umm _umm not compound
 
+              const char  _ccstar not compound
+
+              int  _intstarstar not compound
+
+              umm _ummstar not compound
+
               undefined_type _und0 not compound
 
               foo_struct_0 _foo0 is compound

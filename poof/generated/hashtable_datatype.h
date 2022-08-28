@@ -41,21 +41,23 @@
       return Result;
     }
 
-    bonsai_function void
-    Insert(datatype_linked_list_node *E, datatype_hashtable *Table)
+    bonsai_function datatype*
+    Insert(datatype_linked_list_node *Node, datatype_hashtable *Table)
     {
       Assert(Table->Size);
-      umm HashValue = Hash(&E->Element) % Table->Size;
+      umm HashValue = Hash(&Node->Element) % Table->Size;
       datatype_linked_list_node **Bucket = Table->Elements + HashValue;
       while (*Bucket) Bucket = &(*Bucket)->Next;
-      *Bucket = E;
+      *Bucket = Node;
+      return &Bucket[0]->Element;
     }
 
-    bonsai_function void
-    Insert(datatype E, datatype_hashtable *Table, memory_arena *Memory)
+    bonsai_function datatype*
+    Insert(datatype Element, datatype_hashtable *Table, memory_arena *Memory)
     {
       datatype_linked_list_node *Bucket = Allocate_datatype_linked_list_node(Memory);
-      Bucket->Element = E;
+      Bucket->Element = Element;
       Insert(Bucket, Table);
+      return &Bucket->Element;
     }
 

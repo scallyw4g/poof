@@ -30,21 +30,23 @@
       return Result;
     }
 
-    bonsai_function void
-    Insert(xml_tag_linked_list_node *E, xml_tag_hashtable *Table)
+    bonsai_function xml_tag*
+    Insert(xml_tag_linked_list_node *Node, xml_tag_hashtable *Table)
     {
       Assert(Table->Size);
-      umm HashValue = Hash(&E->Element) % Table->Size;
+      umm HashValue = Hash(&Node->Element) % Table->Size;
       xml_tag_linked_list_node **Bucket = Table->Elements + HashValue;
       while (*Bucket) Bucket = &(*Bucket)->Next;
-      *Bucket = E;
+      *Bucket = Node;
+      return &Bucket[0]->Element;
     }
 
-    bonsai_function void
-    Insert(xml_tag E, xml_tag_hashtable *Table, memory_arena *Memory)
+    bonsai_function xml_tag*
+    Insert(xml_tag Element, xml_tag_hashtable *Table, memory_arena *Memory)
     {
       xml_tag_linked_list_node *Bucket = Allocate_xml_tag_linked_list_node(Memory);
-      Bucket->Element = E;
+      Bucket->Element = Element;
       Insert(Bucket, Table);
+      return &Bucket->Element;
     }
 

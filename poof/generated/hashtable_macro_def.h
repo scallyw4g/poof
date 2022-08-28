@@ -41,21 +41,23 @@
       return Result;
     }
 
-    bonsai_function void
-    Insert(macro_def_linked_list_node *E, macro_def_hashtable *Table)
+    bonsai_function macro_def*
+    Insert(macro_def_linked_list_node *Node, macro_def_hashtable *Table)
     {
       Assert(Table->Size);
-      umm HashValue = Hash(&E->Element) % Table->Size;
+      umm HashValue = Hash(&Node->Element) % Table->Size;
       macro_def_linked_list_node **Bucket = Table->Elements + HashValue;
       while (*Bucket) Bucket = &(*Bucket)->Next;
-      *Bucket = E;
+      *Bucket = Node;
+      return &Bucket[0]->Element;
     }
 
-    bonsai_function void
-    Insert(macro_def E, macro_def_hashtable *Table, memory_arena *Memory)
+    bonsai_function macro_def*
+    Insert(macro_def Element, macro_def_hashtable *Table, memory_arena *Memory)
     {
       macro_def_linked_list_node *Bucket = Allocate_macro_def_linked_list_node(Memory);
-      Bucket->Element = E;
+      Bucket->Element = Element;
       Insert(Bucket, Table);
+      return &Bucket->Element;
     }
 

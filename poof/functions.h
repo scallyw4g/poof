@@ -53,22 +53,24 @@ meta(
       return Result;
     }
 
-    bonsai_function void
-    Insert((Type.name)_linked_list_node *E, (Type.name)_hashtable *Table)
+    bonsai_function (Type.name)*
+    Insert((Type.name)_linked_list_node *Node, (Type.name)_hashtable *Table)
     {
       Assert(Table->Size);
-      umm HashValue = Hash(&E->Element) % Table->Size;
+      umm HashValue = Hash(&Node->Element) % Table->Size;
       (Type.name)_linked_list_node **Bucket = Table->Elements + HashValue;
       while (*Bucket) Bucket = &(*Bucket)->Next;
-      *Bucket = E;
+      *Bucket = Node;
+      return &Bucket[0]->Element;
     }
 
-    bonsai_function void
-    Insert((Type.name) E, (Type.name)_hashtable *Table, memory_arena *Memory)
+    bonsai_function (Type.name)*
+    Insert((Type.name) Element, (Type.name)_hashtable *Table, memory_arena *Memory)
     {
       (Type.name)_linked_list_node *Bucket = Allocate_(Type.name)_linked_list_node(Memory);
-      Bucket->Element = E;
+      Bucket->Element = Element;
       Insert(Bucket, Table);
+      return &Bucket->Element;
     }
   }
 )
@@ -89,28 +91,37 @@ meta(
     {
       if (Struct)
       {
-        DebugPrint(*Struct, Depth+4);
+        DebugPrint(*Struct, Depth);
       }
     }
 
     bonsai_function void
     DebugPrint( (DUnion.type) Struct, u32 Depth)
     {
+      DebugPrint("(DUnion.type) {\n", Depth);
+
+      /* DebugPrint("Type = ", Depth+4); */
+      /* DebugPrint(Struct.Type); */
+      /* DebugPrint(";\n"); */
+
       switch(Struct.Type)
       {
         (DUnion.map_members (M) {
-          (M.is_union? {
-            (M.map_members (UnionMember) {
+          (M.is_union?
+          {
+            (M.map_members (UnionMember)
+            {
               case type_(UnionMember.type):
               {
-                DebugPrint(Struct.(UnionMember.type), Depth+4);
+                DebugPrint(Struct.(UnionMember.name), Depth+4);
               } break;
             })
           })
         })
 
-        default : { DebugPrint("default while printing (UnionMember.type) (UnionMember.name)"); } break;
+        default : { DebugPrint("default while printing (DUnion.type) (DUnion.name) ", Depth+4); DebugLine("Type(%d)", Struct.Type); } break;
       }
+      DebugPrint("}\n", Depth);
     }
   }
 )

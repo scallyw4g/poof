@@ -3,13 +3,19 @@
     {
       if (Struct)
       {
-        DebugPrint(*Struct, Depth+4);
+        DebugPrint(*Struct, Depth);
       }
     }
 
     bonsai_function void
     DebugPrint( declaration Struct, u32 Depth)
     {
+      DebugPrint("declaration {\n", Depth);
+
+      /* DebugPrint("Type = ", Depth+4); */
+      /* DebugPrint(Struct.Type); */
+      /* DebugPrint(";\n"); */
+
       switch(Struct.Type)
       {
                   
@@ -33,7 +39,8 @@
 
 
 
-        default : { DebugPrint("default while printing (UnionMember.type) (UnionMember.name)"); } break;
+        default : { DebugPrint("default while printing declaration declaration ", Depth+4); DebugLine("Type(%d)", Struct.Type); } break;
       }
+      DebugPrint("}\n", Depth);
     }
 

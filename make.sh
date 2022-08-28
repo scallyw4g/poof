@@ -15,21 +15,21 @@ POOF_LOG_LEVEL="--log-level LogLevel_Error"
 POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
 INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Error"
-# INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
+INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
 BUILD_EVERYTHING=0
 
 RunPreemptivePoof=1
 
-RunPoof=1
+# RunPoof=1
 BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
 
-RunParserTests=1
-BuildParserTests=1
+# RunParserTests=1
+# BuildParserTests=1
 # TEST_DEBUGGER="gdb --args"
 
-BuildAndRunAllExamples=1
+# BuildAndRunAllExamples=1
 
 RunIntegrationTests=1
 # INTEGRATION_TEST_DEBUGGER="gdb --args"

@@ -1,8 +1,33 @@
-
+#if 1
 
 typedef __ undefined_type;
 
-typedef int s32;
+// NOTE(Jesse): Copied from bonsai_stdlib/primitives.h
+
+// 8 Bit types
+typedef char           s8;
+typedef unsigned char  u8;
+
+// 16 Bit types
+typedef short          s16;
+typedef unsigned short u16;
+
+// 32 Bit types
+typedef int          s32;
+typedef unsigned int u32;
+typedef float        r32;
+typedef u32          b32;
+
+typedef r32      radians;
+typedef r32      degrees;
+
+// 64 Bit types
+typedef long long int           s64;
+typedef unsigned long long int  u64;
+typedef double                  r64;
+typedef u64                     umm;
+typedef u64                     b64;
+
 
 struct foo_struct_0
 {
@@ -40,8 +65,13 @@ struct foo_struct_1
   u32            _u32;
   u64            _u64;
   umm            _umm;
+  const char*    _ccstar;
+  int **         _intstarstar[42];
+  umm*           _ummstar;
+
   undefined_type _und0;
   foo_struct_0   _foo0;
+
 
   struct
   {
@@ -92,3 +122,20 @@ meta(
   }
 )
 #include <tests/integration/generated/anonymous_func_2.h>
+
+#endif
+
+  /* int            _int; */
+  /* s32            _s32; */
+  /* u32            _u32; */
+  /* u64            _u64; */
+  /* umm            _umm; */
+  /* const char*    _ccstar; */
+  /* int **         _intstarstar[42]; */
+  /* umm*           _ummstar; */
+
+
+struct
+{
+  int __fo;
+} foooo;

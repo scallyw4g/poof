@@ -3,13 +3,19 @@
     {
       if (Struct)
       {
-        DebugPrint(*Struct, Depth+4);
+        DebugPrint(*Struct, Depth);
       }
     }
 
     bonsai_function void
     DebugPrint( ast_node Struct, u32 Depth)
     {
+      DebugPrint("ast_node {\n", Depth);
+
+      /* DebugPrint("Type = ", Depth+4); */
+      /* DebugPrint(Struct.Type); */
+      /* DebugPrint(";\n"); */
+
       switch(Struct.Type)
       {
                   
@@ -65,7 +71,8 @@
 
 
 
-        default : { DebugPrint("default while printing (UnionMember.type) (UnionMember.name)"); } break;
+        default : { DebugPrint("default while printing ast_node ast_node ", Depth+4); DebugLine("Type(%d)", Struct.Type); } break;
       }
+      DebugPrint("}\n", Depth);
     }
 

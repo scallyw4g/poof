@@ -21,7 +21,7 @@ global_variable memory_arena Global_PermMemory = {};
 
 
 
-#define DEBUG_PRINT (0)
+#define DEBUG_PRINT (1)
 #if DEBUG_PRINT
 #include <bonsai_stdlib/headers/debug_print.h>
 
@@ -137,7 +137,8 @@ bonsai_function declaration FinalizeDeclaration(parse_context *Ctx, parser *Pars
 
 bonsai_function counted_string GetTypeTypeForDatatype(datatype *Data, memory_arena *);
 bonsai_function counted_string GetTypeNameForDatatype(datatype *Data, memory_arena *);
-link_internal datatype         ResolveToBaseType(parse_context *Ctx, type_spec TypeSpec);
+link_internal datatype         ResolveToBaseType(parse_context *Ctx, type_spec );
+link_internal datatype         ResolveToBaseType(parse_context *Ctx, datatype *);
 
 bonsai_function counted_string Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory);
 bonsai_function void           DoTrueFalse( parse_context *Ctx, parser *Scope, meta_func_arg_stream* ReplacePatterns, b32 DoTrueBranch, string_builder *OutputBuilder, memory_arena *Memory);
@@ -8113,25 +8114,6 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
         else // operator, regular function, or variable decl
         {
           Result = FinalizeDeclaration(Ctx, Parser, &TypeSpec, &Indirection);
-          // TODO(Jesse): Handle this on the outside?
-          switch (Result.Type)
-          {
-            case type_function_decl:
-            {
-              if (PeekToken(Parser).Type == '{')
-              {
-                Result.function_decl.Body = GetBodyTextForNextScope(Parser, Ctx->Memory);
-              }
-            } break;
-
-            case type_declaration_noop:
-            {
-              InternalCompilerError(Parser, CSz("Unhandled case during ParseStructMember near here"), T);
-            } break;
-
-            default: {} break;
-          }
-
         }
       } break;
 
@@ -8321,9 +8303,17 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
 
     switch (Member.Type)
     {
-      case type_compound_decl:
-      case type_variable_decl:
       case type_function_decl:
+      {
+        if (PeekToken(Parser).Type == '{')
+        {
+          Member.function_decl.Body = GetBodyTextForNextScope(Parser, Ctx->Memory);
+        }
+        Push(&Result.Members, Member, Ctx->Memory);
+      } break;
+
+      case type_variable_decl:
+      case type_compound_decl:
       {
         Push(&Result.Members, Member, Ctx->Memory);
       } break;
@@ -9484,7 +9474,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
   else if (TypeSpec->Qualifier & TypeQual_Union) // union { ... }
   {
     Result.Type = type_compound_decl;
-    Result.compound_decl = ParseStructBody(Ctx, TypeSpec->DatatypeToken); // ParseStructBody(Ctx, TypeSpec->DatatypeToken);
+    Result.compound_decl = ParseStructBody(Ctx, TypeSpec->DatatypeToken);
     Result.compound_decl.IsUnion = True;
   }
   else if (TypeSpec->Qualifier & TypeQual_Enum) // enum { ... }
@@ -9619,7 +9609,8 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         declaration Decl = ParseDeclaration(Ctx);
 
         datatype DeclDT = Datatype(&Decl);
-        Insert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+
+        datatype *DTPointer = Insert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
 
         switch (Decl.Type)
         {
@@ -9658,6 +9649,19 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
 
           case type_variable_decl:
           {
+            // NOTE(Jesse): If we ever start tracking globally defined variables
+            // this'll matter, but for the moment it doesn't
+            variable_decl *VD = SafeAccess(variable_decl, &Decl);
+            /* VD->Type.Datatype = DTPointer; */
+
+            /* DebugPrint(Decl); */
+            /* datatype BaseType = ResolveToBaseType(Ctx, &DeclDT); */
+            /* DebugPrint("---------------------\n"); */
+            /* DebugPrint(&DeclDT); */
+            /* DebugPrint(" :: basetype :: \n"); */
+            /* DebugPrint(&BaseType); */
+            /* DebugPrint("---------------------\n"); */
+
             MaybeEatAdditionalCommaSeperatedNames(Ctx);
 
             if (OptionalToken(Parser, CTokenType_Semicolon) == False)
@@ -10658,13 +10662,14 @@ ResolveTypedefToBaseType(parse_context *Ctx, datatype *Data)
   if (TD->Type.DatatypeToken)
   {
     datatype Resolved = GetDatatypeByName(Ctx, TD->Type.DatatypeToken->Value);
-    if (Resolved.Type == type_type_def)
+    if (Resolved.Type == type_datatype_noop)
+    {
+      // either undefined or a primitive.  what do we do?
+      //
+    }
+    else if (Resolved.Type == type_type_def)
     {
       Result = ResolveTypedefToBaseType(Ctx, &Resolved);
-    }
-    else
-    {
-      Result = Resolved;
     }
   }
   else
@@ -10686,6 +10691,9 @@ ResolveToBaseType(parse_context *Ctx, type_spec TypeSpec)
     Result = GetDatatypeByName(Ctx, TypeSpec.DatatypeToken->Value);
     if (Result.Type == type_type_def)
     {
+      /* DebugLine("------------------------"); */
+      /* DebugPrint(Result); */
+      /* DebugLine("------------------------"); */
       Result = ResolveTypedefToBaseType(Ctx, &Result);
     }
   }
@@ -11929,8 +11937,8 @@ PrintHashtable(datatype_hashtable *Table)
     auto Bucket = Table->Elements[BucketIndex];
     while (Bucket)
     {
-      DebugPrint(Bucket->Element);
-      DebugLine("bucket(%u) --------------------------------------------------------------------------------------------------------------------------", BucketIndex);
+      /* DebugPrint(Bucket->Element); */
+      /* DebugLine("bucket(%u) --------------------------------------------------------------------------------------------------------------------------", BucketIndex); */
       Bucket = Bucket->Next;
     }
   }

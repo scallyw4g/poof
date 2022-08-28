@@ -529,12 +529,13 @@ enum type_qualifier
 meta(string_and_value_tables(type_qualifier))
 #include <poof/generated/string_and_value_tables_type_qualifier.h>
 
+struct datatype;
 struct type_spec
 {
   c_token *QualifierNameT;
 
   c_token *DatatypeToken;
-  // datatype Datatype;
+  datatype *Datatype;
 
   type_qualifier Qualifier;
 

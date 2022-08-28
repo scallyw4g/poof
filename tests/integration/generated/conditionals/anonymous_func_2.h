@@ -2,11 +2,17 @@
 
               s32 _s32 is primitive
 
-              u32 _u32 not primitive
+              u32 _u32 is primitive
 
-              u64 _u64 not primitive
+              u64 _u64 is primitive
 
-              umm _umm not primitive
+              umm _umm is primitive
+
+              const char  _ccstar is primitive
+
+              int  _intstarstar is primitive
+
+              umm _ummstar is primitive
 
               undefined_type _und0 not primitive
 
