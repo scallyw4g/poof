@@ -4,3 +4,5 @@ tags
 breakpoints
 
 examples/*/main
+
+tests/integration_extended

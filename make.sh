@@ -10,23 +10,25 @@
 
 BUILD_EVERYTHING=0
 
-RunPreemptivePoof=1
+# RunPreemptivePoof=1
 
 # RunPoof=1
-BuildPoof=1
+# BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
-RunParserTests=1
-BuildParserTests=1
+# RunParserTests=1
+# BuildParserTests=1
 # TEST_DEBUGGER="gdb --args"
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
-BuildAndRunAllExamples=1
+# BuildAndRunAllExamples=1
 
-RunIntegrationTests=1
+# RunIntegrationTests=1
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
+
+RunExtendedIntegrationTests=1
 
 # OPTIMIZATION_LEVEL="-O2"
 
@@ -47,6 +49,8 @@ SRC="$ROOT/poof"
 BIN="$ROOT/bin"
 BIN_TEST="$BIN/tests"
 META_OUT="$ROOT/poof/generated"
+EXTENDED_INTEGRATION_TESTS_SRC="$ROOT/tests/integration_extended"
+
 
 # git checkout $META_OUT
 
@@ -229,6 +233,169 @@ function RunParserTests
   echo -e ""
 }
 
+function RunExtendedIntegrationTests
+{
+  test_name=uacme
+  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/$test_name ]; then
+    pushd "$EXTENDED_INTEGRATION_TESTS_SRC/$test_name"
+
+    poof                         \
+      --log-level LogLevel_Shush \
+      -D USE_OPENSSL             \
+        ./uacme.c
+
+    if [ $? -eq 0 ]; then
+      echo -e "$Success $test_name parsed"
+    else
+     echo -e "$Failed $test_name didn't parse"
+    fi
+
+    popd
+  else
+    echo -e "$Warn $test_name not found.  Try running './make.sh BootstrapExtendedIntegrationTests'"
+  fi
+
+  test_name=redis
+  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/$test_name ]; then
+    pushd "$EXTENDED_INTEGRATION_TESTS_SRC/$test_name"
+
+    # TODO(Jesse): Do we actually need all these defines?  Which ones should we
+    # do ourselves (ie. automatically, in poof)
+
+    # TODO(Jesse): Why does defining BYTE_ORDER and LITTLE_ENDIAN on the CLI
+    # not bypass the preprocessor check it's failing on?
+
+    poof                       \
+    --log-level LogLevel_Shush \
+    -D BYTE_ORDER              \
+    -D LITTLE_ENDIAN           \
+                               \
+    -D __clang__               \
+    -D __i386                  \
+    -D __x86_64__              \
+    -D linux                   \
+    -D __linux__               \
+    -D __GNUC__                \
+     src/server.c
+
+    if [ $? -eq 0 ]; then
+      echo -e "$Success $test_name parsed"
+    else
+     echo -e "$Failed $test_name didn't parse"
+    fi
+
+    popd
+  else
+    echo -e "$Warn $test_name not found.  Try running './make.sh BootstrapExtendedIntegrationTests'"
+  fi
+
+  test_name=sqlite
+  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/$test_name ]; then
+    pushd "$EXTENDED_INTEGRATION_TESTS_SRC/$test_name"
+
+    poof  \
+    -D __clang__  \
+    -D __i386     \
+    -D __x86_64__ \
+    -D linux      \
+    -D __linux__  \
+    -D __GNUC__   \
+     src/test_server.c
+
+    if [ $? -eq 0 ]; then
+      echo -e "$Success $test_name parsed"
+    else
+     echo -e "$Failed $test_name didn't parse"
+    fi
+
+    popd
+  else
+    echo -e "$Warn $test_name not found.  Try running './make.sh BootstrapExtendedIntegrationTests'"
+  fi
+
+  test_name=handmade_hero
+  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/$test_name ]; then
+    pushd "$EXTENDED_INTEGRATION_TESTS_SRC/$test_name"
+
+    poof                         \
+      --log-level LogLevel_Shush \
+      code/handmade.cpp
+
+    if [ $? -eq 0 ]; then
+      echo -e "$Success $test_name parsed"
+    else
+     echo -e "$Failed $test_name didn't parse"
+    fi
+
+    popd
+  else
+    echo -e "$Warn $test_name not found.  Try running './make.sh BootstrapExtendedIntegrationTests'"
+  fi
+
+  test_name=bonsai
+  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/$test_name ]; then
+    pushd "$EXTENDED_INTEGRATION_TESTS_SRC/$test_name"
+    poof                         \
+      -I src/                    \
+      -I src/poof                \
+      -I include/                \
+      -D BONSAI_LINUX            \
+      -o src/generated           \
+      src/game_loader.cpp
+
+    if [ $? -eq 0 ]; then
+      echo -e "$Success $test_name parsed"
+    else
+     echo -e "$Failed $test_name didn't parse"
+    fi
+
+    popd
+  else
+    echo -e "$Warn $test_name not found.  Try running './make.sh BootstrapExtendedIntegrationTests'"
+  fi
+
+}
+
+function BootstrapExtendedIntegrationTests
+{
+  ColorizeTitle "Bootstrapping Extended Integration Test Suite"
+
+  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/uacme ]; then
+    echo -e "$Info uacme exists, skipping"
+  else
+    echo -e "$Info Cloning uacme"
+    git clone git@github.com:ndilieto/uacme $EXTENDED_INTEGRATION_TESTS_SRC/uacme
+  fi
+
+  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/redis ]; then
+    echo -e "$Info redis exists, skipping"
+  else
+    echo -e "$Info Cloning redis"
+    git clone git@github.com:redis/redis $EXTENDED_INTEGRATION_TESTS_SRC/redis
+  fi
+
+  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/sqlite ]; then
+    echo -e "$Info sqlite exists, skipping"
+  else
+    echo -e "$Info Cloning sqlite"
+    git clone git@github.com:sqlite/sqlite $EXTENDED_INTEGRATION_TESTS_SRC/sqlite
+  fi
+
+  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/handmade_hero ]; then
+    echo -e "$Info handmade_hero exists, skipping"
+  else
+    echo -e "$Info Cloning handmade_hero"
+    git clone git@github.com:HandmadeHero/cpp $EXTENDED_INTEGRATION_TESTS_SRC/handmade_hero
+  fi
+
+  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/bonsai ]; then
+    echo -e "$Info bonsai exists, skipping"
+  else
+    echo -e "$Info Cloning bonsai"
+    git clone --recursive git@github.com:jjbandit/bonsai $EXTENDED_INTEGRATION_TESTS_SRC/bonsai
+  fi
+}
+
 
 function BuildAll
 {
@@ -339,5 +506,10 @@ else
   if [[ $RunIntegrationTests == 1 ]]; then
     RunIntegrationTests
   fi
+
+  if [[ $RunExtendedIntegrationTests == 1 ]]; then
+    RunExtendedIntegrationTests
+  fi
+
 
 fi

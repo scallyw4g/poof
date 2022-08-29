@@ -8007,6 +8007,7 @@ ParseStructMemberDestructorFn(parse_context *Ctx, declaration *Result, c_token *
   if (IsConstructorOrDestructorName(StructNameT, FuncNameT))
   {
     c_token *GotOpen = OptionalToken(Parser, CTokenType_OpenParen);
+    OptionalToken(Parser, CTokenType_Void);
     c_token *GotClose = OptionalToken(Parser, CTokenType_CloseParen);
     if ( GotOpen && GotClose )
     {
@@ -8299,16 +8300,6 @@ IsAnonymous(compound_decl *Decl)
   return Result;
 }
 
-// TODO(Jesse id: 299): This could be improved by not taking the StructName, and
-// filling it out internally.  It would have to check where the struct name is
-//
-// ie. at the start 'struct foo { ... };'
-//
-// or at the end 'typedef struct { ... } foo;
-//
-// This would clean up the calling code quite a bit and get rid of a
-// bunch of redundant RequireTokens on Semicolons.
-//
 bonsai_function compound_decl
 ParseStructBody(parse_context *Ctx, c_token *StructNameT)
 {
@@ -8697,6 +8688,12 @@ ParseTypedef(parse_context *Ctx)
     {
       comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
       compound_decl S = ParseStructBody(Ctx, Decl.NameT);
+
+      /* while (OptionalToken(Parser, CTokenType_Comma)) */
+      /* { */
+      /*   ParseCommaSeperatedDecl(Ctx); */
+      /*   Result = True; */
+      /* } */
 
       /* comma_separated_decl ActualName = */ ParseCommaSeperatedDecl(Ctx);
       MaybeEatAdditionalCommaSeperatedNames(Ctx);
@@ -12130,6 +12127,8 @@ main(s32 ArgCount_, const char** ArgStrings)
 {
   memory_arena Memory_ = {};
   memory_arena* Memory = &Memory_;
+
+  Global_LogLevel = LogLevel_Error;
 
   Memory->NextBlockSize = Gigabytes(2);
 
