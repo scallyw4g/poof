@@ -6,6 +6,15 @@ least-stable.
 
 If you to take `poof` for a test-drive I'd love to hear about it!
 
+# Quickstart
+
+```
+# Get the source
+git clone --recursive https://github.com/jjbandit/poof.git poof
+
+# Build everything, run all test suites
+cd poof && ./make.sh BuildAndRunAll
+```
 
 # About
 `poof` is a 'metaprogramming language' that aims to bring some of the niceties
@@ -132,19 +141,6 @@ uses the error reporting system extensively, and it works great.
 
 ## Roadmap to 0.1.0-alpha
 
-Most of the hard work of writing a C preprocessor and parser is done.  There
-are still some unusual cases I've found that don't parse correctly, but for
-most normal-ish code it's solid.
-
-Once I'm satisfied with the parser, I'll move on to writing a test harness that
-explicitly validates the behavior of `poof` itself.  Until then, the behavior
-will continue to be implicitly specified by its own output, which is used to
-build `poof` itself.
-
-Finally, auditing error messages and completing documentation needs to be done
-before releasing a 0.1.0-alpha version of `poof`.
-
-
 ### Feature Set
 
 [✓] = finished
@@ -171,7 +167,7 @@ before releasing a 0.1.0-alpha version of `poof`.
 
 [✓] Parse include graph of `poof` (including CRT headers)
 
-[o] Write test suite that exhaustively validates behavior of the C parser
+[✓] Write test suite that exhaustively validates behavior of the C parser
 
 [o] Write test suite that validates the behavior of `poof`
 
@@ -186,10 +182,10 @@ before releasing a 0.1.0-alpha version of `poof`.
   - [✓] C++ https://github.com/HandmadeHero
   - [o] C++ https://github.com/oil/oil
   - [✓] C https://github.com/ndilieto/uacme
-  - [✓] C https://github.com/redis/redis
+  - [o] C https://github.com/redis/redis
   - [✓] C https://github.com/sqlite/sqlite
 
-[\_] collate the above projects into an extended integration test suite to ensure we don't break the parser.
+[✓] collate the above projects into an extended integration test suite to ensure we don't break the parser.
 
 ### UX
 [✓] Fix a laundry list of issues I have logged that result in unnecessary friction
