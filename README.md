@@ -11,8 +11,6 @@ If you to take `poof` for a test-drive I'd love to hear about it!
 ```
 # Get the source
 git clone --recursive https://github.com/jjbandit/poof.git poof
-
-# Build everything, run all test suites
 cd poof && ./make.sh BuildAndRunAll
 ```
 
@@ -95,11 +93,11 @@ issue if you're interested in OSX support.
 
 ### Build:
 
-`./make.sh BuildAndRunAll` Go nuclear -- builds everything and runs all tests
+`./make.sh BuildAllBinariesRunAllTests` Go nuclear -- builds everything and runs all tests
 
 ---
 
-`./make.sh BuildAll` Builds all binaries
+`./make.sh BuildAllBinaries` Builds `poof` and test binaries
 
 `./make.sh BuildPoof` Builds poof binary; required for running integration tests
 
@@ -116,6 +114,14 @@ issue if you're interested in OSX support.
 `./make.sh RunParserTests` Runs parser test suite
 
 `./make.sh RunIntegrationTests` Runs integration test suite
+
+---
+
+`./make.sh BootstrapExtendedIntegrationTests` Downloads source for extended integration tests
+
+`./make.sh RunExtendedIntegrationTests` Runs extended integration test suite
+
+---
 
 
 # Current Status

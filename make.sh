@@ -8,27 +8,27 @@
 # Calling functions by name on the command line shouldn't be affected by these.
 
 
-BUILD_EVERYTHING=0
+BuildAllBinariesRunAllTests=1
 
 RunPreemptivePoof=1
 
-RunPoof=1
-BuildPoof=1
+# RunPoof=1
+# BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
-RunParserTests=1
-BuildParserTests=1
+# RunParserTests=1
+# BuildParserTests=1
 # TEST_DEBUGGER="gdb --args"
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
-BuildAndRunAllExamples=1
+# BuildAndRunAllExamples=1
 
-RunIntegrationTests=1
+# RunIntegrationTests=1
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
-RunExtendedIntegrationTests=1
+# RunExtendedIntegrationTests=1
 
 # OPTIMIZATION_LEVEL="-O2"
 
@@ -161,8 +161,8 @@ function RunIntegrationTests()
     basename_stripped=$(basename $filename .h)
 
     # Each test file has a directory created under the output directory that
-    # we'll write all the meta() output to for that test file.  We diff that
-    # whole directory to confirm/deny the output is identical for that test file
+    # we'll write all the poof() output to for that test file.  We diff that
+    # whole directory to confirm the output is identical for that test file
 
     $INTEGRATION_TEST_DEBUGGER bin/poof \
       $INTEGRATION_TEST_LOG_LEVEL       \
@@ -174,10 +174,8 @@ function RunIntegrationTests()
 
     if [[ $DIFF_CHANGED == 0 ]]; then
       echo -e "$Success $filename"
-      echo -e ""
     else
       echo -e "$Failed $filename"
-      echo -e ""
     fi
   done
 
@@ -235,7 +233,7 @@ function RunParserTests
 function RunSingleExtendedIntegrationTest
 {
   if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/$test_name ]; then
-    pushd "$EXTENDED_INTEGRATION_TESTS_SRC/$test_name"
+    pushd "$EXTENDED_INTEGRATION_TESTS_SRC/$test_name" > /dev/null
 
     $1
 
@@ -245,7 +243,7 @@ function RunSingleExtendedIntegrationTest
      echo -e "$Failed $test_name didn't parse"
     fi
 
-    popd
+    popd > /dev/null
   else
     echo -e "$Warn $test_name not found.  Try running './make.sh BootstrapExtendedIntegrationTests'"
   fi
@@ -345,7 +343,26 @@ function BootstrapExtendedIntegrationTests
 }
 
 
-function BuildAll
+function BuildAndRunAllExamples
+{
+  ColorizeTitle "Building and Running examples"
+  pushd examples > /dev/null
+  ./make_all_examples.sh > /dev/null
+
+  if [ $? -eq 0 ]; then
+    echo -e "$Success Examples built and ran"
+  else
+   echo -e "$Failed Examples didn't build, or hit runtime errors"
+  fi
+
+  popd > /dev/null
+
+  echo -e ""
+  echo -e "$Delimeter"
+  echo -e ""
+}
+
+function BuildAllBinaries
 {
   BuildPoof
   BuildParserTests
@@ -355,33 +372,14 @@ function RunAllTests
 {
   RunParserTests
   RunIntegrationTests
+  RunExtendedIntegrationTests
 }
 
-function BuildAndRunAll
+function BuildAllBinariesRunAllTests
 {
-  BuildAll
+  BuildAllBinaries
   RunAllTests
   BuildAndRunAllExamples
-}
-
-function BuildAndRunAllExamples
-{
-  ColorizeTitle "Building and Running examples"
-  pushd examples
-  ./make_all_examples.sh > /dev/null
-
-  if [ $? -eq 0 ]; then
-    echo -e "$Success Examples built and run"
-  else
-   echo -e "$Failed Examples didn't build, or hit runtime errors"
-  fi
-
-  popd
-
-  echo -e ""
-  echo -e "$Delimeter"
-  echo -e ""
-
 }
 
 
@@ -402,7 +400,7 @@ echo -e ""
 : "${OPTIMIZATION_LEVEL:="-O0"}"
 
 # If someone supplied a command line argument, call the function, otherwise
-# respect the runflags
+# respect the 'runflags'
 if [ $# -eq 1 ]; then
 
   # If someone's just trying to run the build/tests from the CLI normally don't
@@ -419,14 +417,11 @@ if [ $# -eq 1 ]; then
 
 else
 
-  if [[ $RunPreemptivePoof == 1 || $BUILD_EVERYTHING == 1 ]]; then
-    # TODO(Jesse): Cache and reset these?
+  if [[ $RunPreemptivePoof == 1 ]]; then
     old_poof_executable=$POOF_EXECUTABLE
     POOF_EXECUTABLE=poof
-
     old_poof_debugger=$POOF_DEBUGGER
     POOF_DEBUGGER=
-
     old_poof_log_level=$POOF_LOG_LEVEL
     POOF_LOG_LEVEL="--log-level LogLevel_Error"
 
@@ -437,25 +432,25 @@ else
     POOF_EXECUTABLE=$old_poof_executable
   fi
 
-  if [[ $BuildPoof == 1 || $BUILD_EVERYTHING == 1 ]]; then
+  if [[ $BuildPoof == 1 ]]; then
     BuildPoof
   fi
 
-  if [[ $RunPoof == 1 || $BUILD_EVERYTHING == 1 ]]; then
+  if [[ $RunPoof == 1 ]]; then
     RunPoof
   fi
 
-  if [[ $BuildParserTests == 1 || $BUILD_EVERYTHING == 1 ]]; then
+  if [[ $BuildParserTests == 1 ]]; then
     BuildParserTests
   fi
 
-  if [[ $BuildAndRunAllExamples == 1 || $BUILD_EVERYTHING == 1 ]]; then
+  if [[ $BuildAndRunAllExamples == 1 ]]; then
     BuildAndRunAllExamples
   fi
 
 
 
-  if [[ $RunParserTests == 1 || $BUILD_EVERYTHING == 1 ]]; then
+  if [[ $RunParserTests == 1 ]]; then
     RunParserTests
   fi
 
@@ -467,5 +462,8 @@ else
     RunExtendedIntegrationTests
   fi
 
+  if [[ $BuildAllBinariesRunAllTests == 1 ]]; then
+    BuildAllBinariesRunAllTests
+  fi
 
 fi
