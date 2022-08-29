@@ -41,7 +41,7 @@ struct counted_string {
   const char* data;
 };
 
-#if 1
+#if 0
 meta(
   func (foo_struct_0 TFooStruct)
   {
@@ -61,7 +61,13 @@ meta(
 #endif
 
 
+int foofunc(void)
+{
+}
 
+
+typedef int (*foofuncptr)(void);
+typedef int (foofunc)(void);
 
 struct foo_struct_1
 {
@@ -88,11 +94,14 @@ struct foo_struct_1
     int _int3;
   } _embedded3;
 
+  counted_string S1; // Ensures the special-case hacks we put in work.  This is actually compound, but we want it considered primitive.
 
-  counted_string S1;
+  foofuncptr FooFuncPtr;
+  foofunc FooFun;
 };
 
 
+#if 0
 meta(
   func (foo_struct_1 TFooStruct)
   {
@@ -127,20 +136,23 @@ meta(
   }
 )
 #include <tests/integration/generated/anonymous_func_2.h>
-
 #endif
 
-  /* int            _int; */
-  /* s32            _s32; */
-  /* u32            _u32; */
-  /* u64            _u64; */
-  /* umm            _umm; */
-  /* const char*    _ccstar; */
-  /* int **         _intstarstar[42]; */
-  /* umm*           _ummstar; */
 
-
-struct
-{
-  int __fo;
-} foooo;
+meta(
+  func (foo_struct_1 TFooStruct)
+  {
+    (TFooStruct.map_members(Member){
+      (Member.is_function?
+      {
+        (Member.type) (Member.name) is a function
+      }
+      {
+        (Member.type) (Member.name) not a function
+      }
+      )
+    })
+  }
+)
+#include <tests/integration/generated/anonymous_func_3.h>
+#endif

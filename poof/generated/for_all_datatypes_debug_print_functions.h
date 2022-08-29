@@ -3453,6 +3453,12 @@
 
 
 
+                                            DebugPrint("type_indirection_info Indirection {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Indirection, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
                                             DebugPrint("b32 HasTemplateArguments =", Depth+2);
               DebugPrint(RuntimeStruct.HasTemplateArguments, 1);
               DebugPrint(";\n");
@@ -3518,12 +3524,6 @@
                                             DebugPrint("u32 StrictBitWidth =", Depth+2);
               DebugPrint(RuntimeStruct.StrictBitWidth, 1);
               DebugPrint(";\n");
-
-
-
-                                            DebugPrint("type_indirection_info Indirection {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Indirection, Depth+4);
-              DebugPrint("}\n", Depth+2);
 
 
 
@@ -3757,12 +3757,6 @@
 
                                             DebugPrint("counted_string Alias =", Depth+2);
               DebugPrint(RuntimeStruct.Alias, 1);
-              DebugPrint(";\n");
-
-
-
-                                            DebugPrint("b32 IsFunction =", Depth+2);
-              DebugPrint(RuntimeStruct.IsFunction, 1);
               DebugPrint(";\n");
 
 
@@ -4175,12 +4169,6 @@
 
                                             DebugPrint("type_spec TypeSpec {\n", Depth+2);
               DebugPrint(RuntimeStruct.TypeSpec, Depth+4);
-              DebugPrint("}\n", Depth+2);
-
-
-
-                                            DebugPrint("type_indirection_info Indirection {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Indirection, Depth+4);
               DebugPrint("}\n", Depth+2);
 
 
@@ -7794,6 +7782,10 @@
             case is_primitive:
             {
               DebugPrint("is_primitive", Depth);
+            } break;
+            case is_function:
+            {
+              DebugPrint("is_function", Depth);
             } break;
 
       }

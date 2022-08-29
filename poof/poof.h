@@ -34,6 +34,7 @@ enum meta_arg_operator
   is_defined,
   is_compound,
   is_primitive,
+  is_function,
 };
 meta( generate_value_table(meta_arg_operator) )
 #include <poof/generated/generate_value_table_meta_arg_operator.h>
@@ -555,10 +556,10 @@ struct type_spec
   datatype *BaseType;     // ATM only used by variable instances that are defined using an anonymous compound decl
 
   type_qualifier Qualifier;
+  type_indirection_info Indirection;
 
   b32 HasTemplateArguments;
   counted_string TemplateSource;
-
   linkage_type Linkage;
 };
 
@@ -571,7 +572,6 @@ struct variable_decl
   ast_node *Value;
 
   u32 StrictBitWidth; // For declarations in structs like : `int foo_bool : 1`
-  type_indirection_info Indirection;
 };
 meta(generate_stream(variable_decl))
 #include <poof/generated/generate_stream_variable_decl.h>
@@ -700,7 +700,6 @@ struct type_def
 {
   type_spec Type;
   counted_string Alias;
-  b32 IsFunction;
 };
 meta(generate_stream(type_def))
 #include <poof/generated/generate_stream_type_def.h>
@@ -727,11 +726,29 @@ Datatype(enum_member* E)
 }
 
 bonsai_function declaration
-Declaration(compound_decl* S)
+Declaration(compound_decl *S)
 {
   declaration Result = {};
   Result.Type = type_compound_decl;
   Result.compound_decl = *S;
+  return Result;
+}
+
+bonsai_function declaration
+Declaration(function_decl *F)
+{
+  declaration Result = {};
+  Result.Type = type_function_decl;
+  Result.function_decl = *F;
+  return Result;
+}
+
+bonsai_function datatype
+Datatype(function_decl* F)
+{
+  datatype Result = {};
+  Result.Type = type_declaration;
+  Result.declaration = Declaration(F);
   return Result;
 }
 
@@ -772,12 +789,30 @@ Datatype(enum_decl* E)
   return Result;
 }
 
+bonsai_function declaration
+Declaration(type_spec *T)
+{
+  declaration Result = {};
+  Result.Type = type_function_decl;
+  return Result;
+}
+
 bonsai_function datatype
 Datatype(type_spec S)
 {
   datatype Result = {};
-  Result.Type = type_primitive_def;
-  Result.primitive_def.TypeSpec = S;
+  if ( S.Indirection.IsFunction   ||
+       S.Indirection.IsFunctionPtr)
+  {
+    Result.Type = type_declaration;
+    Result.declaration = Declaration(&S);
+  }
+  else
+  {
+    Result.Type = type_primitive_def;
+    Result.primitive_def.TypeSpec = S;
+  }
+
   return Result;
 }
 
@@ -911,7 +946,6 @@ struct ast_node_type_specifier
 {
   datatype Datatype;
   type_spec TypeSpec;
-  type_indirection_info Indirection;
   ast_node_expression *Name;
 };
 
@@ -1019,6 +1053,7 @@ struct arguments
 struct program_datatypes
 {
   datatype_hashtable       DatatypeHashtable;
+
   macro_def_hashtable      Macros;
 
   counted_string_hashtable FilesParsed;
@@ -1462,6 +1497,7 @@ enum erase_token_mode
   EraseTokens = 1,
 };
 
+// TODO(Jesse): Make this more formal?  Seems like this should basically be a type_spec
 struct comma_separated_decl
 {
   c_token *NameT;

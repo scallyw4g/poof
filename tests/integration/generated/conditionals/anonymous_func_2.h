@@ -30,5 +30,9 @@
 
               counted_string S1 is primitive
 
+              foofuncptr FooFuncPtr is primitive
+
+              foofunc FooFun is primitive
+
 
 

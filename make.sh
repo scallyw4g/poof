@@ -7,32 +7,26 @@
 # NOTE(Jesse): The following are switches for twiddling during development.
 # Calling functions by name on the command line shouldn't be affected by these.
 
-TEST_LOG_LEVEL="--log-level LogLevel_Error"
-# TEST_LOG_LEVEL="--log-level LogLevel_Debug"
-
-# POOF_LOG_LEVEL="--log-level LogLevel_Shush"
-POOF_LOG_LEVEL="--log-level LogLevel_Error"
-POOF_LOG_LEVEL="--log-level LogLevel_Debug"
-
-INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Error"
-INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
 BUILD_EVERYTHING=0
 
-# RunPreemptivePoof=1
+RunPreemptivePoof=1
 
 # RunPoof=1
 BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
+# POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
-# RunParserTests=1
-# BuildParserTests=1
+RunParserTests=1
+BuildParserTests=1
 # TEST_DEBUGGER="gdb --args"
+# TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
-# BuildAndRunAllExamples=1
+BuildAndRunAllExamples=1
 
 RunIntegrationTests=1
-INTEGRATION_TEST_DEBUGGER="gdb --args"
+# INTEGRATION_TEST_DEBUGGER="gdb --args"
+# INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
 # OPTIMIZATION_LEVEL="-O2"
 
@@ -275,6 +269,14 @@ fi
 echo -e ""
 echo -e "$Delimeter"
 echo -e ""
+
+
+
+# TODO(Jesse): Instead of setting these here should we just set the default
+# value to LogLevel_Error in the compiler?
+: "${TEST_LOG_LEVEL:="--log-level LogLevel_Error"}"
+: "${POOF_LOG_LEVEL:="--log-level LogLevel_Error"}"
+: "${INTEGRATION_TEST_LOG_LEVEL:="--log-level LogLevel_Error"}"
 
 # If someone supplied a command line argument, call the function, otherwise
 # respect the runflags

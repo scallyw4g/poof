@@ -30,5 +30,9 @@
 
               counted_string S1 not compound
 
+              foofuncptr FooFuncPtr not compound
+
+              foofunc FooFun not compound
+
 
 

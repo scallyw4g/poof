@@ -133,7 +133,7 @@ bonsai_function compound_decl ParseStructBody(parse_context *, c_token *);
 
 bonsai_function parser MaybeParseFunctionBody(parser *Parser, memory_arena *Memory);
 bonsai_function void MaybeParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest);
-bonsai_function declaration FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, type_indirection_info *Indirection);
+bonsai_function declaration FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec);
 
 bonsai_function counted_string GetTypeTypeForDatatype(datatype *Data, memory_arena *);
 bonsai_function counted_string GetTypeNameForDatatype(datatype *Data, memory_arena *);
@@ -5735,6 +5735,29 @@ GetEnumByType(enum_decl_stream* ProgramEnums, counted_string EnumType)
   return Result;
 }
 
+bonsai_function function_decl*
+GetFunctionByName(function_decl_stream* Functions, counted_string FuncName)
+{
+  TIMED_FUNCTION();
+
+  function_decl *Result = {};
+  ITERATE_OVER(Functions)
+  {
+    auto *Func = GET_ELEMENT(Iter);
+    if (Func->NameT)
+    {
+      Info("Comparing function (%S) against (%S)", Func->NameT->Value, FuncName);
+      if (StringsMatch(Func->NameT->Value, FuncName))
+      {
+        Info("Matched");
+        Result = Func;
+        break;
+      }
+    }
+  }
+
+  return Result;
+}
 bonsai_function compound_decl*
 GetStructByType(compound_decl_stream* ProgramStructs, counted_string StructType)
 {
@@ -5780,12 +5803,13 @@ GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
   compound_decl *S = GetStructByType(&Datatypes->Structs, Name);
   enum_decl     *E = GetEnumByType(&Datatypes->Enums, Name);
   type_def      *T = GetTypedefByAlias(&Datatypes->Typedefs, Name);
+  function_decl *F = {}; //GetFunctionByName(&Datatypes->Functions, Name);
 
   datatype Result = {};
 
   if (S)
   {
-    if (T || E)
+    if (T || E || F)
     {
       // TODO(Jesse, correctness): Not sure what the solution to this is, but
       // this is definitely incorrect.
@@ -5795,13 +5819,18 @@ GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
   }
   else if (E)
   {
-    Assert(!T && !S);
+    Assert(!T && !S && !F);
     Result = Datatype(E);
   }
   else if (T)
   {
-    Assert(!E && !S);
+    Assert(!E && !S && !F);
     Result = Datatype(T);
+  }
+  else if (F)
+  {
+    Assert(!S && !E && !T);
+    Result = Datatype(F);
   }
 
   return Result;
@@ -6473,7 +6502,7 @@ GetBodyTextForNextScope(parser* Parser, memory_arena *Memory)
 }
 
 bonsai_function type_indirection_info
-ParseReferencesIndirectionAndPossibleFunctionPointerness(parser *Parser)
+ParseIndirectionInfo(parser *Parser)
 {
   type_indirection_info Result = {};
 
@@ -6555,12 +6584,6 @@ ParseReferencesIndirectionAndPossibleFunctionPointerness(parser *Parser)
   }
 
   return Result;
-}
-
-bonsai_function type_indirection_info
-ParseIndirectionInfo(parser *Parser)
-{
-  return ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
 }
 
 bonsai_function b32
@@ -6708,13 +6731,16 @@ EatNameQualifiers(parser *Parser)
   return Result;
 }
 
-bonsai_function void
+bonsai_function b32
 TryEatAttributes(parser *Parser)
 {
+  b32 Result = False;
   while (OptionalToken(Parser, CT_KeywordAttribute))
   {
     EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
+    Result = True;
   }
+  return Result;
 }
 
 bonsai_function counted_string
@@ -7024,6 +7050,8 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
     EatBetween(Parser, CTokenType_LT, CTokenType_GT);
   }
 
+  Result.Indirection = ParseIndirectionInfo(Parser);
+
   return Result;
 }
 
@@ -7037,7 +7065,7 @@ ParseInitializerList(parser *Parser, memory_arena *Memory)
 }
 
 bonsai_function variable_decl
-FinalizeVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indirection_info *Indirection, c_token *IdentifierToken = 0)
+FinalizeVariableDecl(parse_context *Ctx, type_spec *TypeSpec, c_token *IdentifierToken = 0)
 {
   parser *Parser = Ctx->CurrentParser;
 
@@ -7161,8 +7189,7 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
       while ( !DoneParsingArguments && TokensRemain(Parser) )
       {
         type_spec TypeSpec = ParseTypeSpecifier(Ctx);
-        type_indirection_info Indirection = ParseIndirectionInfo(Ctx->CurrentParser);
-        variable_decl Arg = FinalizeVariableDecl(Ctx, &TypeSpec, &Indirection);
+        variable_decl Arg = FinalizeVariableDecl(Ctx, &TypeSpec);
         Push(&Result.Args, Arg, Ctx->Memory);
 
         if (!OptionalToken(Parser, CTokenType_Comma))
@@ -7222,7 +7249,6 @@ MaybeParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest)
   }
 }
 
-// TODO(Jesse, correctness): This doesn't record indirection information for the return value.
 link_internal function_decl
 FinalizeFunctionDecl(parse_context *Ctx, type_spec *TypeSpec, c_token *FuncNameT, function_type Type)
 {
@@ -8018,7 +8044,7 @@ ParsingConstructor(parser *Parser, type_spec *TypeSpec)
 }
 
 link_internal function_decl
-FinalizeVirtualFunctionDecl(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, type_indirection_info *Indirection)
+FinalizeVirtualFunctionDecl(parse_context *Ctx, parser *Parser, type_spec *TypeSpec)
 {
   function_decl Result = {};
 
@@ -8062,9 +8088,8 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
       {
         RequireToken(Parser, T->Type);
         type_spec TypeSpec = ParseTypeSpecifier(Ctx);
-        type_indirection_info Indirection = ParseIndirectionInfo(Ctx->CurrentParser);
         Result.Type = type_variable_decl;
-        Result.variable_decl = FinalizeVariableDecl(Ctx, &TypeSpec, &Indirection);
+        Result.variable_decl = FinalizeVariableDecl(Ctx, &TypeSpec);
       } break;
 
       case CT_NameQualifier:
@@ -8098,7 +8123,6 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
       case CTokenType_Identifier:
       {
         type_spec TypeSpec = ParseTypeSpecifier(Ctx, StructNameT);
-        type_indirection_info Indirection = ParseIndirectionInfo(Parser);
 
         b32 IsConstructor = ParsingConstructor(Parser, &TypeSpec);
         if (IsConstructor)
@@ -8109,11 +8133,11 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
         else if (TypeSpec.Qualifier & TypeQual_Virtual)
         {
           Result.Type = type_function_decl;
-          Result.function_decl = FinalizeVirtualFunctionDecl(Ctx, Parser, &TypeSpec, &Indirection);
+          Result.function_decl = FinalizeVirtualFunctionDecl(Ctx, Parser, &TypeSpec);
         }
         else // operator, regular function, or variable decl
         {
-          Result = FinalizeDeclaration(Ctx, Parser, &TypeSpec, &Indirection);
+          Result = FinalizeDeclaration(Ctx, Parser, &TypeSpec);
         }
       } break;
 
@@ -8195,7 +8219,7 @@ ParseCommaSeperatedDecl(parse_context *Ctx)
 
   TryEatAttributes(Parser);
 
-  Result.Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
+  Result.Indirection = ParseIndirectionInfo(Parser);
 
   Result.NameT = RequireTokenPointer(Parser, CTokenType_Identifier);
 
@@ -8392,7 +8416,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
                 auto Var = SafeAccessObjPtr(variable_decl, Member);
 
                 Var->Name = Decl.NameT->Value;
-                Var->Indirection = Decl.Indirection;
+                Var->Type.Indirection = Decl.Indirection;
                 Var->StaticBufferSize = Decl.StaticBufferSize;
                 Var->Value = Decl.Value;
 
@@ -8414,7 +8438,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
                 // TmpMember.variable_decl.TypeSpec.Datatype = Datatype(StructDecl);
 
                 TmpMember.variable_decl.Name             = Decl.NameT->Value;
-                TmpMember.variable_decl.Indirection      = Decl.Indirection;
+                TmpMember.variable_decl.Type.Indirection      = Decl.Indirection;
                 TmpMember.variable_decl.StaticBufferSize = Decl.StaticBufferSize;
                 TmpMember.variable_decl.Value            = Decl.Value;
                 TmpMember.variable_decl.Value            = Decl.Value;
@@ -8598,14 +8622,13 @@ ParseAndPushTypedef(parse_context *Ctx)
   parser *Parser = Ctx->CurrentParser;
 
   type_spec Type = ParseTypeSpecifier(Ctx);
-  type_indirection_info Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Parser);
 
   counted_string Alias = {};
-  b32 IsFunction = Indirection.IsFunction;
+  b32 IsFunction = Type.Indirection.IsFunction;
 
   if (IsFunction)
   {
-    Alias = Indirection.FunctionNameT->Value;
+    Alias = Type.Indirection.FunctionNameT->Value;
   }
   else
   {
@@ -8616,16 +8639,18 @@ ParseAndPushTypedef(parse_context *Ctx)
       // TODO(Jesse): This is pretty half-baked and probably should be represented
       // differently.  I just hacked it in here to get typedef'd funcs to parse.
       IsFunction = True;
+      Type.Indirection.IsFunction = True;
       EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
     }
   }
 
   MaybeEatAdditionalCommaSeperatedNames(Ctx);
 
-  TryEatAttributes(Parser);
+  TryEatAttributes(Parser) == False;
 
   if ( OptionalToken(Parser, CTokenType_OpenBracket) )
   {
+    // Assert(False); // Pretty sure this path should be dead 
     // lol
     variable_decl Tmp = {};
     ParseExpression(Ctx, &Tmp.StaticBufferSize );
@@ -8637,7 +8662,6 @@ ParseAndPushTypedef(parse_context *Ctx)
   type_def Typedef = {
     .Type = Type,
     .Alias = Alias,
-    .IsFunction = IsFunction,
   };
 
   Push(&Ctx->Datatypes.Typedefs, Typedef, Ctx->Memory);
@@ -9012,7 +9036,6 @@ ParseTypeSpecifierNode(parse_context *Ctx, ast_node_expression *Result, datatype
   ast_node_type_specifier *Node = AllocateAndCastTo(ast_node_type_specifier, &Result->Value, Ctx->Memory);
 
   Node->TypeSpec = ParseTypeSpecifier(Ctx);
-  Node->Indirection = ParseReferencesIndirectionAndPossibleFunctionPointerness(Ctx->CurrentParser);
 
   if (Data)
   {
@@ -9444,7 +9467,7 @@ ParseFunctionCall(parse_context *Ctx, counted_string FunctionName)
 }
 
 bonsai_function declaration
-FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, type_indirection_info *Indirection)
+FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec)
 {
   declaration Result = {};
 
@@ -9475,7 +9498,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
     else
     {
       Result.Type = type_variable_decl;
-      Result.variable_decl = FinalizeVariableDecl(Ctx, TypeSpec, Indirection, NameT); // Globally-scoped variable : `struct foo = { .bar = 1 }`
+      Result.variable_decl = FinalizeVariableDecl(Ctx, TypeSpec, NameT); // Globally-scoped variable : `struct foo = { .bar = 1 }`
     }
 
   }
@@ -9490,7 +9513,8 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
     if ( PeekToken(Parser).Type == CTokenType_OpenBrace ||
          PeekToken(Parser).Type == CTokenType_Colon      )
     {
-
+      // TODO(Jesse): Is this actually valid for structs, or should structs and
+      // unions take the same path?
       if (OptionalToken(Parser, CTokenType_Colon))
       {
         EatUntilExcluding(Parser, CTokenType_OpenBrace);
@@ -9528,6 +9552,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
     {
       EatBetween(Parser, CTokenType_LT, CTokenType_GT);
     }
+
     Result.function_decl = ParseFunctionParameterList( Ctx,
                                                        TypeSpec,
                                                        ConstructorNameT,
@@ -9536,11 +9561,12 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec, typ
 
     Result.function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
   }
-  else if ( Indirection->IsFunctionPtr )
+  else if ( TypeSpec->Indirection.IsFunction || TypeSpec->Indirection.IsFunctionPtr )
   {
+    // TODO(Jesse, correctness, cleanup): Should this not get hit for regular
+    // functions too ..??  Or does this path just never get hit?
     Result.Type = type_variable_decl;
     Result.variable_decl.Type = *TypeSpec;
-    Result.variable_decl.Indirection = *Indirection;
   }
   else
   {
@@ -9558,9 +9584,7 @@ ParseDeclaration(parse_context *Ctx)
   parser *Parser = Ctx->CurrentParser;
 
   type_spec TypeSpec = ParseTypeSpecifier(Ctx);
-  type_indirection_info Indirection = ParseIndirectionInfo(Parser);
-
-  declaration Result = FinalizeDeclaration(Ctx, Parser, &TypeSpec, &Indirection);
+  declaration Result = FinalizeDeclaration(Ctx, Parser, &TypeSpec);
 
   return Result;
 }
@@ -10565,6 +10589,9 @@ GetMembersFor(datatype *Data)
   return Result;
 }
 
+// NOTE(Jesse): This function isn't quite an exact duplicate, but it's close
+// enough that we could probably merge all three with a templating thing
+// @duplicate_DatatypeIs_Decl
 link_internal b32
 DatatypeIsVariableDecl(datatype *Data)
 {
@@ -10610,6 +10637,70 @@ DatatypeIsVariableDecl(datatype *Data)
   return Result;
 }
 
+// This is an _almost_ exact duplicate of DatatypeIsCompoundDecl.  The only difference
+// is which switch statement we set the result in.  How do we fix?
+//
+// @duplicate_DatatypeIs_Decl
+link_internal function_decl *
+DatatypeIsFunctionDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
+{
+  function_decl *Result = {};
+  switch (Data->Type)
+  {
+    case type_datatype_noop:
+    case type_enum_member:
+    case type_primitive_def:
+    {
+    } break;
+
+    case type_type_def:
+    {
+      // NOTE(Jesse): Pretty sure this path is roughly the following, but I didn't test it.
+      NotImplemented;
+
+      type_def *TDef = SafeAccessPtr(type_def, Data);
+      datatype DT = ResolveToBaseType(Ctx, TDef->Type);
+      Result = DatatypeIsFunctionDecl(Ctx, Scope, &DT, MetaOperatorT);
+    } break;
+
+    case type_declaration:
+    {
+      declaration *Decl = SafeAccess(declaration, Data);
+
+      switch(Decl->Type)
+      {
+        case type_declaration_noop:
+        {
+          // TODO(Jesse): ?
+          InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT);
+        } break;
+
+        case type_function_decl:
+        {
+          Result = SafeAccess(function_decl, Decl);
+        } break;
+
+        case type_enum_decl:
+        case type_compound_decl:
+        {
+        } break;
+
+        case type_variable_decl:
+        {
+          variable_decl *VDecl = SafeAccess(variable_decl, Decl);
+          datatype DT = ResolveToBaseType(Ctx, VDecl->Type);
+          /* Assert(DatatypeIsVariableDecl(&DT) == False); */
+          Result = DatatypeIsFunctionDecl(Ctx, Scope, &DT, MetaOperatorT);
+        } break;
+      }
+
+    } break;
+  }
+
+  return Result;
+}
+
+// @duplicate_DatatypeIs_Decl
 link_internal compound_decl *
 DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
 {
@@ -10659,7 +10750,7 @@ DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
         {
           variable_decl *VDecl = SafeAccess(variable_decl, Decl);
           datatype DT = ResolveToBaseType(Ctx, VDecl->Type);
-          Assert(DatatypeIsVariableDecl(&DT) == False);
+          /* Assert(DatatypeIsVariableDecl(&DT) == False); */
           Result = DatatypeIsCompoundDecl(Ctx, Scope, &DT, MetaOperatorT);
         } break;
       }
@@ -10718,6 +10809,11 @@ ResolveToBaseType(parse_context *Ctx, type_spec TypeSpec)
     {
       Result = ResolveTypedefToBaseType(Ctx, &Result);
     }
+  }
+  else if ( TypeSpec.Indirection.IsFunction ||
+            TypeSpec.Indirection.IsFunctionPtr )
+  {
+    Result = Datatype(TypeSpec);
   }
   else
   {
@@ -11018,6 +11114,32 @@ Execute(parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx,
                 } break;
               }
 
+              DoTrueFalse( Ctx, &Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
+            } break;
+
+            case is_function:
+            {
+              RequireToken(&Scope, CTokenType_Question);
+              function_decl *D = DatatypeIsFunctionDecl(Ctx, &Scope, &Replace->Data, MetaOperatorToken);
+
+              if (D)
+              {
+                datatype Base = ResolveToBaseType(Ctx, &Replace->Data);
+
+                /* Info("(%S) (%S) (%S)", */
+                /*     GetTypeTypeForDatatype(&Replace->Data, Memory), */
+                /*     GetNameForDatatype(&Replace->Data, TranArena), */
+                /*     GetTypeNameForDatatype(&Replace->Data, Memory)); */
+
+                /* Info("(%S) (%S) (%S)", */
+                /*     GetTypeTypeForDatatype(&Base, Memory), */
+                /*     GetNameForDatatype(&Base, TranArena), */
+                /*     GetTypeNameForDatatype(&Base, Memory)); */
+
+              }
+
+
+              b32 DoTrueBranch = (D != 0);
               DoTrueFalse( Ctx, &Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
             } break;
 
@@ -12066,7 +12188,7 @@ main(s32 ArgCount_, const char** ArgStrings)
       Ctx.CurrentParser = Parser;
       ParseDatatypes(&Ctx, Parser);
 
-      PrintHashtable(&Ctx.Datatypes.DatatypeHashtable);
+      /* PrintHashtable(&Ctx.Datatypes.DatatypeHashtable); */
 
       MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(0);
 
@@ -12075,20 +12197,20 @@ main(s32 ArgCount_, const char** ArgStrings)
       MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(0);
       GoGoGadgetMetaprogramming(&Ctx, &TodoInfo);
 
-/*       if (Parser->Valid) */
-/*       { */
-/*         if (Parser->OutputTokens->At != Parser->OutputTokens->Start) */
-/*         { */
-/*           TruncateToCurrentElements(&Parser->OutputTokens); */
-/*           Output(Parser->OutputTokens, Parser->Filename, Memory); */
-/*           LogSuccess("Output '%S'.", Parser->Filename); */
-/*         } */
-/*         else */
-/*         { */
-/*           Error("Tried to output an OutputTokens stream of 0 length!"); */
-/*         } */
-/*       } */
-
+#if 0
+      if (Parser->Valid)
+      {
+        Assert(Parser->Tokens->At == Parser->Tokens->Start)
+        if (Output(Parser->Tokens, Concat(Parser->Filename, CSz("_tmp"), Memory), Memory))
+        {
+          LogSuccess("Output '%S'.", Parser->Filename);
+        }
+        else
+        {
+          Erorr("Failed writing to '%S'", Parser->Filename);
+        }
+      }
+#endif
 
       if (Parser->ErrorCode == ParseErrorCode_None)
       {
