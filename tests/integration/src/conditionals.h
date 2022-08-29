@@ -42,7 +42,7 @@ struct counted_string {
 };
 
 #if 0
-meta(
+poof(
   func (foo_struct_0 TFooStruct)
   {
     (TFooStruct.map_members(Member){
@@ -102,7 +102,7 @@ struct foo_struct_1
 
 
 #if 0
-meta(
+poof(
   func (foo_struct_1 TFooStruct)
   {
     (TFooStruct.map_members(Member){
@@ -120,7 +120,7 @@ meta(
 #include <tests/integration/generated/anonymous_func_1.h>
 
 
-meta(
+poof(
   func (foo_struct_1 TFooStruct)
   {
     (TFooStruct.map_members(Member){
@@ -139,7 +139,7 @@ meta(
 #endif
 
 
-meta(
+poof(
   func (foo_struct_1 TFooStruct)
   {
     (TFooStruct.map_members(Member){

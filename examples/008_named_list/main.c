@@ -17,7 +17,7 @@ struct bar
 };
 
 
-meta( named_list(my_list) { foo bar })
+poof( named_list(my_list) { foo bar })
 
 int main()
 {

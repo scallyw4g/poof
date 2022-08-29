@@ -38,7 +38,7 @@ meta
 
 // Here we call the meta func declared above, which poof executes and outputs
 // the result of to the include file immediately afterwards.
-meta(metaprogram_another_useless_struct(my_struct))
+poof(metaprogram_another_useless_struct(my_struct))
 #include <generated/metaprogram_another_useless_struct_my_struct.h>
 
 

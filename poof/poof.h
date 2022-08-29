@@ -16,7 +16,7 @@ enum metaprogramming_directive
   func,
   polymorphic_func,
 };
-meta( string_and_value_tables(metaprogramming_directive) )
+poof( string_and_value_tables(metaprogramming_directive) )
 #include <poof/generated/string_and_value_tables_metaprogramming_directive.h>
 
 enum meta_arg_operator
@@ -36,7 +36,7 @@ enum meta_arg_operator
   is_primitive,
   is_function,
 };
-meta( generate_value_table(meta_arg_operator) )
+poof( generate_value_table(meta_arg_operator) )
 #include <poof/generated/generate_value_table_meta_arg_operator.h>
 
 enum meta_transform_op
@@ -48,7 +48,7 @@ enum meta_transform_op
   strip_single_prefix = (1 << 2),
   strip_all_prefix    = (1 << 3), // TODO(Jesse): Change name to strip_all_prefixes
 };
-meta(generate_value_table(meta_transform_op))
+poof(generate_value_table(meta_transform_op))
 #include <poof/generated/generate_value_table_meta_transform_op.h>
 
 
@@ -260,7 +260,7 @@ enum c_token_type
 
   CT_InsertedCode,
 };
-meta(generate_string_table(c_token_type))
+poof(generate_string_table(c_token_type))
 #include <poof/generated/generate_string_table_c_token_type.h>
 
 enum c_token_flags
@@ -372,7 +372,7 @@ enum token_cursor_source
 
   TokenCursorSource_Count,
 };
-meta(generate_string_table(token_cursor_source));
+poof(generate_string_table(token_cursor_source));
 #include <poof/generated/generate_string_table_token_cursor_source.h>
 
 // TODO(Jesse): Add a way to append additional members to generated datatypes
@@ -381,13 +381,13 @@ meta(generate_string_table(token_cursor_source));
 #include <poof/generated/generate_cursor_c_token.h>
 
 
-meta(buffer(c_token))
+poof(buffer(c_token))
 #include <poof/generated/buffer_c_token.h>
 
-meta(buffer(c_token_buffer))
+poof(buffer(c_token_buffer))
 #include <poof/generated/buffer_c_token_buffer.h>
 
-meta(generate_stream(c_token_buffer))
+poof(generate_stream(c_token_buffer))
 #include <poof/generated/generate_stream_c_token_buffer.h>
 
 enum parse_error_code
@@ -418,7 +418,7 @@ enum parse_error_code
   // We hit an error, but didn't classify it.
   ParseErrorCode_Unknown,
 };
-meta(generate_string_table(parse_error_code))
+poof(generate_string_table(parse_error_code))
 #include <poof/generated/generate_string_table_parse_error_code.h>
 
 struct parser
@@ -426,10 +426,10 @@ struct parser
   parse_error_code ErrorCode;
   c_token_cursor *Tokens;
 };
-meta(generate_cursor(parser))
+poof(generate_cursor(parser))
 #include <poof/generated/generate_cursor_parser.h>
 
-meta(generate_stream(parser))
+poof(generate_stream(parser))
 #include <poof/generated/generate_stream_parser.h>
 
 bonsai_function parser
@@ -465,7 +465,7 @@ struct compound_decl // structs and unions
   declaration_stream Members;
   b32 IsUnion;
 };
-meta(stream_and_cursor(compound_decl))
+poof(stream_and_cursor(compound_decl))
 #include <poof/generated/stream_and_cursor_struct_def.h> // TODO(Jesse): Change this name
 
 enum linkage_type
@@ -527,7 +527,7 @@ enum type_qualifier
   TypeQual_Operator    = (1 << 24),
   TypeQual_Virtual     = (1 << 25),
 };
-meta(string_and_value_tables(type_qualifier))
+poof(string_and_value_tables(type_qualifier))
 #include <poof/generated/string_and_value_tables_type_qualifier.h>
 
 #if 0
@@ -573,7 +573,7 @@ struct variable_decl
 
   u32 StrictBitWidth; // For declarations in structs like : `int foo_bool : 1`
 };
-meta(generate_stream(variable_decl))
+poof(generate_stream(variable_decl))
 #include <poof/generated/generate_stream_variable_decl.h>
 
 enum function_type
@@ -584,7 +584,7 @@ enum function_type
   function_type_operator,
   function_type_normal,
 };
-meta(string_and_value_tables(function_type))
+poof(string_and_value_tables(function_type))
 #include <poof/generated/string_and_value_tables_function_type.h>
 
 struct ast_node_statement;
@@ -605,7 +605,7 @@ struct function_decl
   ast_node *Ast;
 };
 
-meta(generate_stream(function_decl))
+poof(generate_stream(function_decl))
 #include <poof/generated/generate_stream_function_decl.h>
 
 struct ast_node_expression;
@@ -614,7 +614,7 @@ struct enum_member
   counted_string Name;
   ast_node_expression *Expr;
 };
-meta(generate_stream(enum_member))
+poof(generate_stream(enum_member))
 #include <poof/generated/generate_stream_enum_member.h>
 
 struct enum_decl
@@ -622,10 +622,10 @@ struct enum_decl
   counted_string Name;
   enum_member_stream Members;
 };
-meta(stream_and_cursor(enum_decl))
+poof(stream_and_cursor(enum_decl))
 #include <poof/generated/stream_and_cursor_enum_def.h>
 
-meta(
+poof(
   d_union declaration
   {
     enum_decl
@@ -636,13 +636,13 @@ meta(
 )
 #include <poof/generated/d_union_declaration.h>
 
-meta(string_and_value_tables(declaration_type))
+poof(string_and_value_tables(declaration_type))
 #include <poof/generated/string_and_value_tables_declaration_type.h>
 
-meta(generate_cursor(declaration))
+poof(generate_cursor(declaration))
 #include <poof/generated/generate_cursor_declaration.h>
 
-meta(generate_stream_chunk_struct(declaration))
+poof(generate_stream_chunk_struct(declaration))
 #include <poof/generated/generate_stream_chunk_declaration.h>
 
 // TODO(Jesse): Should type_spec actually be representative of primitive types?
@@ -659,7 +659,7 @@ enum datatype_type
   type_type_def,
   type_primitive_def,
 };
-meta(generate_string_table(datatype_type))
+poof(generate_string_table(datatype_type))
 #include <poof/generated/generate_string_table_datatype_type.h>
 
 struct enum_member;
@@ -684,7 +684,7 @@ Hash(datatype *D)
   umm Result = {};
   return Result;
 }
-meta(hashtable(datatype))
+poof(hashtable(datatype))
 #include <poof/generated/hashtable_datatype.h>
 
 struct d_union_member
@@ -693,7 +693,7 @@ struct d_union_member
   counted_string Name;
   d_union_flags Flags;
 };
-meta(generate_stream(d_union_member))
+poof(generate_stream(d_union_member))
 #include <poof/generated/generate_stream_d_union_member.h>
 
 struct type_def
@@ -701,7 +701,7 @@ struct type_def
   type_spec Type;
   counted_string Alias;
 };
-meta(generate_stream(type_def))
+poof(generate_stream(type_def))
 #include <poof/generated/generate_stream_type_def.h>
 
 
@@ -822,7 +822,7 @@ struct meta_func_arg
   counted_string Match;
   datatype Data;
 };
-meta(generate_stream(meta_func_arg))
+poof(generate_stream(meta_func_arg))
 #include <poof/generated/generate_stream_meta_func_arg.h>
 
 
@@ -863,7 +863,7 @@ struct macro_def
   b32 Undefed; // Gets toggled when we hit an undef
   /* b32 IsExpanding; */
 };
-meta(generate_stream(macro_def))
+poof(generate_stream(macro_def))
 #include <poof/generated/generate_stream_macro_def.h>
 
 bonsai_function umm
@@ -874,7 +874,7 @@ Hash(macro_def *M)
   return Result;
 }
 
-meta(hashtable(macro_def))
+poof(hashtable(macro_def))
 #include <poof/generated/hashtable_macro_def.h>
 
 
@@ -884,7 +884,7 @@ struct meta_func
   counted_string ArgName;
   parser Body;
 };
-meta(generate_stream(meta_func))
+poof(generate_stream(meta_func))
 #include <poof/generated/generate_stream_meta_func.h>
 
 
@@ -894,7 +894,7 @@ struct todo
   counted_string Value;
   b32 FoundInCodebase;
 };
-meta(generate_stream(todo))
+poof(generate_stream(todo))
 #include <poof/generated/generate_stream_todo.h>
 
 struct tag
@@ -902,7 +902,7 @@ struct tag
   counted_string Tag;
   todo_stream Todos;
 };
-meta(generate_stream(tag))
+poof(generate_stream(tag))
 #include <poof/generated/generate_stream_tag.h>
 
 struct person
@@ -910,7 +910,7 @@ struct person
   counted_string Name;
   tag_stream Tags;
 };
-meta(generate_stream(person))
+poof(generate_stream(person))
 #include <poof/generated/generate_stream_person.h>
 
 #define SafeAccess(T, Ptr) (&(Ptr)->T); Assert((Ptr)->Type == type_##T)
@@ -925,7 +925,7 @@ struct ast_node_expression
   ast_node *Value;
   ast_node_expression *Next;
 };
-meta(generate_stream(ast_node_expression))
+poof(generate_stream(ast_node_expression))
 #include <poof/generated/generate_stream_ast_node_expression.h>
 
 struct ast_node_statement
@@ -955,7 +955,7 @@ struct ast_node_variable_def
   variable_decl Decl;
   ast_node *Value;
 };
-meta(generate_stream(ast_node_variable_def))
+poof(generate_stream(ast_node_variable_def))
 #include <poof/generated/generate_stream_ast_node_variable_def.h>
 
 struct ast_node_access
@@ -1005,7 +1005,7 @@ struct ast_node_predicated
   ast_node_expression *Predicate;
 };
 
-meta(
+poof(
   d_union ast_node
   {
     ast_node_statement
@@ -1024,7 +1024,7 @@ meta(
 )
 #include <poof/generated/d_union_ast_node.h>
 
-meta(generate_stream(ast_node))
+poof(generate_stream(ast_node))
 #include <poof/generated/generate_stream_ast_node.h>
 
 bonsai_function ast_node*
@@ -1453,10 +1453,10 @@ PeekToken(ansi_stream* Stream, u32 Lookahead = 0)
   return Result;
 }
 
-meta(generate_stream_iterator(declaration))
+poof(generate_stream_iterator(declaration))
 #include <poof/generated/generate_stream_iterator_datatype.h>
 
-meta(generate_stream_push(declaration))
+poof(generate_stream_push(declaration))
 #include <poof/generated/generate_stream_push_datatype.h>
 
 bonsai_function b32

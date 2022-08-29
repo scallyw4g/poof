@@ -1,5 +1,5 @@
 
-#define meta(...)
+#define poof(...)
 
 #if BONSAI_PREPROCESSOR
 

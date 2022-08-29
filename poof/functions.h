@@ -1,7 +1,7 @@
 
-meta( func hashtable(Type) { (hashtable_struct(Type)) (hashtable_impl(Type)) })
+poof( func hashtable(Type) { (hashtable_struct(Type)) (hashtable_impl(Type)) })
 
-meta(
+poof(
   func hashtable_struct(Type)
   {
     struct (Type.name)_linked_list_node
@@ -18,7 +18,7 @@ meta(
   }
 );
 
-meta(
+poof(
   func hashtable_impl(Type)
   {
     bonsai_function (Type.name)_linked_list_node *
@@ -75,7 +75,7 @@ meta(
   }
 )
 
-meta(
+poof(
   func dunion_debug_print_prototype(DUnion)
   {
     bonsai_function void DebugPrint( (DUnion.type) *Struct, u32 Depth = 0);
@@ -83,7 +83,7 @@ meta(
   }
 )
 
-meta(
+poof(
   func dunion_debug_print(DUnion)
   {
     bonsai_function void
@@ -126,7 +126,7 @@ meta(
   }
 )
 
-meta(
+poof(
   func buffer(Type)
   {
     struct (Type.name)_buffer
@@ -155,7 +155,7 @@ meta(
   }
 )
 
-meta(
+poof(
   func generate_cursor(Type)
   {
     struct (Type.name)_cursor
@@ -179,7 +179,7 @@ meta(
   }
 )
 
-meta(
+poof(
   func generate_string_table(EnumType)
   {
     bonsai_function counted_string
@@ -200,7 +200,7 @@ meta(
   }
 )
 
-meta(
+poof(
   func generate_value_table(EnumType)
   {
     bonsai_function (EnumType.name)
@@ -220,7 +220,7 @@ meta(
   }
 )
 
-meta(
+poof(
   func generate_stream_chunk_struct(Type)
   {
     struct (Type.name)_stream_chunk
@@ -231,7 +231,7 @@ meta(
   }
 )
 
-meta(
+poof(
   func generate_stream_push(Type)
   {
     bonsai_function (Type.name) *
@@ -297,7 +297,7 @@ meta(
   }
 )
 
-meta(
+poof(
   func generate_stream_struct(Type)
   {
     struct (Type.name)_stream
@@ -309,7 +309,7 @@ meta(
   }
 )
 
-meta(
+poof(
   func generate_stream_iterator(Type)
   {
     struct (Type.name)_iterator
@@ -351,7 +351,7 @@ meta(
   }
 )
 
-meta(
+poof(
   func generate_stream_getters(InputTypeDef)
   {
     InputTypeDef.map_members (Member) {
@@ -364,7 +364,7 @@ meta(
   }
 )
 
-meta(
+poof(
   func generate_stream(Type)
   {
     (generate_stream_chunk_struct(Type))
@@ -374,7 +374,7 @@ meta(
   }
 )
 
-meta(
+poof(
   func string_and_value_tables(Def)
   {
     ( generate_string_table(Def) )
@@ -382,7 +382,7 @@ meta(
   }
 )
 
-meta(
+poof(
   func stream_and_cursor(Def)
   {
     ( generate_cursor(Def) )
@@ -390,7 +390,7 @@ meta(
   }
 )
 
-meta(
+poof(
   polymorphic_func void DebugPrint( @TypeDef RuntimeValue, u32 Depth)
   {
     DebugPrint("(TypeDef.name): ", Depth);

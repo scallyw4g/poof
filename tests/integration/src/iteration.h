@@ -41,7 +41,7 @@ struct bar_struct
 
 
 #if 1
-meta(
+poof(
   func (foo_enum Type)
   {
     (Type.map_values (Value) {
@@ -51,7 +51,7 @@ meta(
 )
 #include <tests/integration/generated/anonymous_function_foo_1.h>
 
-meta(
+poof(
   func (foo_struct Type)
   {
     (Type.map_members (Value) {
@@ -65,7 +65,7 @@ meta(
 meta (d_union foobar_dunion { foo_struct bar_struct } )
 #include <tests/integration/generated/d_union_foobar_union.h>
 
-meta(
+poof(
   func (foobar_dunion Foobar)
   {
     -- all members start --
