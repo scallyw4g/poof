@@ -5,7 +5,6 @@
 #include <bonsai_stdlib/bonsai_stdlib.h>
 #include <bonsai_stdlib/bonsai_stdlib.cpp>
 
-#include <poof/functions.h>
 #include <poof/poof.h>
 #include <poof/print_ast_node.h>
 

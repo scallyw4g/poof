@@ -9,9 +9,8 @@ If you to take `poof` for a test-drive I'd love to hear about it!
 # Quickstart
 
 ```
-# Get the source
 git clone --recursive https://github.com/jjbandit/poof.git poof
-cd poof && ./make.sh BuildAndRunAll
+cd poof && ./make.sh BuildAllBinariesRunAllTests
 ```
 
 # About
