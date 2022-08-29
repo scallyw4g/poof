@@ -305,44 +305,39 @@ function RunExtendedIntegrationTests
 
 }
 
+function BootstrapSingleExtendedIntegrationTest
+{
+  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/$test_name ]; then
+    echo -e "$Info $test_name exists, skipping"
+  else
+    echo -e "$Info Cloning $test_name"
+    git clone $1 $test_repo $EXTENDED_INTEGRATION_TESTS_SRC/$test_name
+  fi
+}
+
 function BootstrapExtendedIntegrationTests
 {
   ColorizeTitle "Bootstrapping Extended Integration Test Suite"
 
-  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/uacme ]; then
-    echo -e "$Info uacme exists, skipping"
-  else
-    echo -e "$Info Cloning uacme"
-    git clone git@github.com:ndilieto/uacme $EXTENDED_INTEGRATION_TESTS_SRC/uacme
-  fi
+  test_name=uacme
+  test_repo=git@github.com:ndilieto/uacme
+  BootstrapSingleExtendedIntegrationTest
 
-  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/redis ]; then
-    echo -e "$Info redis exists, skipping"
-  else
-    echo -e "$Info Cloning redis"
-    git clone git@github.com:redis/redis $EXTENDED_INTEGRATION_TESTS_SRC/redis
-  fi
+  test_name=redis
+  test_repo=git@github.com:$test_name/$test_name
+  BootstrapSingleExtendedIntegrationTest
 
-  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/sqlite ]; then
-    echo -e "$Info sqlite exists, skipping"
-  else
-    echo -e "$Info Cloning sqlite"
-    git clone git@github.com:sqlite/sqlite $EXTENDED_INTEGRATION_TESTS_SRC/sqlite
-  fi
+  test_name=sqlite
+  test_repo=git@github.com:$test_name/$test_name
+  BootstrapSingleExtendedIntegrationTest
 
-  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/handmade_hero ]; then
-    echo -e "$Info handmade_hero exists, skipping"
-  else
-    echo -e "$Info Cloning handmade_hero"
-    git clone git@github.com:HandmadeHero/cpp $EXTENDED_INTEGRATION_TESTS_SRC/handmade_hero
-  fi
+  test_name=handmade_hero
+  test_repo=git@github.com:HandmadeHero/cpp
+  BootstrapSingleExtendedIntegrationTest
 
-  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/bonsai ]; then
-    echo -e "$Info bonsai exists, skipping"
-  else
-    echo -e "$Info Cloning bonsai"
-    git clone --recursive git@github.com:jjbandit/bonsai $EXTENDED_INTEGRATION_TESTS_SRC/bonsai
-  fi
+  test_name=bonsai
+  test_repo=git@github.com:jjbandit/bonsai
+  BootstrapSingleExtendedIntegrationTest '--recursive'
 }
 
 
