@@ -233,126 +233,75 @@ function RunParserTests
   echo -e ""
 }
 
+function RunSingleExtendedIntegrationTest
+{
+  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/$test_name ]; then
+    pushd "$EXTENDED_INTEGRATION_TESTS_SRC/$test_name"
+
+    $1
+
+    if [ $? -eq 0 ]; then
+      echo -e "$Success $test_name parsed"
+    else
+     echo -e "$Failed $test_name didn't parse"
+    fi
+
+    popd
+  else
+    echo -e "$Warn $test_name not found.  Try running './make.sh BootstrapExtendedIntegrationTests'"
+  fi
+}
+
 function RunExtendedIntegrationTests
 {
   test_name=uacme
-  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/$test_name ]; then
-    pushd "$EXTENDED_INTEGRATION_TESTS_SRC/$test_name"
-
-    poof                         \
-      --log-level LogLevel_Shush \
-      -D USE_OPENSSL             \
-        ./uacme.c
-
-    if [ $? -eq 0 ]; then
-      echo -e "$Success $test_name parsed"
-    else
-     echo -e "$Failed $test_name didn't parse"
-    fi
-
-    popd
-  else
-    echo -e "$Warn $test_name not found.  Try running './make.sh BootstrapExtendedIntegrationTests'"
-  fi
+  RunSingleExtendedIntegrationTest \
+    "poof                          \
+      --log-level LogLevel_Shush   \
+      -D USE_OPENSSL               \
+      ./uacme.c"
 
   test_name=redis
-  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/$test_name ]; then
-    pushd "$EXTENDED_INTEGRATION_TESTS_SRC/$test_name"
-
-    # TODO(Jesse): Do we actually need all these defines?  Which ones should we
-    # do ourselves (ie. automatically, in poof)
-
-    # TODO(Jesse): Why does defining BYTE_ORDER and LITTLE_ENDIAN on the CLI
-    # not bypass the preprocessor check it's failing on?
-
-    poof                       \
-    --log-level LogLevel_Shush \
-    -D BYTE_ORDER              \
-    -D LITTLE_ENDIAN           \
-                               \
-    -D __clang__               \
-    -D __i386                  \
-    -D __x86_64__              \
-    -D linux                   \
-    -D __linux__               \
-    -D __GNUC__                \
-     src/server.c
-
-    if [ $? -eq 0 ]; then
-      echo -e "$Success $test_name parsed"
-    else
-     echo -e "$Failed $test_name didn't parse"
-    fi
-
-    popd
-  else
-    echo -e "$Warn $test_name not found.  Try running './make.sh BootstrapExtendedIntegrationTests'"
-  fi
+  RunSingleExtendedIntegrationTest \
+    "poof                          \
+    --log-level LogLevel_Shush     \
+    -D BYTE_ORDER                  \
+    -D LITTLE_ENDIAN               \
+                                   \
+    -D __clang__                   \
+    -D __i386                      \
+    -D __x86_64__                  \
+    -D linux                       \
+    -D __linux__                   \
+    -D __GNUC__                    \
+     src/server.c"
 
   test_name=sqlite
-  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/$test_name ]; then
-    pushd "$EXTENDED_INTEGRATION_TESTS_SRC/$test_name"
-
-    poof  \
-    -D __clang__  \
-    -D __i386     \
-    -D __x86_64__ \
-    -D linux      \
-    -D __linux__  \
-    -D __GNUC__   \
-     src/test_server.c
-
-    if [ $? -eq 0 ]; then
-      echo -e "$Success $test_name parsed"
-    else
-     echo -e "$Failed $test_name didn't parse"
-    fi
-
-    popd
-  else
-    echo -e "$Warn $test_name not found.  Try running './make.sh BootstrapExtendedIntegrationTests'"
-  fi
+  RunSingleExtendedIntegrationTest \
+    "poof                          \
+    -D __clang__                   \
+    -D __i386                      \
+    -D __x86_64__                  \
+    -D linux                       \
+    -D __linux__                   \
+    -D __GNUC__                    \
+     src/test_server.c"
 
   test_name=handmade_hero
-  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/$test_name ]; then
-    pushd "$EXTENDED_INTEGRATION_TESTS_SRC/$test_name"
-
-    poof                         \
-      --log-level LogLevel_Shush \
-      code/handmade.cpp
-
-    if [ $? -eq 0 ]; then
-      echo -e "$Success $test_name parsed"
-    else
-     echo -e "$Failed $test_name didn't parse"
-    fi
-
-    popd
-  else
-    echo -e "$Warn $test_name not found.  Try running './make.sh BootstrapExtendedIntegrationTests'"
-  fi
+  RunSingleExtendedIntegrationTest \
+    "poof                          \
+      --log-level LogLevel_Shush   \
+      code/handmade.cpp"
 
   test_name=bonsai
-  if [ -d $EXTENDED_INTEGRATION_TESTS_SRC/$test_name ]; then
-    pushd "$EXTENDED_INTEGRATION_TESTS_SRC/$test_name"
-    poof                         \
-      -I src/                    \
-      -I src/poof                \
-      -I include/                \
-      -D BONSAI_LINUX            \
-      -o src/generated           \
-      src/game_loader.cpp
-
-    if [ $? -eq 0 ]; then
-      echo -e "$Success $test_name parsed"
-    else
-     echo -e "$Failed $test_name didn't parse"
-    fi
-
-    popd
-  else
-    echo -e "$Warn $test_name not found.  Try running './make.sh BootstrapExtendedIntegrationTests'"
-  fi
+  RunSingleExtendedIntegrationTest \
+    "poof                          \
+      -I src/                      \
+      -I src/poof                  \
+      -I include/                  \
+      -D BONSAI_LINUX              \
+      -o src/generated             \
+      src/game_loader.cpp"
 
 }
 
