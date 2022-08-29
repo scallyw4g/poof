@@ -10,7 +10,7 @@
 
 BUILD_EVERYTHING=0
 
-# RunPreemptivePoof=1
+RunPreemptivePoof=1
 
 RunPoof=1
 BuildPoof=1
@@ -44,7 +44,7 @@ if [ $# -gt 1 ]; then
   echo "make.sh supports a maximum of 1 argument"
 fi
 
-ROOT="."
+ROOT="$(pwd)"
 SRC="$ROOT/poof"
 BIN="$ROOT/bin"
 BIN_TEST="$BIN/tests"
@@ -111,8 +111,6 @@ function RunPoof {
 }
 
 function BuildPoof {
-
-  : "${OPTIMIZATION_LEVEL:="-O0"}"
 
   which clang++ > /dev/null
   [ $? -ne 0 ] && echo -e "Please install clang++" && exit 1
@@ -225,8 +223,9 @@ function BuildParserTests
 function RunParserTests
 {
   ColorizeTitle "Running Parser Tests"
-  $TEST_DEBUGGER ./bin/tests/poof $COLORFLAG \
-    $TEST_LOG_LEVEL \
+  $TEST_DEBUGGER ./bin/tests/poof \
+    $COLORFLAG                    \
+    $TEST_LOG_LEVEL               \
     $COLORFLAG
 
   echo -e "$Delimeter"
@@ -254,17 +253,18 @@ function RunSingleExtendedIntegrationTest
 
 function RunExtendedIntegrationTests
 {
-  ./install_to_home_bin.sh
+  ColorizeTitle "Running Extended Integration Tests"
+
   test_name=uacme
   RunSingleExtendedIntegrationTest \
-    "poof                          \
+    "$BIN/poof                     \
       --log-level LogLevel_Shush   \
       -D USE_OPENSSL               \
       ./uacme.c"
 
   test_name=redis
   RunSingleExtendedIntegrationTest \
-    "poof                          \
+    "$BIN/poof                     \
     --log-level LogLevel_Shush     \
     -D BYTE_ORDER                  \
     -D LITTLE_ENDIAN               \
@@ -279,7 +279,7 @@ function RunExtendedIntegrationTests
 
   test_name=sqlite
   RunSingleExtendedIntegrationTest \
-    "poof                          \
+    "$BIN/poof                     \
     -D __clang__                   \
     -D __i386                      \
     -D __x86_64__                  \
@@ -290,13 +290,13 @@ function RunExtendedIntegrationTests
 
   test_name=handmade_hero
   RunSingleExtendedIntegrationTest \
-    "poof                          \
+    "$BIN/poof                     \
       --log-level LogLevel_Shush   \
       code/handmade.cpp"
 
   test_name=bonsai
   RunSingleExtendedIntegrationTest \
-    "poof                          \
+    "$BIN/poof                     \
       -I src/                      \
       -I src/poof                  \
       -I include/                  \
@@ -304,6 +304,9 @@ function RunExtendedIntegrationTests
       -o src/generated             \
       src/game_loader.cpp"
 
+  echo -e ""
+  echo -e "$Delimeter"
+  echo -e ""
 }
 
 function BootstrapSingleExtendedIntegrationTest
@@ -363,10 +366,22 @@ function BuildAndRunAll
 
 function BuildAndRunAllExamples
 {
+  ColorizeTitle "Building and Running examples"
   pushd examples
-  ./make_all_examples.sh
-  # ./run_all_examples.sh
+  ./make_all_examples.sh > /dev/null
+
+  if [ $? -eq 0 ]; then
+    echo -e "$Success Examples built and run"
+  else
+   echo -e "$Failed Examples didn't build, or hit runtime errors"
+  fi
+
   popd
+
+  echo -e ""
+  echo -e "$Delimeter"
+  echo -e ""
+
 }
 
 
@@ -384,11 +399,7 @@ echo -e ""
 
 
 
-# TODO(Jesse): Instead of setting these here should we just set the default
-# value to LogLevel_Error in the compiler?
-: "${TEST_LOG_LEVEL:="--log-level LogLevel_Error"}"
-: "${POOF_LOG_LEVEL:="--log-level LogLevel_Error"}"
-: "${INTEGRATION_TEST_LOG_LEVEL:="--log-level LogLevel_Error"}"
+: "${OPTIMIZATION_LEVEL:="-O0"}"
 
 # If someone supplied a command line argument, call the function, otherwise
 # respect the runflags

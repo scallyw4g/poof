@@ -12127,8 +12127,6 @@ main(s32 ArgCount_, const char** ArgStrings)
   memory_arena Memory_ = {};
   memory_arena* Memory = &Memory_;
 
-  Global_LogLevel = LogLevel_Error;
-
   Memory->NextBlockSize = Gigabytes(2);
 
   Assert(ArgCount_ > 0);
