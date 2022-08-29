@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define meta(...)
+#define poof(...)
 
 struct foo_struct
 {
@@ -42,7 +42,7 @@ int main()
 
   printf(" -- Enum Values\n");
   // Here, we generate code to print the enum tag values for the discriminated union
-  meta(
+  poof(
     func (my_discriminated_union_type Enum)
     {
       (Enum.map_values (Val)
@@ -56,7 +56,7 @@ int main()
   printf("\n -- Struct Members\n");
 
   // Here, we generate code to print the discriminated union struct we generated
-  meta(
+  poof(
     func (my_discriminated_union StructType)
     {
       (StructType.map_members (Member)

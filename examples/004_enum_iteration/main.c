@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define meta(...)
+#define poof(...)
 
 enum my_enum
 {

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define meta(...)
+#define poof(...)
 
 //
 // Buckle up.

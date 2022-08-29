@@ -9809,7 +9809,7 @@ FlushOutputToDisk(parse_context *Ctx, counted_string OutputForThisParser, counte
 
   if (FoundValidInclude == False)
   {
-    ParseError(Parser, CSz("A meta() tag must be followed directly by an include tag on the next line."), T);
+    ParseError(Parser, CSz("A poof() tag must be followed directly by an include tag on the next line."), T);
 
     // NOTE(Jesse): This path is for inserting the requisite includes when we
     // re-enable inplace editing
@@ -10880,7 +10880,7 @@ ResolveToBaseType(parse_context *Ctx, datatype *Data)
 #if 0
   // @meta_match
 
-  meta(
+  poof(
     match (Data->Type)
     {
       declaration: D
@@ -11699,7 +11699,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
         c_token MetaToken = RequireToken(Parser, CTokenType_Meta);
         RequireToken(Parser, CTokenType_OpenParen);
 
-        if (OptionalToken(Parser, CTokenType_Ellipsis)) // Just ignore meta tags containing (...) .. It's probably the '#define meta(...)' thing
+        if (OptionalToken(Parser, CTokenType_Ellipsis)) // Just ignore meta tags containing (...) .. It's probably the '#define poof(...)' thing
         {
           RequireToken(Parser, CTokenType_CloseParen);
           break;

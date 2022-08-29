@@ -377,7 +377,7 @@ poof(generate_string_table(token_cursor_source));
 
 // TODO(Jesse): Add a way to append additional members to generated datatypes
 // then reenable this.
-/* meta(generate_cursor(c_token)) */
+/* poof(generate_cursor(c_token)) */
 #include <poof/generated/generate_cursor_c_token.h>
 
 
@@ -447,7 +447,7 @@ struct declaration_stream_chunk;
  * requires lazily evaluating functions once their dependant types have been
  * generated.  Not sure if this is a good idea or not, but we could do it.
  *
- * meta( generate_stream_struct(declaration) )
+ * poof( generate_stream_struct(declaration) )
  *
  * Currently the invariant of being able to remove and re-generate all meta
  * output in a single run of the metaprogramming system is broken by this.

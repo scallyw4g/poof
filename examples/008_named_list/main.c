@@ -1,4 +1,5 @@
-#define meta(...)
+
+#define poof(...)
 
 
 // The debug_print example mentions named_list, so we should probably introduce

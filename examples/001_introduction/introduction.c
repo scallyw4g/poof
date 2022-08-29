@@ -8,7 +8,7 @@
 //
 // Typically, the meta code will look something like:
 //
-// meta( poof code goes here )
+// poof( poof code goes here )
 // #include <the_result_of_the_above_meta_code.h>
 //
 // After poof has run, the program gets compiled with a regular C or C++
@@ -22,7 +22,7 @@
 //
 // All `poof` code lives inside the `meta` macro.
 
-#define meta(...)
+#define poof(...)
 
 // As you can see, we can put any arbitrary junk inside the meta macro and the
 // subsequent compilation step with `clang` will be unaffected.
@@ -30,7 +30,7 @@
 
 int main()
 {
-  meta(Type almost any random crap in here you want; clang will ignore it)
+  poof(Type almost any random crap in here you want; clang will ignore it)
   return 0;
 }
 

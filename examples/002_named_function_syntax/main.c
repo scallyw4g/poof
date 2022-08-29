@@ -1,4 +1,4 @@
-#define meta(...)
+#define poof(...)
 
 
 struct my_struct
@@ -58,9 +58,9 @@ int main()
 //
 // NOTE(Jesse): Passing primitives such at:
 //
-// meta(metaprogram_another_useless_struct(int))
-// meta(metaprogram_another_useless_struct(float))
-// meta(metaprogram_another_useless_struct(char))
+// poof(metaprogram_another_useless_struct(int))
+// poof(metaprogram_another_useless_struct(float))
+// poof(metaprogram_another_useless_struct(char))
 // .. etc
 //
 // is currently unsupported for somewhat subtle reasons.  It may be worthwhile

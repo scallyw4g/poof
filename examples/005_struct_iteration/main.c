@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define meta(...)
+#define poof(...)
 
 
 struct my_struct
