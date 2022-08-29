@@ -62,7 +62,7 @@ poof(
 #include <tests/integration/generated/anonymous_function_foo_2.h>
 #endif
 
-meta (d_union foobar_dunion { foo_struct bar_struct } )
+poof(d_union foobar_dunion { foo_struct bar_struct } )
 #include <tests/integration/generated/d_union_foobar_union.h>
 
 poof(

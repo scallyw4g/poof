@@ -11,8 +11,7 @@ struct my_struct
 
 // Let's define our first meta function!  We're going to make a new struct type
 // using `my_struct` we defined above.
-meta
-(
+poof(
   // Functions in `poof` are defined using the func keyword.  Here we define
   // metaprogram_another_useless_struct, which takes a type argument.
   func metaprogram_another_useless_struct(Type)

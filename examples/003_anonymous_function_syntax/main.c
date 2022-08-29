@@ -9,15 +9,14 @@ struct my_struct
 
 int main()
 {
-  // A meta function that does not specify a name is an anonymous function and
+  // A poof function that does not specify a name is an anonymous function and
   // is executed immediately.  It's required that an anonymous function
   // specifies a type for its type argument.
   //
   // This is particularly useful when paired with type constraints for avoiding
   // a certain class of bugs.  We'll get to this in a subsequent lesson.
   //
-  meta
-  (
+  poof(
     func (my_struct StructType)
     {
       printf("(StructType.name)");

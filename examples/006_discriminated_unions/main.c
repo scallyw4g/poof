@@ -24,8 +24,7 @@ struct baz_struct
 // be generated with the given name (in this case, flazz), but there is not an
 // accompanying struct definition.
 //
-meta
-(
+poof(
   d_union my_discriminated_union
   {
     foo_struct

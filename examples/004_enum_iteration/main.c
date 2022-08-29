@@ -15,8 +15,7 @@ int main()
   printf("> my_enum values \n");
 
   // Here we generate code to print my_enum values using an anonymous function
-  meta
-  (
+  poof(
     func (my_enum Enum)
     {
       // The `map_values` keyword iterates over each value in the my_enum type

@@ -23,8 +23,7 @@ struct baz_struct
 };
 
 
-meta
-(
+poof(
   d_union my_discriminated_union
   {
     foo_struct
@@ -38,8 +37,7 @@ meta
 
 int main()
 {
-  meta
-  (
+  poof(
     // Using the `containing` constraint allows us to filter members which
     // contain a specified type.
     //

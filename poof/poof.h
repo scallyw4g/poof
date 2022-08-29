@@ -449,7 +449,7 @@ struct declaration_stream_chunk;
  *
  * poof( generate_stream_struct(declaration) )
  *
- * Currently the invariant of being able to remove and re-generate all meta
+ * Currently the invariant of being able to remove and re-generate all poof
  * output in a single run of the metaprogramming system is broken by this.
  */
 

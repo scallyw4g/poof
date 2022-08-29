@@ -17,8 +17,7 @@ int main()
   //
   // For the sake of consistency, those APIs may merge into just `map` in the
   // future.  TBD.
-  meta
-  (
+  poof(
     func (my_struct Type)
     {
       (Type.map_members (Member)

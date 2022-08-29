@@ -49,8 +49,7 @@ struct baz_struct
 //
 // see @manually_generate_d_union_switch
 //
-meta
-(
+poof(
   d_union my_discriminated_union
   {
     foo_struct
@@ -75,8 +74,7 @@ meta
 
 // First we declare all the functions we're about to generate implementations for
 //
-meta
-(
+poof(
   for_datatypes(all)
     func (TStruct)
     {
@@ -93,8 +91,7 @@ meta
 // Time to party.  Generate implementations for DebugPrint for every datatype
 // in our program.
 //
-meta
-(
+poof(
   for_datatypes(all) // TODO(Jesse): Probably wrap the callbacks in {} .. ?  The syntax here looks pretty weird 
 
     func (TStruct)

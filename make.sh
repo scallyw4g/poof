@@ -13,22 +13,22 @@ BUILD_EVERYTHING=0
 # RunPreemptivePoof=1
 
 RunPoof=1
-# BuildPoof=1
+BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
-# RunParserTests=1
-# BuildParserTests=1
+RunParserTests=1
+BuildParserTests=1
 # TEST_DEBUGGER="gdb --args"
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
-# BuildAndRunAllExamples=1
+BuildAndRunAllExamples=1
 
-# RunIntegrationTests=1
+RunIntegrationTests=1
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
-# RunExtendedIntegrationTests=1
+RunExtendedIntegrationTests=1
 
 # OPTIMIZATION_LEVEL="-O2"
 
@@ -254,6 +254,7 @@ function RunSingleExtendedIntegrationTest
 
 function RunExtendedIntegrationTests
 {
+  ./install_to_home_bin.sh
   test_name=uacme
   RunSingleExtendedIntegrationTest \
     "poof                          \
