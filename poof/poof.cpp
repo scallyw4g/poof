@@ -4402,9 +4402,9 @@ TryTransmuteKeywordToken(c_token *T, c_token *LastTokenPushed)
   {
     T->Type = CTokenType_Asm;
   }
-  else if ( StringsMatch(T->Value, CSz("meta")) )
+  else if ( StringsMatch(T->Value, CSz("poof")) )
   {
-    T->Type = CTokenType_Meta;
+    T->Type = CTokenType_Poof;
   }
   else if ( StringsMatch(T->Value, CSz("union")) )
   {
@@ -5120,7 +5120,7 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, memory_arena *Memory)
     c_token *T = PeekTokenPointer(Parser);
     switch (T->Type)
     {
-      case CTokenType_Meta:
+      case CTokenType_Poof:
       {
         RequireToken(Parser, T->Type);
         EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
@@ -8948,7 +8948,7 @@ ParseSingleStatement(parse_context *Ctx, ast_node_statement *Result)
         RequireToken(Parser, CTokenType_Identifier);
       } break;
 
-      case CTokenType_Meta:
+      case CTokenType_Poof:
       {
         RequireToken(Parser, T->Type);
         EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
@@ -9161,9 +9161,9 @@ ParseExpression(parse_context *Ctx, ast_node_expression* Result)
     const c_token T = PeekToken(Parser);
     switch (T.Type)
     {
-      case CTokenType_Meta:
+      case CTokenType_Poof:
       {
-        RequireToken(Parser, CTokenType_Meta);
+        RequireToken(Parser, CTokenType_Poof);
         EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
       } break;
 
@@ -9601,7 +9601,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
     switch(T->Type)
     {
       case CT_KeywordPragma:
-      case CTokenType_Meta:
+      case CTokenType_Poof:
       {
         RequireToken(Parser, T->Type);
         EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
@@ -10336,8 +10336,7 @@ PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
   }
   else
   {
-    meta
-    (
+    poof(
       func (type_qualifier Enum)
       {
         (Enum.map_values(EnumVal)
@@ -10950,7 +10949,7 @@ Execute(parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx,
             case meta_arg_operator_noop:
             {
               PoofTypeError( &Scope,
-                             FormatCountedString(TranArena, CSz("Unknown meta operator (%S)"), MetaOperatorToken->Value),
+                             FormatCountedString(TranArena, CSz("Unknown poof operator (%S)"), MetaOperatorToken->Value),
                              MetaOperatorToken);
             } break;
 
@@ -11694,12 +11693,12 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
       } break;
 
-      case CTokenType_Meta:
+      case CTokenType_Poof:
       {
-        c_token MetaToken = RequireToken(Parser, CTokenType_Meta);
+        c_token MetaToken = RequireToken(Parser, CTokenType_Poof);
         RequireToken(Parser, CTokenType_OpenParen);
 
-        if (OptionalToken(Parser, CTokenType_Ellipsis)) // Just ignore meta tags containing (...) .. It's probably the '#define poof(...)' thing
+        if (OptionalToken(Parser, CTokenType_Ellipsis)) // Just ignore poof tags containing (...) .. It's probably the '#define poof(...)' thing
         {
           RequireToken(Parser, CTokenType_CloseParen);
           break;

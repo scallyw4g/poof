@@ -12,7 +12,7 @@ BUILD_EVERYTHING=0
 
 # RunPreemptivePoof=1
 
-# RunPoof=1
+RunPoof=1
 # BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
@@ -28,7 +28,7 @@ BUILD_EVERYTHING=0
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
-RunExtendedIntegrationTests=1
+# RunExtendedIntegrationTests=1
 
 # OPTIMIZATION_LEVEL="-O2"
 

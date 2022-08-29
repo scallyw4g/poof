@@ -144,7 +144,7 @@ enum c_token_type
   CTokenType_DoubleLiteral,
   CTokenType_FloatLiteral,
 
-  CTokenType_Meta,
+  CTokenType_Poof,
 
   CT_Keyword_Override,
   CT_Keyword_Virtual,
