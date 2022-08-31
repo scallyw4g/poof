@@ -1,14 +1,14 @@
         struct compound_decl_cursor
     {
-      compound_decl* Start;
-      compound_decl* At;
-      compound_decl* End;
+      compound_decl *Start;
+      compound_decl *At;
+      compound_decl *End;
     };
 
     bonsai_function compound_decl_cursor
     CompoundDeclCursor(umm ElementCount, memory_arena* Memory)
     {
-      compound_decl* Start = (compound_decl*)PushStruct(Memory, sizeof( compound_decl ), 1, 0);
+      compound_decl *Start = (compound_decl*)PushStruct(Memory, sizeof(compound_decl), 1, 0);
       compound_decl_cursor Result = {
         .Start = Start,
         .End = Start+ElementCount,
@@ -70,7 +70,7 @@
         bonsai_function compound_decl *
     Push(compound_decl_stream* Stream, compound_decl Element, memory_arena* Memory)
     {
-      compound_decl_stream_chunk* NextChunk = (compound_decl_stream_chunk*)PushStruct(Memory, sizeof( compound_decl_stream_chunk ), 1, 0);
+      compound_decl_stream_chunk* NextChunk = (compound_decl_stream_chunk*)PushStruct(Memory, sizeof(compound_decl_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)

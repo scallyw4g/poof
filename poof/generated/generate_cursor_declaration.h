@@ -1,14 +1,14 @@
     struct declaration_cursor
     {
-      declaration* Start;
-      declaration* At;
-      declaration* End;
+      declaration *Start;
+      declaration *At;
+      declaration *End;
     };
 
     bonsai_function declaration_cursor
     DeclarationCursor(umm ElementCount, memory_arena* Memory)
     {
-      declaration* Start = (declaration*)PushStruct(Memory, sizeof( declaration ), 1, 0);
+      declaration *Start = (declaration*)PushStruct(Memory, sizeof(declaration), 1, 0);
       declaration_cursor Result = {
         .Start = Start,
         .End = Start+ElementCount,

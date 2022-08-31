@@ -51,7 +51,7 @@
         bonsai_function function_decl *
     Push(function_decl_stream* Stream, function_decl Element, memory_arena* Memory)
     {
-      function_decl_stream_chunk* NextChunk = (function_decl_stream_chunk*)PushStruct(Memory, sizeof( function_decl_stream_chunk ), 1, 0);
+      function_decl_stream_chunk* NextChunk = (function_decl_stream_chunk*)PushStruct(Memory, sizeof(function_decl_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)

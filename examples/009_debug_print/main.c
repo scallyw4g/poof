@@ -241,7 +241,7 @@ int main()
 // This example is meant to illustrate how you can implement highly generic code in C using `poof`.
 //
 // It is *not* meant to represent the canonical implementation of DebugPrint,
-// in `poof`.  In fact it has several glaring deficiencies.  Notably, it fails
+// in `poof`.  In fact, it has several glaring deficiencies.  Notably, it fails
 // spectacularly when you declare a struct with a union member that doesn't
 // strictly comply with the structure of d_unions.  ie:
 //

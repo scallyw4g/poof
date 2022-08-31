@@ -51,7 +51,7 @@
         bonsai_function parser *
     Push(parser_stream* Stream, parser Element, memory_arena* Memory)
     {
-      parser_stream_chunk* NextChunk = (parser_stream_chunk*)PushStruct(Memory, sizeof( parser_stream_chunk ), 1, 0);
+      parser_stream_chunk* NextChunk = (parser_stream_chunk*)PushStruct(Memory, sizeof(parser_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)

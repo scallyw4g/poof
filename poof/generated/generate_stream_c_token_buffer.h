@@ -51,7 +51,7 @@
         bonsai_function c_token_buffer *
     Push(c_token_buffer_stream* Stream, c_token_buffer Element, memory_arena* Memory)
     {
-      c_token_buffer_stream_chunk* NextChunk = (c_token_buffer_stream_chunk*)PushStruct(Memory, sizeof( c_token_buffer_stream_chunk ), 1, 0);
+      c_token_buffer_stream_chunk* NextChunk = (c_token_buffer_stream_chunk*)PushStruct(Memory, sizeof(c_token_buffer_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)

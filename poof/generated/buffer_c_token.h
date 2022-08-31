@@ -1,6 +1,6 @@
     struct c_token_buffer
     {
-      c_token* Start;
+      c_token *Start;
       umm Count;
     };
 

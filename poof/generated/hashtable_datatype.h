@@ -41,7 +41,7 @@
       return Result;
     }
 
-    bonsai_function datatype*
+    bonsai_function datatype *
     Insert(datatype_linked_list_node *Node, datatype_hashtable *Table)
     {
       Assert(Table->Size);

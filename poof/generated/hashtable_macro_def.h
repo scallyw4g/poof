@@ -41,7 +41,7 @@
       return Result;
     }
 
-    bonsai_function macro_def*
+    bonsai_function macro_def *
     Insert(macro_def_linked_list_node *Node, macro_def_hashtable *Table)
     {
       Assert(Table->Size);

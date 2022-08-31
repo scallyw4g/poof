@@ -1,14 +1,14 @@
         struct enum_decl_cursor
     {
-      enum_decl* Start;
-      enum_decl* At;
-      enum_decl* End;
+      enum_decl *Start;
+      enum_decl *At;
+      enum_decl *End;
     };
 
     bonsai_function enum_decl_cursor
     EnumDeclCursor(umm ElementCount, memory_arena* Memory)
     {
-      enum_decl* Start = (enum_decl*)PushStruct(Memory, sizeof( enum_decl ), 1, 0);
+      enum_decl *Start = (enum_decl*)PushStruct(Memory, sizeof(enum_decl), 1, 0);
       enum_decl_cursor Result = {
         .Start = Start,
         .End = Start+ElementCount,
@@ -70,7 +70,7 @@
         bonsai_function enum_decl *
     Push(enum_decl_stream* Stream, enum_decl Element, memory_arena* Memory)
     {
-      enum_decl_stream_chunk* NextChunk = (enum_decl_stream_chunk*)PushStruct(Memory, sizeof( enum_decl_stream_chunk ), 1, 0);
+      enum_decl_stream_chunk* NextChunk = (enum_decl_stream_chunk*)PushStruct(Memory, sizeof(enum_decl_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)

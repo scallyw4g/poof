@@ -12,10 +12,6 @@
     {
       DebugPrint("datatype {\n", Depth);
 
-      /* DebugPrint("Type = ", Depth+4); */
-      /* DebugPrint(Struct.Type); */
-      /* DebugPrint(";\n"); */
-
       switch(Struct.Type)
       {
                   
@@ -39,7 +35,7 @@
 
 
 
-        default : { DebugPrint("default while printing datatype datatype ", Depth+4); DebugLine("Type(%d)", Struct.Type); } break;
+        default : { DebugPrint("default while printing (datatype) (datatype) ", Depth+4); DebugLine("Type(%d)", Struct.Type); } break;
       }
       DebugPrint("}\n", Depth);
     }

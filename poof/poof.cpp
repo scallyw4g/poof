@@ -10937,12 +10937,15 @@ Execute(parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx,
     else if ( BodyToken->Type == CTokenType_OpenParen ||
               BodyToken->Type == CTokenType_Identifier )
     {
+      b32 ImpetusWasOpenParen = BodyToken->Type == CTokenType_OpenParen;
+      b32 ImpetusWasIdentifier = BodyToken->Type == CTokenType_Identifier;
+
       b32 ExecutedChildFunc = False;
       ITERATE_OVER_AS(Replace, ReplacePatterns)
       {
         meta_func_arg* Replace = GET_ELEMENT(ReplaceIter);
-        if ( (BodyToken->Type == CTokenType_Identifier && StringsMatch(Replace->Match, BodyToken->Value) ) ||
-             (BodyToken->Type == CTokenType_OpenParen && OptionalToken(&Scope, CToken(Replace->Match)))
+        if ( (ImpetusWasIdentifier && StringsMatch(Replace->Match, BodyToken->Value) ) ||
+             (ImpetusWasOpenParen  && OptionalTokenRaw(&Scope, CToken(Replace->Match)))
            )
         {
           ExecutedChildFunc = True;
@@ -11320,7 +11323,7 @@ Execute(parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx,
             } break;
           }
 
-          if (BodyToken->Type == CTokenType_OpenParen)
+          if (ImpetusWasOpenParen)
           {
             RequireToken(&Scope, CTokenType_CloseParen);
           }

@@ -51,7 +51,7 @@
         bonsai_function ast_node *
     Push(ast_node_stream* Stream, ast_node Element, memory_arena* Memory)
     {
-      ast_node_stream_chunk* NextChunk = (ast_node_stream_chunk*)PushStruct(Memory, sizeof( ast_node_stream_chunk ), 1, 0);
+      ast_node_stream_chunk* NextChunk = (ast_node_stream_chunk*)PushStruct(Memory, sizeof(ast_node_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)

@@ -7410,1567 +7410,1567 @@
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( log_level EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( log_level RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case LogLevel_Undefined:
-            {
-              DebugPrint("LogLevel_Undefined", Depth);
-            } break;
-            case LogLevel_Debug:
-            {
-              DebugPrint("LogLevel_Debug", Depth);
-            } break;
-            case LogLevel_Normal:
-            {
-              DebugPrint("LogLevel_Normal", Depth);
-            } break;
-            case LogLevel_Error:
-            {
-              DebugPrint("LogLevel_Error", Depth);
-            } break;
-            case LogLevel_Shush:
-            {
-              DebugPrint("LogLevel_Shush", Depth);
-            } break;
+                  case LogLevel_Undefined:
+          {
+            DebugPrint("LogLevel_Undefined", Depth);
+          } break;
+          case LogLevel_Debug:
+          {
+            DebugPrint("LogLevel_Debug", Depth);
+          } break;
+          case LogLevel_Normal:
+          {
+            DebugPrint("LogLevel_Normal", Depth);
+          } break;
+          case LogLevel_Error:
+          {
+            DebugPrint("LogLevel_Error", Depth);
+          } break;
+          case LogLevel_Shush:
+          {
+            DebugPrint("LogLevel_Shush", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( sign EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( sign RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case Negative:
-            {
-              DebugPrint("Negative", Depth);
-            } break;
-            case Zero:
-            {
-              DebugPrint("Zero", Depth);
-            } break;
-            case Positive:
-            {
-              DebugPrint("Positive", Depth);
-            } break;
+                  case Negative:
+          {
+            DebugPrint("Negative", Depth);
+          } break;
+          case Zero:
+          {
+            DebugPrint("Zero", Depth);
+          } break;
+          case Positive:
+          {
+            DebugPrint("Positive", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( memory_protection_type EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( memory_protection_type RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case MemoryProtection_Protected:
-            {
-              DebugPrint("MemoryProtection_Protected", Depth);
-            } break;
-            case MemoryProtection_RW:
-            {
-              DebugPrint("MemoryProtection_RW", Depth);
-            } break;
+                  case MemoryProtection_Protected:
+          {
+            DebugPrint("MemoryProtection_Protected", Depth);
+          } break;
+          case MemoryProtection_RW:
+          {
+            DebugPrint("MemoryProtection_RW", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( heap_allocation_type EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( heap_allocation_type RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case AllocationType_Free:
-            {
-              DebugPrint("AllocationType_Free", Depth);
-            } break;
-            case AllocationType_Reserved:
-            {
-              DebugPrint("AllocationType_Reserved", Depth);
-            } break;
+                  case AllocationType_Free:
+          {
+            DebugPrint("AllocationType_Free", Depth);
+          } break;
+          case AllocationType_Reserved:
+          {
+            DebugPrint("AllocationType_Reserved", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( text_encoding EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( text_encoding RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case TextEncoding_ASCII:
-            {
-              DebugPrint("TextEncoding_ASCII", Depth);
-            } break;
-            case TextEncoding_UTF8:
-            {
-              DebugPrint("TextEncoding_UTF8", Depth);
-            } break;
-            case TextEncoding_UTF16LE:
-            {
-              DebugPrint("TextEncoding_UTF16LE", Depth);
-            } break;
-            case TextEncoding_UTF16BE:
-            {
-              DebugPrint("TextEncoding_UTF16BE", Depth);
-            } break;
-            case TextEncoding_UTF32LE:
-            {
-              DebugPrint("TextEncoding_UTF32LE", Depth);
-            } break;
-            case TextEncoding_UTF32BE:
-            {
-              DebugPrint("TextEncoding_UTF32BE", Depth);
-            } break;
-            case TextEncoding_UTF7:
-            {
-              DebugPrint("TextEncoding_UTF7", Depth);
-            } break;
-            case TextEncoding_UTF1:
-            {
-              DebugPrint("TextEncoding_UTF1", Depth);
-            } break;
-            case TextEncoding_EBCDIC:
-            {
-              DebugPrint("TextEncoding_EBCDIC", Depth);
-            } break;
-            case TextEncoding_CSCU:
-            {
-              DebugPrint("TextEncoding_CSCU", Depth);
-            } break;
-            case TextEncoding_BOCU:
-            {
-              DebugPrint("TextEncoding_BOCU", Depth);
-            } break;
-            case TextEncoding_GB18030:
-            {
-              DebugPrint("TextEncoding_GB18030", Depth);
-            } break;
+                  case TextEncoding_ASCII:
+          {
+            DebugPrint("TextEncoding_ASCII", Depth);
+          } break;
+          case TextEncoding_UTF8:
+          {
+            DebugPrint("TextEncoding_UTF8", Depth);
+          } break;
+          case TextEncoding_UTF16LE:
+          {
+            DebugPrint("TextEncoding_UTF16LE", Depth);
+          } break;
+          case TextEncoding_UTF16BE:
+          {
+            DebugPrint("TextEncoding_UTF16BE", Depth);
+          } break;
+          case TextEncoding_UTF32LE:
+          {
+            DebugPrint("TextEncoding_UTF32LE", Depth);
+          } break;
+          case TextEncoding_UTF32BE:
+          {
+            DebugPrint("TextEncoding_UTF32BE", Depth);
+          } break;
+          case TextEncoding_UTF7:
+          {
+            DebugPrint("TextEncoding_UTF7", Depth);
+          } break;
+          case TextEncoding_UTF1:
+          {
+            DebugPrint("TextEncoding_UTF1", Depth);
+          } break;
+          case TextEncoding_EBCDIC:
+          {
+            DebugPrint("TextEncoding_EBCDIC", Depth);
+          } break;
+          case TextEncoding_CSCU:
+          {
+            DebugPrint("TextEncoding_CSCU", Depth);
+          } break;
+          case TextEncoding_BOCU:
+          {
+            DebugPrint("TextEncoding_BOCU", Depth);
+          } break;
+          case TextEncoding_GB18030:
+          {
+            DebugPrint("TextEncoding_GB18030", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( mutex_op EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( mutex_op RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case MutexOp_Waiting:
-            {
-              DebugPrint("MutexOp_Waiting", Depth);
-            } break;
-            case MutexOp_Aquired:
-            {
-              DebugPrint("MutexOp_Aquired", Depth);
-            } break;
-            case MutexOp_Released:
-            {
-              DebugPrint("MutexOp_Released", Depth);
-            } break;
+                  case MutexOp_Waiting:
+          {
+            DebugPrint("MutexOp_Waiting", Depth);
+          } break;
+          case MutexOp_Aquired:
+          {
+            DebugPrint("MutexOp_Aquired", Depth);
+          } break;
+          case MutexOp_Released:
+          {
+            DebugPrint("MutexOp_Released", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( xml_token_type EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( xml_token_type RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case XmlTokenType_Unknown:
-            {
-              DebugPrint("XmlTokenType_Unknown", Depth);
-            } break;
-            case XmlTokenType_Boolean:
-            {
-              DebugPrint("XmlTokenType_Boolean", Depth);
-            } break;
-            case XmlTokenType_Float:
-            {
-              DebugPrint("XmlTokenType_Float", Depth);
-            } break;
-            case XmlTokenType_Int:
-            {
-              DebugPrint("XmlTokenType_Int", Depth);
-            } break;
-            case XmlTokenType_Property:
-            {
-              DebugPrint("XmlTokenType_Property", Depth);
-            } break;
-            case XmlTokenType_Open:
-            {
-              DebugPrint("XmlTokenType_Open", Depth);
-            } break;
-            case XmlTokenType_Close:
-            {
-              DebugPrint("XmlTokenType_Close", Depth);
-            } break;
-            case XmlTokenType_Count:
-            {
-              DebugPrint("XmlTokenType_Count", Depth);
-            } break;
+                  case XmlTokenType_Unknown:
+          {
+            DebugPrint("XmlTokenType_Unknown", Depth);
+          } break;
+          case XmlTokenType_Boolean:
+          {
+            DebugPrint("XmlTokenType_Boolean", Depth);
+          } break;
+          case XmlTokenType_Float:
+          {
+            DebugPrint("XmlTokenType_Float", Depth);
+          } break;
+          case XmlTokenType_Int:
+          {
+            DebugPrint("XmlTokenType_Int", Depth);
+          } break;
+          case XmlTokenType_Property:
+          {
+            DebugPrint("XmlTokenType_Property", Depth);
+          } break;
+          case XmlTokenType_Open:
+          {
+            DebugPrint("XmlTokenType_Open", Depth);
+          } break;
+          case XmlTokenType_Close:
+          {
+            DebugPrint("XmlTokenType_Close", Depth);
+          } break;
+          case XmlTokenType_Count:
+          {
+            DebugPrint("XmlTokenType_Count", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( shader_uniform_type EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( shader_uniform_type RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case ShaderUniform_Undefined:
-            {
-              DebugPrint("ShaderUniform_Undefined", Depth);
-            } break;
-            case ShaderUniform_M4:
-            {
-              DebugPrint("ShaderUniform_M4", Depth);
-            } break;
-            case ShaderUniform_V3:
-            {
-              DebugPrint("ShaderUniform_V3", Depth);
-            } break;
-            case ShaderUniform_S32:
-            {
-              DebugPrint("ShaderUniform_S32", Depth);
-            } break;
-            case ShaderUniform_U32:
-            {
-              DebugPrint("ShaderUniform_U32", Depth);
-            } break;
-            case ShaderUniform_R32:
-            {
-              DebugPrint("ShaderUniform_R32", Depth);
-            } break;
-            case ShaderUniform_Texture:
-            {
-              DebugPrint("ShaderUniform_Texture", Depth);
-            } break;
-            case ShaderUniform_Light:
-            {
-              DebugPrint("ShaderUniform_Light", Depth);
-            } break;
-            case ShaderUniform_Camera:
-            {
-              DebugPrint("ShaderUniform_Camera", Depth);
-            } break;
+                  case ShaderUniform_Undefined:
+          {
+            DebugPrint("ShaderUniform_Undefined", Depth);
+          } break;
+          case ShaderUniform_M4:
+          {
+            DebugPrint("ShaderUniform_M4", Depth);
+          } break;
+          case ShaderUniform_V3:
+          {
+            DebugPrint("ShaderUniform_V3", Depth);
+          } break;
+          case ShaderUniform_S32:
+          {
+            DebugPrint("ShaderUniform_S32", Depth);
+          } break;
+          case ShaderUniform_U32:
+          {
+            DebugPrint("ShaderUniform_U32", Depth);
+          } break;
+          case ShaderUniform_R32:
+          {
+            DebugPrint("ShaderUniform_R32", Depth);
+          } break;
+          case ShaderUniform_Texture:
+          {
+            DebugPrint("ShaderUniform_Texture", Depth);
+          } break;
+          case ShaderUniform_Light:
+          {
+            DebugPrint("ShaderUniform_Light", Depth);
+          } break;
+          case ShaderUniform_Camera:
+          {
+            DebugPrint("ShaderUniform_Camera", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( debug_ui_type EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( debug_ui_type RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case DebugUIType_None:
-            {
-              DebugPrint("DebugUIType_None", Depth);
-            } break;
-            case DebugUIType_PickedChunks:
-            {
-              DebugPrint("DebugUIType_PickedChunks", Depth);
-            } break;
-            case DebugUIType_CallGraph:
-            {
-              DebugPrint("DebugUIType_CallGraph", Depth);
-            } break;
-            case DebugUIType_CollatedFunctionCalls:
-            {
-              DebugPrint("DebugUIType_CollatedFunctionCalls", Depth);
-            } break;
-            case DebugUIType_Memory:
-            {
-              DebugPrint("DebugUIType_Memory", Depth);
-            } break;
-            case DebugUIType_Graphics:
-            {
-              DebugPrint("DebugUIType_Graphics", Depth);
-            } break;
-            case DebugUIType_Network:
-            {
-              DebugPrint("DebugUIType_Network", Depth);
-            } break;
-            case DebugUIType_DrawCalls:
-            {
-              DebugPrint("DebugUIType_DrawCalls", Depth);
-            } break;
+                  case DebugUIType_None:
+          {
+            DebugPrint("DebugUIType_None", Depth);
+          } break;
+          case DebugUIType_PickedChunks:
+          {
+            DebugPrint("DebugUIType_PickedChunks", Depth);
+          } break;
+          case DebugUIType_CallGraph:
+          {
+            DebugPrint("DebugUIType_CallGraph", Depth);
+          } break;
+          case DebugUIType_CollatedFunctionCalls:
+          {
+            DebugPrint("DebugUIType_CollatedFunctionCalls", Depth);
+          } break;
+          case DebugUIType_Memory:
+          {
+            DebugPrint("DebugUIType_Memory", Depth);
+          } break;
+          case DebugUIType_Graphics:
+          {
+            DebugPrint("DebugUIType_Graphics", Depth);
+          } break;
+          case DebugUIType_Network:
+          {
+            DebugPrint("DebugUIType_Network", Depth);
+          } break;
+          case DebugUIType_DrawCalls:
+          {
+            DebugPrint("DebugUIType_DrawCalls", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( d_union_flags EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( d_union_flags RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case d_union_flag_none:
-            {
-              DebugPrint("d_union_flag_none", Depth);
-            } break;
-            case d_union_flag_enum_only:
-            {
-              DebugPrint("d_union_flag_enum_only", Depth);
-            } break;
+                  case d_union_flag_none:
+          {
+            DebugPrint("d_union_flag_none", Depth);
+          } break;
+          case d_union_flag_enum_only:
+          {
+            DebugPrint("d_union_flag_enum_only", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( metaprogramming_directive EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( metaprogramming_directive RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case meta_directive_noop:
-            {
-              DebugPrint("meta_directive_noop", Depth);
-            } break;
-            case enum_only:
-            {
-              DebugPrint("enum_only", Depth);
-            } break;
-            case d_union:
-            {
-              DebugPrint("d_union", Depth);
-            } break;
-            case named_list:
-            {
-              DebugPrint("named_list", Depth);
-            } break;
-            case for_datatypes:
-            {
-              DebugPrint("for_datatypes", Depth);
-            } break;
-            case func:
-            {
-              DebugPrint("func", Depth);
-            } break;
-            case polymorphic_func:
-            {
-              DebugPrint("polymorphic_func", Depth);
-            } break;
+                  case meta_directive_noop:
+          {
+            DebugPrint("meta_directive_noop", Depth);
+          } break;
+          case enum_only:
+          {
+            DebugPrint("enum_only", Depth);
+          } break;
+          case d_union:
+          {
+            DebugPrint("d_union", Depth);
+          } break;
+          case named_list:
+          {
+            DebugPrint("named_list", Depth);
+          } break;
+          case for_datatypes:
+          {
+            DebugPrint("for_datatypes", Depth);
+          } break;
+          case func:
+          {
+            DebugPrint("func", Depth);
+          } break;
+          case polymorphic_func:
+          {
+            DebugPrint("polymorphic_func", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( meta_arg_operator EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( meta_arg_operator RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case meta_arg_operator_noop:
-            {
-              DebugPrint("meta_arg_operator_noop", Depth);
-            } break;
-            case name:
-            {
-              DebugPrint("name", Depth);
-            } break;
-            case type:
-            {
-              DebugPrint("type", Depth);
-            } break;
-            case value:
-            {
-              DebugPrint("value", Depth);
-            } break;
-            case map_values:
-            {
-              DebugPrint("map_values", Depth);
-            } break;
-            case map_members:
-            {
-              DebugPrint("map_members", Depth);
-            } break;
-            case is_enum:
-            {
-              DebugPrint("is_enum", Depth);
-            } break;
-            case is_struct:
-            {
-              DebugPrint("is_struct", Depth);
-            } break;
-            case is_union:
-            {
-              DebugPrint("is_union", Depth);
-            } break;
-            case is_defined:
-            {
-              DebugPrint("is_defined", Depth);
-            } break;
-            case is_compound:
-            {
-              DebugPrint("is_compound", Depth);
-            } break;
-            case is_primitive:
-            {
-              DebugPrint("is_primitive", Depth);
-            } break;
-            case is_function:
-            {
-              DebugPrint("is_function", Depth);
-            } break;
+                  case meta_arg_operator_noop:
+          {
+            DebugPrint("meta_arg_operator_noop", Depth);
+          } break;
+          case name:
+          {
+            DebugPrint("name", Depth);
+          } break;
+          case type:
+          {
+            DebugPrint("type", Depth);
+          } break;
+          case value:
+          {
+            DebugPrint("value", Depth);
+          } break;
+          case map_values:
+          {
+            DebugPrint("map_values", Depth);
+          } break;
+          case map_members:
+          {
+            DebugPrint("map_members", Depth);
+          } break;
+          case is_enum:
+          {
+            DebugPrint("is_enum", Depth);
+          } break;
+          case is_struct:
+          {
+            DebugPrint("is_struct", Depth);
+          } break;
+          case is_union:
+          {
+            DebugPrint("is_union", Depth);
+          } break;
+          case is_defined:
+          {
+            DebugPrint("is_defined", Depth);
+          } break;
+          case is_compound:
+          {
+            DebugPrint("is_compound", Depth);
+          } break;
+          case is_primitive:
+          {
+            DebugPrint("is_primitive", Depth);
+          } break;
+          case is_function:
+          {
+            DebugPrint("is_function", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( meta_transform_op EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( meta_transform_op RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case meta_transform_op_noop:
-            {
-              DebugPrint("meta_transform_op_noop", Depth);
-            } break;
-            case to_capital_case:
-            {
-              DebugPrint("to_capital_case", Depth);
-            } break;
-            case to_lowercase:
-            {
-              DebugPrint("to_lowercase", Depth);
-            } break;
-            case strip_single_prefix:
-            {
-              DebugPrint("strip_single_prefix", Depth);
-            } break;
-            case strip_all_prefix:
-            {
-              DebugPrint("strip_all_prefix", Depth);
-            } break;
+                  case meta_transform_op_noop:
+          {
+            DebugPrint("meta_transform_op_noop", Depth);
+          } break;
+          case to_capital_case:
+          {
+            DebugPrint("to_capital_case", Depth);
+          } break;
+          case to_lowercase:
+          {
+            DebugPrint("to_lowercase", Depth);
+          } break;
+          case strip_single_prefix:
+          {
+            DebugPrint("strip_single_prefix", Depth);
+          } break;
+          case strip_all_prefix:
+          {
+            DebugPrint("strip_all_prefix", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( c_token_type EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( c_token_type RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case CTokenType_Unknown:
-            {
-              DebugPrint("CTokenType_Unknown", Depth);
-            } break;
-            case CT_ControlChar_Start_of_Heading:
-            {
-              DebugPrint("CT_ControlChar_Start_of_Heading", Depth);
-            } break;
-            case CT_ControlChar_Start_of_Text:
-            {
-              DebugPrint("CT_ControlChar_Start_of_Text", Depth);
-            } break;
-            case CT_ControlChar_End_of_Text:
-            {
-              DebugPrint("CT_ControlChar_End_of_Text", Depth);
-            } break;
-            case CT_ControlChar_End_of_Transmission:
-            {
-              DebugPrint("CT_ControlChar_End_of_Transmission", Depth);
-            } break;
-            case CT_ControlChar_Enquiry:
-            {
-              DebugPrint("CT_ControlChar_Enquiry", Depth);
-            } break;
-            case CT_ControlChar_Acknowledgement:
-            {
-              DebugPrint("CT_ControlChar_Acknowledgement", Depth);
-            } break;
-            case CT_ControlChar_Bell:
-            {
-              DebugPrint("CT_ControlChar_Bell", Depth);
-            } break;
-            case CT_ControlChar_Backspace:
-            {
-              DebugPrint("CT_ControlChar_Backspace", Depth);
-            } break;
-            case CT_ControlChar_Vertical_Tab:
-            {
-              DebugPrint("CT_ControlChar_Vertical_Tab", Depth);
-            } break;
-            case CT_ControlChar_Form_Feed:
-            {
-              DebugPrint("CT_ControlChar_Form_Feed", Depth);
-            } break;
-            case CT_ControlChar_Shift_Out:
-            {
-              DebugPrint("CT_ControlChar_Shift_Out", Depth);
-            } break;
-            case CT_ControlChar_Shift_In:
-            {
-              DebugPrint("CT_ControlChar_Shift_In", Depth);
-            } break;
-            case CT_ControlChar_Data_Link_Escape:
-            {
-              DebugPrint("CT_ControlChar_Data_Link_Escape", Depth);
-            } break;
-            case CT_ControlChar_Device_Control_1:
-            {
-              DebugPrint("CT_ControlChar_Device_Control_1", Depth);
-            } break;
-            case CT_ControlChar_Device_Control_2:
-            {
-              DebugPrint("CT_ControlChar_Device_Control_2", Depth);
-            } break;
-            case CT_ControlChar_Device_Control_3:
-            {
-              DebugPrint("CT_ControlChar_Device_Control_3", Depth);
-            } break;
-            case CT_ControlChar_Device_Control_4:
-            {
-              DebugPrint("CT_ControlChar_Device_Control_4", Depth);
-            } break;
-            case CT_ControlChar_Negative_Acknowledgement:
-            {
-              DebugPrint("CT_ControlChar_Negative_Acknowledgement", Depth);
-            } break;
-            case CT_ControlChar_Synchronous_Idle:
-            {
-              DebugPrint("CT_ControlChar_Synchronous_Idle", Depth);
-            } break;
-            case CT_ControlChar_End_of_Transmission_Block:
-            {
-              DebugPrint("CT_ControlChar_End_of_Transmission_Block", Depth);
-            } break;
-            case CT_ControlChar_Cancel:
-            {
-              DebugPrint("CT_ControlChar_Cancel", Depth);
-            } break;
-            case CT_ControlChar_End_of_Medium:
-            {
-              DebugPrint("CT_ControlChar_End_of_Medium", Depth);
-            } break;
-            case CT_ControlChar_Substitute:
-            {
-              DebugPrint("CT_ControlChar_Substitute", Depth);
-            } break;
-            case CT_ControlChar_Escape:
-            {
-              DebugPrint("CT_ControlChar_Escape", Depth);
-            } break;
-            case CT_ControlChar_File_Separator:
-            {
-              DebugPrint("CT_ControlChar_File_Separator", Depth);
-            } break;
-            case CT_ControlChar_Group_Separator:
-            {
-              DebugPrint("CT_ControlChar_Group_Separator", Depth);
-            } break;
-            case CT_ControlChar_Record_Separator:
-            {
-              DebugPrint("CT_ControlChar_Record_Separator", Depth);
-            } break;
-            case CT_ControlChar_Unit_Separator:
-            {
-              DebugPrint("CT_ControlChar_Unit_Separator", Depth);
-            } break;
-            case CT_ControlChar_Delete:
-            {
-              DebugPrint("CT_ControlChar_Delete", Depth);
-            } break;
-            case CTokenType_OpenBracket:
-            {
-              DebugPrint("CTokenType_OpenBracket", Depth);
-            } break;
-            case CTokenType_CloseBracket:
-            {
-              DebugPrint("CTokenType_CloseBracket", Depth);
-            } break;
-            case CTokenType_OpenBrace:
-            {
-              DebugPrint("CTokenType_OpenBrace", Depth);
-            } break;
-            case CTokenType_CloseBrace:
-            {
-              DebugPrint("CTokenType_CloseBrace", Depth);
-            } break;
-            case CTokenType_OpenParen:
-            {
-              DebugPrint("CTokenType_OpenParen", Depth);
-            } break;
-            case CTokenType_CloseParen:
-            {
-              DebugPrint("CTokenType_CloseParen", Depth);
-            } break;
-            case CTokenType_Dot:
-            {
-              DebugPrint("CTokenType_Dot", Depth);
-            } break;
-            case CTokenType_Comma:
-            {
-              DebugPrint("CTokenType_Comma", Depth);
-            } break;
-            case CTokenType_Semicolon:
-            {
-              DebugPrint("CTokenType_Semicolon", Depth);
-            } break;
-            case CTokenType_Colon:
-            {
-              DebugPrint("CTokenType_Colon", Depth);
-            } break;
-            case CTokenType_Hash:
-            {
-              DebugPrint("CTokenType_Hash", Depth);
-            } break;
-            case CTokenType_At:
-            {
-              DebugPrint("CTokenType_At", Depth);
-            } break;
-            case CTokenType_Dollar:
-            {
-              DebugPrint("CTokenType_Dollar", Depth);
-            } break;
-            case CTokenType_Space:
-            {
-              DebugPrint("CTokenType_Space", Depth);
-            } break;
-            case CTokenType_Tab:
-            {
-              DebugPrint("CTokenType_Tab", Depth);
-            } break;
-            case CTokenType_Star:
-            {
-              DebugPrint("CTokenType_Star", Depth);
-            } break;
-            case CTokenType_Ampersand:
-            {
-              DebugPrint("CTokenType_Ampersand", Depth);
-            } break;
-            case CTokenType_SingleQuote:
-            {
-              DebugPrint("CTokenType_SingleQuote", Depth);
-            } break;
-            case CTokenType_DoubleQuote:
-            {
-              DebugPrint("CTokenType_DoubleQuote", Depth);
-            } break;
-            case CTokenType_Equals:
-            {
-              DebugPrint("CTokenType_Equals", Depth);
-            } break;
-            case CTokenType_LT:
-            {
-              DebugPrint("CTokenType_LT", Depth);
-            } break;
-            case CTokenType_GT:
-            {
-              DebugPrint("CTokenType_GT", Depth);
-            } break;
-            case CTokenType_Plus:
-            {
-              DebugPrint("CTokenType_Plus", Depth);
-            } break;
-            case CTokenType_Minus:
-            {
-              DebugPrint("CTokenType_Minus", Depth);
-            } break;
-            case CTokenType_Percent:
-            {
-              DebugPrint("CTokenType_Percent", Depth);
-            } break;
-            case CTokenType_Bang:
-            {
-              DebugPrint("CTokenType_Bang", Depth);
-            } break;
-            case CTokenType_Hat:
-            {
-              DebugPrint("CTokenType_Hat", Depth);
-            } break;
-            case CTokenType_Question:
-            {
-              DebugPrint("CTokenType_Question", Depth);
-            } break;
-            case CTokenType_FSlash:
-            {
-              DebugPrint("CTokenType_FSlash", Depth);
-            } break;
-            case CTokenType_BSlash:
-            {
-              DebugPrint("CTokenType_BSlash", Depth);
-            } break;
-            case CTokenType_Tilde:
-            {
-              DebugPrint("CTokenType_Tilde", Depth);
-            } break;
-            case CTokenType_Backtick:
-            {
-              DebugPrint("CTokenType_Backtick", Depth);
-            } break;
-            case CTokenType_Pipe:
-            {
-              DebugPrint("CTokenType_Pipe", Depth);
-            } break;
-            case CTokenType_Newline:
-            {
-              DebugPrint("CTokenType_Newline", Depth);
-            } break;
-            case CTokenType_CarrigeReturn:
-            {
-              DebugPrint("CTokenType_CarrigeReturn", Depth);
-            } break;
-            case CTokenType_EOF:
-            {
-              DebugPrint("CTokenType_EOF", Depth);
-            } break;
-            case CTokenType_CommentSingleLine:
-            {
-              DebugPrint("CTokenType_CommentSingleLine", Depth);
-            } break;
-            case CTokenType_CommentMultiLine:
-            {
-              DebugPrint("CTokenType_CommentMultiLine", Depth);
-            } break;
-            case CTokenType_EscapedNewline:
-            {
-              DebugPrint("CTokenType_EscapedNewline", Depth);
-            } break;
-            case CTokenType_Identifier:
-            {
-              DebugPrint("CTokenType_Identifier", Depth);
-            } break;
-            case CTokenType_StringLiteral:
-            {
-              DebugPrint("CTokenType_StringLiteral", Depth);
-            } break;
-            case CTokenType_CharLiteral:
-            {
-              DebugPrint("CTokenType_CharLiteral", Depth);
-            } break;
-            case CTokenType_IntLiteral:
-            {
-              DebugPrint("CTokenType_IntLiteral", Depth);
-            } break;
-            case CTokenType_DoubleLiteral:
-            {
-              DebugPrint("CTokenType_DoubleLiteral", Depth);
-            } break;
-            case CTokenType_FloatLiteral:
-            {
-              DebugPrint("CTokenType_FloatLiteral", Depth);
-            } break;
-            case CTokenType_Poof:
-            {
-              DebugPrint("CTokenType_Poof", Depth);
-            } break;
-            case CT_Keyword_Override:
-            {
-              DebugPrint("CT_Keyword_Override", Depth);
-            } break;
-            case CT_Keyword_Virtual:
-            {
-              DebugPrint("CT_Keyword_Virtual", Depth);
-            } break;
-            case CT_Keyword_Noexcept:
-            {
-              DebugPrint("CT_Keyword_Noexcept", Depth);
-            } break;
-            case CT_Keyword_Explicit:
-            {
-              DebugPrint("CT_Keyword_Explicit", Depth);
-            } break;
-            case CT_Keyword_Constexpr:
-            {
-              DebugPrint("CT_Keyword_Constexpr", Depth);
-            } break;
-            case CT_Keyword_Namespace:
-            {
-              DebugPrint("CT_Keyword_Namespace", Depth);
-            } break;
-            case CT_Keyword_Class:
-            {
-              DebugPrint("CT_Keyword_Class", Depth);
-            } break;
-            case CTokenType_Struct:
-            {
-              DebugPrint("CTokenType_Struct", Depth);
-            } break;
-            case CTokenType_Enum:
-            {
-              DebugPrint("CTokenType_Enum", Depth);
-            } break;
-            case CTokenType_Union:
-            {
-              DebugPrint("CTokenType_Union", Depth);
-            } break;
-            case CTokenType_Typedef:
-            {
-              DebugPrint("CTokenType_Typedef", Depth);
-            } break;
-            case CTokenType_Using:
-            {
-              DebugPrint("CTokenType_Using", Depth);
-            } break;
-            case CTokenType_ThreadLocal:
-            {
-              DebugPrint("CTokenType_ThreadLocal", Depth);
-            } break;
-            case CTokenType_Const:
-            {
-              DebugPrint("CTokenType_Const", Depth);
-            } break;
-            case CTokenType_Static:
-            {
-              DebugPrint("CTokenType_Static", Depth);
-            } break;
-            case CTokenType_Volatile:
-            {
-              DebugPrint("CTokenType_Volatile", Depth);
-            } break;
-            case CTokenType_Long:
-            {
-              DebugPrint("CTokenType_Long", Depth);
-            } break;
-            case CTokenType_Unsigned:
-            {
-              DebugPrint("CTokenType_Unsigned", Depth);
-            } break;
-            case CTokenType_Signed:
-            {
-              DebugPrint("CTokenType_Signed", Depth);
-            } break;
-            case CTokenType_Bool:
-            {
-              DebugPrint("CTokenType_Bool", Depth);
-            } break;
-            case CTokenType_Auto:
-            {
-              DebugPrint("CTokenType_Auto", Depth);
-            } break;
-            case CTokenType_Void:
-            {
-              DebugPrint("CTokenType_Void", Depth);
-            } break;
-            case CTokenType_Double:
-            {
-              DebugPrint("CTokenType_Double", Depth);
-            } break;
-            case CTokenType_Float:
-            {
-              DebugPrint("CTokenType_Float", Depth);
-            } break;
-            case CTokenType_Char:
-            {
-              DebugPrint("CTokenType_Char", Depth);
-            } break;
-            case CTokenType_Int:
-            {
-              DebugPrint("CTokenType_Int", Depth);
-            } break;
-            case CTokenType_Short:
-            {
-              DebugPrint("CTokenType_Short", Depth);
-            } break;
-            case CTokenType_Inline:
-            {
-              DebugPrint("CTokenType_Inline", Depth);
-            } break;
-            case CTokenType_TemplateKeyword:
-            {
-              DebugPrint("CTokenType_TemplateKeyword", Depth);
-            } break;
-            case CTokenType_OperatorKeyword:
-            {
-              DebugPrint("CTokenType_OperatorKeyword", Depth);
-            } break;
-            case CT_Keyword_Public:
-            {
-              DebugPrint("CT_Keyword_Public", Depth);
-            } break;
-            case CT_Keyword_Private:
-            {
-              DebugPrint("CT_Keyword_Private", Depth);
-            } break;
-            case CT_Keyword_Protected:
-            {
-              DebugPrint("CT_Keyword_Protected", Depth);
-            } break;
-            case CT_KeywordPragma:
-            {
-              DebugPrint("CT_KeywordPragma", Depth);
-            } break;
-            case CT_KeywordAttribute:
-            {
-              DebugPrint("CT_KeywordAttribute", Depth);
-            } break;
-            case CT_StaticAssert:
-            {
-              DebugPrint("CT_StaticAssert", Depth);
-            } break;
-            case CTokenType_Extern:
-            {
-              DebugPrint("CTokenType_Extern", Depth);
-            } break;
-            case CTokenType_Asm:
-            {
-              DebugPrint("CTokenType_Asm", Depth);
-            } break;
-            case CTokenType_Goto:
-            {
-              DebugPrint("CTokenType_Goto", Depth);
-            } break;
-            case CTokenType_Ellipsis:
-            {
-              DebugPrint("CTokenType_Ellipsis", Depth);
-            } break;
-            case CTokenType_If:
-            {
-              DebugPrint("CTokenType_If", Depth);
-            } break;
-            case CTokenType_Else:
-            {
-              DebugPrint("CTokenType_Else", Depth);
-            } break;
-            case CTokenType_Break:
-            {
-              DebugPrint("CTokenType_Break", Depth);
-            } break;
-            case CTokenType_Switch:
-            {
-              DebugPrint("CTokenType_Switch", Depth);
-            } break;
-            case CTokenType_Case:
-            {
-              DebugPrint("CTokenType_Case", Depth);
-            } break;
-            case CT_Keyword_Delete:
-            {
-              DebugPrint("CT_Keyword_Delete", Depth);
-            } break;
-            case CTokenType_Default:
-            {
-              DebugPrint("CTokenType_Default", Depth);
-            } break;
-            case CTokenType_For:
-            {
-              DebugPrint("CTokenType_For", Depth);
-            } break;
-            case CTokenType_While:
-            {
-              DebugPrint("CTokenType_While", Depth);
-            } break;
-            case CTokenType_Continue:
-            {
-              DebugPrint("CTokenType_Continue", Depth);
-            } break;
-            case CTokenType_Return:
-            {
-              DebugPrint("CTokenType_Return", Depth);
-            } break;
-            case CTokenType_LeftShift:
-            {
-              DebugPrint("CTokenType_LeftShift", Depth);
-            } break;
-            case CTokenType_RightShift:
-            {
-              DebugPrint("CTokenType_RightShift", Depth);
-            } break;
-            case CTokenType_LessEqual:
-            {
-              DebugPrint("CTokenType_LessEqual", Depth);
-            } break;
-            case CTokenType_GreaterEqual:
-            {
-              DebugPrint("CTokenType_GreaterEqual", Depth);
-            } break;
-            case CTokenType_AreEqual:
-            {
-              DebugPrint("CTokenType_AreEqual", Depth);
-            } break;
-            case CTokenType_NotEqual:
-            {
-              DebugPrint("CTokenType_NotEqual", Depth);
-            } break;
-            case CTokenType_PlusEquals:
-            {
-              DebugPrint("CTokenType_PlusEquals", Depth);
-            } break;
-            case CTokenType_MinusEquals:
-            {
-              DebugPrint("CTokenType_MinusEquals", Depth);
-            } break;
-            case CTokenType_TimesEquals:
-            {
-              DebugPrint("CTokenType_TimesEquals", Depth);
-            } break;
-            case CTokenType_DivEquals:
-            {
-              DebugPrint("CTokenType_DivEquals", Depth);
-            } break;
-            case CTokenType_ModEquals:
-            {
-              DebugPrint("CTokenType_ModEquals", Depth);
-            } break;
-            case CTokenType_AndEquals:
-            {
-              DebugPrint("CTokenType_AndEquals", Depth);
-            } break;
-            case CTokenType_OrEquals:
-            {
-              DebugPrint("CTokenType_OrEquals", Depth);
-            } break;
-            case CTokenType_XorEquals:
-            {
-              DebugPrint("CTokenType_XorEquals", Depth);
-            } break;
-            case CTokenType_Increment:
-            {
-              DebugPrint("CTokenType_Increment", Depth);
-            } break;
-            case CTokenType_Decrement:
-            {
-              DebugPrint("CTokenType_Decrement", Depth);
-            } break;
-            case CTokenType_LogicalAnd:
-            {
-              DebugPrint("CTokenType_LogicalAnd", Depth);
-            } break;
-            case CTokenType_LogicalOr:
-            {
-              DebugPrint("CTokenType_LogicalOr", Depth);
-            } break;
-            case CTokenType_Arrow:
-            {
-              DebugPrint("CTokenType_Arrow", Depth);
-            } break;
-            case CT_ScopeResolutionOperator:
-            {
-              DebugPrint("CT_ScopeResolutionOperator", Depth);
-            } break;
-            case CT_NameQualifier:
-            {
-              DebugPrint("CT_NameQualifier", Depth);
-            } break;
-            case CT_MacroLiteral:
-            {
-              DebugPrint("CT_MacroLiteral", Depth);
-            } break;
-            case CT_MacroLiteral_SelfRefExpansion:
-            {
-              DebugPrint("CT_MacroLiteral_SelfRefExpansion", Depth);
-            } break;
-            case CT_PreprocessorPaste:
-            {
-              DebugPrint("CT_PreprocessorPaste", Depth);
-            } break;
-            case CT_PreprocessorPaste_InvalidToken:
-            {
-              DebugPrint("CT_PreprocessorPaste_InvalidToken", Depth);
-            } break;
-            case CT_PreprocessorInclude:
-            {
-              DebugPrint("CT_PreprocessorInclude", Depth);
-            } break;
-            case CT_PreprocessorIncludeNext:
-            {
-              DebugPrint("CT_PreprocessorIncludeNext", Depth);
-            } break;
-            case CT_PreprocessorIf:
-            {
-              DebugPrint("CT_PreprocessorIf", Depth);
-            } break;
-            case CT_PreprocessorElse:
-            {
-              DebugPrint("CT_PreprocessorElse", Depth);
-            } break;
-            case CT_PreprocessorElif:
-            {
-              DebugPrint("CT_PreprocessorElif", Depth);
-            } break;
-            case CT_PreprocessorEndif:
-            {
-              DebugPrint("CT_PreprocessorEndif", Depth);
-            } break;
-            case CT_PreprocessorIfDefined:
-            {
-              DebugPrint("CT_PreprocessorIfDefined", Depth);
-            } break;
-            case CT_PreprocessorIfNotDefined:
-            {
-              DebugPrint("CT_PreprocessorIfNotDefined", Depth);
-            } break;
-            case CT_PreprocessorDefine:
-            {
-              DebugPrint("CT_PreprocessorDefine", Depth);
-            } break;
-            case CT_PreprocessorUndef:
-            {
-              DebugPrint("CT_PreprocessorUndef", Depth);
-            } break;
-            case CT_PreprocessorPragma:
-            {
-              DebugPrint("CT_PreprocessorPragma", Depth);
-            } break;
-            case CT_PreprocessorError:
-            {
-              DebugPrint("CT_PreprocessorError", Depth);
-            } break;
-            case CT_PreprocessorWarning:
-            {
-              DebugPrint("CT_PreprocessorWarning", Depth);
-            } break;
-            case CT_Preprocessor__VA_ARGS__:
-            {
-              DebugPrint("CT_Preprocessor__VA_ARGS__", Depth);
-            } break;
-            case CT_Preprocessor_Nuked:
-            {
-              DebugPrint("CT_Preprocessor_Nuked", Depth);
-            } break;
-            case CT_InsertedCode:
-            {
-              DebugPrint("CT_InsertedCode", Depth);
-            } break;
+                  case CTokenType_Unknown:
+          {
+            DebugPrint("CTokenType_Unknown", Depth);
+          } break;
+          case CT_ControlChar_Start_of_Heading:
+          {
+            DebugPrint("CT_ControlChar_Start_of_Heading", Depth);
+          } break;
+          case CT_ControlChar_Start_of_Text:
+          {
+            DebugPrint("CT_ControlChar_Start_of_Text", Depth);
+          } break;
+          case CT_ControlChar_End_of_Text:
+          {
+            DebugPrint("CT_ControlChar_End_of_Text", Depth);
+          } break;
+          case CT_ControlChar_End_of_Transmission:
+          {
+            DebugPrint("CT_ControlChar_End_of_Transmission", Depth);
+          } break;
+          case CT_ControlChar_Enquiry:
+          {
+            DebugPrint("CT_ControlChar_Enquiry", Depth);
+          } break;
+          case CT_ControlChar_Acknowledgement:
+          {
+            DebugPrint("CT_ControlChar_Acknowledgement", Depth);
+          } break;
+          case CT_ControlChar_Bell:
+          {
+            DebugPrint("CT_ControlChar_Bell", Depth);
+          } break;
+          case CT_ControlChar_Backspace:
+          {
+            DebugPrint("CT_ControlChar_Backspace", Depth);
+          } break;
+          case CT_ControlChar_Vertical_Tab:
+          {
+            DebugPrint("CT_ControlChar_Vertical_Tab", Depth);
+          } break;
+          case CT_ControlChar_Form_Feed:
+          {
+            DebugPrint("CT_ControlChar_Form_Feed", Depth);
+          } break;
+          case CT_ControlChar_Shift_Out:
+          {
+            DebugPrint("CT_ControlChar_Shift_Out", Depth);
+          } break;
+          case CT_ControlChar_Shift_In:
+          {
+            DebugPrint("CT_ControlChar_Shift_In", Depth);
+          } break;
+          case CT_ControlChar_Data_Link_Escape:
+          {
+            DebugPrint("CT_ControlChar_Data_Link_Escape", Depth);
+          } break;
+          case CT_ControlChar_Device_Control_1:
+          {
+            DebugPrint("CT_ControlChar_Device_Control_1", Depth);
+          } break;
+          case CT_ControlChar_Device_Control_2:
+          {
+            DebugPrint("CT_ControlChar_Device_Control_2", Depth);
+          } break;
+          case CT_ControlChar_Device_Control_3:
+          {
+            DebugPrint("CT_ControlChar_Device_Control_3", Depth);
+          } break;
+          case CT_ControlChar_Device_Control_4:
+          {
+            DebugPrint("CT_ControlChar_Device_Control_4", Depth);
+          } break;
+          case CT_ControlChar_Negative_Acknowledgement:
+          {
+            DebugPrint("CT_ControlChar_Negative_Acknowledgement", Depth);
+          } break;
+          case CT_ControlChar_Synchronous_Idle:
+          {
+            DebugPrint("CT_ControlChar_Synchronous_Idle", Depth);
+          } break;
+          case CT_ControlChar_End_of_Transmission_Block:
+          {
+            DebugPrint("CT_ControlChar_End_of_Transmission_Block", Depth);
+          } break;
+          case CT_ControlChar_Cancel:
+          {
+            DebugPrint("CT_ControlChar_Cancel", Depth);
+          } break;
+          case CT_ControlChar_End_of_Medium:
+          {
+            DebugPrint("CT_ControlChar_End_of_Medium", Depth);
+          } break;
+          case CT_ControlChar_Substitute:
+          {
+            DebugPrint("CT_ControlChar_Substitute", Depth);
+          } break;
+          case CT_ControlChar_Escape:
+          {
+            DebugPrint("CT_ControlChar_Escape", Depth);
+          } break;
+          case CT_ControlChar_File_Separator:
+          {
+            DebugPrint("CT_ControlChar_File_Separator", Depth);
+          } break;
+          case CT_ControlChar_Group_Separator:
+          {
+            DebugPrint("CT_ControlChar_Group_Separator", Depth);
+          } break;
+          case CT_ControlChar_Record_Separator:
+          {
+            DebugPrint("CT_ControlChar_Record_Separator", Depth);
+          } break;
+          case CT_ControlChar_Unit_Separator:
+          {
+            DebugPrint("CT_ControlChar_Unit_Separator", Depth);
+          } break;
+          case CT_ControlChar_Delete:
+          {
+            DebugPrint("CT_ControlChar_Delete", Depth);
+          } break;
+          case CTokenType_OpenBracket:
+          {
+            DebugPrint("CTokenType_OpenBracket", Depth);
+          } break;
+          case CTokenType_CloseBracket:
+          {
+            DebugPrint("CTokenType_CloseBracket", Depth);
+          } break;
+          case CTokenType_OpenBrace:
+          {
+            DebugPrint("CTokenType_OpenBrace", Depth);
+          } break;
+          case CTokenType_CloseBrace:
+          {
+            DebugPrint("CTokenType_CloseBrace", Depth);
+          } break;
+          case CTokenType_OpenParen:
+          {
+            DebugPrint("CTokenType_OpenParen", Depth);
+          } break;
+          case CTokenType_CloseParen:
+          {
+            DebugPrint("CTokenType_CloseParen", Depth);
+          } break;
+          case CTokenType_Dot:
+          {
+            DebugPrint("CTokenType_Dot", Depth);
+          } break;
+          case CTokenType_Comma:
+          {
+            DebugPrint("CTokenType_Comma", Depth);
+          } break;
+          case CTokenType_Semicolon:
+          {
+            DebugPrint("CTokenType_Semicolon", Depth);
+          } break;
+          case CTokenType_Colon:
+          {
+            DebugPrint("CTokenType_Colon", Depth);
+          } break;
+          case CTokenType_Hash:
+          {
+            DebugPrint("CTokenType_Hash", Depth);
+          } break;
+          case CTokenType_At:
+          {
+            DebugPrint("CTokenType_At", Depth);
+          } break;
+          case CTokenType_Dollar:
+          {
+            DebugPrint("CTokenType_Dollar", Depth);
+          } break;
+          case CTokenType_Space:
+          {
+            DebugPrint("CTokenType_Space", Depth);
+          } break;
+          case CTokenType_Tab:
+          {
+            DebugPrint("CTokenType_Tab", Depth);
+          } break;
+          case CTokenType_Star:
+          {
+            DebugPrint("CTokenType_Star", Depth);
+          } break;
+          case CTokenType_Ampersand:
+          {
+            DebugPrint("CTokenType_Ampersand", Depth);
+          } break;
+          case CTokenType_SingleQuote:
+          {
+            DebugPrint("CTokenType_SingleQuote", Depth);
+          } break;
+          case CTokenType_DoubleQuote:
+          {
+            DebugPrint("CTokenType_DoubleQuote", Depth);
+          } break;
+          case CTokenType_Equals:
+          {
+            DebugPrint("CTokenType_Equals", Depth);
+          } break;
+          case CTokenType_LT:
+          {
+            DebugPrint("CTokenType_LT", Depth);
+          } break;
+          case CTokenType_GT:
+          {
+            DebugPrint("CTokenType_GT", Depth);
+          } break;
+          case CTokenType_Plus:
+          {
+            DebugPrint("CTokenType_Plus", Depth);
+          } break;
+          case CTokenType_Minus:
+          {
+            DebugPrint("CTokenType_Minus", Depth);
+          } break;
+          case CTokenType_Percent:
+          {
+            DebugPrint("CTokenType_Percent", Depth);
+          } break;
+          case CTokenType_Bang:
+          {
+            DebugPrint("CTokenType_Bang", Depth);
+          } break;
+          case CTokenType_Hat:
+          {
+            DebugPrint("CTokenType_Hat", Depth);
+          } break;
+          case CTokenType_Question:
+          {
+            DebugPrint("CTokenType_Question", Depth);
+          } break;
+          case CTokenType_FSlash:
+          {
+            DebugPrint("CTokenType_FSlash", Depth);
+          } break;
+          case CTokenType_BSlash:
+          {
+            DebugPrint("CTokenType_BSlash", Depth);
+          } break;
+          case CTokenType_Tilde:
+          {
+            DebugPrint("CTokenType_Tilde", Depth);
+          } break;
+          case CTokenType_Backtick:
+          {
+            DebugPrint("CTokenType_Backtick", Depth);
+          } break;
+          case CTokenType_Pipe:
+          {
+            DebugPrint("CTokenType_Pipe", Depth);
+          } break;
+          case CTokenType_Newline:
+          {
+            DebugPrint("CTokenType_Newline", Depth);
+          } break;
+          case CTokenType_CarrigeReturn:
+          {
+            DebugPrint("CTokenType_CarrigeReturn", Depth);
+          } break;
+          case CTokenType_EOF:
+          {
+            DebugPrint("CTokenType_EOF", Depth);
+          } break;
+          case CTokenType_CommentSingleLine:
+          {
+            DebugPrint("CTokenType_CommentSingleLine", Depth);
+          } break;
+          case CTokenType_CommentMultiLine:
+          {
+            DebugPrint("CTokenType_CommentMultiLine", Depth);
+          } break;
+          case CTokenType_EscapedNewline:
+          {
+            DebugPrint("CTokenType_EscapedNewline", Depth);
+          } break;
+          case CTokenType_Identifier:
+          {
+            DebugPrint("CTokenType_Identifier", Depth);
+          } break;
+          case CTokenType_StringLiteral:
+          {
+            DebugPrint("CTokenType_StringLiteral", Depth);
+          } break;
+          case CTokenType_CharLiteral:
+          {
+            DebugPrint("CTokenType_CharLiteral", Depth);
+          } break;
+          case CTokenType_IntLiteral:
+          {
+            DebugPrint("CTokenType_IntLiteral", Depth);
+          } break;
+          case CTokenType_DoubleLiteral:
+          {
+            DebugPrint("CTokenType_DoubleLiteral", Depth);
+          } break;
+          case CTokenType_FloatLiteral:
+          {
+            DebugPrint("CTokenType_FloatLiteral", Depth);
+          } break;
+          case CTokenType_Poof:
+          {
+            DebugPrint("CTokenType_Poof", Depth);
+          } break;
+          case CT_Keyword_Override:
+          {
+            DebugPrint("CT_Keyword_Override", Depth);
+          } break;
+          case CT_Keyword_Virtual:
+          {
+            DebugPrint("CT_Keyword_Virtual", Depth);
+          } break;
+          case CT_Keyword_Noexcept:
+          {
+            DebugPrint("CT_Keyword_Noexcept", Depth);
+          } break;
+          case CT_Keyword_Explicit:
+          {
+            DebugPrint("CT_Keyword_Explicit", Depth);
+          } break;
+          case CT_Keyword_Constexpr:
+          {
+            DebugPrint("CT_Keyword_Constexpr", Depth);
+          } break;
+          case CT_Keyword_Namespace:
+          {
+            DebugPrint("CT_Keyword_Namespace", Depth);
+          } break;
+          case CT_Keyword_Class:
+          {
+            DebugPrint("CT_Keyword_Class", Depth);
+          } break;
+          case CTokenType_Struct:
+          {
+            DebugPrint("CTokenType_Struct", Depth);
+          } break;
+          case CTokenType_Enum:
+          {
+            DebugPrint("CTokenType_Enum", Depth);
+          } break;
+          case CTokenType_Union:
+          {
+            DebugPrint("CTokenType_Union", Depth);
+          } break;
+          case CTokenType_Typedef:
+          {
+            DebugPrint("CTokenType_Typedef", Depth);
+          } break;
+          case CTokenType_Using:
+          {
+            DebugPrint("CTokenType_Using", Depth);
+          } break;
+          case CTokenType_ThreadLocal:
+          {
+            DebugPrint("CTokenType_ThreadLocal", Depth);
+          } break;
+          case CTokenType_Const:
+          {
+            DebugPrint("CTokenType_Const", Depth);
+          } break;
+          case CTokenType_Static:
+          {
+            DebugPrint("CTokenType_Static", Depth);
+          } break;
+          case CTokenType_Volatile:
+          {
+            DebugPrint("CTokenType_Volatile", Depth);
+          } break;
+          case CTokenType_Long:
+          {
+            DebugPrint("CTokenType_Long", Depth);
+          } break;
+          case CTokenType_Unsigned:
+          {
+            DebugPrint("CTokenType_Unsigned", Depth);
+          } break;
+          case CTokenType_Signed:
+          {
+            DebugPrint("CTokenType_Signed", Depth);
+          } break;
+          case CTokenType_Bool:
+          {
+            DebugPrint("CTokenType_Bool", Depth);
+          } break;
+          case CTokenType_Auto:
+          {
+            DebugPrint("CTokenType_Auto", Depth);
+          } break;
+          case CTokenType_Void:
+          {
+            DebugPrint("CTokenType_Void", Depth);
+          } break;
+          case CTokenType_Double:
+          {
+            DebugPrint("CTokenType_Double", Depth);
+          } break;
+          case CTokenType_Float:
+          {
+            DebugPrint("CTokenType_Float", Depth);
+          } break;
+          case CTokenType_Char:
+          {
+            DebugPrint("CTokenType_Char", Depth);
+          } break;
+          case CTokenType_Int:
+          {
+            DebugPrint("CTokenType_Int", Depth);
+          } break;
+          case CTokenType_Short:
+          {
+            DebugPrint("CTokenType_Short", Depth);
+          } break;
+          case CTokenType_Inline:
+          {
+            DebugPrint("CTokenType_Inline", Depth);
+          } break;
+          case CTokenType_TemplateKeyword:
+          {
+            DebugPrint("CTokenType_TemplateKeyword", Depth);
+          } break;
+          case CTokenType_OperatorKeyword:
+          {
+            DebugPrint("CTokenType_OperatorKeyword", Depth);
+          } break;
+          case CT_Keyword_Public:
+          {
+            DebugPrint("CT_Keyword_Public", Depth);
+          } break;
+          case CT_Keyword_Private:
+          {
+            DebugPrint("CT_Keyword_Private", Depth);
+          } break;
+          case CT_Keyword_Protected:
+          {
+            DebugPrint("CT_Keyword_Protected", Depth);
+          } break;
+          case CT_KeywordPragma:
+          {
+            DebugPrint("CT_KeywordPragma", Depth);
+          } break;
+          case CT_KeywordAttribute:
+          {
+            DebugPrint("CT_KeywordAttribute", Depth);
+          } break;
+          case CT_StaticAssert:
+          {
+            DebugPrint("CT_StaticAssert", Depth);
+          } break;
+          case CTokenType_Extern:
+          {
+            DebugPrint("CTokenType_Extern", Depth);
+          } break;
+          case CTokenType_Asm:
+          {
+            DebugPrint("CTokenType_Asm", Depth);
+          } break;
+          case CTokenType_Goto:
+          {
+            DebugPrint("CTokenType_Goto", Depth);
+          } break;
+          case CTokenType_Ellipsis:
+          {
+            DebugPrint("CTokenType_Ellipsis", Depth);
+          } break;
+          case CTokenType_If:
+          {
+            DebugPrint("CTokenType_If", Depth);
+          } break;
+          case CTokenType_Else:
+          {
+            DebugPrint("CTokenType_Else", Depth);
+          } break;
+          case CTokenType_Break:
+          {
+            DebugPrint("CTokenType_Break", Depth);
+          } break;
+          case CTokenType_Switch:
+          {
+            DebugPrint("CTokenType_Switch", Depth);
+          } break;
+          case CTokenType_Case:
+          {
+            DebugPrint("CTokenType_Case", Depth);
+          } break;
+          case CT_Keyword_Delete:
+          {
+            DebugPrint("CT_Keyword_Delete", Depth);
+          } break;
+          case CTokenType_Default:
+          {
+            DebugPrint("CTokenType_Default", Depth);
+          } break;
+          case CTokenType_For:
+          {
+            DebugPrint("CTokenType_For", Depth);
+          } break;
+          case CTokenType_While:
+          {
+            DebugPrint("CTokenType_While", Depth);
+          } break;
+          case CTokenType_Continue:
+          {
+            DebugPrint("CTokenType_Continue", Depth);
+          } break;
+          case CTokenType_Return:
+          {
+            DebugPrint("CTokenType_Return", Depth);
+          } break;
+          case CTokenType_LeftShift:
+          {
+            DebugPrint("CTokenType_LeftShift", Depth);
+          } break;
+          case CTokenType_RightShift:
+          {
+            DebugPrint("CTokenType_RightShift", Depth);
+          } break;
+          case CTokenType_LessEqual:
+          {
+            DebugPrint("CTokenType_LessEqual", Depth);
+          } break;
+          case CTokenType_GreaterEqual:
+          {
+            DebugPrint("CTokenType_GreaterEqual", Depth);
+          } break;
+          case CTokenType_AreEqual:
+          {
+            DebugPrint("CTokenType_AreEqual", Depth);
+          } break;
+          case CTokenType_NotEqual:
+          {
+            DebugPrint("CTokenType_NotEqual", Depth);
+          } break;
+          case CTokenType_PlusEquals:
+          {
+            DebugPrint("CTokenType_PlusEquals", Depth);
+          } break;
+          case CTokenType_MinusEquals:
+          {
+            DebugPrint("CTokenType_MinusEquals", Depth);
+          } break;
+          case CTokenType_TimesEquals:
+          {
+            DebugPrint("CTokenType_TimesEquals", Depth);
+          } break;
+          case CTokenType_DivEquals:
+          {
+            DebugPrint("CTokenType_DivEquals", Depth);
+          } break;
+          case CTokenType_ModEquals:
+          {
+            DebugPrint("CTokenType_ModEquals", Depth);
+          } break;
+          case CTokenType_AndEquals:
+          {
+            DebugPrint("CTokenType_AndEquals", Depth);
+          } break;
+          case CTokenType_OrEquals:
+          {
+            DebugPrint("CTokenType_OrEquals", Depth);
+          } break;
+          case CTokenType_XorEquals:
+          {
+            DebugPrint("CTokenType_XorEquals", Depth);
+          } break;
+          case CTokenType_Increment:
+          {
+            DebugPrint("CTokenType_Increment", Depth);
+          } break;
+          case CTokenType_Decrement:
+          {
+            DebugPrint("CTokenType_Decrement", Depth);
+          } break;
+          case CTokenType_LogicalAnd:
+          {
+            DebugPrint("CTokenType_LogicalAnd", Depth);
+          } break;
+          case CTokenType_LogicalOr:
+          {
+            DebugPrint("CTokenType_LogicalOr", Depth);
+          } break;
+          case CTokenType_Arrow:
+          {
+            DebugPrint("CTokenType_Arrow", Depth);
+          } break;
+          case CT_ScopeResolutionOperator:
+          {
+            DebugPrint("CT_ScopeResolutionOperator", Depth);
+          } break;
+          case CT_NameQualifier:
+          {
+            DebugPrint("CT_NameQualifier", Depth);
+          } break;
+          case CT_MacroLiteral:
+          {
+            DebugPrint("CT_MacroLiteral", Depth);
+          } break;
+          case CT_MacroLiteral_SelfRefExpansion:
+          {
+            DebugPrint("CT_MacroLiteral_SelfRefExpansion", Depth);
+          } break;
+          case CT_PreprocessorPaste:
+          {
+            DebugPrint("CT_PreprocessorPaste", Depth);
+          } break;
+          case CT_PreprocessorPaste_InvalidToken:
+          {
+            DebugPrint("CT_PreprocessorPaste_InvalidToken", Depth);
+          } break;
+          case CT_PreprocessorInclude:
+          {
+            DebugPrint("CT_PreprocessorInclude", Depth);
+          } break;
+          case CT_PreprocessorIncludeNext:
+          {
+            DebugPrint("CT_PreprocessorIncludeNext", Depth);
+          } break;
+          case CT_PreprocessorIf:
+          {
+            DebugPrint("CT_PreprocessorIf", Depth);
+          } break;
+          case CT_PreprocessorElse:
+          {
+            DebugPrint("CT_PreprocessorElse", Depth);
+          } break;
+          case CT_PreprocessorElif:
+          {
+            DebugPrint("CT_PreprocessorElif", Depth);
+          } break;
+          case CT_PreprocessorEndif:
+          {
+            DebugPrint("CT_PreprocessorEndif", Depth);
+          } break;
+          case CT_PreprocessorIfDefined:
+          {
+            DebugPrint("CT_PreprocessorIfDefined", Depth);
+          } break;
+          case CT_PreprocessorIfNotDefined:
+          {
+            DebugPrint("CT_PreprocessorIfNotDefined", Depth);
+          } break;
+          case CT_PreprocessorDefine:
+          {
+            DebugPrint("CT_PreprocessorDefine", Depth);
+          } break;
+          case CT_PreprocessorUndef:
+          {
+            DebugPrint("CT_PreprocessorUndef", Depth);
+          } break;
+          case CT_PreprocessorPragma:
+          {
+            DebugPrint("CT_PreprocessorPragma", Depth);
+          } break;
+          case CT_PreprocessorError:
+          {
+            DebugPrint("CT_PreprocessorError", Depth);
+          } break;
+          case CT_PreprocessorWarning:
+          {
+            DebugPrint("CT_PreprocessorWarning", Depth);
+          } break;
+          case CT_Preprocessor__VA_ARGS__:
+          {
+            DebugPrint("CT_Preprocessor__VA_ARGS__", Depth);
+          } break;
+          case CT_Preprocessor_Nuked:
+          {
+            DebugPrint("CT_Preprocessor_Nuked", Depth);
+          } break;
+          case CT_InsertedCode:
+          {
+            DebugPrint("CT_InsertedCode", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( c_token_flags EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( c_token_flags RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case CTFlags_None:
-            {
-              DebugPrint("CTFlags_None", Depth);
-            } break;
-            case CTFlags_RelativeInclude:
-            {
-              DebugPrint("CTFlags_RelativeInclude", Depth);
-            } break;
+                  case CTFlags_None:
+          {
+            DebugPrint("CTFlags_None", Depth);
+          } break;
+          case CTFlags_RelativeInclude:
+          {
+            DebugPrint("CTFlags_RelativeInclude", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( va_args_flags EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( va_args_flags RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case va_args_flags_none:
-            {
-              DebugPrint("va_args_flags_none", Depth);
-            } break;
-            case va_args_flags_expand_with_commas:
-            {
-              DebugPrint("va_args_flags_expand_with_commas", Depth);
-            } break;
+                  case va_args_flags_none:
+          {
+            DebugPrint("va_args_flags_none", Depth);
+          } break;
+          case va_args_flags_expand_with_commas:
+          {
+            DebugPrint("va_args_flags_expand_with_commas", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( token_cursor_source EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( token_cursor_source RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case TokenCursorSource_Unknown:
-            {
-              DebugPrint("TokenCursorSource_Unknown", Depth);
-            } break;
-            case TokenCursorSource_RootFile:
-            {
-              DebugPrint("TokenCursorSource_RootFile", Depth);
-            } break;
-            case TokenCursorSource_Include:
-            {
-              DebugPrint("TokenCursorSource_Include", Depth);
-            } break;
-            case TokenCursorSource_MacroExpansion:
-            {
-              DebugPrint("TokenCursorSource_MacroExpansion", Depth);
-            } break;
-            case TokenCursorSource_MetaprogrammingExpansion:
-            {
-              DebugPrint("TokenCursorSource_MetaprogrammingExpansion", Depth);
-            } break;
-            case TokenCursorSource_PasteOperator:
-            {
-              DebugPrint("TokenCursorSource_PasteOperator", Depth);
-            } break;
-            case TokenCursorSource_CommandLineOption:
-            {
-              DebugPrint("TokenCursorSource_CommandLineOption", Depth);
-            } break;
-            case TokenCursorSource_BodyText:
-            {
-              DebugPrint("TokenCursorSource_BodyText", Depth);
-            } break;
-            case TokenCursorSource_IntermediateRepresentaton:
-            {
-              DebugPrint("TokenCursorSource_IntermediateRepresentaton", Depth);
-            } break;
-            case TokenCursorSource_Count:
-            {
-              DebugPrint("TokenCursorSource_Count", Depth);
-            } break;
+                  case TokenCursorSource_Unknown:
+          {
+            DebugPrint("TokenCursorSource_Unknown", Depth);
+          } break;
+          case TokenCursorSource_RootFile:
+          {
+            DebugPrint("TokenCursorSource_RootFile", Depth);
+          } break;
+          case TokenCursorSource_Include:
+          {
+            DebugPrint("TokenCursorSource_Include", Depth);
+          } break;
+          case TokenCursorSource_MacroExpansion:
+          {
+            DebugPrint("TokenCursorSource_MacroExpansion", Depth);
+          } break;
+          case TokenCursorSource_MetaprogrammingExpansion:
+          {
+            DebugPrint("TokenCursorSource_MetaprogrammingExpansion", Depth);
+          } break;
+          case TokenCursorSource_PasteOperator:
+          {
+            DebugPrint("TokenCursorSource_PasteOperator", Depth);
+          } break;
+          case TokenCursorSource_CommandLineOption:
+          {
+            DebugPrint("TokenCursorSource_CommandLineOption", Depth);
+          } break;
+          case TokenCursorSource_BodyText:
+          {
+            DebugPrint("TokenCursorSource_BodyText", Depth);
+          } break;
+          case TokenCursorSource_IntermediateRepresentaton:
+          {
+            DebugPrint("TokenCursorSource_IntermediateRepresentaton", Depth);
+          } break;
+          case TokenCursorSource_Count:
+          {
+            DebugPrint("TokenCursorSource_Count", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( parse_error_code EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( parse_error_code RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case ParseErrorCode_None:
-            {
-              DebugPrint("ParseErrorCode_None", Depth);
-            } break;
-            case ParseErrorCode_ExpectedSemicolonOrEquals:
-            {
-              DebugPrint("ParseErrorCode_ExpectedSemicolonOrEquals", Depth);
-            } break;
-            case ParseErrorCode_StreamEndedUnexpectedly:
-            {
-              DebugPrint("ParseErrorCode_StreamEndedUnexpectedly", Depth);
-            } break;
-            case ParseErrorCode_RequireTokenFailed:
-            {
-              DebugPrint("ParseErrorCode_RequireTokenFailed", Depth);
-            } break;
-            case ParseErrorCode_InvalidTokenGenerated:
-            {
-              DebugPrint("ParseErrorCode_InvalidTokenGenerated", Depth);
-            } break;
-            case ParseErrorCode_DUnionParse:
-            {
-              DebugPrint("ParseErrorCode_DUnionParse", Depth);
-            } break;
-            case ParseErrorCode_UndefinedDatatype:
-            {
-              DebugPrint("ParseErrorCode_UndefinedDatatype", Depth);
-            } break;
-            case ParseErrorCode_PoofTypeError:
-            {
-              DebugPrint("ParseErrorCode_PoofTypeError", Depth);
-            } break;
-            case ParseErrorCode_InputStreamNull:
-            {
-              DebugPrint("ParseErrorCode_InputStreamNull", Depth);
-            } break;
-            case ParseErrorCode_InternalCompilerError:
-            {
-              DebugPrint("ParseErrorCode_InternalCompilerError", Depth);
-            } break;
-            case ParseErrorCode_Unknown:
-            {
-              DebugPrint("ParseErrorCode_Unknown", Depth);
-            } break;
+                  case ParseErrorCode_None:
+          {
+            DebugPrint("ParseErrorCode_None", Depth);
+          } break;
+          case ParseErrorCode_ExpectedSemicolonOrEquals:
+          {
+            DebugPrint("ParseErrorCode_ExpectedSemicolonOrEquals", Depth);
+          } break;
+          case ParseErrorCode_StreamEndedUnexpectedly:
+          {
+            DebugPrint("ParseErrorCode_StreamEndedUnexpectedly", Depth);
+          } break;
+          case ParseErrorCode_RequireTokenFailed:
+          {
+            DebugPrint("ParseErrorCode_RequireTokenFailed", Depth);
+          } break;
+          case ParseErrorCode_InvalidTokenGenerated:
+          {
+            DebugPrint("ParseErrorCode_InvalidTokenGenerated", Depth);
+          } break;
+          case ParseErrorCode_DUnionParse:
+          {
+            DebugPrint("ParseErrorCode_DUnionParse", Depth);
+          } break;
+          case ParseErrorCode_UndefinedDatatype:
+          {
+            DebugPrint("ParseErrorCode_UndefinedDatatype", Depth);
+          } break;
+          case ParseErrorCode_PoofTypeError:
+          {
+            DebugPrint("ParseErrorCode_PoofTypeError", Depth);
+          } break;
+          case ParseErrorCode_InputStreamNull:
+          {
+            DebugPrint("ParseErrorCode_InputStreamNull", Depth);
+          } break;
+          case ParseErrorCode_InternalCompilerError:
+          {
+            DebugPrint("ParseErrorCode_InternalCompilerError", Depth);
+          } break;
+          case ParseErrorCode_Unknown:
+          {
+            DebugPrint("ParseErrorCode_Unknown", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( linkage_type EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( linkage_type RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case linkage_noop:
-            {
-              DebugPrint("linkage_noop", Depth);
-            } break;
-            case linkage_extern:
-            {
-              DebugPrint("linkage_extern", Depth);
-            } break;
-            case linkage_extern_c:
-            {
-              DebugPrint("linkage_extern_c", Depth);
-            } break;
-            case linkage_extern_cpp:
-            {
-              DebugPrint("linkage_extern_cpp", Depth);
-            } break;
+                  case linkage_noop:
+          {
+            DebugPrint("linkage_noop", Depth);
+          } break;
+          case linkage_extern:
+          {
+            DebugPrint("linkage_extern", Depth);
+          } break;
+          case linkage_extern_c:
+          {
+            DebugPrint("linkage_extern_c", Depth);
+          } break;
+          case linkage_extern_cpp:
+          {
+            DebugPrint("linkage_extern_cpp", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( type_qualifier EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( type_qualifier RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case TypeQual_None:
-            {
-              DebugPrint("TypeQual_None", Depth);
-            } break;
-            case TypeQual_Void:
-            {
-              DebugPrint("TypeQual_Void", Depth);
-            } break;
-            case TypeQual_Auto:
-            {
-              DebugPrint("TypeQual_Auto", Depth);
-            } break;
-            case TypeQual_Class:
-            {
-              DebugPrint("TypeQual_Class", Depth);
-            } break;
-            case TypeQual_Struct:
-            {
-              DebugPrint("TypeQual_Struct", Depth);
-            } break;
-            case TypeQual_Union:
-            {
-              DebugPrint("TypeQual_Union", Depth);
-            } break;
-            case TypeQual_Enum:
-            {
-              DebugPrint("TypeQual_Enum", Depth);
-            } break;
-            case TypeQual_Bool:
-            {
-              DebugPrint("TypeQual_Bool", Depth);
-            } break;
-            case TypeQual_Inline:
-            {
-              DebugPrint("TypeQual_Inline", Depth);
-            } break;
-            case TypeQual_ThreadLocal:
-            {
-              DebugPrint("TypeQual_ThreadLocal", Depth);
-            } break;
-            case TypeQual_Static:
-            {
-              DebugPrint("TypeQual_Static", Depth);
-            } break;
-            case TypeQual_Extern:
-            {
-              DebugPrint("TypeQual_Extern", Depth);
-            } break;
-            case TypeQual_Const:
-            {
-              DebugPrint("TypeQual_Const", Depth);
-            } break;
-            case TypeQual_Volatile:
-            {
-              DebugPrint("TypeQual_Volatile", Depth);
-            } break;
-            case TypeQual_Signed:
-            {
-              DebugPrint("TypeQual_Signed", Depth);
-            } break;
-            case TypeQual_Unsigned:
-            {
-              DebugPrint("TypeQual_Unsigned", Depth);
-            } break;
-            case TypeQual_Char:
-            {
-              DebugPrint("TypeQual_Char", Depth);
-            } break;
-            case TypeQual_Long:
-            {
-              DebugPrint("TypeQual_Long", Depth);
-            } break;
-            case TypeQual_Int:
-            {
-              DebugPrint("TypeQual_Int", Depth);
-            } break;
-            case TypeQual_Long_Long:
-            {
-              DebugPrint("TypeQual_Long_Long", Depth);
-            } break;
-            case TypeQual_Double:
-            {
-              DebugPrint("TypeQual_Double", Depth);
-            } break;
-            case TypeQual_Short:
-            {
-              DebugPrint("TypeQual_Short", Depth);
-            } break;
-            case TypeQual_Float:
-            {
-              DebugPrint("TypeQual_Float", Depth);
-            } break;
-            case TypeQual_Constexpr:
-            {
-              DebugPrint("TypeQual_Constexpr", Depth);
-            } break;
-            case TypeQual_Explicit:
-            {
-              DebugPrint("TypeQual_Explicit", Depth);
-            } break;
-            case TypeQual_Operator:
-            {
-              DebugPrint("TypeQual_Operator", Depth);
-            } break;
-            case TypeQual_Virtual:
-            {
-              DebugPrint("TypeQual_Virtual", Depth);
-            } break;
+                  case TypeQual_None:
+          {
+            DebugPrint("TypeQual_None", Depth);
+          } break;
+          case TypeQual_Void:
+          {
+            DebugPrint("TypeQual_Void", Depth);
+          } break;
+          case TypeQual_Auto:
+          {
+            DebugPrint("TypeQual_Auto", Depth);
+          } break;
+          case TypeQual_Class:
+          {
+            DebugPrint("TypeQual_Class", Depth);
+          } break;
+          case TypeQual_Struct:
+          {
+            DebugPrint("TypeQual_Struct", Depth);
+          } break;
+          case TypeQual_Union:
+          {
+            DebugPrint("TypeQual_Union", Depth);
+          } break;
+          case TypeQual_Enum:
+          {
+            DebugPrint("TypeQual_Enum", Depth);
+          } break;
+          case TypeQual_Bool:
+          {
+            DebugPrint("TypeQual_Bool", Depth);
+          } break;
+          case TypeQual_Inline:
+          {
+            DebugPrint("TypeQual_Inline", Depth);
+          } break;
+          case TypeQual_ThreadLocal:
+          {
+            DebugPrint("TypeQual_ThreadLocal", Depth);
+          } break;
+          case TypeQual_Static:
+          {
+            DebugPrint("TypeQual_Static", Depth);
+          } break;
+          case TypeQual_Extern:
+          {
+            DebugPrint("TypeQual_Extern", Depth);
+          } break;
+          case TypeQual_Const:
+          {
+            DebugPrint("TypeQual_Const", Depth);
+          } break;
+          case TypeQual_Volatile:
+          {
+            DebugPrint("TypeQual_Volatile", Depth);
+          } break;
+          case TypeQual_Signed:
+          {
+            DebugPrint("TypeQual_Signed", Depth);
+          } break;
+          case TypeQual_Unsigned:
+          {
+            DebugPrint("TypeQual_Unsigned", Depth);
+          } break;
+          case TypeQual_Char:
+          {
+            DebugPrint("TypeQual_Char", Depth);
+          } break;
+          case TypeQual_Long:
+          {
+            DebugPrint("TypeQual_Long", Depth);
+          } break;
+          case TypeQual_Int:
+          {
+            DebugPrint("TypeQual_Int", Depth);
+          } break;
+          case TypeQual_Long_Long:
+          {
+            DebugPrint("TypeQual_Long_Long", Depth);
+          } break;
+          case TypeQual_Double:
+          {
+            DebugPrint("TypeQual_Double", Depth);
+          } break;
+          case TypeQual_Short:
+          {
+            DebugPrint("TypeQual_Short", Depth);
+          } break;
+          case TypeQual_Float:
+          {
+            DebugPrint("TypeQual_Float", Depth);
+          } break;
+          case TypeQual_Constexpr:
+          {
+            DebugPrint("TypeQual_Constexpr", Depth);
+          } break;
+          case TypeQual_Explicit:
+          {
+            DebugPrint("TypeQual_Explicit", Depth);
+          } break;
+          case TypeQual_Operator:
+          {
+            DebugPrint("TypeQual_Operator", Depth);
+          } break;
+          case TypeQual_Virtual:
+          {
+            DebugPrint("TypeQual_Virtual", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( function_type EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( function_type RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case function_type_noop:
-            {
-              DebugPrint("function_type_noop", Depth);
-            } break;
-            case function_type_constructor:
-            {
-              DebugPrint("function_type_constructor", Depth);
-            } break;
-            case function_type_destructor:
-            {
-              DebugPrint("function_type_destructor", Depth);
-            } break;
-            case function_type_operator:
-            {
-              DebugPrint("function_type_operator", Depth);
-            } break;
-            case function_type_normal:
-            {
-              DebugPrint("function_type_normal", Depth);
-            } break;
+                  case function_type_noop:
+          {
+            DebugPrint("function_type_noop", Depth);
+          } break;
+          case function_type_constructor:
+          {
+            DebugPrint("function_type_constructor", Depth);
+          } break;
+          case function_type_destructor:
+          {
+            DebugPrint("function_type_destructor", Depth);
+          } break;
+          case function_type_operator:
+          {
+            DebugPrint("function_type_operator", Depth);
+          } break;
+          case function_type_normal:
+          {
+            DebugPrint("function_type_normal", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( datatype_type EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( datatype_type RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case type_datatype_noop:
-            {
-              DebugPrint("type_datatype_noop", Depth);
-            } break;
-            case type_declaration:
-            {
-              DebugPrint("type_declaration", Depth);
-            } break;
-            case type_enum_member:
-            {
-              DebugPrint("type_enum_member", Depth);
-            } break;
-            case type_type_def:
-            {
-              DebugPrint("type_type_def", Depth);
-            } break;
-            case type_primitive_def:
-            {
-              DebugPrint("type_primitive_def", Depth);
-            } break;
+                  case type_datatype_noop:
+          {
+            DebugPrint("type_datatype_noop", Depth);
+          } break;
+          case type_declaration:
+          {
+            DebugPrint("type_declaration", Depth);
+          } break;
+          case type_enum_member:
+          {
+            DebugPrint("type_enum_member", Depth);
+          } break;
+          case type_type_def:
+          {
+            DebugPrint("type_type_def", Depth);
+          } break;
+          case type_primitive_def:
+          {
+            DebugPrint("type_primitive_def", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( macro_type EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( macro_type RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case type_macro_noop:
-            {
-              DebugPrint("type_macro_noop", Depth);
-            } break;
-            case type_macro_keyword:
-            {
-              DebugPrint("type_macro_keyword", Depth);
-            } break;
-            case type_macro_function:
-            {
-              DebugPrint("type_macro_function", Depth);
-            } break;
+                  case type_macro_noop:
+          {
+            DebugPrint("type_macro_noop", Depth);
+          } break;
+          case type_macro_keyword:
+          {
+            DebugPrint("type_macro_keyword", Depth);
+          } break;
+          case type_macro_function:
+          {
+            DebugPrint("type_macro_function", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( output_mode EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( output_mode RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case Output_NoOverwrite:
-            {
-              DebugPrint("Output_NoOverwrite", Depth);
-            } break;
-            case Output_Unsafe:
-            {
-              DebugPrint("Output_Unsafe", Depth);
-            } break;
+                  case Output_NoOverwrite:
+          {
+            DebugPrint("Output_NoOverwrite", Depth);
+          } break;
+          case Output_Unsafe:
+          {
+            DebugPrint("Output_Unsafe", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( parser_push_type EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( parser_push_type RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case parser_push_type_noop:
-            {
-              DebugPrint("parser_push_type_noop", Depth);
-            } break;
-            case parser_push_type_root:
-            {
-              DebugPrint("parser_push_type_root", Depth);
-            } break;
-            case parser_push_type_include:
-            {
-              DebugPrint("parser_push_type_include", Depth);
-            } break;
-            case parser_push_type_macro:
-            {
-              DebugPrint("parser_push_type_macro", Depth);
-            } break;
+                  case parser_push_type_noop:
+          {
+            DebugPrint("parser_push_type_noop", Depth);
+          } break;
+          case parser_push_type_root:
+          {
+            DebugPrint("parser_push_type_root", Depth);
+          } break;
+          case parser_push_type_include:
+          {
+            DebugPrint("parser_push_type_include", Depth);
+          } break;
+          case parser_push_type_macro:
+          {
+            DebugPrint("parser_push_type_macro", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( erase_token_mode EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( erase_token_mode RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case PreserveTokens:
-            {
-              DebugPrint("PreserveTokens", Depth);
-            } break;
-            case EraseTokens:
-            {
-              DebugPrint("EraseTokens", Depth);
-            } break;
+                  case PreserveTokens:
+          {
+            DebugPrint("PreserveTokens", Depth);
+          } break;
+          case EraseTokens:
+          {
+            DebugPrint("EraseTokens", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( declaration_type EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( declaration_type RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case type_declaration_noop:
-            {
-              DebugPrint("type_declaration_noop", Depth);
-            } break;
-            case type_enum_decl:
-            {
-              DebugPrint("type_enum_decl", Depth);
-            } break;
-            case type_function_decl:
-            {
-              DebugPrint("type_function_decl", Depth);
-            } break;
-            case type_compound_decl:
-            {
-              DebugPrint("type_compound_decl", Depth);
-            } break;
-            case type_variable_decl:
-            {
-              DebugPrint("type_variable_decl", Depth);
-            } break;
+                  case type_declaration_noop:
+          {
+            DebugPrint("type_declaration_noop", Depth);
+          } break;
+          case type_enum_decl:
+          {
+            DebugPrint("type_enum_decl", Depth);
+          } break;
+          case type_function_decl:
+          {
+            DebugPrint("type_function_decl", Depth);
+          } break;
+          case type_compound_decl:
+          {
+            DebugPrint("type_compound_decl", Depth);
+          } break;
+          case type_variable_decl:
+          {
+            DebugPrint("type_variable_decl", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( ast_node_type EnumValue, u32 Depth)
+    bonsai_function void DebugPrint( ast_node_type RuntimeValue, u32 Depth)
     {
-      switch (EnumValue)
+      switch (RuntimeValue)
       {
-                    case type_ast_node_noop:
-            {
-              DebugPrint("type_ast_node_noop", Depth);
-            } break;
-            case type_ast_node_statement:
-            {
-              DebugPrint("type_ast_node_statement", Depth);
-            } break;
-            case type_ast_node_access:
-            {
-              DebugPrint("type_ast_node_access", Depth);
-            } break;
-            case type_ast_node_literal:
-            {
-              DebugPrint("type_ast_node_literal", Depth);
-            } break;
-            case type_ast_node_expression:
-            {
-              DebugPrint("type_ast_node_expression", Depth);
-            } break;
-            case type_ast_node_parenthesized:
-            {
-              DebugPrint("type_ast_node_parenthesized", Depth);
-            } break;
-            case type_ast_node_operator:
-            {
-              DebugPrint("type_ast_node_operator", Depth);
-            } break;
-            case type_ast_node_function_call:
-            {
-              DebugPrint("type_ast_node_function_call", Depth);
-            } break;
-            case type_ast_node_return:
-            {
-              DebugPrint("type_ast_node_return", Depth);
-            } break;
-            case type_ast_node_initializer_list:
-            {
-              DebugPrint("type_ast_node_initializer_list", Depth);
-            } break;
-            case type_ast_node_symbol:
-            {
-              DebugPrint("type_ast_node_symbol", Depth);
-            } break;
-            case type_ast_node_variable_def:
-            {
-              DebugPrint("type_ast_node_variable_def", Depth);
-            } break;
-            case type_ast_node_type_specifier:
-            {
-              DebugPrint("type_ast_node_type_specifier", Depth);
-            } break;
+                  case type_ast_node_noop:
+          {
+            DebugPrint("type_ast_node_noop", Depth);
+          } break;
+          case type_ast_node_statement:
+          {
+            DebugPrint("type_ast_node_statement", Depth);
+          } break;
+          case type_ast_node_access:
+          {
+            DebugPrint("type_ast_node_access", Depth);
+          } break;
+          case type_ast_node_literal:
+          {
+            DebugPrint("type_ast_node_literal", Depth);
+          } break;
+          case type_ast_node_expression:
+          {
+            DebugPrint("type_ast_node_expression", Depth);
+          } break;
+          case type_ast_node_parenthesized:
+          {
+            DebugPrint("type_ast_node_parenthesized", Depth);
+          } break;
+          case type_ast_node_operator:
+          {
+            DebugPrint("type_ast_node_operator", Depth);
+          } break;
+          case type_ast_node_function_call:
+          {
+            DebugPrint("type_ast_node_function_call", Depth);
+          } break;
+          case type_ast_node_return:
+          {
+            DebugPrint("type_ast_node_return", Depth);
+          } break;
+          case type_ast_node_initializer_list:
+          {
+            DebugPrint("type_ast_node_initializer_list", Depth);
+          } break;
+          case type_ast_node_symbol:
+          {
+            DebugPrint("type_ast_node_symbol", Depth);
+          } break;
+          case type_ast_node_variable_def:
+          {
+            DebugPrint("type_ast_node_variable_def", Depth);
+          } break;
+          case type_ast_node_type_specifier:
+          {
+            DebugPrint("type_ast_node_type_specifier", Depth);
+          } break;
 
       }
     }

@@ -51,7 +51,7 @@
         bonsai_function meta_func_arg *
     Push(meta_func_arg_stream* Stream, meta_func_arg Element, memory_arena* Memory)
     {
-      meta_func_arg_stream_chunk* NextChunk = (meta_func_arg_stream_chunk*)PushStruct(Memory, sizeof( meta_func_arg_stream_chunk ), 1, 0);
+      meta_func_arg_stream_chunk* NextChunk = (meta_func_arg_stream_chunk*)PushStruct(Memory, sizeof(meta_func_arg_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)

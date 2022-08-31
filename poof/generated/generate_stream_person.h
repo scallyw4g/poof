@@ -51,7 +51,7 @@
         bonsai_function person *
     Push(person_stream* Stream, person Element, memory_arena* Memory)
     {
-      person_stream_chunk* NextChunk = (person_stream_chunk*)PushStruct(Memory, sizeof( person_stream_chunk ), 1, 0);
+      person_stream_chunk* NextChunk = (person_stream_chunk*)PushStruct(Memory, sizeof(person_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)

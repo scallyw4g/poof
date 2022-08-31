@@ -1,7 +1,7 @@
     bonsai_function declaration *
     Push(declaration_stream* Stream, declaration Element, memory_arena* Memory)
     {
-      declaration_stream_chunk* NextChunk = (declaration_stream_chunk*)PushStruct(Memory, sizeof( declaration_stream_chunk ), 1, 0);
+      declaration_stream_chunk* NextChunk = (declaration_stream_chunk*)PushStruct(Memory, sizeof(declaration_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)
