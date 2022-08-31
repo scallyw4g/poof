@@ -94,7 +94,7 @@ function RunPoof {
     -D BONSAI_PREPROCESSOR        \
     -D BONSAI_LINUX               \
     -I "."                        \
-    -I "include"                  \
+    -I "$ROOT/include"           \
     -o $META_OUT
 
   if [ $? -eq 0 ]; then
@@ -131,6 +131,7 @@ function BuildPoof {
     $PLATFORM_INCLUDE_DIRS       \
     -I "$ROOT"                   \
     -I "$ROOT/include"           \
+    -I "$ROOT/poof"           \
     -o "$full_output_name"
 
   if [ $? -eq 0 ]; then
@@ -199,8 +200,9 @@ function BuildParserTests
       $PLATFORM_LINKER_OPTIONS \
       $PLATFORM_DEFINES        \
       $PLATFORM_INCLUDE_DIRS   \
-      -I"."                    \
-      -I"include"              \
+      -I "."                   \
+      -I "$ROOT/include"       \
+      -I "$ROOT/poof"          \
       -o "$full_output_name"
 
   if [ $? -eq 0 ]; then

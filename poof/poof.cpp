@@ -12172,6 +12172,9 @@ main(s32 ArgCount_, const char** ArgStrings)
     Assert(Args.Files.Start == Args.Files.At);
     counted_string ParserFilename = Args.Files.Start[0];
 
+    umm ParserFilenameHash = Hash(&ParserFilename);
+    TempFileEntropy.Seed = ParserFilenameHash;
+
     parser *Parser = PreprocessedParserForFile(&Ctx, ParserFilename, TokenCursorSource_RootFile, 0);
 
     MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(0.0);
@@ -12274,7 +12277,7 @@ main(s32 ArgCount_, const char** ArgStrings)
     }
   }
 
-  TryDeleteDirectory(TMP_DIR_ROOT);
+  /* TryDeleteDirectory(TMP_DIR_ROOT); */
 
   /* DebugPrint(Ctx); */
 
