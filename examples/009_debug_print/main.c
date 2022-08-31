@@ -63,6 +63,8 @@ poof(
 
 
 //
+// TODO(Jesse): Document this more thoroughly
+//
 // for_datatypes() takes a named_list of datatypes to iterate over, or the
 // symbolic constant `all` if you'd like it to iterate over every type in your
 // program.
@@ -72,7 +74,20 @@ poof(
 
 
 
-// First we declare all the functions we're about to generate implementations for
+//
+// First we declare all the functions we're about to generate
+//
+// Notice we can surround TStruct.type with parens () to weld it into another
+// identifier.  This will generate function declarations of the form:
+//
+// void DebugPrint_the_struct_type(struct the_struct_type *Struct);
+//
+// and
+//
+// void DebugPrint_the_enum_type(enum the_enum_type Enum);
+//
+// When targeting C compilers this feature is heavily utilized.  When targeting
+// C++ compilers it's less common, but still very useful.
 //
 poof(
   for_datatypes(all)
@@ -100,14 +115,14 @@ poof(
       {
         DebugPrint_str("{ ");
 
-          TStruct.map_members(M)
+          TStruct.map_members(StructMember)
           {
-            M.is_union?
+            StructMember.is_union?
             {
               // Code to print the value of d_union members.  See comment at @manually_generate_d_union_switch
               switch (Struct->Type)
               {
-                M.map_members (TUnionMember)
+                StructMember.map_members (TUnionMember)
                 {
                    case type_(TUnionMember.name):
                    {
@@ -123,8 +138,8 @@ poof(
             // else
             {
               // Code to print regular members
-              DebugPrint_str("M.type M.name = ");
-              DebugPrint_(M.type)( Struct->(M.name) );
+              DebugPrint_str("StructMember.type StructMember.name = ");
+              DebugPrint_(StructMember.type)( Struct->(StructMember.name) );
               DebugPrint_str(";");
             }
           }

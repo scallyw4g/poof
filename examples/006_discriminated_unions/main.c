@@ -38,8 +38,8 @@ poof(
 
 int main()
 {
-
   printf(" -- Enum Values\n");
+
   // Here, we generate code to print the enum tag values for the discriminated union
   poof(
     func (my_discriminated_union_type Enum)
