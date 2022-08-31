@@ -61,17 +61,17 @@
                                    case type_foo_struct:
                    {
                      DebugPrint_str("\n    foo_struct = ");
-                     DebugPrint_foo_struct(&Struct->foo_struct);
+                     DebugPrint_foo_struct(&Struct->foo_struct );
                    } break;
                    case type_bar_struct:
                    {
                      DebugPrint_str("\n    bar_struct = ");
-                     DebugPrint_bar_struct(&Struct->bar_struct);
+                     DebugPrint_bar_struct(&Struct->bar_struct );
                    } break;
                    case type_baz_struct:
                    {
                      DebugPrint_str("\n    baz_struct = ");
-                     DebugPrint_baz_struct(&Struct->baz_struct);
+                     DebugPrint_baz_struct(&Struct->baz_struct );
                    } break;
 
 

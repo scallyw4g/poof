@@ -6,7 +6,7 @@
 // Buckle up.
 //
 // Here we implement a meta-function that generates code to dump any datatype
-// in our program to the console; the C version of javascript `console.log()`
+// in our program to the console.
 //
 // As you can see by the number of NOTE and TODO comments, this type of code is
 // still not completely stable.  That said, it's pretty flippin' sweet what
@@ -78,11 +78,11 @@ poof(
   for_datatypes(all)
     func (TStruct)
     {
-      void DebugPrint_(TStruct.type)(struct (TStruct.type) *Struct);
+      void DebugPrint_(TStruct.type)(struct TStruct.type *Struct);
     }
     func (TEnum)
     {
-      void DebugPrint_(TEnum.type)(enum (TEnum.type) Enum);
+      void DebugPrint_(TEnum.type)(enum TEnum.type Enum);
     }
 )
 #include <generated/for_datatypes_all_Hm28xSLw.h>
@@ -96,23 +96,25 @@ poof(
 
     func (TStruct)
     {
-      void DebugPrint_(TStruct.type)(struct (TStruct.type) *Struct)
+      void DebugPrint_(TStruct.type)(struct TStruct.type *Struct)
       {
         DebugPrint_str("{ ");
 
-          (TStruct.map_members(M) {
-            (M.is_union?  // TODO(Jesse): Change this to .is_anonymous when that's implemented
+          TStruct.map_members(M)
+          {
+            M.is_union?
             {
               // Code to print the value of d_union members.  See comment at @manually_generate_d_union_switch
               switch (Struct->Type)
               {
-                (M.map_members (TUnionMember) {
+                M.map_members (TUnionMember)
+                {
                    case type_(TUnionMember.name):
                    {
-                     DebugPrint_str("\n    (TUnionMember.name) = ");
-                     DebugPrint_(TUnionMember.type)(&Struct->(TUnionMember.name));
+                     DebugPrint_str("\n    TUnionMember.name = ");
+                     DebugPrint_(TUnionMember.type)(&Struct->(TUnionMember.name) );
                    } break;
-                })
+                }
 
                 default: { /* Invalid type passed to DebugPrint .. handling the error might be nice */ } break;
               }
@@ -121,11 +123,11 @@ poof(
             // else
             {
               // Code to print regular members
-              DebugPrint_str("(M.type) (M.name) = ");
+              DebugPrint_str("M.type M.name = ");
               DebugPrint_(M.type)( Struct->(M.name) );
               DebugPrint_str(";");
-            })
-          })
+            }
+          }
         DebugPrint_str(" }");
       }
     }
@@ -133,18 +135,21 @@ poof(
     func (TEnum)
     {
 
-      // Print an enum value as a string.  In real code this would be a thunk to ToString(enum)
-      void DebugPrint_(TEnum.type)( enum (TEnum.name) EnumValue)
+      // Print an enum value as a string.
+      //
+      // In 'real' code this might be a thunk to ToString(enum) that's already generated.
+      //
+      void DebugPrint_(TEnum.type)( enum TEnum.name EnumValue)
       {
         switch (EnumValue)
         {
-          (TEnum.map_values (TEnumValue)
+          TEnum.map_values (TEnumValue)
           {
-            case (TEnumValue.name):
+            case TEnumValue.name:
             {
-              DebugPrint_str("(TEnumValue.name)");
+              DebugPrint_str("TEnumValue.name");
             } break;
-          })
+          }
         }
       }
 
@@ -158,18 +163,42 @@ poof(
 //
 int main()
 {
-
-  struct nested_struct NestedInstance = {
-    .NestedInt = 42,
+  struct bar_struct BarInstance =
+  {
+    .BarInt = 42,
   };
 
-  struct foo_struct FooInstance = {
+  // TODO(Jesse): Generate constructor functions for this operation
+  //
+  struct my_discriminated_union BarDUnionInstance =
+  {
+    .Type = type_bar_struct,
+    .bar_struct = BarInstance,
+  };
+
+  DebugPrint_str("Bar Instance : \n  ");
+  DebugPrint_bar_struct(&BarInstance); // < Meta generated function
+  DebugPrint_str("\n\n");
+
+  DebugPrint_str("Bar DUnion Instance : \n  ");
+  DebugPrint_my_discriminated_union(&BarDUnionInstance); // < Meta generated function
+  DebugPrint_str("\n\n");
+
+
+  struct nested_struct NestedInstance =
+  {
+    .NestedInt = 420,
+  };
+
+  struct foo_struct FooInstance =
+  {
     .FooNested = &NestedInstance,
   };
 
   // TODO(Jesse): Generate constructor functions for this operation
   //
-  struct my_discriminated_union DUnionInstance = {
+  struct my_discriminated_union FooDUnionInstance =
+  {
     .Type = type_foo_struct,
     .foo_struct = FooInstance,
   };
@@ -182,8 +211,8 @@ int main()
   DebugPrint_foo_struct(&FooInstance); // < Meta generated function
   DebugPrint_str("\n\n");
 
-  DebugPrint_str("DUnion Instance : \n  ");
-  DebugPrint_my_discriminated_union(&DUnionInstance); // < Meta generated function
+  DebugPrint_str("Foo DUnion Instance : \n  ");
+  DebugPrint_my_discriminated_union(&FooDUnionInstance); // < Meta generated function
   DebugPrint_str("\n");
 
 }

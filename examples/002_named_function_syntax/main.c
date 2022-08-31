@@ -3,32 +3,29 @@
 
 struct my_struct
 {
-  int whatever;
+  int trevor;
 };
 
 
 
 
-// Let's define our first meta function!  We're going to make a new struct type
+// Let's define our first meta function!  We're going to make a new struct
 // using `my_struct` we defined above.
+//
 poof(
   // Functions in `poof` are defined using the func keyword.  Here we define
-  // metaprogram_another_useless_struct, which takes a type argument.
-  func metaprogram_another_useless_struct(Type)
+  // metaprogram_another_struct, which takes a type argument.
+  //
+  func metaprogram_another_struct(Type)
   {
     // And here we define a new type derived from whatever type we passed in
     //
-    // `poof` looks for identifiers it knows about surrounded by parens ()
-    //
-    // The (Type.name) statement below is substituted by poof for the name of
+    // The Type.name statement below is substituted by poof for the name of
     // the type we pass into this function.
     //
-    // In this example, we're going to pass in `my_struct` to this function, so
-    // the line below will be expanded to `struct metaprogrammed_my_struct`
-    //
-    struct metaprogrammed_(Type.name)
+    struct my_metaprogrammed_struct
     {
-      int trevor;
+      struct Type.name whatever;
     };
   }
 )
@@ -37,16 +34,17 @@ poof(
 
 // Here we call the meta func declared above, which poof executes and outputs
 // the result of to the include file immediately afterwards.
-poof(metaprogram_another_useless_struct(my_struct))
-#include <generated/metaprogram_another_useless_struct_my_struct.h>
+//
+poof(metaprogram_another_struct(my_struct))
+#include <generated/metaprogram_another_struct_my_struct.h>
 
 
 
 int main()
 {
-  struct my_struct foo = { .whatever = 1 }; // <-- This is the original struct we defined
+  struct my_struct foo = { .trevor = 1 }; // <-- The original struct we defined
 
-  struct metaprogrammed_my_struct bar = { .trevor = 2 }; // <-- And this is the one we metaprogrammed!
+  struct my_metaprogrammed_struct bar = { .whatever = { .trevor = 2 } }; // <-- The one we metaprogrammed!
 }
 
 
@@ -57,14 +55,13 @@ int main()
 //
 // NOTE(Jesse): Passing primitives such at:
 //
-// poof(metaprogram_another_useless_struct(int))
-// poof(metaprogram_another_useless_struct(float))
-// poof(metaprogram_another_useless_struct(char))
+// poof(metaprogram_another_struct(int))
+// poof(metaprogram_another_struct(float))
+// poof(metaprogram_another_struct(char))
 // .. etc
 //
-// is currently unsupported for somewhat subtle reasons.  It may be worthwhile
-// to implement a subset of `poof` functionality for primitives, though doing
-// so is not high-priority at this moment.  I've encountered a need to do this
-// only a few times, so the cost-benefit ratio seems high to me.
+// is currently unsupported for somewhat subtle reasons.  I've started down the
+// path toward supporting this, but it involves writing a type-checker, so
+// it'll continue to be unsupported for a while.
 //
 

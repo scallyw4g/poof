@@ -8,12 +8,12 @@
 # Calling functions by name on the command line shouldn't be affected by these.
 
 
-BuildAllBinariesRunAllTests=1
+BuildAllBinariesRunAllTests=0
 
 RunPreemptivePoof=1
 
 # RunPoof=1
-# BuildPoof=1
+BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
@@ -22,7 +22,7 @@ RunPreemptivePoof=1
 # TEST_DEBUGGER="gdb --args"
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
-# BuildAndRunAllExamples=1
+BuildAndRunAllExamples=1
 
 # RunIntegrationTests=1
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
@@ -349,7 +349,7 @@ function BuildAndRunAllExamples
 {
   ColorizeTitle "Building and Running examples"
   pushd examples > /dev/null
-  ./make_all_examples.sh > /dev/null
+  ./make_all_examples.sh # > /dev/null
 
   if [ $? -eq 0 ]; then
     echo -e "$Success Examples built and ran"

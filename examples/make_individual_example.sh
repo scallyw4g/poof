@@ -12,7 +12,7 @@ DEBUGGER=""
 
 $DEBUGGER                    \
   ../../bin/poof             \
-  --log-level LogLevel_Error \
+  --log-level LogLevel_Debug \
   -I "."                     \
   --output-path ./generated  \
   main.c

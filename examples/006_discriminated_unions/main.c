@@ -44,10 +44,10 @@ int main()
   poof(
     func (my_discriminated_union_type Enum)
     {
-      (Enum.map_values (Val)
+      Enum.map_values (Val)
       {
-        printf("(Val.name)\n");
-      })
+        printf("Val.name\n");
+      }
     }
   )
 #include <generated/print_enum_values_fd9ff432f.h>
@@ -58,10 +58,10 @@ int main()
   poof(
     func (my_discriminated_union StructType)
     {
-      (StructType.map_members (Member)
+      StructType.map_members (Member)
       {
-        printf("(Member.type) (Member.name)\n");
-      })
+        printf("Member.type Member.name\n");
+      }
     }
   )
 #include <generated/print_struct_members_my_struct.h>

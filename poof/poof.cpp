@@ -2327,7 +2327,15 @@ RequireToken(parser* Parser, c_token ExpectedToken)
   if (Parser->ErrorCode == ParseErrorCode_None)
   {
     c_token* PeekedToken = PeekTokenPointer(Parser);
-    if (PeekedToken) Result = *PeekedToken;
+    if (PeekedToken)
+    {
+      Result = *PeekedToken;
+    }
+    else
+    {
+      PeekedToken = PeekTokenPointer(Parser, -1);
+    }
+
 
     // TODO(Jesse, id: 348, tags: immediate, id_347) : This should go into an AreEqual bonsai_function I think..
     if ( Result.Type != ExpectedToken.Type ||
@@ -10918,10 +10926,7 @@ Execute(parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx,
   {
     if ( BodyToken->Type == CTokenType_StringLiteral )
     {
-      counted_string TempStr = BodyToken->Value;
-
-      TempStr = StripQuotes(TempStr);
-
+      counted_string TempStr = StripQuotes(BodyToken->Value);
       parser *StringParse = ParserForAnsiStream(Ctx, AnsiStream(TempStr), TokenCursorSource_MetaprogrammingExpansion);
       counted_string Code = Execute(*StringParse, ReplacePatterns, Ctx, Memory);
 
@@ -10929,13 +10934,16 @@ Execute(parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx,
       Append(&OutputBuilder, EscapeDoubleQuotes(Code, OutputBuilder.Memory));
       Append(&OutputBuilder, CSz("\""));
     }
-    else if ( BodyToken->Type == CTokenType_OpenParen )
+    else if ( BodyToken->Type == CTokenType_OpenParen ||
+              BodyToken->Type == CTokenType_Identifier )
     {
       b32 ExecutedChildFunc = False;
       ITERATE_OVER_AS(Replace, ReplacePatterns)
       {
         meta_func_arg* Replace = GET_ELEMENT(ReplaceIter);
-        if ( OptionalToken(&Scope, CToken(Replace->Match)) )
+        if ( (BodyToken->Type == CTokenType_Identifier && StringsMatch(Replace->Match, BodyToken->Value) ) ||
+             (BodyToken->Type == CTokenType_OpenParen && OptionalToken(&Scope, CToken(Replace->Match)))
+           )
         {
           ExecutedChildFunc = True;
           RequireToken(&Scope, CTokenType_Dot);
@@ -11312,7 +11320,10 @@ Execute(parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx,
             } break;
           }
 
-          RequireToken(&Scope, CTokenType_CloseParen);
+          if (BodyToken->Type == CTokenType_OpenParen)
+          {
+            RequireToken(&Scope, CTokenType_CloseParen);
+          }
         }
       }
 
@@ -12113,13 +12124,6 @@ PrintHashtable(datatype_hashtable *Table)
   }
 }
 
-/* struct whatever___ */
-/* { */
-/*   int foo; */
-/*   f32 bar; */
-/*   umm baz; */
-/* }; */
-
 s32
 main(s32 ArgCount_, const char** ArgStrings)
 {
@@ -12281,7 +12285,7 @@ main(s32 ArgCount_, const char** ArgStrings)
 
   /* DebugPrint(Ctx); */
 
-  s32 Result = !Success; // ? SUCCESS_EXIT_CODE : FAILURE_EXIT_CODE ;
+  s32 Result = Success ? SUCCESS_EXIT_CODE : FAILURE_EXIT_CODE ;
   return Result;
 }
 #endif

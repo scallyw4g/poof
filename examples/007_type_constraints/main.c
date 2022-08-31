@@ -47,27 +47,27 @@ int main()
     func (my_discriminated_union StructType)
     {
       printf(" -- All Members \n");
-      (StructType.map_members(M)
+      StructType.map_members(M)
       {
-        printf("(M.type) (M.name)\n");
-        (M.is_union? {
-          (M.map_members(UM)
+        printf("M.type M.name\n");
+        M.is_union? {
+          M.map_members(UM)
           {
-            printf("(UM.type) (UM.name)\n");
-          })
-        })
-      })
+            printf("UM.type UM.name\n");
+          }
+        }
+      }
 
       printf("\n -- Union Members containing a nested_struct\n");
-      (StructType.map_members(M)
+      StructType.map_members(M)
       {
-        (M.is_union? {
-          (M.map_members(UM).containing(nested_struct)
+        M.is_union? {
+          M.map_members(UM).containing(nested_struct)
           {
-            printf("(UM.type) (UM.name)\n");
-          })
-        })
-      })
+            printf("UM.type UM.name\n");
+          }
+        }
+      }
     }
   )
 #include <generated/print_struct_members_my_struct.h>

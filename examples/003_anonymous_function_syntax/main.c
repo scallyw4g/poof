@@ -13,13 +13,14 @@ int main()
   // is executed immediately.  It's required that an anonymous function
   // specifies a type for its type argument.
   //
-  // This is particularly useful when paired with type constraints for avoiding
-  // a certain class of bugs.  We'll get to this in a subsequent lesson.
+  // Anonymous functions are particularly useful when paired with type
+  // constraints to generate code that avoids certain classes of bugs.  We'll
+  // get to that in a later example.
   //
   poof(
     func (my_struct StructType)
     {
-      printf("(StructType.name)");
+      printf("StructType.name");
     }
   )
 #include <generated/print_struct_members_my_struct.h>
