@@ -285,10 +285,8 @@ __pragma(msvc_style(thing));
 
 int x, y;
 
-#if BUG_COMMA_OPERATOR
 int u = x < 8 ? x : y,
     v = h < 4 ? y : x == 12 || y == 14 ? x : y;
-#endif
 
 unsigned int Int0 = 42;
 int          Int2 = 42;
@@ -302,12 +300,6 @@ typedef unsigned short int u16;
 
 typedef long int __int64;
 typedef long int s64;
-
-#if BUG_TYPEDEF_THING
-// NOTE(Jesse): I'm actually not even sure this is valid code.  Clang rejects
-// it last I checked, though msvc accepted it at one point.
-typedef unsigned s64 u64;
-#endif
 
 typedef void func(int *ArgName);
 

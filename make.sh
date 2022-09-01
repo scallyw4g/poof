@@ -8,7 +8,7 @@
 # Calling functions by name on the command line shouldn't be affected by these.
 
 
-BuildAllBinariesRunAllTests=0
+# BuildAllBinariesRunAllTests=1
 
 # RunPreemptivePoof=1
 
@@ -17,8 +17,8 @@ BuildAllBinariesRunAllTests=0
 # POOF_DEBUGGER="gdb --args"
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
-# RunParserTests=1
-# BuildParserTests=1
+RunParserTests=1
+BuildParserTests=1
 # TEST_DEBUGGER="gdb --args"
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
@@ -28,7 +28,7 @@ BuildAllBinariesRunAllTests=0
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
-RunExtendedIntegrationTests=1
+# RunExtendedIntegrationTests=1
 
 # OPTIMIZATION_LEVEL="-O2"
 

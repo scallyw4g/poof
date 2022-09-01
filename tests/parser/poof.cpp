@@ -870,10 +870,8 @@ TestBoundaryConditions(memory_arena* Memory)
   Next = PeekTokenRawPointer(Parser);
   TestThat( Next == 0 );
 
-#if BUG_LAST_TOKEN_IN_CHAIN_PEEK_BACK
   Prev = PeekTokenRawPointer(Parser, -1);
   TestThat( *Prev == NL );
-#endif
 
   TestThat( RawTokensRemain(Parser) == 0 );
 }
