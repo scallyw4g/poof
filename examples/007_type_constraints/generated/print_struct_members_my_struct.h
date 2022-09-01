@@ -1,7 +1,5 @@
-      printf(" -- All Members \n");
-              printf("my_discriminated_union_type Type\n");
-        
-        printf("union (anonymous)\n");
+      printf(" -- Union Members \n");
+              
                               printf("foo_struct foo_struct\n");
             printf("bar_struct bar_struct\n");
             printf("baz_struct baz_struct\n");

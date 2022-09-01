@@ -5,7 +5,7 @@
 //
 // Buckle up.
 //
-// Here we implement a meta-function that generates code to dump any datatype
+// Here we implement a poof function that generates code to dump any datatype
 // in our program to the console.
 //
 // As you can see by the number of NOTE and TODO comments, this type of code is
@@ -17,6 +17,7 @@
 
 // Hand-written code that thunks DebugPrint through to printf() for primitives
 #include "print_primitives.h"
+
 
 
 

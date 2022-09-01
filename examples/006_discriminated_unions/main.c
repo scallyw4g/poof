@@ -17,11 +17,14 @@ struct baz_struct
   int baz_int;
 };
 
-// The d_union keyword asks `poof` to please generate a discriminated union
-// structure for us from the specified structs.
 //
-// The enum_only keyword specifies that an additional `type` enum value should
-// be generated with the given name (in this case, flazz), but there is not an
+// Here's where things start to get a little more flavorful.
+//
+// The d_union keyword asks `poof` to generate a discriminated union structure
+// for us, from the specified structs.
+//
+// The enum_only keyword specifies that an additional enum value should be
+// generated with the given name (in this case, flazz), but there is not an
 // accompanying struct definition.
 //
 poof(
@@ -40,7 +43,7 @@ int main()
 {
   printf(" -- Enum Values\n");
 
-  // Here, we generate code to print the enum tag values for the discriminated union
+  // Here, we generate code to print the enum tag values
   poof(
     func (my_discriminated_union_type Enum)
     {
@@ -54,7 +57,7 @@ int main()
 
   printf("\n -- Struct Members\n");
 
-  // Here, we generate code to print the discriminated union struct we generated
+  // Here, we generate code to print the discriminated union members from the struct we generated
   poof(
     func (my_discriminated_union StructType)
     {

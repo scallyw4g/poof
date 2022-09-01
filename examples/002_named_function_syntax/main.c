@@ -3,7 +3,7 @@
 
 struct my_struct
 {
-  int trevor;
+  int MyStructInt;
 };
 
 
@@ -18,22 +18,28 @@ poof(
   //
   func metaprogram_another_struct(Type)
   {
-    // And here we define a new type derived from whatever type we passed in
-    //
-    // The Type.name statement below is substituted by poof for the name of
-    // the type we pass into this function.
+    // The Type.name statement below is substituted for the name of the type we
+    // pass into this function.
     //
     struct my_metaprogrammed_struct
     {
-      struct Type.name whatever;
+      struct Type.name MetaStructMember;
     };
   }
 )
 
+// NOTE: Another way to write the metaprogram_another_struct function, without
+// poof, would be the following:
+//
+// #define metaprogram_another_struct(Type) struct my_metaprogrammed_struct { struct Type whatever; };
+//
+// Poof does a lot of stuff that the C preprocessor can't, but for simple
+// operations like this there are 1:1 mappings
+//
 
 
 // Here we call the meta func declared above, which poof executes and outputs
-// the result of to the include file immediately afterwards.
+// to the include file immediately afterwards.
 //
 poof(metaprogram_another_struct(my_struct))
 #include <generated/metaprogram_another_struct_my_struct.h>
@@ -42,9 +48,11 @@ poof(metaprogram_another_struct(my_struct))
 
 int main()
 {
-  struct my_struct foo = { .trevor = 1 }; // <-- The original struct we defined
+  struct my_struct MyStructInstance = { .MyStructInt = 1 }; // <-- The original struct we defined
 
-  struct my_metaprogrammed_struct bar = { .whatever = { .trevor = 2 } }; // <-- The one we metaprogrammed!
+  struct my_metaprogrammed_struct MetaStruct = {}; // <-- The one we metaprogrammed!
+
+  MetaStruct.MetaStructMember = MyStructInstance;
 }
 
 

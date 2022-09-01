@@ -17,13 +17,13 @@ int main()
   // Here we generate code to print my_enum values using an anonymous function
   //
   poof(
-    func (my_enum Enum)
+    func (my_enum TEnum)
     {
       // The `map_values` keyword iterates over each value in the my_enum type
-      // Each value is available as `EnumValue` in the next scoped block {}
-      Enum.map_values (EnumValue)
+      // Each value is available as `TEnumValue` in the next scoped block
+      TEnum.map_values (TEnumValue)
       {
-        printf("EnumValue.name\n");
+        printf("TEnumValue.name\n");
       }
     }
   )
