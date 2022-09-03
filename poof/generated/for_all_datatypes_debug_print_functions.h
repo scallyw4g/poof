@@ -3265,7 +3265,13 @@
         DebugPrint("parser {\n", Depth);
       }
 
-                                                  DebugPrint("parse_error_code ErrorCode =", Depth+2);
+                                                  DebugPrint("parse_warn_code WarnCode =", Depth+2);
+              DebugPrint(RuntimeStruct.WarnCode, 1);
+              DebugPrint(";\n");
+
+
+
+                                            DebugPrint("parse_error_code ErrorCode =", Depth+2);
               DebugPrint(RuntimeStruct.ErrorCode, 1);
               DebugPrint(";\n");
 
@@ -3863,9 +3869,9 @@
 
 
 
-                                            DebugPrint("counted_string Name =", Depth+2);
-              DebugPrint(RuntimeStruct.Name, 1);
-              DebugPrint(";\n");
+                                            DebugPrint("c_token NameT {\n", Depth+2);
+              DebugPrint(RuntimeStruct.NameT, Depth+4);
+              DebugPrint("}\n", Depth+2);
 
 
 
@@ -8569,6 +8575,21 @@
           case TokenCursorSource_Count:
           {
             DebugPrint("TokenCursorSource_Count", Depth);
+          } break;
+
+      }
+    }
+    bonsai_function void DebugPrint( parse_warn_code RuntimeValue, u32 Depth)
+    {
+      switch (RuntimeValue)
+      {
+                  case ParseWarnCode_None:
+          {
+            DebugPrint("ParseWarnCode_None", Depth);
+          } break;
+          case ParseWarnCode_MacroRedefined:
+          {
+            DebugPrint("ParseWarnCode_MacroRedefined", Depth);
           } break;
 
       }

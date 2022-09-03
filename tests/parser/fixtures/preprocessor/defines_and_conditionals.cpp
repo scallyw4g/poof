@@ -649,21 +649,3 @@ invalid_path
 
 #pragma whatever() // this should break
 foo_func(valid_path, invalid_path)
-
-#if BUG_BLANK_DEFINE_DOESNT_WARN_ON_REDEF
-  #define foo
-  #define foo (1) // THIS SHOULD THROW A WARNING
-  #if foo
-    valid_path
-  #else
-    invalid_path
-  #endif
-#endif
-
-#if BUG_BLANK_DEFINE_DOESNT_ERROR_ON_EVAL
-  #define foo
-  #if foo // This should throw an error
-  #endif
-#endif
-
-

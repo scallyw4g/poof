@@ -1282,7 +1282,7 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
   ParseErrorCursor->At = Global_ParseErrorBuffer;
   ParseErrorCursor->End = Global_ParseErrorBuffer+Global_ParseErrorBufferSize;
 
-  u32 LinesOfContext = 10;
+  u32 LinesOfContext = 8;
 
   counted_string ParserName = {};
 
@@ -1386,6 +1386,7 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
     //
     // Output the error message
     //
+    umm MinLineLen = 80;
     {
       c_token *NextT = PeekTokenRawPointer(Parser);
       c_token *PrevT = PeekTokenRawPointer(Parser, -1);
@@ -1447,7 +1448,7 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
 
       { // Output the final underline
         char_cursor ErrorCursor = CharCursor(Message);
-        u64 LongestLine = GetLongestLineInCursor(&ErrorCursor);
+        u64 LongestLine = Max(MinLineLen, GetLongestLineInCursor(&ErrorCursor));
 
         CopyToDest(ParseErrorCursor, '\n');
         PrintTray(ParseErrorCursor, 0, MaxTrayWidth, TerminalColors.Yellow);
@@ -1496,7 +1497,6 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
     // TODO(Jesse, tags: bug): This isn't working for some reason.  I think
     // GetLongestLineInCursor is busted here.
     counted_string NameLine = FormatCountedString(TranArena, CSz("  %S:%u  "), ParserName, ErrorLineNumber);
-    umm MinLineLen = 80;
     umm LongestLine = Max(MinLineLen, GetLongestLineInCursor(ParseErrorCursor));
     LongestLine = Max(MinLineLen, NameLine.Count+4);
 
@@ -1555,7 +1555,14 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
 bonsai_function void
 ParseInfoMessage(parser* Parser, counted_string Message, c_token* T)
 {
-  OutputContextMessage(Parser, ParseErrorCode_None, CSz(""), Message, T);
+  OutputContextMessage(Parser, Parser->ErrorCode, CSz(""), Message, T);
+}
+
+bonsai_function void
+ParseWarn(parser* Parser, parse_warn_code WarnCode, counted_string ErrorMessage, c_token* ErrorToken)
+{
+  Parser->WarnCode = WarnCode;
+  OutputContextMessage(Parser, Parser->ErrorCode, CSz("Poof Warning"), ErrorMessage, ErrorToken);
 }
 
 bonsai_function void
@@ -1574,12 +1581,6 @@ bonsai_function void
 PoofTypeError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
 {
   OutputContextMessage(Parser, ParseErrorCode_PoofTypeError, CSz("Poof Type Error"), ErrorMessage, ErrorToken);
-}
-
-bonsai_function void
-ParseWarn(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
-{
-  OutputContextMessage(Parser, ParseErrorCode_None, CSz("Poof Warning"), ErrorMessage, ErrorToken);
 }
 
 bonsai_function void
@@ -2715,7 +2716,7 @@ ExpandMacro( parse_context *Ctx,
   //
   // TODO(Jesse, correctness): Is this a bug, or is the above comment wrong?
   //
-  c_token MacroNameT = RequireTokenRaw(Parser, CToken(CT_MacroLiteral, Macro->Name));
+  c_token MacroNameT = RequireTokenRaw(Parser, CToken(CT_MacroLiteral, Macro->NameT->Value));
 
   // NOTE(Jesse): These get filled out in the case where we've got a macro
   // function to expand.  The expansion loop works for both function and
@@ -2927,7 +2928,7 @@ ExpandMacro( parse_context *Ctx,
                   //
                   // @mark_keyword_macros_self_referential
                   //
-                  if (Macro->Type == type_macro_keyword && StringsMatch(ExpandedT->Value, Macro->Name))
+                  if (Macro->Type == type_macro_keyword && StringsMatch(ExpandedT->Value, Macro->NameT->Value))
                   {
                     ExpandedT->Type = CT_MacroLiteral_SelfRefExpansion;
                   }
@@ -3757,8 +3758,7 @@ GetByName(macro_def_hashtable *Table, counted_string Name)
   {
     macro_def *M = &Bucket->Element;
 
-    if (!M->Undefed &&
-        StringsMatch(M->Name, Name))
+    if (StringsMatch(M->NameT->Value, Name))
     {
       Result = M;
       break;
@@ -4010,7 +4010,7 @@ DefineMacro(parse_context *Ctx, parser *Parser, macro_def *Macro)
   // tokens.
   parser *InstanceParser = DuplicateParserTokens(&InstanceBody, Memory);
 
-  RequireToken(InstanceParser, CToken(CT_MacroLiteral, Macro->Name));
+  RequireToken(InstanceParser, CToken(CT_MacroLiteral, Macro->NameT->Value));
 
   //
   // Classify as keyword or function
@@ -4115,7 +4115,7 @@ MacroShouldBeExpanded(parser *Parser, c_token *T, macro_def *ThisMacro, macro_de
 {
   Assert(PeekTokenPointer(Parser) == T);
   Assert(T->Type == CTokenType_Identifier);
-  Assert(StringsMatch(T->Value, ThisMacro->Name));
+  Assert(StringsMatch(T->Value, ThisMacro->NameT->Value));
 
   b32 Result = False;
 
@@ -4131,7 +4131,7 @@ MacroShouldBeExpanded(parser *Parser, c_token *T, macro_def *ThisMacro, macro_de
 
     case type_macro_keyword:
     {
-      if (ExpandingMacro && StringsMatch(ExpandingMacro->Name, ThisMacro->Name))
+      if (ExpandingMacro && StringsMatch(ExpandingMacro->NameT->Value, ThisMacro->NameT->Value))
       {
         // TODO(Jesse): This is the path that's preventing self-referential macros
         // from expanding, but we should take this out in favor of the code at
@@ -5266,23 +5266,40 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, memory_arena *Memory)
 
       case CT_PreprocessorDefine:
       {
-        c_token *MacroNameToken = PeekTokenPointer(Parser, 1);
+        c_token *MacroNameT = PeekTokenPointer(Parser, 1);
 
         if (Ctx)
         {
-          macro_def *Macro = GetByName(&Ctx->Datatypes.Macros, MacroNameToken->Value);
+          macro_def *Macro = GetByName(&Ctx->Datatypes.Macros, MacroNameT->Value);
 
-          if (!Macro)
+          if (Macro)
+          {
+            if (!Macro->Undefed)
+            {
+              ParseInfoMessage(Parser, CSz("Previous definition here"), Macro->NameT);
+              ParseWarn( Parser,
+                         ParseWarnCode_MacroRedefined,
+                         FormatCountedString(TranArena, CSz("Macro (%S) already defined"), MacroNameT->Value),
+                         MacroNameT);
+            }
+            else
+            {
+            }
+
+            *Macro = {};
+            Macro->NameT = MacroNameT;
+          }
+          else
           {
             macro_def_linked_list_node *MacroNode = AllocateProtection(macro_def_linked_list_node, Ctx->Memory, 1, False);
             Macro = &MacroNode->Element;
 
-            Macro->Name = MacroNameToken->Value;
+            Macro->NameT = MacroNameT;
             Insert(MacroNode, &Ctx->Datatypes.Macros);
           }
 
-          MacroNameToken->Type = CT_MacroLiteral;
-          MacroNameToken->Macro.Def = Macro;
+          MacroNameT->Type = CT_MacroLiteral;
+          MacroNameT->Macro.Def = Macro;
 
           DefineMacro(Ctx, Parser, Macro);
 
@@ -6048,7 +6065,11 @@ ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_aren
         macro_def *Macro = &MacroNode->Element;
 
         Macro->Type = type_macro_keyword;
-        Macro->Name = MacroName;
+        c_token *MacroNameT = Allocate(c_token, Memory, 1);
+
+        Macro->NameT = MacroNameT;
+        Macro->NameT->Type = CT_MacroLiteral;
+        Macro->NameT->Value = MacroName;
 
         CTokenCursor(&Macro->Body, 1, Memory, CSz("<CLI>"), TokenCursorSource_CommandLineOption, {0,0});
 
@@ -6066,7 +6087,7 @@ ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_aren
     // NOTE(Jesse): This has to come after the above -D path
     else if ( StartsWith(Arg, CSz("-D")) )
     {
-      macro_def *NewMacro = Push(&Ctx->Datatypes.Macros, { .Name = MacroNameToken->Value }, Ctx->Memory);
+      macro_def *NewMacro = Push(&Ctx->Datatypes.Macros, { .Name = MacroNameT->Value }, Ctx->Memory);
       NewMacro->Type = type_macro_keyword;
       counted_string Name = Substring(Arg, 2);
       NewMacro->Name = Name;
@@ -7895,7 +7916,8 @@ GetMacroDef(parse_context *Ctx, counted_string DefineValue)
   macro_def *Macro = GetByName(&Ctx->Datatypes.Macros, DefineValue);
 
   macro_def *Result = 0;
-  if (Macro && !Macro->Undefed)
+  if ( Macro &&
+      !Macro->Undefed )
   {
     Result = Macro;
   }
@@ -9307,6 +9329,8 @@ ParseExpression(parse_context *Ctx, ast_node_expression* Result)
 
             case CTokenType_Identifier:
             {
+              NotImplemented;
+
               // TODO(Jesse id: 264): Once we have proper macro expansion, this can be expanded and concatenated to the string as well.
               macro_def *Macro = GetByName(&Ctx->Datatypes.Macros, NextT.Value);
               switch(Macro->Type)

@@ -390,6 +390,13 @@ poof(buffer(c_token_buffer))
 poof(generate_stream(c_token_buffer))
 #include <poof/generated/generate_stream_c_token_buffer.h>
 
+enum parse_warn_code
+{
+  ParseWarnCode_None,
+
+  ParseWarnCode_MacroRedefined,
+};
+
 enum parse_error_code
 {
   ParseErrorCode_None,
@@ -423,6 +430,7 @@ poof(generate_string_table(parse_error_code))
 
 struct parser
 {
+  parse_warn_code WarnCode;
   parse_error_code ErrorCode;
   c_token_cursor *Tokens;
 };
@@ -855,7 +863,7 @@ enum macro_type
 struct macro_def
 {
   macro_type Type;
-  counted_string Name;
+  c_token *NameT;
   c_token_cursor Body;
 
   counted_string_buffer NamedArguments;
@@ -869,7 +877,7 @@ poof(generate_stream(macro_def))
 bonsai_function umm
 Hash(macro_def *M)
 {
-  umm Result = Hash(&M->Name);
+  umm Result = Hash(&M->NameT->Value);
   // TODO(Jesse): Hash arguments and incorporate Type & Variadic ..?
   return Result;
 }

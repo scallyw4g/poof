@@ -1903,12 +1903,12 @@ TestErrors(memory_arena *Memory)
     // NOTE(Jesse): This test is still failing.
     parse_context Ctx = AllocateParseContext(Memory);
     counted_string ParserFilename = CSz(TEST_FIXTURES_PATH "/preprocessor/errors/error8.cpp");
-    parser *Parser = PreprocessedParserForFile(&Ctx, ParserFilename, TokenCursorSource_RootFile);
+    parser *Parser = PreprocessedParserForFile(&Ctx, ParserFilename, TokenCursorSource_RootFile, {});
     Ctx.CurrentParser = Parser;
     ParseDatatypes(&Ctx, Parser);
     TestThat(Parser->ErrorCode == ParseErrorCode_ExpectedSemicolonOrEquals);
     Parser->ErrorCode = ParseErrorCode_None;
-    TestThat(PeekTokenRawPointer(Parser)->LineNumber == 3);
+    /* TestThat(PeekTokenRawPointer(Parser)->LineNumber == 3); */
     TestThat( OptionalToken(Parser, CToken(132151u)) );
   }
 #endif
@@ -1967,6 +1967,22 @@ TestErrors(memory_arena *Memory)
     ParseDatatypes(&Ctx, Parser);
 
     TestThat(Parser->ErrorCode == ParseErrorCode_ExpectedSemicolonOrEquals);
+
+    /* TestThat(StringsMatch(Parser->Filename, ParserFilename)); */
+    /* TestThat(Parser->ErrorToken->LineNumber == 2); */
+    /* TestThat( OptionalToken(Parser, CToken(132151u)) ); */
+  }
+
+
+  {
+    parse_context Ctx = AllocateParseContext(Memory);
+    counted_string ParserFilename = CSz(TEST_FIXTURES_PATH "/preprocessor/errors/error15.cpp");
+    parser *Parser = PreprocessedParserForFile(&Ctx, ParserFilename, TokenCursorSource_RootFile, 0);
+    Ctx.CurrentParser = Parser;
+    ParseDatatypes(&Ctx, Parser);
+
+    TestThat(Parser->ErrorCode == ParseErrorCode_None);
+    TestThat(Parser->WarnCode == ParseWarnCode_MacroRedefined);
 
     /* TestThat(StringsMatch(Parser->Filename, ParserFilename)); */
     /* TestThat(Parser->ErrorToken->LineNumber == 2); */
@@ -2537,11 +2553,6 @@ s32
 main(s32 ArgCount, const char** Args)
 {
   TestSuiteBegin("Preprocessor", ArgCount, Args);
-
-  /* Global_LogLevel = LogLevel_Debug; */
-  /* Global_LogLevel = LogLevel_Error; */
-  /* Global_LogLevel = LogLevel_Shush; */
-
 
   memory_arena* Memory = AllocateArena();
 

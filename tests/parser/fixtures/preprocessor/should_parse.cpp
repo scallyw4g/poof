@@ -515,9 +515,9 @@ TestFunc(int foo)
 
 
 #define global_variable static
-#define bonsai_function static
 #define CSz(NullTerminatedCString) \
   CS(NullTerminatedCString, sizeof(NullTerminatedCString)-1)
+
 #include <include/bonsai_stdlib/headers/console_macros.h>
 
 #undef foo;

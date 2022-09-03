@@ -41,16 +41,23 @@ this is actually commented
 #include <tests/parser/fixtures/preprocessor/empty.cpp>
 
 #include <tests/parser/fixtures/preprocessor/random_define.cpp> /* this should be fine */
+#undef foo
 
 #include <tests/parser/fixtures/preprocessor/random_define.cpp> // this should be fine \
 This line is actually commented
+#undef foo
+
 #include <tests/parser/fixtures/preprocessor/random_define.cpp> /* this should be fine */
+#undef foo
+
 #include <tests/parser/fixtures/preprocessor/random_define.cpp> /* this should be fine */  \
+#undef foo
 
 #include <tests/parser/fixtures/preprocessor/empty.cpp> /*
                                                        */   
 #include <tests/parser/fixtures/preprocessor/random_define.cpp> // this should be fine \\\\
 This line is actually commented
+#undef foo
 
 
 #define MacroKeyword    this_is_a_variable_name

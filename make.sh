@@ -10,7 +10,7 @@
 
 # BuildAllBinariesRunAllTests=1
 
-# RunPreemptivePoof=1
+RunPreemptivePoof=1
 
 # RunPoof=1
 # BuildPoof=1
@@ -22,13 +22,13 @@ BuildParserTests=1
 # TEST_DEBUGGER="gdb --args"
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
-# BuildAndRunAllExamples=1
+BuildAndRunAllExamples=1
 
-# RunIntegrationTests=1
+RunIntegrationTests=1
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
-# RunExtendedIntegrationTests=1
+RunExtendedIntegrationTests=1
 
 # OPTIMIZATION_LEVEL="-O2"
 
@@ -277,7 +277,7 @@ function RunExtendedIntegrationTests
     -D __GNUC__                    \
      src/server.c"
 
-  echo "           - poof is known to not handle redis correctly yet.  This failure is expected"
+  echo "           - NOTE(Jesse): poof is known to not handle redis correctly yet.  This failure is expected"
 
   test_name=sqlite
   RunSingleExtendedIntegrationTest \

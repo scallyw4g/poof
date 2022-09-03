@@ -403,6 +403,7 @@
       bonsai_function void DebugPrint( c_token_flags EnumValue, u32 Depth = 0);
       bonsai_function void DebugPrint( va_args_flags EnumValue, u32 Depth = 0);
       bonsai_function void DebugPrint( token_cursor_source EnumValue, u32 Depth = 0);
+      bonsai_function void DebugPrint( parse_warn_code EnumValue, u32 Depth = 0);
       bonsai_function void DebugPrint( parse_error_code EnumValue, u32 Depth = 0);
       bonsai_function void DebugPrint( linkage_type EnumValue, u32 Depth = 0);
       bonsai_function void DebugPrint( type_qualifier EnumValue, u32 Depth = 0);
