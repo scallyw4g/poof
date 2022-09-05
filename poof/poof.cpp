@@ -1282,7 +1282,7 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
   ParseErrorCursor->At = Global_ParseErrorBuffer;
   ParseErrorCursor->End = Global_ParseErrorBuffer+Global_ParseErrorBufferSize;
 
-  u32 LinesOfContext = 8;
+  u32 LinesOfContext = 5;
 
   counted_string ParserName = {};
 
@@ -1528,9 +1528,14 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
     }
 
 
-    RewindTo(Parser, OriginalAtToken);
-    Assert(PeekTokenRawPointer(Parser) == OriginalAtToken);
+    if (RewindTo(Parser, OriginalAtToken))
+    {
+    }
+    else if (AdvanceTo(Parser, OriginalAtToken))
+    {
+    }
 
+    Assert(PeekTokenRawPointer(Parser) == OriginalAtToken);
 
     // Don't overwrite the error code if we call this with an info message (and pass ParseErrorCode_None)
     if (ErrorCode)
@@ -3748,6 +3753,30 @@ GetByValue(counted_string_hashtable *Table, counted_string Value)
   return Result;
 }
 
+bonsai_function parser*
+Get(parser_hashtable *Table, counted_string Value)
+{
+  parser *Result = {};
+
+  auto *Bucket = GetHashBucket(Hash(&Value), Table);
+  while (Bucket)
+  {
+    parser *Element = &Bucket->Element;
+
+    if (StringsMatch(Element->Tokens->Filename, Value))
+    {
+      Result = Element;
+      break;
+    }
+    else
+    {
+      Bucket = Bucket->Next;
+    }
+  }
+
+  return Result;
+}
+
 bonsai_function macro_def*
 GetByName(macro_def_hashtable *Table, counted_string Name)
 {
@@ -5111,7 +5140,7 @@ TokenizeAnsiStream(ansi_stream Code, memory_arena* Memory, b32 IgnoreQuotes, par
 }
 
 bonsai_function b32
-RunPreprocessor(parse_context *Ctx, parser *Parser, memory_arena *Memory)
+RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena *Memory)
 {
   TIMED_FUNCTION();
 
@@ -5276,7 +5305,11 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, memory_arena *Memory)
           {
             if (!Macro->Undefed)
             {
-              ParseInfoMessage(Parser, CSz("Previous definition here"), Macro->NameT);
+              parser *PrevParser = Get(&Ctx->ParserHashtable, Macro->NameT->Filename);
+              ParseInfoMessage( PrevParser,
+                                CSz("Previous definition here"),
+                                Macro->NameT);
+
               ParseWarn( Parser,
                          ParseWarnCode_MacroRedefined,
                          FormatCountedString(TranArena, CSz("Macro (%S) already defined"), MacroNameT->Value),
@@ -5456,12 +5489,14 @@ ParserForFile(parse_context *Ctx, counted_string Filename, token_cursor_source S
 }
 
 bonsai_function parser *
-PreprocessedParserForFile(parse_context *Ctx, counted_string Filename, token_cursor_source Source, c_token_cursor *Up)
+PreprocessedParserForFile(parse_context *Ctx, counted_string Filename, token_cursor_source Source, parser *Parent)
 {
   parser *Result = ParserForFile(Ctx, Filename, Source);
+
   if (Result && Result->ErrorCode == ParseErrorCode_None)
   {
-    if (RunPreprocessor(Ctx, Result, Ctx->Memory))
+    Insert(*Result, &Ctx->ParserHashtable, Ctx->Memory);
+    if (RunPreprocessor(Ctx, Result, Parent, Ctx->Memory))
     {
       /* c_token_cursor Tmp = *Result->Tokens; */
       /* Result->Tokens = Allocate(c_token_cursor, Ctx->Memory, 1); */
@@ -5599,7 +5634,7 @@ ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
   if (FinalIncludePath.Count)
   {
     LogSuccess("Including (%S)", FinalIncludePath);
-    parser *IncludeParser = PreprocessedParserForFile(Ctx, FinalIncludePath, TokenCursorSource_Include, Parser->Tokens);
+    parser *IncludeParser = PreprocessedParserForFile(Ctx, FinalIncludePath, TokenCursorSource_Include, Parser);
     if (IncludeParser)
     {
       // TODO(Jesse)(memory_leak) This leaks the parser struct but it's such
@@ -8670,7 +8705,10 @@ ParseAndPushTypedef(parse_context *Ctx)
 
   if ( OptionalToken(Parser, CTokenType_OpenBracket) )
   {
-    // Assert(False); // Pretty sure this path should be dead 
+    // Assert(False); // Pretty sure this path should be dead
+    //
+    // Turns out this codepath isn't dead.  Just braindead.
+    //
     // lol
     variable_decl Tmp = {};
     ParseExpression(Ctx, &Tmp.StaticBufferSize );
@@ -9865,7 +9903,7 @@ FlushOutputToDisk(parse_context *Ctx, counted_string OutputForThisParser, counte
       // it's completely unnecessary cruft.
       parser *OldParser = Ctx->CurrentParser;
       Ctx->CurrentParser = OutputParse;
-      RunPreprocessor(Ctx, OutputParse, Memory);
+      RunPreprocessor(Ctx, OutputParse, OldParser, Memory);
       ParseDatatypes(Ctx, OutputParse);
       Ctx->CurrentParser = OldParser;
     }
@@ -10091,6 +10129,8 @@ bonsai_function person_stream
 ParseAllTodosFromFile(counted_string Filename, memory_arena* Memory)
 {
   TIMED_FUNCTION();
+
+  InvalidCodePath();
 
   person_stream People = {};
 
@@ -12137,6 +12177,21 @@ WalkAst(ast_node* Ast)
 #define FAILURE_EXIT_CODE 1
 
 link_internal void
+PrintHashtable(parser_hashtable *Table)
+{
+  for (u32 BucketIndex = 0; BucketIndex < Table->Size; ++BucketIndex)
+  {
+    auto Bucket = Table->Elements[BucketIndex];
+    while (Bucket)
+    {
+      DebugPrint(Bucket->Element);
+      /* DebugLine("bucket(%u) --------------------------------------------------------------------------------------------------------------------------", BucketIndex); */
+      Bucket = Bucket->Next;
+    }
+  }
+}
+
+link_internal void
 PrintHashtable(datatype_hashtable *Table)
 {
   for (u32 BucketIndex = 0; BucketIndex < Table->Size; ++BucketIndex)
@@ -12156,7 +12211,6 @@ main(s32 ArgCount_, const char** ArgStrings)
 {
   memory_arena Memory_ = {};
   memory_arena* Memory = &Memory_;
-
   Memory->NextBlockSize = Gigabytes(2);
 
   Assert(ArgCount_ > 0);
@@ -12206,7 +12260,23 @@ main(s32 ArgCount_, const char** ArgStrings)
     umm ParserFilenameHash = Hash(&ParserFilename);
     TempFileEntropy.Seed = ParserFilenameHash;
 
+#if 1
     parser *Parser = PreprocessedParserForFile(&Ctx, ParserFilename, TokenCursorSource_RootFile, 0);
+#else
+    parser *Parser = ParserForFile(&Ctx, ParserFilename, TokenCursorSource_RootFile);
+    if (Parser && Parser->ErrorCode == ParseErrorCode_None)
+    {
+      Ctx.CurrentParser = Parser;
+      if (RunPreprocessor(&Ctx, Parser, Ctx.Memory))
+      {
+      }
+      else
+      {
+        Warn("Error encountered while running preprocessor on file %S", ParserFilename);
+      }
+    }
+#endif
+
 
     MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(0.0);
 
@@ -12214,10 +12284,13 @@ main(s32 ArgCount_, const char** ArgStrings)
     {
       /* RemoveAllMetaprogrammingOutputRecursive(GetNullTerminated(Args.Outpath)); */
 
+      // TODO(Jesse): Do we actually need this?
       Ctx.CurrentParser = Parser;
+      FullRewind(Ctx.CurrentParser);
+
       ParseDatatypes(&Ctx, Parser);
 
-      /* PrintHashtable(&Ctx.Datatypes.DatatypeHashtable); */
+      /* PrintHashtable(&Ctx.ParserHashtable); */
 
       MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(0);
 

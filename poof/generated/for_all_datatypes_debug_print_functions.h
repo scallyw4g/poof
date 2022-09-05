@@ -4733,6 +4733,12 @@
 
 
 
+                                            DebugPrint("parser_hashtable ParserHashtable {\n", Depth+2);
+              DebugPrint(RuntimeStruct.ParserHashtable, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
                                             DebugPrint("program_datatypes Datatypes {\n", Depth+2);
               DebugPrint(RuntimeStruct.Datatypes, Depth+4);
               DebugPrint("}\n", Depth+2);
@@ -5570,6 +5576,70 @@
     }
 
     bonsai_function void DebugPrint( parser_iterator *RuntimePtr, u32 Depth)
+    {
+      if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
+    }
+    bonsai_function void DebugPrint( parser_linked_list_node RuntimeStruct, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("parser_linked_list_node {\n", Depth);
+      }
+
+                                                  DebugPrint("parser Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("parser_linked_list_node Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+
+
+      if (Depth == 0)
+      {
+        DebugPrint("}\n", Depth);
+      }
+    }
+
+    bonsai_function void DebugPrint( parser_linked_list_node *RuntimePtr, u32 Depth)
+    {
+      if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
+    }
+    bonsai_function void DebugPrint( parser_hashtable RuntimeStruct, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("parser_hashtable {\n", Depth);
+      }
+
+                                                  DebugPrint("umm Size =", Depth+2);
+              DebugPrint(RuntimeStruct.Size, 1);
+              DebugPrint(";\n");
+
+
+
+                                            DebugPrint("parser_linked_list_node Elements {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Elements, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+
+
+      if (Depth == 0)
+      {
+        DebugPrint("}\n", Depth);
+      }
+    }
+
+    bonsai_function void DebugPrint( parser_hashtable *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }

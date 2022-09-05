@@ -440,6 +440,16 @@ poof(generate_cursor(parser))
 poof(generate_stream(parser))
 #include <poof/generated/generate_stream_parser.h>
 
+link_internal umm
+Hash(parser *Parser)
+{
+  umm Result = Hash(&Parser->Tokens->Filename);
+  return Result;
+}
+
+poof(hashtable(parser))
+#include <poof/generated/hashtable_parser.h>
+
 bonsai_function parser
 MakeParser(c_token_cursor *Tokens)
 {
@@ -1491,6 +1501,8 @@ struct parse_context
 {
   parser                *CurrentParser;
 
+  parser_hashtable       ParserHashtable;
+
   program_datatypes      Datatypes;
   counted_string_cursor *IncludePaths;
   meta_func_stream       MetaFunctions;
@@ -1523,11 +1535,15 @@ struct d_list
 bonsai_function parse_context
 AllocateParseContext(memory_arena *Memory)
 {
-  parse_context Ctx = {
-    .Memory = Memory
-  };
-  Ctx.Datatypes.Macros = Allocate_macro_def_hashtable(4096, Memory);
+  parse_context Ctx = {};
+
+  Ctx.Memory = Memory;
+
+  // TODO(Jesse): Collapse these
+  Ctx.ParserHashtable = Allocate_parser_hashtable(128, Memory);
   Ctx.Datatypes.FilesParsed = Allocate_counted_string_hashtable(512, Memory);
+
+  Ctx.Datatypes.Macros = Allocate_macro_def_hashtable(4096, Memory);
   Ctx.Datatypes.DatatypeHashtable = Allocate_datatype_hashtable(512, Memory);
   return Ctx;
 }

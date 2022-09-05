@@ -272,6 +272,10 @@
       bonsai_function void DebugPrint( parser_stream  S, u32 Depth = 0);
       bonsai_function void DebugPrint( parser_iterator *S, u32 Depth = 0);
       bonsai_function void DebugPrint( parser_iterator  S, u32 Depth = 0);
+      bonsai_function void DebugPrint( parser_linked_list_node *S, u32 Depth = 0);
+      bonsai_function void DebugPrint( parser_linked_list_node  S, u32 Depth = 0);
+      bonsai_function void DebugPrint( parser_hashtable *S, u32 Depth = 0);
+      bonsai_function void DebugPrint( parser_hashtable  S, u32 Depth = 0);
       bonsai_function void DebugPrint( compound_decl_cursor *S, u32 Depth = 0);
       bonsai_function void DebugPrint( compound_decl_cursor  S, u32 Depth = 0);
       bonsai_function void DebugPrint( compound_decl_stream_chunk *S, u32 Depth = 0);
