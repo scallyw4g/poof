@@ -753,17 +753,19 @@ EatUntilExcluding(parser* Parser, c_token_type Close)
   return;
 }
 
-bonsai_function void
+bonsai_function c_token *
 EatUntilIncluding(parser* Parser, c_token_type Close)
 {
+  c_token *Result = 0;
   while (c_token *T = PopTokenRawPointer(Parser))
   {
     if(T->Type == Close)
     {
+      Result = T;
       break;
     }
   }
-  return;
+  return Result;
 }
 
 
@@ -6168,9 +6170,9 @@ ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_aren
   return Result;
 }
 
-#if 0
+#if 1
 bonsai_function b32
-Output(c_token_cursor Code, counted_string Filename, memory_arena* Memory)
+RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Filename, memory_arena* Memory)
 {
   TIMED_FUNCTION();
   b32 Result = False;
@@ -6178,26 +6180,54 @@ Output(c_token_cursor Code, counted_string Filename, memory_arena* Memory)
   native_file TempFile = GetTempFile(&TempFileEntropy, Memory);
   if (TempFile.Handle)
   {
-    Rewind(&Code);
+    Rewind(Parser->Tokens);
+    Assert(Parser->Tokens->At == Parser->Tokens->Start);
+
     b32 FileWritesSucceeded = True;
-    while(Remaining(&Code))
+
+    umm TotalTokens = TotalElements(Parser->Tokens);
+
+    c_token *Start = Parser->Tokens->Start;
+    for (umm TokenIndex = 0; TokenIndex < TotalTokens; ++TokenIndex)
     {
-      if (Code.At->Value.Count)
+      c_token *T = Start + TokenIndex;
+
+      // TODO(Jesse): This should probably work differently..
+      //
+      // Output nothing for the special tokens we insert for #includes
+      if (T->Type == CT_InsertedCode)
       {
-        FileWritesSucceeded &= WriteToFile(&TempFile, Code.At->Value);
+        continue;
+      }
+
+      if (T->Value.Count)
+      {
+        FileWritesSucceeded &= WriteToFile(&TempFile, T->Value);
       }
       else
       {
-        FileWritesSucceeded &= WriteToFile(&TempFile, CS((const char*)&Code.At->Type, 1));
+        FileWritesSucceeded &= WriteToFile(&TempFile, CS((const char*)&T->Type, 1));
       }
 
-      Advance(&Code);
+      // We mutated this token from its original type to signify we should
+      // insert an include here.  At the moment it was always a newline, but
+      // that could change in the future.
+      //
+      if (T->Type == CT_PoofInsertedCode)
+      {
+        Assert(StringsMatch(T->Value, CSz("\n")));
+        FileWritesSucceeded &= WriteToFile(&TempFile, CSz("#include <"));
+        FileWritesSucceeded &= WriteToFile(&TempFile, Concat(OutputPath, T->IncludePath, TranArena) ); // TODO(Jesse, begin_temporary_memory)
+        FileWritesSucceeded &= WriteToFile(&TempFile, CSz(">"));
+        FileWritesSucceeded &= WriteToFile(&TempFile, CSz("\n"));
+      }
     }
+
     FileWritesSucceeded &= CloseFile(&TempFile);
 
     if (FileWritesSucceeded)
     {
-      if (Rename(TempFile, Filename))
+      if (Rename(TempFile.Path, Filename))
       {
         Result = True;
       }
@@ -9850,11 +9880,17 @@ bonsai_function void
 GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo);
 
 bonsai_function void
-FlushOutputToDisk(parse_context *Ctx, counted_string OutputForThisParser, counted_string NewFilename, todo_list_info* TodoInfo, memory_arena* Memory, b32 IsInlineCode = False)
+FlushOutputToDisk( parse_context *Ctx,
+                   counted_string OutputForThisParser,
+                   counted_string NewFilename,
+                   todo_list_info* TodoInfo,
+                   memory_arena* Memory,
+                   b32 IsInlineCode = False)
 {
   TIMED_FUNCTION();
-
   parser *Parser = Ctx->CurrentParser;
+
+/*   Assert(PeekToken(Parser, -1).Type == CTokenType_CloseParen); */
 
   if (Parser->ErrorCode)
   {
@@ -9864,7 +9900,8 @@ FlushOutputToDisk(parse_context *Ctx, counted_string OutputForThisParser, counte
 
   counted_string OutputPath = {};
 
-  EatUntilIncluding(Parser, CTokenType_Newline);
+  c_token *FirstNewlineAfterPoofBlock = EatUntilIncluding(Parser, CTokenType_Newline);
+
   EatNBSP(Parser);
 
   b32 FoundValidInclude = False;
@@ -9878,16 +9915,18 @@ FlushOutputToDisk(parse_context *Ctx, counted_string OutputForThisParser, counte
 
   if (FoundValidInclude == False)
   {
-    ParseError(Parser, CSz("A poof() tag must be followed directly by an include tag on the next line."), T);
+    /* ParseError(Parser, CSz("A poof() tag must be followed directly by an include tag on the next line."), T); */
 
-    // NOTE(Jesse): This path is for inserting the requisite includes when we
-    // re-enable inplace editing
-    /* NotImplemented; */
+    Assert(PeekTokenRaw(Parser).Type == CTokenType_Newline);
+    OutputPath = Concat(Ctx->Args->Outpath, NewFilename, Memory);
+    Assert(FirstNewlineAfterPoofBlock->IncludePath.Start == 0);
+    Assert(FirstNewlineAfterPoofBlock->IncludePath.Count == 0);
 
-    /* Assert(PeekTokenRaw(Parser).Type == CTokenType_Newline); */
-    /* OutputPath = Concat(Ctx->Args->Outpath, NewFilename, Memory); */
+    // NOTE(Jesse): Keep the value intact so we can still print it
+    FirstNewlineAfterPoofBlock->Type = CT_PoofInsertedCode;
+    FirstNewlineAfterPoofBlock->IncludePath = NewFilename;
   }
-  else
+
   {
     Output(OutputForThisParser, OutputPath, Memory);
     parser *OutputParse = ParserForAnsiStream(Ctx, AnsiStream(OutputForThisParser, OutputPath), TokenCursorSource_MetaprogrammingExpansion);
@@ -10175,7 +10214,6 @@ bonsai_function counted_string
 GenerateOutfileNameFor(counted_string Name, counted_string DatatypeName, memory_arena* Memory, counted_string Modifier = {})
 {
   string_builder OutfileBuilder = {};
-  Append(&OutfileBuilder, CSz("/"));
   Append(&OutfileBuilder, Name);
   Append(&OutfileBuilder, CSz("_"));
   Append(&OutfileBuilder, DatatypeName);
@@ -12206,6 +12244,40 @@ PrintHashtable(datatype_hashtable *Table)
   }
 }
 
+
+void
+ScanForMutationsAndOutput(parser *Parser, counted_string OutputPath, memory_arena *Memory)
+{
+  c_token_cursor *Tokens = Parser->Tokens;
+
+  umm TotalTokens = TotalElements(Tokens);
+
+  b32 NeedsToBeOverwritten = false;
+
+  c_token *Start = Tokens->Start;
+  for (umm TokenIndex = 0; TokenIndex < TotalTokens; ++TokenIndex)
+  {
+    c_token *T = Start + TokenIndex;
+
+    // This is how we signal that we've got a `poof` statement without an
+    // include directive following it.  This system should probably be fleshed
+    // out to support more arbitrary output types, but this is fine for now.
+    if (T->Type == CT_PoofInsertedCode)
+    {
+      Assert(T->IncludePath.Start);
+      Assert(T->IncludePath.Count);
+      NeedsToBeOverwritten = true;
+      break;
+    }
+  }
+
+  if (NeedsToBeOverwritten)
+  {
+    RewriteOriginalFile(Parser, OutputPath, Parser->Tokens->Filename, Memory);
+  }
+
+}
+
 s32
 main(s32 ArgCount_, const char** ArgStrings)
 {
@@ -12260,23 +12332,7 @@ main(s32 ArgCount_, const char** ArgStrings)
     umm ParserFilenameHash = Hash(&ParserFilename);
     TempFileEntropy.Seed = ParserFilenameHash;
 
-#if 1
     parser *Parser = PreprocessedParserForFile(&Ctx, ParserFilename, TokenCursorSource_RootFile, 0);
-#else
-    parser *Parser = ParserForFile(&Ctx, ParserFilename, TokenCursorSource_RootFile);
-    if (Parser && Parser->ErrorCode == ParseErrorCode_None)
-    {
-      Ctx.CurrentParser = Parser;
-      if (RunPreprocessor(&Ctx, Parser, Ctx.Memory))
-      {
-      }
-      else
-      {
-        Warn("Error encountered while running preprocessor on file %S", ParserFilename);
-      }
-    }
-#endif
-
 
     MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(0.0);
 
@@ -12298,6 +12354,20 @@ main(s32 ArgCount_, const char** ArgStrings)
 
       MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(0);
       GoGoGadgetMetaprogramming(&Ctx, &TodoInfo);
+
+      auto Table = &Ctx.ParserHashtable;
+      for (u32 BucketIndex = 0; BucketIndex < Table->Size; ++BucketIndex)
+      {
+        auto Bucket = Table->Elements[BucketIndex];
+        while (Bucket)
+        {
+          auto P = Bucket->Element;
+
+          ScanForMutationsAndOutput(Parser, Ctx.Args->Outpath, Memory);
+
+          Bucket = Bucket->Next;
+        }
+      }
 
 #if 0
       if (Parser->Valid)

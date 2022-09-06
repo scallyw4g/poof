@@ -12,10 +12,10 @@
 
 # RunPreemptivePoof=1
 
-# RunPoof=1
+RunPoof=1
 BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
-# POOF_LOG_LEVEL="--log-level LogLevel_Debug"
+POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
 # RunParserTests=1
 # BuildParserTests=1
@@ -24,9 +24,9 @@ BuildPoof=1
 
 # BuildAndRunAllExamples=1
 
-RunIntegrationTests=1
+# RunIntegrationTests=1
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
-INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
+# INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
 # RunExtendedIntegrationTests=1
 
@@ -44,11 +44,11 @@ if [ $# -gt 1 ]; then
   echo "make.sh supports a maximum of 1 argument"
 fi
 
-ROOT="$(pwd)"
+ROOT="."
 SRC="$ROOT/poof"
 BIN="$ROOT/bin"
 BIN_TEST="$BIN/tests"
-META_OUT="$ROOT/poof/generated"
+META_OUT="poof/generated"
 EXTENDED_INTEGRATION_TESTS_SRC="$ROOT/tests/integration_extended"
 
 

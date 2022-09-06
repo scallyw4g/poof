@@ -172,6 +172,7 @@
           case CT_Preprocessor__VA_ARGS__: { Result = CSz("CT_Preprocessor__VA_ARGS__"); } break;
           case CT_Preprocessor_Nuked: { Result = CSz("CT_Preprocessor_Nuked"); } break;
           case CT_InsertedCode: { Result = CSz("CT_InsertedCode"); } break;
+          case CT_PoofInsertedCode: { Result = CSz("CT_PoofInsertedCode"); } break;
 
       }
       return Result;

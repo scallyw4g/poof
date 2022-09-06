@@ -8569,6 +8569,10 @@
           {
             DebugPrint("CT_InsertedCode", Depth);
           } break;
+          case CT_PoofInsertedCode:
+          {
+            DebugPrint("CT_PoofInsertedCode", Depth);
+          } break;
 
       }
     }

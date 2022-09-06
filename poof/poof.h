@@ -258,7 +258,8 @@ enum c_token_type
   CT_Preprocessor__VA_ARGS__,
   CT_Preprocessor_Nuked,
 
-  CT_InsertedCode,
+  CT_InsertedCode,     // This is how macros and includes get inserted
+  CT_PoofInsertedCode, // This hijacks an existing token so poof can insert arbitrary stuff into source files
 };
 poof(generate_string_table(c_token_type))
 #include <poof/generated/generate_string_table_c_token_type.h>
