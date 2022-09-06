@@ -5,6 +5,7 @@ enum foo_enum
   foo = 1,
   bar = 'a',
   baz = (1 upshift_by_31),
+  fing
 };
 
 

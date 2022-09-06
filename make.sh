@@ -10,7 +10,7 @@
 
 # BuildAllBinariesRunAllTests=1
 
-RunPreemptivePoof=1
+# RunPreemptivePoof=1
 
 # RunPoof=1
 BuildPoof=1
@@ -24,11 +24,11 @@ BuildPoof=1
 
 # BuildAndRunAllExamples=1
 
-# RunIntegrationTests=1
+RunIntegrationTests=1
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
-# INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
+INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
-RunExtendedIntegrationTests=1
+# RunExtendedIntegrationTests=1
 
 # OPTIMIZATION_LEVEL="-O2"
 

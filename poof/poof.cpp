@@ -10450,7 +10450,7 @@ GetValueForDatatype(datatype *Data, memory_arena *Memory)
     case type_enum_member:
     {
       enum_member *EM = SafeAccessPtr(enum_member, Data);
-      Result = PrintAstNode(EM->Expr->Value, Memory);
+      Result = PrintAstNode(EM->Expr, Memory);
     } break;
 
 
