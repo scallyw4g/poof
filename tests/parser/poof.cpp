@@ -2060,7 +2060,7 @@ TestPoofErrors(memory_arena *Memory)
     FullRewind(Parser);
     GoGoGadgetMetaprogramming(&Ctx, 0);
 
-    TestThat(Parser->ErrorCode == ParseErrorCode_InvalidName);
+    TestThat(Parser->ErrorCode == ParseErrorCode_UndefinedDatatype);
     TestThat(Parser->WarnCode == ParseWarnCode_None);
   }
 
@@ -2651,12 +2651,13 @@ main(s32 ArgCount, const char** Args)
 
   auto PrevLogLevel = Global_LogLevel;
   Global_LogLevel = LogLevel_Shush;
+  /* Global_LogLevel = LogLevel_Debug; */
   TestParserErrors(Memory);
   Global_LogLevel = PrevLogLevel;
 
   PrevLogLevel = Global_LogLevel;
   Global_LogLevel = LogLevel_Shush;
-  Global_LogLevel = LogLevel_Debug;
+  /* Global_LogLevel = LogLevel_Debug; */
   TestPoofErrors(Memory);
   Global_LogLevel = PrevLogLevel;
 #endif

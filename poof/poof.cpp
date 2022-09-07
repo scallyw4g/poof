@@ -5981,7 +5981,8 @@ ParseDiscriminatedUnion(parser* Parser, program_datatypes* Datatypes, counted_st
     }
     else
     {
-      PoofTypeError( Parser, 
+      PoofTypeError( Parser,
+                     ParseErrorCode_UndefinedDatatype,
                      CSz("Couldn't find definition for custom enum type"),
                      EnumTypeT);
     }
