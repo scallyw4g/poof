@@ -41,6 +41,11 @@ poof(
 // Here we call the meta func declared above, which poof executes and outputs
 // to the include file immediately afterwards.
 //
+// Poof automatically generates and writes the include to your source files if
+// you choose to not write it yourself.  It first generates a name for the file
+// from the function name and type you pass it, then concatenates the value of
+// the (--output-path|-o) arguemnt passed on the command line.
+//
 poof(metaprogram_another_struct(my_struct))
 #include <generated/metaprogram_another_struct_my_struct.h>
 
@@ -56,11 +61,6 @@ int main()
 }
 
 
-// NOTE(Jesse): The includes are normally generated and written to your source
-// files automatically by `poof`.  This functionality is currently broken,
-// however it's on the top of my priority list to fix this feature.  Manually
-// typing those include names is super annoying.
-//
 // NOTE(Jesse): Passing primitives such at:
 //
 // poof(metaprogram_another_struct(int))
