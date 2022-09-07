@@ -54,7 +54,8 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
             case meta_arg_operator_noop:
             {
               PoofTypeError( Scope,
-                             FormatCountedString(TranArena, CSz("Unknown poof operator (%S)"), MetaOperatorToken->Value),
+                             ParseErrorCode_InvalidOperator,
+                             FormatCountedString(TranArena, CSz("(%S) is not a valid poof operator"), MetaOperatorToken->Value),
                              MetaOperatorToken);
             } break;
 
@@ -374,6 +375,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
               else
               {
                 PoofTypeError( Scope,
+                               ParseErrorCode_InvalidArgument,
                                FormatCountedString( TranArena,
                                                     CSz("Called map_members on a datatype that didn't have members (%S)"),
                                                     GetNameForDatatype(&Replace->Data, TranArena)),
@@ -414,6 +416,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                 else
                 {
                   PoofTypeError( Scope,
+                                 ParseErrorCode_InvalidArgument,
                                  FormatCountedString( TranArena,
                                                       CSz("Called map_values on a datatype that wasn't an enum (%S)"),
                                                       GetNameForDatatype(&Replace->Data, Memory)),
@@ -423,6 +426,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
               else
               {
                 PoofTypeError( Scope,
+                               ParseErrorCode_InvalidArgument,
                                FormatCountedString( TranArena,
                                                     CSz("Called map_values on a datatype that wasn't an enum (%S)"),
                                                     GetNameForDatatype(&Replace->Data, Memory)),
@@ -469,6 +473,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
         else
         {
           PoofTypeError( Scope,
+                         ParseErrorCode_InvalidArgument,
                          CSz("Unable to resolve poof function argument."),
                          ArgNameT);
         }

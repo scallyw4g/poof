@@ -117,9 +117,7 @@ bonsai_function void DumpLocalTokens(parser *Parser);
 bonsai_function void PrintTray(char_cursor *Dest, c_token *T, u32 Columns, counted_string Color);
 bonsai_function void PrintTraySimple(c_token *T, b32 Force = False);
 
-
 bonsai_function void PoofTypeError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken);
-bonsai_function void PoofTypeError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken);
 
 bonsai_function void ParseError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken = 0);
 bonsai_function void ParseError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken = 0);
@@ -1597,12 +1595,6 @@ bonsai_function void
 PoofTypeError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken)
 {
   OutputContextMessage(Parser, ErrorCode, CSz("Poof Type Error"), ErrorMessage, ErrorToken);
-}
-
-bonsai_function void
-PoofTypeError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
-{
-  PoofTypeError(Parser, ParseErrorCode_PoofTypeError, ErrorMessage, ErrorToken);
 }
 
 bonsai_function void

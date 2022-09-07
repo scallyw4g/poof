@@ -23,11 +23,16 @@ enum meta_arg_operator
 {
   meta_arg_operator_noop,
 
+  // 'literal' values
   name,
   type,
   value,
+
+  // iterative
   map_values,
   map_members,
+
+  // predicates
   is_enum,
   is_struct,
   is_union,
@@ -410,10 +415,12 @@ enum parse_error_code
 
 
   // Poof errors
+  ParseErrorCode_PoofTypeError,
   ParseErrorCode_DUnionParse,
   ParseErrorCode_UndefinedDatatype,
-  ParseErrorCode_PoofTypeError,
+  ParseErrorCode_InvalidOperator,
   ParseErrorCode_InvalidMetaTransformOp,
+  ParseErrorCode_InvalidArgument,
   ParseErrorCode_InvalidName,
 
 

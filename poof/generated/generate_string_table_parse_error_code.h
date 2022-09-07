@@ -9,10 +9,12 @@
           case ParseErrorCode_StreamEndedUnexpectedly: { Result = CSz("ParseErrorCode_StreamEndedUnexpectedly"); } break;
           case ParseErrorCode_RequireTokenFailed: { Result = CSz("ParseErrorCode_RequireTokenFailed"); } break;
           case ParseErrorCode_InvalidTokenGenerated: { Result = CSz("ParseErrorCode_InvalidTokenGenerated"); } break;
+          case ParseErrorCode_PoofTypeError: { Result = CSz("ParseErrorCode_PoofTypeError"); } break;
           case ParseErrorCode_DUnionParse: { Result = CSz("ParseErrorCode_DUnionParse"); } break;
           case ParseErrorCode_UndefinedDatatype: { Result = CSz("ParseErrorCode_UndefinedDatatype"); } break;
-          case ParseErrorCode_PoofTypeError: { Result = CSz("ParseErrorCode_PoofTypeError"); } break;
+          case ParseErrorCode_InvalidOperator: { Result = CSz("ParseErrorCode_InvalidOperator"); } break;
           case ParseErrorCode_InvalidMetaTransformOp: { Result = CSz("ParseErrorCode_InvalidMetaTransformOp"); } break;
+          case ParseErrorCode_InvalidArgument: { Result = CSz("ParseErrorCode_InvalidArgument"); } break;
           case ParseErrorCode_InvalidName: { Result = CSz("ParseErrorCode_InvalidName"); } break;
           case ParseErrorCode_InputStreamNull: { Result = CSz("ParseErrorCode_InputStreamNull"); } break;
           case ParseErrorCode_InternalCompilerError: { Result = CSz("ParseErrorCode_InternalCompilerError"); } break;

@@ -8708,6 +8708,10 @@
           {
             DebugPrint("ParseErrorCode_InvalidTokenGenerated", Depth);
           } break;
+          case ParseErrorCode_PoofTypeError:
+          {
+            DebugPrint("ParseErrorCode_PoofTypeError", Depth);
+          } break;
           case ParseErrorCode_DUnionParse:
           {
             DebugPrint("ParseErrorCode_DUnionParse", Depth);
@@ -8716,13 +8720,17 @@
           {
             DebugPrint("ParseErrorCode_UndefinedDatatype", Depth);
           } break;
-          case ParseErrorCode_PoofTypeError:
+          case ParseErrorCode_InvalidOperator:
           {
-            DebugPrint("ParseErrorCode_PoofTypeError", Depth);
+            DebugPrint("ParseErrorCode_InvalidOperator", Depth);
           } break;
           case ParseErrorCode_InvalidMetaTransformOp:
           {
             DebugPrint("ParseErrorCode_InvalidMetaTransformOp", Depth);
+          } break;
+          case ParseErrorCode_InvalidArgument:
+          {
+            DebugPrint("ParseErrorCode_InvalidArgument", Depth);
           } break;
           case ParseErrorCode_InvalidName:
           {
