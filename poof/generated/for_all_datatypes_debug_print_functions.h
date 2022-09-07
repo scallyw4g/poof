@@ -8714,6 +8714,14 @@
           {
             DebugPrint("ParseErrorCode_PoofTypeError", Depth);
           } break;
+          case ParseErrorCode_InvalidMetaTransformOp:
+          {
+            DebugPrint("ParseErrorCode_InvalidMetaTransformOp", Depth);
+          } break;
+          case ParseErrorCode_InvalidName:
+          {
+            DebugPrint("ParseErrorCode_InvalidName", Depth);
+          } break;
           case ParseErrorCode_InputStreamNull:
           {
             DebugPrint("ParseErrorCode_InputStreamNull", Depth);

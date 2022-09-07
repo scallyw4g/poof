@@ -1261,10 +1261,10 @@ PrintContext(c_token_cursor_up *Up)
 bonsai_function void
 OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string MessageContext, counted_string Message, c_token* ErrorToken)
 {
-  c_token *OriginalAtToken = PeekTokenRawPointer(Parser);
-
   parse_error_code PrevErrorCode = Parser->ErrorCode;
   Parser->ErrorCode = ParseErrorCode_None;
+
+  c_token *OriginalAtToken = PeekTokenRawPointer(Parser);
 
   if (Parser->Tokens->Up.Tokens)
   {
@@ -1284,7 +1284,7 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
   ParseErrorCursor->At = Global_ParseErrorBuffer;
   ParseErrorCursor->End = Global_ParseErrorBuffer+Global_ParseErrorBufferSize;
 
-  u32 LinesOfContext = 5;
+  u32 LinesOfContext = 4;
 
   counted_string ParserName = {};
 
@@ -1305,6 +1305,13 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
   {
     u32 ErrorLineNumber = ErrorToken->LineNumber;
     u32 MaxTrayWidth = 1 + GetColumnsFor(ErrorLineNumber + LinesOfContext);
+
+    // Indent info messages a bunch so we can visually tell the difference
+    if (ErrorCode == ParseErrorCode_None)
+    {
+      MaxTrayWidth += 4;
+    }
+
     ParserName = ErrorToken->Filename;
 
     Assert(PeekTokenRawPointer(Parser) == ErrorToken);
@@ -1514,13 +1521,13 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
       LogDirect(CSz("\n"));
     }
 
-    CopyToDest(ParseErrorCursor, '\n');
-    for (u32 DashIndex = 0;
-        DashIndex < LongestLine;
-        ++DashIndex)
-    {
-      CopyToDest(ParseErrorCursor, '-');
-    }
+    /* CopyToDest(ParseErrorCursor, '\n'); */
+    /* for (u32 DashIndex = 0; */
+    /*     DashIndex < LongestLine; */
+    /*     ++DashIndex) */
+    /* { */
+    /*   CopyToDest(ParseErrorCursor, '-'); */
+    /* } */
 
     CopyToDest(ParseErrorCursor, '\n');
 
@@ -1562,14 +1569,14 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
 bonsai_function void
 ParseInfoMessage(parser* Parser, counted_string Message, c_token* T)
 {
-  OutputContextMessage(Parser, Parser->ErrorCode, CSz(""), Message, T);
+  OutputContextMessage(Parser, ParseErrorCode_None, CSz(""), Message, T);
 }
 
 bonsai_function void
 ParseWarn(parser* Parser, parse_warn_code WarnCode, counted_string ErrorMessage, c_token* ErrorToken)
 {
   Parser->WarnCode = WarnCode;
-  OutputContextMessage(Parser, Parser->ErrorCode, CSz("Poof Warning"), ErrorMessage, ErrorToken);
+  OutputContextMessage(Parser, ParseErrorCode_None, CSz("Poof Warning"), ErrorMessage, ErrorToken);
 }
 
 bonsai_function void
@@ -1585,9 +1592,15 @@ ParseError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
 }
 
 bonsai_function void
+PoofTypeError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken)
+{
+  OutputContextMessage(Parser, ErrorCode, CSz("Poof Type Error"), ErrorMessage, ErrorToken);
+}
+
+bonsai_function void
 PoofTypeError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
 {
-  OutputContextMessage(Parser, ParseErrorCode_PoofTypeError, CSz("Poof Type Error"), ErrorMessage, ErrorToken);
+  PoofTypeError(Parser, ParseErrorCode_PoofTypeError, ErrorMessage, ErrorToken);
 }
 
 bonsai_function void
@@ -9942,7 +9955,7 @@ FlushOutputToDisk( parse_context *Ctx,
 
   if (Parser->ErrorCode)
   {
-    Error(CSz("Parse Error Encountered, not flushing to disk."));
+    Warn(CSz("Parse Error Encountered, not flushing (%S) to disk."), Parser->Tokens->Filename);
     return;
   }
 
@@ -9957,7 +9970,7 @@ FlushOutputToDisk( parse_context *Ctx,
   if (T && T->Type == CT_PreprocessorInclude)
   {
     counted_string IncludePath = RequireTokenRaw(Parser, CT_PreprocessorInclude).IncludePath;
-    OutputPath = Concat(Ctx->Args->Outpath, Basename(IncludePath), Memory);
+    OutputPath = Concat(Ctx->Args.Outpath, Basename(IncludePath), Memory);
     FoundValidInclude = True;
   }
 
@@ -9966,7 +9979,7 @@ FlushOutputToDisk( parse_context *Ctx,
     /* ParseError(Parser, CSz("A poof() tag must be followed directly by an include tag on the next line."), T); */
 
     Assert(PeekTokenRaw(Parser).Type == CTokenType_Newline);
-    OutputPath = Concat(Ctx->Args->Outpath, NewFilename, Memory);
+    OutputPath = Concat(Ctx->Args.Outpath, NewFilename, Memory);
     Assert(FirstNewlineAfterPoofBlock->IncludePath.Start == 0);
     Assert(FirstNewlineAfterPoofBlock->IncludePath.Count == 0);
 
@@ -10073,6 +10086,11 @@ StreamContains(meta_func_stream* Stream, counted_string Name)
       Result = Current;
       break;
     }
+  }
+
+  if (Result)
+  {
+    Result->Body.ErrorCode = ParseErrorCode_None;
   }
 
   return Result;
@@ -10444,14 +10462,18 @@ ParseTransformations(parser* Scope)
 
   while (OptionalToken(Scope, CTokenType_Dot))
   {
-    meta_transform_op NextOp = MetaTransformOp(RequireToken(Scope, CTokenType_Identifier).Value);
+    c_token *NextOpT = PopTokenPointer(Scope);
+    meta_transform_op NextOp = MetaTransformOp(NextOpT->Value);
     if (NextOp != meta_transform_op_noop)
     {
       Result = (meta_transform_op)(Result | NextOp);
     }
     else
     {
-      Error("Parsing meta_transform_ops.");
+      PoofTypeError(Scope,
+                    ParseErrorCode_InvalidMetaTransformOp,
+                    CSz("Unknown transformer encountered"),
+                    NextOpT);
     }
   }
 
@@ -11060,514 +11082,7 @@ ResolveToBaseType(parse_context *Ctx, datatype *Data)
 
 }
 
-// TODO(Jesse id: 222, tags: immediate, parsing, metaprogramming) : Re-add [[nodiscard]] here
-bonsai_function counted_string
-Execute(parser Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx, memory_arena* Memory)
-{
-  TIMED_FUNCTION();
-
-  program_datatypes* Datatypes = &Ctx->Datatypes;
-  meta_func_stream* FunctionDefs = &Ctx->MetaFunctions;
-
-  Assert(Scope.Tokens->At == Scope.Tokens->Start);
-
-  string_builder OutputBuilder = {};
-  while ( c_token *BodyToken = PopTokenRawPointer(&Scope) )
-  {
-    if ( BodyToken->Type == CTokenType_StringLiteral )
-    {
-      counted_string TempStr = StripQuotes(BodyToken->Value);
-      parser *StringParse = ParserForAnsiStream(Ctx, AnsiStream(TempStr), TokenCursorSource_MetaprogrammingExpansion);
-      counted_string Code = Execute(*StringParse, ReplacePatterns, Ctx, Memory);
-
-      Append(&OutputBuilder, CSz("\""));
-      Append(&OutputBuilder, EscapeDoubleQuotes(Code, OutputBuilder.Memory));
-      Append(&OutputBuilder, CSz("\""));
-    }
-    else if ( BodyToken->Type == CTokenType_OpenParen ||
-              BodyToken->Type == CTokenType_Identifier )
-    {
-      b32 ImpetusWasOpenParen = BodyToken->Type == CTokenType_OpenParen;
-      b32 ImpetusWasIdentifier = BodyToken->Type == CTokenType_Identifier;
-
-      b32 ExecutedChildFunc = False;
-      ITERATE_OVER_AS(Replace, ReplacePatterns)
-      {
-        meta_func_arg* Replace = GET_ELEMENT(ReplaceIter);
-        if ( (ImpetusWasIdentifier && StringsMatch(Replace->Match, BodyToken->Value) ) ||
-             (ImpetusWasOpenParen  && OptionalTokenRaw(&Scope, CToken(Replace->Match)))
-           )
-        {
-          ExecutedChildFunc = True;
-          RequireToken(&Scope, CTokenType_Dot);
-
-          c_token *MetaOperatorToken = RequireTokenPointer(&Scope, CTokenType_Identifier);
-
-          meta_arg_operator Operator = MetaArgOperator( MetaOperatorToken->Value );
-          switch (Operator)
-          {
-            case meta_arg_operator_noop:
-            {
-              PoofTypeError( &Scope,
-                             FormatCountedString(TranArena, CSz("Unknown poof operator (%S)"), MetaOperatorToken->Value),
-                             MetaOperatorToken);
-            } break;
-
-            case is_defined:
-            {
-              RequireToken(&Scope, CTokenType_Question);
-              parser TrueScope = GetBodyTextForNextScope(&Scope, Memory);
-              parser FalseScope = {};
-              if (PeekToken(&Scope).Type == CTokenType_OpenBrace)
-              {
-                FalseScope = GetBodyTextForNextScope(&Scope, Memory);
-              }
-
-              auto S1 = GetTypeTypeForDatatype(&Replace->Data, TranArena);
-              auto S2 = GetTypeNameForDatatype(&Replace->Data, TranArena);
-
-              b32 DoTrueBranch = False;
-              switch(Replace->Data.Type)
-              {
-                case type_datatype_noop:
-                {
-                  DoTrueBranch = False;
-                } break;
-
-                case type_declaration:
-                case type_enum_member:
-                case type_primitive_def:
-                {
-                  datatype ResolvedT = ResolveToBaseType(Ctx, &Replace->Data);
-                  DoTrueBranch = (ResolvedT.Type != type_datatype_noop);
-                } break;
-
-                case type_type_def:
-                {
-                  InvalidCodePath();
-                } break;
-              }
-
-              if (DoTrueBranch)
-              {
-                counted_string Code = Execute(TrueScope, ReplacePatterns, Ctx, Memory);
-                Append(&OutputBuilder, Code);
-              }
-              else
-              {
-                if (FalseScope.Tokens)
-                {
-                  counted_string Code = Execute(FalseScope, ReplacePatterns, Ctx, Memory);
-                  Append(&OutputBuilder, Code);
-                }
-              }
-
-            } break;
-
-            case is_primitive:
-            {
-              RequireToken(&Scope, CTokenType_Question);
-
-              datatype Dt = ResolveToBaseType(Ctx, &Replace->Data);
-              b32 DoTrueBranch = (Dt.Type == type_primitive_def);
-
-              counted_string DTName = GetNameForDatatype(&Dt, TranArena);
-
-              // @counted_string_primitive_hack
-              if (StringsMatch(DTName, CSz("counted_string")))
-              {
-                DoTrueBranch = True;
-              }
-              DoTrueFalse(Ctx, &Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
-            } break;
-
-            case is_compound:
-            {
-              RequireToken(&Scope, CTokenType_Question);
-              compound_decl *CD = DatatypeIsCompoundDecl(Ctx, &Scope, &Replace->Data, MetaOperatorToken);
-
-              b32 DoTrueBranch = (CD != 0);
-
-              // @counted_string_primitive_hack
-              if (CD)
-              {
-                datatype TmpDt = Datatype(CD);
-                counted_string DTName = GetNameForDatatype(&TmpDt, TranArena);
-                if (StringsMatch(DTName, CSz("counted_string")))
-                {
-                  DoTrueBranch = False;
-                }
-              }
-
-              DoTrueFalse(Ctx, &Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
-            } break;
-
-            case is_struct:
-            case is_union:
-            {
-              RequireToken(&Scope, CTokenType_Question);
-              compound_decl *D = DatatypeIsCompoundDecl(Ctx, &Scope, &Replace->Data, MetaOperatorToken);
-
-              b32 DoTrueBranch = False;
-              if (D)
-              {
-                b32 Negate = (Operator == is_struct);
-                DoTrueBranch = (D->IsUnion ^ Negate);
-              }
-
-              DoTrueFalse( Ctx, &Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
-            } break;
-
-            case is_enum:
-            {
-              RequireToken(&Scope, CTokenType_Question);
-              b32 DoTrueBranch = False;
-              switch (Replace->Data.Type)
-              {
-                case type_datatype_noop:
-                {
-                  InvalidCodePath();
-                } break;
-
-                case type_type_def:
-                {
-                  NotImplemented;
-                } break;
-
-                case type_primitive_def:
-                {
-                } break;
-
-                case type_enum_member:
-                {
-                  DoTrueBranch = True;
-                } break;
-
-                case type_declaration:
-                {
-                  declaration *Decl = SafeAccess(declaration, &Replace->Data);
-                  switch (Replace->Data.declaration.Type)
-                  {
-                    case type_declaration_noop:
-                    case type_compound_decl:
-                    case type_function_decl:
-                    {
-                      NotImplemented;
-                    } break;
-
-                    case type_enum_decl:
-                    {
-                      DoTrueBranch = True;
-                    } break;
-
-                    case type_variable_decl:
-                    {
-                      variable_decl *VDecl = SafeAccess(variable_decl, Decl);
-                      enum_decl *E = GetEnumByType(&Datatypes->Enums, VDecl->Type.DatatypeToken->Value);
-                      DoTrueBranch = (E != 0);
-                    } break;
-                  }
-                } break;
-              }
-
-              DoTrueFalse( Ctx, &Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
-            } break;
-
-            case is_function:
-            {
-              RequireToken(&Scope, CTokenType_Question);
-              function_decl *D = DatatypeIsFunctionDecl(Ctx, &Scope, &Replace->Data, MetaOperatorToken);
-
-              if (D)
-              {
-                datatype Base = ResolveToBaseType(Ctx, &Replace->Data);
-
-                /* Info("(%S) (%S) (%S)", */
-                /*     GetTypeTypeForDatatype(&Replace->Data, Memory), */
-                /*     GetNameForDatatype(&Replace->Data, TranArena), */
-                /*     GetTypeNameForDatatype(&Replace->Data, Memory)); */
-
-                /* Info("(%S) (%S) (%S)", */
-                /*     GetTypeTypeForDatatype(&Base, Memory), */
-                /*     GetNameForDatatype(&Base, TranArena), */
-                /*     GetTypeNameForDatatype(&Base, Memory)); */
-
-              }
-
-
-              b32 DoTrueBranch = (D != 0);
-              DoTrueFalse( Ctx, &Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
-            } break;
-
-            case value:
-            {
-              counted_string Value = GetValueForDatatype(&Replace->Data, Memory);
-              Append(&OutputBuilder, Value);
-            } break;
-
-            case type:
-            {
-              counted_string TypeName = GetTypeNameForDatatype(&Replace->Data, Memory);
-              meta_transform_op Transformations = ParseTransformations(&Scope);
-              counted_string TransformedName = ApplyTransformations(Transformations, TypeName, Memory);
-              Append(&OutputBuilder, TransformedName);
-            } break;
-
-            case name:
-            {
-              counted_string Name = GetNameForDatatype(&Replace->Data, Memory);
-              if (OptionalToken(&Scope, CTokenType_Question))
-              {
-                b32 DoTrueBranch = StringsMatch(Name, CSz("(anonymous)")) == False;
-                DoTrueFalse( Ctx, &Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
-              }
-              else
-              {
-                meta_transform_op Transformations = ParseTransformations(&Scope);
-                counted_string TransformedName = ApplyTransformations(Transformations, Name, Memory);
-                Append(&OutputBuilder, TransformedName);
-              }
-
-            } break;
-
-            case map_members:
-            {
-              RequireToken(&Scope, CTokenType_OpenParen);
-              counted_string MatchPattern  = RequireToken(&Scope, CTokenType_Identifier).Value;
-              RequireToken(&Scope, CTokenType_CloseParen);
-
-              counted_string ContainingConstraint = {};
-              counted_string ChildName = {};
-              if ( OptionalToken(&Scope, CTokenType_Dot) )
-              {
-                RequireToken(&Scope, CToken(CSz("containing")));
-                RequireToken(&Scope, CTokenType_OpenParen);
-                ContainingConstraint = RequireToken(&Scope, CTokenType_Identifier).Value;
-
-                if ( OptionalToken(&Scope, CToken(CSz("as"))) )
-                {
-                  ChildName = RequireToken(&Scope, CTokenType_Identifier).Value;
-                }
-
-                RequireToken(&Scope, CTokenType_CloseParen);
-              }
-
-              parser MapMemberScope = GetBodyTextForNextScope(&Scope, Memory);
-              declaration_stream *Members = GetMembersFor(&Replace->Data);
-
-              if (Members)
-              {
-                ITERATE_OVER_AS(Member, Members)
-                {
-                  declaration* Member = GET_ELEMENT(MemberIter);
-
-                  switch (Member->Type)
-                  {
-                    case type_declaration_noop:
-                    {
-                      InvalidCodePath();
-                    } break;
-
-                    case type_enum_decl:
-                    case type_function_decl:
-                    {
-                      // What do we do for functions and enum declaratons ..?  Maybe the same thing as compound_decl?
-                    } break;
-
-                    case type_variable_decl:
-                    {
-                      b32 ConstraintPassed = False;
-                      b32 HaveConstraint = ContainingConstraint.Count > 0;
-
-                      if (HaveConstraint)
-                      {
-                        auto Var = SafeAccess(variable_decl, Member);
-                        Assert(Var->Type.DatatypeToken);
-                        auto DT = GetDatatypeByName(Ctx, Var->Type.DatatypeToken->Value);
-                        Assert(DT.Type);
-                        auto VarMembers = GetMembersFor(&DT);
-
-                        if (VarMembers)
-                        {
-                          ITERATE_OVER_AS(VarMember, VarMembers)
-                          {
-                            declaration* VarMember = GET_ELEMENT(VarMemberIter);
-                            counted_string MemberName = GetTypeNameForStructMember(Ctx, VarMember, Memory);
-                            if (StringsMatch(MemberName, ContainingConstraint))
-                            {
-                              ConstraintPassed = True;
-                            }
-                          }
-                        }
-                      }
-
-                      if (HaveConstraint == False           ||
-                         (HaveConstraint && ConstraintPassed) )
-                      {
-                        meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
-                        Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)), Memory);
-                        Rewind(MapMemberScope.Tokens);
-                        counted_string StructFieldOutput = Execute(MapMemberScope, &NewArgs, Ctx, Memory);
-                        Append(&OutputBuilder, StructFieldOutput);
-                      }
-
-                    } break;
-
-                    case type_compound_decl:
-                    {
-                      meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
-                      Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)), Memory);
-                      Rewind(MapMemberScope.Tokens);
-                      counted_string StructFieldOutput = Execute(MapMemberScope, &NewArgs, Ctx, Memory);
-                      Append(&OutputBuilder, StructFieldOutput);
-                    } break;
-                  }
-
-                  continue;
-                }
-              }
-              else
-              {
-                PoofTypeError( &Scope,
-                               FormatCountedString( TranArena,
-                                                    CSz("Called map_members on a datatype that didn't have members (%S)"),
-                                                    GetNameForDatatype(&Replace->Data, TranArena)),
-                               MetaOperatorToken);
-              }
-
-            } break;
-
-            case map_values:
-            {
-              RequireToken(&Scope, CTokenType_OpenParen);
-              c_token *EnumValueMatch  = RequireTokenPointer(&Scope, CTokenType_Identifier);
-              RequireToken(&Scope, CTokenType_CloseParen);
-              parser NextScope = GetBodyTextForNextScope(&Scope, Memory);
-
-              if (Replace->Data.Type == type_declaration)
-              {
-                declaration *D = SafeAccess(declaration, &Replace->Data);
-                if (D->Type == type_enum_decl)
-                {
-                  ITERATE_OVER(&D->enum_decl.Members)
-                  {
-                    enum_member* EnumMember = GET_ELEMENT(Iter);
-                    meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
-                    Push(&NewArgs, ReplacementPattern(EnumValueMatch->Value, Datatype(EnumMember)), Memory);
-                    Rewind(NextScope.Tokens);
-                    counted_string EnumFieldOutput = Execute(NextScope, &NewArgs, Ctx, Memory);
-                    Append(&OutputBuilder, EnumFieldOutput);
-                    continue;
-                  }
-                }
-              }
-              else
-              {
-                PoofTypeError( &Scope,
-                               FormatCountedString( TranArena,
-                                                    CSz("Called map_values on a datatype that wasn't an enum (%S)"),
-                                                    GetNameForDatatype(&Replace->Data, Memory)),
-                               MetaOperatorToken);
-              }
-
-            } break;
-          }
-
-          if (ImpetusWasOpenParen)
-          {
-            RequireToken(&Scope, CTokenType_CloseParen);
-          }
-        }
-      }
-
-      meta_func* NestedFunc = StreamContains( FunctionDefs, PeekToken(&Scope).Value );
-      if (NestedFunc)
-      {
-        RequireToken(&Scope, CToken(NestedFunc->Name));
-
-        RequireToken(&Scope, CTokenType_OpenParen);
-
-        counted_string ArgName = RequireToken(&Scope, CTokenType_Identifier).Value;
-        meta_func_arg* Arg = StreamContains(ReplacePatterns, ArgName);
-
-        if (Arg)
-        {
-          RequireToken(&Scope, CTokenType_CloseParen);
-          RequireToken(&Scope, CTokenType_CloseParen);
-
-          meta_func_arg_stream NewArgs = {};
-          Push(&NewArgs, ReplacementPattern(NestedFunc->ArgName, Arg->Data), Memory);
-          counted_string NestedCode = Execute(NestedFunc, &NewArgs, Ctx, Memory);
-          Append(&OutputBuilder, NestedCode);
-        }
-        else
-        {
-          ParseError(&Scope, CSz("Unable to resolve bonsai_function argument."));
-        }
-
-      }
-      else if (ExecutedChildFunc)
-      {
-      }
-      else
-      {
-        Append(&OutputBuilder, BodyToken->Value);
-      }
-    }
-    else
-    {
-      Append(&OutputBuilder, BodyToken->Value);
-    }
-
-    continue;
-  }
-
-  counted_string Result = Finalize(&OutputBuilder, Memory);
-  return Result;
-}
-
-link_internal void
-DoTrueFalse( parse_context *Ctx,
-             parser *Scope,
-             meta_func_arg_stream* ReplacePatterns,
-             b32 DoTrueBranch,
-             string_builder *OutputBuilder,
-             memory_arena *Memory)
-{
-  parser TrueScope = GetBodyTextForNextScope(Scope, Memory);
-  parser FalseScope = {};
-
-  if (PeekToken(Scope).Type == CTokenType_OpenBrace)
-  {
-    FalseScope = GetBodyTextForNextScope(Scope, Memory);
-  }
-
-  if (DoTrueBranch)
-  {
-    counted_string Code = Execute(TrueScope, ReplacePatterns, Ctx, Memory);
-    Append(OutputBuilder, Code);
-  }
-  else
-  {
-    if (FalseScope.Tokens)
-    {
-      counted_string Code = Execute(FalseScope, ReplacePatterns, Ctx, Memory);
-      Append(OutputBuilder, Code);
-    }
-  }
-}
-
-bonsai_function counted_string
-Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory)
-{
-  Assert(Func->Body.Tokens->At == Func->Body.Tokens->Start);
-
-  counted_string Result = Execute(Func->Body, Args, Ctx, Memory);
-
-  Assert(Func->Body.Tokens->At == Func->Body.Tokens->End);
-  Rewind(Func->Body.Tokens);
-  return Result;
-}
+#include <poof/execute.h>
 
 bonsai_function void
 ConcatStreams(counted_string_stream* S1, counted_string_stream* S2, memory_arena* Memory)
@@ -11751,6 +11266,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
   tagged_counted_string_stream_stream* NameLists = &TodoInfo->NameLists;
 
   parser *Parser = Ctx->CurrentParser;
+  Assert(IsAtBeginning(Parser));
   while (c_token *T = PeekTokenPointer(Parser))
   {
     switch( T->Type )
@@ -11867,8 +11383,8 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
           break;
         }
 
-        counted_string DirectiveString = RequireToken(Parser, CTokenType_Identifier).Value;
-        metaprogramming_directive Directive = MetaprogrammingDirective(DirectiveString);
+        c_token *DirectiveT = RequireTokenPointer(Parser, CTokenType_Identifier);
+        metaprogramming_directive Directive = MetaprogrammingDirective(DirectiveT->Value);
         switch (Directive)
         {
           case polymorphic_func:
@@ -11879,18 +11395,18 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
           case func:
           {
-            if (OptionalToken(Parser, CTokenType_OpenParen))
+            if (OptionalToken(Parser, CTokenType_OpenParen)) // Anonymous function
             {
-              c_token *ArgTypeToken = PeekTokenPointer(Parser);
+              c_token *ArgTypeT = RequireTokenPointer(Parser, CTokenType_Identifier);
 
-              counted_string ArgType = RequireToken(Parser, CTokenType_Identifier).Value;
+              counted_string ArgType = ArgTypeT->Value;
               counted_string ArgName = RequireToken(Parser, CTokenType_Identifier).Value;
               RequireToken(Parser, CTokenType_CloseParen);
 
               parser Body = GetBodyTextForNextScope(Parser, Memory);
 
               meta_func Func = {
-                .Name = CSz("anonymous_function"),
+                .Name = CSz("anonymous"),
                 .ArgName = ArgName,
                 .Body = Body,
               };
@@ -11902,25 +11418,30 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
                 meta_func_arg_stream Args = {};
                 Push(&Args, ReplacementPattern(ArgName, Arg), Memory);
                 counted_string Code = Execute(&Func, &Args, Ctx, Memory);
-
                 RequireToken(Parser, CTokenType_CloseParen);
+
                 while(OptionalToken(Parser, CTokenType_Semicolon));
-                if (Code.Count)
+
+                if (Func.Body.ErrorCode)
+                {
+                  Parser->ErrorCode = Func.Body.ErrorCode;
+                  ParseInfoMessage( Parser,
+                                    FormatCountedString(TranArena,
+                                                        CSz("Unable to generate code for (func %S)"), Func.Name),
+                                    DirectiveT);
+                }
+                else
                 {
                   counted_string OutfileName = GenerateOutfileNameFor(Func.Name, ArgType, Memory, GetRandomString(8, Hash(&Code), Memory));
                   FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory, True);
                 }
-                else
-                {
-                  Warn("Unable to generate code for meta_func %S", Func.Name);
-                }
               }
               else
               {
-                ParseError(Parser,
-                    ParseErrorCode_UndefinedDatatype,
-                    FormatCountedString(TranArena, CSz("Unable to find definition for datatype (%S)"), ArgTypeToken->Value),
-                    ArgTypeToken);
+                PoofTypeError( Parser,
+                               ParseErrorCode_UndefinedDatatype,
+                               FormatCountedString(TranArena, CSz("Unable to find definition for datatype (%S)"), ArgTypeT->Value),
+                               ArgTypeT);
               }
             }
             else
@@ -12050,7 +11571,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
           default:
           {
-            meta_func* Func = StreamContains(FunctionDefs, DirectiveString);
+            meta_func* Func = StreamContains(FunctionDefs, DirectiveT->Value);
             if (Func)
             {
               RequireToken(Parser, CTokenType_OpenParen);
@@ -12058,26 +11579,34 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               RequireToken(Parser, CTokenType_CloseParen);
               RequireToken(Parser, CTokenType_CloseParen);
 
-              /* Info("Calling bonsai_function : %S(%S)", Func->Name, DatatypeName); */
               datatype Arg = GetDatatypeByName(&Ctx->Datatypes, DatatypeName);
               meta_func_arg_stream Args = {};
               Push(&Args, ReplacementPattern(Func->ArgName, Arg), Memory);
               counted_string Code = Execute(Func, &Args, Ctx, Memory);
               while(OptionalToken(Parser, CTokenType_Semicolon));
 
-              if (Code.Count)
+              if (Func->Body.ErrorCode)
+              {
+                Parser->ErrorCode = Func->Body.ErrorCode;
+                ParseInfoMessage( Parser,
+                                  FormatCountedString(TranArena,
+                                                      CSz("Unable to generate code for (func %S)"), Func->Name),
+                                  DirectiveT);
+              }
+              else
               {
                 counted_string OutfileName = GenerateOutfileNameFor(Func->Name, DatatypeName, Memory);
                 FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
               }
-              else
-              {
-                Warn("Unable to generate code for meta_func %S", Func->Name);
-              }
             }
             else
             {
-              ParseError(Parser, FormatCountedString(TranArena, CSz("Couldn't resolve %S to a metaprogramming directive or bonsai_function name"), DirectiveString));
+              PoofTypeError( Parser,
+                             ParseErrorCode_InvalidName,
+                             FormatCountedString( TranArena,
+                                                  CSz("(%S) is not a poof keyword or function name"),
+                                                  DirectiveT->Value ),
+                             DirectiveT);
             }
           }
 
@@ -12340,8 +11869,7 @@ main(s32 ArgCount_, const char** ArgStrings)
 
   SetupStdout(ArgCount, ArgStrings);
 
-  arguments Args = ParseArgs(ArgStrings, ArgCount, &Ctx, Memory);
-  Ctx.Args = &Args;
+  Ctx.Args = ParseArgs(ArgStrings, ArgCount, &Ctx, Memory);
 
   if (Args.HelpTextPrinted)
   {

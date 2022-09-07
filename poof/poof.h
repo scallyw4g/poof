@@ -413,6 +413,8 @@ enum parse_error_code
   ParseErrorCode_DUnionParse,
   ParseErrorCode_UndefinedDatatype,
   ParseErrorCode_PoofTypeError,
+  ParseErrorCode_InvalidMetaTransformOp,
+  ParseErrorCode_InvalidName,
 
 
   // General errors
@@ -1510,7 +1512,7 @@ struct parse_context
   meta_func_stream       MetaFunctions;
   memory_arena          *Memory;
 
-  arguments *Args;
+  arguments Args;
 };
 
 enum erase_token_mode
