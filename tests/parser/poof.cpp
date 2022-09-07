@@ -2030,6 +2030,41 @@ TestPoofErrors(memory_arena *Memory)
     TestThat(Parser->WarnCode == ParseWarnCode_None);
   }
 
+  {
+    parse_context Ctx = AllocateParseContext(Memory);
+    counted_string ParserFilename = CSz(POOF_FIXTURES_PATH "/errors/error3.cpp");
+    parser *Parser = PreprocessedParserForFile(&Ctx, ParserFilename, TokenCursorSource_RootFile, 0);
+    Ctx.CurrentParser = Parser;
+    ParseDatatypes(&Ctx, Parser);
+
+    TestThat(Parser->ErrorCode == ParseErrorCode_None);
+    TestThat(Parser->WarnCode == ParseWarnCode_None);
+
+    FullRewind(Parser);
+    GoGoGadgetMetaprogramming(&Ctx, 0);
+
+    TestThat(Parser->ErrorCode == ParseErrorCode_InvalidName);
+    TestThat(Parser->WarnCode == ParseWarnCode_None);
+  }
+
+  {
+    parse_context Ctx = AllocateParseContext(Memory);
+    counted_string ParserFilename = CSz(POOF_FIXTURES_PATH "/errors/error4.cpp");
+    parser *Parser = PreprocessedParserForFile(&Ctx, ParserFilename, TokenCursorSource_RootFile, 0);
+    Ctx.CurrentParser = Parser;
+    ParseDatatypes(&Ctx, Parser);
+
+    TestThat(Parser->ErrorCode == ParseErrorCode_None);
+    TestThat(Parser->WarnCode == ParseWarnCode_None);
+
+    FullRewind(Parser);
+    GoGoGadgetMetaprogramming(&Ctx, 0);
+
+    TestThat(Parser->ErrorCode == ParseErrorCode_InvalidName);
+    TestThat(Parser->WarnCode == ParseWarnCode_None);
+  }
+
+
 }
 
 

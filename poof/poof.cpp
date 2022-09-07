@@ -1288,20 +1288,22 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
 
   counted_string ParserName = {};
 
+  b32 DoErrorOutput = False;
   if (AdvanceTo(Parser, ErrorToken))
   {
+    DoErrorOutput = True;
   }
   else if (RewindTo(Parser, ErrorToken))
   {
+    DoErrorOutput = True;
   }
   else
   {
-    Error("Couldn't find specified token in parser chain.");
-    Parser = 0;
+    Warn("Couldn't find specified token in parser chain.");
   }
 
 
-  if (Parser)
+  if (DoErrorOutput)
   {
     u32 ErrorLineNumber = ErrorToken->LineNumber;
     u32 MaxTrayWidth = 1 + GetColumnsFor(ErrorLineNumber + LinesOfContext);
@@ -2388,7 +2390,7 @@ RequireToken(parser* Parser, c_token *ExpectedToken)
   }
   else
   {
-    Error("Internal error : RequireToken was passed ptr(0)");
+    Error("Internal Compiler Error : RequireToken was passed ptr(0)");
   }
   return Result;
 }
@@ -5140,7 +5142,7 @@ TokenizeAnsiStream(ansi_stream Code, memory_arena* Memory, b32 IgnoreQuotes, par
   }
   else
   {
-    Warn("Input stream to TokenizeAnsiStreamInput was null");
+    Warn("Input to TokenizeAnsiStreamInput was of length 0");
   }
 
   umm CurrentSize = TotalSize(Tokens);
@@ -5569,7 +5571,7 @@ ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
   counted_string PartialPath = T->IncludePath;
   if (PartialPath.Count == 0)
   {
-    ParseError(Parser, CSz("Include path must be specified."), T);
+    ParseError(Parser, CSz("Include path must be specified"), T);
     return Result;
   }
 
@@ -5577,7 +5579,7 @@ ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
   {
     if (SkipFirst != False)
     {
-      Error("Relative includes not supported with 'include_next'.");
+      ParseError(Parser, CSz("Relative includes not supported with 'include_next'"), T);
       return Result;
     }
 
@@ -5964,7 +5966,8 @@ ParseDiscriminatedUnion(parser* Parser, program_datatypes* Datatypes, counted_st
   }
   else
   {
-    dUnion.CustomEnumType = RequireToken(Parser, CTokenType_Identifier).Value;;
+    c_token *EnumTypeT = RequireTokenPointer(Parser, CTokenType_Identifier);
+    dUnion.CustomEnumType = EnumTypeT->Value;
 
     enum_decl* EnumDef = GetEnumByType(&Datatypes->Enums, dUnion.CustomEnumType);
     if (EnumDef)
@@ -5978,7 +5981,9 @@ ParseDiscriminatedUnion(parser* Parser, program_datatypes* Datatypes, counted_st
     }
     else
     {
-      Error("Couldn't find enum %S", dUnion.CustomEnumType);
+      PoofTypeError( Parser, 
+                     CSz("Couldn't find definition for custom enum type"),
+                     EnumTypeT);
     }
   }
 
@@ -6156,7 +6161,7 @@ PrintToStdout(CSz(
 
         if (Contains(CSz("="), MacroName))
         {
-          Warn("Currently, custom define values are unsupported.  Please use `(--define/-D) DEFINE_NAME` to set DEFINE_NAME=1.");
+          Warn("Custom define values are currently unsupported.  Please use `--define NAME` or `-D NAME` to set NAME=1");
         }
 
         macro_def_linked_list_node *MacroNode = Allocate_macro_def_linked_list_node(Ctx->Memory);
@@ -6624,33 +6629,38 @@ GetBodyTextForNextScope(parser* Parser, memory_arena *Memory)
 
   EatBetween(Parser, CTokenType_OpenBrace, CTokenType_CloseBrace);
 
-  // TODO(Jesse, immediate): This is janky as fuck and should work..
-  // differently.  I'm not entirely sure _what_ should be different, but the
-  // assertions and -1 +1 business below is a symptom of the return value of
-  // this function having to be a slice into an existing c_token_cursor.  This
-  // holds true without issue (at the moment) for the interpreter code, but the
-  // C++ parsing code can encounter situations where the token after End was on
-  // a different cursor, so we do these sketchy hacks.  There are also
-  // situations where this fails completely.. ie if a function is closed by a
-  // macro.  So..  what we should do in that situation is unclear.
-  //
-  // This is documented with the define BUG_BODY_SCOPE_ACROSS_C_TOKEN_CURSOR_BOUNDARY
-  //
-  c_token *End = PeekTokenRawPointer(Parser, -1);
+  if (Parser->ErrorCode == ParseErrorCode_None)
+  {
+    // TODO(Jesse, immediate): This is janky as fuck and should work..
+    // differently.  I'm not entirely sure _what_ should be different, but the
+    // assertions and -1 +1 business below is a symptom of the return value of
+    // this function having to be a slice into an existing c_token_cursor.  This
+    // holds true without issue (at the moment) for the interpreter code, but the
+    // C++ parsing code can encounter situations where the token after End was on
+    // a different cursor, so we do these sketchy hacks.  There are also
+    // situations where this fails completely.. ie if a function is closed by a
+    // macro.  So..  what we should do in that situation is unclear.
+    //
+    // The complete failure case is documented at:
+    //
+    // BUG_BODY_SCOPE_ACROSS_C_TOKEN_CURSOR_BOUNDARY
+    //
+    c_token *End = PeekTokenRawPointer(Parser, -1);
 
-  Assert(End->Type == CTokenType_CloseBrace);
-  Assert(TokenValidFor(StartTokens, Start));
-  Assert(TokenValidFor(StartTokens, End));
+    Assert(End->Type == CTokenType_CloseBrace);
+    Assert(TokenValidFor(StartTokens, Start));
+    Assert(TokenValidFor(StartTokens, End));
 
-  CTokenCursor(Tokens, Start, (umm)(End-Start) + 1, Start->Filename, TokenCursorSource_BodyText, {});
+    CTokenCursor(Tokens, Start, (umm)(End-Start) + 1, Start->Filename, TokenCursorSource_BodyText, {});
 
-  TrimFirstToken(&BodyText, CTokenType_OpenBrace);
-  TrimUntilNewline(&BodyText);
-  TrimLastToken(&BodyText, CTokenType_CloseBrace);
-  TrimTrailingWhitespace(&BodyText);
-  Rewind(BodyText.Tokens);
+    TrimFirstToken(&BodyText, CTokenType_OpenBrace);
+    TrimUntilNewline(&BodyText);
+    TrimLastToken(&BodyText, CTokenType_CloseBrace);
+    TrimTrailingWhitespace(&BodyText);
+    Rewind(BodyText.Tokens);
 
-  Assert(BodyText.Tokens->At == BodyText.Tokens->Start);
+    Assert(BodyText.Tokens->At == BodyText.Tokens->Start);
+  }
 
   return BodyText;
 }
@@ -7640,13 +7650,6 @@ ApplyOperator(parser *Parser, u64 LHS, c_token_type OperatorType, u64 RHS)
 
 
   return Result;
-}
-
-bonsai_function b32
-IsOfHigherPrecedenceThan(c_token_type O1, c_token_type O2)
-{
-  Warn("IsOfHigherPrecedenceThan is left un-implemented.");
-  return False;
 }
 
 #if 0
@@ -9228,7 +9231,7 @@ ParseTypeSpecifierNode(parse_context *Ctx, ast_node_expression *Result, datatype
       // This case should go away once we can check what local varaibles are defined for the scope we're parsing
       case type_ast_node_access:
       {
-        Error("BUG during ParseTypeSpecifierNode");
+        BUG("during ParseTypeSpecifierNode");
       } break;
 
       InvalidDefaultWhileParsing(Ctx->CurrentParser, CSz("Invalid syntax following type-specifier."));
@@ -9955,7 +9958,7 @@ FlushOutputToDisk( parse_context *Ctx,
 
   if (Parser->ErrorCode)
   {
-    Warn(CSz("Parse Error Encountered, not flushing (%S) to disk."), Parser->Tokens->Filename);
+    Warn(CSz("Parse error encountered, not flushing code generated in (%S) to disk."), Parser->Tokens->Filename);
     return;
   }
 
@@ -9995,7 +9998,7 @@ FlushOutputToDisk( parse_context *Ctx,
     if (IsInlineCode)
     {
       // TODO(Jesse, id: 226, tags: metaprogramming, output): Should we handle this differently?
-      Warn("Not parsing datatypes in inlined code for %S", OutputPath);
+      Info("Not parsing inlined code (%S)", OutputPath);
     }
     else
     {
@@ -11108,7 +11111,8 @@ ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_s
   counted_string_stream Result = {};
   while (PeekToken(Parser).Type == CTokenType_Identifier)
   {
-    counted_string DatatypeName = RequireToken(Parser, CTokenType_Identifier).Value;
+    c_token *NameT = RequireTokenPointer(Parser, CTokenType_Identifier);
+    counted_string DatatypeName = NameT->Value;
 
     compound_decl* Struct              = GetStructByType(&Datatypes->Structs, DatatypeName);
     enum_decl* Enum                    = GetEnumByType(&Datatypes->Enums, DatatypeName);
@@ -11124,7 +11128,12 @@ ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_s
     }
     else
     {
-      Warn("Type (%S) could not be resolved to a struct or named_list, ignoring it.", DatatypeName);
+      PoofTypeError(Parser,
+                    ParseErrorCode_InvalidName,
+                    FormatCountedString( TranArena,
+                                         CSz("(%S) could not be resolved to a struct name, enum name, or named_list"),
+                                         DatatypeName),
+                    NameT);
     }
 
     OptionalToken(Parser, CTokenType_Comma);
@@ -11262,8 +11271,9 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
   meta_func_stream *FunctionDefs = &Ctx->MetaFunctions;
   memory_arena *Memory           = Ctx->Memory;
 
-  person_stream* People = &TodoInfo->People;
-  tagged_counted_string_stream_stream* NameLists = &TodoInfo->NameLists;
+  /* if ( */
+  /* person_stream* People = &TodoInfo->People; */
+  /* tagged_counted_string_stream_stream* NameLists = &TodoInfo->NameLists; */
 
   parser *Parser = Ctx->CurrentParser;
   Assert(IsAtBeginning(Parser));
@@ -11457,9 +11467,8 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
           {
             RequireToken(Parser, CTokenType_OpenParen);
 
-            tagged_counted_string_stream NameList = {
-              .Tag = RequireToken(Parser, CTokenType_Identifier).Value
-            };
+            tagged_counted_string_stream NameList = {};
+            NameList.Tag = RequireToken(Parser, CTokenType_Identifier).Value;
 
             RequireToken(Parser, CTokenType_CloseParen);
 
@@ -11473,7 +11482,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
             RequireToken(Parser, CTokenType_CloseBrace);
 
-            Push(&TodoInfo->NameLists, NameList, Memory);
+            Push(&Ctx->NamedLists, NameList, Memory);
 
           } break;
 
@@ -11488,7 +11497,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
             {
               RequireToken(Parser, CToken(CSz("exclude")));
               RequireToken(Parser, CTokenType_OpenParen);
-              Excludes = ParseDatatypeList(Parser, Datatypes, NameLists, Memory);
+              Excludes = ParseDatatypeList(Parser, Datatypes, &Ctx->NamedLists, Memory);
               RequireToken(Parser, CTokenType_CloseParen);
             }
 
@@ -11538,7 +11547,8 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
           case d_union:
           {
-            counted_string DatatypeName = RequireToken(Parser, CTokenType_Identifier).Value;
+            c_token *DatatypeT = RequireTokenPointer(Parser, CTokenType_Identifier);
+            counted_string DatatypeName = DatatypeT->Value;
             d_union_decl dUnion = ParseDiscriminatedUnion(Parser, Datatypes, DatatypeName, Memory);
             if (Parser->ErrorCode == ParseErrorCode_None)
             {
@@ -11563,10 +11573,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
 
             }
-            else
-            {
-              Error("Parsing d_union declaration");
-            }
+
           } break;
 
           default:
@@ -11995,7 +12002,7 @@ main(s32 ArgCount_, const char** ArgStrings)
   }
   else
   {
-    Warn("No files passed, exiting.");
+    Warn("No input files specified, exiting.");
   }
 
 

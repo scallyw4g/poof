@@ -1512,6 +1512,8 @@ struct parse_context
   meta_func_stream       MetaFunctions;
   memory_arena          *Memory;
 
+  tagged_counted_string_stream_stream NamedLists;
+
   arguments Args;
 };
 

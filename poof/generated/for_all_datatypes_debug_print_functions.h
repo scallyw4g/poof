@@ -4769,6 +4769,12 @@
 
 
 
+                                            DebugPrint("tagged_counted_string_stream_stream NamedLists {\n", Depth+2);
+              DebugPrint(RuntimeStruct.NamedLists, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
                                             DebugPrint("arguments Args {\n", Depth+2);
               DebugPrint(RuntimeStruct.Args, Depth+4);
               DebugPrint("}\n", Depth+2);
