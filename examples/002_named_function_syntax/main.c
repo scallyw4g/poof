@@ -61,7 +61,7 @@ int main()
 }
 
 
-// NOTE(Jesse): Passing primitives such at:
+// NOTE(Jesse): Passing primitives such as:
 //
 // poof(metaprogram_another_struct(int))
 // poof(metaprogram_another_struct(float))
@@ -70,6 +70,7 @@ int main()
 //
 // is currently unsupported for somewhat subtle reasons.  I've started down the
 // path toward supporting this, but it involves writing a type-checker, so
-// it'll continue to be unsupported for a while.
+// it'll continue to be unsupported for a while.  Thankfully, I've yet to run
+// into a situation where I needed to do this.
 //
 
