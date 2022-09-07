@@ -8,14 +8,14 @@
 # Calling functions by name on the command line shouldn't be affected by these.
 
 
-# BuildAllBinariesRunAllTests=1
+BuildAllBinariesRunAllTests=1
 
 # RunPreemptivePoof=1
 
-RunPoof=1
-BuildPoof=1
+# RunPoof=1
+# BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
-POOF_LOG_LEVEL="--log-level LogLevel_Debug"
+# POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
 # RunParserTests=1
 # BuildParserTests=1
@@ -44,7 +44,7 @@ if [ $# -gt 1 ]; then
   echo "make.sh supports a maximum of 1 argument"
 fi
 
-ROOT="."
+ROOT="$(pwd)"
 SRC="$ROOT/poof"
 BIN="$ROOT/bin"
 BIN_TEST="$BIN/tests"
