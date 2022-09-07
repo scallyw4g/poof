@@ -1067,6 +1067,7 @@ struct arguments
   counted_string_cursor IncludePaths;
 
   b32 DoDebugWindow;
+  b32 HelpTextPrinted;
 };
 
 struct program_datatypes

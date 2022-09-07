@@ -6064,6 +6064,54 @@ ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_aren
     {
       break;
     }
+    else if (StringsMatch(CSz("-h"), Arg) ||
+             StringsMatch(CSz("--help"), Arg) )
+    {
+      log_level PrevLL = Global_LogLevel;
+      Global_LogLevel = LogLevel_Verbose;
+
+      Result.HelpTextPrinted = True;
+      PrintToStdout(CSz(
+" -- Overview: poof C metaprogramming compiler --\n"
+"\n"
+" `poof` is a metaprogramming environment for the C and C++ languages\n"
+"\n"
+" poof aims to be unintrusive, but powerful.  Users of the language write `poof` \n"
+" code inline in their C or C++ source files.  The generated code is then output \n"
+" to header files which are included inline immediately after the `poof` code.   \n"
+"\n"
+" `poof` parses a small, currently undocumented, subset of C++, which may stabilize \n"
+" and become well-defined in the future.  For the moment it parses operator         \n"
+" overloads, classes (w/ constructors, destructors, virtual functions..) and        \n"
+" simple templates.\n"
+"\n"
+" Usage: poof [--options] <src_file>\n"
+"\n"
+" -- Options --\n"
+"\n"
+" -h       | --help               : display this help text\n"
+"\n"
+" -I <dir> | --include-path <dir> : add dir to the include search path\n"
+"\n"
+" -D name  | --define name        : analogous to #define name=1  Custom values (ie -D name=2) are, for the moment, unsupported\n"
+"\n"
+" -c0      | --colors-off         : disable color escape codes in console output\n"
+"\n"
+" --log-level <LogLevel_Value>    : One of "));
+
+DumpValidLogLevelOptions();
+
+PrintToStdout(CSz(
+"\n"
+"\n"
+" -- Experimental Options --\n"
+"\n"
+" -d       | --do-debug-window    : open performance debug window.  Requires https://github.com/jjbandit/bonsai_debug to be built.\n"
+"                                   this is currently not well supported, or documented, and will likely crash `poof`\n"
+"\n"));
+
+      Global_LogLevel = PrevLL;
+    }
     else if (StringsMatch(CSz("-d"), Arg) ||
              StringsMatch(CSz("--do-debug-window"), Arg) )
     {
@@ -12294,6 +12342,11 @@ main(s32 ArgCount_, const char** ArgStrings)
 
   arguments Args = ParseArgs(ArgStrings, ArgCount, &Ctx, Memory);
   Ctx.Args = &Args;
+
+  if (Args.HelpTextPrinted)
+  {
+    return SUCCESS_EXIT_CODE;
+  }
 
   TryCreateDirectory(TMP_DIR_ROOT);
   TryCreateDirectory(Args.Outpath);

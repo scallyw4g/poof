@@ -4505,6 +4505,12 @@
 
 
 
+                                            DebugPrint("b32 HelpTextPrinted =", Depth+2);
+              DebugPrint(RuntimeStruct.HelpTextPrinted, 1);
+              DebugPrint(";\n");
+
+
+
 
 
       if (Depth == 0)
@@ -7494,13 +7500,17 @@
           {
             DebugPrint("LogLevel_Undefined", Depth);
           } break;
+          case LogLevel_Verbose:
+          {
+            DebugPrint("LogLevel_Verbose", Depth);
+          } break;
           case LogLevel_Debug:
           {
             DebugPrint("LogLevel_Debug", Depth);
           } break;
-          case LogLevel_Normal:
+          case LogLevel_Info:
           {
-            DebugPrint("LogLevel_Normal", Depth);
+            DebugPrint("LogLevel_Info", Depth);
           } break;
           case LogLevel_Error:
           {
