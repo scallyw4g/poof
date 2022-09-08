@@ -13,20 +13,21 @@
 RunPreemptivePoof=1
 
 # RunPoof=1
-# BuildPoof=1
+BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
-RunParserTests=1
-BuildParserTests=1
+# RunParserTests=1
+# BuildParserTests=1
 # TEST_DEBUGGER="gdb --args"
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
 # BuildAndRunAllExamples=1
 
-# RunIntegrationTests=1
+RunIntegrationTests=1
+INTEGRATION_TEST_INDEX=2
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
-# INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
+INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
 # RunExtendedIntegrationTests=1
 
@@ -157,27 +158,43 @@ function RunIntegrationTests()
 
   FILES_TO_POOF=$(find $INTEGRATION_SRC_DIR -type f | grep '\.h')
 
+  test_index=0
   for filename in $FILES_TO_POOF; do
 
     basename_stripped=$(basename $filename .h)
+
+    test_output_dir=$INTEGRATION_OUTPUT_DIR/$basename_stripped
+
+    if [ ! -d $test_output_dir ]; then
+      mkdir $test_output_dir
+    fi
 
     # Each test file has a directory created under the output directory that
     # we'll write all the poof() output to for that test file.  We diff that
     # whole directory to confirm the output is identical for that test file
 
-    $INTEGRATION_TEST_DEBUGGER bin/poof \
-      $INTEGRATION_TEST_LOG_LEVEL       \
-      $filename                         \
-      $COLORFLAG                        \
-      -o $INTEGRATION_OUTPUT_DIR/$basename_stripped
+    if [[ $test_index == $INTEGRATION_TEST_INDEX ]]; then
 
-    DIFF_CHANGED=$(git diff --ignore-all-space --ignore-blank-lines $INTEGRATION_OUTPUT_DIR/$basename_stripped | wc -l)
+      $INTEGRATION_TEST_DEBUGGER bin/poof \
+        $INTEGRATION_TEST_LOG_LEVEL       \
+        $filename                         \
+        $COLORFLAG                        \
+        -o $test_output_dir
 
-    if [[ $DIFF_CHANGED == 0 ]]; then
-      echo -e "$Success $filename"
-    else
-      echo -e "$Failed $filename"
+      if [[ $? == 0 ]]; then
+        DIFF_CHANGED=$(git diff --ignore-all-space --ignore-blank-lines $test_output_dir | wc -l)
+        if [[ $DIFF_CHANGED == 0 ]]; then
+          echo -e "$Success $filename"
+        else
+          echo -e "$Failed $filename"
+        fi
+      else
+        echo -e "$Failed $filename"
+      fi
+
     fi
+
+    ((test_index++))
   done
 
   echo -e ""

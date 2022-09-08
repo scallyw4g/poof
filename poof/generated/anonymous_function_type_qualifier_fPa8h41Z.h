@@ -70,13 +70,13 @@
           {
             Append(&Builder, CSz("long "));
           }
-          if (TypeSpec->Qualifier & TypeQual_Int)
-          {
-            Append(&Builder, CSz("int "));
-          }
           if (TypeSpec->Qualifier & TypeQual_Long_Long)
           {
             Append(&Builder, CSz("long "));
+          }
+          if (TypeSpec->Qualifier & TypeQual_Int)
+          {
+            Append(&Builder, CSz("int "));
           }
           if (TypeSpec->Qualifier & TypeQual_Double)
           {

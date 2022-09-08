@@ -412,6 +412,7 @@ enum parse_error_code
   ParseErrorCode_StreamEndedUnexpectedly,
   ParseErrorCode_RequireTokenFailed,
   ParseErrorCode_InvalidTokenGenerated,
+  ParseErrorCode_MalformedType,
 
 
   // Poof errors
@@ -545,8 +546,8 @@ enum type_qualifier
   TypeQual_Unsigned    = (1 << 14),
   TypeQual_Char        = (1 << 15),
   TypeQual_Long        = (1 << 16),
-  TypeQual_Int         = (1 << 17),
-  TypeQual_Long_Long   = (1 << 18),
+  TypeQual_Long_Long   = (1 << 17),
+  TypeQual_Int         = (1 << 18),
   TypeQual_Double      = (1 << 19),
   TypeQual_Short       = (1 << 20),
   TypeQual_Float       = (1 << 21),
@@ -867,7 +868,7 @@ struct d_union_decl
   counted_string Name;
 
   d_union_member_stream Members;
-  declaration_stream CommonMembers;
+  compound_decl CommonMembers;
 
   counted_string CustomEnumType;
 };

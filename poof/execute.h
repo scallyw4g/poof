@@ -63,7 +63,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
             {
               RequireToken(Scope, CTokenType_Question);
               auto S1 = GetTypeTypeForDatatype(&Replace->Data, TranArena);
-              auto S2 = GetTypeNameForDatatype(&Replace->Data, TranArena);
+              auto S2 = GetTypeNameForDatatype(Ctx, &Replace->Data, TranArena);
 
               b32 DoTrueBranch = False;
               switch(Replace->Data.Type)
@@ -233,7 +233,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
 
             case type:
             {
-              counted_string TypeName = GetTypeNameForDatatype(&Replace->Data, Memory);
+              counted_string TypeName = GetTypeNameForDatatype(Ctx, &Replace->Data, Memory);
               meta_transform_op Transformations = ParseTransformations(Scope);
               if (Scope->ErrorCode == ParseErrorCode_None)
               {
@@ -323,8 +323,8 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                         {
                           ITERATE_OVER_AS(VarMember, VarMembers)
                           {
-                            declaration* VarMember = GET_ELEMENT(VarMemberIter);
-                            counted_string MemberName = GetTypeNameForStructMember(Ctx, VarMember, Memory);
+                            declaration* Decl = GET_ELEMENT(VarMemberIter);
+                            counted_string MemberName = GetTypeNameForDecl(Ctx, Decl, Memory);
                             if (StringsMatch(MemberName, ContainingConstraint))
                             {
                               ConstraintPassed = True;

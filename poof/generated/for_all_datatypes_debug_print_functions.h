@@ -3831,7 +3831,7 @@
 
 
 
-                                            DebugPrint("declaration_stream CommonMembers {\n", Depth+2);
+                                            DebugPrint("compound_decl CommonMembers {\n", Depth+2);
               DebugPrint(RuntimeStruct.CommonMembers, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -8708,6 +8708,10 @@
           {
             DebugPrint("ParseErrorCode_InvalidTokenGenerated", Depth);
           } break;
+          case ParseErrorCode_MalformedType:
+          {
+            DebugPrint("ParseErrorCode_MalformedType", Depth);
+          } break;
           case ParseErrorCode_PoofTypeError:
           {
             DebugPrint("ParseErrorCode_PoofTypeError", Depth);
@@ -8850,13 +8854,13 @@
           {
             DebugPrint("TypeQual_Long", Depth);
           } break;
-          case TypeQual_Int:
-          {
-            DebugPrint("TypeQual_Int", Depth);
-          } break;
           case TypeQual_Long_Long:
           {
             DebugPrint("TypeQual_Long_Long", Depth);
+          } break;
+          case TypeQual_Int:
+          {
+            DebugPrint("TypeQual_Int", Depth);
           } break;
           case TypeQual_Double:
           {

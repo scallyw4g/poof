@@ -127,13 +127,18 @@ bonsai_function void                 ParseExpression(parse_context *Ctx, ast_nod
 bonsai_function void                 ParseExpression(parse_context *Ctx, ast_node** Result);
 
 bonsai_function compound_decl ParseStructBody(parse_context *, c_token *);
+bonsai_function declaration   ParseStructMember(parse_context *Ctx, c_token *StructNameT);
 
 bonsai_function parser MaybeParseFunctionBody(parser *Parser, memory_arena *Memory);
 bonsai_function void MaybeParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest);
 bonsai_function declaration FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec);
 
+bonsai_function counted_string PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory);
+
+bonsai_function counted_string GetTypeNameForDecl(parse_context *Ctx, declaration* Decl, memory_arena *Memory);
+bonsai_function counted_string GetNameForDecl(declaration* Decl);
 bonsai_function counted_string GetTypeTypeForDatatype(datatype *Data, memory_arena *);
-bonsai_function counted_string GetTypeNameForDatatype(datatype *Data, memory_arena *);
+bonsai_function counted_string GetTypeNameForDatatype(parse_context*, datatype *Data, memory_arena *);
 link_internal datatype         ResolveToBaseType(parse_context *Ctx, type_spec );
 link_internal datatype         ResolveToBaseType(parse_context *Ctx, datatype *);
 
@@ -5713,7 +5718,7 @@ GenerateEnumDef(d_union_decl* dUnion, memory_arena* Memory)
 }
 
 bonsai_function counted_string
-GenerateStructDef(d_union_decl* dUnion, memory_arena* Memory)
+GenerateStructDef(parse_context *Ctx, d_union_decl* dUnion, memory_arena* Memory)
 {
   TIMED_FUNCTION();
 
@@ -5725,16 +5730,16 @@ GenerateStructDef(d_union_decl* dUnion, memory_arena* Memory)
   counted_string Result = FormatCountedString(Memory, CSz("struct %S\n{\n  enum %S Type;\n"),
       UnionName, TagType);
 
-  ITERATE_OVER(&dUnion->CommonMembers)
+  ITERATE_OVER(&dUnion->CommonMembers.Members)
   {
     declaration* Member = GET_ELEMENT(Iter);
     Assert(Member->Type == type_variable_decl);
-    Result =
-      Concat(Result,
-        FormatCountedString(Memory, CSz("  %S %S;\n"),
-          Member->variable_decl.Type.DatatypeToken->Value,
-          Member->variable_decl.Name),
-      Memory);
+    Result = Concat( Result,
+                      FormatCountedString( Memory,
+                                           CSz("  %S %S;\n"),
+                                           GetTypeNameForDecl(Ctx, Member, Memory),
+                                           GetNameForDecl(Member)),
+                      Memory);
   }
 
   b32 ValidMemberFound = False;
@@ -5912,53 +5917,16 @@ GetDatatypeByName(parse_context *Ctx, counted_string Name)
 }
 
 d_union_decl
-ParseDiscriminatedUnion(parser* Parser, program_datatypes* Datatypes, counted_string Name, memory_arena* Memory)
+ParseDiscriminatedUnion(parse_context *Ctx, parser* Parser, program_datatypes* Datatypes, c_token *NameT, memory_arena* Memory)
 {
   TIMED_FUNCTION();
 
   d_union_decl dUnion = {};
 
-  dUnion.Name = Name;
+  dUnion.Name = NameT->Value;
 
-  if (OptionalToken(Parser, CTokenType_OpenBrace))
+  if (c_token *EnumTypeT = OptionalToken(Parser, CTokenType_Identifier))
   {
-    b32 Complete = False;
-    while (c_token *Interior = PeekTokenPointer(Parser))
-    {
-      if (Complete) break;
-
-      switch (Interior->Type)
-      {
-        case CTokenType_Identifier:
-        {
-          RequireToken(Parser, Interior);
-
-          d_union_flags Flags = {};
-          if ( OptionalToken(Parser, CToken(ToString(enum_only))) )
-          {
-            Flags = d_union_flag_enum_only;
-          }
-
-          PushMember(&dUnion, *Interior, Flags, Memory);
-        } break;
-
-        case CTokenType_CloseBrace:
-        {
-          RequireToken(Parser, CTokenType_CloseBrace);
-          Complete = True;
-        } break;
-
-        default:
-        {
-          Parser->ErrorCode = ParseErrorCode_DUnionParse;
-          Complete = True;
-        } break;
-      }
-    }
-  }
-  else
-  {
-    c_token *EnumTypeT = RequireTokenPointer(Parser, CTokenType_Identifier);
     dUnion.CustomEnumType = EnumTypeT->Value;
 
     enum_decl* EnumDef = GetEnumByType(&Datatypes->Enums, dUnion.CustomEnumType);
@@ -5980,20 +5948,50 @@ ParseDiscriminatedUnion(parser* Parser, program_datatypes* Datatypes, counted_st
     }
   }
 
+  RequireToken(Parser, CTokenType_OpenBrace);
+
+  b32 Complete = False;
+  while (c_token *Interior = PeekTokenPointer(Parser))
+  {
+    if (Complete) break;
+
+    switch (Interior->Type)
+    {
+      case CTokenType_Identifier:
+      {
+        RequireToken(Parser, Interior);
+
+        d_union_flags Flags = {};
+        if ( OptionalToken(Parser, CToken(ToString(enum_only))) )
+        {
+          Flags = d_union_flag_enum_only;
+        }
+
+        OptionalToken(Parser, CTokenType_Comma);
+
+        PushMember(&dUnion, *Interior, Flags, Memory);
+      } break;
+
+      case CTokenType_CloseBrace:
+      {
+        RequireToken(Parser, CTokenType_CloseBrace);
+        Complete = True;
+      } break;
+
+      default:
+      {
+        PoofTypeError( Parser,
+                       ParseErrorCode_DUnionParse,
+                       CSz("Unexpected token encountered while parsing d_union"),
+                       Interior);
+        Complete = True;
+      } break;
+    }
+  }
+
   if (OptionalToken(Parser, CTokenType_Comma))
   {
-    RequireToken(Parser, CTokenType_OpenBrace);
-    while (!OptionalToken(Parser, CTokenType_CloseBrace))
-    {
-      declaration Decl = {
-        .Type = type_variable_decl,
-        .variable_decl = {
-          .Type.DatatypeToken = RequireTokenPointer(Parser, CTokenType_Identifier),
-          .Name               = RequireToken(Parser, CTokenType_Identifier).Value,
-        }
-      };
-      Push(&dUnion.CommonMembers, Decl, Memory);
-    }
+    dUnion.CommonMembers = ParseStructBody(Ctx, NameT);
   }
 
   return dUnion;
@@ -9723,9 +9721,10 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec)
   }
   else
   {
-    InternalCompilerError( Parser,
-                           CSz("Unhandled case during FinalizeDeclaration"),
-                           PeekTokenPointer(Parser));
+    ParseError( Parser,
+                ParseErrorCode_MalformedType,
+                CSz("Malformed type specifier near here"),
+                PeekTokenPointer(Parser, -1));
   }
 
   return Result;
@@ -10307,25 +10306,23 @@ GetTypeNameForCompoundDecl(compound_decl *CDecl)
 }
 
 bonsai_function counted_string
-GetTypeNameForStructMember(parse_context *Ctx, declaration* Decl, memory_arena *Memory)
+GetTypeNameForDecl(parse_context *Ctx, declaration* Decl, memory_arena *Memory)
 {
   counted_string Result = {};
 
   switch (Decl->Type)
   {
-    case type_function_decl:
-    {
-      NotImplemented;
-    } break;
+    case type_declaration_noop: { InvalidCodePath(); } break;
 
     case type_variable_decl:
     {
-      auto Var = SafeAccess(variable_decl, Decl);
-      if (Var->Type.DatatypeToken)
-      {
-        datatype DT = GetDatatypeByName(&Ctx->Datatypes, Var->Type.DatatypeToken->Value);
-        Result = GetTypeNameForDatatype(&DT, Memory);
-      }
+      auto VDecl = SafeAccess(variable_decl, Decl);
+      Result = PrintTypeSpec(&VDecl->Type, Memory);
+    } break;
+
+    case type_function_decl:
+    {
+      Result = Decl->function_decl.NameT->Value;
     } break;
 
     case type_compound_decl:
@@ -10334,7 +10331,10 @@ GetTypeNameForStructMember(parse_context *Ctx, declaration* Decl, memory_arena *
       Result = GetTypeNameForCompoundDecl(CDecl);
     } break;
 
-    InvalidDefaultCase;
+    case type_enum_decl:
+    {
+      Result = Decl->enum_decl.Name;
+    } break;
   }
 
   return Result;
@@ -10531,6 +10531,8 @@ PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
     Result = Finalize(&Builder, Memory);
   }
 
+  Assert(Result.Count);
+
   return Result;
 }
 
@@ -10667,7 +10669,7 @@ GetTypeTypeForDatatype(datatype *Data, memory_arena *Memory)
 }
 
 bonsai_function counted_string
-GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
+GetTypeNameForDatatype(parse_context *Ctx, datatype *Data, memory_arena *Memory)
 {
   counted_string Result = {};
   switch (Data->Type)
@@ -10696,34 +10698,7 @@ GetTypeNameForDatatype(datatype *Data, memory_arena *Memory)
     case type_declaration:
     {
       declaration *Decl = SafeAccess(declaration, Data);
-      switch (Decl->Type)
-      {
-        case type_declaration_noop: { InvalidCodePath(); } break;
-
-        case type_variable_decl:
-        {
-          auto VDecl = SafeAccess(variable_decl, Decl);
-          Result = PrintTypeSpec(&VDecl->Type, Memory);
-        } break;
-
-        case type_function_decl:
-        {
-          Result = Decl->function_decl.NameT->Value;
-        } break;
-
-        case type_compound_decl:
-        {
-          compound_decl *CDecl = SafeAccess(compound_decl, Decl);
-          Result = GetTypeNameForCompoundDecl(CDecl);
-        } break;
-
-        case type_enum_decl:
-        {
-          Result = Decl->enum_decl.Name;
-        } break;
-
-      }
-
+      Result = GetTypeNameForDecl(Ctx, Decl, Memory);
     } break;
   }
 
@@ -11541,8 +11516,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
           case d_union:
           {
             c_token *DatatypeT = RequireTokenPointer(Parser, CTokenType_Identifier);
-            counted_string DatatypeName = DatatypeT->Value;
-            d_union_decl dUnion = ParseDiscriminatedUnion(Parser, Datatypes, DatatypeName, Memory);
+            d_union_decl dUnion = ParseDiscriminatedUnion(Ctx, Parser, Datatypes, DatatypeT, Memory);
             if (Parser->ErrorCode == ParseErrorCode_None)
             {
               string_builder CodeBuilder = {};
@@ -11553,7 +11527,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               }
 
               {
-                counted_string StructString = GenerateStructDef(&dUnion, Memory);
+                counted_string StructString = GenerateStructDef(Ctx, &dUnion, Memory);
                 Append(&CodeBuilder, StructString);
               }
 
@@ -11562,9 +11536,12 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               RequireToken(Parser, CTokenType_CloseParen);
               while(OptionalToken(Parser, CTokenType_Semicolon));
 
-              counted_string OutfileName = GenerateOutfileNameFor(ToString(Directive), DatatypeName, Memory);
+              counted_string OutfileName = GenerateOutfileNameFor(ToString(Directive), DatatypeT->Value, Memory);
               FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
-
+            }
+            else
+            {
+              ParseInfoMessage(Parser, CSz("While parsing d_union"), DatatypeT);
             }
 
           } break;
@@ -11871,15 +11848,15 @@ main(s32 ArgCount_, const char** ArgStrings)
 
   Ctx.Args = ParseArgs(ArgStrings, ArgCount, &Ctx, Memory);
 
-  if (Args.HelpTextPrinted)
+  if (Ctx.Args.HelpTextPrinted)
   {
     return SUCCESS_EXIT_CODE;
   }
 
   TryCreateDirectory(TMP_DIR_ROOT);
-  TryCreateDirectory(Args.Outpath);
+  TryCreateDirectory(Ctx.Args.Outpath);
 
-  if (Args.DoDebugWindow)
+  if (Ctx.Args.DoDebugWindow)
   {
     if (BootstrapDebugSystem() == 1)
     {
@@ -11898,7 +11875,7 @@ main(s32 ArgCount_, const char** ArgStrings)
   if (ArgCount > 1)
   {
     // TODO(Jesse): Make ParseArgs operate on the parse context directly?
-    Ctx.IncludePaths = &Args.IncludePaths;
+    Ctx.IncludePaths = &Ctx.Args.IncludePaths;
 
     todo_list_info TodoInfo = {};
 
@@ -11906,9 +11883,9 @@ main(s32 ArgCount_, const char** ArgStrings)
     /*   .People = ParseAllTodosFromFile(CSz("todos.md"), Memory), */
     /* }; */
 
-    Assert(TotalElements(&Args.Files) == 1);
-    Assert(Args.Files.Start == Args.Files.At);
-    counted_string ParserFilename = Args.Files.Start[0];
+    Assert(TotalElements(&Ctx.Args.Files) == 1);
+    Assert(Ctx.Args.Files.Start == Ctx.Args.Files.At);
+    counted_string ParserFilename = Ctx.Args.Files.Start[0];
 
     umm ParserFilenameHash = Hash(&ParserFilename);
     TempFileEntropy.Seed = ParserFilenameHash;
@@ -11919,7 +11896,7 @@ main(s32 ArgCount_, const char** ArgStrings)
 
     if (Parser->ErrorCode == ParseErrorCode_None)
     {
-      /* RemoveAllMetaprogrammingOutputRecursive(GetNullTerminated(Args.Outpath)); */
+      /* RemoveAllMetaprogrammingOutputRecursive(GetNullTerminated(Ctx.Args.Outpath)); */
 
       // TODO(Jesse): Do we actually need this?
       Ctx.CurrentParser = Parser;
@@ -11944,7 +11921,7 @@ main(s32 ArgCount_, const char** ArgStrings)
         {
           auto P = Bucket->Element;
 
-          ScanForMutationsAndOutput(Parser, Ctx.Args->Outpath, Memory);
+          ScanForMutationsAndOutput(Parser, Ctx.Args.Outpath, Memory);
 
           Bucket = Bucket->Next;
         }

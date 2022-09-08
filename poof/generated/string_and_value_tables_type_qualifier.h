@@ -22,8 +22,8 @@
           case TypeQual_Unsigned: { Result = CSz("TypeQual_Unsigned"); } break;
           case TypeQual_Char: { Result = CSz("TypeQual_Char"); } break;
           case TypeQual_Long: { Result = CSz("TypeQual_Long"); } break;
-          case TypeQual_Int: { Result = CSz("TypeQual_Int"); } break;
           case TypeQual_Long_Long: { Result = CSz("TypeQual_Long_Long"); } break;
+          case TypeQual_Int: { Result = CSz("TypeQual_Int"); } break;
           case TypeQual_Double: { Result = CSz("TypeQual_Double"); } break;
           case TypeQual_Short: { Result = CSz("TypeQual_Short"); } break;
           case TypeQual_Float: { Result = CSz("TypeQual_Float"); } break;
@@ -59,8 +59,8 @@
         if (StringsMatch(S, CSz("TypeQual_Unsigned"))) { return TypeQual_Unsigned; }
         if (StringsMatch(S, CSz("TypeQual_Char"))) { return TypeQual_Char; }
         if (StringsMatch(S, CSz("TypeQual_Long"))) { return TypeQual_Long; }
-        if (StringsMatch(S, CSz("TypeQual_Int"))) { return TypeQual_Int; }
         if (StringsMatch(S, CSz("TypeQual_Long_Long"))) { return TypeQual_Long_Long; }
+        if (StringsMatch(S, CSz("TypeQual_Int"))) { return TypeQual_Int; }
         if (StringsMatch(S, CSz("TypeQual_Double"))) { return TypeQual_Double; }
         if (StringsMatch(S, CSz("TypeQual_Short"))) { return TypeQual_Short; }
         if (StringsMatch(S, CSz("TypeQual_Float"))) { return TypeQual_Float; }
