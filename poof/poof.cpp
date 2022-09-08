@@ -10503,14 +10503,25 @@ bonsai_function counted_string
 PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
 {
   counted_string Result = {};
-  string_builder Builder = {};
 
   if (TypeSpec->DatatypeToken)
   {
     Result = TypeSpec->DatatypeToken->Value;
   }
+  else if (TypeSpec->BaseType)
+  {
+    // TODO(Jesse): This is actually a symptom of a much deeper issue.  TypeSpecs
+    // should probably always just have a BaseType pointer instead of a DatatypeToken?
+    //
+    // @base_type_hack
+    //
+    // Seems like we might actually just want to have typespecs basically be datatypes ??
+    //
+    Result = CSz("this_is_a_bug"); // GetTypeNameForDatatype(Ctx, TypeSpec->BaseType, Memory);
+  }
   else
   {
+    string_builder Builder = {};
     poof(
       func (type_qualifier Enum)
       {
@@ -10524,10 +10535,6 @@ PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
       }
     )
 #include <poof/generated/anonymous_function_type_qualifier_fPa8h41Z.h>
-  }
-
-  if (Result.Count == 0)
-  {
     Result = Finalize(&Builder, Memory);
   }
 
@@ -11886,6 +11893,8 @@ main(s32 ArgCount_, const char** ArgStrings)
     Assert(TotalElements(&Ctx.Args.Files) == 1);
     Assert(Ctx.Args.Files.Start == Ctx.Args.Files.At);
     counted_string ParserFilename = Ctx.Args.Files.Start[0];
+
+    Info("Poofing %S", ParserFilename);
 
     umm ParserFilenameHash = Hash(&ParserFilename);
     TempFileEntropy.Seed = ParserFilenameHash;

@@ -20,13 +20,13 @@
 
               struct (anonymous) is compound
 
-               _embedded1 is compound
+              this_is_a_bug _embedded1 is compound
 
-               _embedded2 is compound
+              this_is_a_bug _embedded2 is compound
 
               union (anonymous) is compound
 
-               _embedded3 is compound
+              this_is_a_bug _embedded3 is compound
 
               counted_string S1 not compound
 

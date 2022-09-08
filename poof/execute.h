@@ -104,6 +104,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
               {
                 DoTrueBranch = True;
               }
+
               DoTrueFalse(Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
             } break;
 

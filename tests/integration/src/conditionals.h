@@ -1,5 +1,3 @@
-#if 1
-
 typedef __ undefined_type;
 
 // NOTE(Jesse): Copied from bonsai_stdlib/primitives.h
@@ -71,30 +69,30 @@ typedef int (foofunc)(void);
 
 struct foo_struct_1
 {
-  int            _int;
-  s32            _s32;
-  u32            _u32;
-  u64            _u64;
-  umm            _umm;
-  const char*    _ccstar;
-  int **         _intstarstar[42];
-  umm*           _ummstar;
+  /* int            _int; */
+  /* s32            _s32; */
+  /* u32            _u32; */
+  /* u64            _u64; */
+  /* umm            _umm; */
+  /* const char*    _ccstar; */
+  /* int **         _intstarstar[42]; */
+  /* umm*           _ummstar; */
 
-  undefined_type _und0;
-  foo_struct_0   _foo0;
+  /* undefined_type _und0; */
+  /* foo_struct_0   _foo0; */
 
 
-  struct
-  {
-    int _int2;
-  } _embedded1, _embedded2;
+  /* struct */
+  /* { */
+  /*   int _int2; */
+  /* } _embedded1, _embedded2; */
 
-  union
-  {
-    int _int3;
-  } _embedded3;
+  /* union */
+  /* { */
+  /*   int _int3; */
+  /* } _embedded3; */
 
-  counted_string S1; // Ensures the special-case hacks we put in work.  This is actually compound, but we want it considered primitive.
+  /* counted_string S1; // Ensures the special-case hacks we put in work.  This is actually compound, but we want it considered primitive. */
 
   foofuncptr FooFuncPtr;
   foofunc FooFun;
@@ -118,8 +116,10 @@ poof(
   }
 )
 #include <tests/integration/generated/anonymous_func_1.h>
+#endif
 
 
+#if 1
 poof(
   func (foo_struct_1 TFooStruct)
   {
@@ -139,6 +139,7 @@ poof(
 #endif
 
 
+#if 0
 poof(
   func (foo_struct_1 TFooStruct)
   {

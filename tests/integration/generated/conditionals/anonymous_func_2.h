@@ -20,19 +20,15 @@
 
               struct (anonymous) not primitive
 
-               _embedded1 not primitive
+              this_is_a_bug _embedded1 not primitive
 
-               _embedded2 not primitive
+              this_is_a_bug _embedded2 not primitive
 
               union (anonymous) not primitive
 
-               _embedded3 not primitive
+              this_is_a_bug _embedded3 not primitive
 
               counted_string S1 is primitive
-
-              foofuncptr FooFuncPtr is primitive
-
-              foofunc FooFun is primitive
 
 
 

@@ -22,8 +22,8 @@ poof(
 
 enum custom_enum_tag
 {
-  tag_foo,
-  tag_bar,
+  type_foo,
+  type_bar,
 };
 
 poof(

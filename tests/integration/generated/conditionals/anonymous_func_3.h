@@ -20,13 +20,13 @@
 
               struct (anonymous) not a function
 
-               _embedded1 not a function
+              this_is_a_bug _embedded1 not a function
 
-               _embedded2 not a function
+              this_is_a_bug _embedded2 not a function
 
               union (anonymous) not a function
 
-               _embedded3 not a function
+              this_is_a_bug _embedded3 not a function
 
               counted_string S1 not a function
 

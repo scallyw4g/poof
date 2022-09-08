@@ -10,10 +10,10 @@
 
 # BuildAllBinariesRunAllTests=1
 
-RunPreemptivePoof=1
+# RunPreemptivePoof=1
 
 # RunPoof=1
-BuildPoof=1
+# BuildPoof=1
 # POOF_DEBUGGER="gdb --args"
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 
@@ -25,8 +25,8 @@ BuildPoof=1
 # BuildAndRunAllExamples=1
 
 RunIntegrationTests=1
-INTEGRATION_TEST_INDEX=2
-# INTEGRATION_TEST_DEBUGGER="gdb --args"
+INTEGRATION_TEST_INDEX=1
+INTEGRATION_TEST_DEBUGGER="gdb --args"
 INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 
 # RunExtendedIntegrationTests=1
@@ -173,8 +173,15 @@ function RunIntegrationTests()
     # we'll write all the poof() output to for that test file.  We diff that
     # whole directory to confirm the output is identical for that test file
 
-    if [[ $test_index == $INTEGRATION_TEST_INDEX ]]; then
+    run_test=1
+    if [[ -v INTEGRATION_TEST_INDEX ]]; then
+      if [[ $test_index != $INTEGRATION_TEST_INDEX ]]; then
+        run_test=0
+      fi
+    fi
 
+
+    if [[ $run_test == 1 ]]; then
       $INTEGRATION_TEST_DEBUGGER bin/poof \
         $INTEGRATION_TEST_LOG_LEVEL       \
         $filename                         \
@@ -191,7 +198,6 @@ function RunIntegrationTests()
       else
         echo -e "$Failed $filename"
       fi
-
     fi
 
     ((test_index++))

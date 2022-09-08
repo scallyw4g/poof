@@ -582,6 +582,8 @@ struct type_spec
   c_token *QualifierNameT;
 
   c_token *DatatypeToken;
+
+  // @base_type_hack
   datatype *BaseType;     // ATM only used by variable instances that are defined using an anonymous compound decl
 
   type_qualifier Qualifier;
