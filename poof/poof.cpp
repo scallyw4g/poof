@@ -1,6 +1,11 @@
-#define PLATFORM_LIBRARY_AND_WINDOW_IMPLEMENTATIONS 1
-#define PLATFORM_GL_IMPLEMENTATIONS 1
-#define BONSAI_DEBUG_SYSTEM_API 1
+#if BONSAI_EMCC
+
+#else
+  #define PLATFORM_LIBRARY_AND_WINDOW_IMPLEMENTATIONS 1
+  #define PLATFORM_GL_IMPLEMENTATIONS 1
+  #define BONSAI_DEBUG_SYSTEM_API 1
+  #define DEBUG_PRINT (1)
+#endif
 
 #include <bonsai_stdlib/bonsai_stdlib.h>
 #include <bonsai_stdlib/bonsai_stdlib.cpp>
@@ -20,7 +25,6 @@ global_variable memory_arena Global_PermMemory = {};
 
 
 
-#define DEBUG_PRINT (1)
 #if DEBUG_PRINT
 #include <bonsai_stdlib/headers/debug_print.h>
 
@@ -139,8 +143,9 @@ bonsai_function counted_string GetTypeNameForDecl(parse_context *Ctx, declaratio
 bonsai_function counted_string GetNameForDecl(declaration* Decl);
 bonsai_function counted_string GetTypeTypeForDatatype(datatype *Data, memory_arena *);
 bonsai_function counted_string GetTypeNameForDatatype(parse_context*, datatype *Data, memory_arena *);
-link_internal datatype         ResolveToBaseType(parse_context *Ctx, type_spec );
-link_internal datatype         ResolveToBaseType(parse_context *Ctx, datatype *);
+link_internal datatype ResolveToBaseType(parse_context *Ctx, type_spec );
+link_internal datatype ResolveToBaseType(parse_context *Ctx, datatype *);
+link_internal datatype ResolveToBaseType(parse_context *Ctx, type_def *);
 
 bonsai_function counted_string Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory);
 bonsai_function void           DoTrueFalse( parse_context *Ctx, parser *Scope, meta_func_arg_stream* ReplacePatterns, b32 DoTrueBranch, string_builder *OutputBuilder, memory_arena *Memory);
@@ -1400,7 +1405,7 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
     //
     // Output the error message
     //
-    umm MinLineLen = 80;
+    u64 MinLineLen = 80;
     {
       c_token *NextT = PeekTokenRawPointer(Parser);
       c_token *PrevT = PeekTokenRawPointer(Parser, -1);
@@ -1511,8 +1516,8 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
     // TODO(Jesse, tags: bug): This isn't working for some reason.  I think
     // GetLongestLineInCursor is busted here.
     counted_string NameLine = FormatCountedString(TranArena, CSz("  %S:%u  "), ParserName, ErrorLineNumber);
-    umm LongestLine = Max(MinLineLen, GetLongestLineInCursor(ParseErrorCursor));
-    LongestLine = Max(MinLineLen, NameLine.Count+4);
+    u64 LongestLine = Max(MinLineLen, GetLongestLineInCursor(ParseErrorCursor));
+    LongestLine = Max(MinLineLen, (u64)NameLine.Count+4);
 
     ParseErrorCursor->End = End;
 
@@ -5065,7 +5070,7 @@ TokenizeAnsiStream(ansi_stream Code, memory_arena* Memory, b32 IgnoreQuotes, par
           LastTokenPushed = Push(PushT, Tokens);
 
           Assert(CommentToken->Erased);
-          CommentToken->Value.Count = (umm)(Code.At - CommentToken->Value.Start - (u32)PushT.Value.Count);
+          CommentToken->Value.Count = (umm)((umm)Code.At - (umm)CommentToken->Value.Start - (umm)PushT.Value.Count);
           CommentToken->LineNumber = LineNumber;
           CommentToken = Push(*CommentToken, Tokens);
           Assert(CommentToken->Erased);
@@ -5819,10 +5824,10 @@ GetFunctionByName(function_decl_stream* Functions, counted_string FuncName)
     auto *Func = GET_ELEMENT(Iter);
     if (Func->NameT)
     {
-      Info("Comparing function (%S) against (%S)", Func->NameT->Value, FuncName);
+      /* Info("Comparing function (%S) against (%S)", Func->NameT->Value, FuncName); */
       if (StringsMatch(Func->NameT->Value, FuncName))
       {
-        Info("Matched");
+        /* Info("Matched"); */
         Result = Func;
         break;
       }
@@ -6081,6 +6086,7 @@ ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_aren
 
       Result.HelpTextPrinted = True;
       PrintToStdout(CSz(
+"\n"
 " -- Overview: poof C metaprogramming compiler --\n"
 "\n"
 " `poof` is a metaprogramming environment for the C and C++ languages\n"
@@ -6657,7 +6663,7 @@ GetBodyTextForNextScope(parser* Parser, memory_arena *Memory)
 }
 
 bonsai_function type_indirection_info
-ParseIndirectionInfo(parser *Parser)
+ParseIndirectionInfo(parser *Parser, type_spec *TypeSpec)
 {
   type_indirection_info Result = {};
 
@@ -6678,7 +6684,8 @@ ParseIndirectionInfo(parser *Parser)
           Result.IsFunctionPtr = True;
         }
 
-        Result.FunctionNameT = OptionalToken(Parser, CTokenType_Identifier);
+        Assert(TypeSpec);
+        TypeSpec->DatatypeToken = OptionalToken(Parser, CTokenType_Identifier);
 
         if (PeekToken(Parser).Type == CTokenType_OpenParen)
            { EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen); }
@@ -7205,7 +7212,7 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
     EatBetween(Parser, CTokenType_LT, CTokenType_GT);
   }
 
-  Result.Indirection = ParseIndirectionInfo(Parser);
+  Result.Indirection = ParseIndirectionInfo(Parser, &Result);
 
   return Result;
 }
@@ -8369,7 +8376,7 @@ ParseCommaSeperatedDecl(parse_context *Ctx)
 
   TryEatAttributes(Parser);
 
-  Result.Indirection = ParseIndirectionInfo(Parser);
+  Result.Indirection = ParseIndirectionInfo(Parser, 0);
 
   Result.NameT = RequireTokenPointer(Parser, CTokenType_Identifier);
 
@@ -8768,7 +8775,7 @@ ParseAndPushTypedef(parse_context *Ctx)
 
   if (IsFunction)
   {
-    Alias = Type.Indirection.FunctionNameT->Value;
+    Alias = Type.DatatypeToken->Value;
   }
   else
   {
@@ -10017,6 +10024,7 @@ debug_global os Os = {};
  * copy-pasted from the callgraph tests .. should we be able to call this from
  * anywhere?  It's also in the platform layer
  */
+#if BONSAI_DEBUG_SYSTEM_API
 bonsai_function b32
 BootstrapDebugSystem()
 {
@@ -10051,6 +10059,7 @@ BootstrapDebugSystem()
 
   return True;
 }
+#endif
 
 bonsai_function meta_func_arg*
 StreamContains(meta_func_arg_stream* Stream, counted_string Match)
@@ -10404,7 +10413,7 @@ ApplyTransformations(meta_transform_op Transformations, counted_string Input, me
     if ( Transformations & strip_all_prefix )
     {
       UnsetBitfield(meta_transform_op, Transformations, strip_all_prefix );
-      Result = StripPrefix(Result, Memory, u64_MAX);
+      Result = StripPrefix(Result, Memory, u32_MAX);
     }
   }
 
@@ -10535,6 +10544,7 @@ PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
       }
     )
 #include <poof/generated/anonymous_function_type_qualifier_fPa8h41Z.h>
+
     Result = Finalize(&Builder, Memory);
   }
 
@@ -10868,11 +10878,11 @@ DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
 
     case type_type_def:
     {
-      // NOTE(Jesse): Pretty sure this path is roughly the following, but I didn't test it.
-      NotImplemented;
+      /* // NOTE(Jesse): Pretty sure this path is roughly the following, but I didn't test it. */
+      /* NotImplemented; */
 
       type_def *TDef = SafeAccessPtr(type_def, Data);
-      datatype DT = ResolveToBaseType(Ctx, TDef->Type);
+      datatype DT = ResolveToBaseType(Ctx, TDef);
       Result = DatatypeIsCompoundDecl(Ctx, Scope, &DT, MetaOperatorT);
     } break;
 
@@ -10917,11 +10927,9 @@ DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
 // This resolves typedefs and tells us if we've got a primitive type, complex type, or undefined type
 //
 link_internal datatype
-ResolveTypedefToBaseType(parse_context *Ctx, datatype *Data)
+ResolveToBaseType(parse_context *Ctx, type_def *TD)
 {
   datatype Result = {};
-
-  type_def *TD = SafeAccessPtr(type_def, Data);
 
   if (TD->Type.DatatypeToken)
   {
@@ -10933,8 +10941,20 @@ ResolveTypedefToBaseType(parse_context *Ctx, datatype *Data)
     }
     else if (Resolved.Type == type_type_def)
     {
-      Result = ResolveTypedefToBaseType(Ctx, &Resolved);
+      type_def *ResolvedTD = SafeAccessPtr(type_def, &Resolved);
+      if (ResolvedTD->Type.Indirection.IsFunction || ResolvedTD->Type.Indirection.IsFunctionPtr)
+      {
+        function_decl Func = {};
+        Result = Datatype(&Func);
+      }
+      else
+      {
+        Result = ResolveToBaseType(Ctx, ResolvedTD);
+      }
     }
+  }
+  else if ( TD->Type.Indirection.IsFunction || TD->Type.Indirection.IsFunctionPtr )
+  {
   }
   else
   {
@@ -10960,7 +10980,8 @@ ResolveToBaseType(parse_context *Ctx, type_spec TypeSpec)
     Result = GetDatatypeByName(Ctx, TypeSpec.DatatypeToken->Value);
     if (Result.Type == type_type_def)
     {
-      Result = ResolveTypedefToBaseType(Ctx, &Result);
+      type_def *ResolvedTD = SafeAccessPtr(type_def, &Result);
+      Result = ResolveToBaseType(Ctx, ResolvedTD);
     }
   }
   else if ( TypeSpec.Indirection.IsFunction ||
@@ -11842,16 +11863,17 @@ ScanForMutationsAndOutput(parser *Parser, counted_string OutputPath, memory_aren
 s32
 main(s32 ArgCount_, const char** ArgStrings)
 {
+  u32 ArgCount = (u32)ArgCount_;
+  SetupStdout(ArgCount, ArgStrings);
+
+
   memory_arena Memory_ = {};
   memory_arena* Memory = &Memory_;
-  Memory->NextBlockSize = Gigabytes(2);
+  Memory->NextBlockSize = Megabytes(256);
 
-  Assert(ArgCount_ > 0);
-  u32 ArgCount = (u32)ArgCount_;
 
   parse_context Ctx = AllocateParseContext(Memory);
 
-  SetupStdout(ArgCount, ArgStrings);
 
   Ctx.Args = ParseArgs(ArgStrings, ArgCount, &Ctx, Memory);
 
@@ -11863,6 +11885,7 @@ main(s32 ArgCount_, const char** ArgStrings)
   TryCreateDirectory(TMP_DIR_ROOT);
   TryCreateDirectory(Ctx.Args.Outpath);
 
+#if BONSAI_DEBUG_SYSTEM_API
   if (Ctx.Args.DoDebugWindow)
   {
     if (BootstrapDebugSystem() == 1)
@@ -11877,6 +11900,7 @@ main(s32 ArgCount_, const char** ArgStrings)
       return FAILURE_EXIT_CODE;
     }
   }
+#endif
 
   b32 Success = False;
   if (ArgCount > 1)
@@ -11928,10 +11952,7 @@ main(s32 ArgCount_, const char** ArgStrings)
         auto Bucket = Table->Elements[BucketIndex];
         while (Bucket)
         {
-          auto P = Bucket->Element;
-
-          ScanForMutationsAndOutput(Parser, Ctx.Args.Outpath, Memory);
-
+          ScanForMutationsAndOutput(&Bucket->Element, Ctx.Args.Outpath, Memory);
           Bucket = Bucket->Next;
         }
       }
@@ -11985,6 +12006,7 @@ main(s32 ArgCount_, const char** ArgStrings)
   }
 
 
+#if BONSAI_DEBUG_SYSTEM_API
   // BootstrapDebugSystem is behind a flag, or it could have failed.
   if (GetDebugState)
   {
@@ -12017,6 +12039,7 @@ main(s32 ArgCount_, const char** ArgStrings)
       /* Ensure(RewindArena(TranArena)); */
     }
   }
+#endif
 
   /* TryDeleteDirectory(TMP_DIR_ROOT); */
 

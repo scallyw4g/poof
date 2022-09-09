@@ -516,7 +516,7 @@ struct type_indirection_info
   b32 IsFunction;
   b32 IsFunctionPtr;
 
-  c_token *FunctionNameT;
+  /* c_token *FunctionNameT; */
 };
 
 global_variable type_indirection_info NullIndirection = {};
@@ -734,7 +734,6 @@ struct type_def
 };
 poof(generate_stream(type_def))
 #include <poof/generated/generate_stream_type_def.h>
-
 
 bonsai_function datatype
 Datatype(declaration* M)

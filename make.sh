@@ -10,29 +10,30 @@
 
 # BuildAllBinariesRunAllTests=1
 
-# RunPreemptivePoof=1
+RunPreemptivePoof=1
 
 # RunPoof=1
 # BuildPoof=1
-# POOF_DEBUGGER="gdb --args"
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
+# POOF_DEBUGGER="gdb --args"
+
+# BuildEmcc=1
 
 # RunParserTests=1
 # BuildParserTests=1
-# TEST_DEBUGGER="gdb --args"
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
+# TEST_DEBUGGER="gdb --args"
 
 # BuildAndRunAllExamples=1
 
-RunIntegrationTests=1
-INTEGRATION_TEST_INDEX=1
-INTEGRATION_TEST_DEBUGGER="gdb --args"
-INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
+# RunIntegrationTests=1
+# INTEGRATION_TEST_INDEX=1
+# INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
+# INTEGRATION_TEST_DEBUGGER="gdb --args"
 
 # RunExtendedIntegrationTests=1
 
 # OPTIMIZATION_LEVEL="-O2"
-
 
 
 
@@ -52,6 +53,48 @@ BIN_TEST="$BIN/tests"
 META_OUT="poof/generated"
 EXTENDED_INTEGRATION_TESTS_SRC="$ROOT/tests/integration_extended"
 
+function BuildEmcc
+{
+  which emcc > /dev/null
+  [ $? -ne 0 ] && echo -e "Please install emcc" && exit 1
+
+  ColorizeTitle "Building Poof (emcc)"
+
+  emcc                            \
+    poof/poof.cpp                 \
+    $OPTIMIZATION_LEVEL           \
+    $CXX_OPTIONS                  \
+    $PLATFORM_CXX_OPTIONS         \
+    $PLATFORM_LINKER_OPTIONS      \
+                                  \
+    -msimd128                     \
+    -sSINGLE_FILE                 \
+    -sALLOW_MEMORY_GROWTH         \
+    -D "__SSE__"                  \
+    -D "BONSAI_EMCC"              \
+    -Wno-disabled-macro-expansion \
+    -Wno-reserved-identifier      \
+                                  \
+    -D "BONSAI_INTERNAL"          \
+    $PLATFORM_INCLUDE_DIRS        \
+    -I "$ROOT"                    \
+    -I "$ROOT/include"            \
+    -I "$ROOT/poof"               \
+    -o poof.html
+
+  if [ $? -eq 0 ]; then
+    echo -e "$Success poof/poof.cpp -> poof.html"
+    echo -e ""
+    echo -e "$Delimeter"
+    echo -e ""
+
+  else
+   echo ""
+   echo -e "$Failed Error building poof, exiting."
+   exit 1
+  fi
+
+}
 
 # git checkout $META_OUT
 
@@ -91,11 +134,10 @@ function RunPoof {
                                   \
     $POOF_LOG_LEVEL               \
     poof/poof.cpp                 \
-    $COLORFLAG                    \
     -D BONSAI_PREPROCESSOR        \
     -D BONSAI_LINUX               \
     -I "."                        \
-    -I "$ROOT/include"           \
+    -I "$ROOT/include"            \
     -o $META_OUT
 
   if [ $? -eq 0 ]; then
@@ -185,7 +227,6 @@ function RunIntegrationTests()
       $INTEGRATION_TEST_DEBUGGER bin/poof \
         $INTEGRATION_TEST_LOG_LEVEL       \
         $filename                         \
-        $COLORFLAG                        \
         -o $test_output_dir
 
       if [[ $? == 0 ]]; then
@@ -247,9 +288,7 @@ function RunParserTests
 {
   ColorizeTitle "Running Parser Tests"
   $TEST_DEBUGGER ./bin/tests/poof \
-    $COLORFLAG                    \
     $TEST_LOG_LEVEL               \
-    $COLORFLAG
 
   echo -e "$Delimeter"
   echo -e ""
@@ -459,6 +498,10 @@ else
 
   if [[ $BuildPoof == 1 ]]; then
     BuildPoof
+  fi
+
+  if [[ $BuildEmcc == 1 ]]; then
+    BuildEmcc
   fi
 
   if [[ $RunPoof == 1 ]]; then

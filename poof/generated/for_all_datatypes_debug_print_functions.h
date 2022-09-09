@@ -3409,12 +3409,6 @@
 
 
 
-                                            DebugPrint("c_token FunctionNameT {\n", Depth+2);
-              DebugPrint(RuntimeStruct.FunctionNameT, Depth+4);
-              DebugPrint("}\n", Depth+2);
-
-
-
 
 
       if (Depth == 0)
