@@ -55,7 +55,7 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/anonymous_func_0.h>
+#include <tests/integration/generated/conditionals/anonymous_foo_struct_0_ROYeHpk2.h>
 #endif
 
 
@@ -138,7 +138,7 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/anonymous_foo_struct_1_ZpWJur7o.h>
+#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_ZpWJur7o.h>
 #endif
 
 #if 1
@@ -176,7 +176,7 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/anonymous_func_1.h>
+#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_w3dGd6mh.h>
 #endif
 
 
@@ -196,7 +196,7 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/anonymous_func_2.h>
+#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_TObfsxb6.h>
 #endif
 
 
@@ -216,5 +216,5 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/anonymous_func_3.h>
+#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_YvJnQLUi.h>
 #endif
