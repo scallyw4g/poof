@@ -1355,7 +1355,18 @@ CTokenCursor(c_token_buffer *Buf, counted_string Filename, token_cursor_source S
 inline void
 CTokenCursor(c_token_cursor *Result, umm Count, memory_arena *Memory, counted_string Filename, token_cursor_source Source, c_token_cursor_up Up)
 {
+  Info("Allocating (%u)bytes for CTokenCursor, Count=(%u)", sizeof(c_token)*Count, Count);
   c_token *Buffer = AllocateProtection(c_token, Memory, Count, False);
+
+  if (Buffer)
+  {
+    Info("Successfully allocated buffer");
+  }
+  else
+  {
+    Info("Failed allocating buffer");
+  }
+
   CTokenCursor(Result, Buffer, Count, Filename, Source, Up);
 }
 

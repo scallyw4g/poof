@@ -4537,12 +4537,15 @@ TokenizeAnsiStream(ansi_stream Code, memory_arena* Memory, b32 IgnoreQuotes, par
 
   u32 LineNumber = 1;
 
+  umm ByteCount = TotalElements(&Code);
+  umm TokensToAllocate = ByteCount/2;
+
   // Allocate a huge buffer that gets truncated to the necessary size at the end of the tokenization
   //
   // TODO(Jesse)(hardening): This could now (easily?) expand as we go, but at
   // the moment I don't see a reason for doing that work.  Maybe when I get
   // around to hardening.
-  c_token_cursor *Tokens = AllocateTokenCursor(Memory, Code.Filename, (u32)Megabytes(8), Source, LineNumber, {0, 0});
+  c_token_cursor *Tokens = AllocateTokenCursor(Memory, Code.Filename, TokensToAllocate, Source, LineNumber, {0, 0});
 
   if (!Tokens->Start)
   {
@@ -5151,7 +5154,8 @@ TokenizeAnsiStream(ansi_stream Code, memory_arena* Memory, b32 IgnoreQuotes, par
   TruncateToCurrentElements(Tokens);
   umm NewSize = TotalSize(Tokens);
 
-  Reallocate((u8*)Tokens->Start, Memory, CurrentSize, NewSize);
+  Info("Attempting to reallocate CurrentSize(%u), NewSize(%u)", CurrentSize, NewSize);
+  Ensure(Reallocate((u8*)Tokens->Start, Memory, CurrentSize, NewSize));
 
   Rewind(Tokens);
 
@@ -11939,14 +11943,31 @@ ScanForMutationsAndOutput(parser *Parser, counted_string OutputPath, memory_aren
 
 }
 
-link_external char * TestFunc(char *zInput, umm InputLen)
+link_external b32 DoPoofForWeb(char *zInput, umm InputLen)
 {
-  SetTerminalColorsOff();
+  b32 Result = False;
 
   counted_string Input = CS(zInput, InputLen);
-  Info(CSz("%S"), Input);
 
-  return zInput;
+  SetTerminalColorsOff();
+
+  memory_arena tmpMemory = {};
+  memory_arena *Memory = &tmpMemory;
+
+  parse_context CtxObj = AllocateParseContext(Memory);
+  parse_context *Ctx = &CtxObj;
+
+  parser *Parser = ParserForAnsiStream(Ctx, AnsiStream(Input), TokenCursorSource_RootFile);
+  Ctx->CurrentParser = Parser;
+
+
+  if (RunPreprocessor(Ctx, Parser, 0, Memory))
+  {
+    GoGoGadgetMetaprogramming(Ctx, 0);
+    Result = True;
+  }
+
+  return Result;
 }
 
 s32
