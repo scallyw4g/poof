@@ -302,6 +302,7 @@ typedef long int __int64;
 typedef long int s64;
 
 typedef void func(int *ArgName);
+typedef foo  func(int *ArgName);
 
 typedef unsigned int u32;
 

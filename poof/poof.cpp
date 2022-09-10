@@ -8829,15 +8829,13 @@ ParseAndPushTypedef(parse_context *Ctx)
     Func.Type = function_type_normal;
     Func.ReturnType = Type;
 
-    if (Type.DatatypeToken)
+    if (AliasT)
     {
-      Assert(AliasT == 0);
-      Func.NameT = Type.DatatypeToken;
+      Func.NameT = AliasT;
     }
     else
     {
-      Assert(Type.DatatypeToken == 0);
-      Func.NameT = AliasT;
+      Func.NameT = Type.DatatypeToken;
     }
 
     Assert(Func.NameT);
