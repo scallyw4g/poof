@@ -13,7 +13,7 @@ struct nested_struct
 {
 };
 
-struct foo_struct
+struct foo_struct_0
 {
   int *first[0] = 42, *second = -1;
 
@@ -33,6 +33,7 @@ struct foo_struct
 
   nested_struct foo;
 
+  undefined_type _und0;
 };
 
 struct bar_struct
@@ -53,7 +54,7 @@ poof(
 #include <tests/integration/generated/anonymous_function_foo_1.h>
 
 poof(
-  func (foo_struct Type)
+  func (foo_struct_0 Type)
   {
     Type.map_members (Value)
     {
@@ -64,7 +65,7 @@ poof(
 #include <tests/integration/generated/anonymous_function_foo_2.h>
 #endif
 
-poof(d_union foobar_dunion { foo_struct bar_struct } )
+poof(d_union foobar_dunion { foo_struct_0 bar_struct } )
 #include <tests/integration/generated/d_union_foobar_union.h>
 
 poof(

@@ -9,7 +9,7 @@
     -- filtered members start --
 
           
-                        foo_struct foo_struct
+                        foo_struct_0 foo_struct_0
 
 
 

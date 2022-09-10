@@ -11,5 +11,6 @@
       foo_enum fenum 
       foo_enum fenum2 
       nested_struct foo 
+      undefined_type _und0 
 
 
