@@ -1,4 +1,32 @@
-                  char  _char not a function
+                  int  first not a function
+
+              int  second not a function
+
+              int  bar not a function
+
+              int  baz not a function
+
+              float  fbaz not a function
+
+              double  dbaz not a function
+
+              long double  ldbaz not a function
+
+              long long  ldbaz not a function
+
+              long int  libaz not a function
+
+              char  cbaz not a function
+
+              foo_enum fenum not a function
+
+              foo_enum fenum2 not a function
+
+              nested_struct foo not a function
+
+              undefined_type _und0 not a function
+
+              char  _char not a function
 
               int  _int not a function
 

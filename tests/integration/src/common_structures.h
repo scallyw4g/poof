@@ -46,30 +46,6 @@ struct bar_struct
 };
 
 
-struct foo_struct_0
-{
-  int *first[0] = 42, *second = -1;
-
-  int bar = 0;
-  int baz = (1 << 1) -1;
-
-  float fbaz = 42.0f;
-  double dbaz = 42.0;
-  long double ldbaz = 42.0;
-  long long ldbaz = 42.0;
-  long int libaz = 42.0;
-
-  char cbaz = 'f';
-
-  enum foo_enum fenum;
-  foo_enum fenum2;
-
-  nested_struct foo;
-
-  undefined_type _und0;
-};
-
-
 struct counted_string {
   int count;
   const char* data;
@@ -92,8 +68,33 @@ typedef int (foofunc0)(void);
 typedef int foofunc1(void);
 typedef foo_enum foofunc2(int);
 
+struct foo_struct_0
+{
+};
+
 struct foo_struct_1
 {
+  int *first[0] = 42, *second = -1;
+
+  int bar = 0;
+  int baz = (1 << 1) -1;
+
+  float fbaz = 42.0f;
+  double dbaz = 42.0;
+  long double ldbaz = 42.0;
+  long long ldbaz = 42.0;
+  long int libaz = 42.0;
+
+  char cbaz = 'f';
+
+  enum foo_enum fenum;
+  foo_enum fenum2;
+
+  nested_struct foo;
+
+  undefined_type _und0;
+
+
   char           _char;
   int            _int;
   s32            _s32;

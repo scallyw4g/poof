@@ -1,4 +1,32 @@
-                  char  _char defined
+                  int  first defined
+
+              int  second defined
+
+              int  bar defined
+
+              int  baz defined
+
+              float  fbaz defined
+
+              double  dbaz defined
+
+              long double  ldbaz defined
+
+              long long  ldbaz defined
+
+              long int  libaz defined
+
+              char  cbaz defined
+
+              foo_enum fenum defined
+
+              foo_enum fenum2 defined
+
+              nested_struct foo defined
+
+              undefined_type _und0 not defined
+
+              char  _char defined
 
               int  _int defined
 

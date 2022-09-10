@@ -1,4 +1,32 @@
-                  char  _char not struct
+                  int  first not struct
+
+              int  second not struct
+
+              int  bar not struct
+
+              int  baz not struct
+
+              float  fbaz not struct
+
+              double  dbaz not struct
+
+              long double  ldbaz not struct
+
+              long long  ldbaz not struct
+
+              long int  libaz not struct
+
+              char  cbaz not struct
+
+              foo_enum fenum not struct
+
+              foo_enum fenum2 not struct
+
+              nested_struct foo is struct
+
+              undefined_type _und0 not struct
+
+              char  _char not struct
 
               int  _int not struct
 

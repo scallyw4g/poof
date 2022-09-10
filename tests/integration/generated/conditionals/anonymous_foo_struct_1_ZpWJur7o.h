@@ -1,4 +1,32 @@
-                  char  _char not enum
+                  int  first not enum
+
+              int  second not enum
+
+              int  bar not enum
+
+              int  baz not enum
+
+              float  fbaz not enum
+
+              double  dbaz not enum
+
+              long double  ldbaz not enum
+
+              long long  ldbaz not enum
+
+              long int  libaz not enum
+
+              char  cbaz not enum
+
+              foo_enum fenum is enum
+
+              foo_enum fenum2 is enum
+
+              nested_struct foo not enum
+
+              undefined_type _und0 not enum
+
+              char  _char not enum
 
               int  _int not enum
 

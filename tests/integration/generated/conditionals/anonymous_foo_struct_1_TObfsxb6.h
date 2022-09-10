@@ -1,4 +1,32 @@
-                  char  _char is primitive
+                  int  first is primitive
+
+              int  second is primitive
+
+              int  bar is primitive
+
+              int  baz is primitive
+
+              float  fbaz is primitive
+
+              double  dbaz is primitive
+
+              long double  ldbaz is primitive
+
+              long long  ldbaz is primitive
+
+              long int  libaz is primitive
+
+              char  cbaz is primitive
+
+              foo_enum fenum not primitive
+
+              foo_enum fenum2 not primitive
+
+              nested_struct foo not primitive
+
+              undefined_type _und0 not primitive
+
+              char  _char is primitive
 
               int  _int is primitive
 

@@ -1,4 +1,32 @@
-                  char  _char not compound
+                  int  first not compound
+
+              int  second not compound
+
+              int  bar not compound
+
+              int  baz not compound
+
+              float  fbaz not compound
+
+              double  dbaz not compound
+
+              long double  ldbaz not compound
+
+              long long  ldbaz not compound
+
+              long int  libaz not compound
+
+              char  cbaz not compound
+
+              foo_enum fenum not compound
+
+              foo_enum fenum2 not compound
+
+              nested_struct foo is compound
+
+              undefined_type _und0 not compound
+
+              char  _char not compound
 
               int  _int not compound
 

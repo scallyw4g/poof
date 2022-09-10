@@ -1,6 +1,5 @@
 #include <tests/integration/src/common_structures.h>
 
-#if 1
 poof(
   func (foo_enum Type)
   {
@@ -12,7 +11,7 @@ poof(
 #include <tests/integration/generated/anonymous_function_foo_1.h>
 
 poof(
-  func (foo_struct_0 Type)
+  func (foo_struct_1 Type)
   {
     Type.map_members (Value)
     {
@@ -20,10 +19,9 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/anonymous_function_foo_2.h>
-#endif
+#include <tests/integration/generated/iteration/anonymous_foo_struct_1_M6dQmZmw.h>
 
-poof(d_union foobar_dunion { foo_struct_0 bar_struct } )
+poof(d_union foobar_dunion { foo_struct_1 bar_struct } )
 #include <tests/integration/generated/d_union_foobar_union.h>
 
 poof(

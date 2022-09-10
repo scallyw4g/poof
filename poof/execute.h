@@ -335,7 +335,6 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                         auto Var = SafeAccess(variable_decl, Member);
                         Assert(Var->Type.DatatypeToken);
                         auto DT = GetDatatypeByName(Ctx, Var->Type.DatatypeToken->Value);
-                        Assert(DT.Type);
                         auto VarMembers = GetMembersFor(&DT);
 
                         if (VarMembers)
