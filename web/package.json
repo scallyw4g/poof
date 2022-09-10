@@ -1,0 +1,18 @@
+{
+  "name": "poofweb",
+  "version": "0.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "@codemirror/lang-javascript": "^6.0.2",
+    "@rollup/plugin-node-resolve": "^14.0.1",
+    "codemirror": "^6.0.1",
+    "rollup": "^2.79.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "WTFPL"
+}

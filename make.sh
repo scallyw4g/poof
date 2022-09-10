@@ -83,9 +83,11 @@ function BuildEmcc
     -I "$ROOT/poof"                        \
     -o web/poof_runtime.js
 
-  rollup web/main.js \
-    --file web/main.bundle.js \
-    --format iife
+  web/node_modules/.bin/rollup \
+    web/main.js                \
+    -f iife                    \
+    -o web/main.bundle.js      \
+    -p @rollup/plugin-node-resolve
 
   if [ $? -eq 0 ]; then
     echo -e "$Success poof/poof.cpp -> poof.html"

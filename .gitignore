@@ -6,3 +6,6 @@ breakpoints
 examples/*/main
 
 tests/integration_extended
+
+web/main.bundle.js
+web/node_modules
