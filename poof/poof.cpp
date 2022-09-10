@@ -4538,7 +4538,7 @@ TokenizeAnsiStream(ansi_stream Code, memory_arena* Memory, b32 IgnoreQuotes, par
   u32 LineNumber = 1;
 
   umm ByteCount = TotalElements(&Code);
-  umm TokensToAllocate = ByteCount/2;
+  umm TokensToAllocate = ByteCount;
 
   // Allocate a huge buffer that gets truncated to the necessary size at the end of the tokenization
   //
@@ -11663,29 +11663,44 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
             if (Func)
             {
               RequireToken(Parser, CTokenType_OpenParen);
-              counted_string DatatypeName = RequireToken(Parser, CTokenType_Identifier).Value;
+              c_token *DatatypeNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
+              counted_string DatatypeName = DatatypeNameT->Value;
               RequireToken(Parser, CTokenType_CloseParen);
               RequireToken(Parser, CTokenType_CloseParen);
 
               datatype Arg = GetDatatypeByName(&Ctx->Datatypes, DatatypeName);
-              meta_func_arg_stream Args = {};
-              Push(&Args, ReplacementPattern(Func->ArgName, Arg), Memory);
-              counted_string Code = Execute(Func, &Args, Ctx, Memory);
-              while(OptionalToken(Parser, CTokenType_Semicolon));
 
-              if (Func->Body.ErrorCode)
+              if (Arg.Type)
               {
-                Parser->ErrorCode = Func->Body.ErrorCode;
-                ParseInfoMessage( Parser,
-                                  FormatCountedString(TranArena,
-                                                      CSz("Unable to generate code for (func %S)"), Func->Name),
-                                  DirectiveT);
+                meta_func_arg_stream Args = {};
+                Push(&Args, ReplacementPattern(Func->ArgName, Arg), Memory);
+                counted_string Code = Execute(Func, &Args, Ctx, Memory);
+                while(OptionalToken(Parser, CTokenType_Semicolon));
+
+                if (Func->Body.ErrorCode)
+                {
+                  Parser->ErrorCode = Func->Body.ErrorCode;
+                  ParseInfoMessage( Parser,
+                                    FormatCountedString(TranArena,
+                                                        CSz("Unable to generate code for (func %S)"), Func->Name),
+                                    DirectiveT);
+                }
+                else
+                {
+                  counted_string OutfileName = GenerateOutfileNameFor(Func->Name, DatatypeName, Memory);
+                  FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
+                }
               }
               else
               {
-                counted_string OutfileName = GenerateOutfileNameFor(Func->Name, DatatypeName, Memory);
-                FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
+                PoofTypeError( Parser,
+                               ParseErrorCode_UndefinedDatatype,
+                               FormatCountedString( TranArena,
+                                                    CSz("(%S) is not a defined datatype"),
+                                                    DatatypeName ),
+                               DatatypeNameT );
               }
+
             }
             else
             {
@@ -11694,7 +11709,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
                              FormatCountedString( TranArena,
                                                   CSz("(%S) is not a poof keyword or function name"),
                                                   DirectiveT->Value ),
-                             DirectiveT);
+                             DirectiveT );
             }
           }
 
@@ -11963,7 +11978,12 @@ link_external b32 DoPoofForWeb(char *zInput, umm InputLen)
 
   if (RunPreprocessor(Ctx, Parser, 0, Memory))
   {
+    FullRewind(Ctx->CurrentParser);
+    ParseDatatypes(Ctx, Parser);
+
+    FullRewind(Ctx->CurrentParser);
     GoGoGadgetMetaprogramming(Ctx, 0);
+
     Result = True;
   }
 

@@ -6,30 +6,45 @@ window.addEventListener('DOMContentLoaded', () => {
 
   Module.onRuntimeInitialized = () => {
 
-    let DoPoofForWeb = Module.cwrap('DoPoofForWeb', 'number', ['string', 'number']);
-
-    let ex02 = FS.readFile('examples/002_named_function_syntax/main.c', {encoding: 'utf8'});
-
-    console.log("DoPoofForWeb()");
-    console.log( DoPoofForWeb(ex02, ex02.length) );
-
-
-    let ex02Output = FS.readFile('metaprogram_another_struct_my_struct.h', {encoding: 'utf8'});
-
     let editorDiv = document.querySelector("div#editor");
     let outputDiv = document.querySelector("div#output");
+    let bigRedButton = document.querySelector("div#big-red-button");
+
+    let DoPoofForWeb = Module.cwrap('DoPoofForWeb', 'number', ['string', 'number']);
+
+    let ex02Src = FS.readFile('examples/002_named_function_syntax/main.c', {encoding: 'utf8'});
+
+
+
 
     let srcEditor = new EditorView({
       extensions: [basicSetup, cpp()],
-      doc: ex02,
+      doc: ex02Src,
       parent: editorDiv,
     })
 
-    let outputEditor = new EditorView({
-      extensions: [basicSetup, cpp()],
-      doc: ex02Output,
-      parent: outputDiv,
-    })
+
+
+    bigRedButton.addEventListener('click', () => {
+
+      let doc = srcEditor.state.doc;
+      let srcToPoof = doc.sliceString(0, doc.length);
+
+      // console.log(doc);
+      // console.log(srcToPoof);
+
+      console.log("DoPoofForWeb()");
+      console.log( DoPoofForWeb(srcToPoof, srcToPoof.length) );
+
+      let ex02Output = FS.readFile('metaprogram_another_struct_my_struct.h', {encoding: 'utf8'});
+
+      let outputEditor = new EditorView({
+        extensions: [basicSetup, cpp()],
+        doc: ex02Output,
+        parent: outputDiv,
+      })
+
+    });
 
   }
 

@@ -39,6 +39,9 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
       ITERATE_OVER_AS(Replace, ReplacePatterns)
       {
         meta_func_arg* Replace = GET_ELEMENT(ReplaceIter);
+
+        Assert(Replace->Data.Type);
+
         if ( (ImpetusWasIdentifier && StringsMatch(Replace->Match, BodyToken->Value) ) ||
              (ImpetusWasOpenParen  && OptionalTokenRaw(Scope, CToken(Replace->Match)))
            )

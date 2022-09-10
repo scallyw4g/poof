@@ -8,7 +8,7 @@
 # Calling functions by name on the command line shouldn't be affected by these.
 
 
-BuildAllBinariesRunAllTests=1
+# BuildAllBinariesRunAllTests=1
 
 # RunPreemptivePoof=1
 
@@ -17,7 +17,7 @@ BuildAllBinariesRunAllTests=1
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 # POOF_DEBUGGER="gdb --args"
 
-# BuildEmcc=1
+BuildEmcc=1
 
 # RunParserTests=1
 # BuildParserTests=1
@@ -60,32 +60,38 @@ function BuildEmcc
 
   ColorizeTitle "Building Poof (emcc)"
 
-  emcc                                                       \
-    poof/poof.cpp                                            \
-    $OPTIMIZATION_LEVEL                                      \
-    $CXX_OPTIONS                                             \
-    $PLATFORM_CXX_OPTIONS                                    \
-    $PLATFORM_LINKER_OPTIONS                                 \
-                                                             \
-    -msimd128                                                \
-    -sALLOW_MEMORY_GROWTH                                    \
-    -sEXPORTED_FUNCTIONS=_DoPoofForWeb                       \
-    -sEXPORTED_RUNTIME_METHODS=ccall,cwrap                   \
-    -D "__SSE__"                                             \
-    -D "BONSAI_EMCC"                                         \
-    -Wno-disabled-macro-expansion                            \
-    -Wno-reserved-identifier                                 \
-                                                             \
-    -sFORCE_FILESYSTEM                                       \
-    --preload-file examples/002_named_function_syntax/main.c \
-                                                             \
-    -fsanitize=undefined                                     \
-                                                             \
-    -D "BONSAI_INTERNAL"                                     \
-    $PLATFORM_INCLUDE_DIRS                                   \
-    -I "$ROOT"                                               \
-    -I "$ROOT/include"                                       \
-    -I "$ROOT/poof"                                          \
+  emcc                                                        \
+    poof/poof.cpp                                             \
+    $OPTIMIZATION_LEVEL                                       \
+    $CXX_OPTIONS                                              \
+    $PLATFORM_CXX_OPTIONS                                     \
+    $PLATFORM_LINKER_OPTIONS                                  \
+                                                              \
+    -O0                                                       \
+    -g                                                        \
+                                                              \
+    -msimd128                                                 \
+    -sALLOW_MEMORY_GROWTH                                     \
+    -sEXPORTED_FUNCTIONS=_DoPoofForWeb                        \
+    -sEXPORTED_RUNTIME_METHODS=ccall,cwrap                    \
+    -D "__SSE__"                                              \
+    -D "BONSAI_EMCC"                                          \
+    -Wno-disabled-macro-expansion                             \
+    -Wno-reserved-identifier                                  \
+                                                              \
+    -sFORCE_FILESYSTEM                                        \
+    --preload-file examples/002_named_function_syntax/main.c  \
+                                                              \
+    -sASSERTIONS=2                                            \
+    -sSAFE_HEAP=1                                             \
+    -sSTACK_OVERFLOW_CHECK=1                                  \
+    -fsanitize=undefined                                      \
+                                                              \
+    -D "BONSAI_INTERNAL"                                      \
+    $PLATFORM_INCLUDE_DIRS                                    \
+    -I "$ROOT"                                                \
+    -I "$ROOT/include"                                        \
+    -I "$ROOT/poof"                                           \
     -o web/poof_runtime.js
 
 
