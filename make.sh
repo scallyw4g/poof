@@ -207,10 +207,6 @@ function RunIntegrationTests()
 
     test_output_dir=$INTEGRATION_OUTPUT_DIR/$basename_stripped
 
-    if [ ! -d $test_output_dir ]; then
-      mkdir $test_output_dir
-    fi
-
     # Each test file has a directory created under the output directory that
     # we'll write all the poof() output to for that test file.  We diff that
     # whole directory to confirm the output is identical for that test file
@@ -224,6 +220,13 @@ function RunIntegrationTests()
 
 
     if [[ $run_test == 1 ]]; then
+
+      if [ -d $test_output_dir ]; then
+        rm -Rf $test_output_dir
+      fi
+
+      mkdir -p $test_output_dir
+
       $INTEGRATION_TEST_DEBUGGER bin/poof \
         $INTEGRATION_TEST_LOG_LEVEL       \
         $filename                         \
