@@ -1,46 +1,4 @@
-#define upshift_by_31 << 31
-
-enum foo_enum
-{
-  foo = 1,
-  bar = 'a',
-  baz = (1 upshift_by_31),
-  fing
-};
-
-
-struct nested_struct
-{
-};
-
-struct foo_struct_0
-{
-  int *first[0] = 42, *second = -1;
-
-  int bar = 0;
-  int baz = (1 << 1) -1;
-
-  float fbaz = 42.0f;
-  double dbaz = 42.0;
-  long double ldbaz = 42.0;
-  long long ldbaz = 42.0;
-  long int libaz = 42.0;
-
-  char cbaz = 'f';
-
-  enum foo_enum fenum;
-  foo_enum fenum2;
-
-  nested_struct foo;
-
-  undefined_type _und0;
-};
-
-struct bar_struct
-{
-  int fda;
-};
-
+#include <tests/integration/src/common_structures.h>
 
 #if 1
 poof(
