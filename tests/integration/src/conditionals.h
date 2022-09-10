@@ -39,7 +39,7 @@ struct counted_string {
   const char* data;
 };
 
-#if 0
+#if 1
 poof(
   func (foo_struct_0 TFooStruct)
   {
@@ -96,10 +96,12 @@ struct foo_struct_1
 
   foofuncptr FooFuncPtr;
   foofunc FooFun;
+
+  void **(*func_type_name)(void) AnotherFunc[2];
 };
 
 
-#if 0
+#if 1
 poof(
   func (foo_struct_1 TFooStruct)
   {
@@ -119,7 +121,7 @@ poof(
 #endif
 
 
-#if 0
+#if 1
 poof(
   func (foo_struct_1 TFooStruct)
   {
@@ -139,7 +141,7 @@ poof(
 #endif
 
 
-#if 0
+#if 1
 poof(
   func (foo_struct_1 TFooStruct)
   {

@@ -34,5 +34,7 @@
 
               foofunc FooFun not compound
 
+              func_type_name AnotherFunc not compound
+
 
 

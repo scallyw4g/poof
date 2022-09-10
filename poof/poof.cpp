@@ -5881,7 +5881,7 @@ GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
   compound_decl *S = GetStructByType(&Datatypes->Structs, Name);
   enum_decl     *E = GetEnumByType(&Datatypes->Enums, Name);
   type_def      *T = GetTypedefByAlias(&Datatypes->Typedefs, Name);
-  function_decl *F = {}; //GetFunctionByName(&Datatypes->Functions, Name);
+  function_decl *F = GetFunctionByName(&Datatypes->Functions, Name);
 
   datatype Result = {};
 
@@ -5889,26 +5889,33 @@ GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
   {
     if (T || E || F)
     {
-      // TODO(Jesse, correctness): Not sure what the solution to this is, but
-      // this is definitely incorrect.
       BUG("Multiple datatypes for %S detected!", Name);
     }
     Result = Datatype(S);
   }
   else if (E)
   {
-    Assert(!T && !S && !F);
+    if (T || S || F)
+    {
+      BUG("Multiple datatypes for %S detected!", Name);
+    }
     Result = Datatype(E);
-  }
-  else if (T)
-  {
-    Assert(!E && !S && !F);
-    Result = Datatype(T);
   }
   else if (F)
   {
-    Assert(!S && !E && !T);
+    if (S || E || T)
+    {
+      BUG("Multiple datatypes for %S detected!", Name);
+    }
     Result = Datatype(F);
+  }
+  else if (T)
+  {
+    if (E || S || F)
+    {
+      BUG("Multiple datatypes for %S detected!", Name);
+    }
+    Result = Datatype(T);
   }
 
   return Result;
@@ -8770,6 +8777,7 @@ ParseAndPushTypedef(parse_context *Ctx)
 
   type_spec Type = ParseTypeSpecifier(Ctx);
 
+  c_token *AliasT = {};
   counted_string Alias = {};
   b32 IsFunction = Type.Indirection.IsFunction;
 
@@ -8779,7 +8787,8 @@ ParseAndPushTypedef(parse_context *Ctx)
   }
   else
   {
-    Alias = RequireToken(Parser, CTokenType_Identifier).Value;
+    AliasT = RequireTokenPointer(Parser, CTokenType_Identifier);
+    Alias = AliasT->Value;
 
     if (PeekToken(Parser).Type == CTokenType_OpenParen)
     {
@@ -8814,7 +8823,21 @@ ParseAndPushTypedef(parse_context *Ctx)
     .Alias = Alias,
   };
 
-  Push(&Ctx->Datatypes.Typedefs, Typedef, Ctx->Memory);
+  if (Type.Indirection.IsFunction || Type.Indirection.IsFunctionPtr)
+  {
+    function_decl Func = {};
+    Func.Type = function_type_normal;
+    Func.ReturnType = Type;
+    Func.NameT = Type.DatatypeToken;
+    Assert(AliasT == 0);
+
+    Info("Pushing function decl (%S)", Func.NameT ? Func.NameT->Value : CSz("anonymous"));
+    Push(&Ctx->Datatypes.Functions, Func, Ctx->Memory);
+  }
+  else
+  {
+    Push(&Ctx->Datatypes.Typedefs, Typedef, Ctx->Memory);
+  }
 }
 
 bonsai_function void
@@ -10800,6 +10823,65 @@ DatatypeIsVariableDecl(datatype *Data)
   return Result;
 }
 
+link_internal b32
+DatatypeIsFunction(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
+{
+  b32 Result = {};
+  switch (Data->Type)
+  {
+    case type_datatype_noop:
+    case type_enum_member:
+    case type_primitive_def:
+    {
+    } break;
+
+    case type_type_def:
+    {
+      // NOTE(Jesse): Pretty sure this path is roughly the following, but I didn't test it.
+      NotImplemented;
+
+      type_def *TDef = SafeAccessPtr(type_def, Data);
+      datatype DT = ResolveToBaseType(Ctx, TDef->Type);
+      Result = DatatypeIsFunction(Ctx, Scope, &DT, MetaOperatorT);
+    } break;
+
+    case type_declaration:
+    {
+      declaration *Decl = SafeAccess(declaration, Data);
+
+      switch(Decl->Type)
+      {
+        case type_declaration_noop:
+        {
+          // TODO(Jesse): ?
+          InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT);
+        } break;
+
+        case type_function_decl:
+        {
+          Result = True;
+        } break;
+
+        case type_enum_decl:
+        case type_compound_decl:
+        {
+        } break;
+
+        case type_variable_decl:
+        {
+          variable_decl *VDecl = SafeAccess(variable_decl, Decl);
+          Result = (VDecl->Type.Indirection.IsFunction || VDecl->Type.Indirection.IsFunctionPtr);
+          /* datatype DT = ResolveToBaseType(Ctx, VDecl->Type); */
+          /* Result = DatatypeIsFunction(Ctx, Scope, &DT, MetaOperatorT); */
+        } break;
+      }
+
+    } break;
+  }
+
+  return Result;
+}
+
 // This is an _almost_ exact duplicate of DatatypeIsCompoundDecl.  The only difference
 // is which switch statement we set the result in.  How do we fix?
 //
@@ -10852,7 +10934,6 @@ DatatypeIsFunctionDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
         {
           variable_decl *VDecl = SafeAccess(variable_decl, Decl);
           datatype DT = ResolveToBaseType(Ctx, VDecl->Type);
-          /* Assert(DatatypeIsVariableDecl(&DT) == False); */
           Result = DatatypeIsFunctionDecl(Ctx, Scope, &DT, MetaOperatorT);
         } break;
       }
@@ -10942,19 +11023,8 @@ ResolveToBaseType(parse_context *Ctx, type_def *TD)
     else if (Resolved.Type == type_type_def)
     {
       type_def *ResolvedTD = SafeAccessPtr(type_def, &Resolved);
-      if (ResolvedTD->Type.Indirection.IsFunction || ResolvedTD->Type.Indirection.IsFunctionPtr)
-      {
-        function_decl Func = {};
-        Result = Datatype(&Func);
-      }
-      else
-      {
-        Result = ResolveToBaseType(Ctx, ResolvedTD);
-      }
+      Result = ResolveToBaseType(Ctx, ResolvedTD);
     }
-  }
-  else if ( TD->Type.Indirection.IsFunction || TD->Type.Indirection.IsFunctionPtr )
-  {
   }
   else
   {

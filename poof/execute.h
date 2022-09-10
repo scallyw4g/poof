@@ -203,7 +203,9 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
             case is_function:
             {
               RequireToken(Scope, CTokenType_Question);
+              b32 IsFunc = DatatypeIsFunction(Ctx, Scope, &Replace->Data, MetaOperatorToken);
               function_decl *D = DatatypeIsFunctionDecl(Ctx, Scope, &Replace->Data, MetaOperatorToken);
+
 
               if (D)
               {
@@ -222,7 +224,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
               }
 
 
-              b32 DoTrueBranch = (D != 0);
+              b32 DoTrueBranch = (IsFunc || D != 0);
               DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
             } break;
 

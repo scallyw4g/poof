@@ -30,5 +30,11 @@
 
               counted_string S1 is primitive
 
+              foofuncptr FooFuncPtr not primitive
+
+              foofunc FooFun not primitive
+
+              func_type_name AnotherFunc not primitive
+
 
 
