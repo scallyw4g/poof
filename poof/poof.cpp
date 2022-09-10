@@ -8828,8 +8828,19 @@ ParseAndPushTypedef(parse_context *Ctx)
     function_decl Func = {};
     Func.Type = function_type_normal;
     Func.ReturnType = Type;
-    Func.NameT = Type.DatatypeToken;
-    Assert(AliasT == 0);
+
+    if (Type.DatatypeToken)
+    {
+      Assert(AliasT == 0);
+      Func.NameT = Type.DatatypeToken;
+    }
+    else
+    {
+      Assert(Type.DatatypeToken == 0);
+      Func.NameT = AliasT;
+    }
+
+    Assert(Func.NameT);
 
     Info("Pushing function decl (%S)", Func.NameT ? Func.NameT->Value : CSz("anonymous"));
     Push(&Ctx->Datatypes.Functions, Func, Ctx->Memory);
