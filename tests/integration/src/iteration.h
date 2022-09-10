@@ -45,9 +45,9 @@ struct bar_struct
 poof(
   func (foo_enum Type)
   {
-    (Type.map_values (Value) {
+    Type.map_values (Value) {
       (Value.name) (Value.value)
-    })
+    }
   }
 )
 #include <tests/integration/generated/anonymous_function_foo_1.h>
@@ -55,9 +55,10 @@ poof(
 poof(
   func (foo_struct Type)
   {
-    (Type.map_members (Value) {
+    Type.map_members (Value)
+    {
       (Value.type) (Value.name) (Value.value)
-    })
+    }
   }
 )
 #include <tests/integration/generated/anonymous_function_foo_2.h>
@@ -71,23 +72,25 @@ poof(
   {
     -- all members start --
 
-    (Foobar.map_members (Member) {
+    Foobar.map_members (Member)
+    {
       (Member.type) (Member.name) (Member.value)
-    })
+    }
 
     -- all members end --
 
     -- filtered members start --
 
-    (Foobar.map_members(M)
+    Foobar.map_members(M)
     {
-      (M.is_union? {
-        (M.map_members(UM).containing(nested_struct)
+      M.is_union?
+      {
+        M.map_members(UM).containing(nested_struct)
         {
           (UM.type) (UM.name)
-        })
-      })
-    })
+        }
+      }
+    }
 
     -- filtered members end --
 
