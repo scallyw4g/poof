@@ -11939,6 +11939,16 @@ ScanForMutationsAndOutput(parser *Parser, counted_string OutputPath, memory_aren
 
 }
 
+link_external char * TestFunc(char *zInput, umm InputLen)
+{
+  SetTerminalColorsOff();
+
+  counted_string Input = CS(zInput, InputLen);
+  Info(CSz("%S"), Input);
+
+  return zInput;
+}
+
 s32
 main(s32 ArgCount_, const char** ArgStrings)
 {
