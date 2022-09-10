@@ -28,7 +28,7 @@
 
 RunIntegrationTests=1
 # INTEGRATION_TEST_INDEX=0
-INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
+# INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 
 # RunExtendedIntegrationTests=1

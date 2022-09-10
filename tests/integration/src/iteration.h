@@ -3,7 +3,8 @@
 poof(
   func (foo_enum Type)
   {
-    Type.map_values (Value) {
+    Type.map_values (Value)
+    {
       (Value.name) (Value.value)
     }
   }
@@ -53,5 +54,5 @@ poof(
 
   }
 )
-#include <tests/integration/generated/anonymous_function_foo_3.h>
+#include <tests/integration/generated/iteration/anonymous_foobar_dunion_E2SFNKQr.h>
 
