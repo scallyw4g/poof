@@ -60,47 +60,50 @@ function BuildEmcc
 
   ColorizeTitle "Building Poof (emcc)"
 
-  emcc                                     \
-    poof/poof.cpp                          \
-    $OPTIMIZATION_LEVEL                    \
-    $CXX_OPTIONS                           \
-    $PLATFORM_CXX_OPTIONS                  \
-    $PLATFORM_LINKER_OPTIONS               \
-                                           \
-    -msimd128                              \
-    -sALLOW_MEMORY_GROWTH                  \
-    -sEXPORTED_FUNCTIONS=_TestFunc         \
-    -sEXPORTED_RUNTIME_METHODS=ccall,cwrap \
-    -D "__SSE__"                           \
-    -D "BONSAI_EMCC"                       \
-    -Wno-disabled-macro-expansion          \
-    -Wno-reserved-identifier               \
-                                           \
-    -D "BONSAI_INTERNAL"                   \
-    $PLATFORM_INCLUDE_DIRS                 \
-    -I "$ROOT"                             \
-    -I "$ROOT/include"                     \
-    -I "$ROOT/poof"                        \
+  emcc                                                                                                 \
+    poof/poof.cpp                                                                                      \
+    $OPTIMIZATION_LEVEL                                                                                \
+    $CXX_OPTIONS                                                                                       \
+    $PLATFORM_CXX_OPTIONS                                                                              \
+    $PLATFORM_LINKER_OPTIONS                                                                           \
+                                                                                                       \
+    -msimd128                                                                                          \
+    -sALLOW_MEMORY_GROWTH                                                                              \
+    -sEXPORTED_FUNCTIONS=_TestFunc                                                                     \
+    -sEXPORTED_RUNTIME_METHODS=ccall,cwrap                                                             \
+    -D "__SSE__"                                                                                       \
+    -D "BONSAI_EMCC"                                                                                   \
+    -Wno-disabled-macro-expansion                                                                      \
+    -Wno-reserved-identifier                                                                           \
+                                                                                                       \
+    -sFORCE_FILESYSTEM                                                                                 \
+    --preload-file examples/002_named_function_syntax/main.c                                           \
+    --preload-file examples/002_named_function_syntax/generated/metaprogram_another_struct_my_struct.h \
+                                                                                                       \
+    -D "BONSAI_INTERNAL"                                                                               \
+    $PLATFORM_INCLUDE_DIRS                                                                             \
+    -I "$ROOT"                                                                                         \
+    -I "$ROOT/include"                                                                                 \
+    -I "$ROOT/poof"                                                                                    \
     -o web/poof_runtime.js
 
-  web/node_modules/.bin/rollup \
-    web/main.js                \
-    -f iife                    \
-    -o web/main.bundle.js      \
-    -p @rollup/plugin-node-resolve
 
   if [ $? -eq 0 ]; then
     echo -e "$Success poof/poof.cpp -> poof.html"
-    echo -e ""
-    echo -e "$Delimeter"
-    echo -e ""
-
   else
-   echo ""
-   echo -e "$Failed Error building poof, exiting."
-   exit 1
+    echo -e "$Failed Error building poof, exiting."
+    exit 1
   fi
 
+  web/node_modules/.bin/rollup                               \
+    web/main.js                                              \
+    -f iife                                                  \
+    -o web/main.bundle.js                                    \
+    -p @rollup/plugin-node-resolve
+
+  echo -e ""
+  echo -e "$Delimeter"
+  echo -e ""
 }
 
 # git checkout $META_OUT

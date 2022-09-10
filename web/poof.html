@@ -1,11 +1,35 @@
 <html>
   <head>
-    <script src="poof_runtime.js"></script>
+    <!-- NOTE(Jesse): This has to come first because it needs to register the -->
+    <!-- Module.onRuntimeInitialized callback if it comes after poof_runtime.js the -->
+    <!-- onRuntimeInitialized event can fire before main.bundle.js is executed -->
     <script src="main.bundle.js"></script>
+
+    <script src="poof_runtime.js"></script>
+
+    <style>
+      #editor,
+      #output
+      {
+        display: inline-block;
+        width: 49.5%;
+      }
+
+      #editor
+      {
+      }
+
+      #output
+      {
+      }
+    </style>
+
   </head>
 
   <body>
-    This is the body, yay!
+
+    <div id='editor'></div>
+    <div id='output'></div>
   </body>
 
 </html>

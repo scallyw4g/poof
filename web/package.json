@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "dependencies": {
-    "@codemirror/lang-javascript": "^6.0.2",
+    "@codemirror/lang-cpp": "^6.0.1",
     "@rollup/plugin-node-resolve": "^14.0.1",
     "codemirror": "^6.0.1",
     "rollup": "^2.79.0"

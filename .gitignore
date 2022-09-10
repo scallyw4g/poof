@@ -8,4 +8,6 @@ examples/*/main
 tests/integration_extended
 
 web/main.bundle.js
+web/poof_runtime.js
+web/poof_runtime.data
 web/node_modules
