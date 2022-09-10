@@ -118,8 +118,8 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
               // @counted_string_primitive_hack
               if (CD)
               {
-                datatype TmpDt = Datatype(CD);
-                counted_string DTName = GetNameForDatatype(&TmpDt, TranArena);
+                declaration TempDecl = Declaration(CD);
+                counted_string DTName = GetNameForDecl(&TempDecl);
                 if (StringsMatch(DTName, CSz("counted_string")))
                 {
                   DoTrueBranch = False;
@@ -133,13 +133,22 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
             case is_union:
             {
               RequireToken(Scope, CTokenType_Question);
-              compound_decl *D = DatatypeIsCompoundDecl(Ctx, Scope, &Replace->Data, MetaOperatorToken);
+              compound_decl *CD = DatatypeIsCompoundDecl(Ctx, Scope, &Replace->Data, MetaOperatorToken);
 
               b32 DoTrueBranch = False;
-              if (D)
+              if (CD)
               {
                 b32 Negate = (Operator == is_struct);
-                DoTrueBranch = (D->IsUnion ^ Negate);
+                DoTrueBranch = (CD->IsUnion ^ Negate);
+
+                // @counted_string_primitive_hack
+                declaration TempDecl = Declaration(CD);
+                counted_string DTName = GetNameForDecl(&TempDecl);
+                if (StringsMatch(DTName, CSz("counted_string")))
+                {
+                  DoTrueBranch = False;
+                }
+
               }
 
               DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
