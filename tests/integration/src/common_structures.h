@@ -87,7 +87,7 @@ struct foo_struct_1
 
   char cbaz = 'f';
 
-  enum foo_enum fenum;
+  enum foo_enum fenum  = foo_enum_value_0;
   foo_enum fenum2;
 
   nested_struct foo;

@@ -58,6 +58,12 @@ PrintAstNode(ast_node *Node, string_builder *Builder)
         PrintAstNode(Child->Operand, Builder);
       } break;
 
+      case type_ast_node_symbol:
+      {
+        auto Child = SafeAccess(ast_node_symbol, Node);
+        Append(Builder, Child->Token.Value);
+      } break;
+
       case type_ast_node_literal:
       {
         auto Child = SafeAccess(ast_node_literal, Node);
@@ -119,7 +125,6 @@ PrintAstNode(ast_node *Node, string_builder *Builder)
       } break;
 
       case type_ast_node_initializer_list:
-      case type_ast_node_symbol:
       case type_ast_node_type_specifier:
       {
         NotImplemented;
