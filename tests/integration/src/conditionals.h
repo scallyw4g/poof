@@ -72,10 +72,13 @@ enum foo_enum
 
 
 typedef int (*foofuncptr)(void);
-typedef int (foofunc)(void);
+typedef int (foofunc0)(void);
+typedef int foofunc1(void);
+typedef foo_enum foofunc2(int);
 
 struct foo_struct_1
 {
+  char           _char;
   int            _int;
   s32            _s32;
   u32            _u32;
@@ -116,7 +119,10 @@ struct foo_struct_1
   counted_string S1; // Ensures the special-case hacks we put in work.  This is actually compound, but we want it considered primitive.
 
   foofuncptr FooFuncPtr;
-  foofunc FooFun;
+
+  foofunc0 FooFun;
+  foofunc1 FooFun1;
+  foofunc2 FooFun2;
 
   void **(*func_type_name)(void) AnotherFunc[2];
 };

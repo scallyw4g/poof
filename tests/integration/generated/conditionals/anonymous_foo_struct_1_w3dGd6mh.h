@@ -1,4 +1,6 @@
-                  int  _int not compound
+                  char  _char not compound
+
+              int  _int not compound
 
               s32 _s32 not compound
 
@@ -34,7 +36,11 @@
 
               foofuncptr FooFuncPtr not compound
 
-              foofunc FooFun not compound
+              foofunc0 FooFun not compound
+
+              foofunc1 FooFun1 not compound
+
+              foofunc2 FooFun2 not compound
 
               func_type_name AnotherFunc not compound
 

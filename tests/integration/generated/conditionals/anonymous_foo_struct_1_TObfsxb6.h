@@ -1,4 +1,6 @@
-                  int  _int is primitive
+                  char  _char is primitive
+
+              int  _int is primitive
 
               s32 _s32 is primitive
 
@@ -34,7 +36,11 @@
 
               foofuncptr FooFuncPtr not primitive
 
-              foofunc FooFun not primitive
+              foofunc0 FooFun not primitive
+
+              foofunc1 FooFun1 not primitive
+
+              foofunc2 FooFun2 not primitive
 
               func_type_name AnotherFunc not primitive
 

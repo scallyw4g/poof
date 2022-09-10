@@ -1,4 +1,6 @@
-                  int  _int not a function
+                  char  _char not a function
+
+              int  _int not a function
 
               s32 _s32 not a function
 
@@ -34,7 +36,11 @@
 
               foofuncptr FooFuncPtr is a function
 
-              foofunc FooFun is a function
+              foofunc0 FooFun is a function
+
+              foofunc1 FooFun1 is a function
+
+              foofunc2 FooFun2 is a function
 
               func_type_name AnotherFunc is a function
 

@@ -1,4 +1,6 @@
-                  int  _int not enum
+                  char  _char not enum
+
+              int  _int not enum
 
               s32 _s32 not enum
 
@@ -34,7 +36,11 @@
 
               foofuncptr FooFuncPtr not enum
 
-              foofunc FooFun not enum
+              foofunc0 FooFun not enum
+
+              foofunc1 FooFun1 not enum
+
+              foofunc2 FooFun2 not enum
 
               func_type_name AnotherFunc not enum
 

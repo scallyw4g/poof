@@ -36,7 +36,11 @@
 
               foofuncptr FooFuncPtr defined
 
-              foofunc FooFun defined
+              foofunc0 FooFun defined
+
+              foofunc1 FooFun1 defined
+
+              foofunc2 FooFun2 defined
 
               func_type_name AnotherFunc not defined
 

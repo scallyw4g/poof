@@ -1,4 +1,6 @@
-                  int  _int not struct
+                  char  _char not struct
+
+              int  _int not struct
 
               s32 _s32 not struct
 
@@ -30,11 +32,15 @@
 
               this_is_a_bug _embedded3 not struct
 
-              counted_string S1 not struct
+              counted_string S1 is struct
 
               foofuncptr FooFuncPtr not struct
 
-              foofunc FooFun not struct
+              foofunc0 FooFun not struct
+
+              foofunc1 FooFun1 not struct
+
+              foofunc2 FooFun2 not struct
 
               func_type_name AnotherFunc not struct
 
