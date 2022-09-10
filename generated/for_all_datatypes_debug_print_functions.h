@@ -3047,11 +3047,8 @@
         DebugPrint("macro_expansion {\n", Depth);
       }
 
-                                                  DebugPrint("c_token_cursor Expansion {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Expansion, Depth+4);
-              DebugPrint("}\n", Depth+2);
-
-
+                        // NOTE(Jesse): found no definition for this type.. probably from stdlib
+          DebugPrint("undefined(c_token_cursor Expansion)\n", Depth+2);
 
                                             DebugPrint("macro_def Def {\n", Depth+2);
               DebugPrint(RuntimeStruct.Def, Depth+4);
@@ -3139,11 +3136,8 @@
         DebugPrint("peek_result {\n", Depth);
       }
 
-                                                  DebugPrint("c_token_cursor Tokens {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Tokens, Depth+4);
-              DebugPrint("}\n", Depth+2);
-
-
+                        // NOTE(Jesse): found no definition for this type.. probably from stdlib
+          DebugPrint("undefined(c_token_cursor Tokens)\n", Depth+2);
 
                                             DebugPrint("c_token At {\n", Depth+2);
               DebugPrint(RuntimeStruct.At, Depth+4);
@@ -3170,94 +3164,6 @@
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( c_token_cursor_up RuntimeStruct, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("c_token_cursor_up {\n", Depth);
-      }
-
-                                                  DebugPrint("c_token_cursor Tokens {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Tokens, Depth+4);
-              DebugPrint("}\n", Depth+2);
-
-
-
-                                            DebugPrint("c_token At {\n", Depth+2);
-              DebugPrint(RuntimeStruct.At, Depth+4);
-              DebugPrint("}\n", Depth+2);
-
-
-
-
-
-      if (Depth == 0)
-      {
-        DebugPrint("}\n", Depth);
-      }
-    }
-
-    bonsai_function void DebugPrint( c_token_cursor_up *RuntimePtr, u32 Depth)
-    {
-      if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
-      else { DebugPrint("ptr(0)\n", Depth); }
-    }
-    bonsai_function void DebugPrint( c_token_cursor RuntimeStruct, u32 Depth)
-    {
-      if (Depth == 0)
-      {
-        DebugPrint("c_token_cursor {\n", Depth);
-      }
-
-                                                  DebugPrint("token_cursor_source Source =", Depth+2);
-              DebugPrint(RuntimeStruct.Source, 1);
-              DebugPrint(";\n");
-
-
-
-                                            DebugPrint("c_token Start {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Start, Depth+4);
-              DebugPrint("}\n", Depth+2);
-
-
-
-                                            DebugPrint("c_token End {\n", Depth+2);
-              DebugPrint(RuntimeStruct.End, Depth+4);
-              DebugPrint("}\n", Depth+2);
-
-
-
-                                            DebugPrint("c_token At {\n", Depth+2);
-              DebugPrint(RuntimeStruct.At, Depth+4);
-              DebugPrint("}\n", Depth+2);
-
-
-
-                                            DebugPrint("c_token_cursor_up Up {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Up, Depth+4);
-              DebugPrint("}\n", Depth+2);
-
-
-
-                                            DebugPrint("counted_string Filename =", Depth+2);
-              DebugPrint(RuntimeStruct.Filename, 1);
-              DebugPrint(";\n");
-
-
-
-
-
-      if (Depth == 0)
-      {
-        DebugPrint("}\n", Depth);
-      }
-    }
-
-    bonsai_function void DebugPrint( c_token_cursor *RuntimePtr, u32 Depth)
-    {
-      if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
-      else { DebugPrint("ptr(0)\n", Depth); }
-    }
     bonsai_function void DebugPrint( parser RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
@@ -3277,11 +3183,8 @@
 
 
 
-                                            DebugPrint("c_token_cursor Tokens {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Tokens, Depth+4);
-              DebugPrint("}\n", Depth+2);
-
-
+                  // NOTE(Jesse): found no definition for this type.. probably from stdlib
+          DebugPrint("undefined(c_token_cursor Tokens)\n", Depth+2);
 
 
 
@@ -3869,11 +3772,8 @@
 
 
 
-                                            DebugPrint("c_token_cursor Body {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Body, Depth+4);
-              DebugPrint("}\n", Depth+2);
-
-
+                  // NOTE(Jesse): found no definition for this type.. probably from stdlib
+          DebugPrint("undefined(c_token_cursor Body)\n", Depth+2);
 
                                             DebugPrint("counted_string_buffer NamedArguments {\n", Depth+2);
               DebugPrint(RuntimeStruct.NamedArguments, Depth+4);

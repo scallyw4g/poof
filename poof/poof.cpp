@@ -5154,7 +5154,7 @@ TokenizeAnsiStream(ansi_stream Code, memory_arena* Memory, b32 IgnoreQuotes, par
   TruncateToCurrentElements(Tokens);
   umm NewSize = TotalSize(Tokens);
 
-  Info("Attempting to reallocate CurrentSize(%u), NewSize(%u)", CurrentSize, NewSize);
+  /* Info("Attempting to reallocate CurrentSize(%u), NewSize(%u)", CurrentSize, NewSize); */
   Ensure(Reallocate((u8*)Tokens->Start, Memory, CurrentSize, NewSize));
 
   Rewind(Tokens);
@@ -9989,7 +9989,10 @@ FlushOutputToDisk( parse_context *Ctx,
   TIMED_FUNCTION();
   parser *Parser = Ctx->CurrentParser;
 
-/*   Assert(PeekToken(Parser, -1).Type == CTokenType_CloseParen); */
+  // NOTE(Jesse): It can be a semicolon too
+  // TODO(Jesse): I _think_ the semicolon thing is fixed and this assertion shouldn't fire anymore
+  //
+  /* Assert(PeekToken(Parser, -1).Type == CTokenType_CloseParen); */
 
   if (Parser->ErrorCode)
   {
@@ -9999,31 +10002,33 @@ FlushOutputToDisk( parse_context *Ctx,
 
   counted_string OutputPath = {};
 
-  c_token *FirstNewlineAfterPoofBlock = EatUntilIncluding(Parser, CTokenType_Newline);
+  EatUntilIncluding(Parser, CTokenType_Newline);
 
   EatNBSP(Parser);
+
+  c_token *LastTokenBeforeNewline = PeekTokenPointer(Parser, -1);
 
   b32 FoundValidInclude = False;
   c_token *T = PeekTokenRawPointer(Parser);
   if (T && T->Type == CT_PreprocessorInclude)
   {
     counted_string IncludePath = RequireTokenRaw(Parser, CT_PreprocessorInclude).IncludePath;
-    OutputPath = Concat(Ctx->Args.Outpath, Basename(IncludePath), Memory);
+    /* Info("INCLUDE PATH %S", IncludePath); */
+    /* OutputPath = Concat(Ctx->Args.Outpath, Basename(IncludePath), Memory); */
+    OutputPath = IncludePath;
     FoundValidInclude = True;
   }
 
   if (FoundValidInclude == False)
   {
-    /* ParseError(Parser, CSz("A poof() tag must be followed directly by an include tag on the next line."), T); */
-
     Assert(PeekTokenRaw(Parser, -1).Type == CTokenType_Newline);
     OutputPath = Concat(Ctx->Args.Outpath, NewFilename, Memory);
-    Assert(FirstNewlineAfterPoofBlock->IncludePath.Start == 0);
-    Assert(FirstNewlineAfterPoofBlock->IncludePath.Count == 0);
+    Assert(LastTokenBeforeNewline->IncludePath.Start == 0);
+    Assert(LastTokenBeforeNewline->IncludePath.Count == 0);
 
     // NOTE(Jesse): Keep the value intact so we can still print it
-    FirstNewlineAfterPoofBlock->Type = CT_PoofInsertedCode;
-    FirstNewlineAfterPoofBlock->IncludePath = NewFilename;
+    LastTokenBeforeNewline->Type = CT_PoofInsertedCode;
+    LastTokenBeforeNewline->IncludePath = NewFilename;
   }
 
   {
@@ -10579,7 +10584,7 @@ PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
         })
       }
     )
-#include <poof/generated/anonymous_function_type_qualifier_fPa8h41Z.h>
+#include <generated/anonymous_function_type_qualifier_fPa8h41Z.h>
 
     Result = Finalize(&Builder, Memory);
   }
@@ -11508,8 +11513,6 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
                 Push(&Args, ReplacementPattern(ArgName, Arg), Memory);
                 counted_string Code = Execute(&Func, &Args, Ctx, Memory);
                 RequireToken(Parser, CTokenType_CloseParen);
-
-                while(OptionalToken(Parser, CTokenType_Semicolon));
 
                 if (Func.Body.ErrorCode)
                 {

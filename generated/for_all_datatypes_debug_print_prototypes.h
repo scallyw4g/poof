@@ -142,10 +142,6 @@
       bonsai_function void DebugPrint( c_token  S, u32 Depth = 0);
       bonsai_function void DebugPrint( peek_result *S, u32 Depth = 0);
       bonsai_function void DebugPrint( peek_result  S, u32 Depth = 0);
-      bonsai_function void DebugPrint( c_token_cursor_up *S, u32 Depth = 0);
-      bonsai_function void DebugPrint( c_token_cursor_up  S, u32 Depth = 0);
-      bonsai_function void DebugPrint( c_token_cursor *S, u32 Depth = 0);
-      bonsai_function void DebugPrint( c_token_cursor  S, u32 Depth = 0);
       bonsai_function void DebugPrint( parser *S, u32 Depth = 0);
       bonsai_function void DebugPrint( parser  S, u32 Depth = 0);
       bonsai_function void DebugPrint( declaration_stream *S, u32 Depth = 0);

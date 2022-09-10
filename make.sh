@@ -8,16 +8,16 @@
 # Calling functions by name on the command line shouldn't be affected by these.
 
 
-# BuildAllBinariesRunAllTests=1
-
 # RunPreemptivePoof=1
 
+# BuildAllBinariesRunAllTests=1
+
 # RunPoof=1
-# BuildPoof=1
+BuildPoof=1
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 # POOF_DEBUGGER="gdb --args"
 
-BuildEmcc=1
+# BuildEmcc=1
 
 # RunParserTests=1
 # BuildParserTests=1
@@ -50,7 +50,7 @@ ROOT="$(pwd)"
 SRC="$ROOT/poof"
 BIN="$ROOT/bin"
 BIN_TEST="$BIN/tests"
-META_OUT="poof/generated"
+META_OUT="$ROOT/generated"
 EXTENDED_INTEGRATION_TESTS_SRC="$ROOT/tests/integration_extended"
 
 function BuildEmcc
@@ -134,15 +134,6 @@ function RunPoof {
   if [ -d $META_OUT ]; then
     rm -Rf $META_OUT
     git checkout poof/generated/generate_cursor_c_token.h
-
-    git checkout poof/generated/for_all_datatypes_debug_print_functions.h
-    git checkout poof/generated/for_all_datatypes_debug_print_prototypes.h
-    git checkout poof/generated/debug_print_ast_node.h
-    git checkout poof/generated/debug_print_datatype.h
-    git checkout poof/generated/debug_print_declaration.h
-    git checkout poof/generated/debug_print_prototype_datatype.h
-    git checkout poof/generated/debug_print_prototype_declaration.h
-
   fi
 
   : "${POOF_EXECUTABLE:=./bin/poof}"
@@ -507,7 +498,7 @@ else
     old_poof_debugger=$POOF_DEBUGGER
     POOF_DEBUGGER=
     old_poof_log_level=$POOF_LOG_LEVEL
-    POOF_LOG_LEVEL="--log-level LogLevel_Error"
+    # POOF_LOG_LEVEL="--log-level LogLevel_Error"
 
     RunPoof
 
