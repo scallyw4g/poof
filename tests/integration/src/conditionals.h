@@ -39,26 +39,6 @@ struct counted_string {
   const char* data;
 };
 
-#if 1
-poof(
-  func (foo_struct_0 TFooStruct)
-  {
-    TFooStruct.map_members(Member)
-    {
-      Member.is_defined?
-      {
-        (Member.type) (Member.name)
-      }
-      {
-        type not defined for ((Member.type) (Member.name))
-      }
-    }
-  }
-)
-#include <tests/integration/generated/conditionals/anonymous_foo_struct_0_ROYeHpk2.h>
-#endif
-
-
 int foofunc(void)
 {
 }
