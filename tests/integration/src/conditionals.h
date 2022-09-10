@@ -166,6 +166,26 @@ poof(
   {
     TFooStruct.map_members(Member)
     {
+      Member.is_defined?
+      {
+        (Member.type) (Member.name) defined
+      }
+      {
+        (Member.type) (Member.name) not defined
+      }
+    }
+  }
+)
+#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_IjaKQKyX.h>
+#endif
+
+
+#if 1
+poof(
+  func (foo_struct_1 TFooStruct)
+  {
+    TFooStruct.map_members(Member)
+    {
       Member.is_compound?
       {
         (Member.type) (Member.name) is compound
