@@ -10012,7 +10012,7 @@ FlushOutputToDisk( parse_context *Ctx,
   {
     /* ParseError(Parser, CSz("A poof() tag must be followed directly by an include tag on the next line."), T); */
 
-    Assert(PeekTokenRaw(Parser).Type == CTokenType_Newline);
+    Assert(PeekTokenRaw(Parser, -1).Type == CTokenType_Newline);
     OutputPath = Concat(Ctx->Args.Outpath, NewFilename, Memory);
     Assert(FirstNewlineAfterPoofBlock->IncludePath.Start == 0);
     Assert(FirstNewlineAfterPoofBlock->IncludePath.Count == 0);

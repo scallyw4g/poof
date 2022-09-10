@@ -43,16 +43,16 @@ struct counted_string {
 poof(
   func (foo_struct_0 TFooStruct)
   {
-    (TFooStruct.map_members(Member){
-      (Member.is_defined?
+    TFooStruct.map_members(Member)
+    {
+      Member.is_defined?
       {
         (Member.type) (Member.name)
       }
       {
         type not defined for ((Member.type) (Member.name))
       }
-      )
-    })
+    }
   }
 )
 #include <tests/integration/generated/anonymous_func_0.h>
@@ -62,6 +62,13 @@ poof(
 int foofunc(void)
 {
 }
+
+enum foo_enum
+{
+  foo_enum_val0,
+  foo_enum_val1,
+  foo_enum_val2,
+};
 
 
 typedef int (*foofuncptr)(void);
@@ -77,6 +84,20 @@ struct foo_struct_1
   const char*    _ccstar;
   int **         _intstarstar[42];
   umm*           _ummstar;
+
+  /* enum enum_type */
+  /* { */
+  /*   named_enum_value0, */
+  /*   named_enum_value1, */
+  /* } _named_enum; */
+
+  /* enum */
+  /* { */
+  /*   anon_enum_value0, */
+  /*   anon_enum_value1, */
+  /* } _anon_enum; */
+
+  foo_enum _foo_enum;
 
   undefined_type _und0;
   foo_struct_0   _foo0;
@@ -107,6 +128,44 @@ poof(
   {
     TFooStruct.map_members(Member)
     {
+      Member.is_enum?
+      {
+        (Member.type) (Member.name) is enum
+      }
+      {
+        (Member.type) (Member.name) not enum
+      }
+    }
+  }
+)
+#include <tests/integration/generated/anonymous_foo_struct_1_ZpWJur7o.h>
+#endif
+
+#if 1
+poof(
+  func (foo_struct_1 TFooStruct)
+  {
+    TFooStruct.map_members(Member)
+    {
+      Member.is_struct?
+      {
+        (Member.type) (Member.name) is struct
+      }
+      {
+        (Member.type) (Member.name) not struct
+      }
+    }
+  }
+)
+#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_m33iB55j.h>
+#endif
+
+#if 1
+poof(
+  func (foo_struct_1 TFooStruct)
+  {
+    TFooStruct.map_members(Member)
+    {
       Member.is_compound?
       {
         (Member.type) (Member.name) is compound
@@ -125,16 +184,16 @@ poof(
 poof(
   func (foo_struct_1 TFooStruct)
   {
-    (TFooStruct.map_members(Member){
-      (Member.is_primitive?
+    TFooStruct.map_members(Member)
+    {
+      Member.is_primitive?
       {
         (Member.type) (Member.name) is primitive
       }
       {
         (Member.type) (Member.name) not primitive
       }
-      )
-    })
+    }
   }
 )
 #include <tests/integration/generated/anonymous_func_2.h>
@@ -145,16 +204,16 @@ poof(
 poof(
   func (foo_struct_1 TFooStruct)
   {
-    (TFooStruct.map_members(Member){
-      (Member.is_function?
+    TFooStruct.map_members(Member)
+    {
+      Member.is_function?
       {
         (Member.type) (Member.name) is a function
       }
       {
         (Member.type) (Member.name) not a function
       }
-      )
-    })
+    }
   }
 )
 #include <tests/integration/generated/anonymous_func_3.h>

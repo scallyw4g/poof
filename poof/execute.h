@@ -173,13 +173,16 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                 case type_declaration:
                 {
                   declaration *Decl = SafeAccess(declaration, &Replace->Data);
-                  switch (Replace->Data.declaration.Type)
+                  switch (Decl->Type)
                   {
                     case type_declaration_noop:
+                    {
+                      InvalidCodePath();
+                    } break;
+
                     case type_compound_decl:
                     case type_function_decl:
                     {
-                      NotImplemented;
                     } break;
 
                     case type_enum_decl:
@@ -190,7 +193,11 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                     case type_variable_decl:
                     {
                       variable_decl *VDecl = SafeAccess(variable_decl, Decl);
-                      enum_decl *E = GetEnumByType(&Datatypes->Enums, VDecl->Type.DatatypeToken->Value);
+                      enum_decl *E = {};
+                      if (VDecl->Type.DatatypeToken)
+                      {
+                        E = GetEnumByType(&Datatypes->Enums, VDecl->Type.DatatypeToken->Value);
+                      }
                       DoTrueBranch = (E != 0);
                     } break;
                   }

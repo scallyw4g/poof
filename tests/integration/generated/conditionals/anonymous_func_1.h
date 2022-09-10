@@ -14,6 +14,8 @@
 
               umm _ummstar not compound
 
+              foo_enum _foo_enum not compound
+
               undefined_type _und0 not compound
 
               foo_struct_0 _foo0 is compound

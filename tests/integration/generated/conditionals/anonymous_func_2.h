@@ -14,6 +14,8 @@
 
               umm _ummstar is primitive
 
+              foo_enum _foo_enum not primitive
+
               undefined_type _und0 not primitive
 
               foo_struct_0 _foo0 not primitive

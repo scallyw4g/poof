@@ -14,6 +14,8 @@
 
               umm _ummstar not a function
 
+              foo_enum _foo_enum not a function
+
               undefined_type _und0 not a function
 
               foo_struct_0 _foo0 not a function
