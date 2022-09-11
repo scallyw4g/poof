@@ -1,20 +1,27 @@
 import {EditorView, basicSetup} from "codemirror"
 import {cpp} from "@codemirror/lang-cpp"
 
+var EverythingInitialized = false;
 
-window.addEventListener('DOMContentLoaded', () => {
-
-  Module.onRuntimeInitialized = () => {
-
+InitExamplesPage = function (filename)
+{
+  if (EverythingInitialized)
+  {
     let editorDiv = document.querySelector("div#editor");
     let outputDiv = document.querySelector("div#output");
     let bigRedButton = document.querySelector("div#big-red-button");
 
     let DoPoofForWeb = Module.cwrap('DoPoofForWeb', 'number', ['string', 'number']);
 
-    let ex02Src = FS.readFile('examples/002_named_function_syntax/main.c', {encoding: 'utf8'});
+    let ex02Src = FS.readFile(filename, {encoding: 'utf8'});
 
-    FS.mkdir('generated');
+    try
+    {
+      FS.mkdir('generated');
+    }
+    catch (e)
+    {
+    }
 
     let srcEditor = new EditorView({
       extensions: [basicSetup, cpp()],
@@ -49,8 +56,17 @@ window.addEventListener('DOMContentLoaded', () => {
       let transaction = outputEditor.state.update(updateMessage);
       outputEditor.dispatch(transaction);
     });
-
+  }
+  else
+  {
+    console.error('tried to initialize poof view before libraries were all initialized.');
   }
 
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  Module.onRuntimeInitialized = () => {
+    EverythingInitialized = true;
+  }
 });
 

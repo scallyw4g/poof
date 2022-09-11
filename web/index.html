@@ -1,0 +1,100 @@
+<html>
+  <head>
+    <style>
+      #editor,
+      #output
+      {
+        display: inline-block;
+        width: 49.5%;
+      }
+
+      #big-red-button
+      {
+        display: flex;
+        background: #f00000;
+        width: 100%;
+        height: 50px;
+
+        margin-left: -2px;
+        border: 2px solid black;
+        border-radius: 5px;
+
+        justify-content: center;
+        align-items: center;
+      }
+
+      #big-red-button:hover
+      {
+        background: #e00000;
+      }
+
+      #big-red-button:active
+      {
+        background: #ff0000;
+      }
+
+    </style>
+
+    <script>
+      var InitExamplesPage = null;
+      var InitEx01 = function (arg)
+      {
+        console.log(arg);
+      }
+    </script>
+    <script src="https://unpkg.com/htmx.org@1.8.0"></script>
+
+    <!-- NOTE(Jesse): This has to come first because it needs to register the -->
+    <!-- Module.onRuntimeInitialized callback. if it comes after poof_runtime.js the -->
+    <!-- onRuntimeInitialized event can fire before main.bundle.js is executed -->
+    <script src="main.bundle.js"></script>
+    <script src="poof_runtime.js"></script>
+
+    <script>
+       htmx.onLoad(function(content) {
+         if (content.id == 'examples')
+         {
+         }
+         else
+         {
+           console.log('a boring page.');
+         }
+
+      });
+
+    </script>
+
+  </head>
+
+  <body>
+
+    <h1>Poof</h1>
+    <span>A metaprogramming tool</span>
+
+    <ul>
+      <div
+        id='about-link'
+        hx-get='/web/about'
+        hx-swap='innerHTML'
+        hx-target='#content'
+      >
+        About
+      </div>
+
+      <div
+        id='examples-link'
+        hx-get='/web/examples'
+        hx-swap='innerHTML'
+        hx-target='#content'
+      >
+        Examples
+      </div>
+
+    </ul>
+
+    <div id='content'>
+    </div>
+
+  </body>
+
+</html>
