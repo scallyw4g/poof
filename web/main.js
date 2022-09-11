@@ -22,10 +22,17 @@ window.addEventListener('DOMContentLoaded', () => {
       parent: editorDiv,
     })
 
+    let outputEditor = new EditorView({
+      extensions: [basicSetup, cpp()],
+      doc: "// Hit the big red button to generate code!",
+      parent: outputDiv,
+    })
+
+
     bigRedButton.addEventListener('click', () => {
 
-      let doc = srcEditor.state.doc;
-      let srcToPoof = doc.sliceString(0, doc.length);
+      let srcDoc = srcEditor.state.doc;
+      let srcToPoof = srcDoc.sliceString(0, srcDoc.length);
 
       // console.log(doc);
       // console.log(srcToPoof);
@@ -35,12 +42,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
       let ex02Output = FS.readFile('generated/metaprogram_another_struct_my_struct.h', {encoding: 'utf8'});
 
-      let outputEditor = new EditorView({
-        extensions: [basicSetup, cpp()],
-        doc: ex02Output,
-        parent: outputDiv,
-      })
+      let outputDoc = outputEditor.state.doc;
+      let updateMessage = {changes: [{from: 0, to: outputDoc.length}, {from: 0, insert: ex02Output}]};
 
+      console.log("updateMessage", updateMessage);
+      let transaction = outputEditor.state.update(updateMessage);
+      outputEditor.dispatch(transaction);
     });
 
   }
