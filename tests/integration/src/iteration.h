@@ -9,7 +9,7 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/anonymous_function_foo_1.h>
+#include <tests/integration/generated/iteration/anonymous_function_foo_1.h>
 
 poof(
   func (foo_struct_1 Type)
@@ -23,7 +23,7 @@ poof(
 #include <tests/integration/generated/iteration/anonymous_foo_struct_1_M6dQmZmw.h>
 
 poof(d_union foobar_dunion { foo_struct_1 bar_struct } )
-#include <tests/integration/generated/d_union_foobar_union.h>
+#include <tests/integration/generated/iteration/d_union_foobar_union.h>
 
 poof(
   func (foobar_dunion Foobar)
