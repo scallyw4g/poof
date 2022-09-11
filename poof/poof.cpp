@@ -4,7 +4,7 @@
   #define PLATFORM_LIBRARY_AND_WINDOW_IMPLEMENTATIONS 1
   #define PLATFORM_GL_IMPLEMENTATIONS 1
   #define BONSAI_DEBUG_SYSTEM_API 1
-  #define DEBUG_PRINT (1)
+  #define DEBUG_PRINT (0)
 #endif
 
 #include <bonsai_stdlib/bonsai_stdlib.h>
@@ -11961,7 +11961,8 @@ ScanForMutationsAndOutput(parser *Parser, counted_string OutputPath, memory_aren
 
 }
 
-link_external b32 DoPoofForWeb(char *zInput, umm InputLen)
+link_external b32
+DoPoofForWeb(char *zInput, umm InputLen)
 {
   b32 Result = False;
 

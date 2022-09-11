@@ -34,6 +34,7 @@ BuildAllBinariesRunAllTests=1
 # RunExtendedIntegrationTests=1
 
 # OPTIMIZATION_LEVEL="-O2"
+# BONSAI_INTERNAL=O
 
 
 
@@ -87,7 +88,7 @@ function BuildEmcc
     -sSTACK_OVERFLOW_CHECK=1                                  \
     -fsanitize=undefined                                      \
                                                               \
-    -D "BONSAI_INTERNAL"                                      \
+    -D "BONSAI_INTERNAL=$BONSAI_INTERNAL"                     \
     $PLATFORM_INCLUDE_DIRS                                    \
     -I "$ROOT"                                                \
     -I "$ROOT/include"                                        \
@@ -137,6 +138,7 @@ function RunPoof {
   fi
 
   : "${POOF_EXECUTABLE:=./bin/poof}"
+  : "${POOF_EXECUTABLE:=./bin/poof}"
 
   $POOF_DEBUGGER $POOF_EXECUTABLE \
                                   \
@@ -171,18 +173,19 @@ function BuildPoof {
   SetFullOutputName "$source_file" bin
   echo -e "$Building $source_file"
 
-  clang++                        \
-    $source_file                 \
-    $OPTIMIZATION_LEVEL          \
-    $CXX_OPTIONS                 \
-    $PLATFORM_CXX_OPTIONS        \
-    $PLATFORM_LINKER_OPTIONS     \
-    $PLATFORM_DEFINES            \
-    -D "BONSAI_DEBUG_SYSTEM_API" \
-    $PLATFORM_INCLUDE_DIRS       \
-    -I "$ROOT"                   \
-    -I "$ROOT/include"           \
-    -I "$ROOT/poof"              \
+  clang++                                 \
+    $source_file                          \
+    $OPTIMIZATION_LEVEL                   \
+    $CXX_OPTIONS                          \
+    $PLATFORM_CXX_OPTIONS                 \
+    $PLATFORM_LINKER_OPTIONS              \
+    $PLATFORM_DEFINES                     \
+    -D "BONSAI_DEBUG_SYSTEM_API"          \
+    -D "BONSAI_INTERNAL=$BONSAI_INTERNAL" \
+    $PLATFORM_INCLUDE_DIRS                \
+    -I "$ROOT"                            \
+    -I "$ROOT/include"                    \
+    -I "$ROOT/poof"                       \
     -o "$full_output_name"
 
   if [ $? -eq 0 ]; then
@@ -267,17 +270,18 @@ function BuildParserTests
     SetFullOutputName "$source_file" bin/tests
     echo -e "$Building $source_file"
 
-    clang++                    \
-      $source_file             \
-      $OPTIMIZATION_LEVEL      \
-      $CXX_OPTIONS             \
-      $PLATFORM_CXX_OPTIONS    \
-      $PLATFORM_LINKER_OPTIONS \
-      $PLATFORM_DEFINES        \
-      $PLATFORM_INCLUDE_DIRS   \
-      -I "."                   \
-      -I "$ROOT/include"       \
-      -I "$ROOT/poof"          \
+    clang++                                 \
+      $source_file                          \
+      $OPTIMIZATION_LEVEL                   \
+      $CXX_OPTIONS                          \
+      $PLATFORM_CXX_OPTIONS                 \
+      $PLATFORM_LINKER_OPTIONS              \
+      $PLATFORM_DEFINES                     \
+      $PLATFORM_INCLUDE_DIRS                \
+      -D "BONSAI_INTERNAL=$BONSAI_INTERNAL" \
+      -I "."                                \
+      -I "$ROOT/include"                    \
+      -I "$ROOT/poof"                       \
       -o "$full_output_name"
 
   if [ $? -eq 0 ]; then
@@ -473,6 +477,7 @@ echo -e ""
 
 
 : "${OPTIMIZATION_LEVEL:="-O0"}"
+: "${BONSAI_INTERNAL:=1}"
 
 # If someone supplied a command line argument, call the function, otherwise
 # respect the 'runflags'
