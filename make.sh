@@ -17,7 +17,7 @@ BuildAllBinariesRunAllTests=1
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 # POOF_DEBUGGER="gdb --args"
 
-# BuildEmcc=1
+# BuildPoofEmcc=1
 
 # RunParserTests=1
 # BuildParserTests=1
@@ -54,64 +54,104 @@ BIN_TEST="$BIN/tests"
 META_OUT="$ROOT/generated"
 EXTENDED_INTEGRATION_TESTS_SRC="$ROOT/tests/integration_extended"
 
-function BuildEmcc
+function RollupEmcc
 {
-  which emcc > /dev/null
-  [ $? -ne 0 ] && echo -e "Please install emcc" && exit 1
+  if [ -x web/node_modules/.bin/rollup ]; then
 
+    web/node_modules/.bin/rollup                               \
+      web/main.js                                              \
+      -f iife                                                  \
+      -o web/main.bundle.js                                    \
+      -p @rollup/plugin-node-resolve
+  else
+    echo -e "$Error Rollup not found, try running './make.sh BootstrapWeb'"
+  fi
+}
+
+function BuildPoofEmcc
+{
   ColorizeTitle "Building Poof (emcc)"
 
-  emcc                                                        \
-    poof/poof.cpp                                             \
-    $OPTIMIZATION_LEVEL                                       \
-    $CXX_OPTIONS                                              \
-    $PLATFORM_CXX_OPTIONS                                     \
-    $PLATFORM_LINKER_OPTIONS                                  \
-                                                              \
-    -O0                                                       \
-    -g                                                        \
-                                                              \
-    -msimd128                                                 \
-    -sALLOW_MEMORY_GROWTH                                     \
-    -sEXPORTED_FUNCTIONS=_DoPoofForWeb                        \
-    -sEXPORTED_RUNTIME_METHODS=ccall,cwrap                    \
-    -D "__SSE__"                                              \
-    -D "BONSAI_EMCC"                                          \
-    -Wno-disabled-macro-expansion                             \
-    -Wno-reserved-identifier                                  \
-                                                              \
-    -sFORCE_FILESYSTEM                                        \
-    --preload-file examples/002_named_function_syntax/main.c  \
-                                                              \
-    -sASSERTIONS=2                                            \
-    -sSAFE_HEAP=1                                             \
-    -sSTACK_OVERFLOW_CHECK=1                                  \
-    -fsanitize=undefined                                      \
-                                                              \
-    -D "BONSAI_INTERNAL=$BONSAI_INTERNAL"                     \
-    $PLATFORM_INCLUDE_DIRS                                    \
-    -I "$ROOT"                                                \
-    -I "$ROOT/include"                                        \
-    -I "$ROOT/poof"                                           \
-    -o web/poof_runtime.js
-
-
+  which emcc > /dev/null
   if [ $? -eq 0 ]; then
-    echo -e "$Success poof/poof.cpp -> poof.html"
+    emcc                                                        \
+      poof/poof.cpp                                             \
+      $OPTIMIZATION_LEVEL                                       \
+      $CXX_OPTIONS                                              \
+      $PLATFORM_CXX_OPTIONS                                     \
+      $PLATFORM_LINKER_OPTIONS                                  \
+                                                                \
+      -O0                                                       \
+      -g                                                        \
+                                                                \
+      -msimd128                                                 \
+      -sALLOW_MEMORY_GROWTH                                     \
+      -sEXPORTED_FUNCTIONS=_DoPoofForWeb                        \
+      -sEXPORTED_RUNTIME_METHODS=ccall,cwrap                    \
+      -D "__SSE__"                                              \
+      -D "BONSAI_EMCC"                                          \
+      -Wno-disabled-macro-expansion                             \
+      -Wno-reserved-identifier                                  \
+                                                                \
+      -sFORCE_FILESYSTEM                                        \
+      --preload-file examples/002_named_function_syntax/main.c  \
+                                                                \
+      -sASSERTIONS=2                                            \
+      -sSAFE_HEAP=1                                             \
+      -sSTACK_OVERFLOW_CHECK=1                                  \
+      -fsanitize=undefined                                      \
+                                                                \
+      -D "BONSAI_INTERNAL=$BONSAI_INTERNAL"                     \
+      $PLATFORM_INCLUDE_DIRS                                    \
+      -I "$ROOT"                                                \
+      -I "$ROOT/include"                                        \
+      -I "$ROOT/poof"                                           \
+      -o web/poof_runtime.js
+
+
+    if [ $? -eq 0 ]; then
+      echo -e "$Success poof/poof.cpp -> poof.html"
+    else
+      echo -e "$Failed Error building poof, exiting."
+      exit 1
+    fi
+
+  if [ -d web/node_modules ]; then
+    RollupEmcc
   else
-    echo -e "$Failed Error building poof, exiting."
-    exit 1
+    echo -e "$Info ./web/node_modules could not be found! Attempting to bootstrap"
+    BootstrapWeb
+    if [ -d web/node_modules ]; then
+      RollupEmcc
+    fi
   fi
 
-  web/node_modules/.bin/rollup                               \
-    web/main.js                                              \
-    -f iife                                                  \
-    -o web/main.bundle.js                                    \
-    -p @rollup/plugin-node-resolve
+  else
+    echo -e "$Warn No installation of emcc detected"
+    echo -e "$Info If you wish to target WASM, install emscriptend then run './make.sh BootstrapWeb'"
+  fi
 
   echo -e ""
   echo -e "$Delimeter"
   echo -e ""
+}
+
+function BootstrapWeb
+{
+  pushd web > /dev/null 2>&1
+
+  which npm > /dev/null
+  if [ $? -eq 0 ]; then
+    npm install > /dev/null 2>&1
+    if [ $? -eq 0 ]; then
+      echo -e "$Success BootstrapWeb complete!"
+    else
+      echo -e "$Failed Bootstrapping web"
+    fi
+  else
+    echo -e "$Error No installation of npm detected.  To bootstrap web, please install npm"
+  fi
+  popd > /dev/null 2>&1
 }
 
 # git checkout $META_OUT
@@ -444,6 +484,7 @@ function BuildAndRunAllExamples
 function BuildAllBinaries
 {
   BuildPoof
+  BuildPoofEmcc
   BuildParserTests
 }
 
@@ -516,8 +557,8 @@ else
     BuildPoof
   fi
 
-  if [[ $BuildEmcc == 1 ]]; then
-    BuildEmcc
+  if [[ $BuildPoofEmcc == 1 ]]; then
+    BuildPoofEmcc
   fi
 
   if [[ $RunPoof == 1 ]]; then
