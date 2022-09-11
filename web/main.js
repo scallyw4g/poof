@@ -14,16 +14,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
     let ex02Src = FS.readFile('examples/002_named_function_syntax/main.c', {encoding: 'utf8'});
 
-
-
+    FS.mkdir('generated');
 
     let srcEditor = new EditorView({
       extensions: [basicSetup, cpp()],
       doc: ex02Src,
       parent: editorDiv,
     })
-
-
 
     bigRedButton.addEventListener('click', () => {
 
@@ -36,7 +33,7 @@ window.addEventListener('DOMContentLoaded', () => {
       console.log("DoPoofForWeb()");
       console.log( DoPoofForWeb(srcToPoof, srcToPoof.length) );
 
-      let ex02Output = FS.readFile('metaprogram_another_struct_my_struct.h', {encoding: 'utf8'});
+      let ex02Output = FS.readFile('generated/metaprogram_another_struct_my_struct.h', {encoding: 'utf8'});
 
       let outputEditor = new EditorView({
         extensions: [basicSetup, cpp()],
