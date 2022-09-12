@@ -413,14 +413,24 @@ RewindTo(parser* Parser, c_token *T)
 }
 
 bonsai_function c_token *
-RewindTo(parser* Parser, c_token_type Type)
+RewindTo(parser* Parser, c_token_type Type, u32 Count = 0)
 {
   peek_result Current = {};
   if (Type)
   {
+    u32 Hits = 0;
+
     Current = PeekTokenRawCursor(Parser->Tokens, -1);
-    while (Current.At && Current.At->Type != Type)
+    while (Current.At)
     {
+      if (Current.At->Type == Type)
+      {
+        if (Hits++ == Count)
+        {
+          break;
+        }
+      }
+
       Current = PeekTokenRawCursor(&Current, -1);
     }
 
@@ -1292,7 +1302,7 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
   ParseErrorCursor->At = Global_ParseErrorBuffer;
   ParseErrorCursor->End = Global_ParseErrorBuffer+Global_ParseErrorBufferSize;
 
-  u32 LinesOfContext = 4;
+  u32 LinesOfContext = 3;
 
   counted_string ParserName = {};
 
@@ -1326,12 +1336,7 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
 
     Assert(PeekTokenRawPointer(Parser) == ErrorToken);
 
-    u32 LinesReversed = 0;
-    while (LinesReversed <= LinesOfContext)
-    {
-      RewindTo(Parser, CTokenType_Newline);
-      LinesReversed += 1;
-    }
+    RewindTo(Parser, CTokenType_Newline, LinesOfContext);
 
     u32 SpaceCount = 0;
     u32 TabCount = 0;
@@ -1493,19 +1498,21 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
 
     {
       c_token *NextT = PeekTokenRawPointer(Parser);
-      if (NextT) { PrintTray(ParseErrorCursor, NextT, MaxTrayWidth); }
+      if (LinesOfContext && NextT) { PrintTray(ParseErrorCursor, NextT, MaxTrayWidth); }
     }
 
     u32 LinesToPrint = LinesOfContext;
     while ( c_token *T = PopTokenRawPointer(Parser) )
     {
+      if (LinesToPrint == 0) break;
       PrintToken(T, ParseErrorCursor);
 
       if ( IsNewline(T->Type) )
       {
+        if (--LinesToPrint == 0) break;
+
         c_token *NextT = PeekTokenRawPointer(Parser);
         if (NextT) { PrintTray(ParseErrorCursor, NextT, MaxTrayWidth); }
-        if (LinesToPrint-- == 0) break;
       }
     }
 
@@ -1525,7 +1532,7 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
     {
       u64 HalfDashes = (LongestLine-NameLine.Count)/2;
       for (u32 DashIndex = 0; DashIndex < HalfDashes; ++DashIndex) { LogDirect(CSz("-")); }
-      LogDirect(NameLine);
+      LogDirect(CSz("%S"), NameLine);
       for (u32 DashIndex = 0; DashIndex < HalfDashes; ++DashIndex) { LogDirect(CSz("-")); }
 
       LogDirect(CSz("\n"));
@@ -1884,7 +1891,7 @@ PeekTokenRawCursor(c_token_cursor *Tokens, s32 Direction, b32 CanSearchDown)
       Result.At = GetNext(Tokens, Direction);
 
       c_token_cursor *Down = HasValidDownPointer(Result.At);
-      b32 SearchDown = CanSearchDown && Down && RemainingForDir(Down, Direction) > 0;
+      b32 SearchDown = CanSearchDown && Down; // && RemainingForDir(Down, Direction) > 0;
       if (SearchDown)
       {
         Assert(Result.At->Down == Result.At->Macro.Expansion); // @janky-macro-expansion-struct-ordering
@@ -2483,7 +2490,7 @@ bonsai_function c_token
 RequireTokenRaw(parser *Parser, c_token_type Expected )
 {
   c_token *Peek = PeekTokenRawPointer(Parser);
-  if (Peek->Type == Expected)  // TODO(Jesse tags:id_347) : Change to a function call instead of == operator
+  if (Peek && Peek->Type == Expected)  // TODO(Jesse tags:id_347) : Change to a function call instead of == operator
   {
     PopTokenRaw(Parser);
   }
