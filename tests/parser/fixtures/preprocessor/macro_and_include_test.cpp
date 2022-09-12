@@ -1,6 +1,26 @@
 
 #include <tests/parser/bug_defines.h>
 
+#if BUG_HAS_INCLUDE
+  #if __has_include("tests/parser/fixtures/preprocessor/random_define.cpp")
+  #endif
+#endif
+
+#if BUG_HAS_INCLUDE
+  #if __has_include(<tests/parser/fixtures/preprocessor/random_define.cpp>)
+  #endif
+#endif
+
+#if BUG_HAS_INCLUDE_NEXT
+  #if __has_include_next("tests/parser/fixtures/preprocessor/random_define.cpp")
+  #endif
+#endif
+
+#if BUG_HAS_INCLUDE_NEXT
+  #if __has_include_next(<tests/parser/fixtures/preprocessor/random_define.cpp>)
+  #endif
+#endif
+
 #if 1
 
 // 0 \

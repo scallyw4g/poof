@@ -20,9 +20,9 @@ RunPreemptivePoof=1
 # BuildPoofEmcc=1
 
 RunParserTests=1
-BuildParserTests=1
+# BuildParserTests=1
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
-TEST_DEBUGGER="gdb --args"
+# TEST_DEBUGGER="gdb --args"
 
 # BuildAndRunAllExamples=1
 
@@ -31,7 +31,7 @@ TEST_DEBUGGER="gdb --args"
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 
-RunExtendedIntegrationTests=1
+# RunExtendedIntegrationTests=1
 
 # OPTIMIZATION_LEVEL="-O2"
 # BONSAI_INTERNAL=O
@@ -372,67 +372,68 @@ function RunExtendedIntegrationTests
 {
   ColorizeTitle "Running Extended Integration Tests"
 
-#   test_name=uacme
-#   RunSingleExtendedIntegrationTest \
-#     "$BIN/poof                     \
-#       -D USE_OPENSSL               \
-#       ./uacme.c"
+  test_name=uacme
+  RunSingleExtendedIntegrationTest \
+    "$BIN/poof                     \
+      -D USE_OPENSSL               \
+      ./uacme.c"
 
-#   test_name=redis
-#   RunSingleExtendedIntegrationTest \
-#     "$BIN/poof                     \
-#     --log-level LogLevel_Shush     \
-#     -D BYTE_ORDER                  \
-#     -D LITTLE_ENDIAN               \
-#                                    \
-#     -D __clang__                   \
-#     -D __i386                      \
-#     -D __x86_64__                  \
-#     -D linux                       \
-#     -D __linux__                   \
-#     -D __GNUC__                    \
-#      src/server.c"
+  test_name=redis
+  RunSingleExtendedIntegrationTest \
+    "$BIN/poof                     \
+    --log-level LogLevel_Shush     \
+    -D BYTE_ORDER                  \
+    -D LITTLE_ENDIAN               \
+                                   \
+    -D __clang__                   \
+    -D __i386                      \
+    -D __x86_64__                  \
+    -D linux                       \
+    -D __linux__                   \
+    -D __GNUC__                    \
+     src/server.c"
 
-#   echo "           - NOTE(Jesse): poof is known to not handle redis correctly yet.  This failure is expected"
+  echo "           - NOTE(Jesse): poof is known to not handle redis correctly yet.  This failure is expected"
 
-#   test_name=sqlite
-#   RunSingleExtendedIntegrationTest \
-#     "$BIN/poof                     \
-#     -D __clang__                   \
-#     -D __i386                      \
-#     -D __x86_64__                  \
-#     -D linux                       \
-#     -D __linux__                   \
-#     -D __GNUC__                    \
-#      src/test_server.c"
+  test_name=sqlite
+  RunSingleExtendedIntegrationTest \
+    "$BIN/poof                     \
+    -D __clang__                   \
+    -D __i386                      \
+    -D __x86_64__                  \
+    -D linux                       \
+    -D __linux__                   \
+    -D __GNUC__                    \
+     src/test_server.c"
 
-#   test_name=handmade_hero
-#   RunSingleExtendedIntegrationTest \
-#     "$BIN/poof                     \
-#       code/handmade.cpp"
+  test_name=handmade_hero
+  RunSingleExtendedIntegrationTest \
+    "$BIN/poof                     \
+      code/handmade.cpp"
 
-#   test_name=bonsai
-#   RunSingleExtendedIntegrationTest \
-#     "$BIN/poof                     \
-#       -I src/                      \
-#       -I src/poof                  \
-#       -I include/                  \
-#       -D BONSAI_LINUX              \
-#       -o src/generated             \
-#       src/game_loader.cpp"
+  test_name=bonsai
+  RunSingleExtendedIntegrationTest \
+    "$BIN/poof                     \
+      -I src/                      \
+      -I src/poof                  \
+      -I include/                  \
+      -D BONSAI_LINUX              \
+      -o src/generated             \
+      src/game_loader.cpp"
 
-#   test_name=hcc
-#   RunSingleExtendedIntegrationTest \
-#     "$BIN/poof                     \
-#       -I src/                      \
-#       src/hcc.c"
-
+  test_name=hcc
+  RunSingleExtendedIntegrationTest \
+    "$BIN/poof                     \
+      -I src/                      \
+      src/hcc.c"
 
   test_name=gf
   RunSingleExtendedIntegrationTest \
     "$BIN/poof                     \
-      -I . \
+    --log-level LogLevel_Shush     \
+      -I .                         \
       gf2.cpp"
+  echo "           - NOTE(Jesse): poof is known to not handle gf correctly yet.  This failure is expected"
 
 
   echo -e ""

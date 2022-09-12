@@ -3328,27 +3328,7 @@ EatSpacesTabsAndEscapedNewlines(parser *Parser)
             Type == CTokenType_FSlash ) )
   {
     Result = True;
-    if ( Type == CTokenType_FSlash )
-    {
-      // NOTE(Jesse): This is garbage and should actually never happen.  An excaped newline is '\n' .. which is a backslash!!!!
-      Assert(False);
-#if 0
-      if ( PeekTokenRaw(Parser, 1).Type == CTokenType_Newline )
-      {
-        RequireTokenRaw(Parser, CTokenType_FSlash);
-        RequireTokenRaw(Parser, CTokenType_Newline);
-      }
-      else
-      {
-        break;
-      }
-#endif
-    }
-    else
-    {
-      RequireTokenRaw(Parser, Type);
-    }
-
+    RequireTokenRaw(Parser, Type);
     Type = PeekTokenRaw(Parser).Type;
   }
 

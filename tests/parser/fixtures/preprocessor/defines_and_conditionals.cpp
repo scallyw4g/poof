@@ -648,4 +648,5 @@ invalid_path
 #define foo_func(a, ...) a
 
 #pragma whatever() // this should break
+
 foo_func(valid_path, invalid_path)
