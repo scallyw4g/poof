@@ -1,10 +1,8 @@
-#if BONSAI_EMCC
-
-#else
+#if !BONSAI_EMCC
   #define PLATFORM_LIBRARY_AND_WINDOW_IMPLEMENTATIONS 1
   #define PLATFORM_GL_IMPLEMENTATIONS 1
   #define BONSAI_DEBUG_SYSTEM_API 1
-  #define DEBUG_PRINT (1)
+  #define DEBUG_PRINT 1
 #endif
 
 #include <bonsai_stdlib/bonsai_stdlib.h>

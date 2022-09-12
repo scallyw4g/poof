@@ -10,7 +10,7 @@
 
 RunPreemptivePoof=1
 
-# BuildAllBinariesRunAllTests=1
+BuildAllBinariesRunAllTests=1
 
 # RunPoof=1
 # BuildPoof=1
@@ -19,19 +19,19 @@ RunPreemptivePoof=1
 
 # BuildPoofEmcc=1
 
-RunParserTests=1
+# RunParserTests=1
 # BuildParserTests=1
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 # TEST_DEBUGGER="gdb --args"
 
-BuildAndRunAllExamples=1
+# BuildAndRunAllExamples=1
 
-RunIntegrationTests=1
+# RunIntegrationTests=1
 # INTEGRATION_TEST_INDEX=0
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 
-RunExtendedIntegrationTests=1
+# RunExtendedIntegrationTests=1
 
 # OPTIMIZATION_LEVEL="-O2"
 # BONSAI_INTERNAL=O
@@ -74,38 +74,39 @@ function BuildPoofEmcc
 
   which emcc > /dev/null
   if [ $? -eq 0 ]; then
-    emcc                                                        \
-      poof/poof.cpp                                             \
-      $OPTIMIZATION_LEVEL                                       \
-      $CXX_OPTIONS                                              \
-      $PLATFORM_CXX_OPTIONS                                     \
-      $PLATFORM_LINKER_OPTIONS                                  \
-                                                                \
-      -O0                                                       \
-      -g                                                        \
-                                                                \
-      -msimd128                                                 \
-      -sALLOW_MEMORY_GROWTH                                     \
-      -sEXPORTED_FUNCTIONS=_DoPoofForWeb                        \
-      -sEXPORTED_RUNTIME_METHODS=ccall,cwrap                    \
-      -D "__SSE__"                                              \
-      -D "BONSAI_EMCC"                                          \
-      -Wno-disabled-macro-expansion                             \
-      -Wno-reserved-identifier                                  \
-                                                                \
-      -sFORCE_FILESYSTEM                                        \
-      --preload-file examples/002_named_function_syntax/main.c  \
-                                                                \
-      -sASSERTIONS=2                                            \
-      -sSAFE_HEAP=1                                             \
-      -sSTACK_OVERFLOW_CHECK=1                                  \
-      -fsanitize=undefined                                      \
-                                                                \
-      -D "BONSAI_INTERNAL=$BONSAI_INTERNAL"                     \
-      $PLATFORM_INCLUDE_DIRS                                    \
-      -I "$ROOT"                                                \
-      -I "$ROOT/include"                                        \
-      -I "$ROOT/poof"                                           \
+    emcc                                                         \
+      poof/poof.cpp                                              \
+      $OPTIMIZATION_LEVEL                                        \
+      $CXX_OPTIONS                                               \
+      $PLATFORM_CXX_OPTIONS                                      \
+      $PLATFORM_LINKER_OPTIONS                                   \
+                                                                 \
+      -O0                                                        \
+      -g                                                         \
+                                                                 \
+      -msimd128                                                  \
+      -sALLOW_MEMORY_GROWTH                                      \
+      -sEXPORTED_FUNCTIONS=_DoPoofForWeb                         \
+      -sEXPORTED_RUNTIME_METHODS=ccall,cwrap                     \
+      -D "__SSE__"                                               \
+      -D "BONSAI_EMCC"                                           \
+      -Wno-disabled-macro-expansion                              \
+      -Wno-reserved-identifier                                   \
+      -Wno-limited-postlink-optimizations                        \
+                                                                 \
+      -sFORCE_FILESYSTEM                                         \
+      --preload-file examples/002_named_function_syntax/main.c   \
+                                                                 \
+      -sASSERTIONS=2                                             \
+      -sSAFE_HEAP=1                                              \
+      -sSTACK_OVERFLOW_CHECK=1                                   \
+      -fsanitize=undefined                                       \
+                                                                 \
+      -D "BONSAI_INTERNAL=$BONSAI_INTERNAL"                      \
+      $PLATFORM_INCLUDE_DIRS                                     \
+      -I "$ROOT"                                                 \
+      -I "$ROOT/include"                                         \
+      -I "$ROOT/poof"                                            \
       -o web/poof_runtime.js
 
 
@@ -220,7 +221,6 @@ function BuildPoof {
     $PLATFORM_CXX_OPTIONS                 \
     $PLATFORM_LINKER_OPTIONS              \
     $PLATFORM_DEFINES                     \
-    -D "BONSAI_DEBUG_SYSTEM_API"          \
     -D "BONSAI_INTERNAL=$BONSAI_INTERNAL" \
     $PLATFORM_INCLUDE_DIRS                \
     -I "$ROOT"                            \

@@ -10,4 +10,5 @@ tests/integration_extended
 web/main.bundle.js
 web/poof_runtime.js
 web/poof_runtime.data
+web/poof_runtime.wasm
 web/node_modules
