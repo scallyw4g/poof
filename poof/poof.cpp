@@ -9985,10 +9985,10 @@ AllocateTokenizedFiles(u32 Count, memory_arena* Memory)
   return Result;
 }
 
-link_internal void
-GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo);
+/* link_internal tuple_CountedString_CountedString_buffer */
+/* GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo); */
 
-link_internal void
+link_internal counted_string
 FlushOutputToDisk( parse_context *Ctx,
                    counted_string OutputForThisParser,
                    counted_string NewFilename,
@@ -10007,7 +10007,7 @@ FlushOutputToDisk( parse_context *Ctx,
   if (Parser->ErrorCode)
   {
     Warn(CSz("Parse error encountered, not flushing code generated in (%S) to disk."), Parser->Tokens->Filename);
-    return;
+    return {};
   }
 
   counted_string OutputPath = {};
@@ -10063,6 +10063,8 @@ FlushOutputToDisk( parse_context *Ctx,
 
   /* PushParser(Ctx->CurrentParser, OutputParse, parser_push_type_include); */
   /* GoGoGadgetMetaprogramming(Ctx, TodoInfo); */
+
+  return OutputPath;
 }
 
 // TODO(Jesse, id: 113, tags: cleanup): Remove these?
@@ -11354,10 +11356,13 @@ ParseMultiLineTodoValue(parser* Parser, memory_arena* Memory)
 }
 #endif
 
-link_internal void
+
+link_internal tuple_CountedString_CountedString_buffer
 GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 {
   TIMED_FUNCTION();
+
+  tuple_CountedString_CountedString_buffer_builder Builder = {};
 
   program_datatypes *Datatypes   = &Ctx->Datatypes;
   meta_func_stream *FunctionDefs = &Ctx->MetaFunctions;
@@ -11529,7 +11534,8 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
                 else
                 {
                   counted_string OutfileName = GenerateOutfileNameFor( Func.Name, ArgType, Memory, GetRandomString(8, Hash(&Code), Memory));
-                  FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory, True);
+                  counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory, True);
+                  Append(&Builder, Tuple(ActualOutputFile, Code));
                 }
               }
               else
@@ -11628,7 +11634,8 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
             counted_string Code = Finalize(&OutputBuilder, Memory);
             counted_string OutfileName = GenerateOutfileNameFor(ToString(Directive), CSz("debug_print"), Memory);
-            FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
+            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
+            Append(&Builder, Tuple(ActualOutputFile, Code));
           } break;
 
           case d_union:
@@ -11655,7 +11662,8 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               while(OptionalToken(Parser, CTokenType_Semicolon));
 
               counted_string OutfileName = GenerateOutfileNameFor(ToString(Directive), DatatypeT->Value, Memory);
-              FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
+              counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
+              Append(&Builder, Tuple(ActualOutputFile, Code));
             }
             else
             {
@@ -11695,7 +11703,8 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
                 else
                 {
                   counted_string OutfileName = GenerateOutfileNameFor(Func->Name, DatatypeName, Memory);
-                  FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
+                  counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
+                  Append(&Builder, Tuple(ActualOutputFile, Code));
                 }
               }
               else
@@ -11731,6 +11740,9 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
     continue;
   }
+
+  tuple_CountedString_CountedString_buffer Result = Finalize(&Builder, Memory);
+  return Result;
 }
 
 link_internal void
@@ -11969,10 +11981,10 @@ ScanForMutationsAndOutput(parser *Parser, counted_string OutputPath, memory_aren
 
 }
 
-link_external b32
+link_external const char *
 DoPoofForWeb(char *zInput, umm InputLen)
 {
-  b32 Result = False;
+  const char *Result = {};
 
   counted_string Input = CS(zInput, InputLen);
 
@@ -11994,9 +12006,27 @@ DoPoofForWeb(char *zInput, umm InputLen)
     ParseDatatypes(Ctx, Parser);
 
     FullRewind(Ctx->CurrentParser);
-    GoGoGadgetMetaprogramming(Ctx, 0);
+    tuple_CountedString_CountedString_buffer OutputBuffer = GoGoGadgetMetaprogramming(Ctx, 0);
 
-    Result = True;
+    string_builder Builder = {};
+
+    Info("Tuple Count %d", OutputBuffer.Count);
+
+    for (u32 TupleIndex = 0; TupleIndex < OutputBuffer.Count; ++TupleIndex)
+    {
+      counted_string Filename = OutputBuffer.E[TupleIndex].E[0];
+      counted_string Code = OutputBuffer.E[TupleIndex].E[1];
+
+      Append(&Builder, CSz("// "));
+      Append(&Builder, Filename);
+      Append(&Builder, CSz("\n\n\n"));
+
+      Append(&Builder, Code);
+      Append(&Builder, CSz("\n\n"));
+    }
+
+    counted_string S = Finalize(&Builder, Memory, True);
+    Result = S.Start;
   }
 
   return Result;

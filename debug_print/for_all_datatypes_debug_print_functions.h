@@ -4764,6 +4764,32 @@
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
+    link_internal void DebugPrint( tuple_CountedString_CountedString RuntimeStruct, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("tuple_CountedString_CountedString {\n", Depth);
+      }
+
+                                                  DebugPrint("counted_string E =", Depth+2);
+              DebugPrint(RuntimeStruct.E, 1);
+              DebugPrint(";\n");
+
+
+
+
+
+      if (Depth == 0)
+      {
+        DebugPrint("}\n", Depth);
+      }
+    }
+
+    link_internal void DebugPrint( tuple_CountedString_CountedString *RuntimePtr, u32 Depth)
+    {
+      if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
+    }
     link_internal void DebugPrint( counted_string_cursor RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
@@ -7388,6 +7414,166 @@
     }
 
     link_internal void DebugPrint( declaration_iterator *RuntimePtr, u32 Depth)
+    {
+      if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
+    }
+    link_internal void DebugPrint( tuple_CountedString_CountedString_stream_chunk RuntimeStruct, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("tuple_CountedString_CountedString_stream_chunk {\n", Depth);
+      }
+
+                                                  DebugPrint("tuple_CountedString_CountedString Element {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Element, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("tuple_CountedString_CountedString_stream_chunk Next {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Next, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+
+
+      if (Depth == 0)
+      {
+        DebugPrint("}\n", Depth);
+      }
+    }
+
+    link_internal void DebugPrint( tuple_CountedString_CountedString_stream_chunk *RuntimePtr, u32 Depth)
+    {
+      if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
+    }
+    link_internal void DebugPrint( tuple_CountedString_CountedString_stream RuntimeStruct, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("tuple_CountedString_CountedString_stream {\n", Depth);
+      }
+
+                                                  DebugPrint("tuple_CountedString_CountedString_stream_chunk FirstChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("tuple_CountedString_CountedString_stream_chunk LastChunk {\n", Depth+2);
+              DebugPrint(RuntimeStruct.LastChunk, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+
+
+      if (Depth == 0)
+      {
+        DebugPrint("}\n", Depth);
+      }
+    }
+
+    link_internal void DebugPrint( tuple_CountedString_CountedString_stream *RuntimePtr, u32 Depth)
+    {
+      if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
+    }
+    link_internal void DebugPrint( tuple_CountedString_CountedString_iterator RuntimeStruct, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("tuple_CountedString_CountedString_iterator {\n", Depth);
+      }
+
+                                                  DebugPrint("tuple_CountedString_CountedString_stream Stream {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Stream, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("tuple_CountedString_CountedString_stream_chunk At {\n", Depth+2);
+              DebugPrint(RuntimeStruct.At, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+
+
+      if (Depth == 0)
+      {
+        DebugPrint("}\n", Depth);
+      }
+    }
+
+    link_internal void DebugPrint( tuple_CountedString_CountedString_iterator *RuntimePtr, u32 Depth)
+    {
+      if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
+    }
+    link_internal void DebugPrint( tuple_CountedString_CountedString_buffer_builder RuntimeStruct, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("tuple_CountedString_CountedString_buffer_builder {\n", Depth);
+      }
+
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("tuple_CountedString_CountedString_stream Chunks {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Chunks, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+
+
+      if (Depth == 0)
+      {
+        DebugPrint("}\n", Depth);
+      }
+    }
+
+    link_internal void DebugPrint( tuple_CountedString_CountedString_buffer_builder *RuntimePtr, u32 Depth)
+    {
+      if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
+      else { DebugPrint("ptr(0)\n", Depth); }
+    }
+    link_internal void DebugPrint( tuple_CountedString_CountedString_buffer RuntimeStruct, u32 Depth)
+    {
+      if (Depth == 0)
+      {
+        DebugPrint("tuple_CountedString_CountedString_buffer {\n", Depth);
+      }
+
+                                                  DebugPrint("umm Count =", Depth+2);
+              DebugPrint(RuntimeStruct.Count, 1);
+              DebugPrint(";\n");
+
+
+
+                                            DebugPrint("tuple_CountedString_CountedString E {\n", Depth+2);
+              DebugPrint(RuntimeStruct.E, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+
+
+      if (Depth == 0)
+      {
+        DebugPrint("}\n", Depth);
+      }
+    }
+
+    link_internal void DebugPrint( tuple_CountedString_CountedString_buffer *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }

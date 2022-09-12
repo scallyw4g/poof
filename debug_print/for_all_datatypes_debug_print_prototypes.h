@@ -224,6 +224,8 @@
       link_internal void DebugPrint( comma_separated_decl  S, u32 Depth = 0);
       link_internal void DebugPrint( d_list *S, u32 Depth = 0);
       link_internal void DebugPrint( d_list  S, u32 Depth = 0);
+      link_internal void DebugPrint( tuple_CountedString_CountedString *S, u32 Depth = 0);
+      link_internal void DebugPrint( tuple_CountedString_CountedString  S, u32 Depth = 0);
       link_internal void DebugPrint( counted_string_cursor *S, u32 Depth = 0);
       link_internal void DebugPrint( counted_string_cursor  S, u32 Depth = 0);
       link_internal void DebugPrint( counted_string_stream_chunk *S, u32 Depth = 0);
@@ -386,6 +388,16 @@
       link_internal void DebugPrint( ast_node_iterator  S, u32 Depth = 0);
       link_internal void DebugPrint( declaration_iterator *S, u32 Depth = 0);
       link_internal void DebugPrint( declaration_iterator  S, u32 Depth = 0);
+      link_internal void DebugPrint( tuple_CountedString_CountedString_stream_chunk *S, u32 Depth = 0);
+      link_internal void DebugPrint( tuple_CountedString_CountedString_stream_chunk  S, u32 Depth = 0);
+      link_internal void DebugPrint( tuple_CountedString_CountedString_stream *S, u32 Depth = 0);
+      link_internal void DebugPrint( tuple_CountedString_CountedString_stream  S, u32 Depth = 0);
+      link_internal void DebugPrint( tuple_CountedString_CountedString_iterator *S, u32 Depth = 0);
+      link_internal void DebugPrint( tuple_CountedString_CountedString_iterator  S, u32 Depth = 0);
+      link_internal void DebugPrint( tuple_CountedString_CountedString_buffer_builder *S, u32 Depth = 0);
+      link_internal void DebugPrint( tuple_CountedString_CountedString_buffer_builder  S, u32 Depth = 0);
+      link_internal void DebugPrint( tuple_CountedString_CountedString_buffer *S, u32 Depth = 0);
+      link_internal void DebugPrint( tuple_CountedString_CountedString_buffer  S, u32 Depth = 0);
       link_internal void DebugPrint( log_level EnumValue, u32 Depth = 0);
       link_internal void DebugPrint( sign EnumValue, u32 Depth = 0);
       link_internal void DebugPrint( memory_protection_type EnumValue, u32 Depth = 0);
