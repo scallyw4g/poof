@@ -74,39 +74,39 @@ function BuildPoofEmcc
 
   which emcc > /dev/null
   if [ $? -eq 0 ]; then
-    emcc                                                         \
-      poof/poof.cpp                                              \
-      $OPTIMIZATION_LEVEL                                        \
-      $CXX_OPTIONS                                               \
-      $PLATFORM_CXX_OPTIONS                                      \
-      $PLATFORM_LINKER_OPTIONS                                   \
-                                                                 \
-      -O0                                                        \
-      -g                                                         \
-                                                                 \
-      -msimd128                                                  \
-      -sALLOW_MEMORY_GROWTH                                      \
-      -sEXPORTED_FUNCTIONS=_DoPoofForWeb                         \
-      -sEXPORTED_RUNTIME_METHODS=ccall,cwrap                     \
-      -D "__SSE__"                                               \
-      -D "BONSAI_EMCC"                                           \
-      -Wno-disabled-macro-expansion                              \
-      -Wno-reserved-identifier                                   \
-      -Wno-limited-postlink-optimizations                        \
-                                                                 \
-      -sFORCE_FILESYSTEM                                         \
-      --preload-file examples/002_named_function_syntax/main.c   \
-                                                                 \
-      -sASSERTIONS=2                                             \
-      -sSAFE_HEAP=1                                              \
-      -sSTACK_OVERFLOW_CHECK=1                                   \
-      -fsanitize=undefined                                       \
-                                                                 \
-      -D "BONSAI_INTERNAL=$BONSAI_INTERNAL"                      \
-      $PLATFORM_INCLUDE_DIRS                                     \
-      -I "$ROOT"                                                 \
-      -I "$ROOT/include"                                         \
-      -I "$ROOT/poof"                                            \
+    emcc                                                          \
+      poof/poof.cpp                                               \
+      $OPTIMIZATION_LEVEL                                         \
+      $CXX_OPTIONS                                                \
+      $PLATFORM_CXX_OPTIONS                                       \
+      $PLATFORM_LINKER_OPTIONS                                    \
+                                                                  \
+      -O0                                                         \
+      -g                                                          \
+                                                                  \
+      -msimd128                                                   \
+      -sALLOW_MEMORY_GROWTH                                       \
+      -sEXPORTED_FUNCTIONS=_DoPoofForWeb                          \
+      -sEXPORTED_RUNTIME_METHODS=ccall,cwrap                      \
+      -D "__SSE__"                                                \
+      -D "BONSAI_EMCC"                                            \
+      -Wno-disabled-macro-expansion                               \
+      -Wno-reserved-identifier                                    \
+      -Wno-limited-postlink-optimizations                         \
+                                                                  \
+      -sFORCE_FILESYSTEM                                          \
+      --preload-file examples                                     \
+                                                                  \
+      -sASSERTIONS=2                                              \
+      -sSAFE_HEAP=1                                               \
+      -sSTACK_OVERFLOW_CHECK=1                                    \
+      -fsanitize=undefined                                        \
+                                                                  \
+      -D "BONSAI_INTERNAL=$BONSAI_INTERNAL"                       \
+      $PLATFORM_INCLUDE_DIRS                                      \
+      -I "$ROOT"                                                  \
+      -I "$ROOT/include"                                          \
+      -I "$ROOT/poof"                                             \
       -o web/poof_runtime.js
 
 

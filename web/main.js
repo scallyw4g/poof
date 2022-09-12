@@ -1,20 +1,20 @@
 import {EditorView, basicSetup} from "codemirror"
 import {cpp} from "@codemirror/lang-cpp"
 
-var EverythingInitialized = false;
+var defaultOutputEditorText = "// Hit the big red button to generate code!";
 
-InitExamplesPage = function (filename)
+var EnvInitialized = false;
+var EditorsInitialized = false;
+var srcEditor = null;
+var outputEditor = null;
+var DoPoofForWeb = null;
+
+function InitEditors(filename)
 {
-  if (EverythingInitialized)
+  console.assert(EnvInitialized);
+
+  if (EditorsInitialized == false)
   {
-    let editorDiv = document.querySelector("div#editor");
-    let outputDiv = document.querySelector("div#output");
-    let bigRedButton = document.querySelector("div#big-red-button");
-
-    let DoPoofForWeb = Module.cwrap('DoPoofForWeb', 'string', ['string', 'number']);
-
-    let ex02Src = FS.readFile(filename, {encoding: 'utf8'});
-
     try
     {
       FS.mkdir('generated');
@@ -23,18 +23,24 @@ InitExamplesPage = function (filename)
     {
     }
 
-    let srcEditor = new EditorView({
+    let editorDiv = document.querySelector("div#editor");
+    let outputDiv = document.querySelector("div#output");
+    let bigRedButton = document.querySelector("div#big-red-button");
+    DoPoofForWeb = Module.cwrap('DoPoofForWeb', 'string', ['string', 'number']);
+
+    EditorsInitialized = true;
+
+    srcEditor = new EditorView({
       extensions: [basicSetup, cpp()],
-      doc: ex02Src,
+      doc: "// Loading source ..",
       parent: editorDiv,
     })
 
-    let outputEditor = new EditorView({
+    outputEditor = new EditorView({
       extensions: [basicSetup, cpp()],
-      doc: "// Hit the big red button to generate code!",
+      doc: defaultOutputEditorText,
       parent: outputDiv,
     })
-
 
     bigRedButton.addEventListener('click', () => {
 
@@ -44,20 +50,43 @@ InitExamplesPage = function (filename)
       // console.log(doc);
       // console.log(srcToPoof);
 
+      let poofOutput = DoPoofForWeb(srcToPoof, srcToPoof.length);
 
-      let ex02Output = DoPoofForWeb(srcToPoof, srcToPoof.length);
-
-      console.log("DoPoofForWeb() {");
-      console.log( ex02Output );
-      console.log("}");
+      // console.log("DoPoofForWeb() {");
+      // console.log( poofOutput );
+      // console.log("}");
 
       let outputDoc = outputEditor.state.doc;
-      let updateMessage = {changes: [{from: 0, to: outputDoc.length}, {from: 0, insert: ex02Output}]};
+      let updateMessage = {changes: [{from: 0, to: outputDoc.length}, {from: 0, insert: poofOutput}]};
 
       console.log("updateMessage", updateMessage);
       let transaction = outputEditor.state.update(updateMessage);
       outputEditor.dispatch(transaction);
     });
+
+  }
+}
+
+function setEditorText(editor, text)
+{
+  let outputDoc = editor.state.doc;
+  let updateMessage = {changes: [{from: 0, to: outputDoc.length}, {from: 0, insert: text}]};
+  let transaction = editor.state.update(updateMessage);
+  editor.dispatch(transaction);
+}
+
+InitExample = function (filename)
+{
+  console.log(`Initializing example for ${filename}`);
+
+  if (EnvInitialized)
+  {
+    if (EditorsInitialized == false) { InitEditors(); }
+
+    let exSourceText = FS.readFile(filename, {encoding: 'utf8'});
+
+    setEditorText(srcEditor, exSourceText);
+    setEditorText(outputEditor, defaultOutputEditorText);
   }
   else
   {
@@ -68,7 +97,7 @@ InitExamplesPage = function (filename)
 
 window.addEventListener('DOMContentLoaded', () => {
   Module.onRuntimeInitialized = () => {
-    EverythingInitialized = true;
+    EnvInitialized = true;
   }
 });
 

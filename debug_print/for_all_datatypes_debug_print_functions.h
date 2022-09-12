@@ -732,7 +732,61 @@
         DebugPrint("hotkeys {\n", Depth);
       }
 
-                                                  DebugPrint("b32 Left =", Depth+2);
+                                                  DebugPrint("b32 Debug_RedrawEveryPush =", Depth+2);
+              DebugPrint(RuntimeStruct.Debug_RedrawEveryPush, 1);
+              DebugPrint(";\n");
+
+
+
+                                            DebugPrint("b32 Debug_ToggleLoopedGamePlayback =", Depth+2);
+              DebugPrint(RuntimeStruct.Debug_ToggleLoopedGamePlayback, 1);
+              DebugPrint(";\n");
+
+
+
+                                            DebugPrint("b32 Debug_ToggleTriggeredRuntimeBreak =", Depth+2);
+              DebugPrint(RuntimeStruct.Debug_ToggleTriggeredRuntimeBreak, 1);
+              DebugPrint(";\n");
+
+
+
+                                            DebugPrint("b32 Debug_Pause =", Depth+2);
+              DebugPrint(RuntimeStruct.Debug_Pause, 1);
+              DebugPrint(";\n");
+
+
+
+                                            DebugPrint("b32 Debug_ToggleProfile =", Depth+2);
+              DebugPrint(RuntimeStruct.Debug_ToggleProfile, 1);
+              DebugPrint(";\n");
+
+
+
+                                            DebugPrint("b32 Debug_ToggleMenu =", Depth+2);
+              DebugPrint(RuntimeStruct.Debug_ToggleMenu, 1);
+              DebugPrint(";\n");
+
+
+
+                                            DebugPrint("b32 Debug_TriangulateIncrement =", Depth+2);
+              DebugPrint(RuntimeStruct.Debug_TriangulateIncrement, 1);
+              DebugPrint(";\n");
+
+
+
+                                            DebugPrint("b32 Debug_TriangulateDecrement =", Depth+2);
+              DebugPrint(RuntimeStruct.Debug_TriangulateDecrement, 1);
+              DebugPrint(";\n");
+
+
+
+                                            DebugPrint("b32 Debug_MousePick =", Depth+2);
+              DebugPrint(RuntimeStruct.Debug_MousePick, 1);
+              DebugPrint(";\n");
+
+
+
+                                            DebugPrint("b32 Left =", Depth+2);
               DebugPrint(RuntimeStruct.Left, 1);
               DebugPrint(";\n");
 
