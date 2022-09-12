@@ -186,11 +186,11 @@ uses the error reporting system extensively, and it works great.
   - [✓] C++ https://github.com/jjbandit/bonsai
   - [✓] C++ https://github.com/HandmadeHero
   - [o] C++ https://github.com/oil/oil
+  - [o] C++ https://github.com/nakst/gf
   - [✓] C https://github.com/ndilieto/uacme
-  - [o] C https://github.com/redis/redis
   - [✓] C https://github.com/sqlite/sqlite
-  - [\_] C https://github.com/nakst/gf
   - [✓] C https://github.com/heroseh/hcc
+  - [o] C https://github.com/redis/redis
 
 [✓] collate the above projects into an extended integration test suite to ensure we don't break the parser.
 
