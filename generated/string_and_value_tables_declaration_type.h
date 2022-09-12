@@ -1,4 +1,4 @@
-        bonsai_function counted_string
+        link_internal counted_string
     ToString( declaration_type Type)
     {
       counted_string Result = {};
@@ -14,7 +14,7 @@
       return Result;
     }
 
-        bonsai_function declaration_type
+        link_internal declaration_type
     DeclarationType(counted_string S)
     {
       declaration_type Result = {};

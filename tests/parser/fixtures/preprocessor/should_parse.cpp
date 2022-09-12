@@ -515,6 +515,7 @@ TestFunc(int foo)
 }
 
 
+#define link_internal static
 #define global_variable static
 #define CSz(NullTerminatedCString) \
   CS(NullTerminatedCString, sizeof(NullTerminatedCString)-1)

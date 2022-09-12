@@ -1,4 +1,4 @@
-        bonsai_function counted_string
+        link_internal counted_string
     ToString( type_qualifier Type)
     {
       counted_string Result = {};
@@ -37,7 +37,7 @@
       return Result;
     }
 
-        bonsai_function type_qualifier
+        link_internal type_qualifier
     TypeQualifier(counted_string S)
     {
       type_qualifier Result = {};

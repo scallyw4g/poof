@@ -1,4 +1,4 @@
-        bonsai_function counted_string
+        link_internal counted_string
     ToString( function_type Type)
     {
       counted_string Result = {};
@@ -14,7 +14,7 @@
       return Result;
     }
 
-        bonsai_function function_type
+        link_internal function_type
     FunctionType(counted_string S)
     {
       function_type Result = {};

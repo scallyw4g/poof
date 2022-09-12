@@ -1,4 +1,4 @@
-    bonsai_function void
+    link_internal void
     DebugPrint( declaration *Struct, u32 Depth)
     {
       if (Struct)
@@ -7,7 +7,7 @@
       }
     }
 
-    bonsai_function void
+    link_internal void
     DebugPrint( declaration Struct, u32 Depth)
     {
       DebugPrint("declaration {\n", Depth);

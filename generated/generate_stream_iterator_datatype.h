@@ -4,7 +4,7 @@
       declaration_stream_chunk* At;
     };
 
-    bonsai_function declaration_iterator
+    link_internal declaration_iterator
     Iterator(declaration_stream* Stream)
     {
       declaration_iterator Iterator = {
@@ -14,20 +14,20 @@
       return Iterator;
     }
 
-    bonsai_function b32
+    link_internal b32
     IsValid(declaration_iterator* Iter)
     {
       b32 Result = Iter->At != 0;
       return Result;
     }
 
-    bonsai_function void
+    link_internal void
     Advance(declaration_iterator* Iter)
     {
       Iter->At = Iter->At->Next;
     }
 
-    bonsai_function b32
+    link_internal b32
     IsLastElement(declaration_iterator* Iter)
     {
       b32 Result = Iter->At->Next == 0;

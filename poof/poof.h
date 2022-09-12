@@ -267,7 +267,9 @@ enum c_token_type
   CT_Preprocessor_Nuked,
 
   CT_InsertedCode,     // This is how macros and includes get inserted
+
   CT_PoofInsertedCode, // This hijacks an existing token so poof can insert arbitrary stuff into source files
+  CT_PoofModifiedToken,
 };
 poof(generate_string_table(c_token_type))
 #include <generated/generate_string_table_c_token_type.h>
@@ -464,7 +466,7 @@ Hash(parser *Parser)
 poof(hashtable(parser))
 #include <generated/hashtable_parser.h>
 
-bonsai_function parser
+link_internal parser
 MakeParser(c_token_cursor *Tokens)
 {
   parser Result = {
@@ -739,7 +741,7 @@ struct type_def
 poof(generate_stream(type_def))
 #include <generated/generate_stream_type_def.h>
 
-bonsai_function datatype
+link_internal datatype
 Datatype(declaration* M)
 {
   datatype Result = {
@@ -749,7 +751,7 @@ Datatype(declaration* M)
   return Result;
 }
 
-bonsai_function datatype
+link_internal datatype
 Datatype(enum_member* E)
 {
   datatype Result = {
@@ -759,7 +761,7 @@ Datatype(enum_member* E)
   return Result;
 }
 
-bonsai_function declaration
+link_internal declaration
 Declaration(compound_decl *S)
 {
   declaration Result = {};
@@ -768,7 +770,7 @@ Declaration(compound_decl *S)
   return Result;
 }
 
-bonsai_function declaration
+link_internal declaration
 Declaration(function_decl *F)
 {
   declaration Result = {};
@@ -777,7 +779,7 @@ Declaration(function_decl *F)
   return Result;
 }
 
-bonsai_function datatype
+link_internal datatype
 Datatype(function_decl* F)
 {
   datatype Result = {};
@@ -786,7 +788,7 @@ Datatype(function_decl* F)
   return Result;
 }
 
-bonsai_function datatype
+link_internal datatype
 Datatype(compound_decl* S)
 {
   datatype Result = {};
@@ -795,7 +797,7 @@ Datatype(compound_decl* S)
   return Result;
 }
 
-bonsai_function datatype
+link_internal datatype
 Datatype(type_def* E)
 {
   datatype Result = {
@@ -805,7 +807,7 @@ Datatype(type_def* E)
   return Result;
 }
 
-bonsai_function declaration
+link_internal declaration
 Declaration(enum_decl* E)
 {
   declaration Result = {};
@@ -814,7 +816,7 @@ Declaration(enum_decl* E)
   return Result;
 }
 
-bonsai_function datatype
+link_internal datatype
 Datatype(enum_decl* E)
 {
   datatype Result = {};
@@ -823,7 +825,7 @@ Datatype(enum_decl* E)
   return Result;
 }
 
-bonsai_function declaration
+link_internal declaration
 Declaration(type_spec *T)
 {
   declaration Result = {};
@@ -831,7 +833,7 @@ Declaration(type_spec *T)
   return Result;
 }
 
-bonsai_function datatype
+link_internal datatype
 Datatype(type_spec S)
 {
   datatype Result = {};
@@ -900,7 +902,7 @@ struct macro_def
 poof(generate_stream(macro_def))
 #include <generated/generate_stream_macro_def.h>
 
-bonsai_function umm
+link_internal umm
 Hash(macro_def *M)
 {
   umm Result = Hash(&M->NameT->Value);
@@ -1061,7 +1063,7 @@ poof(
 poof(generate_stream(ast_node))
 #include <generated/generate_stream_ast_node.h>
 
-bonsai_function ast_node*
+link_internal ast_node*
 AllocateAstNode(ast_node_type T, ast_node **Result, memory_arena* Memory)
 {
   Assert(Result && (*Result == 0)); // We got a valid pointer, and it hasn't been allocated yet.
@@ -1334,7 +1336,7 @@ CTokenCursor(c_token_cursor *Result, c_token *Buffer, umm Count, counted_string 
   Result->Up = Up;
 }
 
-bonsai_function c_token_cursor
+link_internal c_token_cursor
 CTokenCursor(c_token *Start, c_token *End, counted_string Filename, token_cursor_source Source, c_token_cursor_up Up)
 {
   c_token_cursor Result = {
@@ -1348,7 +1350,7 @@ CTokenCursor(c_token *Start, c_token *End, counted_string Filename, token_cursor
   return Result;
 }
 
-bonsai_function c_token_cursor
+link_internal c_token_cursor
 CTokenCursor(c_token_buffer *Buf, counted_string Filename, token_cursor_source Source, c_token_cursor_up Up)
 {
   c_token_cursor Result = CTokenCursor(Buf->Start, Buf->Start + Buf->Count, Filename, Source, Up);
@@ -1371,7 +1373,7 @@ AllocateTokenCursor(memory_arena* Memory, counted_string Filename, umm Count, to
   return Result;
 }
 
-bonsai_function parser
+link_internal parser
 AllocateParser(counted_string Filename, u32 LineNumber, u32 TokenCount, token_cursor_source Source, u32 OutputBufferTokenCount, c_token_cursor_up Up, memory_arena *Memory)
 {
   TIMED_FUNCTION();
@@ -1388,7 +1390,7 @@ AllocateParser(counted_string Filename, u32 LineNumber, u32 TokenCount, token_cu
   return Result;
 }
 
-bonsai_function parser*
+link_internal parser*
 AllocateParserPtr(counted_string Filename, u32 LineNumber, u32 TokenCount, token_cursor_source Source, u32 OutputBufferTokenCount, c_token_cursor_up Up,  memory_arena *Memory)
 {
   Assert(OutputBufferTokenCount == 0);
@@ -1494,7 +1496,7 @@ poof(generate_stream_iterator(declaration))
 poof(generate_stream_push(declaration))
 #include <generated/generate_stream_push_datatype.h>
 
-bonsai_function b32
+link_internal b32
 Contains(parser *Parser, c_token *T)
 {
   b32 Result = False;
@@ -1551,7 +1553,7 @@ struct d_list
   d_list *Next;
 };
 
-bonsai_function parse_context
+link_internal parse_context
 AllocateParseContext(memory_arena *Memory)
 {
   parse_context Ctx = {};
@@ -1567,7 +1569,7 @@ AllocateParseContext(memory_arena *Memory)
   return Ctx;
 }
 
-bonsai_function b32
+link_internal b32
 IsValidForCursor(c_token_cursor *Tokens, c_token *T)
 {
   b32 Result = T < Tokens->End && T >= Tokens->Start;

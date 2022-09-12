@@ -1,4 +1,4 @@
-    bonsai_function counted_string
+    link_internal counted_string
     ToString( parse_error_code Type)
     {
       counted_string Result = {};

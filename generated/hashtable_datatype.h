@@ -9,14 +9,14 @@
       umm Size;
       datatype_linked_list_node **Elements;
     };
-     bonsai_function datatype_linked_list_node *
+     link_internal datatype_linked_list_node *
     Allocate_datatype_linked_list_node(memory_arena *Memory)
     {
       datatype_linked_list_node *Result = Allocate( datatype_linked_list_node, Memory, 1);
       return Result;
     }
 
-    bonsai_function datatype_hashtable
+    link_internal datatype_hashtable
     Allocate_datatype_hashtable(umm ElementCount, memory_arena *Memory)
     {
       datatype_hashtable Result = {};
@@ -25,7 +25,7 @@
       return Result;
     }
 
-    bonsai_function datatype_linked_list_node *
+    link_internal datatype_linked_list_node *
     GetHashBucket(umm HashValue, datatype_hashtable *Table)
     {
       Assert(Table->Size);
@@ -33,7 +33,7 @@
       return Result;
     }
 
-    bonsai_function datatype *
+    link_internal datatype *
     GetFirstAtBucket(umm HashValue, datatype_hashtable *Table)
     {
       datatype_linked_list_node *Bucket = GetHashBucket(HashValue, Table);
@@ -41,7 +41,7 @@
       return Result;
     }
 
-    bonsai_function datatype *
+    link_internal datatype *
     Insert(datatype_linked_list_node *Node, datatype_hashtable *Table)
     {
       Assert(Table->Size);
@@ -52,7 +52,7 @@
       return &Bucket[0]->Element;
     }
 
-    bonsai_function datatype*
+    link_internal datatype*
     Insert(datatype Element, datatype_hashtable *Table, memory_arena *Memory)
     {
       datatype_linked_list_node *Bucket = Allocate_datatype_linked_list_node(Memory);

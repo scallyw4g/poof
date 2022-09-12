@@ -1,4 +1,4 @@
-        bonsai_function counted_string
+        link_internal counted_string
     ToString( metaprogramming_directive Type)
     {
       counted_string Result = {};
@@ -16,7 +16,7 @@
       return Result;
     }
 
-        bonsai_function metaprogramming_directive
+        link_internal metaprogramming_directive
     MetaprogrammingDirective(counted_string S)
     {
       metaprogramming_directive Result = {};

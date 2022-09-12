@@ -1,8 +1,8 @@
-bonsai_function void PrintAstNode(ast_node* Node, string_builder *Builder);
-bonsai_function void PrintAstNode(ast_node_expression *Node, string_builder *Builder);
-bonsai_function void PrintAstNode(ast_node_statement* Node, string_builder *Builder);
+link_internal void PrintAstNode(ast_node* Node, string_builder *Builder);
+link_internal void PrintAstNode(ast_node_expression *Node, string_builder *Builder);
+link_internal void PrintAstNode(ast_node_statement* Node, string_builder *Builder);
 
-bonsai_function void
+link_internal void
 PrintAstNode(ast_node_expression *Node, string_builder *Builder)
 {
   if (Node)
@@ -12,7 +12,7 @@ PrintAstNode(ast_node_expression *Node, string_builder *Builder)
   }
 }
 
-bonsai_function void
+link_internal void
 PrintAstNode(ast_node_statement *Node, string_builder *Builder)
 {
   if (Node)
@@ -23,7 +23,7 @@ PrintAstNode(ast_node_statement *Node, string_builder *Builder)
   }
 }
 
-bonsai_function void
+link_internal void
 PrintAstNode(ast_node *Node, string_builder *Builder)
 {
   if (Node)
@@ -138,7 +138,7 @@ PrintAstNode(ast_node *Node, string_builder *Builder)
   }
 }
 
-bonsai_function counted_string
+link_internal counted_string
 PrintAstNode(ast_node_expression *Node, memory_arena *Memory)
 {
   string_builder Builder = {};
@@ -147,7 +147,7 @@ PrintAstNode(ast_node_expression *Node, memory_arena *Memory)
   return Value;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 PrintAstNode(ast_node *Node, memory_arena *Memory)
 {
   string_builder Builder = {};

@@ -1,6 +1,6 @@
 
 // TODO(Jesse id: 222, tags: immediate, parsing, metaprogramming) : Re-add [[nodiscard]] here
-bonsai_function counted_string
+link_internal counted_string
 Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx, memory_arena* Memory)
 {
   TIMED_FUNCTION();
@@ -565,7 +565,7 @@ DoTrueFalse( parse_context *Ctx,
   }
 }
 
-bonsai_function counted_string
+link_internal counted_string
 Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory)
 {
   Assert(Func->Body.Tokens->At == Func->Body.Tokens->Start);

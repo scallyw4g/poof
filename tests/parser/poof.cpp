@@ -8,7 +8,7 @@
 #define POOF_FIXTURES_PATH "tests/poof/fixtures"
 
 #if 1
-bonsai_function void
+link_internal void
 PositiveExponentTests(parser *Parser, c_token_type FloatingPointTokenType)
 {
   {
@@ -62,7 +62,7 @@ PositiveExponentTests(parser *Parser, c_token_type FloatingPointTokenType)
   return;
 }
 
-bonsai_function void
+void
 ExponentTests(parser *Parser, c_token_type FloatingPointTokenType)
 {
 
@@ -123,7 +123,7 @@ ExponentTests(parser *Parser, c_token_type FloatingPointTokenType)
   return;
 }
 
-bonsai_function void
+link_internal void
 TestBasicTokenizationAndParsing(memory_arena* Memory)
 {
   parse_context Ctx = AllocateParseContext(Memory);
@@ -651,7 +651,7 @@ TestBasicTokenizationAndParsing(memory_arena* Memory)
   }
 }
 
-bonsai_function void
+link_internal void
 TestPeekAndPopTokens(memory_arena* Memory)
 {
   parse_context Ctx = AllocateParseContext(Memory);
@@ -837,7 +837,7 @@ TestPeekAndPopTokens(memory_arena* Memory)
   return;
 }
 
-bonsai_function void
+link_internal void
 TestBoundaryConditions(memory_arena* Memory)
 {
   parse_context Ctx = AllocateParseContext(Memory);
@@ -879,7 +879,7 @@ TestBoundaryConditions(memory_arena* Memory)
 
 
 
-bonsai_function void
+link_internal void
 TestStructParsing(memory_arena* Memory)
 {
   parse_context Ctx = AllocateParseContext(Memory);
@@ -899,7 +899,7 @@ TestStructParsing(memory_arena* Memory)
   return;
 }
 
-bonsai_function void
+link_internal void
 TestCommentSituation(memory_arena* Memory)
 {
   parse_context Ctx = AllocateParseContext(Memory);
@@ -955,7 +955,7 @@ TestCommentSituation(memory_arena* Memory)
   return;
 }
 
-bonsai_function void
+link_internal void
 TestAst(memory_arena *Memory)
 {
   parse_context Ctx = AllocateParseContext(Memory);
@@ -1015,7 +1015,7 @@ TestAst(memory_arena *Memory)
   }
 }
 
-bonsai_function void
+link_internal void
 MacroAndIncludetest(memory_arena *Memory)
 {
   parse_context Ctx = AllocateParseContext(Memory);
@@ -1340,7 +1340,7 @@ MacroAndIncludetest(memory_arena *Memory)
   return;
 }
 
-bonsai_function void
+link_internal void
 TestIncludeGuards(memory_arena *Memory)
 {
   {
@@ -1371,7 +1371,7 @@ TestIncludeGuards(memory_arena *Memory)
   }
 }
 
-bonsai_function void
+link_internal void
 TestDefinesAndConditionals(memory_arena *Memory)
 {
   parse_context Ctx = AllocateParseContext(Memory);
@@ -1398,7 +1398,7 @@ TestDefinesAndConditionals(memory_arena *Memory)
   }
 }
 
-bonsai_function void
+link_internal void
 TestLogicalOperators(memory_arena *Memory)
 {
   parse_context Ctx = AllocateParseContext(Memory);
@@ -1423,7 +1423,7 @@ TestLogicalOperators(memory_arena *Memory)
 }
 
 #define MAX_PARSERS_IN_PARSER_BLOCK 8
-bonsai_function b32
+link_internal b32
 ParserChainIntegrityPasses(d_list *Mem)
 {
   CAssert(MAX_PARSERS_IN_PARSER_BLOCK == 8);
@@ -1448,7 +1448,7 @@ ParserChainIntegrityPasses(d_list *Mem)
   return Result;
 }
 
-bonsai_function void
+link_internal void
 LinkParserBlocks(d_list *Mem, u32 ParserCount)
 {
   d_list *Prev = 0;
@@ -1466,7 +1466,7 @@ LinkParserBlocks(d_list *Mem, u32 ParserCount)
   TestThat(ParserChainIntegrityPasses(Mem));
 }
 
-bonsai_function void
+link_internal void
 TestDoublyLinkedListSwap()
 {
   d_list Mem[MAX_PARSERS_IN_PARSER_BLOCK] = {};
@@ -1722,7 +1722,7 @@ TestDoublyLinkedListSwap()
   }
 }
 
-bonsai_function void
+link_internal void
 TestParserChain(memory_arena *Memory)
 {
   parse_context Ctx = AllocateParseContext(Memory);
@@ -1788,7 +1788,7 @@ TestParserChain(memory_arena *Memory)
   return;
 }
 
-bonsai_function void
+link_internal void
 TestParserErrors(memory_arena *Memory)
 {
 

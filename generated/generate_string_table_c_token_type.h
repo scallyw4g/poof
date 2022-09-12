@@ -1,4 +1,4 @@
-    bonsai_function counted_string
+    link_internal counted_string
     ToString( c_token_type Type)
     {
       counted_string Result = {};
@@ -174,6 +174,7 @@
           case CT_Preprocessor_Nuked: { Result = CSz("CT_Preprocessor_Nuked"); } break;
           case CT_InsertedCode: { Result = CSz("CT_InsertedCode"); } break;
           case CT_PoofInsertedCode: { Result = CSz("CT_PoofInsertedCode"); } break;
+          case CT_PoofModifiedToken: { Result = CSz("CT_PoofModifiedToken"); } break;
 
       }
       return Result;

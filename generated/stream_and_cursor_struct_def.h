@@ -5,7 +5,7 @@
       compound_decl *End;
     };
 
-    bonsai_function compound_decl_cursor
+    link_internal compound_decl_cursor
     CompoundDeclCursor(umm ElementCount, memory_arena* Memory)
     {
       compound_decl *Start = (compound_decl*)PushStruct(Memory, sizeof(compound_decl), 1, 0);
@@ -36,7 +36,7 @@
       compound_decl_stream_chunk* At;
     };
 
-    bonsai_function compound_decl_iterator
+    link_internal compound_decl_iterator
     Iterator(compound_decl_stream* Stream)
     {
       compound_decl_iterator Iterator = {
@@ -46,20 +46,20 @@
       return Iterator;
     }
 
-    bonsai_function b32
+    link_internal b32
     IsValid(compound_decl_iterator* Iter)
     {
       b32 Result = Iter->At != 0;
       return Result;
     }
 
-    bonsai_function void
+    link_internal void
     Advance(compound_decl_iterator* Iter)
     {
       Iter->At = Iter->At->Next;
     }
 
-    bonsai_function b32
+    link_internal b32
     IsLastElement(compound_decl_iterator* Iter)
     {
       b32 Result = Iter->At->Next == 0;
@@ -67,7 +67,7 @@
     }
 
 
-        bonsai_function compound_decl *
+        link_internal compound_decl *
     Push(compound_decl_stream* Stream, compound_decl Element, memory_arena* Memory)
     {
       compound_decl_stream_chunk* NextChunk = (compound_decl_stream_chunk*)PushStruct(Memory, sizeof(compound_decl_stream_chunk), 1, 0);
@@ -92,7 +92,7 @@
       return Result;
     }
 
-    bonsai_function void
+    link_internal void
     ConcatStreams( compound_decl_stream *S1, compound_decl_stream *S2)
     {
       if (S1->LastChunk)

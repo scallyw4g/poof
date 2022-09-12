@@ -4,7 +4,7 @@
   #define PLATFORM_LIBRARY_AND_WINDOW_IMPLEMENTATIONS 1
   #define PLATFORM_GL_IMPLEMENTATIONS 1
   #define BONSAI_DEBUG_SYSTEM_API 1
-  #define DEBUG_PRINT (0)
+  #define DEBUG_PRINT (1)
 #endif
 
 #include <bonsai_stdlib/bonsai_stdlib.h>
@@ -43,112 +43,112 @@ _Pragma("clang diagnostic pop") // unused-macros
 
 
 
-bonsai_function peek_result PeekTokenRawCursor(peek_result *Peek, s32 TokenLookahead = 0);
-bonsai_function peek_result PeekTokenRawCursor(c_token_cursor *Tokens, s32 TokenLookahead, b32 CanSearchDown = True);
-bonsai_function peek_result PeekTokenRawCursor(parser *Parser, s32 TokenLookahead = 0);
+link_internal peek_result PeekTokenRawCursor(peek_result *Peek, s32 TokenLookahead = 0);
+link_internal peek_result PeekTokenRawCursor(c_token_cursor *Tokens, s32 TokenLookahead, b32 CanSearchDown = True);
+link_internal peek_result PeekTokenRawCursor(parser *Parser, s32 TokenLookahead = 0);
 
-bonsai_function peek_result PeekTokenCursor(peek_result *Peek, s32 TokenLookahead = 0);
-bonsai_function peek_result PeekTokenCursor(c_token_cursor *Tokens, s32 TokenLookahead = 0);
-bonsai_function peek_result PeekTokenCursor(parser *Parser, s32 TokenLookahead = 0);
+link_internal peek_result PeekTokenCursor(peek_result *Peek, s32 TokenLookahead = 0);
+link_internal peek_result PeekTokenCursor(c_token_cursor *Tokens, s32 TokenLookahead = 0);
+link_internal peek_result PeekTokenCursor(parser *Parser, s32 TokenLookahead = 0);
 
-bonsai_function c_token* PeekTokenRawPointer(parser *Parser, u32 TokenLookahead);
-bonsai_function c_token* PeekTokenRawPointer(parser *Parser, s32 TokenLookahead = 0);
+link_internal c_token* PeekTokenRawPointer(parser *Parser, u32 TokenLookahead);
+link_internal c_token* PeekTokenRawPointer(parser *Parser, s32 TokenLookahead = 0);
 
-bonsai_function c_token * PeekTokenPointer(c_token_cursor *Tokens, s32 TokenLookahead = 0);
-bonsai_function c_token * PeekTokenPointer(parser *Parser, u32 TokenLookahead = 0);
+link_internal c_token * PeekTokenPointer(c_token_cursor *Tokens, s32 TokenLookahead = 0);
+link_internal c_token * PeekTokenPointer(parser *Parser, u32 TokenLookahead = 0);
 
-bonsai_function c_token   PeekTokenRaw(parser *Parser, s32 Lookahead = 0);
-bonsai_function c_token   PeekToken(parser *Parser, s32 Lookahead = 0);
-bonsai_function c_token   PopTokenRaw(parser *Parser);
-bonsai_function c_token * PopTokenRawPointer(parser *Parser);
-bonsai_function c_token   PopToken(parser *Parser);
-bonsai_function b32       OptionalTokenRaw(parser *Parser, c_token_type Type);
-bonsai_function c_token * OptionalToken(parser *Parser, c_token T);
-bonsai_function c_token * OptionalToken(parser *Parser, c_token_type Type);
-bonsai_function c_token   RequireToken(parser *Parser, c_token *ExpectedToken);
-bonsai_function c_token   RequireToken(parser *Parser, c_token ExpectedToken);
-bonsai_function c_token   RequireToken(parser *Parser, c_token_type ExpectedType);
-bonsai_function c_token   RequireTokenRaw(parser *Parser, c_token Expected);
-bonsai_function c_token   RequireTokenRaw(parser *Parser, c_token *Expected);
-bonsai_function c_token   RequireTokenRaw(parser *Parser, c_token_type ExpectedType);
+link_internal c_token   PeekTokenRaw(parser *Parser, s32 Lookahead = 0);
+link_internal c_token   PeekToken(parser *Parser, s32 Lookahead = 0);
+link_internal c_token   PopTokenRaw(parser *Parser);
+link_internal c_token * PopTokenRawPointer(parser *Parser);
+link_internal c_token   PopToken(parser *Parser);
+link_internal b32       OptionalTokenRaw(parser *Parser, c_token_type Type);
+link_internal c_token * OptionalToken(parser *Parser, c_token T);
+link_internal c_token * OptionalToken(parser *Parser, c_token_type Type);
+link_internal c_token   RequireToken(parser *Parser, c_token *ExpectedToken);
+link_internal c_token   RequireToken(parser *Parser, c_token ExpectedToken);
+link_internal c_token   RequireToken(parser *Parser, c_token_type ExpectedType);
+link_internal c_token   RequireTokenRaw(parser *Parser, c_token Expected);
+link_internal c_token   RequireTokenRaw(parser *Parser, c_token *Expected);
+link_internal c_token   RequireTokenRaw(parser *Parser, c_token_type ExpectedType);
 
-bonsai_function b32       TokensRemain(parser *Parser, u32 TokenLookahead = 0);
-bonsai_function b32       RawTokensRemain(parser *Parser, u32 TokenLookahead = 0);
+link_internal b32       TokensRemain(parser *Parser, u32 TokenLookahead = 0);
+link_internal b32       RawTokensRemain(parser *Parser, u32 TokenLookahead = 0);
 
-bonsai_function b32       TokenIsOperator(c_token_type T);
-bonsai_function b32       NextTokenIsOperator(parser *Parser);
-bonsai_function c_token * RequireOperatorToken(parser *Parser);
+link_internal b32       TokenIsOperator(c_token_type T);
+link_internal b32       NextTokenIsOperator(parser *Parser);
+link_internal c_token * RequireOperatorToken(parser *Parser);
 
-bonsai_function void      TrimFirstToken(parser* Parser, c_token_type TokenType);
-bonsai_function void      TrimLastToken(parser* Parser, c_token_type TokenType);
-bonsai_function void      TrimLeadingWhitespace(parser* Parser);
+link_internal void      TrimFirstToken(parser* Parser, c_token_type TokenType);
+link_internal void      TrimLastToken(parser* Parser, c_token_type TokenType);
+link_internal void      TrimLeadingWhitespace(parser* Parser);
 
-bonsai_function counted_string EatBetweenExcluding(ansi_stream*, char Open, char Close);
-bonsai_function void      EatBetween(parser* Parser, c_token_type Open, c_token_type Close);
-bonsai_function b32       EatWhitespace(parser* Parser);
-bonsai_function b32       EatSpacesTabsAndEscapedNewlines(parser *Parser);
-bonsai_function void      EatWhitespaceAndComments(parser *Parser);
+link_internal counted_string EatBetweenExcluding(ansi_stream*, char Open, char Close);
+link_internal void      EatBetween(parser* Parser, c_token_type Open, c_token_type Close);
+link_internal b32       EatWhitespace(parser* Parser);
+link_internal b32       EatSpacesTabsAndEscapedNewlines(parser *Parser);
+link_internal void      EatWhitespaceAndComments(parser *Parser);
 
-bonsai_function void      FullRewind(parser* Parser);
+link_internal void      FullRewind(parser* Parser);
 
-bonsai_function parser * DuplicateParserTokens(parser *Parser, memory_arena *Memory);
-bonsai_function parser * DuplicateParser(parser *Parser, memory_arena *Memory);
-bonsai_function c_token_cursor * DuplicateCTokenCursor(c_token_cursor *Tokens, memory_arena *Memory);
-bonsai_function parser *         DuplicateCTokenCursor2(c_token_cursor *Tokens, memory_arena *Memory);
+link_internal parser * DuplicateParserTokens(parser *Parser, memory_arena *Memory);
+link_internal parser * DuplicateParser(parser *Parser, memory_arena *Memory);
+link_internal c_token_cursor * DuplicateCTokenCursor(c_token_cursor *Tokens, memory_arena *Memory);
+link_internal parser *         DuplicateCTokenCursor2(c_token_cursor *Tokens, memory_arena *Memory);
 
 //
 // Preprocessor stuff
 //
 
-bonsai_function b32         TryTransmuteKeywordToken(c_token *T, c_token *LastTokenPushed);
-bonsai_function b32         TryTransmuteOperatorToken(c_token *T);
-bonsai_function b32         TryTransmuteIdentifierToken(c_token *T);
-bonsai_function macro_def * TryTransmuteIdentifierToMacro(parse_context *Ctx, parser *Parser, c_token *T, macro_def *ExpandingMacro);
-bonsai_function macro_def * IdentifierShouldBeExpanded(parse_context *Ctx, parser *Parser, c_token *T, macro_def *ExpandingMacro);
+link_internal b32         TryTransmuteKeywordToken(c_token *T, c_token *LastTokenPushed);
+link_internal b32         TryTransmuteOperatorToken(c_token *T);
+link_internal b32         TryTransmuteIdentifierToken(c_token *T);
+link_internal macro_def * TryTransmuteIdentifierToMacro(parse_context *Ctx, parser *Parser, c_token *T, macro_def *ExpandingMacro);
+link_internal macro_def * IdentifierShouldBeExpanded(parse_context *Ctx, parser *Parser, c_token *T, macro_def *ExpandingMacro);
 
-bonsai_function c_token_cursor * ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T);
-bonsai_function parser * ExpandMacro(parse_context *Ctx, parser *Parser, macro_def *Macro, memory_arena *PermMemory, memory_arena *TempMemory, b32 ScanArgsForAdditionalMacros = False);
-bonsai_function u64      ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena *PermMemory, memory_arena *TempMemory, u64 PreviousValue, b32 LogicalNotNextValue);
+link_internal c_token_cursor * ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T);
+link_internal parser * ExpandMacro(parse_context *Ctx, parser *Parser, macro_def *Macro, memory_arena *PermMemory, memory_arena *TempMemory, b32 ScanArgsForAdditionalMacros = False);
+link_internal u64      ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena *PermMemory, memory_arena *TempMemory, u64 PreviousValue, b32 LogicalNotNextValue);
 
-bonsai_function macro_def * GetMacroDef(parse_context *Ctx, counted_string DefineValue) ;
-bonsai_function c_token *   EatIfBlock(parser *Parser, erase_token_mode Erased);
-bonsai_function c_token *   EraseAllRemainingIfBlocks(parser *Parser);
+link_internal macro_def * GetMacroDef(parse_context *Ctx, counted_string DefineValue) ;
+link_internal c_token *   EatIfBlock(parser *Parser, erase_token_mode Erased);
+link_internal c_token *   EraseAllRemainingIfBlocks(parser *Parser);
 
-bonsai_function void EraseToken(c_token *Token);
-bonsai_function void EraseBetweenExcluding(parser *Parser, c_token *StartToken, c_token *OnePastLastToken);
+link_internal void EraseToken(c_token *Token);
+link_internal void EraseBetweenExcluding(parser *Parser, c_token *StartToken, c_token *OnePastLastToken);
 
-bonsai_function void DumpLocalTokens(parser *Parser);
-bonsai_function void PrintTray(char_cursor *Dest, c_token *T, u32 Columns, counted_string Color);
-bonsai_function void PrintTraySimple(c_token *T, b32 Force = False);
+link_internal void DumpLocalTokens(parser *Parser);
+link_internal void PrintTray(char_cursor *Dest, c_token *T, u32 Columns, counted_string Color);
+link_internal void PrintTraySimple(c_token *T, b32 Force = False);
 
-bonsai_function void PoofTypeError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken);
+link_internal void PoofTypeError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken);
 
-bonsai_function void ParseError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken = 0);
-bonsai_function void ParseError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken = 0);
+link_internal void ParseError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken = 0);
+link_internal void ParseError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken = 0);
 
-bonsai_function ast_node_expression* ParseExpression(parse_context *Ctx);
-bonsai_function void                 ParseExpression(parse_context *Ctx, ast_node_expression *Result);
-bonsai_function void                 ParseExpression(parse_context *Ctx, ast_node** Result);
+link_internal ast_node_expression* ParseExpression(parse_context *Ctx);
+link_internal void                 ParseExpression(parse_context *Ctx, ast_node_expression *Result);
+link_internal void                 ParseExpression(parse_context *Ctx, ast_node** Result);
 
-bonsai_function compound_decl ParseStructBody(parse_context *, c_token *);
-bonsai_function declaration   ParseStructMember(parse_context *Ctx, c_token *StructNameT);
+link_internal compound_decl ParseStructBody(parse_context *, c_token *);
+link_internal declaration   ParseStructMember(parse_context *Ctx, c_token *StructNameT);
 
-bonsai_function parser MaybeParseFunctionBody(parser *Parser, memory_arena *Memory);
-bonsai_function void MaybeParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest);
-bonsai_function declaration FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec);
+link_internal parser MaybeParseFunctionBody(parser *Parser, memory_arena *Memory);
+link_internal void MaybeParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest);
+link_internal declaration FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec);
 
-bonsai_function counted_string PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory);
+link_internal counted_string PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory);
 
-bonsai_function counted_string GetTypeNameForDecl(parse_context *Ctx, declaration* Decl, memory_arena *Memory);
-bonsai_function counted_string GetNameForDecl(declaration* Decl);
-bonsai_function counted_string GetTypeTypeForDatatype(datatype *Data, memory_arena *);
-bonsai_function counted_string GetTypeNameForDatatype(parse_context*, datatype *Data, memory_arena *);
+link_internal counted_string GetTypeNameForDecl(parse_context *Ctx, declaration* Decl, memory_arena *Memory);
+link_internal counted_string GetNameForDecl(declaration* Decl);
+link_internal counted_string GetTypeTypeForDatatype(datatype *Data, memory_arena *);
+link_internal counted_string GetTypeNameForDatatype(parse_context*, datatype *Data, memory_arena *);
 link_internal datatype ResolveToBaseType(parse_context *Ctx, type_spec );
 link_internal datatype ResolveToBaseType(parse_context *Ctx, datatype *);
 link_internal datatype ResolveToBaseType(parse_context *Ctx, type_def *);
 
-bonsai_function counted_string Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory);
-bonsai_function void           DoTrueFalse( parse_context *Ctx, parser *Scope, meta_func_arg_stream* ReplacePatterns, b32 DoTrueBranch, string_builder *OutputBuilder, memory_arena *Memory);
+link_internal counted_string Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory);
+link_internal void           DoTrueFalse( parse_context *Ctx, parser *Scope, meta_func_arg_stream* ReplacePatterns, b32 DoTrueBranch, string_builder *OutputBuilder, memory_arena *Memory);
 
 
 inline c_token_cursor *
@@ -159,7 +159,7 @@ HasValidDownPointer(c_token *T)
 }
 
 #if BONSAI_SLOW
-bonsai_function void
+link_internal void
 SanityCheckCTokenCursor(c_token_cursor *Current)
 {
   for (u32 TokenIndex = 0; TokenIndex < TotalElements(Current); ++TokenIndex)
@@ -174,7 +174,7 @@ SanityCheckCTokenCursor(c_token_cursor *Current)
   }
 }
 
-bonsai_function void
+link_internal void
 SanityCheckParserChain(parser *Parser)
 {
 #if 1
@@ -191,7 +191,7 @@ SanityCheckParserChain(parser *Parser)
 #define SanityCheckCTokenCursor(...)
 #endif
 
-bonsai_function string_from_parser
+link_internal string_from_parser
 StartStringFromParser(parser* Parser)
 {
   c_token *T = PeekTokenRawPointer(Parser);
@@ -207,7 +207,7 @@ StartStringFromParser(parser* Parser)
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 FinalizeStringFromParser(string_from_parser* Builder)
 {
   counted_string Result = {};
@@ -244,7 +244,7 @@ FinalizeStringFromParser(string_from_parser* Builder)
 }
 
 #if 0
-bonsai_function void
+link_internal void
 SinglyLinkedListSwapInplace(c_token_cursor *P0, c_token_cursor *P1)
 {
   NotImplemented;
@@ -268,7 +268,7 @@ SinglyLinkedListSwapInplace(c_token_cursor *P0, c_token_cursor *P1)
 #endif
 
 #if 1
-bonsai_function void
+link_internal void
 DoublyLinkedListSwap(d_list *P0, d_list *P1)
 {
   Assert(P0 != P1);
@@ -367,7 +367,7 @@ IsValid(peek_result *Peek)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 TokenShouldModifyLineCount(c_token *T, token_cursor_source Source)
 {
   b32 Result = False;
@@ -382,7 +382,7 @@ TokenShouldModifyLineCount(c_token *T, token_cursor_source Source)
   return Result;
 }
 
-bonsai_function c_token *
+link_internal c_token *
 RewindTo(parser* Parser, c_token *T)
 {
   peek_result Current = {};
@@ -412,7 +412,7 @@ RewindTo(parser* Parser, c_token *T)
   return Current.At;
 }
 
-bonsai_function c_token *
+link_internal c_token *
 RewindTo(parser* Parser, c_token_type Type, u32 Count = 0)
 {
   peek_result Current = {};
@@ -454,7 +454,7 @@ RewindTo(parser* Parser, c_token_type Type, u32 Count = 0)
 
 // NOTE(Jesse): This function should actually just be able to walk the "Up" chain
 // since we never actually modify cursors
-bonsai_function void
+link_internal void
 FullRewind(parser* Parser)
 {
   TIMED_FUNCTION();
@@ -480,7 +480,7 @@ FullRewind(parser* Parser)
   SanityCheckParserChain(Parser);
 }
 
-bonsai_function b32
+link_internal b32
 IsNewline(c_token_type Type)
 {
   b32 Result = Type == CTokenType_Newline        ||
@@ -491,14 +491,14 @@ IsNewline(c_token_type Type)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 IsNewline(c_token *T)
 {
   b32 Result = T && IsNewline(T->Type);
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 IsNBSP(c_token_type Type)
 {
   b32 Result = Type == CTokenType_Tab            ||
@@ -507,7 +507,7 @@ IsNBSP(c_token_type Type)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 IsNBSP(c_token *T)
 {
   b32 Result = IsNBSP(T->Type);
@@ -515,7 +515,7 @@ IsNBSP(c_token *T)
 }
 
 
-bonsai_function b32
+link_internal b32
 IsWhitespace(c_token_type Type)
 {
   b32 Result = Type == CTokenType_Newline        ||
@@ -528,14 +528,14 @@ IsWhitespace(c_token_type Type)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 IsWhitespace(c_token *T)
 {
   b32 Result = IsWhitespace(T->Type);
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 IsComment(c_token *T)
 {
   b32 Result = (T->Type == CTokenType_CommentSingleLine) || (T->Type == CTokenType_CommentMultiLine);
@@ -550,7 +550,7 @@ IsComment(c_token *T)
 //
 // Half-measure might be renaming it to NotEmpty() or something..
 #if 0
-bonsai_function umm
+link_internal umm
 Remaining(parser* Parser)
 {
   umm Result = 0;
@@ -588,7 +588,7 @@ umm Remaining(c_token_cursor *Tokens)
 
 
 #if 0
-bonsai_function void
+link_internal void
 Advance(c_token_cursor* Tokens, u32 Lookahead = 0)
 {
   if (Remaining(Tokens, Lookahead))
@@ -604,7 +604,7 @@ Advance(c_token_cursor* Tokens, u32 Lookahead = 0)
 }
 #endif
 
-bonsai_function c_token *
+link_internal c_token *
 AdvanceTo(parser *Parser, peek_result *Peek)
 {
   c_token *Result = 0;
@@ -630,7 +630,7 @@ AdvanceTo(parser *Parser, peek_result *Peek)
   return Result;
 }
 
-bonsai_function void
+link_internal void
 AdvanceParser(parser* Parser)
 {
   NotImplemented;
@@ -666,7 +666,7 @@ AdvanceParser(parser* Parser)
 }
 
 #if 0
-bonsai_function b32
+link_internal b32
 Scan(parser *Parser, c_token *Needle, sign Direction)
 {
   b32 Result = False;
@@ -684,7 +684,7 @@ Scan(parser *Parser, c_token *Needle, sign Direction)
 #endif
 
 #if 0
-bonsai_function c_token *
+link_internal c_token *
 AdvanceTo(parser* Parser, c_token_cursor *T)
 {
   c_token *Result = IsValid(Parser->Tokens) ? Parser->Tokens->At : 0;
@@ -697,7 +697,7 @@ AdvanceTo(parser* Parser, c_token_cursor *T)
 }
 #endif
 
-bonsai_function c_token *
+link_internal c_token *
 AdvanceTo(parser* Parser, c_token* T)
 {
   SanityCheckParserChain(Parser);
@@ -719,7 +719,7 @@ AdvanceTo(parser* Parser, c_token* T)
   return Peek.At;
 }
 
-bonsai_function void
+link_internal void
 ParseMacroArgument(parser* Parser, c_token_buffer *Result)
 {
   Result->Start = Parser->Tokens->At;
@@ -753,7 +753,7 @@ ParseMacroArgument(parser* Parser, c_token_buffer *Result)
   return;
 }
 
-bonsai_function void
+link_internal void
 EatUntilExcluding(parser* Parser, c_token_type Close)
 {
   // TODO(Jesse, performance, slow): This is slow AF
@@ -771,7 +771,7 @@ EatUntilExcluding(parser* Parser, c_token_type Close)
   return;
 }
 
-bonsai_function c_token *
+link_internal c_token *
 EatUntilIncluding(parser* Parser, c_token_type Close)
 {
   c_token *Result = 0;
@@ -794,7 +794,7 @@ EatUntilIncluding(parser* Parser, c_token_type Close)
 
 
 
-bonsai_function void
+link_internal void
 DumpSingle(c_token_cursor *Cursor, c_token *At)
 {
   u32 TokenCount = (u32)TotalElements(Cursor);
@@ -824,7 +824,7 @@ DumpSingle(c_token_cursor *Cursor, c_token *At)
 }
 
 #if 0
-bonsai_function void
+link_internal void
 DumpChain(parser* Parser, u32 LinesToDump = u32_MAX)
 {
   c_token_cursor *Cursor = Parser->Tokens;
@@ -848,7 +848,7 @@ DumpChain(parser* Parser, u32 LinesToDump = u32_MAX)
 }
 #endif
 
-bonsai_function void
+link_internal void
 PrintTokenVerbose(c_token_cursor *Tokens, c_token *T, c_token *AbsAt, u32 Depth)
 {
   counted_string AtMarker = CSz(" ");
@@ -951,7 +951,7 @@ DumpCursorSimple(c_token_cursor* Tokens, c_token *AbsoluteAt = 0, u32 Depth = 0)
 }
 
 #if 0
-bonsai_function void
+link_internal void
 DumpEntireParser(parser* Parser, u32 LinesToDump = u32_MAX, b32 Verbose = False)
 {
   DebugLine("%S---%S", TerminalColors.Purple, TerminalColors.White);
@@ -1044,7 +1044,7 @@ DumpEntireParser(parser* Parser, u32 LinesToDump = u32_MAX, b32 Verbose = False)
 #endif
 
 #if 0
-bonsai_function void
+link_internal void
 TruncateAtNextLineEnd(c_token_cursor *Tokens, u32 Count)
 {
   while (Remaining(Tokens))
@@ -1063,7 +1063,7 @@ TruncateAtNextLineEnd(c_token_cursor *Tokens, u32 Count)
   Tokens->Next = 0;
 }
 
-bonsai_function void
+link_internal void
 TruncateAtPreviousLineStart(parser* Parser, u32 Count )
 {
   while (Parser->Tokens->At > Parser->Tokens->Start)
@@ -1102,7 +1102,7 @@ TruncateAtPreviousLineStart(parser* Parser, u32 Count )
 static const u32 Global_ParseErrorBufferSize = 64*1024;
 static char Global_ParseErrorBuffer[Global_ParseErrorBufferSize] = {};
 
-bonsai_function void
+link_internal void
 Highlight(char_cursor *Dest, counted_string Str, counted_string Color)
 {
   CopyToDest(Dest, Color);
@@ -1110,7 +1110,7 @@ Highlight(char_cursor *Dest, counted_string Str, counted_string Color)
   CopyToDest(Dest, TerminalColors.White);
 }
 
-bonsai_function void
+link_internal void
 Highlight(char_cursor *Dest, char C, counted_string Color)
 {
   CopyToDest(Dest, Color);
@@ -1118,7 +1118,7 @@ Highlight(char_cursor *Dest, char C, counted_string Color)
   CopyToDest(Dest, TerminalColors.White);
 }
 
-bonsai_function void
+link_internal void
 Indent(char_cursor *Dest, u32 TabCount, u32 SpaceCount)
 {
   for (u32 ColumnIndex = 0;
@@ -1136,7 +1136,7 @@ Indent(char_cursor *Dest, u32 TabCount, u32 SpaceCount)
   }
 }
 
-bonsai_function void
+link_internal void
 OutputIdentifierUnderline(char_cursor *Dest, u32 IdentifierLength, counted_string Color)
 {
   u32 IdentifierLengthSubOne = IdentifierLength > 0 ? IdentifierLength-1 : IdentifierLength;
@@ -1172,7 +1172,7 @@ OutputIdentifierUnderline(char_cursor *Dest, u32 IdentifierLength, counted_strin
   CopyToDest(Dest, TerminalColors.White);
 }
 
-bonsai_function void
+link_internal void
 PrintTraySimple(c_token *T, b32 Force)
 {
   if (T)
@@ -1188,7 +1188,7 @@ PrintTraySimple(c_token *T, b32 Force)
   }
 }
 
-bonsai_function void
+link_internal void
 PrintTray(char_cursor *Dest, c_token *T, u32 Columns, counted_string Color = TerminalColors.White)
 {
   if (T)
@@ -1201,7 +1201,7 @@ PrintTray(char_cursor *Dest, c_token *T, u32 Columns, counted_string Color = Ter
   }
 }
 
-bonsai_function u64
+link_internal u64
 GetLongestLineInCursor(char_cursor *Cursor)
 {
   Assert(Cursor->At == Cursor->Start);
@@ -1246,7 +1246,7 @@ GetLongestLineInCursor(char_cursor *Cursor)
   return Result;
 }
 
-bonsai_function void
+link_internal void
 PrintContext(c_token_cursor_up *Up)
 {
   if (Up->Tokens)
@@ -1276,7 +1276,7 @@ PrintContext(c_token_cursor_up *Up)
   }
 }
 
-bonsai_function void
+link_internal void
 OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string MessageContext, counted_string Message, c_token* ErrorToken)
 {
   parse_error_code PrevErrorCode = Parser->ErrorCode;
@@ -1583,38 +1583,38 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
   return;
 }
 
-bonsai_function void
+link_internal void
 ParseInfoMessage(parser* Parser, counted_string Message, c_token* T)
 {
   OutputContextMessage(Parser, ParseErrorCode_None, CSz(""), Message, T);
 }
 
-bonsai_function void
+link_internal void
 ParseWarn(parser* Parser, parse_warn_code WarnCode, counted_string ErrorMessage, c_token* ErrorToken)
 {
   Parser->WarnCode = WarnCode;
   OutputContextMessage(Parser, ParseErrorCode_None, CSz("Poof Warning"), ErrorMessage, ErrorToken);
 }
 
-bonsai_function void
+link_internal void
 ParseError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken)
 {
   OutputContextMessage(Parser, ErrorCode, CSz("Parse Error"), ErrorMessage, ErrorToken);
 }
 
-bonsai_function void
+link_internal void
 ParseError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
 {
   ParseError(Parser, ParseErrorCode_Unknown, ErrorMessage, ErrorToken);
 }
 
-bonsai_function void
+link_internal void
 PoofTypeError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken)
 {
   OutputContextMessage(Parser, ErrorCode, CSz("Poof Type Error"), ErrorMessage, ErrorToken);
 }
 
-bonsai_function void
+link_internal void
 InternalCompilerError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
 {
   OutputContextMessage(Parser, ParseErrorCode_InternalCompilerError, CSz("XX INTERNAL COMPILER ERROR XX"), ErrorMessage, ErrorToken);
@@ -1622,7 +1622,7 @@ InternalCompilerError(parser* Parser, counted_string ErrorMessage, c_token* Erro
 }
 
 #if 0
-bonsai_function counted_string
+link_internal counted_string
 ParseError_StreamEndedUnexpectedly(parser *Parser)
 {
   counted_string Result = FormatCountedString(TranArena, CSz("Stream ended unexpectedly in file : %S"), ???->Filename);
@@ -1634,7 +1634,7 @@ ParseError_StreamEndedUnexpectedly(parser *Parser)
 #define ParseErrorTokenHelper(T) \
   (T) ? ToString((T)->Type) : CSz(""), (T) ? (T)->Value : CSz("null")
 
-bonsai_function counted_string
+link_internal counted_string
 ParseError_ExpectedSemicolonEqualsCommaOrOpenBrace(parser *Parser, c_token *T)
 {
   counted_string Result =
@@ -1650,7 +1650,7 @@ ParseError_ExpectedSemicolonEqualsCommaOrOpenBrace(parser *Parser, c_token *T)
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 ParseError_RequireTokenFailed(parser *Parser, counted_string FuncName, c_token *Got, c_token *Expected)
 {
   counted_string Result = FormatCountedString( TranArena,
@@ -1682,7 +1682,7 @@ RemainingForDir(c_token_cursor *Tokens, s32 Direction)
   return TokensRemaining;
 }
 
-bonsai_function c_token *
+link_internal c_token *
 GetNext(c_token_cursor *Tokens, s32 Direction)
 {
   u32 TokensRemaining = RemainingForDir(Tokens, Direction);
@@ -1718,7 +1718,7 @@ GetNext(c_token_cursor *Tokens, s32 Direction)
 }
 
 #if 0
-bonsai_function c_token*
+link_internal c_token*
 GetToken(c_token_cursor *Tokens, s32 PeekIndex)
 {
   c_token* Result = 0;
@@ -1746,7 +1746,7 @@ GetToken(c_token_cursor *Tokens, s32 PeekIndex)
 #endif
 
 #if 0
-bonsai_function c_token*
+link_internal c_token*
 PeekTokenRawPointer(c_token_cursor *Tokens, s32 MaxPeek)
 {
   Assert(Tokens->At >= Tokens->Start);
@@ -1831,7 +1831,7 @@ PeekTokenRawPointer(c_token_cursor *Tokens, s32 MaxPeek)
 
 #else
 
-bonsai_function peek_result
+link_internal peek_result
 PeekTokenRawCursor(c_token_cursor *Tokens, s32 Direction, b32 CanSearchDown)
 {
   Assert(Direction > -2 && Direction < 2);
@@ -1950,7 +1950,7 @@ PeekTokenRawCursor(c_token_cursor *Tokens, s32 Direction, b32 CanSearchDown)
   return Result;
 }
 
-bonsai_function peek_result
+link_internal peek_result
 PeekTokenRawCursor(peek_result *Peek, s32 Direction)
 {
   peek_result Result = {};
@@ -1970,7 +1970,7 @@ PeekTokenRawCursor(peek_result *Peek, s32 Direction)
   return Result;
 }
 
-bonsai_function peek_result
+link_internal peek_result
 PeekTokenRawCursor(parser *Parser, s32 Direction)
 {
   peek_result Result = {};
@@ -1983,7 +1983,7 @@ PeekTokenRawCursor(parser *Parser, s32 Direction)
 
 #endif
 
-bonsai_function c_token*
+link_internal c_token*
 PeekTokenRawPointer(parser* Parser, s32 Lookahead)
 {
   c_token *T = {};
@@ -2008,14 +2008,14 @@ PeekTokenRawPointer(parser* Parser, s32 Lookahead)
   return T;
 }
 
-bonsai_function c_token*
+link_internal c_token*
 PeekTokenRawPointer(parser* Parser, u32 Lookahead)
 {
   c_token *T = PeekTokenRawPointer(Parser, (s32)Lookahead);
   return T;
 }
 
-bonsai_function c_token
+link_internal c_token
 PeekTokenRaw(parser* Parser, s32 Direction)
 {
   c_token *T = PeekTokenRawPointer(Parser, Direction);
@@ -2024,7 +2024,7 @@ PeekTokenRaw(parser* Parser, s32 Direction)
   return Result;
 }
 
-bonsai_function peek_result
+link_internal peek_result
 PeekTokenCursor(c_token_cursor *Tokens, s32 Skip)
 {
   SanityCheckCTokenCursor(Tokens);
@@ -2087,7 +2087,7 @@ PeekTokenCursor(c_token_cursor *Tokens, s32 Skip)
   return Current;
 }
 
-bonsai_function peek_result
+link_internal peek_result
 PeekTokenCursor(parser *Parser, s32 Skip)
 {
   peek_result Result = {};
@@ -2098,7 +2098,7 @@ PeekTokenCursor(parser *Parser, s32 Skip)
   return Result;
 }
 
-bonsai_function c_token*
+link_internal c_token*
 PeekTokenPointer(parser* Parser, s32 Skip)
 {
   c_token *Result = 0;
@@ -2110,7 +2110,7 @@ PeekTokenPointer(parser* Parser, s32 Skip)
   return Result;
 }
 
-bonsai_function c_token*
+link_internal c_token*
 PeekTokenPointer(parser* Parser, u32 Skip)
 {
   c_token *Result = PeekTokenPointer(Parser, (s32)Skip);
@@ -2118,7 +2118,7 @@ PeekTokenPointer(parser* Parser, u32 Skip)
 }
 
 #if 0
-bonsai_function c_token*
+link_internal c_token*
 PeekTokenPointer(parser* Parser, u32 Lookahead)
 {
   u32 TokenHits = 0;
@@ -2168,7 +2168,7 @@ PeekTokenPointer(parser* Parser, u32 Lookahead)
 }
 #endif
 
-bonsai_function c_token
+link_internal c_token
 PeekToken(parser* Parser, s32 Lookahead)
 {
   c_token* Pointer = PeekTokenPointer(Parser, Lookahead);
@@ -2177,7 +2177,7 @@ PeekToken(parser* Parser, s32 Lookahead)
   return Result;
 }
 
-bonsai_function c_token *
+link_internal c_token *
 PopTokenRawPointer(parser* Parser)
 {
   peek_result This = PeekTokenRawCursor(Parser);
@@ -2212,7 +2212,7 @@ PopTokenRawPointer(parser* Parser)
   return Result;
 }
 
-bonsai_function c_token
+link_internal c_token
 PopTokenRaw(parser* Parser)
 {
   c_token *T = 0;
@@ -2237,21 +2237,21 @@ PopTokenRaw(parser* Parser)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 RawTokensRemain(parser *Parser, u32 Count)
 {
   b32 Result = PeekTokenRawPointer(Parser, Count) != 0;
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 TokensRemain(parser *Parser, u32 Count)
 {
   b32 Result = PeekTokenPointer(Parser, Count) != 0;
   return Result;
 }
 
-bonsai_function c_token *
+link_internal c_token *
 PopTokenPointer(parser* Parser)
 {
   peek_result NextT = PeekTokenCursor(Parser);
@@ -2287,7 +2287,7 @@ PopTokenPointer(parser* Parser)
 
   return Result;
 }
-bonsai_function c_token
+link_internal c_token
 PopToken(parser* Parser)
 {
   c_token *Pop = PopTokenPointer(Parser);
@@ -2298,7 +2298,7 @@ PopToken(parser* Parser)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 OptionalTokenRaw(parser* Parser, c_token_type Type)
 {
   b32 Result = False;
@@ -2314,7 +2314,7 @@ OptionalTokenRaw(parser* Parser, c_token_type Type)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 OptionalTokenRaw(parser* Parser, c_token T)
 {
   b32 Result = False;
@@ -2331,7 +2331,7 @@ OptionalTokenRaw(parser* Parser, c_token T)
 
 // TODO(Jesse): Optimize by calling Advance() instead of RequireToken()
 // @optimize_call_advance_instead_of_being_dumb
-bonsai_function c_token *
+link_internal c_token *
 OptionalToken(parser* Parser, c_token T)
 {
   c_token *Result = PeekTokenPointer(Parser);
@@ -2341,7 +2341,7 @@ OptionalToken(parser* Parser, c_token T)
 
 // TODO(Jesse): Optimize by calling Advance() instead of RequireToken()
 // @optimize_call_advance_instead_of_being_dumb
-bonsai_function c_token *
+link_internal c_token *
 OptionalToken(parser* Parser, c_token_type Type)
 {
   c_token *Result = PeekTokenPointer(Parser);
@@ -2351,7 +2351,7 @@ OptionalToken(parser* Parser, c_token_type Type)
 
 // TODO(Jesse): Could be optimized significanly utilizing new routines.
 // @optimize_call_advance_instead_of_being_dumb
-bonsai_function c_token
+link_internal c_token
 RequireToken(parser* Parser, c_token ExpectedToken)
 {
   c_token Result = {};
@@ -2389,7 +2389,7 @@ RequireToken(parser* Parser, c_token ExpectedToken)
 }
 
 // TODO(Jesse): This function should likely be primal for the sake of efficiency
-bonsai_function c_token
+link_internal c_token
 RequireToken(parser* Parser, c_token *ExpectedToken)
 {
   c_token Result = {};
@@ -2404,14 +2404,14 @@ RequireToken(parser* Parser, c_token *ExpectedToken)
   return Result;
 }
 
-bonsai_function c_token
+link_internal c_token
 RequireToken(parser* Parser, c_token_type ExpectedType)
 {
   c_token Result = RequireToken(Parser, CToken(ExpectedType));
   return Result;
 }
 
-bonsai_function c_token *
+link_internal c_token *
 RequireTokenPointer(parser* Parser, c_token *ExpectedToken)
 {
   c_token *Result = {};
@@ -2442,14 +2442,14 @@ RequireTokenPointer(parser* Parser, c_token *ExpectedToken)
   return Result;
 }
 
-bonsai_function c_token*
+link_internal c_token*
 RequireTokenPointer(parser* Parser, c_token Expected)
 {
   c_token *Result = RequireTokenPointer(Parser, &Expected);
   return Result;
 }
 
-bonsai_function c_token*
+link_internal c_token*
 RequireTokenPointer(parser* Parser, c_token_type ExpectedType)
 {
   c_token *Result = RequireTokenPointer(Parser, CToken(ExpectedType));
@@ -2458,7 +2458,7 @@ RequireTokenPointer(parser* Parser, c_token_type ExpectedType)
 
 // @duplicated_require_token_raw
 // @optimize_call_advance_instead_of_being_dumb
-bonsai_function c_token
+link_internal c_token
 RequireTokenRaw(parser *Parser, c_token Expected )
 {
   c_token *Peek = PeekTokenRawPointer(Parser);
@@ -2476,7 +2476,7 @@ RequireTokenRaw(parser *Parser, c_token Expected )
   return Result;
 }
 
-bonsai_function c_token
+link_internal c_token
 RequireTokenRaw(parser *Parser, c_token *Expected )
 {
   Assert(Expected);
@@ -2486,7 +2486,7 @@ RequireTokenRaw(parser *Parser, c_token *Expected )
 
 // @duplicated_require_token_raw
 // @optimize_call_advance_instead_of_being_dumb
-bonsai_function c_token
+link_internal c_token
 RequireTokenRaw(parser *Parser, c_token_type Expected )
 {
   c_token *Peek = PeekTokenRawPointer(Parser);
@@ -2505,7 +2505,7 @@ RequireTokenRaw(parser *Parser, c_token_type Expected )
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 TokenIsOperator(c_token_type T)
 {
   b32 Result = False;
@@ -2555,7 +2555,7 @@ TokenIsOperator(c_token_type T)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 NextTokenIsOperator(parser* Parser)
 {
   c_token T = PeekToken(Parser);
@@ -2563,7 +2563,7 @@ NextTokenIsOperator(parser* Parser)
   return Result;
 }
 
-bonsai_function c_token *
+link_internal c_token *
 RequireOperatorToken(parser* Parser)
 {
   c_token *Result = PeekTokenPointer(Parser);
@@ -2635,7 +2635,7 @@ RequireOperatorToken(parser* Parser)
 
 
 
-bonsai_function void
+link_internal void
 CopyRemainingIntoCursor(c_token_cursor *Src, c_token_cursor *Dest)
 {
   u32 SrcElements = (u32)Remaining(Src);
@@ -2660,7 +2660,7 @@ CopyRemainingIntoCursor(c_token_cursor *Src, c_token_cursor *Dest)
   }
 }
 
-bonsai_function void
+link_internal void
 CopyBufferIntoCursor(c_token_buffer *Src, c_token_cursor *Dest, u32 Skip = 0)
 {
   if ( Src->Count <= Remaining(Dest) )
@@ -2678,7 +2678,7 @@ CopyBufferIntoCursor(c_token_buffer *Src, c_token_cursor *Dest, u32 Skip = 0)
   }
 }
 
-bonsai_function c_token_buffer *
+link_internal c_token_buffer *
 TryMacroArgSubstitution(c_token *T, counted_string_buffer *NamedArguments, c_token_buffer_buffer *ArgInstanceValues)
 {
   c_token_buffer *Result = {};
@@ -2692,7 +2692,7 @@ TryMacroArgSubstitution(c_token *T, counted_string_buffer *NamedArguments, c_tok
   return Result;
 }
 
-bonsai_function void
+link_internal void
 CopyVaArgsInto(c_token_buffer_stream *VarArgs, c_token_cursor *Dest, b32 DoCommas)
 {
   ITERATE_OVER(VarArgs)
@@ -2715,7 +2715,7 @@ CopyVaArgsInto(c_token_buffer_stream *VarArgs, c_token_cursor *Dest, b32 DoComma
 // allocate a bunch of temp shit on the TempMemory arena and roll it all back
 // at the end of the function.  The only thing that goes on the PermMemory is
 // the Result.
-bonsai_function parser *
+link_internal parser *
 ExpandMacro( parse_context *Ctx,
              parser *Parser,
              macro_def *Macro,
@@ -3249,7 +3249,7 @@ ExpandMacro( parse_context *Ctx,
 /*************************                         ***************************/
 
 
-bonsai_function b32
+link_internal b32
 EatComment(parser* Parser, c_token_type CommentT)
 {
   b32 Result = False;
@@ -3273,14 +3273,14 @@ EatComment(parser* Parser, c_token_type CommentT)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 EatComment(parser* Parser)
 {
   b32 Result = EatComment(Parser, PeekTokenRaw(Parser).Type);
   return Result;
 }
 
-bonsai_function void
+link_internal void
 EatSpacesTabsEscapedNewlinesAndComments(parser *Parser)
 {
   b32 Continue = true;
@@ -3293,7 +3293,7 @@ EatSpacesTabsEscapedNewlinesAndComments(parser *Parser)
 }
 
 // @optimize_call_advance_instead_of_being_dumb
-bonsai_function void
+link_internal void
 EatWhitespaceAndComments(parser *Parser)
 {
   while ( c_token *T = PeekTokenRawPointer(Parser) )
@@ -3315,7 +3315,7 @@ EatWhitespaceAndComments(parser *Parser)
 
 // NOTE(Jesse): This is duplicated @duplicate_EatSpacesTabsAndEscapedNewlines
 // NOTE(Jesse): This could also be optimized using PeekTokenRawPointer now
-bonsai_function b32
+link_internal b32
 EatSpacesTabsAndEscapedNewlines(parser *Parser)
 {
   b32 Result = False;
@@ -3339,7 +3339,7 @@ EatSpacesTabsAndEscapedNewlines(parser *Parser)
 // @meta_similar_whitespace_routines
 //
 // @optimize_call_advance_instead_of_being_dumb
-bonsai_function b32
+link_internal b32
 EatNBSP(parser* Parser)
 {
   b32 Result = False;
@@ -3358,7 +3358,7 @@ EatNBSP(parser* Parser)
 // @meta_similar_whitespace_routines
 //
 // @optimize_call_advance_instead_of_being_dumb
-bonsai_function b32
+link_internal b32
 EatWhitespace(parser* Parser)
 {
   b32 Result = False;
@@ -3375,7 +3375,7 @@ EatWhitespace(parser* Parser)
 }
 
 // NOTE(Jesse): This is the same as EatWhitespace but it doesn't return a bool
-bonsai_function void
+link_internal void
 TrimLeadingWhitespace(parser* Parser)
 {
   c_token *T = PeekTokenRawPointer(Parser);
@@ -3386,7 +3386,7 @@ TrimLeadingWhitespace(parser* Parser)
   }
 }
 
-bonsai_function void
+link_internal void
 TrimTrailingWhitespace(parser* Parser)
 {
   c_token* CurrentToken = Parser->Tokens->End-1;
@@ -3421,7 +3421,7 @@ TrimTrailingWhitespace(parser* Parser)
 
 
 
-bonsai_function counted_string
+link_internal counted_string
 PopHex(ansi_stream* SourceFileStream)
 {
   counted_string Result = {
@@ -3444,7 +3444,7 @@ PopHex(ansi_stream* SourceFileStream)
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 PopNumeric(ansi_stream* SourceFileStream)
 {
   counted_string Result = {
@@ -3467,7 +3467,7 @@ PopNumeric(ansi_stream* SourceFileStream)
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 PopIdentifier(ansi_stream* SourceFileStream)
 {
   counted_string Result = {
@@ -3491,7 +3491,7 @@ PopIdentifier(ansi_stream* SourceFileStream)
   return Result;
 }
 
-bonsai_function r64
+link_internal r64
 ToFractional(counted_string S)
 {
   r64 Result = 0;
@@ -3500,7 +3500,7 @@ ToFractional(counted_string S)
   return Result;
 }
 
-bonsai_function u64
+link_internal u64
 BinaryStringToU64(counted_string Bin)
 {
   u64 Result = 0;
@@ -3516,7 +3516,7 @@ BinaryStringToU64(counted_string Bin)
   return Result;
 }
 
-bonsai_function u64
+link_internal u64
 HexToU64(char C)
 {
   u64 Result = 0;
@@ -3542,7 +3542,7 @@ HexToU64(char C)
   return Result;
 }
 
-bonsai_function u64
+link_internal u64
 HexStringToU64(counted_string S)
 {
   u64 Result = 0;
@@ -3557,7 +3557,7 @@ HexStringToU64(counted_string S)
   return Result;
 }
 
-bonsai_function c_token
+link_internal c_token
 ParseExponentAndSuffixes(ansi_stream *Code, r64 OriginalValue)
 {
   c_token Result = {};
@@ -3620,7 +3620,7 @@ ParseExponentAndSuffixes(ansi_stream *Code, r64 OriginalValue)
   return Result;
 }
 
-bonsai_function void
+link_internal void
 ParseIntegerSuffixes(ansi_stream *Code)
 {
   b32 Done = False;
@@ -3648,7 +3648,7 @@ ParseIntegerSuffixes(ansi_stream *Code)
   }
 }
 
-bonsai_function c_token
+link_internal c_token
 ParseNumericToken(ansi_stream *Code)
 {
   const char *Start = Code->At;
@@ -3703,7 +3703,7 @@ ParseNumericToken(ansi_stream *Code)
 }
 
 // @duplicate_EatSpacesTabsAndEscapedNewlines
-bonsai_function u32
+link_internal u32
 EatSpacesTabsAndEscapedNewlines(ansi_stream *Code)
 {
   u32 LinesEaten = 0;
@@ -3735,7 +3735,7 @@ EatSpacesTabsAndEscapedNewlines(ansi_stream *Code)
   return LinesEaten;
 }
 
-bonsai_function counted_string*
+link_internal counted_string*
 GetByValue(counted_string_hashtable *Table, counted_string Value)
 {
   counted_string *Result = {};
@@ -3759,7 +3759,7 @@ GetByValue(counted_string_hashtable *Table, counted_string Value)
   return Result;
 }
 
-bonsai_function parser*
+link_internal parser*
 Get(parser_hashtable *Table, counted_string Value)
 {
   parser *Result = {};
@@ -3783,7 +3783,7 @@ Get(parser_hashtable *Table, counted_string Value)
   return Result;
 }
 
-bonsai_function macro_def*
+link_internal macro_def*
 GetByName(macro_def_hashtable *Table, counted_string Name)
 {
   macro_def *Result = {};
@@ -3807,7 +3807,7 @@ GetByName(macro_def_hashtable *Table, counted_string Name)
   return Result;
 }
 
-bonsai_function u32
+link_internal u32
 CountTokensBeforeNext(parser *Parser, c_token_type T1, c_token_type T2)
 {
   Assert(T1 != T2);
@@ -3841,7 +3841,7 @@ CountTokensBeforeNext(parser *Parser, c_token_type T1, c_token_type T2)
 
 
 #if 0
-bonsai_function c_token_cursor *
+link_internal c_token_cursor *
 SplitAndInsertTokenCursor(c_token_cursor *CursorToSplit, c_token* SplitStart, c_token_cursor *CursorToInsert, c_token* SplitEnd, memory_arena *Memory)
 {
   InvalidCodePath();
@@ -3938,14 +3938,14 @@ SplitAndInsertTokenCursor(c_token_cursor *CursorToSplit, c_token* SplitStart, c_
   return 0;
 }
 
-bonsai_function c_token_cursor *
+link_internal c_token_cursor *
 SplitAndInsertTokenCursor(c_token_cursor *CursorToSplit, c_token_cursor *CursorToInsert, memory_arena *Memory)
 {
   return SplitAndInsertTokenCursor(CursorToSplit, CursorToSplit->At, CursorToInsert, CursorToSplit->At, Memory);
 }
 #endif
 
-bonsai_function c_token_cursor *
+link_internal c_token_cursor *
 DuplicateCTokenCursor(c_token_cursor *Tokens, memory_arena *Memory)
 {
   Assert(Tokens->At == Tokens->Start);
@@ -3977,7 +3977,7 @@ DuplicateCTokenCursor(c_token_cursor *Tokens, memory_arena *Memory)
   return Result;
 }
 
-bonsai_function parser *
+link_internal parser *
 DuplicateCTokenCursor2(c_token_cursor *Tokens, memory_arena *Memory)
 {
   Assert(Tokens->At == Tokens->Start);
@@ -3989,7 +3989,7 @@ DuplicateCTokenCursor2(c_token_cursor *Tokens, memory_arena *Memory)
 
 // NOTE(Jesse): This function is pretty sketch .. it modifies the parser you
 // pass in which kinda goes against convention in this codebase.
-bonsai_function parser *
+link_internal parser *
 DuplicateParserTokens(parser *Parser, memory_arena *Memory)
 {
   Assert(Parser->Tokens->At == Parser->Tokens->Start);
@@ -3997,7 +3997,7 @@ DuplicateParserTokens(parser *Parser, memory_arena *Memory)
   return Parser;
 }
 
-bonsai_function b32
+link_internal b32
 TokenCursorsMatch(c_token_cursor *C1, c_token_cursor *C2)
 {
   umm C1Elements = TotalElements(C1);
@@ -4022,7 +4022,7 @@ TokenCursorsMatch(c_token_cursor *C1, c_token_cursor *C2)
   return Result;
 }
 
-bonsai_function void
+link_internal void
 DefineMacro(parse_context *Ctx, parser *Parser, macro_def *Macro)
 {
   TIMED_FUNCTION();
@@ -4128,7 +4128,7 @@ DefineMacro(parse_context *Ctx, parser *Parser, macro_def *Macro)
   Rewind(&Macro->Body);
 }
 
-bonsai_function void
+link_internal void
 SkipToEndOfCursor(c_token_cursor *At, c_token_cursor *ToSkip)
 {
   InvalidCodePath();
@@ -4145,7 +4145,7 @@ SkipToEndOfCursor(c_token_cursor *At, c_token_cursor *ToSkip)
 #endif
 }
 
-bonsai_function b32
+link_internal b32
 MacroShouldBeExpanded(parser *Parser, c_token *T, macro_def *ThisMacro, macro_def *ExpandingMacro)
 {
   Assert(PeekTokenPointer(Parser) == T);
@@ -4186,7 +4186,7 @@ MacroShouldBeExpanded(parser *Parser, c_token *T, macro_def *ThisMacro, macro_de
   return Result;
 }
 
-bonsai_function macro_def *
+link_internal macro_def *
 IdentifierShouldBeExpanded(parse_context *Ctx, parser *Parser, c_token *T, macro_def *ExpandingMacro)
 {
   Assert(T->Type == CTokenType_Identifier);
@@ -4204,7 +4204,7 @@ IdentifierShouldBeExpanded(parse_context *Ctx, parser *Parser, c_token *T, macro
   return Result;
 }
 
-bonsai_function macro_def *
+link_internal macro_def *
 TryTransmuteIdentifierToMacro(parse_context *Ctx, parser *Parser, c_token *T, macro_def *ExpandingMacro)
 {
   Assert(T->Type == CTokenType_Identifier);
@@ -4220,7 +4220,7 @@ TryTransmuteIdentifierToMacro(parse_context *Ctx, parser *Parser, c_token *T, ma
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 TryTransmuteIdentifierToken(c_token *T)
 {
   Assert(T->Type == CT_PreprocessorPaste_InvalidToken);
@@ -4243,7 +4243,7 @@ TryTransmuteIdentifierToken(c_token *T)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 TryTransmuteOperatorToken(c_token *T)
 {
   TIMED_FUNCTION();
@@ -4256,7 +4256,7 @@ TryTransmuteOperatorToken(c_token *T)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 TryTransmuteKeywordToken(c_token *T, c_token *LastTokenPushed)
 {
   TIMED_FUNCTION();
@@ -4533,7 +4533,7 @@ TryTransmuteKeywordToken(c_token *T, c_token *LastTokenPushed)
   return Result;
 }
 
-bonsai_function c_token_cursor *
+link_internal c_token_cursor *
 TokenizeAnsiStream(ansi_stream Code, memory_arena* Memory, b32 IgnoreQuotes, parse_context *Ctx, token_cursor_source Source)
 {
   TIMED_FUNCTION();
@@ -5165,7 +5165,7 @@ TokenizeAnsiStream(ansi_stream Code, memory_arena* Memory, b32 IgnoreQuotes, par
   return Tokens;
 }
 
-bonsai_function b32
+link_internal b32
 RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena *Memory)
 {
   TIMED_FUNCTION();
@@ -5472,14 +5472,14 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena
   return (Parser->ErrorCode == ParseErrorCode_None);
 }
 
-bonsai_function c_token_cursor *
+link_internal c_token_cursor *
 CTokenCursorForAnsiStream(parse_context *Ctx, ansi_stream SourceFileStream, token_cursor_source Source)
 {
   c_token_cursor *Result = TokenizeAnsiStream(SourceFileStream, Ctx->Memory, False, Ctx, Source);
   return Result;
 }
 
-bonsai_function parser *
+link_internal parser *
 ParserForAnsiStream(parse_context *Ctx, ansi_stream SourceFileStream, token_cursor_source Source)
 {
   TIMED_FUNCTION();
@@ -5506,7 +5506,7 @@ ParserForAnsiStream(parse_context *Ctx, ansi_stream SourceFileStream, token_curs
 
 }
 
-bonsai_function parser *
+link_internal parser *
 ParserForFile(parse_context *Ctx, counted_string Filename, token_cursor_source Source)
 {
   ansi_stream SourceFileStream = AnsiStreamFromFile(Filename, Ctx->Memory);
@@ -5514,7 +5514,7 @@ ParserForFile(parse_context *Ctx, counted_string Filename, token_cursor_source S
   return Result;
 }
 
-bonsai_function parser *
+link_internal parser *
 PreprocessedParserForFile(parse_context *Ctx, counted_string Filename, token_cursor_source Source, parser *Parent)
 {
   parser *Result = ParserForFile(Ctx, Filename, Source);
@@ -5540,7 +5540,7 @@ PreprocessedParserForFile(parse_context *Ctx, counted_string Filename, token_cur
 
 #if 0
 // TODO(Jesse id: 302, tags: id_301)
-bonsai_function parser*
+link_internal parser*
 GetByFilename(parser_stream* Stream, counted_string Filename)
 {
   TIMED_FUNCTION();
@@ -5560,7 +5560,7 @@ GetByFilename(parser_stream* Stream, counted_string Filename)
 }
 #endif
 
-bonsai_function c_token_cursor *
+link_internal c_token_cursor *
 ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
 {
   TIMED_FUNCTION();
@@ -5710,7 +5710,7 @@ PushMember(d_union_decl* dUnion, c_token MemberIdentifierToken, d_union_flags Fl
   Push(&dUnion->Members, Member, Memory);
 }
 
-bonsai_function counted_string
+link_internal counted_string
 GenerateEnumDef(d_union_decl* dUnion, memory_arena* Memory)
 {
   TIMED_FUNCTION();
@@ -5729,7 +5729,7 @@ GenerateEnumDef(d_union_decl* dUnion, memory_arena* Memory)
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 GenerateStructDef(parse_context *Ctx, d_union_decl* dUnion, memory_arena* Memory)
 {
   TIMED_FUNCTION();
@@ -5780,7 +5780,7 @@ GenerateStructDef(parse_context *Ctx, d_union_decl* dUnion, memory_arena* Memory
   return Result;
 }
 
-bonsai_function type_def*
+link_internal type_def*
 GetTypedefByAlias(type_def_stream* Typedefs, counted_string Alias)
 {
   type_def *Result = 0;
@@ -5799,7 +5799,7 @@ GetTypedefByAlias(type_def_stream* Typedefs, counted_string Alias)
 
 
 // TODO(Jesse id: 301, tags: metaprogramming):  These functions are super repetitive, generate them!
-bonsai_function enum_decl*
+link_internal enum_decl*
 GetEnumByType(enum_decl_stream* ProgramEnums, counted_string EnumType)
 {
   TIMED_FUNCTION();
@@ -5820,7 +5820,7 @@ GetEnumByType(enum_decl_stream* ProgramEnums, counted_string EnumType)
   return Result;
 }
 
-bonsai_function function_decl*
+link_internal function_decl*
 GetFunctionByName(function_decl_stream* Functions, counted_string FuncName)
 {
   TIMED_FUNCTION();
@@ -5843,7 +5843,7 @@ GetFunctionByName(function_decl_stream* Functions, counted_string FuncName)
 
   return Result;
 }
-bonsai_function compound_decl*
+link_internal compound_decl*
 GetStructByType(compound_decl_stream* ProgramStructs, counted_string StructType)
 {
   TIMED_FUNCTION();
@@ -5879,7 +5879,7 @@ GetDatatypeByTypeSpec(program_datatypes *Datatypes, type_spec *Type)
 }
 #endif
 
-bonsai_function datatype
+link_internal datatype
 GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
 {
   TIMED_FUNCTION();
@@ -5928,7 +5928,7 @@ GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
   return Result;
 }
 
-bonsai_function datatype
+link_internal datatype
 GetDatatypeByName(parse_context *Ctx, counted_string Name)
 {
   datatype Result = GetDatatypeByName(&Ctx->Datatypes, Name);
@@ -6016,7 +6016,7 @@ ParseDiscriminatedUnion(parse_context *Ctx, parser* Parser, program_datatypes* D
   return dUnion;
 }
 
-bonsai_function b32
+link_internal b32
 DoDebugWindow(const char** ArgStrings, u32 ArgCount)
 {
   b32 Result = False;
@@ -6035,7 +6035,7 @@ DoDebugWindow(const char** ArgStrings, u32 ArgCount)
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 PopArgString(const char** ArgStrings, u32 ArgStringCount, u32* ArgIndex)
 {
   counted_string Result = {};
@@ -6054,7 +6054,7 @@ PopArgString(const char** ArgStrings, u32 ArgStringCount, u32* ArgIndex)
   return Result;
 }
 
-bonsai_function arguments
+link_internal arguments
 ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_arena* Memory)
 {
   arguments Result = {
@@ -6247,8 +6247,7 @@ PrintToStdout(CSz(
   return Result;
 }
 
-#if 1
-bonsai_function b32
+link_internal b32
 RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Filename, memory_arena* Memory)
 {
   TIMED_FUNCTION();
@@ -6292,11 +6291,14 @@ RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Fi
       //
       if (T->Type == CT_PoofInsertedCode)
       {
-        Assert(StringsMatch(T->Value, CSz("\n")));
-        FileWritesSucceeded &= WriteToFile(&TempFile, CSz("#include <"));
-        FileWritesSucceeded &= WriteToFile(&TempFile, Concat(OutputPath, T->IncludePath, TranArena) ); // TODO(Jesse, begin_temporary_memory)
-        FileWritesSucceeded &= WriteToFile(&TempFile, CSz(">"));
-        FileWritesSucceeded &= WriteToFile(&TempFile, CSz("\n"));
+        if (T->IncludePath.Start)
+        {
+          Assert(StringsMatch(T->Value, CSz("\n")));
+          FileWritesSucceeded &= WriteToFile(&TempFile, CSz("#include <"));
+          FileWritesSucceeded &= WriteToFile(&TempFile, Concat(OutputPath, T->IncludePath, TranArena) ); // TODO(Jesse, begin_temporary_memory)
+          FileWritesSucceeded &= WriteToFile(&TempFile, CSz(">"));
+          FileWritesSucceeded &= WriteToFile(&TempFile, CSz("\n"));
+        }
       }
     }
 
@@ -6325,9 +6327,8 @@ RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Fi
 
   return Result;
 }
-#endif
 
-bonsai_function b32
+link_internal b32
 Output(counted_string Code, counted_string OutputFilename, memory_arena* Memory, output_mode Mode = Output_NoOverwrite)
 {
   TIMED_FUNCTION();
@@ -6394,7 +6395,7 @@ Output(counted_string Code, counted_string OutputFilename, memory_arena* Memory,
   return Result;
 }
 
-bonsai_function void
+link_internal void
 DumpStringStreamToConsole(counted_string_stream* Stream)
 {
   for (counted_string_iterator Iter = Iterator(Stream);
@@ -6406,7 +6407,7 @@ DumpStringStreamToConsole(counted_string_stream* Stream)
   }
 }
 
-bonsai_function void
+link_internal void
 EatUntil_TrackingDepth(parser *Parser, c_token_type Open, c_token_type Close, c_token *StartToken)
 {
   u32 Depth = 0;
@@ -6439,7 +6440,7 @@ EatUntil_TrackingDepth(parser *Parser, c_token_type Open, c_token_type Close, c_
   return;
 }
 
-bonsai_function void
+link_internal void
 EatBetweenRaw(parser* Parser, c_token_type Open, c_token_type Close)
 {
   u32 Depth = 0;
@@ -6474,14 +6475,14 @@ EatBetweenRaw(parser* Parser, c_token_type Open, c_token_type Close)
   return;
 }
 
-bonsai_function void
+link_internal void
 RequireToken(ansi_stream *Code, char C)
 {
   Assert(*Code->At == C);
   Advance(Code);
 }
 
-bonsai_function counted_string
+link_internal counted_string
 EatBetweenExcluding(ansi_stream *Code, char Open, char Close)
 {
   u32 Depth = 0;
@@ -6529,7 +6530,7 @@ EatBetweenExcluding(ansi_stream *Code, char Open, char Close)
   return Result;
 }
 
-bonsai_function void
+link_internal void
 EatBetween(parser* Parser, c_token_type Open, c_token_type Close)
 {
   b32 Success = False;
@@ -6565,7 +6566,7 @@ EatBetween(parser* Parser, c_token_type Open, c_token_type Close)
   }
 }
 
-bonsai_function compound_decl
+link_internal compound_decl
 StructDef(c_token *StructNameT) // , counted_string Sourcefile)
 {
   compound_decl Result = {
@@ -6576,7 +6577,7 @@ StructDef(c_token *StructNameT) // , counted_string Sourcefile)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 NextTokenIsSpaceOrTab(parser *Parser)
 {
   b32 Result = PeekTokenRaw(Parser).Type == CTokenType_Space ||
@@ -6584,7 +6585,7 @@ NextTokenIsSpaceOrTab(parser *Parser)
   return Result;
 }
 
-bonsai_function void
+link_internal void
 TrimUntilNewline(parser* Parser)
 {
   Assert(Parser->Tokens->At == Parser->Tokens->Start);
@@ -6594,7 +6595,7 @@ TrimUntilNewline(parser* Parser)
   Parser->Tokens->Start = Parser->Tokens->At;
 }
 
-bonsai_function void
+link_internal void
 TrimFirstToken(parser* Parser, c_token_type TokenType)
 {
   Assert(Parser->Tokens->At == Parser->Tokens->Start);
@@ -6602,7 +6603,7 @@ TrimFirstToken(parser* Parser, c_token_type TokenType)
   Parser->Tokens->Start = Parser->Tokens->At;
 }
 
-bonsai_function void
+link_internal void
 TrimLastToken(parser* Parser, c_token_type TokenType)
 {
   c_token* CurrentToken = Parser->Tokens->End-1;
@@ -6626,7 +6627,7 @@ TokenValidFor(c_token_cursor *Tokens, c_token *T)
   return Result;
 }
 
-bonsai_function parser
+link_internal parser
 GetBodyTextForNextScope(parser* Parser, memory_arena *Memory)
 {
   // TODO(Jesse, immediate): This should return c_token_cursor .. I think ..
@@ -6676,7 +6677,7 @@ GetBodyTextForNextScope(parser* Parser, memory_arena *Memory)
   return BodyText;
 }
 
-bonsai_function type_indirection_info
+link_internal type_indirection_info
 ParseIndirectionInfo(parser *Parser, type_spec *TypeSpec)
 {
   type_indirection_info Result = {};
@@ -6762,14 +6763,14 @@ ParseIndirectionInfo(parser *Parser, type_spec *TypeSpec)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 IsTypeIdentifier(counted_string TypeName, program_datatypes *Datatypes)
 {
   b32 Result = GetDatatypeByName(Datatypes, TypeName).Type != type_datatype_noop;
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 TryEatTemplateParameterList(parser *Parser, program_datatypes *Datatypes)
 {
   b32 ValidTemplateList = PeekToken(Parser).Type == CTokenType_LT;
@@ -6834,14 +6835,14 @@ TryEatTemplateParameterList(parser *Parser, program_datatypes *Datatypes)
   return ValidTemplateList;
 }
 
-bonsai_function b32
+link_internal b32
 IsConstructorOrDestructorName(counted_string ClassName, counted_string FnName)
 {
   b32 Result = StringsMatch(ClassName, FnName);
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 IsConstructorOrDestructorName(c_token *ClassNameT, c_token *FNameT)
 {
   b32 Result = False;
@@ -6854,14 +6855,14 @@ IsConstructorOrDestructorName(c_token *ClassNameT, c_token *FNameT)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 IsConstructorOrDestructorName(counted_string *ClassName, counted_string *FnName)
 {
   b32 Result = StringsMatch(ClassName, FnName);
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 IsConstructorOrDestructorName(c_token *T)
 {
   b32 Result = False;
@@ -6873,7 +6874,7 @@ IsConstructorOrDestructorName(c_token *T)
   return Result;
 }
 
-bonsai_function void
+link_internal void
 ParseLongness(parser *Parser, type_spec *Result)
 {
   RequireToken(Parser, CTokenType_Long);
@@ -6887,7 +6888,7 @@ ParseLongness(parser *Parser, type_spec *Result)
   }
 }
 
-bonsai_function c_token *
+link_internal c_token *
 EatNameQualifiers(parser *Parser)
 {
   c_token *Result = {};
@@ -6907,7 +6908,7 @@ EatNameQualifiers(parser *Parser)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 TryEatAttributes(parser *Parser)
 {
   b32 Result = False;
@@ -6919,7 +6920,7 @@ TryEatAttributes(parser *Parser)
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 StringFromTokenSpan(parser *Parser, c_token *StartToken, c_token *EndToken, memory_arena *Memory)
 {
   Assert(IsValidForCursor(Parser->Tokens, StartToken));
@@ -6929,7 +6930,7 @@ StringFromTokenSpan(parser *Parser, c_token *StartToken, c_token *EndToken, memo
   return Result;
 }
 
-bonsai_function void
+link_internal void
 ParsePrimitivesAndQualifiers(parser *Parser, type_spec *Result)
 {
   b32 Done = False;
@@ -7133,7 +7134,7 @@ ParsePrimitivesAndQualifiers(parser *Parser, type_spec *Result)
   }
 }
 
-bonsai_function b32
+link_internal b32
 IsPrimitiveType(type_spec *Type)
 {
   u32 Mask =
@@ -7154,7 +7155,7 @@ IsPrimitiveType(type_spec *Type)
   return Result;
 }
 
-bonsai_function type_spec
+link_internal type_spec
 ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
 {
   type_spec Result = {};
@@ -7236,7 +7237,7 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
   return Result;
 }
 
-bonsai_function ast_node*
+link_internal ast_node*
 ParseInitializerList(parser *Parser, memory_arena *Memory)
 {
   ast_node* Result = {};
@@ -7245,7 +7246,7 @@ ParseInitializerList(parser *Parser, memory_arena *Memory)
   return Result;
 }
 
-bonsai_function variable_decl
+link_internal variable_decl
 FinalizeVariableDecl(parse_context *Ctx, type_spec *TypeSpec, c_token *IdentifierToken = 0)
 {
   parser *Parser = Ctx->CurrentParser;
@@ -7299,7 +7300,7 @@ FinalizeVariableDecl(parse_context *Ctx, type_spec *TypeSpec, c_token *Identifie
   return Result;
 }
 
-bonsai_function void
+link_internal void
 MaybeParseDeleteOrDefault(parser *Parser, function_decl *Result)
 {
   auto Type = Result->Type ;
@@ -7325,7 +7326,7 @@ MaybeParseDeleteOrDefault(parser *Parser, function_decl *Result)
   }
 }
 
-bonsai_function void
+link_internal void
 MaybeParseAttributes(parser *Parser)
 {
   if (PeekToken(Parser).Type == CT_KeywordAttribute)
@@ -7337,7 +7338,7 @@ MaybeParseAttributes(parser *Parser)
   }
 }
 
-bonsai_function function_decl
+link_internal function_decl
 ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *FuncNameT, function_type Type, c_token *StructNameT = 0)
 {
   parser *Parser = Ctx->CurrentParser;
@@ -7407,7 +7408,7 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
   return Result;
 }
 
-bonsai_function void
+link_internal void
 MaybeParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest)
 {
   ast_node_expression *Current = {};
@@ -7461,7 +7462,7 @@ FinalizeOperatorFunction(parse_context *Ctx, type_spec *TypeSpec)
 #if 0
 // NOTE(Jesse): This function is not meant to parse struct-member specific
 // functions such as constructors and destructors.  It parses variables or free functions
-bonsai_function declaration
+link_internal declaration
 ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indirection_info *Indirection)
 {
   parser *Parser = Ctx->CurrentParser;
@@ -7508,7 +7509,7 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indire
 }
 #endif
 
-bonsai_function u64
+link_internal u64
 ApplyOperator(parser *Parser, u64 LHS, c_token_type OperatorType, u64 RHS)
 {
   u64 Result = 0;
@@ -7670,7 +7671,7 @@ ApplyOperator(parser *Parser, u64 LHS, c_token_type OperatorType, u64 RHS)
 }
 
 #if 0
-bonsai_function b32
+link_internal b32
 IsNextTokenMacro(parse_context *Ctx, parser *Parser)
 {
   c_token *T = PeekTokenRawPointer(Parser);
@@ -7687,7 +7688,7 @@ IsNextTokenMacro(parse_context *Ctx, parser *Parser)
 //
 // TODO(Jesse): Should this function not return a signed value?!  Pretty sure
 // constant expressions can resolve to negative values.. just sayin..
-bonsai_function u64
+link_internal u64
 ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena *PermMemory, memory_arena *TempMemory, u64 PreviousValue, b32 LogicalNotNextValue)
 {
   TIMED_FUNCTION();
@@ -7910,13 +7911,13 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
   return Result;
 }
 
-bonsai_function void
+link_internal void
 EraseToken(c_token *Token)
 {
   Token->Erased = True;
 }
 
-bonsai_function void
+link_internal void
 EraseBetweenExcluding(parser *Parser, c_token *FirstToErase, c_token *OnePastLastToErase)
 {
   b32 E0 = (FirstToErase > OnePastLastToErase);
@@ -7942,7 +7943,7 @@ EraseBetweenExcluding(parser *Parser, c_token *FirstToErase, c_token *OnePastLas
   return;
 }
 
-bonsai_function c_token *
+link_internal c_token *
 EraseAllRemainingIfBlocks(parser *Parser)
 {
   c_token *StartToken = PeekTokenRawPointer(Parser);
@@ -7984,7 +7985,7 @@ EraseAllRemainingIfBlocks(parser *Parser)
   return Result;
 }
 
-bonsai_function c_token *
+link_internal c_token *
 EatIfBlock(parser *Parser, erase_token_mode EraseMode)
 {
   c_token *StartToken = PeekTokenRawPointer(Parser);
@@ -8035,7 +8036,7 @@ EatIfBlock(parser *Parser, erase_token_mode EraseMode)
 }
 
 #if 0
-bonsai_function counted_string
+link_internal counted_string
 ParseIfDefinedValue(parser *Parser)
 {
   u32 NumOpenParens = 0;
@@ -8055,7 +8056,7 @@ ParseIfDefinedValue(parser *Parser)
 }
 #endif
 
-bonsai_function macro_def *
+link_internal macro_def *
 GetMacroDef(parse_context *Ctx, counted_string DefineValue)
 {
   TIMED_FUNCTION();
@@ -8071,7 +8072,7 @@ GetMacroDef(parse_context *Ctx, counted_string DefineValue)
 }
 
 #if 0
-bonsai_function macro_def *
+link_internal macro_def *
 GetMacroDef(parse_context *Ctx, counted_string *DefineValue)
 {
   macro_def *Result = GetMacroDef(Ctx, *DefineValue);
@@ -8079,28 +8080,28 @@ GetMacroDef(parse_context *Ctx, counted_string *DefineValue)
 }
 #endif
 
-bonsai_function b32
+link_internal b32
 IsImplementation(function_decl *Func)
 {
   b32 Result = Func->Body.Tokens != 0;
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 IsDefaultImplementation(function_decl *Func)
 {
   b32 Result = Func->ImplIsDefault;
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 IsDeletedImplementation(function_decl *Func)
 {
   b32 Result = Func->ImplIsDeleted;
   return Result;
 }
 
-bonsai_function parser
+link_internal parser
 MaybeParseFunctionBody(parser *Parser, memory_arena *Memory)
 {
   parser Result = {};
@@ -8111,12 +8112,12 @@ MaybeParseFunctionBody(parser *Parser, memory_arena *Memory)
   return Result;
 }
 
-bonsai_function void
+link_internal void
 ParseStructMemberOperatorFn(parse_context *Ctx, declaration *Result, c_token *StructNameT)
 {
 }
 
-bonsai_function void
+link_internal void
 ParseStructMemberConstructorFn(parse_context *Ctx, type_spec *TypeSpec, declaration *Result, c_token *ConstructorNameT)
 {
   parser *Parser = Ctx->CurrentParser;
@@ -8168,7 +8169,7 @@ ParseStructMemberConstructorFn(parse_context *Ctx, type_spec *TypeSpec, declarat
   }
 }
 
-bonsai_function void
+link_internal void
 ParseStructMemberDestructorFn(parse_context *Ctx, declaration *Result, c_token *StructNameT)
 {
   Assert(Result->Type == type_declaration_noop);
@@ -8204,7 +8205,7 @@ ParseStructMemberDestructorFn(parse_context *Ctx, declaration *Result, c_token *
   Result->function_decl.Body = MaybeParseFunctionBody(Parser, Ctx->Memory);
 }
 
-bonsai_function b32
+link_internal b32
 ParsingConstructor(parser *Parser, type_spec *TypeSpec)
 {
   b32 Result = False;
@@ -8241,7 +8242,7 @@ FinalizeVirtualFunctionDecl(parse_context *Ctx, parser *Parser, type_spec *TypeS
   return Result;
 }
 
-bonsai_function declaration
+link_internal declaration
 ParseStructMember(parse_context *Ctx, c_token *StructNameT)
 {
   TIMED_FUNCTION();
@@ -8331,7 +8332,7 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 ConcatTokensUntil(parser* Parser, c_token_type Close, memory_arena* Memory)
 {
   NotImplemented;
@@ -8349,14 +8350,14 @@ ConcatTokensUntil(parser* Parser, c_token_type Close, memory_arena* Memory)
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 ConcatTokensUntilNewline(parser* Parser, memory_arena* Memory)
 {
   counted_string Result = ConcatTokensUntil(Parser, CTokenType_Newline, Memory);
   return Result;
 }
 
-bonsai_function declaration_stream
+link_internal declaration_stream
 MembersOfType(compound_decl* Struct, counted_string MemberType, memory_arena *Memory)
 {
   declaration_stream Result = {};
@@ -8387,7 +8388,7 @@ MembersOfType(compound_decl* Struct, counted_string MemberType, memory_arena *Me
   return Result;
 }
 
-bonsai_function comma_separated_decl
+link_internal comma_separated_decl
 ParseCommaSeperatedDecl(parse_context *Ctx)
 {
   parser *Parser = Ctx->CurrentParser;
@@ -8420,7 +8421,7 @@ ParseCommaSeperatedDecl(parse_context *Ctx)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 MaybeEatAdditionalCommaSeperatedNames(parse_context *Ctx)
 {
   parser *Parser = Ctx->CurrentParser;
@@ -8435,7 +8436,7 @@ MaybeEatAdditionalCommaSeperatedNames(parse_context *Ctx)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 MaybeEatVisibilityQualifier(parser *Parser)
 {
   b32 Result = False;
@@ -8454,7 +8455,7 @@ MaybeEatVisibilityQualifier(parser *Parser)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 MaybeEatStaticAssert(parser *Parser)
 {
   b32 Result = False;
@@ -8475,7 +8476,7 @@ IsAnonymous(compound_decl *Decl)
   return Result;
 }
 
-bonsai_function compound_decl
+link_internal compound_decl
 ParseStructBody(parse_context *Ctx, c_token *StructNameT)
 {
   TIMED_FUNCTION();
@@ -8653,7 +8654,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 ParseIntegerConstant(parser* Parser)
 {
   c_token T = PeekToken(Parser);
@@ -8685,7 +8686,7 @@ ParseIntegerConstant(parser* Parser)
   return Result;
 }
 
-bonsai_function void
+link_internal void
 ParseEnumBody(parse_context *Ctx, parser *Parser, enum_decl *Enum, memory_arena *Memory)
 {
   RequireToken(Parser, CTokenType_OpenBrace);
@@ -8720,7 +8721,7 @@ ParseEnumBody(parse_context *Ctx, parser *Parser, enum_decl *Enum, memory_arena 
   return;
 }
 
-bonsai_function enum_decl
+link_internal enum_decl
 ParseEnum(parse_context *Ctx, type_spec *TypeSpec)
 {
   TIMED_FUNCTION();
@@ -8740,7 +8741,7 @@ ParseEnum(parse_context *Ctx, type_spec *TypeSpec)
   return Enum;
 }
 
-bonsai_function b32
+link_internal b32
 IsTypeQualifier(c_token T)
 {
   b32 Result = False;
@@ -8757,7 +8758,7 @@ IsTypeQualifier(c_token T)
   return Result;
 }
 
-bonsai_function void
+link_internal void
 OptionalPrefixOperator(parser *Parser)
 {
   c_token T = PeekToken(Parser);
@@ -8771,7 +8772,7 @@ OptionalPrefixOperator(parser *Parser)
   }
 }
 
-bonsai_function void
+link_internal void
 OptionalPostfixOperator(parser *Parser)
 {
   c_token T = PeekToken(Parser);
@@ -8782,7 +8783,7 @@ OptionalPostfixOperator(parser *Parser)
   }
 }
 
-bonsai_function void
+link_internal void
 ParseAndPushTypedef(parse_context *Ctx)
 {
   parser *Parser = Ctx->CurrentParser;
@@ -8861,7 +8862,7 @@ ParseAndPushTypedef(parse_context *Ctx)
   }
 }
 
-bonsai_function void
+link_internal void
 ParseTypedef(parse_context *Ctx)
 {
   parser *Parser = Ctx->CurrentParser;
@@ -8944,7 +8945,7 @@ ParseTypedef(parse_context *Ctx)
   return;
 }
 
-bonsai_function function_decl*
+link_internal function_decl*
 GetByName(counted_string Name, function_decl_stream* Stream)
 {
   TIMED_FUNCTION();
@@ -8963,7 +8964,7 @@ GetByName(counted_string Name, function_decl_stream* Stream)
   return Result;
 }
 
-bonsai_function ast_node_variable_def*
+link_internal ast_node_variable_def*
 GetByTypeName(counted_string Name, ast_node_variable_def_stream* Stream)
 {
   ast_node_variable_def* Result = {};
@@ -8979,13 +8980,13 @@ GetByTypeName(counted_string Name, ast_node_variable_def_stream* Stream)
   return Result;
 }
 
-bonsai_function ast_node *
+link_internal ast_node *
 ParseFunctionArgument(parser *Parser, memory_arena *Memory, function_decl_stream *FunctionPrototypes);
 
-bonsai_function ast_node_statement *
+link_internal ast_node_statement *
 ParseAllStatements(parse_context *Ctx);
 
-bonsai_function void
+link_internal void
 ParseSingleStatement(parse_context *Ctx, ast_node_statement *Result)
 {
   parser *Parser = Ctx->CurrentParser;
@@ -9170,7 +9171,7 @@ ParseSingleStatement(parse_context *Ctx, ast_node_statement *Result)
 
 }
 
-bonsai_function ast_node_statement*
+link_internal ast_node_statement*
 ParseSingleStatement(parse_context *Ctx)
 {
   ast_node_statement *Result = AllocateProtection(ast_node_statement, Ctx->Memory, 1, False);
@@ -9178,14 +9179,14 @@ ParseSingleStatement(parse_context *Ctx)
   return Result;
 }
 
-bonsai_function b32
+link_internal b32
 IsAtBeginning(parser *Parser)
 {
   b32 Result = Parser->Tokens->At == Parser->Tokens->Start && Parser->Tokens->Up.Tokens == 0;
   return Result;
 }
 
-bonsai_function ast_node_statement*
+link_internal ast_node_statement*
 ParseAllStatements(parse_context *Ctx)
 {
   ast_node_statement *Result = 0;
@@ -9207,7 +9208,7 @@ ParseAllStatements(parse_context *Ctx)
   return Result;
 }
 
-bonsai_function ast_node*
+link_internal ast_node*
 ParseAllStatements_ast_node(parse_context *Ctx)
 {
   ast_node *Result = Allocate(ast_node, Ctx->Memory, 1);
@@ -9227,10 +9228,10 @@ ParseAllStatements_ast_node(parse_context *Ctx)
   return Result;
 }
 
-bonsai_function ast_node*
+link_internal ast_node*
 ParseFunctionCall(parse_context *Ctx, counted_string FunctionName);
 
-bonsai_function void
+link_internal void
 ParseTypeSpecifierNode(parse_context *Ctx, ast_node_expression *Result, datatype *Data = 0)
 {
   ast_node_type_specifier *Node = AllocateAndCastTo(ast_node_type_specifier, &Result->Value, Ctx->Memory);
@@ -9285,7 +9286,7 @@ ParseTypeSpecifierNode(parse_context *Ctx, ast_node_expression *Result, datatype
   }
 }
 
-bonsai_function b32
+link_internal b32
 ParseSymbol(parse_context *Ctx, ast_node_expression* Result, b32 SymbolIsNeverTypeSpecifier = True)
 {
   parser *Parser = Ctx->CurrentParser;
@@ -9352,7 +9353,7 @@ ParseSymbol(parse_context *Ctx, ast_node_expression* Result, b32 SymbolIsNeverTy
   return PushedParser;
 }
 
-bonsai_function void
+link_internal void
 ParseExpression(parse_context *Ctx, ast_node_expression* Result)
 {
   parser *Parser = Ctx->CurrentParser;
@@ -9548,7 +9549,7 @@ ParseExpression(parse_context *Ctx, ast_node_expression* Result)
 }
 
 // TODO(Jesse id: 316): These paths are exactly the same .. they should probably use the same API ..?
-bonsai_function ast_node_expression*
+link_internal ast_node_expression*
 ParseExpression(parse_context *Ctx)
 {
   ast_node_expression *Result = AllocateProtection(ast_node_expression, Ctx->Memory, 1, False);
@@ -9556,7 +9557,7 @@ ParseExpression(parse_context *Ctx)
   return Result;
 }
 
-bonsai_function void
+link_internal void
 ParseExpression(parse_context *Ctx, ast_node **Result)
 {
   ast_node_expression *Node = AllocateAndCastTo(ast_node_expression, Result, Ctx->Memory);
@@ -9564,7 +9565,7 @@ ParseExpression(parse_context *Ctx, ast_node **Result)
 }
 
 #if 0
-bonsai_function type_spec
+link_internal type_spec
 ReduceToTypeSpec(ast_node* InputNode, ast_node_variable_def_stream *Locals)
 {
   type_spec Result = {};
@@ -9634,7 +9635,7 @@ ReduceToTypeSpec(ast_node* InputNode, ast_node_variable_def_stream *Locals)
 }
 #endif
 
-bonsai_function ast_node*
+link_internal ast_node*
 ParseFunctionCall(parse_context *Ctx, counted_string FunctionName)
 {
   parser *Parser = Ctx->CurrentParser;
@@ -9668,7 +9669,7 @@ ParseFunctionCall(parse_context *Ctx, counted_string FunctionName)
   return Result;
 }
 
-bonsai_function declaration
+link_internal declaration
 FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec)
 {
   declaration Result = {};
@@ -9781,7 +9782,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec)
   return Result;
 }
 
-bonsai_function declaration
+link_internal declaration
 ParseDeclaration(parse_context *Ctx)
 {
   parser *Parser = Ctx->CurrentParser;
@@ -9792,7 +9793,7 @@ ParseDeclaration(parse_context *Ctx)
   return Result;
 }
 
-bonsai_function void
+link_internal void
 ParseDatatypes(parse_context *Ctx, parser *Parser)
 {
   TIMED_FUNCTION();
@@ -9973,7 +9974,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
   return;
 }
 
-bonsai_function parser_cursor
+link_internal parser_cursor
 AllocateTokenizedFiles(u32 Count, memory_arena* Memory)
 {
   parser* Start = Allocate(parser, Memory, Count);
@@ -9986,10 +9987,10 @@ AllocateTokenizedFiles(u32 Count, memory_arena* Memory)
   return Result;
 }
 
-bonsai_function void
+link_internal void
 GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo);
 
-bonsai_function void
+link_internal void
 FlushOutputToDisk( parse_context *Ctx,
                    counted_string OutputForThisParser,
                    counted_string NewFilename,
@@ -10075,7 +10076,7 @@ debug_global os Os = {};
  * anywhere?  It's also in the platform layer
  */
 #if BONSAI_DEBUG_SYSTEM_API
-bonsai_function b32
+link_internal b32
 BootstrapDebugSystem()
 {
   shared_lib DebugLib = OpenLibrary(DEFAULT_DEBUG_LIB);
@@ -10111,7 +10112,7 @@ BootstrapDebugSystem()
 }
 #endif
 
-bonsai_function meta_func_arg*
+link_internal meta_func_arg*
 StreamContains(meta_func_arg_stream* Stream, counted_string Match)
 {
   meta_func_arg* Result = {};
@@ -10128,7 +10129,7 @@ StreamContains(meta_func_arg_stream* Stream, counted_string Match)
   return Result;
 }
 
-bonsai_function meta_func*
+link_internal meta_func*
 StreamContains(meta_func_stream* Stream, counted_string Name)
 {
   meta_func* Result = {};
@@ -10150,7 +10151,7 @@ StreamContains(meta_func_stream* Stream, counted_string Name)
   return Result;
 }
 
-bonsai_function counted_string*
+link_internal counted_string*
 StreamContains(counted_string_stream* Stream, counted_string Name)
 {
   counted_string* Result = {};
@@ -10167,7 +10168,7 @@ StreamContains(counted_string_stream* Stream, counted_string Name)
   return Result;
 }
 
-bonsai_function person*
+link_internal person*
 StreamContains(person_stream* People, counted_string Name)
 {
   person* Result = {};
@@ -10184,7 +10185,7 @@ StreamContains(person_stream* People, counted_string Name)
   return Result;
 }
 
-bonsai_function tagged_counted_string_stream*
+link_internal tagged_counted_string_stream*
 StreamContains(tagged_counted_string_stream_stream* Stream, counted_string Tag)
 {
   tagged_counted_string_stream* Result = {};
@@ -10200,7 +10201,7 @@ StreamContains(tagged_counted_string_stream_stream* Stream, counted_string Tag)
   return Result;
 }
 
-bonsai_function todo*
+link_internal todo*
 StreamContains(todo_stream* Todos, counted_string TodoId)
 {
   todo* Result = {};
@@ -10216,7 +10217,7 @@ StreamContains(todo_stream* Todos, counted_string TodoId)
   return Result;
 }
 
-bonsai_function tag*
+link_internal tag*
 StreamContains(tag_stream* TodoLists, counted_string Tag)
 {
   tag* Result = {};
@@ -10232,7 +10233,7 @@ StreamContains(tag_stream* TodoLists, counted_string Tag)
   return Result;
 }
 
-bonsai_function todo*
+link_internal todo*
 UpdateTodo(todo_stream* Stream, todo Todo, memory_arena* Memory)
 {
   todo* Result = StreamContains(Stream, Todo.Id);
@@ -10249,7 +10250,7 @@ UpdateTodo(todo_stream* Stream, todo Todo, memory_arena* Memory)
   return Result;
 }
 
-bonsai_function tag*
+link_internal tag*
 GetExistingOrCreate(tag_stream* Stream, counted_string Tag, memory_arena* Memory)
 {
   tag* Result = StreamContains(Stream, Tag);
@@ -10262,7 +10263,7 @@ GetExistingOrCreate(tag_stream* Stream, counted_string Tag, memory_arena* Memory
   return Result;
 }
 
-bonsai_function person*
+link_internal person*
 GetExistingOrCreate(person_stream* People, counted_string PersonName, memory_arena* Memory)
 {
   person* Person = StreamContains(People, PersonName);
@@ -10277,14 +10278,14 @@ GetExistingOrCreate(person_stream* People, counted_string PersonName, memory_are
 
 static u32 LargestIdFoundInFile = 0;
 
-bonsai_function todo
+link_internal todo
 Todo(counted_string Id, counted_string Value, b32 FoundInCodebase)
 {
   todo Result = { .Id = Id, .Value = Value, .FoundInCodebase = FoundInCodebase };
   return Result;
 }
 
-bonsai_function person_stream
+link_internal person_stream
 ParseAllTodosFromFile(counted_string Filename, memory_arena* Memory)
 {
   TIMED_FUNCTION();
@@ -10330,7 +10331,7 @@ ParseAllTodosFromFile(counted_string Filename, memory_arena* Memory)
   return People;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 GenerateOutfileNameFor(counted_string Name, counted_string DatatypeName, memory_arena* Memory, counted_string Modifier = {})
 {
   string_builder OutfileBuilder = {};
@@ -10364,7 +10365,7 @@ GetTypeNameForCompoundDecl(compound_decl *CDecl)
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 GetTypeNameForDecl(parse_context *Ctx, declaration* Decl, memory_arena *Memory)
 {
   counted_string Result = {};
@@ -10400,7 +10401,7 @@ GetTypeNameForDecl(parse_context *Ctx, declaration* Decl, memory_arena *Memory)
 }
 
 
-bonsai_function counted_string
+link_internal counted_string
 GetNameForDecl(declaration* Decl)
 {
   counted_string Result = {};
@@ -10437,7 +10438,7 @@ GetNameForDecl(declaration* Decl)
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 ApplyTransformations(meta_transform_op Transformations, counted_string Input, memory_arena* Memory)
 {
   counted_string Result = Input;
@@ -10472,7 +10473,7 @@ ApplyTransformations(meta_transform_op Transformations, counted_string Input, me
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 EscapeDoubleQuotes(counted_string S, memory_arena* Memory)
 {
   string_builder B = {};
@@ -10491,7 +10492,7 @@ EscapeDoubleQuotes(counted_string S, memory_arena* Memory)
   return Result;
 }
 
-bonsai_function void
+link_internal void
 AppendAndEscapeInteriorOfDoubleQuotedString(string_builder* Builder, counted_string S)
 {
   if (S.Count >= 2 &&
@@ -10510,7 +10511,7 @@ AppendAndEscapeInteriorOfDoubleQuotedString(string_builder* Builder, counted_str
   }
 }
 
-bonsai_function meta_transform_op
+link_internal meta_transform_op
 ParseTransformations(parser* Scope)
 {
   meta_transform_op Result = {};
@@ -10535,7 +10536,7 @@ ParseTransformations(parser* Scope)
   return Result;
 }
 
-bonsai_function meta_func_arg
+link_internal meta_func_arg
 ReplacementPattern(counted_string Match, datatype Data)
 {
   meta_func_arg Result = {
@@ -10546,7 +10547,7 @@ ReplacementPattern(counted_string Match, datatype Data)
   return Result;
 }
 
-bonsai_function meta_func_arg_stream
+link_internal meta_func_arg_stream
 CopyStream(meta_func_arg_stream* Stream, memory_arena* Memory)
 {
   meta_func_arg_stream Result = {};
@@ -10558,7 +10559,7 @@ CopyStream(meta_func_arg_stream* Stream, memory_arena* Memory)
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
 {
   counted_string Result = {};
@@ -10603,7 +10604,7 @@ PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 GetValueForDatatype(datatype *Data, memory_arena *Memory)
 {
   counted_string Result = {};
@@ -10669,7 +10670,7 @@ GetValueForDatatype(datatype *Data, memory_arena *Memory)
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 GetNameForDatatype(datatype *Data, memory_arena *Memory)
 {
   counted_string Result = {};
@@ -10704,7 +10705,7 @@ GetNameForDatatype(datatype *Data, memory_arena *Memory)
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 GetTypeTypeForDatatype(datatype *Data, memory_arena *Memory)
 {
   counted_string Result = {};
@@ -10735,7 +10736,7 @@ GetTypeTypeForDatatype(datatype *Data, memory_arena *Memory)
   return Result;
 }
 
-bonsai_function counted_string
+link_internal counted_string
 GetTypeNameForDatatype(parse_context *Ctx, datatype *Data, memory_arena *Memory)
 {
   counted_string Result = {};
@@ -10772,7 +10773,7 @@ GetTypeNameForDatatype(parse_context *Ctx, datatype *Data, memory_arena *Memory)
   return Result;
 }
 
-bonsai_function declaration_stream*
+link_internal declaration_stream*
 GetMembersFor(datatype *Data)
 {
   declaration_stream *Result = {};
@@ -11180,7 +11181,7 @@ ResolveToBaseType(parse_context *Ctx, datatype *Data)
 
 #include <poof/execute.h>
 
-bonsai_function void
+link_internal void
 ConcatStreams(counted_string_stream* S1, counted_string_stream* S2, memory_arena* Memory)
 {
   ITERATE_OVER(S2)
@@ -11191,14 +11192,14 @@ ConcatStreams(counted_string_stream* S1, counted_string_stream* S2, memory_arena
   return;
 }
 
-bonsai_function b32
+link_internal b32
 IsMetaprogrammingOutput(counted_string Filename, counted_string OutputDirectory)
 {
   b32 Result = Contains(Filename, OutputDirectory);
   return Result;
 }
 
-bonsai_function counted_string_stream
+link_internal counted_string_stream
 ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_string_stream_stream* NameLists, memory_arena* Memory)
 {
   counted_string_stream Result = {};
@@ -11235,7 +11236,7 @@ ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_s
   return Result;
 }
 
-bonsai_function meta_func
+link_internal meta_func
 ParseMetaFunctionDef(parser* Parser, counted_string FuncName, memory_arena *Memory)
 {
   TIMED_FUNCTION();
@@ -11258,7 +11259,7 @@ ParseMetaFunctionDef(parser* Parser, counted_string FuncName, memory_arena *Memo
 //
 // Or maybe just delete it?
 #if 0
-bonsai_function void
+link_internal void
 RemoveAllMetaprogrammingOutputRecursive(const char * OutputPath)
 {
 
@@ -11322,7 +11323,7 @@ RemoveAllMetaprogrammingOutputRecursive(const char * OutputPath)
 #endif
 
 #if 0
-bonsai_function counted_string
+link_internal counted_string
 ParseMultiLineTodoValue(parser* Parser, memory_arena* Memory)
 {
   string_builder Builder = {};
@@ -11355,7 +11356,7 @@ ParseMultiLineTodoValue(parser* Parser, memory_arena* Memory)
 }
 #endif
 
-bonsai_function void
+link_internal void
 GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 {
   TIMED_FUNCTION();
@@ -11734,7 +11735,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
   }
 }
 
-bonsai_function void
+link_internal void
 WriteTodosToFile(person_stream* People, memory_arena* Memory)
 {
   random_series Rng = {.Seed = 123125};
@@ -11794,10 +11795,10 @@ WriteTodosToFile(person_stream* People, memory_arena* Memory)
   return;
 }
 
-bonsai_function void WalkAst(ast_node* Ast);
-bonsai_function void WalkAst(ast_node_statement* Ast);
+link_internal void WalkAst(ast_node* Ast);
+link_internal void WalkAst(ast_node_statement* Ast);
 
-bonsai_function void
+link_internal void
 WalkAst(ast_node_expression* Ast)
 {
   if (Ast)
@@ -11807,7 +11808,7 @@ WalkAst(ast_node_expression* Ast)
   }
 }
 
-bonsai_function void
+link_internal void
 WalkAst(ast_node_statement* Ast)
 {
   if (Ast)
@@ -11818,7 +11819,7 @@ WalkAst(ast_node_statement* Ast)
   }
 }
 
-bonsai_function void
+link_internal void
 WalkAst(ast_node* Ast)
 {
   if (Ast)
@@ -11947,13 +11948,17 @@ ScanForMutationsAndOutput(parser *Parser, counted_string OutputPath, memory_aren
   {
     c_token *T = Start + TokenIndex;
 
+    if (StringsMatch(T->Value, CSz("bonsai_function")))
+    {
+      T->Value = CSz("link_internal");
+      NeedsToBeOverwritten = true;
+    }
+
     // This is how we signal that we've got a `poof` statement without an
     // include directive following it.  This system should probably be fleshed
     // out to support more arbitrary output types, but this is fine for now.
     if (T->Type == CT_PoofInsertedCode)
     {
-      Assert(T->IncludePath.Start);
-      Assert(T->IncludePath.Count);
       NeedsToBeOverwritten = true;
       break;
     }

@@ -4,7 +4,7 @@
       umm Count;
     };
 
-    bonsai_function c_token_buffer
+    link_internal c_token_buffer
     CTokenBuffer(umm ElementCount, memory_arena* Memory)
     {
       c_token_buffer Result = {};

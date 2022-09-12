@@ -1,4 +1,4 @@
-    bonsai_function meta_transform_op
+    link_internal meta_transform_op
     MetaTransformOp(counted_string S)
     {
       meta_transform_op Result = {};

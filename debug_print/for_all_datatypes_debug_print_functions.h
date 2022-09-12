@@ -1,4 +1,4 @@
-    bonsai_function void DebugPrint( terminal_colors RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( terminal_colors RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -91,12 +91,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( terminal_colors *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( terminal_colors *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( native_file RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( native_file RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -120,12 +120,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( native_file *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( native_file *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( XVisualInfo RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( XVisualInfo RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -194,12 +194,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( XVisualInfo *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( XVisualInfo *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( os RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( os RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -229,12 +229,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( os *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( os *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( v2i RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( v2i RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -261,12 +261,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( v2i *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( v2i *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( v2 RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( v2 RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -293,12 +293,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( v2 *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( v2 *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( v3i RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( v3i RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -335,12 +335,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( v3i *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( v3i *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( v3 RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( v3 RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -377,12 +377,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( v3 *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( v3 *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( v4 RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( v4 RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -427,12 +427,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( v4 *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( v4 *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( voxel_position RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( voxel_position RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -457,12 +457,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( voxel_position *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( voxel_position *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( f32_reg RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( f32_reg RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -486,12 +486,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( f32_reg *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( f32_reg *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( random_series RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( random_series RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -512,12 +512,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( random_series *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( random_series *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( input_event RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( input_event RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -544,12 +544,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( input_event *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( input_event *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( input RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( input RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -720,12 +720,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( input *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( input *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( hotkeys RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( hotkeys RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -782,12 +782,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( hotkeys *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( hotkeys *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( work_queue RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( work_queue RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -820,12 +820,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( work_queue *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( work_queue *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( memory_arena RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( memory_arena RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -870,12 +870,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( memory_arena *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( memory_arena *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( push_metadata RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( push_metadata RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -926,12 +926,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( push_metadata *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( push_metadata *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( platform RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( platform RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1006,12 +1006,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( platform *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( platform *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( heap_allocation_block RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( heap_allocation_block RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1044,12 +1044,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( heap_allocation_block *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( heap_allocation_block *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( heap_allocator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( heap_allocator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1076,12 +1076,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( heap_allocator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( heap_allocator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( tagged_counted_string_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( tagged_counted_string_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1108,12 +1108,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( tagged_counted_string_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( tagged_counted_string_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( char_cursor RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( char_cursor RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1152,12 +1152,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( char_cursor *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( char_cursor *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( linei RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( linei RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1184,12 +1184,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( linei *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( linei *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( line RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( line RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1216,12 +1216,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( line *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( line *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( Quaternion RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( Quaternion RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1250,12 +1250,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( Quaternion *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( Quaternion *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( string_builder RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( string_builder RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1282,12 +1282,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( string_builder *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( string_builder *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( u32_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( u32_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1320,12 +1320,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( u32_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( u32_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( u8_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( u8_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1358,12 +1358,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( u8_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( u8_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ansi_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ansi_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1408,12 +1408,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ansi_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ansi_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( r32_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( r32_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1446,12 +1446,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( r32_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( r32_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( m4 RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( m4 RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1472,12 +1472,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( m4 *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( m4 *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( m_nxn RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( m_nxn RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1522,12 +1522,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( m_nxn *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( m_nxn *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( mutex RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( mutex RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1545,12 +1545,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( mutex *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( mutex *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( mutex_op_record RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( mutex_op_record RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1583,12 +1583,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( mutex_op_record *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( mutex_op_record *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( mutex_op_array RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( mutex_op_array RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1615,12 +1615,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( mutex_op_array *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( mutex_op_array *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( rect2 RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( rect2 RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1647,12 +1647,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( rect2 *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( rect2 *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( aabb RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( aabb RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1679,12 +1679,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( aabb *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( aabb *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ray RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ray RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1711,12 +1711,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ray *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ray *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( xml_property RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( xml_property RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1749,12 +1749,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( xml_property *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( xml_property *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( xml_token RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( xml_token RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1781,12 +1781,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( xml_token *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( xml_token *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( xml_tag RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( xml_tag RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1837,12 +1837,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( xml_tag *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( xml_tag *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( xml_token_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( xml_token_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1881,12 +1881,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( xml_token_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( xml_token_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( xml_tag_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( xml_tag_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1919,12 +1919,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( xml_tag_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( xml_tag_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( xml_parsing_at_indicators RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( xml_parsing_at_indicators RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1951,12 +1951,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( xml_parsing_at_indicators *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( xml_parsing_at_indicators *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( shader_uniform RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( shader_uniform RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -1999,12 +1999,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( shader_uniform *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( shader_uniform *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( shader RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( shader RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2031,12 +2031,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( shader *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( shader *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( texture RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( texture RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2063,12 +2063,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( texture *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( texture *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( textured_2d_geometry_buffer RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( textured_2d_geometry_buffer RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2113,12 +2113,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( textured_2d_geometry_buffer *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( textured_2d_geometry_buffer *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( untextured_2d_geometry_buffer RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( untextured_2d_geometry_buffer RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2157,12 +2157,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( untextured_2d_geometry_buffer *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( untextured_2d_geometry_buffer *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( untextured_3d_geometry_buffer RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( untextured_3d_geometry_buffer RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2207,12 +2207,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( untextured_3d_geometry_buffer *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( untextured_3d_geometry_buffer *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( gpu_mapped_element_buffer RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( gpu_mapped_element_buffer RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2251,12 +2251,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( gpu_mapped_element_buffer *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( gpu_mapped_element_buffer *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( framebuffer RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( framebuffer RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2283,12 +2283,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( framebuffer *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( framebuffer *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( cycle_range RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( cycle_range RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2315,12 +2315,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( cycle_range *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( cycle_range *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( memory_arena_stats RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( memory_arena_stats RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2359,12 +2359,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( memory_arena_stats *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( memory_arena_stats *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( min_max_avg_dt RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( min_max_avg_dt RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2397,12 +2397,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( min_max_avg_dt *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( min_max_avg_dt *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( debug_profile_scope RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( debug_profile_scope RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2459,12 +2459,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( debug_profile_scope *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( debug_profile_scope *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( unique_debug_profile_scope RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( unique_debug_profile_scope RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2521,12 +2521,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( unique_debug_profile_scope *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( unique_debug_profile_scope *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( debug_scope_tree RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( debug_scope_tree RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2565,12 +2565,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( debug_scope_tree *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( debug_scope_tree *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( debug_thread_state RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( debug_thread_state RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2633,12 +2633,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( debug_thread_state *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( debug_thread_state *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( registered_memory_arena RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( registered_memory_arena RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2671,12 +2671,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( registered_memory_arena *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( registered_memory_arena *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( selected_memory_arena RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( selected_memory_arena RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2703,12 +2703,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( selected_memory_arena *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( selected_memory_arena *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( selected_arenas RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( selected_arenas RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2735,12 +2735,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( selected_arenas *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( selected_arenas *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( frame_stats RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( frame_stats RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2773,12 +2773,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( frame_stats *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( frame_stats *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( called_function RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( called_function RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2805,12 +2805,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( called_function *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( called_function *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( debug_draw_call RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( debug_draw_call RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2843,12 +2843,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( debug_draw_call *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( debug_draw_call *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( bitmap_image_header RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( bitmap_image_header RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -2953,12 +2953,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( bitmap_image_header *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( bitmap_image_header *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( bitmap_header RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( bitmap_header RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3003,12 +3003,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( bitmap_header *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( bitmap_header *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( bitmap RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( bitmap RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3035,12 +3035,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( bitmap *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( bitmap *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( macro_expansion RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( macro_expansion RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3064,12 +3064,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( macro_expansion *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( macro_expansion *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( c_token RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( c_token RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3124,12 +3124,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( c_token *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( c_token *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( peek_result RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( peek_result RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3159,12 +3159,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( peek_result *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( peek_result *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( parser RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( parser RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3194,12 +3194,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( parser *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( parser *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( declaration_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( declaration_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3226,12 +3226,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( declaration_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( declaration_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( compound_decl RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( compound_decl RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3264,12 +3264,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( compound_decl *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( compound_decl *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( type_indirection_info RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( type_indirection_info RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3320,12 +3320,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( type_indirection_info *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( type_indirection_info *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( type_spec RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( type_spec RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3388,12 +3388,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( type_spec *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( type_spec *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( variable_decl RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( variable_decl RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3438,12 +3438,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( variable_decl *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( variable_decl *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( function_decl RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( function_decl RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3512,12 +3512,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( function_decl *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( function_decl *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( enum_member RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( enum_member RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3544,12 +3544,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( enum_member *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( enum_member *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( enum_decl RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( enum_decl RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3576,12 +3576,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( enum_decl *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( enum_decl *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( primitive_def RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( primitive_def RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3602,12 +3602,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( primitive_def *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( primitive_def *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( d_union_member RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( d_union_member RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3640,12 +3640,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( d_union_member *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( d_union_member *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( type_def RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( type_def RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3672,12 +3672,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( type_def *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( type_def *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( meta_func_arg RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( meta_func_arg RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3704,12 +3704,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( meta_func_arg *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( meta_func_arg *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( d_union_decl RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( d_union_decl RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3748,12 +3748,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( d_union_decl *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( d_union_decl *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( macro_def RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( macro_def RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3801,12 +3801,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( macro_def *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( macro_def *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( meta_func RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( meta_func RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3839,12 +3839,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( meta_func *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( meta_func *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( todo RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( todo RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3877,12 +3877,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( todo *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( todo *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( tag RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( tag RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3909,12 +3909,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( tag *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( tag *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( person RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( person RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3941,12 +3941,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( person *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( person *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_expression RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_expression RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -3973,12 +3973,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_expression *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_expression *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_statement RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_statement RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4011,12 +4011,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_statement *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_statement *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_function_call RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_function_call RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4049,12 +4049,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_function_call *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_function_call *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_type_specifier RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_type_specifier RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4087,12 +4087,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_type_specifier *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_type_specifier *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_variable_def RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_variable_def RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4125,12 +4125,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_variable_def *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_variable_def *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_access RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_access RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4157,12 +4157,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_access *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_access *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_parenthesized RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_parenthesized RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4195,12 +4195,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_parenthesized *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_parenthesized *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_initializer_list RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_initializer_list RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4221,12 +4221,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_initializer_list *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_initializer_list *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_operator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_operator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4253,12 +4253,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_operator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_operator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_literal RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_literal RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4279,12 +4279,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_literal *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_literal *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_symbol RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_symbol RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4305,12 +4305,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_symbol *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_symbol *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_return RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_return RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4331,12 +4331,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_return *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_return *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_predicated RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_predicated RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4363,12 +4363,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_predicated *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_predicated *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( arguments RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( arguments RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4413,12 +4413,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( arguments *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( arguments *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( program_datatypes RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( program_datatypes RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4475,12 +4475,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( program_datatypes *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( program_datatypes *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( for_enum_constraints RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( for_enum_constraints RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4507,12 +4507,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( for_enum_constraints *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( for_enum_constraints *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( body_text_constraints RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( body_text_constraints RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4551,12 +4551,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( body_text_constraints *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( body_text_constraints *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( todo_list_info RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( todo_list_info RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4583,12 +4583,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( todo_list_info *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( todo_list_info *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( string_from_parser RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( string_from_parser RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4615,12 +4615,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( string_from_parser *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( string_from_parser *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( parse_context RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( parse_context RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4683,12 +4683,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( parse_context *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( parse_context *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( comma_separated_decl RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( comma_separated_decl RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4727,12 +4727,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( comma_separated_decl *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( comma_separated_decl *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( d_list RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( d_list RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4759,12 +4759,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( d_list *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( d_list *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( counted_string_cursor RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( counted_string_cursor RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4797,12 +4797,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( counted_string_cursor *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( counted_string_cursor *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( counted_string_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( counted_string_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4829,12 +4829,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( counted_string_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( counted_string_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( counted_string_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( counted_string_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4861,12 +4861,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( counted_string_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( counted_string_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( counted_string_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( counted_string_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4893,12 +4893,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( counted_string_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( counted_string_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( tagged_counted_string_stream_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( tagged_counted_string_stream_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4925,12 +4925,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( tagged_counted_string_stream_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( tagged_counted_string_stream_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( tagged_counted_string_stream_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( tagged_counted_string_stream_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4957,12 +4957,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( tagged_counted_string_stream_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( tagged_counted_string_stream_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( tagged_counted_string_stream_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( tagged_counted_string_stream_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -4989,12 +4989,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( tagged_counted_string_stream_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( tagged_counted_string_stream_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( xml_tag_linked_list_node RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( xml_tag_linked_list_node RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5021,12 +5021,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( xml_tag_linked_list_node *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( xml_tag_linked_list_node *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( xml_tag_hashtable RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( xml_tag_hashtable RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5053,12 +5053,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( xml_tag_hashtable *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( xml_tag_hashtable *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( counted_string_buffer RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( counted_string_buffer RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5085,12 +5085,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( counted_string_buffer *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( counted_string_buffer *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( counted_string_linked_list_node RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( counted_string_linked_list_node RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5117,12 +5117,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( counted_string_linked_list_node *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( counted_string_linked_list_node *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( counted_string_hashtable RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( counted_string_hashtable RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5149,12 +5149,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( counted_string_hashtable *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( counted_string_hashtable *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( v3_cursor RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( v3_cursor RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5187,12 +5187,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( v3_cursor *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( v3_cursor *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( c_token_buffer RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( c_token_buffer RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5219,12 +5219,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( c_token_buffer *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( c_token_buffer *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( c_token_buffer_buffer RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( c_token_buffer_buffer RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5251,12 +5251,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( c_token_buffer_buffer *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( c_token_buffer_buffer *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( c_token_buffer_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( c_token_buffer_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5283,12 +5283,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( c_token_buffer_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( c_token_buffer_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( c_token_buffer_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( c_token_buffer_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5315,12 +5315,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( c_token_buffer_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( c_token_buffer_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( c_token_buffer_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( c_token_buffer_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5347,12 +5347,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( c_token_buffer_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( c_token_buffer_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( parser_cursor RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( parser_cursor RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5385,12 +5385,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( parser_cursor *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( parser_cursor *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( parser_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( parser_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5417,12 +5417,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( parser_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( parser_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( parser_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( parser_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5449,12 +5449,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( parser_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( parser_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( parser_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( parser_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5481,12 +5481,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( parser_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( parser_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( parser_linked_list_node RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( parser_linked_list_node RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5513,12 +5513,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( parser_linked_list_node *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( parser_linked_list_node *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( parser_hashtable RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( parser_hashtable RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5545,12 +5545,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( parser_hashtable *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( parser_hashtable *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( compound_decl_cursor RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( compound_decl_cursor RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5583,12 +5583,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( compound_decl_cursor *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( compound_decl_cursor *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( compound_decl_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( compound_decl_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5615,12 +5615,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( compound_decl_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( compound_decl_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( compound_decl_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( compound_decl_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5647,12 +5647,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( compound_decl_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( compound_decl_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( compound_decl_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( compound_decl_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5679,12 +5679,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( compound_decl_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( compound_decl_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( variable_decl_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( variable_decl_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5711,12 +5711,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( variable_decl_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( variable_decl_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( variable_decl_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( variable_decl_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5743,12 +5743,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( variable_decl_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( variable_decl_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( variable_decl_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( variable_decl_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5775,12 +5775,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( variable_decl_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( variable_decl_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( function_decl_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( function_decl_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5807,12 +5807,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( function_decl_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( function_decl_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( function_decl_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( function_decl_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5839,12 +5839,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( function_decl_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( function_decl_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( function_decl_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( function_decl_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5871,12 +5871,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( function_decl_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( function_decl_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( enum_member_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( enum_member_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5903,12 +5903,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( enum_member_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( enum_member_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( enum_member_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( enum_member_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5935,12 +5935,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( enum_member_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( enum_member_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( enum_member_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( enum_member_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -5967,12 +5967,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( enum_member_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( enum_member_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( enum_decl_cursor RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( enum_decl_cursor RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6005,12 +6005,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( enum_decl_cursor *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( enum_decl_cursor *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( enum_decl_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( enum_decl_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6037,12 +6037,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( enum_decl_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( enum_decl_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( enum_decl_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( enum_decl_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6069,12 +6069,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( enum_decl_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( enum_decl_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( enum_decl_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( enum_decl_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6101,12 +6101,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( enum_decl_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( enum_decl_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( declaration_cursor RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( declaration_cursor RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6139,12 +6139,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( declaration_cursor *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( declaration_cursor *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( declaration_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( declaration_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6171,12 +6171,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( declaration_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( declaration_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( datatype_linked_list_node RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( datatype_linked_list_node RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6203,12 +6203,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( datatype_linked_list_node *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( datatype_linked_list_node *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( datatype_hashtable RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( datatype_hashtable RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6235,12 +6235,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( datatype_hashtable *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( datatype_hashtable *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( d_union_member_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( d_union_member_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6267,12 +6267,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( d_union_member_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( d_union_member_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( d_union_member_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( d_union_member_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6299,12 +6299,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( d_union_member_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( d_union_member_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( d_union_member_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( d_union_member_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6331,12 +6331,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( d_union_member_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( d_union_member_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( type_def_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( type_def_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6363,12 +6363,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( type_def_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( type_def_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( type_def_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( type_def_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6395,12 +6395,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( type_def_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( type_def_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( type_def_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( type_def_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6427,12 +6427,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( type_def_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( type_def_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( meta_func_arg_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( meta_func_arg_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6459,12 +6459,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( meta_func_arg_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( meta_func_arg_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( meta_func_arg_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( meta_func_arg_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6491,12 +6491,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( meta_func_arg_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( meta_func_arg_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( meta_func_arg_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( meta_func_arg_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6523,12 +6523,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( meta_func_arg_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( meta_func_arg_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( macro_def_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( macro_def_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6555,12 +6555,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( macro_def_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( macro_def_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( macro_def_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( macro_def_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6587,12 +6587,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( macro_def_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( macro_def_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( macro_def_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( macro_def_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6619,12 +6619,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( macro_def_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( macro_def_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( macro_def_linked_list_node RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( macro_def_linked_list_node RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6651,12 +6651,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( macro_def_linked_list_node *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( macro_def_linked_list_node *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( macro_def_hashtable RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( macro_def_hashtable RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6683,12 +6683,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( macro_def_hashtable *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( macro_def_hashtable *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( meta_func_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( meta_func_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6715,12 +6715,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( meta_func_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( meta_func_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( meta_func_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( meta_func_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6747,12 +6747,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( meta_func_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( meta_func_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( meta_func_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( meta_func_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6779,12 +6779,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( meta_func_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( meta_func_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( todo_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( todo_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6811,12 +6811,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( todo_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( todo_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( todo_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( todo_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6843,12 +6843,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( todo_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( todo_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( todo_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( todo_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6875,12 +6875,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( todo_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( todo_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( tag_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( tag_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6907,12 +6907,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( tag_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( tag_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( tag_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( tag_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6939,12 +6939,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( tag_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( tag_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( tag_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( tag_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -6971,12 +6971,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( tag_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( tag_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( person_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( person_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -7003,12 +7003,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( person_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( person_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( person_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( person_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -7035,12 +7035,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( person_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( person_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( person_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( person_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -7067,12 +7067,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( person_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( person_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_expression_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_expression_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -7099,12 +7099,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_expression_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_expression_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_expression_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_expression_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -7131,12 +7131,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_expression_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_expression_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_expression_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_expression_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -7163,12 +7163,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_expression_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_expression_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_variable_def_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_variable_def_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -7195,12 +7195,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_variable_def_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_variable_def_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_variable_def_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_variable_def_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -7227,12 +7227,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_variable_def_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_variable_def_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_variable_def_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_variable_def_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -7259,12 +7259,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_variable_def_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_variable_def_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_stream_chunk RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_stream_chunk RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -7291,12 +7291,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_stream_chunk *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_stream_chunk *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_stream RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_stream RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -7323,12 +7323,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_stream *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_stream *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( ast_node_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( ast_node_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -7355,12 +7355,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( ast_node_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( ast_node_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( declaration_iterator RuntimeStruct, u32 Depth)
+    link_internal void DebugPrint( declaration_iterator RuntimeStruct, u32 Depth)
     {
       if (Depth == 0)
       {
@@ -7387,12 +7387,12 @@
       }
     }
 
-    bonsai_function void DebugPrint( declaration_iterator *RuntimePtr, u32 Depth)
+    link_internal void DebugPrint( declaration_iterator *RuntimePtr, u32 Depth)
     {
       if (RuntimePtr) { DebugPrint(*RuntimePtr, Depth); }
       else { DebugPrint("ptr(0)\n", Depth); }
     }
-    bonsai_function void DebugPrint( log_level RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( log_level RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -7423,7 +7423,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( sign RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( sign RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -7442,7 +7442,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( memory_protection_type RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( memory_protection_type RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -7457,7 +7457,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( heap_allocation_type RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( heap_allocation_type RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -7472,7 +7472,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( text_encoding RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( text_encoding RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -7527,7 +7527,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( mutex_op RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( mutex_op RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -7546,7 +7546,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( xml_token_type RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( xml_token_type RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -7585,7 +7585,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( shader_uniform_type RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( shader_uniform_type RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -7628,7 +7628,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( debug_ui_type RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( debug_ui_type RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -7667,7 +7667,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( d_union_flags RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( d_union_flags RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -7682,7 +7682,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( metaprogramming_directive RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( metaprogramming_directive RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -7717,7 +7717,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( meta_arg_operator RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( meta_arg_operator RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -7776,7 +7776,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( meta_transform_op RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( meta_transform_op RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -7803,7 +7803,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( c_token_type RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( c_token_type RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -8110,6 +8110,10 @@
           case CTokenType_Poof:
           {
             DebugPrint("CTokenType_Poof", Depth);
+          } break;
+          case CT_Keyword_Noreturn:
+          {
+            DebugPrint("CT_Keyword_Noreturn", Depth);
           } break;
           case CT_Keyword_Override:
           {
@@ -8483,10 +8487,14 @@
           {
             DebugPrint("CT_PoofInsertedCode", Depth);
           } break;
+          case CT_PoofModifiedToken:
+          {
+            DebugPrint("CT_PoofModifiedToken", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( c_token_flags RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( c_token_flags RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -8501,7 +8509,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( va_args_flags RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( va_args_flags RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -8516,7 +8524,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( token_cursor_source RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( token_cursor_source RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -8563,7 +8571,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( parse_warn_code RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( parse_warn_code RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -8578,7 +8586,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( parse_error_code RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( parse_error_code RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -8649,7 +8657,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( linkage_type RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( linkage_type RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -8672,7 +8680,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( type_qualifier RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( type_qualifier RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -8784,10 +8792,14 @@
           {
             DebugPrint("TypeQual_Virtual", Depth);
           } break;
+          case TypeQual_Noreturn:
+          {
+            DebugPrint("TypeQual_Noreturn", Depth);
+          } break;
 
       }
     }
-    bonsai_function void DebugPrint( function_type RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( function_type RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -8814,7 +8826,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( datatype_type RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( datatype_type RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -8841,7 +8853,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( macro_type RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( macro_type RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -8860,7 +8872,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( output_mode RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( output_mode RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -8875,7 +8887,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( parser_push_type RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( parser_push_type RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -8898,7 +8910,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( erase_token_mode RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( erase_token_mode RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -8913,7 +8925,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( declaration_type RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( declaration_type RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {
@@ -8940,7 +8952,7 @@
 
       }
     }
-    bonsai_function void DebugPrint( ast_node_type RuntimeValue, u32 Depth)
+    link_internal void DebugPrint( ast_node_type RuntimeValue, u32 Depth)
     {
       switch (RuntimeValue)
       {

@@ -17,7 +17,7 @@
       macro_def_stream_chunk* At;
     };
 
-    bonsai_function macro_def_iterator
+    link_internal macro_def_iterator
     Iterator(macro_def_stream* Stream)
     {
       macro_def_iterator Iterator = {
@@ -27,20 +27,20 @@
       return Iterator;
     }
 
-    bonsai_function b32
+    link_internal b32
     IsValid(macro_def_iterator* Iter)
     {
       b32 Result = Iter->At != 0;
       return Result;
     }
 
-    bonsai_function void
+    link_internal void
     Advance(macro_def_iterator* Iter)
     {
       Iter->At = Iter->At->Next;
     }
 
-    bonsai_function b32
+    link_internal b32
     IsLastElement(macro_def_iterator* Iter)
     {
       b32 Result = Iter->At->Next == 0;
@@ -48,7 +48,7 @@
     }
 
 
-        bonsai_function macro_def *
+        link_internal macro_def *
     Push(macro_def_stream* Stream, macro_def Element, memory_arena* Memory)
     {
       macro_def_stream_chunk* NextChunk = (macro_def_stream_chunk*)PushStruct(Memory, sizeof(macro_def_stream_chunk), 1, 0);
@@ -73,7 +73,7 @@
       return Result;
     }
 
-    bonsai_function void
+    link_internal void
     ConcatStreams( macro_def_stream *S1, macro_def_stream *S2)
     {
       if (S1->LastChunk)

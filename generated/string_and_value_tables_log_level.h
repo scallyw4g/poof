@@ -1,4 +1,4 @@
-        bonsai_function counted_string
+        link_internal counted_string
     ToString( log_level Type)
     {
       counted_string Result = {};
@@ -15,7 +15,7 @@
       return Result;
     }
 
-        bonsai_function log_level
+        link_internal log_level
     LogLevel(counted_string S)
     {
       log_level Result = {};

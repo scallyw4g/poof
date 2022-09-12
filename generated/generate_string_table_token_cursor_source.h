@@ -1,4 +1,4 @@
-    bonsai_function counted_string
+    link_internal counted_string
     ToString( token_cursor_source Type)
     {
       counted_string Result = {};

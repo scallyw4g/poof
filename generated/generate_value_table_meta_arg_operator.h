@@ -1,4 +1,4 @@
-    bonsai_function meta_arg_operator
+    link_internal meta_arg_operator
     MetaArgOperator(counted_string S)
     {
       meta_arg_operator Result = {};

@@ -18,7 +18,7 @@ struct c_token_cursor_up
       counted_string Filename;
     };
 
-    bonsai_function c_token_cursor
+    link_internal c_token_cursor
     CTokenCursor(umm ElementCount, memory_arena* Memory)
     {
       c_token* Start = (c_token*)PushStruct(Memory, sizeof( c_token ), 1, 0);
