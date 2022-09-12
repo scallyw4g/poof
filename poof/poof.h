@@ -151,6 +151,9 @@ enum c_token_type
 
   CTokenType_Poof,
 
+  // C11 keyword
+  CT_Keyword_Noreturn,
+
   CT_Keyword_Override,
   CT_Keyword_Virtual,
   CT_Keyword_Noexcept,

@@ -4413,6 +4413,22 @@ TryTransmuteKeywordToken(c_token *T, c_token *LastTokenPushed)
   {
     T->Type = CT_Keyword_Protected;
   }
+  else if ( StringsMatch(T->Value, CSz("__Noreturn__")) )
+  {
+    T->Type = CT_Keyword_Noreturn;
+  }
+  else if ( StringsMatch(T->Value, CSz("__noreturn__")) )
+  {
+    T->Type = CT_Keyword_Noreturn;
+  }
+  else if ( StringsMatch(T->Value, CSz("noreturn")) )
+  {
+    T->Type = CT_Keyword_Noreturn;
+  }
+  else if ( StringsMatch(T->Value, CSz("_Noreturn")) )
+  {
+    T->Type = CT_Keyword_Noreturn;
+  }
   else if ( StringsMatch(T->Value, CSz("override")) )
   {
     T->Type = CT_Keyword_Override;
@@ -10022,6 +10038,7 @@ FlushOutputToDisk( parse_context *Ctx,
   if (FoundValidInclude == False)
   {
     Assert(PeekTokenRaw(Parser, -1).Type == CTokenType_Newline);
+
     OutputPath = Concat(Ctx->Args.Outpath, NewFilename, Memory);
     Assert(LastTokenBeforeNewline->IncludePath.Start == 0);
     Assert(LastTokenBeforeNewline->IncludePath.Count == 0);
@@ -10031,30 +10048,27 @@ FlushOutputToDisk( parse_context *Ctx,
     LastTokenBeforeNewline->IncludePath = NewFilename;
   }
 
-  {
-    Output(OutputForThisParser, OutputPath, Memory);
-    parser *OutputParse = ParserForAnsiStream(Ctx, AnsiStream(OutputForThisParser, OutputPath), TokenCursorSource_MetaprogrammingExpansion);
+  Output(OutputForThisParser, OutputPath, Memory);
+  parser *OutputParse = ParserForAnsiStream(Ctx, AnsiStream(OutputForThisParser, OutputPath), TokenCursorSource_MetaprogrammingExpansion);
 
-    if (IsInlineCode)
-    {
-      // TODO(Jesse, id: 226, tags: metaprogramming, output): Should we handle this differently?
-      Info("Not parsing inlined code (%S)", OutputPath);
-    }
-    else
-    {
-      // NOTE(Jesse): This is horribly tortured.. remove Ctx->CurrentParser..
-      // it's completely unnecessary cruft.
-      parser *OldParser = Ctx->CurrentParser;
-      Ctx->CurrentParser = OutputParse;
-      RunPreprocessor(Ctx, OutputParse, OldParser, Memory);
-      ParseDatatypes(Ctx, OutputParse);
-      Ctx->CurrentParser = OldParser;
-    }
+  if (IsInlineCode)
+  {
+    // TODO(Jesse, id: 226, tags: metaprogramming, output): Should we handle this differently?
+    Info("Not parsing inlined code (%S)", OutputPath);
   }
+  else
+  {
+    // NOTE(Jesse): This is pretty tortured.. maybe remove Ctx->CurrentParser..
+    // it's technically unnecessary but kinda entrenched at this point..
+    parser *OldParser = Ctx->CurrentParser;
+    Ctx->CurrentParser = OutputParse;
+    RunPreprocessor(Ctx, OutputParse, OldParser, Memory);
+    ParseDatatypes(Ctx, OutputParse);
+    Ctx->CurrentParser = OldParser;
+  }
+
   /* PushParser(Ctx->CurrentParser, OutputParse, parser_push_type_include); */
   /* GoGoGadgetMetaprogramming(Ctx, TodoInfo); */
-
-  return;
 }
 
 // TODO(Jesse, id: 113, tags: cleanup): Remove these?
@@ -11355,10 +11369,6 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
   meta_func_stream *FunctionDefs = &Ctx->MetaFunctions;
   memory_arena *Memory           = Ctx->Memory;
 
-  /* if ( */
-  /* person_stream* People = &TodoInfo->People; */
-  /* tagged_counted_string_stream_stream* NameLists = &TodoInfo->NameLists; */
-
   parser *Parser = Ctx->CurrentParser;
   Assert(IsAtBeginning(Parser));
   while (c_token *T = PeekTokenPointer(Parser))
@@ -11524,7 +11534,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
                 }
                 else
                 {
-                  counted_string OutfileName = GenerateOutfileNameFor(Func.Name, ArgType, Memory, GetRandomString(8, Hash(&Code), Memory));
+                  counted_string OutfileName = GenerateOutfileNameFor( Func.Name, ArgType, Memory, GetRandomString(8, Hash(&Code), Memory));
                   FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory, True);
                 }
               }
@@ -11593,9 +11603,9 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
             string_builder OutputBuilder = {};
 
-            for (compound_decl_iterator Iter = Iterator(&Datatypes->Structs);
-                IsValid(&Iter);
-                Advance(&Iter))
+            for ( compound_decl_iterator Iter = Iterator(&Datatypes->Structs);
+                  IsValid(&Iter);
+                  Advance(&Iter) )
             {
               compound_decl* Struct = &Iter.At->Element;
 
@@ -11608,9 +11618,9 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               }
             }
 
-            for (auto Iter = Iterator(&Datatypes->Enums);
-                IsValid(&Iter);
-                Advance(&Iter))
+            for ( auto Iter = Iterator(&Datatypes->Enums);
+                  IsValid(&Iter);
+                  Advance(&Iter) )
             {
               enum_decl* Enum = &Iter.At->Element;
               if (!StreamContains(&Excludes, Enum->Name))

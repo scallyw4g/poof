@@ -17,7 +17,7 @@ RunPreemptivePoof=1
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 # POOF_DEBUGGER="gdb --args"
 
-BuildPoofEmcc=1
+# BuildPoofEmcc=1
 
 # RunParserTests=1
 # BuildParserTests=1
@@ -31,7 +31,7 @@ BuildPoofEmcc=1
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 
-# RunExtendedIntegrationTests=1
+RunExtendedIntegrationTests=1
 
 # OPTIMIZATION_LEVEL="-O2"
 # BONSAI_INTERNAL=O
@@ -421,6 +421,12 @@ function RunExtendedIntegrationTests
       -o src/generated             \
       src/game_loader.cpp"
 
+  test_name=hcc
+  RunSingleExtendedIntegrationTest \
+    "$BIN/poof                     \
+      -I src/                      \
+      src/hcc.c"
+
   echo -e ""
   echo -e "$Delimeter"
   echo -e ""
@@ -459,6 +465,10 @@ function BootstrapExtendedIntegrationTests
   test_name=bonsai
   test_repo=git@github.com:jjbandit/bonsai
   BootstrapSingleExtendedIntegrationTest '--recursive'
+
+  test_name=hcc
+  test_repo=https://github.com/heroseh/hcc
+  BootstrapSingleExtendedIntegrationTest
 }
 
 
