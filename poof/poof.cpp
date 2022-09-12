@@ -6985,6 +6985,11 @@ ParsePrimitivesAndQualifiers(parser *Parser, type_spec *Result)
         }
       } break;
 
+      case CT_Keyword_Noreturn:
+      {
+        RequireToken(Parser, CT_Keyword_Noreturn);
+        SetBitfield(type_qualifier, Result->Qualifier, TypeQual_Noreturn);
+      } break;
       case CT_Keyword_Virtual:
       {
         RequireToken(Parser, CT_Keyword_Virtual);
@@ -9849,11 +9854,14 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         EatUntilIncluding(Parser, CTokenType_Semicolon);
       } break;
 
+
       case CT_NameQualifier:
       case CTokenType_Struct:
       case CTokenType_Enum:
       case CTokenType_Union:
       case CT_Keyword_Class:
+
+      case CT_Keyword_Noreturn:
 
       case CTokenType_OperatorKeyword:
       case CT_Keyword_Explicit:

@@ -558,6 +558,7 @@ enum type_qualifier
   TypeQual_Explicit    = (1 << 23),
   TypeQual_Operator    = (1 << 24),
   TypeQual_Virtual     = (1 << 25),
+  TypeQual_Noreturn    = (1 << 26),
 };
 poof(string_and_value_tables(type_qualifier))
 #include <generated/string_and_value_tables_type_qualifier.h>

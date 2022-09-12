@@ -106,5 +106,9 @@
           {
             Append(&Builder, CSz("virtual "));
           }
+          if (TypeSpec->Qualifier & TypeQual_Noreturn)
+          {
+            Append(&Builder, CSz("noreturn "));
+          }
 
 
