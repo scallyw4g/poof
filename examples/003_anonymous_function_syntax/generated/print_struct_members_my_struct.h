@@ -1,2 +1,2 @@
-      printf("my_struct");
+printf("my_struct");
 

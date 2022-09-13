@@ -1,4 +1,15 @@
 
+link_internal umm
+SafeDecrement(umm *N)
+{
+  umm Result = *N;
+  if (Result > 0)
+  {
+    Result -= 1;
+  }
+  return Result;
+}
+
 link_internal c_token
 NormalizeWhitespaceTokens(c_token *T, c_token* PrevT, c_token *NextT, umm *Depth)
 {
@@ -11,27 +22,27 @@ NormalizeWhitespaceTokens(c_token *T, c_token* PrevT, c_token *NextT, umm *Depth
 
   if (T->Type == '}')
   {
-    if (*Depth > 0)
-    {
-      *Depth -= 1;
-    }
+    *Depth = SafeDecrement(Depth);
   }
 
   if ( (T->Type == ' ' && PrevT && PrevT->Type == CTokenType_Newline) ||
        (T->Type == ' ' && PrevT == 0) )
   {
-    Info("Truncating whitespace");
     Result.Value.Count = Min(T->Value.Count, (*Depth)*2);
-    if (Result.Value.Count > 1)
-    {
-      Info("Appending thick whitespace");
-    }
   }
 
-  if ( NextT && NextT->Type == '}' && IsNBSP(T))
+  if (IsNBSP(T))
   {
-    Assert(*Depth > 0);
-    Result.Value.Count = Min(T->Value.Count, ((*Depth)-1)*2);
+    if ( NextT && NextT->Type == '}')
+    {
+      Result.Value.Count = Min(T->Value.Count, (SafeDecrement(Depth))*2);
+    }
+
+    if ( PrevT && PrevT->Type == T->Type )
+    {
+      InvalidCodePath();
+      /* Result.Value.Count = 0; */
+    }
   }
 
   return Result;
@@ -39,7 +50,7 @@ NormalizeWhitespaceTokens(c_token *T, c_token* PrevT, c_token *NextT, umm *Depth
 
 // TODO(Jesse id: 222, tags: immediate, parsing, metaprogramming) : Re-add [[nodiscard]] here
 link_internal counted_string
-Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx, memory_arena* Memory)
+Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx, memory_arena* Memory, umm *Depth)
 {
   TIMED_FUNCTION();
 
@@ -48,18 +59,16 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
 
   Assert(Scope->Tokens->At == Scope->Tokens->Start);
 
-  umm Depth = 0;
   string_builder OutputBuilder = {};
   while ( c_token *BodyToken = PopTokenRawPointer(Scope) )
   {
-
     switch (BodyToken->Type)
     {
       case CTokenType_StringLiteral:
       {
         counted_string TempStr = StripQuotes(BodyToken->Value);
         parser *StringParse = ParserForAnsiStream(Ctx, AnsiStream(TempStr), TokenCursorSource_MetaprogrammingExpansion);
-        counted_string Code = Execute(StringParse, ReplacePatterns, Ctx, Memory);
+        counted_string Code = Execute(StringParse, ReplacePatterns, Ctx, Memory, Depth);
         if (StringParse->ErrorCode)
         {
           Scope->ErrorCode = StringParse->ErrorCode;
@@ -133,7 +142,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                   } break;
                 }
 
-                DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
+                DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
               } break;
 
               case is_primitive:
@@ -151,7 +160,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                   DoTrueBranch = True;
                 }
 
-                DoTrueFalse(Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
+                DoTrueFalse(Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
               } break;
 
               case is_compound:
@@ -172,7 +181,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                   }
                 }
 
-                DoTrueFalse(Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
+                DoTrueFalse(Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
               } break;
 
               case is_struct:
@@ -197,7 +206,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
 
                 }
 
-                DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
+                DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
               } break;
 
               case is_enum:
@@ -259,7 +268,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                   } break;
                 }
 
-                DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
+                DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
               } break;
 
               case is_function:
@@ -287,7 +296,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
 
 
                 b32 DoTrueBranch = (IsFunc || D != 0);
-                DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
+                DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
               } break;
 
               case value:
@@ -313,7 +322,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                 if (OptionalToken(Scope, CTokenType_Question))
                 {
                   b32 DoTrueBranch = StringsMatch(Name, CSz("(anonymous)")) == False;
-                  DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory);
+                  DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
                 }
                 else
                 {
@@ -354,6 +363,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
 
                 if (Members)
                 {
+                  b32 IsFirstLoop = true;
                   ITERATE_OVER_AS(Member, Members)
                   {
                     declaration* Member = GET_ELEMENT(MemberIter);
@@ -403,13 +413,17 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                           meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
                           Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)));
                           Rewind(MapMemberScope.Tokens);
-                          counted_string StructFieldOutput = Execute(&MapMemberScope, &NewArgs, Ctx, Memory);
+                          counted_string StructFieldOutput = Execute(&MapMemberScope, &NewArgs, Ctx, Memory, Depth);
                           if (MapMemberScope.ErrorCode)
                           {
                             Scope->ErrorCode = MapMemberScope.ErrorCode;
                           }
                           else
                           {
+                            if (IsFirstLoop)
+                            {
+                              StructFieldOutput = Trim(StructFieldOutput);
+                            }
                             Append(&OutputBuilder, StructFieldOutput);
                           }
                         }
@@ -421,7 +435,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                         meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
                         Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)));
                         Rewind(MapMemberScope.Tokens);
-                        counted_string StructFieldOutput = Execute(&MapMemberScope, &NewArgs, Ctx, Memory);
+                        counted_string StructFieldOutput = Execute(&MapMemberScope, &NewArgs, Ctx, Memory, Depth);
                         if (MapMemberScope.ErrorCode)
                         {
                           Scope->ErrorCode = MapMemberScope.ErrorCode;
@@ -433,6 +447,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                       } break;
                     }
 
+                    IsFirstLoop = false;
                     continue;
                   }
                 }
@@ -466,7 +481,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                       meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
                       Push(&NewArgs, ReplacementPattern(EnumValueMatch->Value, Datatype(EnumMember)));
                       Rewind(NextScope.Tokens);
-                      counted_string EnumFieldOutput = Execute(&NextScope, &NewArgs, Ctx, Memory);
+                      counted_string EnumFieldOutput = Execute(&NextScope, &NewArgs, Ctx, Memory, Depth);
                       if (NextScope.ErrorCode)
                       {
                         Scope->ErrorCode = NextScope.ErrorCode;
@@ -524,7 +539,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
 
             meta_func_arg_stream NewArgs = {};
             Push(&NewArgs, ReplacementPattern(NestedFunc->ArgName, Arg->Data));
-            counted_string NestedCode = Execute(NestedFunc, &NewArgs, Ctx, Memory);
+            counted_string NestedCode = Execute(NestedFunc, &NewArgs, Ctx, Memory, Depth);
             if (NestedFunc->Body.ErrorCode)
             {
               Scope->ErrorCode = NestedFunc->Body.ErrorCode;
@@ -554,7 +569,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
 
       default:
       {
-        c_token ToPush = NormalizeWhitespaceTokens(BodyToken, PeekTokenRawPointer(Scope, -2), PeekTokenRawPointer(Scope), &Depth);
+        c_token ToPush = NormalizeWhitespaceTokens(BodyToken, PeekTokenRawPointer(Scope, -2), PeekTokenRawPointer(Scope), Depth);
         Append(&OutputBuilder, ToPush.Value);
       } break;
 
@@ -573,7 +588,8 @@ DoTrueFalse( parse_context *Ctx,
              meta_func_arg_stream* ReplacePatterns,
              b32 DoTrueBranch,
              string_builder *OutputBuilder,
-             memory_arena *Memory)
+             memory_arena *Memory,
+             umm *Depth)
 {
   parser TrueScope = GetBodyTextForNextScope(Scope, Memory);
   parser FalseScope = {};
@@ -585,7 +601,7 @@ DoTrueFalse( parse_context *Ctx,
 
   if (DoTrueBranch)
   {
-    counted_string Code = Execute(&TrueScope, ReplacePatterns, Ctx, Memory);
+    counted_string Code = Execute(&TrueScope, ReplacePatterns, Ctx, Memory, Depth);
     if (TrueScope.ErrorCode)
     {
       Scope->ErrorCode = TrueScope.ErrorCode;
@@ -599,7 +615,7 @@ DoTrueFalse( parse_context *Ctx,
   {
     if (FalseScope.Tokens)
     {
-      counted_string Code = Execute(&FalseScope, ReplacePatterns, Ctx, Memory);
+      counted_string Code = Execute(&FalseScope, ReplacePatterns, Ctx, Memory, Depth+1);
       if (FalseScope.ErrorCode)
       {
         Scope->ErrorCode = FalseScope.ErrorCode;
@@ -613,11 +629,11 @@ DoTrueFalse( parse_context *Ctx,
 }
 
 link_internal counted_string
-Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory)
+Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory, umm *Depth)
 {
   Assert(Func->Body.Tokens->At == Func->Body.Tokens->Start);
 
-  counted_string Result = Execute(&Func->Body, Args, Ctx, Memory);
+  counted_string Result = Execute(&Func->Body, Args, Ctx, Memory, Depth);
 
   Assert(Func->Body.Tokens->At == Func->Body.Tokens->End);
   Rewind(Func->Body.Tokens);

@@ -147,8 +147,8 @@ link_internal datatype ResolveToBaseType(parse_context *Ctx, type_spec );
 link_internal datatype ResolveToBaseType(parse_context *Ctx, datatype *);
 link_internal datatype ResolveToBaseType(parse_context *Ctx, type_def *);
 
-link_internal counted_string Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory);
-link_internal void           DoTrueFalse( parse_context *Ctx, parser *Scope, meta_func_arg_stream* ReplacePatterns, b32 DoTrueBranch, string_builder *OutputBuilder, memory_arena *Memory);
+link_internal counted_string Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory, umm *Depth);
+link_internal void           DoTrueFalse( parse_context *Ctx, parser *Scope, meta_func_arg_stream* ReplacePatterns, b32 DoTrueBranch, string_builder *OutputBuilder, memory_arena *Memory, umm *Depth);
 
 
 inline c_token_cursor *
@@ -11356,35 +11356,10 @@ ParseMultiLineTodoValue(parser* Parser, memory_arena* Memory)
 }
 #endif
 
-
-
-link_internal tuple_CountedString_CountedString_buffer
-GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
+void
+ParseComment_old_dead_deprecated()
 {
-  TIMED_FUNCTION();
-
-  tuple_CountedString_CountedString_buffer_builder Builder = {};
-
-  program_datatypes *Datatypes   = &Ctx->Datatypes;
-  meta_func_stream *FunctionDefs = &Ctx->MetaFunctions;
-  memory_arena *Memory           = Ctx->Memory;
-
-  parser *Parser = Ctx->CurrentParser;
-  Assert(IsAtBeginning(Parser));
-  umm Depth = 0;
-  while (c_token *T = PeekTokenPointer(Parser))
-  {
-    switch( T->Type )
-    {
-      case CTokenType_CommentMultiLine:
-      case CTokenType_CommentSingleLine:
-      {
-        Assert(False);
-#if 1
-        c_token CommentToken = RequireTokenRaw(Parser, T->Type);
-        /* EatComment(Parser, CommentStartToken.Type); */
-#else
-
+#if 0
         c_token CommentStartToken = PopTokenRaw(Parser);
         c_token FirstInteriorT = PeekToken(Parser);
         if ( StringsMatch(FirstInteriorT.Value, CSz("TODO")) )
@@ -11474,6 +11449,32 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
           EatComment(Parser, CommentStartToken.Type);
         }
 #endif
+}
+
+link_internal tuple_CountedString_CountedString_buffer
+GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
+{
+  TIMED_FUNCTION();
+
+  tuple_CountedString_CountedString_buffer_builder Builder = {};
+
+  program_datatypes *Datatypes   = &Ctx->Datatypes;
+  meta_func_stream *FunctionDefs = &Ctx->MetaFunctions;
+  memory_arena *Memory           = Ctx->Memory;
+
+  parser *Parser = Ctx->CurrentParser;
+  Assert(IsAtBeginning(Parser));
+  while (c_token *T = PeekTokenPointer(Parser))
+  {
+    switch( T->Type )
+    {
+      case CTokenType_CommentMultiLine:
+      case CTokenType_CommentSingleLine:
+      {
+        Assert(False);
+        c_token CommentToken = RequireTokenRaw(Parser, T->Type);
+        /* ParseComment_old_dead_deprecated(Parser); */
+        /* EatComment(Parser, CommentStartToken.Type); */
 
       } break;
 
@@ -11522,7 +11523,8 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               {
                 meta_func_arg_stream Args = {};
                 Push(&Args, ReplacementPattern(ArgName, Arg));
-                counted_string Code = Execute(&Func, &Args, Ctx, Memory);
+                umm Depth = 0;
+                counted_string Code = Execute(&Func, &Args, Ctx, Memory, &Depth);
                 RequireToken(Parser, CTokenType_CloseParen);
 
                 if (Func.Body.ErrorCode)
@@ -11615,7 +11617,8 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               {
                 meta_func_arg_stream Args = {};
                 Push(&Args, ReplacementPattern(StructFunc.ArgName, Datatype(Struct)));
-                counted_string Code = Execute(&StructFunc, &Args, Ctx, Memory);
+                umm Depth = 0;
+                counted_string Code = Execute(&StructFunc, &Args, Ctx, Memory, &Depth);
                 Append(&OutputBuilder, Code);
               }
             }
@@ -11629,7 +11632,8 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               {
                 meta_func_arg_stream Args = {};
                 Push(&Args, ReplacementPattern(EnumFunc.ArgName, Datatype(Enum)));
-                counted_string Code = Execute(&EnumFunc, &Args, Ctx, Memory);
+                umm Depth = 0;
+                counted_string Code = Execute(&EnumFunc, &Args, Ctx, Memory, &Depth);
                 Append(&OutputBuilder, Code);
               }
             }
@@ -11691,8 +11695,8 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               {
                 meta_func_arg_stream Args = {};
                 Push(&Args, ReplacementPattern(Func->ArgName, Arg));
-                counted_string Code = Execute(Func, &Args, Ctx, Memory);
-                while(OptionalToken(Parser, CTokenType_Semicolon));
+                umm Depth = 0;
+                counted_string Code = Execute(Func, &Args, Ctx, Memory, &Depth);
 
                 if (Func->Body.ErrorCode)
                 {
