@@ -12,6 +12,8 @@
 #include <poof/print_ast_node.h>
 
 
+global_variable counted_string_stream Global_ErrorStream = {};
+
 global_variable memory_arena Global_PermMemory = {};
 
 
@@ -1513,10 +1515,10 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
         if (NextT) { PrintTray(ParseErrorCursor, NextT, MaxTrayWidth); }
       }
     }
+    /* CopyToDest(ParseErrorCursor, '\n'); */
 
-    char *End = ParseErrorCursor->End;
-    ParseErrorCursor->End = ParseErrorCursor->At;
-    ParseErrorCursor->At = ParseErrorCursor->Start;
+    TruncateToCurrentElements(ParseErrorCursor);
+    Rewind(ParseErrorCursor);
 
     // TODO(Jesse, tags: bug): This isn't working for some reason.  I think
     // GetLongestLineInCursor is busted here.
@@ -1524,31 +1526,25 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
     u64 LongestLine = Max(MinLineLen, GetLongestLineInCursor(ParseErrorCursor));
     LongestLine = Max(MinLineLen, (u64)NameLine.Count+4);
 
-    ParseErrorCursor->End = End;
+    string_builder Builder = {};
+
+    u64 HalfDashes = (LongestLine-NameLine.Count)/2;
+    for (u32 DashIndex = 0; DashIndex < HalfDashes; ++DashIndex) { Append(&Builder, CSz("-")); }
+    Append(&Builder, NameLine);
+    for (u32 DashIndex = 0; DashIndex < HalfDashes; ++DashIndex) { Append(&Builder, CSz("-")); }
+    Append(&Builder, CSz("\n"));
+
+    // Intentional copy
+    counted_string ErrorText = CopyString(CS(ParseErrorCursor), &Global_PermMemory);
+    Append(&Builder, ErrorText);
+    /* LogDirect("%S", CS(ParseErrorCursor)); */
+
+    counted_string FullErrorText = Finalize(&Builder, &Global_PermMemory);
+    Push(&Global_ErrorStream, FullErrorText, &Global_PermMemory);
 
     if (Global_LogLevel <= LogLevel_Error)
     {
-      u64 HalfDashes = (LongestLine-NameLine.Count)/2;
-      for (u32 DashIndex = 0; DashIndex < HalfDashes; ++DashIndex) { LogDirect(CSz("-")); }
-      LogDirect(CSz("%S"), NameLine);
-      for (u32 DashIndex = 0; DashIndex < HalfDashes; ++DashIndex) { LogDirect(CSz("-")); }
-
-      LogDirect(CSz("\n"));
-    }
-
-    /* CopyToDest(ParseErrorCursor, '\n'); */
-    /* for (u32 DashIndex = 0; */
-    /*     DashIndex < LongestLine; */
-    /*     ++DashIndex) */
-    /* { */
-    /*   CopyToDest(ParseErrorCursor, '-'); */
-    /* } */
-
-    CopyToDest(ParseErrorCursor, '\n');
-
-    if (Global_LogLevel <= LogLevel_Error)
-    {
-      LogDirect("%S", CS(ParseErrorCursor));
+      LogDirect(FullErrorText);
     }
 
 
@@ -1573,9 +1569,8 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
   }
   else
   {
-    FormatCountedString_(ParseErrorCursor, CSz("Error determining where the error occurred\n"));
-    FormatCountedString_(ParseErrorCursor, CSz("Error messsage was : %S\n"), Message);
-    LogDirect("%S", CS(ParseErrorCursor));
+    LogDirect( CSz("Error determining where the error occurred \n"));
+    LogDirect( CSz("Error messsage was : %S \n"), Message);
   }
 
   return;
@@ -12008,25 +12003,36 @@ DoPoofForWeb(char *zInput, umm InputLen)
     FullRewind(Ctx->CurrentParser);
     tuple_CountedString_CountedString_buffer OutputBuffer = GoGoGadgetMetaprogramming(Ctx, 0);
 
-    string_builder Builder = {};
-
-    Info("Tuple Count %d", OutputBuffer.Count);
-
-    for (u32 TupleIndex = 0; TupleIndex < OutputBuffer.Count; ++TupleIndex)
+    if (Parser->ErrorCode == ParseErrorCode_None)
     {
-      counted_string Filename = OutputBuffer.E[TupleIndex].E[0];
-      counted_string Code = OutputBuffer.E[TupleIndex].E[1];
+      string_builder Builder = {};
+      for (u32 TupleIndex = 0; TupleIndex < OutputBuffer.Count; ++TupleIndex)
+      {
+        counted_string Filename = OutputBuffer.E[TupleIndex].E[0];
+        counted_string Code = OutputBuffer.E[TupleIndex].E[1];
 
-      Append(&Builder, CSz("// "));
-      Append(&Builder, Filename);
-      Append(&Builder, CSz("\n\n\n"));
+        Append(&Builder, CSz("// "));
+        Append(&Builder, Filename);
+        Append(&Builder, CSz("\n\n\n"));
 
-      Append(&Builder, Code);
-      Append(&Builder, CSz("\n\n"));
+        Append(&Builder, Code);
+        Append(&Builder, CSz("\n\n"));
+      }
+
+      counted_string S = Finalize(&Builder, Memory, True);
+      Result = S.Start;
     }
-
-    counted_string S = Finalize(&Builder, Memory, True);
-    Result = S.Start;
+    else
+    {
+      string_builder Builder = {};
+      Append(&Builder, CSz("//\n// ERROR\n//\n\n"));
+      ITERATE_OVER(&Global_ErrorStream)
+      {
+        counted_string *E = GET_ELEMENT(Iter);
+        Append(&Builder, *E);
+      }
+      Result = Finalize(&Builder, Memory, True).Start;
+    }
   }
 
   return Result;
