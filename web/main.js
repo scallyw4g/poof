@@ -1,4 +1,4 @@
-import {EditorView, basicSetup} from "codemirror"
+import {EditorView, basicSetup, minimalSetup} from "codemirror"
 import {cpp} from "@codemirror/lang-cpp"
 
 var defaultOutputEditorText = "// Hit the big red button to generate code!";
@@ -7,6 +7,16 @@ var EnvInitialized = false;
 var srcEditor = null;
 var outputEditor = null;
 var DoPoofForWeb = null;
+
+function InitEditor(message, container)
+{
+  let Result = new EditorView({
+    extensions: [minimalSetup, cpp()],
+    doc: message,
+    parent: container,
+  })
+  return Result;
+}
 
 function InitEditors(filename)
 {
@@ -27,17 +37,8 @@ function InitEditors(filename)
     let bigRedButton = document.querySelector("div#big-red-button");
     DoPoofForWeb = Module.cwrap('DoPoofForWeb', 'string', ['string', 'number']);
 
-    srcEditor = new EditorView({
-      extensions: [basicSetup, cpp()],
-      doc: "// Loading source ..",
-      parent: editorDiv,
-    })
-
-    outputEditor = new EditorView({
-      extensions: [basicSetup, cpp()],
-      doc: defaultOutputEditorText,
-      parent: outputDiv,
-    })
+    srcEditor = InitEditor("// Error loading source ..", editorDiv);
+    outputEditor = InitEditor(defaultOutputEditorText, outputDiv);
 
     bigRedButton.addEventListener('click', () => {
 

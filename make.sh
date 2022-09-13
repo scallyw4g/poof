@@ -18,13 +18,14 @@ RunPoof=1
 # POOF_DEBUGGER="gdb --args"
 
 # BuildPoofEmcc=1
+# RollupEmcc=1
 
 # RunParserTests=1
 # BuildParserTests=1
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 # TEST_DEBUGGER="gdb --args"
 
-BuildAndRunAllExamples=1
+# BuildAndRunAllExamples=1
 
 # RunIntegrationTests=1
 # INTEGRATION_TEST_INDEX=0
@@ -578,6 +579,10 @@ else
 
   if [[ $BuildPoof == 1 ]]; then
     BuildPoof
+  fi
+
+  if [[ $RollupEmcc == 1 ]]; then
+    RollupEmcc
   fi
 
   if [[ $BuildPoofEmcc == 1 ]]; then

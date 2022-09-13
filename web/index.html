@@ -21,11 +21,11 @@
   <body>
 
     <h1>Poof</h1>
-    <span>A metaprogramming runtime</span>
+    <span>A metaprogramming language and runtime</span>
 
     <ul>
+
       <div
-        id='about-link'
         hx-get='/web/about'
         hx-swap='innerHTML'
         hx-target='#content'
@@ -34,7 +34,14 @@
       </div>
 
       <div
-        id='examples-link'
+        hx-get='/web/motivation'
+        hx-swap='innerHTML'
+        hx-target='#content'
+      >
+        Motivation
+      </div>
+
+      <div
         hx-get='/web/examples'
         hx-swap='innerHTML'
         hx-target='#content'

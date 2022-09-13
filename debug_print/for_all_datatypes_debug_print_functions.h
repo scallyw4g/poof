@@ -103,7 +103,6 @@ link_internal void DebugPrint( native_file RuntimeStruct, u32 Depth)
     DebugPrint("native_file {\n", Depth);
   }
 
-  // NOTE(Jesse): found no definition for this type.. probably from stdlib
   DebugPrint("undefined(FILE Handle)\n", Depth+2);
 
   DebugPrint("counted_string Path =", Depth+2);
@@ -132,10 +131,8 @@ link_internal void DebugPrint( XVisualInfo RuntimeStruct, u32 Depth)
     DebugPrint("XVisualInfo {\n", Depth);
   }
 
-  // NOTE(Jesse): found no definition for this type.. probably from stdlib
   DebugPrint("undefined(Visual visual)\n", Depth+2);
 
-  // NOTE(Jesse): found no definition for this type.. probably from stdlib
   DebugPrint("undefined(VisualID visualid)\n", Depth+2);
 
   DebugPrint("s32 screen =", Depth+2);
@@ -206,13 +203,10 @@ link_internal void DebugPrint( os RuntimeStruct, u32 Depth)
     DebugPrint("os {\n", Depth);
   }
 
-  // NOTE(Jesse): found no definition for this type.. probably from stdlib
   DebugPrint("undefined(window Window)\n", Depth+2);
 
-  // NOTE(Jesse): found no definition for this type.. probably from stdlib
   DebugPrint("undefined(display Display)\n", Depth+2);
 
-  // NOTE(Jesse): found no definition for this type.. probably from stdlib
   DebugPrint("undefined(gl_context GlContext)\n", Depth+2);
 
   DebugPrint("b32 ContinueRunning =", Depth+2);
@@ -305,19 +299,15 @@ link_internal void DebugPrint( v3i RuntimeStruct, u32 Depth)
     DebugPrint("v3i {\n", Depth);
   }
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("struct (anonymous)\n", Depth+2);
 
 
@@ -347,19 +337,15 @@ link_internal void DebugPrint( v3 RuntimeStruct, u32 Depth)
     DebugPrint("v3 {\n", Depth);
   }
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("struct (anonymous)\n", Depth+2);
 
 
@@ -389,27 +375,21 @@ link_internal void DebugPrint( v4 RuntimeStruct, u32 Depth)
     DebugPrint("v4 {\n", Depth);
   }
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("struct (anonymous)\n", Depth+2);
 
 
@@ -439,7 +419,6 @@ link_internal void DebugPrint( voxel_position RuntimeStruct, u32 Depth)
     DebugPrint("voxel_position {\n", Depth);
   }
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("struct (anonymous)\n", Depth+2);
 
 
@@ -475,7 +454,6 @@ link_internal void DebugPrint( f32_reg RuntimeStruct, u32 Depth)
 
 
 
-  // NOTE(Jesse): found no definition for this type.. probably from stdlib
   DebugPrint("undefined(__m128 Sse)\n", Depth+2);
 
 
@@ -860,10 +838,8 @@ link_internal void DebugPrint( work_queue RuntimeStruct, u32 Depth)
 
 
 
-  // NOTE(Jesse): found no definition for this type.. probably from stdlib
   DebugPrint("undefined(work_queue_entry Entries)\n", Depth+2);
 
-  // NOTE(Jesse): found no definition for this type.. probably from stdlib
   DebugPrint("undefined(semaphore GlobalQueueSemaphore)\n", Depth+2);
 
 
@@ -1004,10 +980,8 @@ link_internal void DebugPrint( platform RuntimeStruct, u32 Depth)
 
 
 
-  // NOTE(Jesse): found no definition for this type.. probably from stdlib
   DebugPrint("undefined(semaphore QueueSemaphore)\n", Depth+2);
 
-  // NOTE(Jesse): found no definition for this type.. probably from stdlib
   DebugPrint("undefined(thread_startup_params Threads)\n", Depth+2);
 
   DebugPrint("v2 MouseP {\n", Depth+2);
@@ -1282,11 +1256,9 @@ link_internal void DebugPrint( Quaternion RuntimeStruct, u32 Depth)
     DebugPrint("Quaternion {\n", Depth);
   }
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("struct (anonymous)\n", Depth+2);
 
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("struct (anonymous)\n", Depth+2);
 
 
@@ -1588,7 +1560,6 @@ link_internal void DebugPrint( mutex RuntimeStruct, u32 Depth)
     DebugPrint("mutex {\n", Depth);
   }
 
-  // NOTE(Jesse): found no definition for this type.. probably from stdlib
   DebugPrint("undefined(native_mutex M)\n", Depth+2);
 
 
@@ -2023,7 +1994,6 @@ link_internal void DebugPrint( shader_uniform RuntimeStruct, u32 Depth)
 
 
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("union (anonymous)\n", Depth+2);
 
 
@@ -3101,7 +3071,6 @@ link_internal void DebugPrint( macro_expansion RuntimeStruct, u32 Depth)
     DebugPrint("macro_expansion {\n", Depth);
   }
 
-  // NOTE(Jesse): found no definition for this type.. probably from stdlib
   DebugPrint("undefined(c_token_cursor Expansion)\n", Depth+2);
 
   DebugPrint("macro_def Def {\n", Depth+2);
@@ -3166,7 +3135,6 @@ link_internal void DebugPrint( c_token RuntimeStruct, u32 Depth)
 
 
 
-  // NOTE(Jesse): an anonymous struct or union
   DebugPrint("union (anonymous)\n", Depth+2);
 
 
@@ -3190,7 +3158,6 @@ link_internal void DebugPrint( peek_result RuntimeStruct, u32 Depth)
     DebugPrint("peek_result {\n", Depth);
   }
 
-  // NOTE(Jesse): found no definition for this type.. probably from stdlib
   DebugPrint("undefined(c_token_cursor Tokens)\n", Depth+2);
 
   DebugPrint("c_token At {\n", Depth+2);
@@ -3237,7 +3204,6 @@ link_internal void DebugPrint( parser RuntimeStruct, u32 Depth)
 
 
 
-  // NOTE(Jesse): found no definition for this type.. probably from stdlib
   DebugPrint("undefined(c_token_cursor Tokens)\n", Depth+2);
 
 
@@ -3832,7 +3798,6 @@ link_internal void DebugPrint( macro_def RuntimeStruct, u32 Depth)
 
 
 
-  // NOTE(Jesse): found no definition for this type.. probably from stdlib
   DebugPrint("undefined(c_token_cursor Body)\n", Depth+2);
 
   DebugPrint("counted_string_buffer NamedArguments {\n", Depth+2);
