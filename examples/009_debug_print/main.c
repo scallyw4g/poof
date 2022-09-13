@@ -116,34 +116,32 @@ poof(
       {
         DebugPrint_str("{ ");
 
-          TStruct.map_members(StructMember)
+        TStruct.map_members(StructMember)
+        {
+          StructMember.is_union?
           {
-            StructMember.is_union?
+            // Print d_union members.  See comment at @manually_generate_d_union_switch
+            switch (Struct->Type)
             {
-              // Code to print the value of d_union members.  See comment at @manually_generate_d_union_switch
-              switch (Struct->Type)
+              StructMember.map_members (TUnionMember)
               {
-                StructMember.map_members (TUnionMember)
-                {
-                   case type_(TUnionMember.name):
-                   {
-                     DebugPrint_str("\n    TUnionMember.name = ");
-                     DebugPrint_(TUnionMember.type)(&Struct->(TUnionMember.name) );
-                   } break;
-                }
-
-                default: { /* Invalid type passed to DebugPrint .. handling the error might be nice */ } break;
+                 case type_(TUnionMember.name):
+                 {
+                   DebugPrint_str("\n    TUnionMember.name = ");
+                   DebugPrint_(TUnionMember.type)(&Struct->(TUnionMember.name) );
+                 } break;
               }
-            }
-            // TODO(Jesse): Maybe let people put an else here to differentiate between the .is_union? true/false blocks?
-            // else
-            {
-              // Code to print regular members
-              DebugPrint_str("StructMember.type StructMember.name = ");
-              DebugPrint_(StructMember.type)( Struct->(StructMember.name) );
-              DebugPrint_str(";");
+
+              default: { /* Invalid type passed to DebugPrint .. handling the error might be nice */ } break;
             }
           }
+          // Print regular members
+          {
+            DebugPrint_str("StructMember.type StructMember.name = ");
+            DebugPrint_(StructMember.type)( Struct->(StructMember.name) );
+            DebugPrint_str(";");
+          }
+        }
         DebugPrint_str(" }");
       }
     }
@@ -239,7 +237,7 @@ int main()
 //
 // NOTES ON IMPLEMENTATION
 //
-// This example is meant to illustrate how you can implement highly generic code in C using `poof`.
+// This example is meant to illustrate how you can implement generic code using `poof`.
 //
 // It is *not* meant to represent the canonical implementation of DebugPrint,
 // in `poof`.  In fact, it has several glaring deficiencies.  Notably, it fails

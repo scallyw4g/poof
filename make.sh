@@ -12,8 +12,8 @@ RunPreemptivePoof=1
 
 # BuildAllBinariesRunAllTests=1
 
-# RunPoof=1
-BuildPoof=1
+RunPoof=1
+# BuildPoof=1
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 # POOF_DEBUGGER="gdb --args"
 
@@ -24,7 +24,7 @@ BuildPoof=1
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 # TEST_DEBUGGER="gdb --args"
 
-# BuildAndRunAllExamples=1
+BuildAndRunAllExamples=1
 
 # RunIntegrationTests=1
 # INTEGRATION_TEST_INDEX=0
@@ -489,7 +489,7 @@ function BuildAndRunAllExamples
 {
   ColorizeTitle "Building and Running examples"
   pushd examples > /dev/null
-  ./make_all_examples.sh > /dev/null
+  ./make_all_examples.sh # > /dev/null
 
   if [ $? -eq 0 ]; then
     echo -e "$Success Examples built and ran"

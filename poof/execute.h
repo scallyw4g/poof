@@ -68,7 +68,10 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
       {
         counted_string TempStr = StripQuotes(BodyToken->Value);
         parser *StringParse = ParserForAnsiStream(Ctx, AnsiStream(TempStr), TokenCursorSource_MetaprogrammingExpansion);
-        counted_string Code = Execute(StringParse, ReplacePatterns, Ctx, Memory, Depth);
+
+        umm IgnoreDepth = 0;
+        counted_string Code = Execute(StringParse, ReplacePatterns, Ctx, Memory, &IgnoreDepth);
+
         if (StringParse->ErrorCode)
         {
           Scope->ErrorCode = StringParse->ErrorCode;
@@ -363,7 +366,6 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
 
                 if (Members)
                 {
-                  b32 IsFirstLoop = true;
                   ITERATE_OVER_AS(Member, Members)
                   {
                     declaration* Member = GET_ELEMENT(MemberIter);
@@ -420,10 +422,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                           }
                           else
                           {
-                            if (IsFirstLoop)
-                            {
-                              StructFieldOutput = Trim(StructFieldOutput);
-                            }
+                            TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
                             Append(&OutputBuilder, StructFieldOutput);
                           }
                         }
@@ -442,12 +441,11 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                         }
                         else
                         {
+                          TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
                           Append(&OutputBuilder, StructFieldOutput);
                         }
                       } break;
                     }
-
-                    IsFirstLoop = false;
                     continue;
                   }
                 }
@@ -488,6 +486,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                       }
                       else
                       {
+                        TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
                         Append(&OutputBuilder, EnumFieldOutput);
                       }
                     }
@@ -546,6 +545,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
             }
             else
             {
+              TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
               Append(&OutputBuilder, NestedCode);
             }
           }
@@ -599,31 +599,19 @@ DoTrueFalse( parse_context *Ctx,
     FalseScope = GetBodyTextForNextScope(Scope, Memory);
   }
 
-  if (DoTrueBranch)
+  parser *ParserToUse = DoTrueBranch ? &TrueScope : &FalseScope;
+
+  if (ParserToUse->Tokens)
   {
-    counted_string Code = Execute(&TrueScope, ReplacePatterns, Ctx, Memory, Depth);
-    if (TrueScope.ErrorCode)
+    counted_string Code = Execute(ParserToUse, ReplacePatterns, Ctx, Memory, Depth);
+    if (ParserToUse->ErrorCode)
     {
-      Scope->ErrorCode = TrueScope.ErrorCode;
+      Scope->ErrorCode = ParserToUse->ErrorCode;
     }
     else
     {
+      TrimTrailingNBSP(&OutputBuilder->Chunks.LastChunk->Element);
       Append(OutputBuilder, Code);
-    }
-  }
-  else
-  {
-    if (FalseScope.Tokens)
-    {
-      counted_string Code = Execute(&FalseScope, ReplacePatterns, Ctx, Memory, Depth+1);
-      if (FalseScope.ErrorCode)
-      {
-        Scope->ErrorCode = FalseScope.ErrorCode;
-      }
-      else
-      {
-        Append(OutputBuilder, Code);
-      }
     }
   }
 }

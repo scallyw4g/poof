@@ -24,7 +24,7 @@ foo_enum fenum2 defined
 
 nested_struct foo defined
 
-  undefined_type _und0 not defined
+undefined_type _und0 not defined
 
 char  _char defined
 
@@ -46,7 +46,7 @@ umm _ummstar defined
 
 foo_enum _foo_enum defined
 
-  undefined_type _und0 not defined
+undefined_type _und0 not defined
 
 foo_struct_0 _foo0 defined
 
@@ -70,7 +70,7 @@ foofunc1 FooFun1 defined
 
 foofunc2 FooFun2 defined
 
-  func_type_name AnotherFunc not defined
+func_type_name AnotherFunc not defined
 
 
 
