@@ -4,7 +4,6 @@ import {cpp} from "@codemirror/lang-cpp"
 var defaultOutputEditorText = "// Hit the big red button to generate code!";
 
 var EnvInitialized = false;
-var EditorsInitialized = false;
 var srcEditor = null;
 var outputEditor = null;
 var DoPoofForWeb = null;
@@ -13,7 +12,7 @@ function InitEditors(filename)
 {
   console.assert(EnvInitialized);
 
-  if (EditorsInitialized == false)
+  if (global_EditorsInitialized == false)
   {
     try
     {
@@ -27,8 +26,6 @@ function InitEditors(filename)
     let outputDiv = document.querySelector("div#output");
     let bigRedButton = document.querySelector("div#big-red-button");
     DoPoofForWeb = Module.cwrap('DoPoofForWeb', 'string', ['string', 'number']);
-
-    EditorsInitialized = true;
 
     srcEditor = new EditorView({
       extensions: [basicSetup, cpp()],
@@ -64,6 +61,7 @@ function InitEditors(filename)
       outputEditor.dispatch(transaction);
     });
 
+    global_EditorsInitialized = true;
   }
 }
 
@@ -75,13 +73,13 @@ function setEditorText(editor, text)
   editor.dispatch(transaction);
 }
 
-InitExample = function (filename)
+global_InitExample = function (filename)
 {
   console.log(`Initializing example for ${filename}`);
 
   if (EnvInitialized)
   {
-    if (EditorsInitialized == false) { InitEditors(); }
+    if (global_EditorsInitialized == false) { InitEditors(); }
 
     let exSourceText = FS.readFile(filename, {encoding: 'utf8'});
 

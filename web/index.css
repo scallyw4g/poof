@@ -1,0 +1,36 @@
+p
+{
+  max-width: 760px;
+}
+
+#editor,
+#output
+{
+  display: inline-block;
+  width: 49.5%;
+}
+
+#big-red-button
+{
+  display: flex;
+  background: #f00000;
+  width: 100%;
+  height: 50px;
+
+  margin-left: -2px;
+  border: 2px solid black;
+  border-radius: 5px;
+
+  justify-content: center;
+  align-items: center;
+}
+
+#big-red-button:hover
+{
+  background: #e00000;
+}
+
+#big-red-button:active
+{
+  background: #ff0000;
+}

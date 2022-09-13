@@ -1,13 +1,32 @@
+<script>
+  global_EditorsInitialized = false;
+</script>
 
 <div id='examples'>
 
-  <ul>
-    <li onclick="InitExample('examples/002_named_function_syntax/main.c')" > ex01 </li>
-    <li onclick="InitExample('examples/003_anonymous_function_syntax/main.c')" > ex02 </li>
-    <li onclick="InitExample('examples/004_enum_iteration/main.c')" > ex03 </li>
-  </ul>
+  <p>
+    Here are some examples of how to use the features in poof.  They are sorted
+    from simplest to most complex.  Each example introduces a new language feature.
+  </p>
 
-  <div id='example-src'></div>
+  <p>
+    Each of the following examples can be compiled with clang and run.  The
+    source code and a script to compile them can be found in the
+    <a href="https://github.com/jjbandit/poof/tree/master/examples">poof</a>
+    source repository.
+  </p>
+
+  <ul>
+    <li onclick="global_InitExample('examples/001_introduction/introduction.c')" >       Introduction </li>
+    <li onclick="global_InitExample('examples/002_named_function_syntax/main.c')" >      Named Functions </li>
+    <li onclick="global_InitExample('examples/003_anonymous_function_syntax/main.c')" >  Anonymous Functions </li>
+    <li onclick="global_InitExample('examples/004_enum_iteration/main.c')" >             Enum Iteration </li>
+    <li onclick="global_InitExample('examples/005_struct_iteration/main.c')" >           Struct Iteration </li>
+    <li onclick="global_InitExample('examples/006_discriminated_unions/main.c')" >       Discriminated Unions </li>
+    <li onclick="global_InitExample('examples/007_type_constraints/main.c')" >           Type Constraints </li>
+    <li onclick="global_InitExample('examples/008_named_list/main.c')" >                 Named Lists </li>
+    <li onclick="global_InitExample('examples/009_debug_print/main.c')" >                Debug Print </li>
+  </ul>
 
   <div id='big-red-button'>
     <span>Go Go Gadget Metaprogramming</span>
