@@ -11357,6 +11357,7 @@ ParseMultiLineTodoValue(parser* Parser, memory_arena* Memory)
 #endif
 
 
+
 link_internal tuple_CountedString_CountedString_buffer
 GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 {
@@ -11370,6 +11371,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
   parser *Parser = Ctx->CurrentParser;
   Assert(IsAtBeginning(Parser));
+  umm Depth = 0;
   while (c_token *T = PeekTokenPointer(Parser))
   {
     switch( T->Type )
