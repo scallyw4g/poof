@@ -5061,6 +5061,7 @@ TokenizeAnsiStream(ansi_stream Code, memory_arena* Memory, b32 IgnoreQuotes, par
         {
           PushT.Erased = True;
           CommentToken = Push(PushT, Tokens);
+          LastTokenPushed = CommentToken;
         }
 
         if ( (PushT.Type == CTokenType_EscapedNewline) ||
@@ -5078,17 +5079,16 @@ TokenizeAnsiStream(ansi_stream Code, memory_arena* Memory, b32 IgnoreQuotes, par
           CommentToken->Value.Start = Code.At;
         }
       }
-      else if ( CommentToken && !(ParsingSingleLineComment || ParsingMultiLineComment) )
+      else if ( CommentToken &&
+                !(ParsingSingleLineComment || ParsingMultiLineComment) ) // Finished parsing a comment
       {
         umm Count = (umm)(Code.At - CommentToken->Value.Start);
 
         // We finished parsing a comment on this token
         if (PushT.Type == CTokenType_Newline || PushT.Type == CTokenType_CarrigeReturn)
         {
-
           // TODO(Jesse): Is this actually busted for \r\n ?  Seems like we should sub 2 for that case?
           if (Count) { Count -= 1; } // Exclude the \r or \n from single line comments
-
           LastTokenPushed = Push(PushT, Tokens);
         }
 
@@ -5127,6 +5127,11 @@ TokenizeAnsiStream(ansi_stream Code, memory_arena* Memory, b32 IgnoreQuotes, par
         };
 
         LastTokenPushed = Push(InsertedCodePlaceholder, Tokens);
+      }
+      else if (IsNBSP(&PushT) && LastTokenPushed && PushT.Type == LastTokenPushed->Type)
+      {
+        Assert( (LastTokenPushed->Value.Start+LastTokenPushed->Value.Count) == PushT.Value.Start);
+        LastTokenPushed->Value.Count += 1;
       }
       else
       {

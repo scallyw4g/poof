@@ -2161,7 +2161,6 @@ TestLineNumbers(memory_arena *Memory)
     TestThat(PeekTokenRawPointer(Parser)->LineNumber == 2);
 
     TestThat(OptionalTokenRaw(Parser, CTokenType_Space));
-    TestThat(OptionalTokenRaw(Parser, CTokenType_Space));
     TestThat(OptionalTokenRaw(Parser, CToken(132151u)));
 
     TestThat(OptionalTokenRaw(Parser, CTokenType_Newline));
@@ -2174,7 +2173,6 @@ TestLineNumbers(memory_arena *Memory)
     TestThat(OptionalTokenRaw(Parser, CToken(CT_MacroLiteral, CSz("boo"))));
     TestThat(OptionalTokenRaw(Parser, CTokenType_Space));
     TestThat(OptionalTokenRaw(Parser, CTokenType_EscapedNewline));
-    TestThat(OptionalTokenRaw(Parser, CTokenType_Space));
     TestThat(OptionalTokenRaw(Parser, CTokenType_Space));
     TestThat(OptionalTokenRaw(Parser, CToken(132151u)));
 
