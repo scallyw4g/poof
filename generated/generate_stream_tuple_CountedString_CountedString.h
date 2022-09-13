@@ -14,7 +14,9 @@
     link_internal void
     Deallocate(tuple_CountedString_CountedString_stream *Stream)
     {
-      NotImplemented;
+      Stream->LastChunk = 0;
+      Stream->FirstChunk = 0;
+      VaporizeArena(Stream->Memory);
     }
 
         struct tuple_CountedString_CountedString_iterator

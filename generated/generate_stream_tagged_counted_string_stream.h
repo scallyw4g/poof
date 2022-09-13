@@ -14,7 +14,9 @@
     link_internal void
     Deallocate(tagged_counted_string_stream_stream *Stream)
     {
-      NotImplemented;
+      Stream->LastChunk = 0;
+      Stream->FirstChunk = 0;
+      VaporizeArena(Stream->Memory);
     }
 
         struct tagged_counted_string_stream_iterator

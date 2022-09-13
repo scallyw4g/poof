@@ -14,7 +14,9 @@
     link_internal void
     Deallocate(type_def_stream *Stream)
     {
-      NotImplemented;
+      Stream->LastChunk = 0;
+      Stream->FirstChunk = 0;
+      VaporizeArena(Stream->Memory);
     }
 
         struct type_def_iterator

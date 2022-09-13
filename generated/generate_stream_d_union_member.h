@@ -14,7 +14,9 @@
     link_internal void
     Deallocate(d_union_member_stream *Stream)
     {
-      NotImplemented;
+      Stream->LastChunk = 0;
+      Stream->FirstChunk = 0;
+      VaporizeArena(Stream->Memory);
     }
 
         struct d_union_member_iterator

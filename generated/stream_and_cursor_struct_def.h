@@ -33,7 +33,9 @@
     link_internal void
     Deallocate(compound_decl_stream *Stream)
     {
-      NotImplemented;
+      Stream->LastChunk = 0;
+      Stream->FirstChunk = 0;
+      VaporizeArena(Stream->Memory);
     }
 
         struct compound_decl_iterator

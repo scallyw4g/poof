@@ -12032,6 +12032,7 @@ DoPoofForWeb(char *zInput, umm InputLen)
         Append(&Builder, *E);
       }
       Result = Finalize(&Builder, Memory, True).Start;
+      Deallocate(&Global_ErrorStream);
     }
   }
 

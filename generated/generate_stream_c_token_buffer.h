@@ -14,7 +14,9 @@
     link_internal void
     Deallocate(c_token_buffer_stream *Stream)
     {
-      NotImplemented;
+      Stream->LastChunk = 0;
+      Stream->FirstChunk = 0;
+      VaporizeArena(Stream->Memory);
     }
 
         struct c_token_buffer_iterator
