@@ -6,10 +6,16 @@
 
         struct parser_stream
     {
+      memory_arena *Memory;
       parser_stream_chunk* FirstChunk;
       parser_stream_chunk* LastChunk;
     };
 
+    link_internal void
+    Deallocate(parser_stream *Stream)
+    {
+      NotImplemented;
+    }
 
         struct parser_iterator
     {
@@ -49,9 +55,15 @@
 
 
         link_internal parser *
-    Push(parser_stream* Stream, parser Element, memory_arena* Memory)
+    Push(parser_stream* Stream, parser Element)
     {
-      parser_stream_chunk* NextChunk = (parser_stream_chunk*)PushStruct(Memory, sizeof(parser_stream_chunk), 1, 0);
+      if (Stream->Memory == 0)
+      {
+        Stream->Memory = AllocateArena();
+      }
+
+      /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
+      parser_stream_chunk* NextChunk = (parser_stream_chunk*)PushStruct(Stream->Memory, sizeof(parser_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)
@@ -71,42 +83,6 @@
 
       parser *Result = &NextChunk->Element;
       return Result;
-    }
-
-    link_internal void
-    ConcatStreams( parser_stream *S1, parser_stream *S2)
-    {
-      if (S1->LastChunk)
-      {
-        Assert(S1->FirstChunk);
-
-        if (S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-          S1->LastChunk->Next = S2->FirstChunk;
-          S1->LastChunk = S2->LastChunk;
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-      }
-      else
-      {
-        Assert(!S1->FirstChunk);
-        Assert(!S1->LastChunk);
-
-        if(S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-
-        *S1 = *S2;
-      }
     }
 
 

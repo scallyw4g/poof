@@ -3260,7 +3260,13 @@
         DebugPrint("declaration_stream {\n", Depth);
       }
 
-                                                  DebugPrint("declaration_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("declaration_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -4921,7 +4927,13 @@
         DebugPrint("counted_string_stream {\n", Depth);
       }
 
-                                                  DebugPrint("counted_string_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("counted_string_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -5017,7 +5029,13 @@
         DebugPrint("tagged_counted_string_stream_stream {\n", Depth);
       }
 
-                                                  DebugPrint("tagged_counted_string_stream_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("tagged_counted_string_stream_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -5375,7 +5393,13 @@
         DebugPrint("c_token_buffer_stream {\n", Depth);
       }
 
-                                                  DebugPrint("c_token_buffer_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("c_token_buffer_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -5509,7 +5533,13 @@
         DebugPrint("parser_stream {\n", Depth);
       }
 
-                                                  DebugPrint("parser_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("parser_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -5707,7 +5737,13 @@
         DebugPrint("compound_decl_stream {\n", Depth);
       }
 
-                                                  DebugPrint("compound_decl_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("compound_decl_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -5803,7 +5839,13 @@
         DebugPrint("variable_decl_stream {\n", Depth);
       }
 
-                                                  DebugPrint("variable_decl_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("variable_decl_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -5899,7 +5941,13 @@
         DebugPrint("function_decl_stream {\n", Depth);
       }
 
-                                                  DebugPrint("function_decl_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("function_decl_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -5995,7 +6043,13 @@
         DebugPrint("enum_member_stream {\n", Depth);
       }
 
-                                                  DebugPrint("enum_member_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("enum_member_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -6129,7 +6183,13 @@
         DebugPrint("enum_decl_stream {\n", Depth);
       }
 
-                                                  DebugPrint("enum_decl_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("enum_decl_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -6359,7 +6419,13 @@
         DebugPrint("d_union_member_stream {\n", Depth);
       }
 
-                                                  DebugPrint("d_union_member_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("d_union_member_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -6455,7 +6521,13 @@
         DebugPrint("type_def_stream {\n", Depth);
       }
 
-                                                  DebugPrint("type_def_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("type_def_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -6551,7 +6623,13 @@
         DebugPrint("meta_func_arg_stream {\n", Depth);
       }
 
-                                                  DebugPrint("meta_func_arg_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("meta_func_arg_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -6647,7 +6725,13 @@
         DebugPrint("macro_def_stream {\n", Depth);
       }
 
-                                                  DebugPrint("macro_def_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("macro_def_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -6807,7 +6891,13 @@
         DebugPrint("meta_func_stream {\n", Depth);
       }
 
-                                                  DebugPrint("meta_func_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("meta_func_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -6903,7 +6993,13 @@
         DebugPrint("todo_stream {\n", Depth);
       }
 
-                                                  DebugPrint("todo_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("todo_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -6999,7 +7095,13 @@
         DebugPrint("tag_stream {\n", Depth);
       }
 
-                                                  DebugPrint("tag_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("tag_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -7095,7 +7197,13 @@
         DebugPrint("person_stream {\n", Depth);
       }
 
-                                                  DebugPrint("person_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("person_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -7191,7 +7299,13 @@
         DebugPrint("ast_node_expression_stream {\n", Depth);
       }
 
-                                                  DebugPrint("ast_node_expression_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("ast_node_expression_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -7287,7 +7401,13 @@
         DebugPrint("ast_node_variable_def_stream {\n", Depth);
       }
 
-                                                  DebugPrint("ast_node_variable_def_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("ast_node_variable_def_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -7383,7 +7503,13 @@
         DebugPrint("ast_node_stream {\n", Depth);
       }
 
-                                                  DebugPrint("ast_node_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("ast_node_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -7511,7 +7637,13 @@
         DebugPrint("tuple_CountedString_CountedString_stream {\n", Depth);
       }
 
-                                                  DebugPrint("tuple_CountedString_CountedString_stream_chunk FirstChunk {\n", Depth+2);
+                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
+              DebugPrint(RuntimeStruct.Memory, Depth+4);
+              DebugPrint("}\n", Depth+2);
+
+
+
+                                            DebugPrint("tuple_CountedString_CountedString_stream_chunk FirstChunk {\n", Depth+2);
               DebugPrint(RuntimeStruct.FirstChunk, Depth+4);
               DebugPrint("}\n", Depth+2);
 
@@ -7575,13 +7707,7 @@
         DebugPrint("tuple_CountedString_CountedString_buffer_builder {\n", Depth);
       }
 
-                                                  DebugPrint("memory_arena Memory {\n", Depth+2);
-              DebugPrint(RuntimeStruct.Memory, Depth+4);
-              DebugPrint("}\n", Depth+2);
-
-
-
-                                            DebugPrint("tuple_CountedString_CountedString_stream Chunks {\n", Depth+2);
+                                                  DebugPrint("tuple_CountedString_CountedString_stream Chunks {\n", Depth+2);
               DebugPrint(RuntimeStruct.Chunks, Depth+4);
               DebugPrint("}\n", Depth+2);
 

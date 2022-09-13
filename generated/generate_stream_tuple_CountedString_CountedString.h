@@ -6,10 +6,16 @@
 
         struct tuple_CountedString_CountedString_stream
     {
+      memory_arena *Memory;
       tuple_CountedString_CountedString_stream_chunk* FirstChunk;
       tuple_CountedString_CountedString_stream_chunk* LastChunk;
     };
 
+    link_internal void
+    Deallocate(tuple_CountedString_CountedString_stream *Stream)
+    {
+      NotImplemented;
+    }
 
         struct tuple_CountedString_CountedString_iterator
     {
@@ -49,9 +55,15 @@
 
 
         link_internal tuple_CountedString_CountedString *
-    Push(tuple_CountedString_CountedString_stream* Stream, tuple_CountedString_CountedString Element, memory_arena* Memory)
+    Push(tuple_CountedString_CountedString_stream* Stream, tuple_CountedString_CountedString Element)
     {
-      tuple_CountedString_CountedString_stream_chunk* NextChunk = (tuple_CountedString_CountedString_stream_chunk*)PushStruct(Memory, sizeof(tuple_CountedString_CountedString_stream_chunk), 1, 0);
+      if (Stream->Memory == 0)
+      {
+        Stream->Memory = AllocateArena();
+      }
+
+      /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
+      tuple_CountedString_CountedString_stream_chunk* NextChunk = (tuple_CountedString_CountedString_stream_chunk*)PushStruct(Stream->Memory, sizeof(tuple_CountedString_CountedString_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)
@@ -71,42 +83,6 @@
 
       tuple_CountedString_CountedString *Result = &NextChunk->Element;
       return Result;
-    }
-
-    link_internal void
-    ConcatStreams( tuple_CountedString_CountedString_stream *S1, tuple_CountedString_CountedString_stream *S2)
-    {
-      if (S1->LastChunk)
-      {
-        Assert(S1->FirstChunk);
-
-        if (S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-          S1->LastChunk->Next = S2->FirstChunk;
-          S1->LastChunk = S2->LastChunk;
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-      }
-      else
-      {
-        Assert(!S1->FirstChunk);
-        Assert(!S1->LastChunk);
-
-        if(S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-
-        *S1 = *S2;
-      }
     }
 
 

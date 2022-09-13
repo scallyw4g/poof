@@ -6,10 +6,16 @@
 
         struct meta_func_arg_stream
     {
+      memory_arena *Memory;
       meta_func_arg_stream_chunk* FirstChunk;
       meta_func_arg_stream_chunk* LastChunk;
     };
 
+    link_internal void
+    Deallocate(meta_func_arg_stream *Stream)
+    {
+      NotImplemented;
+    }
 
         struct meta_func_arg_iterator
     {
@@ -49,9 +55,15 @@
 
 
         link_internal meta_func_arg *
-    Push(meta_func_arg_stream* Stream, meta_func_arg Element, memory_arena* Memory)
+    Push(meta_func_arg_stream* Stream, meta_func_arg Element)
     {
-      meta_func_arg_stream_chunk* NextChunk = (meta_func_arg_stream_chunk*)PushStruct(Memory, sizeof(meta_func_arg_stream_chunk), 1, 0);
+      if (Stream->Memory == 0)
+      {
+        Stream->Memory = AllocateArena();
+      }
+
+      /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
+      meta_func_arg_stream_chunk* NextChunk = (meta_func_arg_stream_chunk*)PushStruct(Stream->Memory, sizeof(meta_func_arg_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)
@@ -71,42 +83,6 @@
 
       meta_func_arg *Result = &NextChunk->Element;
       return Result;
-    }
-
-    link_internal void
-    ConcatStreams( meta_func_arg_stream *S1, meta_func_arg_stream *S2)
-    {
-      if (S1->LastChunk)
-      {
-        Assert(S1->FirstChunk);
-
-        if (S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-          S1->LastChunk->Next = S2->FirstChunk;
-          S1->LastChunk = S2->LastChunk;
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-      }
-      else
-      {
-        Assert(!S1->FirstChunk);
-        Assert(!S1->LastChunk);
-
-        if(S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-
-        *S1 = *S2;
-      }
     }
 
 

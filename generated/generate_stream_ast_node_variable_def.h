@@ -6,10 +6,16 @@
 
         struct ast_node_variable_def_stream
     {
+      memory_arena *Memory;
       ast_node_variable_def_stream_chunk* FirstChunk;
       ast_node_variable_def_stream_chunk* LastChunk;
     };
 
+    link_internal void
+    Deallocate(ast_node_variable_def_stream *Stream)
+    {
+      NotImplemented;
+    }
 
         struct ast_node_variable_def_iterator
     {
@@ -49,9 +55,15 @@
 
 
         link_internal ast_node_variable_def *
-    Push(ast_node_variable_def_stream* Stream, ast_node_variable_def Element, memory_arena* Memory)
+    Push(ast_node_variable_def_stream* Stream, ast_node_variable_def Element)
     {
-      ast_node_variable_def_stream_chunk* NextChunk = (ast_node_variable_def_stream_chunk*)PushStruct(Memory, sizeof(ast_node_variable_def_stream_chunk), 1, 0);
+      if (Stream->Memory == 0)
+      {
+        Stream->Memory = AllocateArena();
+      }
+
+      /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
+      ast_node_variable_def_stream_chunk* NextChunk = (ast_node_variable_def_stream_chunk*)PushStruct(Stream->Memory, sizeof(ast_node_variable_def_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)
@@ -71,42 +83,6 @@
 
       ast_node_variable_def *Result = &NextChunk->Element;
       return Result;
-    }
-
-    link_internal void
-    ConcatStreams( ast_node_variable_def_stream *S1, ast_node_variable_def_stream *S2)
-    {
-      if (S1->LastChunk)
-      {
-        Assert(S1->FirstChunk);
-
-        if (S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-          S1->LastChunk->Next = S2->FirstChunk;
-          S1->LastChunk = S2->LastChunk;
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-      }
-      else
-      {
-        Assert(!S1->FirstChunk);
-        Assert(!S1->LastChunk);
-
-        if(S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-
-        *S1 = *S2;
-      }
     }
 
 

@@ -6,10 +6,16 @@
 
         struct function_decl_stream
     {
+      memory_arena *Memory;
       function_decl_stream_chunk* FirstChunk;
       function_decl_stream_chunk* LastChunk;
     };
 
+    link_internal void
+    Deallocate(function_decl_stream *Stream)
+    {
+      NotImplemented;
+    }
 
         struct function_decl_iterator
     {
@@ -49,9 +55,15 @@
 
 
         link_internal function_decl *
-    Push(function_decl_stream* Stream, function_decl Element, memory_arena* Memory)
+    Push(function_decl_stream* Stream, function_decl Element)
     {
-      function_decl_stream_chunk* NextChunk = (function_decl_stream_chunk*)PushStruct(Memory, sizeof(function_decl_stream_chunk), 1, 0);
+      if (Stream->Memory == 0)
+      {
+        Stream->Memory = AllocateArena();
+      }
+
+      /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
+      function_decl_stream_chunk* NextChunk = (function_decl_stream_chunk*)PushStruct(Stream->Memory, sizeof(function_decl_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)
@@ -71,42 +83,6 @@
 
       function_decl *Result = &NextChunk->Element;
       return Result;
-    }
-
-    link_internal void
-    ConcatStreams( function_decl_stream *S1, function_decl_stream *S2)
-    {
-      if (S1->LastChunk)
-      {
-        Assert(S1->FirstChunk);
-
-        if (S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-          S1->LastChunk->Next = S2->FirstChunk;
-          S1->LastChunk = S2->LastChunk;
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-      }
-      else
-      {
-        Assert(!S1->FirstChunk);
-        Assert(!S1->LastChunk);
-
-        if(S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-
-        *S1 = *S2;
-      }
     }
 
 

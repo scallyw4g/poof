@@ -1,13 +1,12 @@
     struct tuple_CountedString_CountedString_buffer_builder
     {
-      memory_arena* Memory = AllocateArena();
       tuple_CountedString_CountedString_stream Chunks;
     };
 
     link_internal void
     Append( tuple_CountedString_CountedString_buffer_builder* Builder, tuple_CountedString_CountedString E)
     {
-      Push(&Builder->Chunks, E, Builder->Memory);
+      Push(&Builder->Chunks, E);
     }
 
     struct tuple_CountedString_CountedString_buffer
@@ -49,8 +48,6 @@
         ++ElementIndex;
       }
       Assert(ElementIndex == Result.Count);
-
-      VaporizeArena(Builder->Memory);
 
       return Result;
     }

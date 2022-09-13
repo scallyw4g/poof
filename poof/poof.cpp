@@ -1540,7 +1540,7 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
     /* LogDirect("%S", CS(ParseErrorCursor)); */
 
     counted_string FullErrorText = Finalize(&Builder, &Global_PermMemory);
-    Push(&Global_ErrorStream, FullErrorText, &Global_PermMemory);
+    Push(&Global_ErrorStream, FullErrorText);
 
     if (Global_LogLevel <= LogLevel_Error)
     {
@@ -2817,7 +2817,7 @@ ExpandMacro( parse_context *Ctx,
         {
           while (TokensRemain(InstanceArgs))
           {
-            c_token_buffer *Arg = Push(&VarArgs, {}, TempMemory);
+            c_token_buffer *Arg = Push(&VarArgs, {});
             ParseMacroArgument(InstanceArgs, Arg);
           }
         }
@@ -5700,7 +5700,7 @@ PushMember(d_union_decl* dUnion, c_token MemberIdentifierToken, d_union_flags Fl
 {
   Assert(MemberIdentifierToken.Type == CTokenType_Identifier);
   d_union_member Member = DUnionMember(MemberIdentifierToken.Value, MemberIdentifierToken.Value, Flags);
-  Push(&dUnion->Members, Member, Memory);
+  Push(&dUnion->Members, Member);
 }
 
 link_internal counted_string
@@ -7365,7 +7365,7 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
       {
         type_spec TypeSpec = ParseTypeSpecifier(Ctx);
         variable_decl Arg = FinalizeVariableDecl(Ctx, &TypeSpec);
-        Push(&Result.Args, Arg, Ctx->Memory);
+        Push(&Result.Args, Arg);
 
         if (!OptionalToken(Parser, CTokenType_Comma))
         {
@@ -8365,7 +8365,7 @@ MembersOfType(compound_decl* Struct, counted_string MemberType, memory_arena *Me
         {
           if (StringsMatch(Member->variable_decl.Type.DatatypeToken->Value, MemberType))
           {
-            Push(&Result, *Member, Memory);
+            Push(&Result, *Member);
           }
         } break;
 
@@ -8502,12 +8502,12 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
         {
           Member.function_decl.Body = GetBodyTextForNextScope(Parser, Ctx->Memory);
         }
-        Push(&Result.Members, Member, Ctx->Memory);
+        Push(&Result.Members, Member);
       } break;
 
       case type_variable_decl:
       {
-        Push(&Result.Members, Member, Ctx->Memory);
+        Push(&Result.Members, Member);
       } break;
 
       case type_compound_decl:
@@ -8526,7 +8526,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
           AnonymousDecl = Insert(Datatype(&Member), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
         }
 
-        Push(&Result.Members, Member, Ctx->Memory);
+        Push(&Result.Members, Member);
       } break;
 
       /* { */
@@ -8580,7 +8580,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
                 Var->StaticBufferSize = Decl.StaticBufferSize;
                 Var->Value = Decl.Value;
 
-                Push(&Result.Members, Member, Ctx->Memory);
+                Push(&Result.Members, Member);
               } break;
 
               case type_compound_decl:
@@ -8611,7 +8611,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
                 }
                 TmpMember.variable_decl.Type.BaseType    = AnonymousDecl;
 
-                Push(&Result.Members, TmpMember, Ctx->Memory);
+                Push(&Result.Members, TmpMember);
               } break;
 
               case type_enum_decl:
@@ -8695,7 +8695,7 @@ ParseEnumBody(parse_context *Ctx, parser *Parser, enum_decl *Enum, memory_arena 
       Field.Expr = ParseExpression(Ctx);
     }
 
-    Push(&Enum->Members, Field, Ctx->Memory);
+    Push(&Enum->Members, Field);
 
     if(OptionalToken(Parser, CTokenType_Comma))
     {
@@ -8847,11 +8847,11 @@ ParseAndPushTypedef(parse_context *Ctx)
     Assert(Func.NameT);
 
     Info("Pushing function decl (%S)", Func.NameT ? Func.NameT->Value : CSz("anonymous"));
-    Push(&Ctx->Datatypes.Functions, Func, Ctx->Memory);
+    Push(&Ctx->Datatypes.Functions, Func);
   }
   else
   {
-    Push(&Ctx->Datatypes.Typedefs, Typedef, Ctx->Memory);
+    Push(&Ctx->Datatypes.Typedefs, Typedef);
   }
 }
 
@@ -8878,7 +8878,7 @@ ParseTypedef(parse_context *Ctx)
       MaybeEatAdditionalCommaSeperatedNames(Ctx);
       RequireToken(Parser, CTokenType_Semicolon);
 
-      Push(&Ctx->Datatypes.Structs, S, Ctx->Memory);
+      Push(&Ctx->Datatypes.Structs, S);
     }
     else if ( PeekToken(Parser, 0).Type == CTokenType_Identifier &&
               PeekToken(Parser, 1).Type == CTokenType_OpenBrace )
@@ -8896,7 +8896,7 @@ ParseTypedef(parse_context *Ctx)
       MaybeEatAdditionalCommaSeperatedNames(Ctx);
 
       RequireToken(Parser, CTokenType_Semicolon);
-      Push(&Ctx->Datatypes.Structs, S, Ctx->Memory);
+      Push(&Ctx->Datatypes.Structs, S);
     }
     else
     {
@@ -9646,7 +9646,7 @@ ParseFunctionCall(parse_context *Ctx, counted_string FunctionName)
   {
     ast_node_expression Arg = {};
     ParseExpression(Ctx, &Arg);
-    Push(&Node->Args, Arg, Ctx->Memory);
+    Push(&Node->Args, Arg);
 
     if(OptionalToken(Parser, CTokenType_Comma))
     {
@@ -9876,13 +9876,13 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         {
           case type_enum_decl:
           {
-            Push(&Ctx->Datatypes.Enums, Decl.enum_decl, Ctx->Memory);
+            Push(&Ctx->Datatypes.Enums, Decl.enum_decl);
           } break;
 
           case type_function_decl:
           {
             /* Info("Pushing function decl (%S)", Function.Type ? Function.Type->Value : CSz("anonymous")); */
-            Push(&Ctx->Datatypes.Functions, Decl.function_decl, Ctx->Memory); // Free function
+            Push(&Ctx->Datatypes.Functions, Decl.function_decl); // Free function
           } break;
 
 
@@ -9894,7 +9894,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
                   StructOrUnion.IsUnion ? CSz("union") : CSz("struct"),
                   StructOrUnion.Type ? StructOrUnion.Type->Value : CSz("(anonymous)") );
 
-            Push(&Ctx->Datatypes.Structs, StructOrUnion, Ctx->Memory);
+            Push(&Ctx->Datatypes.Structs, StructOrUnion);
 
             if (OptionalToken(Parser, CTokenType_Semicolon))
             {
@@ -10239,7 +10239,7 @@ UpdateTodo(todo_stream* Stream, todo Todo, memory_arena* Memory)
   }
   else
   {
-    Push(Stream, Todo, Memory);
+    Push(Stream, Todo);
     Result = StreamContains(Stream, Todo.Id);
   }
   return Result;
@@ -10252,7 +10252,7 @@ GetExistingOrCreate(tag_stream* Stream, counted_string Tag, memory_arena* Memory
   if (!Result)
   {
     tag NewTag = { .Tag = Tag };
-    Push(Stream, NewTag, Memory);
+    Push(Stream, NewTag);
     Result = StreamContains(Stream, Tag);
   }
   return Result;
@@ -10265,7 +10265,7 @@ GetExistingOrCreate(person_stream* People, counted_string PersonName, memory_are
   if (!Person)
   {
     person NewPerson = { .Name = PersonName };
-    Push(People, NewPerson, Memory);
+    Push(People, NewPerson);
     Person = StreamContains(People, PersonName);
   }
   return Person;
@@ -10312,7 +10312,7 @@ ParseAllTodosFromFile(counted_string Filename, memory_arena* Memory)
           LargestIdFoundInFile = Max(LargestIdFoundInFile, (u32)TodoId.UnsignedValue);
           counted_string TodoValue = Trim(ConcatTokensUntilNewline(Parser, Memory));
           todo NewTodo = Todo(TodoId.Value, TodoValue, False);
-          Push(&Tag->Todos, NewTodo, Memory);
+          Push(&Tag->Todos, NewTodo);
           EatWhitespace(Parser);
         }
 
@@ -10549,7 +10549,7 @@ CopyStream(meta_func_arg_stream* Stream, memory_arena* Memory)
   ITERATE_OVER(Stream)
   {
     meta_func_arg* Element = GET_ELEMENT(Iter);
-    Push(&Result, *Element, Memory);
+    Push(&Result, *Element);
   }
   return Result;
 }
@@ -11182,7 +11182,7 @@ ConcatStreams(counted_string_stream* S1, counted_string_stream* S2, memory_arena
   ITERATE_OVER(S2)
   {
     counted_string* Element = GET_ELEMENT(Iter);
-    Push(S1, *Element, Memory);
+    Push(S1, *Element);
   }
   return;
 }
@@ -11209,7 +11209,7 @@ ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_s
 
     if (Struct || Enum)
     {
-      Push(&Result, DatatypeName, Memory);
+      Push(&Result, DatatypeName);
     }
     else if (List)
     {
@@ -11514,7 +11514,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               if (Arg.Type)
               {
                 meta_func_arg_stream Args = {};
-                Push(&Args, ReplacementPattern(ArgName, Arg), Memory);
+                Push(&Args, ReplacementPattern(ArgName, Arg));
                 counted_string Code = Execute(&Func, &Args, Ctx, Memory);
                 RequireToken(Parser, CTokenType_CloseParen);
 
@@ -11545,7 +11545,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
             {
               counted_string FuncName = RequireToken(Parser, CTokenType_Identifier).Value;
               meta_func Func = ParseMetaFunctionDef(Parser, FuncName, Memory);
-              Push(FunctionDefs, Func, Memory);
+              Push(FunctionDefs, Func);
             }
 
           } break;
@@ -11563,13 +11563,13 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
             while (PeekToken(Parser).Type == CTokenType_Identifier)
             {
               counted_string Name = RequireToken(Parser, CTokenType_Identifier).Value;
-              Push(&NameList.Stream, Name, Memory);
+              Push(&NameList.Stream, Name);
               OptionalToken(Parser, CTokenType_Comma);
             }
 
             RequireToken(Parser, CTokenType_CloseBrace);
 
-            Push(&Ctx->NamedLists, NameList, Memory);
+            Push(&Ctx->NamedLists, NameList);
 
           } break;
 
@@ -11607,7 +11607,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               if (!StreamContains(&Excludes, Struct->Type->Value))
               {
                 meta_func_arg_stream Args = {};
-                Push(&Args, ReplacementPattern(StructFunc.ArgName, Datatype(Struct)), Memory);
+                Push(&Args, ReplacementPattern(StructFunc.ArgName, Datatype(Struct)));
                 counted_string Code = Execute(&StructFunc, &Args, Ctx, Memory);
                 Append(&OutputBuilder, Code);
               }
@@ -11621,7 +11621,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               if (!StreamContains(&Excludes, Enum->Name))
               {
                 meta_func_arg_stream Args = {};
-                Push(&Args, ReplacementPattern(EnumFunc.ArgName, Datatype(Enum)), Memory);
+                Push(&Args, ReplacementPattern(EnumFunc.ArgName, Datatype(Enum)));
                 counted_string Code = Execute(&EnumFunc, &Args, Ctx, Memory);
                 Append(&OutputBuilder, Code);
               }
@@ -11683,7 +11683,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               if (Arg.Type)
               {
                 meta_func_arg_stream Args = {};
-                Push(&Args, ReplacementPattern(Func->ArgName, Arg), Memory);
+                Push(&Args, ReplacementPattern(Func->ArgName, Arg));
                 counted_string Code = Execute(Func, &Args, Ctx, Memory);
                 while(OptionalToken(Parser, CTokenType_Semicolon));
 

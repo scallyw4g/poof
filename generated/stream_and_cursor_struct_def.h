@@ -25,10 +25,16 @@
 
         struct compound_decl_stream
     {
+      memory_arena *Memory;
       compound_decl_stream_chunk* FirstChunk;
       compound_decl_stream_chunk* LastChunk;
     };
 
+    link_internal void
+    Deallocate(compound_decl_stream *Stream)
+    {
+      NotImplemented;
+    }
 
         struct compound_decl_iterator
     {
@@ -68,9 +74,15 @@
 
 
         link_internal compound_decl *
-    Push(compound_decl_stream* Stream, compound_decl Element, memory_arena* Memory)
+    Push(compound_decl_stream* Stream, compound_decl Element)
     {
-      compound_decl_stream_chunk* NextChunk = (compound_decl_stream_chunk*)PushStruct(Memory, sizeof(compound_decl_stream_chunk), 1, 0);
+      if (Stream->Memory == 0)
+      {
+        Stream->Memory = AllocateArena();
+      }
+
+      /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
+      compound_decl_stream_chunk* NextChunk = (compound_decl_stream_chunk*)PushStruct(Stream->Memory, sizeof(compound_decl_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)
@@ -90,42 +102,6 @@
 
       compound_decl *Result = &NextChunk->Element;
       return Result;
-    }
-
-    link_internal void
-    ConcatStreams( compound_decl_stream *S1, compound_decl_stream *S2)
-    {
-      if (S1->LastChunk)
-      {
-        Assert(S1->FirstChunk);
-
-        if (S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-          S1->LastChunk->Next = S2->FirstChunk;
-          S1->LastChunk = S2->LastChunk;
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-      }
-      else
-      {
-        Assert(!S1->FirstChunk);
-        Assert(!S1->LastChunk);
-
-        if(S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-
-        *S1 = *S2;
-      }
     }
 
 

@@ -6,10 +6,16 @@
 
         struct tag_stream
     {
+      memory_arena *Memory;
       tag_stream_chunk* FirstChunk;
       tag_stream_chunk* LastChunk;
     };
 
+    link_internal void
+    Deallocate(tag_stream *Stream)
+    {
+      NotImplemented;
+    }
 
         struct tag_iterator
     {
@@ -49,9 +55,15 @@
 
 
         link_internal tag *
-    Push(tag_stream* Stream, tag Element, memory_arena* Memory)
+    Push(tag_stream* Stream, tag Element)
     {
-      tag_stream_chunk* NextChunk = (tag_stream_chunk*)PushStruct(Memory, sizeof(tag_stream_chunk), 1, 0);
+      if (Stream->Memory == 0)
+      {
+        Stream->Memory = AllocateArena();
+      }
+
+      /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
+      tag_stream_chunk* NextChunk = (tag_stream_chunk*)PushStruct(Stream->Memory, sizeof(tag_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)
@@ -71,42 +83,6 @@
 
       tag *Result = &NextChunk->Element;
       return Result;
-    }
-
-    link_internal void
-    ConcatStreams( tag_stream *S1, tag_stream *S2)
-    {
-      if (S1->LastChunk)
-      {
-        Assert(S1->FirstChunk);
-
-        if (S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-          S1->LastChunk->Next = S2->FirstChunk;
-          S1->LastChunk = S2->LastChunk;
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-      }
-      else
-      {
-        Assert(!S1->FirstChunk);
-        Assert(!S1->LastChunk);
-
-        if(S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-
-        *S1 = *S2;
-      }
     }
 
 

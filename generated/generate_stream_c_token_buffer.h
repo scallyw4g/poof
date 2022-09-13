@@ -6,10 +6,16 @@
 
         struct c_token_buffer_stream
     {
+      memory_arena *Memory;
       c_token_buffer_stream_chunk* FirstChunk;
       c_token_buffer_stream_chunk* LastChunk;
     };
 
+    link_internal void
+    Deallocate(c_token_buffer_stream *Stream)
+    {
+      NotImplemented;
+    }
 
         struct c_token_buffer_iterator
     {
@@ -49,9 +55,15 @@
 
 
         link_internal c_token_buffer *
-    Push(c_token_buffer_stream* Stream, c_token_buffer Element, memory_arena* Memory)
+    Push(c_token_buffer_stream* Stream, c_token_buffer Element)
     {
-      c_token_buffer_stream_chunk* NextChunk = (c_token_buffer_stream_chunk*)PushStruct(Memory, sizeof(c_token_buffer_stream_chunk), 1, 0);
+      if (Stream->Memory == 0)
+      {
+        Stream->Memory = AllocateArena();
+      }
+
+      /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
+      c_token_buffer_stream_chunk* NextChunk = (c_token_buffer_stream_chunk*)PushStruct(Stream->Memory, sizeof(c_token_buffer_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)
@@ -71,42 +83,6 @@
 
       c_token_buffer *Result = &NextChunk->Element;
       return Result;
-    }
-
-    link_internal void
-    ConcatStreams( c_token_buffer_stream *S1, c_token_buffer_stream *S2)
-    {
-      if (S1->LastChunk)
-      {
-        Assert(S1->FirstChunk);
-
-        if (S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-          S1->LastChunk->Next = S2->FirstChunk;
-          S1->LastChunk = S2->LastChunk;
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-      }
-      else
-      {
-        Assert(!S1->FirstChunk);
-        Assert(!S1->LastChunk);
-
-        if(S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-
-        *S1 = *S2;
-      }
     }
 
 

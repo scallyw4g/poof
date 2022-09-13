@@ -6,10 +6,16 @@
 
         struct todo_stream
     {
+      memory_arena *Memory;
       todo_stream_chunk* FirstChunk;
       todo_stream_chunk* LastChunk;
     };
 
+    link_internal void
+    Deallocate(todo_stream *Stream)
+    {
+      NotImplemented;
+    }
 
         struct todo_iterator
     {
@@ -49,9 +55,15 @@
 
 
         link_internal todo *
-    Push(todo_stream* Stream, todo Element, memory_arena* Memory)
+    Push(todo_stream* Stream, todo Element)
     {
-      todo_stream_chunk* NextChunk = (todo_stream_chunk*)PushStruct(Memory, sizeof(todo_stream_chunk), 1, 0);
+      if (Stream->Memory == 0)
+      {
+        Stream->Memory = AllocateArena();
+      }
+
+      /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
+      todo_stream_chunk* NextChunk = (todo_stream_chunk*)PushStruct(Stream->Memory, sizeof(todo_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)
@@ -71,42 +83,6 @@
 
       todo *Result = &NextChunk->Element;
       return Result;
-    }
-
-    link_internal void
-    ConcatStreams( todo_stream *S1, todo_stream *S2)
-    {
-      if (S1->LastChunk)
-      {
-        Assert(S1->FirstChunk);
-
-        if (S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-          S1->LastChunk->Next = S2->FirstChunk;
-          S1->LastChunk = S2->LastChunk;
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-      }
-      else
-      {
-        Assert(!S1->FirstChunk);
-        Assert(!S1->LastChunk);
-
-        if(S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-
-        *S1 = *S2;
-      }
     }
 
 

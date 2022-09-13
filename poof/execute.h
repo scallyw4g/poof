@@ -358,7 +358,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                          (HaveConstraint && ConstraintPassed) )
                       {
                         meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
-                        Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)), Memory);
+                        Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)));
                         Rewind(MapMemberScope.Tokens);
                         counted_string StructFieldOutput = Execute(&MapMemberScope, &NewArgs, Ctx, Memory);
                         if (MapMemberScope.ErrorCode)
@@ -376,7 +376,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                     case type_compound_decl:
                     {
                       meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
-                      Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)), Memory);
+                      Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)));
                       Rewind(MapMemberScope.Tokens);
                       counted_string StructFieldOutput = Execute(&MapMemberScope, &NewArgs, Ctx, Memory);
                       if (MapMemberScope.ErrorCode)
@@ -421,7 +421,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                   {
                     enum_member* EnumMember = GET_ELEMENT(Iter);
                     meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
-                    Push(&NewArgs, ReplacementPattern(EnumValueMatch->Value, Datatype(EnumMember)), Memory);
+                    Push(&NewArgs, ReplacementPattern(EnumValueMatch->Value, Datatype(EnumMember)));
                     Rewind(NextScope.Tokens);
                     counted_string EnumFieldOutput = Execute(&NextScope, &NewArgs, Ctx, Memory);
                     if (NextScope.ErrorCode)
@@ -480,7 +480,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
           RequireToken(Scope, CTokenType_CloseParen);
 
           meta_func_arg_stream NewArgs = {};
-          Push(&NewArgs, ReplacementPattern(NestedFunc->ArgName, Arg->Data), Memory);
+          Push(&NewArgs, ReplacementPattern(NestedFunc->ArgName, Arg->Data));
           counted_string NestedCode = Execute(NestedFunc, &NewArgs, Ctx, Memory);
           if (NestedFunc->Body.ErrorCode)
           {

@@ -25,10 +25,16 @@
 
         struct counted_string_stream
     {
+      memory_arena *Memory;
       counted_string_stream_chunk* FirstChunk;
       counted_string_stream_chunk* LastChunk;
     };
 
+    link_internal void
+    Deallocate(counted_string_stream *Stream)
+    {
+      NotImplemented;
+    }
 
         struct counted_string_iterator
     {
@@ -68,9 +74,15 @@
 
 
         link_internal counted_string *
-    Push(counted_string_stream* Stream, counted_string Element, memory_arena* Memory)
+    Push(counted_string_stream* Stream, counted_string Element)
     {
-      counted_string_stream_chunk* NextChunk = (counted_string_stream_chunk*)PushStruct(Memory, sizeof(counted_string_stream_chunk), 1, 0);
+      if (Stream->Memory == 0)
+      {
+        Stream->Memory = AllocateArena();
+      }
+
+      /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
+      counted_string_stream_chunk* NextChunk = (counted_string_stream_chunk*)PushStruct(Stream->Memory, sizeof(counted_string_stream_chunk), 1, 0);
       NextChunk->Element = Element;
 
       if (!Stream->FirstChunk)
@@ -90,42 +102,6 @@
 
       counted_string *Result = &NextChunk->Element;
       return Result;
-    }
-
-    link_internal void
-    ConcatStreams( counted_string_stream *S1, counted_string_stream *S2)
-    {
-      if (S1->LastChunk)
-      {
-        Assert(S1->FirstChunk);
-
-        if (S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-          S1->LastChunk->Next = S2->FirstChunk;
-          S1->LastChunk = S2->LastChunk;
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-      }
-      else
-      {
-        Assert(!S1->FirstChunk);
-        Assert(!S1->LastChunk);
-
-        if(S2->FirstChunk)
-        {
-          Assert(S2->LastChunk);
-        }
-        else
-        {
-          Assert(!S2->LastChunk);
-        }
-
-        *S1 = *S2;
-      }
     }
 
 
