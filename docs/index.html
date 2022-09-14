@@ -1,7 +1,9 @@
 <html>
   <head>
-    <link rel="stylesheet" href="index.css">
     <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,0" />
+    <link rel="stylesheet" href="index.css">
+
     <script>
       var global_InitExample = null;
       var global_EditorsInitialized = false;
@@ -27,6 +29,7 @@
     <ul id='main-nav'>
 
       <div
+        class='nav-link'
         hx-get='about'
         hx-swap='innerHTML'
         hx-target='#content'
@@ -35,6 +38,7 @@
       </div>
 
       <div
+        class='nav-link'
         hx-get='motivation'
         hx-swap='innerHTML'
         hx-target='#content'
@@ -43,6 +47,7 @@
       </div>
 
       <div
+        class='nav-link'
         hx-get='language-ref'
         hx-swap='innerHTML'
         hx-target='#content'
@@ -51,12 +56,21 @@
       </div>
 
       <div
+        class='nav-link'
         hx-get='examples'
         hx-swap='innerHTML'
         hx-target='#content'
       >
         Examples
       </div>
+
+      <a
+        class='nav-link'
+        href='https://github.com/jjbandit/poof'
+        target='_blank'
+      >
+        <span class='pad-right-5'>Github</span><span class="material-symbols-outlined">open_in_new</span>
+      </a>
 
     </ul>
 
