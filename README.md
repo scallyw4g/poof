@@ -1,10 +1,8 @@
 ### Pre-alpha Disclaimer
 
-Features may change or be removed without warning.  Features documented in the
-examples folder are sorted in (roughly) descending order from most-stable to
-least-stable.
-
-If you to take `poof` for a test-drive I'd love to hear about it!
+`poof` is quickly approaching 0.1.0-alpha where features will stabilize
+somewhat, however it's not quite there yet.  Expect some churn in the next few
+weeks.
 
 # Quickstart
 
@@ -13,15 +11,15 @@ git clone --recursive https://github.com/jjbandit/poof.git poof
 cd poof && ./make.sh BuildAllBinariesRunAllTests
 ```
 
+# Documentation
+
+There's a [website](https://scallyw4g.github.io/poof/) with examples and an
+interactive playground if you want quickly give poof a try.
+
 # About
+
 `poof` is a 'metaprogramming language' that aims to bring some of the niceties
 of more modern languages to C.
-
-`poof` parses a small subset of C++, so you can use it in your codebase that
-makes use of operator overloading and simple templates.
-
-`poof` requires a C++ compiler to build, though I'm making an effort to remove
-the use of C++ features in favor of using `poof` itself.
 
 
 # Features
@@ -51,13 +49,8 @@ the use of C++ features in favor of using `poof` itself.
 
 ## Required Tools to Build
 
-`poof` depends on two submodules to build, which are themselves entirely
-self-contained.  The CRT is the only external dependency, which I may remove
-in the future.
-
-NOTE(Jesse): This may not be strictly true on Windows .. I think the OS loads
-some DLLs (and launches threads) that a userspace process has little or no
-control over.  TBD if we care about this level of cleanliness.
+`poof` requires a C++ compiler to build, though I'm making an effort to remove
+the use of C++ features in favor of using `poof` itself.
 
 ### Linux
 
@@ -78,11 +71,8 @@ slightly more onerous to set up.
 
 ### Mac
 
-OSX is currently unsupported because I do not own Apple hardware.  Porting to
-Apple should be a minimal amount of effort; I'd be happy to do it if someone
-would donate me a Macbook.  PRs are also most welcome. Feel free to open an
-issue if you're interested in OSX support.
-
+Currently unsupported.  If you're interested in compiling poof on OSX please
+open an issue :)
 
 # Building
 
@@ -92,7 +82,7 @@ issue if you're interested in OSX support.
 
 ### Build:
 
-`./make.sh BuildAllBinariesRunAllTests` Go nuclear -- builds everything and runs all tests
+`./make.sh BuildAllBinariesRunAllTests` Builds everything and runs all tests
 
 ---
 
@@ -101,6 +91,12 @@ issue if you're interested in OSX support.
 `./make.sh BuildPoof` Builds poof binary; required for running integration tests
 
 `./make.sh BuildParserTests` Builds parser test suite binary
+
+---
+
+`./make.sh BuildPoofEmcc` Build poof targeting WASM.  Requires `emcc` to be installed
+
+`./make.sh BootstrapWeb` Once you've installed emcc, this bootstraps the rest of the WASM compilation tools
 
 ---
 
@@ -131,18 +127,6 @@ At the time of this writing, the tool relies on itself to generate ~3.5k LoC
 (14k if you count debug printing code) and makes use of every documented
 feature.  [Bonsai](https://github.com/jjbandit/bonsai) relies on `poof` to
 generate ~15k LoC (>30k including DebugPrint).
-
-At the moment, error messages are sometimes misleading or missing.  Generally,
-UX is reasonable in some places, and highly questionable in others.
-
-That said, helpful error reporting is a primary concern for `poof`.  I've put a
-large amount of effort into writing a system that makes error reporting easy
-for the language and helpful for the user.  Taking the error reporting system
-and putting it to use at the language level is the final step.  The C parser
-uses the error reporting system extensively, and it works great.
-
-
-
 
 ## Roadmap to 0.1.0-alpha
 
@@ -192,14 +176,14 @@ uses the error reporting system extensively, and it works great.
   - [✓] C https://github.com/heroseh/hcc
   - [o] C https://github.com/redis/redis
 
-[✓] collate the above projects into an extended integration test suite to ensure we don't break the parser.
+[✓] collate the above projects into an extended integration test suite to ensure we don't break the parser
 
 ### UX
 [✓] Fix a laundry list of issues I have logged that result in unnecessary friction
 
-[o] Audit error messages; find nonsensical, misleading or missing errors
+[✓] Audit error messages; find nonsensical, misleading or missing errors
 
-[\_] Consider options for controlling whitespace in generated code.
+[✓] Control whitespace in generated code
 
 
 
