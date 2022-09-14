@@ -18211,7 +18211,7 @@
        return new LanguageSupport(cppLanguage);
    }
 
-   var defaultOutputEditorText = "// Hit the big red button to generate code!";
+   var defaultOutputEditorText = "//\n// Hit the metaprogramming button to generate code!\n//";
 
    var EnvInitialized = false;
    var srcEditor = null;
@@ -18242,9 +18242,9 @@
        {
        }
 
-       let editorDiv = document.querySelector("div#editor");
-       let outputDiv = document.querySelector("div#output");
-       let bigRedButton = document.querySelector("div#big-red-button");
+       let editorDiv = document.querySelector("div#src-editor");
+       let outputDiv = document.querySelector("div#output-editor");
+       let bigRedButton = document.querySelector("div#metaprogramming-button");
        DoPoofForWeb = Module.cwrap('DoPoofForWeb', 'string', ['string', 'number']);
 
        srcEditor = InitEditor("// Error loading source ..", editorDiv);

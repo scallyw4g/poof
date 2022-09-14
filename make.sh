@@ -8,17 +8,17 @@
 # Calling functions by name on the command line shouldn't be affected by these.
 
 
-RunPreemptivePoof=1
+# RunPreemptivePoof=1
 
 # BuildAllBinariesRunAllTests=1
 
-RunPoof=1
+# RunPoof=1
 # BuildPoof=1
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 # POOF_DEBUGGER="gdb --args"
 
-# BuildPoofEmcc=1
-# RollupEmcc=1
+BuildPoofEmcc=1
+RollupEmcc=1
 
 # RunParserTests=1
 # BuildParserTests=1
@@ -57,12 +57,12 @@ EXTENDED_INTEGRATION_TESTS_SRC="$ROOT/tests/integration_extended"
 
 function RollupEmcc
 {
-  if [ -x web/node_modules/.bin/rollup ]; then
+  if [ -x docs/node_modules/.bin/rollup ]; then
 
-    web/node_modules/.bin/rollup                               \
-      web/main.js                                              \
+   docs/node_modules/.bin/rollup                               \
+     docs/main.js                                              \
       -f iife                                                  \
-      -o web/main.bundle.js                                    \
+      -o docs/main.bundle.js                                    \
       -p @rollup/plugin-node-resolve
   else
     echo -e "$Error Rollup not found, try running './make.sh BootstrapWeb'"
@@ -108,7 +108,7 @@ function BuildPoofEmcc
       -I "$ROOT"                             \
       -I "$ROOT/include"                     \
       -I "$ROOT/poof"                        \
-      -o web/poof_runtime.js
+      -o docs/poof_runtime.js
 
 
     if [ $? -eq 0 ]; then
@@ -118,12 +118,12 @@ function BuildPoofEmcc
       exit 1
     fi
 
-  if [ -d web/node_modules ]; then
+  if [ -d docs/node_modules ]; then
     RollupEmcc
   else
-    echo -e "$Info ./web/node_modules could not be found! Attempting to bootstrap"
+    echo -e "$Info ./docs/node_modules could not be found! Attempting to bootstrap"
     BootstrapWeb
-    if [ -d web/node_modules ]; then
+    if [ -d docs/node_modules ]; then
       RollupEmcc
     fi
   fi
@@ -140,7 +140,7 @@ function BuildPoofEmcc
 
 function BootstrapWeb
 {
-  pushd web > /dev/null 2>&1
+  pushd docs > /dev/null 2>&1
 
   which npm > /dev/null
   if [ $? -eq 0 ]; then
@@ -148,10 +148,10 @@ function BootstrapWeb
     if [ $? -eq 0 ]; then
       echo -e "$Success BootstrapWeb complete!"
     else
-      echo -e "$Failed Bootstrapping web"
+      echo -e "$Failed Bootstrapping docs"
     fi
   else
-    echo -e "$Error No installation of npm detected.  To bootstrap web, please install npm"
+    echo -e "$Error No installation of npm detected.  To bootstrap docs, please install npm"
   fi
   popd > /dev/null 2>&1
 }

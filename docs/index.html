@@ -1,6 +1,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
     <script>
       var global_InitExample = null;
       var global_EditorsInitialized = false;
@@ -21,12 +22,12 @@
   <body>
 
     <h1>Poof</h1>
-    <span>A metaprogramming language and runtime</span>
+    <span class='tagline'>A metaprogramming language and runtime</span>
 
-    <ul>
+    <ul id='main-nav'>
 
       <div
-        hx-get='/web/about'
+        hx-get='about'
         hx-swap='innerHTML'
         hx-target='#content'
       >
@@ -34,7 +35,7 @@
       </div>
 
       <div
-        hx-get='/web/motivation'
+        hx-get='motivation'
         hx-swap='innerHTML'
         hx-target='#content'
       >
@@ -42,7 +43,15 @@
       </div>
 
       <div
-        hx-get='/web/examples'
+        hx-get='language-ref'
+        hx-swap='innerHTML'
+        hx-target='#content'
+      >
+        Language Reference
+      </div>
+
+      <div
+        hx-get='examples'
         hx-swap='innerHTML'
         hx-target='#content'
       >

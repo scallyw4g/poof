@@ -15,7 +15,7 @@ Module.expectedDataFileDownloads++;
   } else if (typeof process === "undefined" && typeof location !== "undefined") {
    PACKAGE_PATH = encodeURIComponent(location.pathname.toString().substring(0, location.pathname.toString().lastIndexOf("/")) + "/");
   }
-  var PACKAGE_NAME = "web/poof_runtime.data";
+  var PACKAGE_NAME = "docs/poof_runtime.data";
   var REMOTE_PACKAGE_BASE = "poof_runtime.data";
   if (typeof Module["locateFilePackage"] === "function" && !Module["locateFile"]) {
    Module["locateFile"] = Module["locateFilePackage"];
@@ -152,9 +152,9 @@ Module.expectedDataFileDownloads++;
     for (var i = 0; i < files.length; ++i) {
      DataRequest.prototype.requests[files[i].filename].onload();
     }
-    Module["removeRunDependency"]("datafile_web/poof_runtime.data");
+    Module["removeRunDependency"]("datafile_docs/poof_runtime.data");
    }
-   Module["addRunDependency"]("datafile_web/poof_runtime.data");
+   Module["addRunDependency"]("datafile_docs/poof_runtime.data");
    if (!Module.preloadResults) Module.preloadResults = {};
    Module.preloadResults[PACKAGE_NAME] = {
     fromCache: false
