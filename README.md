@@ -133,8 +133,6 @@ generate ~15k LoC (>30k including DebugPrint).
 
 ## Roadmap to 0.1.0-alpha
 
-### Feature Set
-
 [✓] = finished
 
 [o] = started
@@ -144,24 +142,20 @@ generate ~15k LoC (>30k including DebugPrint).
 ---
 
 ### Documentation
-[o] Write example code
+[✓] Write example code
 
 [o] Formally specify feature set for 0.1.0-alpha
 
-- self-informed by the features required to build `poof`
-
 [\_] Write language documentation
 
-- For alpha this may be the same as example code, TBD
-
-### Behavior
+### Behavior & Testing
 [✓] Parse include graph of `poof` (excluding CRT headers)
 
 [✓] Parse include graph of `poof` (including CRT headers)
 
 [✓] Write test suite that exhaustively validates behavior of the C parser
 
-[o] Write test suite that validates the behavior of `poof`
+[✓] Write test suite that validates the behavior of `poof`
 
 ### Hardening
 [✓] parse all C headers on my linux system
