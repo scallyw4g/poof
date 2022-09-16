@@ -473,7 +473,7 @@ function BootstrapExtendedIntegrationTests
   BootstrapSingleExtendedIntegrationTest
 
   test_name=bonsai
-  test_repo=git@github.com:jjbandit/bonsai
+  test_repo=git@github.com:scallyw4g/bonsai
   BootstrapSingleExtendedIntegrationTest '--recursive'
 
   test_name=hcc

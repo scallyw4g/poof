@@ -7,7 +7,7 @@ weeks.
 # Quickstart
 
 ```
-git clone --recursive https://github.com/jjbandit/poof.git poof
+git clone --recursive https://github.com/scallyw4g/poof.git poof
 cd poof && ./make.sh BuildAllBinariesRunAllTests
 ```
 
@@ -81,7 +81,7 @@ open an issue :)
 
 ### Clone:
 
-`git clone --recursive https://github.com/jjbandit/poof.git poof`
+`git clone --recursive https://github.com/scallyw4g/poof.git poof`
 
 ### Build:
 
@@ -128,7 +128,7 @@ open an issue :)
 
 At the time of this writing, the tool relies on itself to generate ~3.5k LoC
 (14k if you count debug printing code) and makes use of every documented
-feature.  [Bonsai](https://github.com/jjbandit/bonsai) relies on `poof` to
+feature.  [Bonsai](https://github.com/scallyw4g/bonsai) relies on `poof` to
 generate ~15k LoC (>30k including DebugPrint).
 
 ## Roadmap to 0.1.0-alpha
@@ -169,8 +169,8 @@ generate ~15k LoC (>30k including DebugPrint).
 [o] parse all C headers on my windows system
 
 [o] parse some open-source C and C++ projects
-  - [✓] C++ https://github.com/jjbandit/poof
-  - [✓] C++ https://github.com/jjbandit/bonsai
+  - [✓] C++ https://github.com/scallyw4g/poof
+  - [✓] C++ https://github.com/scallyw4g/bonsai
   - [✓] C++ https://github.com/HandmadeHero
   - [o] C++ https://github.com/oil/oil
   - [o] C++ https://github.com/nakst/gf
@@ -192,13 +192,13 @@ generate ~15k LoC (>30k including DebugPrint).
 
 # Examples
 
-See the [examples](https://github.com/jjbandit/poof/tree/master/examples)
+See the [examples](https://github.com/scallyw4g/poof/tree/master/examples)
 folder for, well, examples of how to use `poof`.  Take note that these examples
 are meant to demonstrate language features, and make heavy use of printf.  This
 is not a typical use-case, but it makes visualizing the output of `poof` easier.
 
 For less contrived examples of using `poof` have a look at the
-[functions](https://github.com/jjbandit/poof/blob/master/poof/functions.h) used
+[functions](https://github.com/scallyw4g/poof/blob/master/poof/functions.h) used
 to build `poof`, and their
-[output](https://github.com/jjbandit/poof/tree/master/poof/generated).
+[output](https://github.com/scallyw4g/poof/tree/master/poof/generated).
 

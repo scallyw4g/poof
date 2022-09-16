@@ -259,7 +259,7 @@ struct this_completely_breaks_our_DebugPrint_code
 
 //
 // For an implementation of DebugPrint that handles arbitrary code, see the
-// implementation in [bonsai_stdlib](https://github.com/jjbandit/bonsai_stdlib/blob/master/headers/debug_print.h)
+// implementation in [bonsai_stdlib](https://github.com/scallyw4g/bonsai_stdlib/blob/master/headers/debug_print.h)
 //
 // The bonsai_stdlib code relies on a C++ compiler, so we don't have to do all
 // the gymnastics to generate functions with unique names, which makes

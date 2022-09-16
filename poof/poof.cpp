@@ -6133,7 +6133,7 @@ PrintToStdout(CSz(
 "\n"
 " -- Experimental Options --\n"
 "\n"
-" -d       | --do-debug-window    : open performance debug window.  Requires https://github.com/jjbandit/bonsai_debug to be built.\n"
+" -d       | --do-debug-window    : open performance debug window.  Requires https://github.com/scallyw4g/bonsai_debug to be built.\n"
 "                                   this is currently not well supported, or documented, and will likely crash `poof`\n"
 "\n"));
 
