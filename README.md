@@ -16,6 +16,9 @@ cd poof && ./make.sh BuildAllBinariesRunAllTests
 There's a [website](https://scallyw4g.github.io/poof/) with examples and an
 interactive playground if you want quickly give poof a try.
 
+Proper documentation is currently a WIP, but there is example code on the
+website as well as in this repository.
+
 # About
 
 `poof` is a 'metaprogramming language' that aims to bring some of the niceties
