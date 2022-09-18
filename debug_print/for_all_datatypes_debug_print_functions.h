@@ -8742,6 +8742,14 @@ link_internal void DebugPrint( c_token_type RuntimeValue, u32 Depth)
     {
       DebugPrint("CT_MacroLiteral_SelfRefExpansion", Depth);
     } break;
+    case CT_PreprocessorHasInclude:
+    {
+      DebugPrint("CT_PreprocessorHasInclude", Depth);
+    } break;
+    case CT_PreprocessorHasIncludeNext:
+    {
+      DebugPrint("CT_PreprocessorHasIncludeNext", Depth);
+    } break;
     case CT_PreprocessorPaste:
     {
       DebugPrint("CT_PreprocessorPaste", Depth);

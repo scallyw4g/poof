@@ -12,13 +12,13 @@
 
 # BuildAllBinariesRunAllTests=1
 
-# RunPoof=1
-# BuildPoof=1
+RunPoof=1
+BuildPoof=1
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 # POOF_DEBUGGER="gdb --args"
 
-BuildPoofEmcc=1
-RollupEmcc=1
+# BuildPoofEmcc=1
+# RollupEmcc=1
 
 # RunParserTests=1
 # BuildParserTests=1
@@ -431,7 +431,6 @@ function RunExtendedIntegrationTests
   test_name=gf
   RunSingleExtendedIntegrationTest \
     "$BIN/poof                     \
-    --log-level LogLevel_Shush     \
       -I .                         \
       gf2.cpp"
   echo "           - NOTE(Jesse): poof is known to not handle gf correctly yet.  This failure is expected"
@@ -490,7 +489,7 @@ function BuildAndRunAllExamples
 {
   ColorizeTitle "Building and Running examples"
   pushd examples > /dev/null
-  ./make_all_examples.sh # > /dev/null
+  ./make_all_examples.sh > /dev/null
 
   if [ $? -eq 0 ]; then
     echo -e "$Success Examples built and ran"

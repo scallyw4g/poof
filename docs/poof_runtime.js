@@ -289,25 +289,25 @@ Module.expectedDataFileDownloads++;
   }, {
    "filename": "/examples/009_debug_print/main.c",
    "start": 78830,
-   "end": 85269
+   "end": 85270
   }, {
    "filename": "/examples/009_debug_print/print_primitives.h",
-   "start": 85269,
-   "end": 85380
+   "start": 85270,
+   "end": 85381
   }, {
    "filename": "/examples/make_all_examples.sh",
-   "start": 85380,
-   "end": 85650
+   "start": 85381,
+   "end": 85651
   }, {
    "filename": "/examples/make_individual_example.sh",
-   "start": 85650,
-   "end": 86133
+   "start": 85651,
+   "end": 86134
   }, {
    "filename": "/examples/tags",
-   "start": 86133,
-   "end": 93466
+   "start": 86134,
+   "end": 93467
   } ],
-  "remote_package_size": 93466
+  "remote_package_size": 93467
  });
 })();
 

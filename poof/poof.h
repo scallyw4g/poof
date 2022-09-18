@@ -246,6 +246,8 @@ enum c_token_type
   CT_MacroLiteral,
   CT_MacroLiteral_SelfRefExpansion,
 
+  CT_PreprocessorHasInclude,
+  CT_PreprocessorHasIncludeNext,
   CT_PreprocessorPaste,
   CT_PreprocessorPaste_InvalidToken,
 

@@ -4513,6 +4513,14 @@ TryTransmuteKeywordToken(c_token *T, c_token *LastTokenPushed)
   {
     T->Type = CT_KeywordAttribute;
   }
+  else if ( StringsMatch(T->Value, CSz("__has_include")) )
+  {
+    T->Type = CT_PreprocessorHasInclude;
+  }
+  else if ( StringsMatch(T->Value, CSz("__has_include_next")) )
+  {
+    T->Type = CT_PreprocessorHasIncludeNext;
+  }
   else if ( StringsMatch(T->Value, CSz("__VA_ARGS__")) )
   {
     T->Type = CT_Preprocessor__VA_ARGS__;
@@ -7697,16 +7705,16 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
 
   if (RawTokensRemain(Parser))
   {
-    c_token T = PeekTokenRaw(Parser); // Has to be raw because newlines delimit the end of a macro expression
-    switch (T.Type)
+    c_token *T = PeekTokenRawPointer(Parser); // Has to be raw because newlines delimit the end of a macro expression
+    switch (T->Type)
     {
       case CT_MacroLiteral:
       {
-        if (T.Erased)
+        if (T->Erased)
         {
           RequireTokenRaw(Parser, T);
 
-          if (T.Macro.Def->Type == type_macro_function)
+          if (T->Macro.Def->Type == type_macro_function)
           {
             c_token Next = PeekTokenRaw(Parser);
             if (Next.Type == CTokenType_OpenParen)
@@ -7749,8 +7757,8 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
         if (OptionalTokenRaw(Parser, CToken(CSz("defined"))))
         {
           EatSpacesTabsAndEscapedNewlines(Parser);
-          c_token NextToken = PeekTokenRaw(Parser);
-          switch (NextToken.Type)
+          c_token *NextToken = PeekTokenRawPointer(Parser);
+          switch (NextToken->Type)
           {
             case CT_MacroLiteral:
             case CTokenType_Identifier:
@@ -7789,13 +7797,15 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
               Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, LogicalNotNextValue ? !NextTokenIsMacro : NextTokenIsMacro, False);
             } break;
 
-            InvalidDefaultCase;
+            InvalidDefaultError( Parser,
+                                 FormatCountedString_(TranArena, CSz(" ResolveMacroConstantExpression failed : Invalid %S(%S)"), ToString(NextToken->Type), NextToken->Value ),
+                                 NextToken );
           }
         }
         else
         {
           // TODO(Jesse)(correctness): Call TryTransmuteIdentifierToMacro() here?
-          macro_def *Macro = GetMacroDef(Ctx, T.Value);
+          macro_def *Macro = GetMacroDef(Ctx, T->Value);
           if (Macro)
           {
             c_token *pT = PeekTokenRawPointer(Parser);
@@ -7832,16 +7842,16 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
       case CTokenType_CharLiteral:
       case CTokenType_IntLiteral:
       {
-        RequireTokenRaw(Parser, T.Type);
+        RequireTokenRaw(Parser, T->Type);
 
-        u64 ThisValue = LogicalNotNextValue ? !T.UnsignedValue : T.UnsignedValue;
+        u64 ThisValue = LogicalNotNextValue ? !T->UnsignedValue : T->UnsignedValue;
         Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, ThisValue, False);
 
       } break;
 
       case CTokenType_OpenParen:
       {
-        RequireTokenRaw(Parser, T.Type);
+        RequireTokenRaw(Parser, T->Type);
         Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, Result, False);
         if (LogicalNotNextValue)
         {
@@ -7880,8 +7890,8 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
       case CTokenType_Pipe:
       case CTokenType_Hat:
       {
-        RequireTokenRaw(Parser, T.Type);
-        c_token_type OperatorToApply = T.Type;
+        RequireTokenRaw(Parser, T->Type);
+        c_token_type OperatorToApply = T->Type;
         u64 NextValue = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, Result, False);
         u64 OperationResult = ApplyOperator(Parser, Result, OperatorToApply, NextValue);
         Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, OperationResult, False);
@@ -7890,7 +7900,7 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
       case CTokenType_CommentMultiLine:
       case CTokenType_EscapedNewline:
       {
-        RequireTokenRaw(Parser, T.Type);
+        RequireTokenRaw(Parser, T->Type);
         Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, Result, LogicalNotNextValue);
       } break;
 
@@ -7902,7 +7912,9 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
         // We're done
       } break;
 
-      default: { ParseError(Parser, FormatCountedString_(TranArena, CSz(" ResolveMacroConstantExpression failed : Invalid %S(%S)"), ToString(T.Type), T.Value )); } break;
+      InvalidDefaultError( Parser,
+                           FormatCountedString_(TranArena, CSz(" ResolveMacroConstantExpression failed : Invalid %S(%S)"), ToString(T->Type), T->Value ),
+                           T);
     }
   }
 
