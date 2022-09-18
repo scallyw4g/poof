@@ -1,8 +1,3 @@
-/* #if defined __has_include */
-/*   #if __has_include("foo") */
-/*   #endif */
-/* #endif */
-
 struct foo
 {
 } Foo;

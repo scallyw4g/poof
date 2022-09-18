@@ -13,15 +13,15 @@
 # BuildAllBinariesRunAllTests=1
 
 # RunPoof=1
-BuildPoof=1
+# BuildPoof=1
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 # POOF_DEBUGGER="gdb --args"
 
 # BuildPoofEmcc=1
 # RollupEmcc=1
 
-# RunParserTests=1
-# BuildParserTests=1
+RunParserTests=1
+BuildParserTests=1
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 # TEST_DEBUGGER="gdb --args"
 
@@ -32,7 +32,7 @@ BuildPoof=1
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 
-RunExtendedIntegrationTests=1
+# RunExtendedIntegrationTests=1
 
 # OPTIMIZATION_LEVEL="-O2"
 # BONSAI_INTERNAL=O

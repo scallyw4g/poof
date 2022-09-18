@@ -5566,33 +5566,24 @@ GetByFilename(parser_stream* Stream, counted_string Filename)
 }
 #endif
 
-link_internal c_token_cursor *
-ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
+link_internal counted_string
+ResolveIncludePath(parse_context *Ctx, parser *Parser, c_token *T, counted_string PartialPath, b32 IsIncludeNext, b32 IsRelative)
 {
   TIMED_FUNCTION();
 
-  if (const char *INCLUDE_ENV = PlatformGetEnvironmentVar("INCLUDE"))
-  {
-    Warn("poof does not support the environemnt variable INCLUDE (%s)", INCLUDE_ENV);
-  }
-
   Assert(IsValidForCursor(Parser->Tokens, T));
 
-  c_token_cursor *Result = {};
-  counted_string FinalIncludePath = {};
+  counted_string Result = {};
 
-  b32 SkipFirst = T->Type == CT_PreprocessorIncludeNext ? True : False;
-
-  counted_string PartialPath = T->IncludePath;
   if (PartialPath.Count == 0)
   {
     ParseError(Parser, CSz("Include path must be specified"), T);
     return Result;
   }
 
-  if (T->Flags & CTFlags_RelativeInclude)
+  if (IsRelative)
   {
-    if (SkipFirst != False)
+    if (IsIncludeNext)
     {
       ParseError(Parser, CSz("Relative includes not supported with 'include_next'"), T);
       return Result;
@@ -5606,7 +5597,7 @@ ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
       counted_string CurrentFilepath = Concat(Dirname(Current->Filename), PartialPath, TranArena);
       if (FileExists(CurrentFilepath))
       {
-        FinalIncludePath = CurrentFilepath;
+        Result = CurrentFilepath;
         break;
       }
       else
@@ -5616,12 +5607,12 @@ ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
     }
   }
 
-  if (FinalIncludePath.Count == 0)
+  if (Result.Count == 0)
   {
     counted_string_cursor *IncludePaths = Ctx->IncludePaths;
     if (IncludePaths)
     {
-      if (!Result)
+      Assert(Result.Start == 0);
       {
         for ( u32 PrefixIndex = 0;
               PrefixIndex < Count(IncludePaths);
@@ -5632,13 +5623,13 @@ ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
 
           if (FileExists(FullPath))
           {
-            if (SkipFirst)
+            if (IsIncludeNext)
             {
-              SkipFirst = False;
+              IsIncludeNext = False;
             }
             else
             {
-              FinalIncludePath = FullPath;
+              Result = FullPath;
               break;
             }
           }
@@ -5647,21 +5638,41 @@ ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
       }
     }
 
-    if ( ! FinalIncludePath.Count )
+    if ( ! Result.Count )
     {
       if (FileExists(PartialPath))
       {
-        if (SkipFirst)
+        if (IsIncludeNext)
         {
-          SkipFirst = False;
+          IsIncludeNext = False;
         }
         else
         {
-          FinalIncludePath = PartialPath;
+          Result = PartialPath;
         }
       }
     }
   }
+
+  return Result;
+}
+
+link_internal c_token_cursor *
+ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
+{
+  TIMED_FUNCTION();
+
+  if (const char *INCLUDE_ENV = PlatformGetEnvironmentVar("INCLUDE"))
+  {
+    Warn("poof does not support the environemnt variable INCLUDE (%s)", INCLUDE_ENV);
+  }
+
+  Assert(IsValidForCursor(Parser->Tokens, T));
+
+  c_token_cursor *Result = {};
+  b32 IsIncludeNext = (T->Type == CT_PreprocessorIncludeNext);
+  b32 IsRelative = T->Flags & CTFlags_RelativeInclude;
+  counted_string FinalIncludePath = ResolveIncludePath(Ctx, Parser, T, T->IncludePath, IsIncludeNext, IsRelative);
 
   if (FinalIncludePath.Count)
   {
@@ -5678,11 +5689,11 @@ ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
   }
   else
   {
-    const char *FmtMessage = SkipFirst ?
+    const char *FmtMessage = IsIncludeNext ?
       "Unable to resolve include_next for file : (%S)" :
       "Unable to resolve include for file : (%S)";
 
-    Warn(FmtMessage, PartialPath);
+    Warn(FmtMessage, T->IncludePath);
   }
 
   return Result;
@@ -7796,6 +7807,13 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
               Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, LogicalNotNextValue ? !NextTokenIsMacro : NextTokenIsMacro, False);
             } break;
 
+            case CT_PreprocessorHasInclude:
+            case CT_PreprocessorHasIncludeNext:
+            {
+              RequireTokenRaw(Parser, NextToken);
+              Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, LogicalNotNextValue ? 0 : 1, False);
+            } break;
+
             InvalidDefaultError( Parser,
                                  FormatCountedString_(TranArena, CSz(" ResolveMacroConstantExpression failed : Invalid %S(%S)"), ToString(NextToken->Type), NextToken->Value ),
                                  NextToken );
@@ -7909,6 +7927,28 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
       case CTokenType_Colon:
       {
         // We're done
+      } break;
+
+      case CT_PreprocessorHasInclude:
+      {
+        RequireTokenRaw(Parser, T);
+
+        RequireToken(Parser, CTokenType_OpenParen);
+        c_token *Path = PopTokenPointer(Parser);
+        RequireToken(Parser, CTokenType_CloseParen);
+
+        b32 IsRelative = True;
+        b32 IsIncludeNext = False;
+        counted_string Inc = ResolveIncludePath(Ctx, Parser, Path, Path->Value, IsIncludeNext, IsRelative);
+
+
+        Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, (Inc.Start != 0), LogicalNotNextValue);
+
+      } break;
+
+      case CT_PreprocessorHasIncludeNext:
+      {
+        NotImplemented;
       } break;
 
       InvalidDefaultError( Parser,

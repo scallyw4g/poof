@@ -650,3 +650,48 @@ invalid_path
 #pragma whatever() // this should break
 
 foo_func(valid_path, invalid_path)
+
+
+
+#if defined __has_include
+
+  valid_path
+
+  #if __has_include("dfafdsafdas")
+    invalid_path
+  #else
+    valid_path
+  #endif
+
+
+  #if __has_include("errors.cpp")
+    valid_path
+  #else
+    invalid_path
+  #endif
+
+/*   #if __has_include(<dfafdsafdas>) */
+/*     invalid_path */
+/*   #else */
+/*     valid_path */
+/*   #endif */
+
+
+/*   #if __has_include(<errors.cpp>) */
+/*     valid_path */
+/*   #else */
+/*     invalid_path */
+/*   #endif */
+
+
+#else
+
+  invalid_path
+
+#endif
+
+#if defined __has_include_next
+  valid_path
+#else
+  invalid_path
+#endif
