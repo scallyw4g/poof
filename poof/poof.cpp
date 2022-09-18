@@ -5537,7 +5537,7 @@ PreprocessedParserForFile(parse_context *Ctx, counted_string Filename, token_cur
     }
     else
     {
-      Warn("Error encountered while running preprocessor on file %S", Filename);
+      Warn("Error encountered while running preprocessor on file (%S)", Filename);
     }
   }
 
@@ -6439,7 +6439,6 @@ EatUntil_TrackingDepth(parser *Parser, c_token_type Open, c_token_type Close, c_
 
   if (!Success)
   {
-    RuntimeBreak();
     ParseError(Parser, FormatCountedString(TranArena, CSz("Unable to find closing token %S"), ToString(Close)), StartToken);
   }
 
@@ -7959,39 +7958,38 @@ EraseAllRemainingIfBlocks(parser *Parser)
   c_token *StartToken = PeekTokenRawPointer(Parser);
   c_token *Result = StartToken;
 
-  u32 Depth = 0;
-  while (Result)
+  if (Parser->ErrorCode == ParseErrorCode_None)
   {
-    if (Result->Type == CT_PreprocessorIf ||
-        Result->Type == CT_PreprocessorIfNotDefined ||
-        Result->Type == CT_PreprocessorIfDefined)
+    b32 Done = 0;
+    while (Result && !Done)
     {
-      ++Depth;
-    }
+      Result = EatIfBlock(Parser, EraseTokens);
 
-    if (Result->Type == CT_PreprocessorEndif )
-    {
-      if (Depth == 0)
+      switch (Result->Type)
       {
-        break;
-      }
+        case CT_PreprocessorElse:
+        case CT_PreprocessorElif:
+        {
+          RequireTokenRaw(Parser, Result);
+        } break;
 
-      --Depth;
+        case CT_PreprocessorEndif:
+        {
+          Done = True;
+        } break;
+
+        InvalidDefaultError(Parser, CSz("Got an invalid token while attempting to preprocess #if block"), StartToken);
+      }
     }
 
-    Result->Erased = True;
-
-    // @optimize_call_advance_instead_of_being_dumb
-    RequireTokenRaw(Parser, *Result);
-    Result = PeekTokenRawPointer(Parser);
+    if (!Result)
+    {
+      ParseError( Parser,
+                  FormatCountedString(TranArena, CSz("Unable to find closing token for %S."), ToString(CT_PreprocessorIf)),
+                  StartToken);
+    }
   }
 
-  if (!Result)
-  {
-    ParseError(Parser, FormatCountedString(TranArena, CSz("Unable to find closing token for %S."), ToString(CT_PreprocessorIf)), StartToken);
-  }
-
-  /* Assert(Result == Parser->Tokens->At); */
   return Result;
 }
 
@@ -8001,44 +7999,49 @@ EatIfBlock(parser *Parser, erase_token_mode EraseMode)
   c_token *StartToken = PeekTokenRawPointer(Parser);
   c_token *Result = StartToken;
 
-  u32 Depth = 0;
-  while (Result)
+  if (Parser->ErrorCode == ParseErrorCode_None)
   {
-    if (Result->Type == CT_PreprocessorIf ||
-        Result->Type == CT_PreprocessorIfNotDefined ||
-        Result->Type == CT_PreprocessorIfDefined)
+    u32 Depth = 0;
+    while (Result)
     {
-      ++Depth;
-    }
-
-    if ( Result->Type == CT_PreprocessorElse ||
-         Result->Type == CT_PreprocessorElif ||
-         Result->Type == CT_PreprocessorEndif )
-    {
-      if (Depth == 0)
+      if (Result->Type == CT_PreprocessorIf ||
+          Result->Type == CT_PreprocessorIfNotDefined ||
+          Result->Type == CT_PreprocessorIfDefined)
       {
-        break;
+        ++Depth;
       }
 
-      if (Result->Type == CT_PreprocessorEndif)
+      if ( Result->Type == CT_PreprocessorElse ||
+           Result->Type == CT_PreprocessorElif ||
+           Result->Type == CT_PreprocessorEndif )
       {
-        --Depth;
+        if (Depth == 0)
+        {
+          break;
+        }
+
+        if (Result->Type == CT_PreprocessorEndif)
+        {
+          --Depth;
+        }
       }
+
+      if (EraseMode == EraseTokens)
+      {
+        Result->Erased = True;
+      }
+
+      // @optimize_call_advance_instead_of_being_dumb
+      RequireTokenRaw(Parser, *Result);
+      Result = PeekTokenRawPointer(Parser);
     }
 
-    if (EraseMode == EraseTokens)
+    if (!Result)
     {
-      Result->Erased = True;
+      ParseError( Parser,
+                  FormatCountedString(TranArena, CSz("Unable to find closing token for %S."), ToString(CT_PreprocessorIf)),
+                  StartToken );
     }
-
-    // @optimize_call_advance_instead_of_being_dumb
-    RequireTokenRaw(Parser, *Result);
-    Result = PeekTokenRawPointer(Parser);
-  }
-
-  if (!Result)
-  {
-    ParseError(Parser, FormatCountedString(TranArena, CSz("Unable to find closing token for %S."), ToString(CT_PreprocessorIf)), StartToken);
   }
 
   /* Assert(Result == Parser->Tokens->At); */
@@ -12181,7 +12184,7 @@ main(s32 ArgCount_, const char** ArgStrings)
     }
     else
     {
-      Error("Tokenizing File: %S", ParserFilename);
+      Warn("Failed tokenizing file (%S)", ParserFilename);
     }
 
 #if 0
