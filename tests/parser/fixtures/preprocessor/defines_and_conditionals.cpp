@@ -683,6 +683,34 @@ foo_func(valid_path, invalid_path)
     invalid_path
   #endif
 
+  ////
+
+  #if !__has_include("dfafdsafdas")
+    valid_path
+  #else
+    invalid_path
+  #endif
+
+
+  #if !__has_include("errors.cpp")
+    invalid_path
+  #else
+    valid_path
+  #endif
+
+  #if !__has_include(<dfafdsafdas>)
+    valid_path
+  #else
+    invalid_path
+  #endif
+
+
+  #if !__has_include(<tests/parser/fixtures/preprocessor/errors.cpp>)
+    invalid_path
+  #else
+    valid_path
+  #endif
+
 #else
 
   invalid_path

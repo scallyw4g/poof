@@ -167,7 +167,7 @@ generate ~15k LoC (>30k including DebugPrint).
   - [✓] C++ https://github.com/scallyw4g/bonsai
   - [✓] C++ https://github.com/HandmadeHero
   - [o] C++ https://github.com/oil/oil
-  - [o] C++ https://github.com/nakst/gf
+  - [✓] C++ https://github.com/nakst/gf
   - [✓] C https://github.com/ndilieto/uacme
   - [✓] C https://github.com/sqlite/sqlite
   - [✓] C https://github.com/heroseh/hcc

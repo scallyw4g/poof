@@ -7727,9 +7727,8 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
 
   EatSpacesTabsAndEscapedNewlines(Parser);
 
-  if (RawTokensRemain(Parser))
+  if (c_token *T = PeekTokenRawPointer(Parser)) // Has to be raw because newlines delimit the end of a macro expression
   {
-    c_token *T = PeekTokenRawPointer(Parser); // Has to be raw because newlines delimit the end of a macro expression
     switch (T->Type)
     {
       case CT_MacroLiteral:
@@ -7944,6 +7943,7 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
       } break;
 
       case CT_PreprocessorHasInclude:
+      case CT_PreprocessorHasIncludeNext:
       {
         RequireTokenRaw(Parser, T);
 
@@ -7968,21 +7968,16 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
 
         RequireToken(Parser, CTokenType_CloseParen);
 
-        b32 IsIncludeNext = False;
+        b32 IsIncludeNext = (T->Type == CT_PreprocessorHasIncludeNext);
         counted_string Inc = ResolveIncludePath(Ctx, Parser, PathT, Path, IsIncludeNext, IsRelative);
 
+        b32 Val = (Inc.Start != 0);
+        Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, LogicalNotNextValue ? !Val : Val, False);
 
-        Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, (Inc.Start != 0), LogicalNotNextValue);
-
-      } break;
-
-      case CT_PreprocessorHasIncludeNext:
-      {
-        NotImplemented;
       } break;
 
       InvalidDefaultError( Parser,
-                           FormatCountedString_(TranArena, CSz(" ResolveMacroConstantExpression failed : Invalid %S(%S)"), ToString(T->Type), T->Value ),
+                           FormatCountedString_(TranArena, CSz("ResolveMacroConstantExpression failed : Invalid %S(%S)"), ToString(T->Type), T->Value ),
                            T);
     }
   }
