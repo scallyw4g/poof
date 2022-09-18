@@ -670,19 +670,20 @@ foo_func(valid_path, invalid_path)
     invalid_path
   #endif
 
-/*   #if __has_include(<dfafdsafdas>) */
-/*     invalid_path */
-/*   #else */
-/*     valid_path */
-/*   #endif */
+  #if __has_include(<dfafdsafdas>)
+    invalid_path
+  #else
+    valid_path
+  #endif
 
 
-/*   #if __has_include(<errors.cpp>) */
-/*     valid_path */
-/*   #else */
-/*     invalid_path */
-/*   #endif */
-
+#if 0
+  #if __has_include(<errors.cpp>)
+    valid_path
+  #else
+    invalid_path
+  #endif
+#endif
 
 #else
 

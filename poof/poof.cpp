@@ -84,10 +84,12 @@ link_internal void      TrimLastToken(parser* Parser, c_token_type TokenType);
 link_internal void      TrimLeadingWhitespace(parser* Parser);
 
 link_internal counted_string EatBetweenExcluding(ansi_stream*, char Open, char Close);
-link_internal void      EatBetween(parser* Parser, c_token_type Open, c_token_type Close);
-link_internal b32       EatWhitespace(parser* Parser);
-link_internal b32       EatSpacesTabsAndEscapedNewlines(parser *Parser);
-link_internal void      EatWhitespaceAndComments(parser *Parser);
+
+link_internal void           EatBetween(parser* Parser, c_token_type Open, c_token_type Close);
+link_internal counted_string EatBetween_Str(parser* Parser, c_token_type Open, c_token_type Close);
+link_internal b32            EatWhitespace(parser* Parser);
+link_internal b32            EatSpacesTabsAndEscapedNewlines(parser *Parser);
+link_internal void           EatWhitespaceAndComments(parser *Parser);
 
 link_internal void      FullRewind(parser* Parser);
 
@@ -6582,6 +6584,18 @@ EatBetween(parser* Parser, c_token_type Open, c_token_type Close)
   }
 }
 
+link_internal counted_string
+EatBetween_Str(parser* Parser, c_token_type Open, c_token_type Close)
+{
+  counted_string Result = {};
+
+  string_from_parser Builder = StartStringFromParser(Parser);
+  EatBetween(Parser, Open, Close);
+  Result = FinalizeStringFromParser(&Builder);
+
+  return Result;
+}
+
 link_internal compound_decl
 StructDef(c_token *StructNameT) // , counted_string Sourcefile)
 {
@@ -7934,12 +7948,28 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
         RequireTokenRaw(Parser, T);
 
         RequireToken(Parser, CTokenType_OpenParen);
-        c_token *Path = PopTokenPointer(Parser);
+
+        b32 IsRelative;
+        c_token *PathT = 0;
+        counted_string Path = {};
+        if (PeekToken(Parser).Type == CTokenType_LT)
+        {
+          IsRelative = False;
+          PathT = T;
+          Path = EatBetween_Str(Parser, CTokenType_LT, CTokenType_GT);
+          StripBookends(Path, '<', '>');
+        }
+        else
+        {
+          IsRelative = True;
+          PathT = PopTokenPointer(Parser);
+          Path = PathT->Value;
+        }
+
         RequireToken(Parser, CTokenType_CloseParen);
 
-        b32 IsRelative = True;
         b32 IsIncludeNext = False;
-        counted_string Inc = ResolveIncludePath(Ctx, Parser, Path, Path->Value, IsIncludeNext, IsRelative);
+        counted_string Inc = ResolveIncludePath(Ctx, Parser, PathT, Path, IsIncludeNext, IsRelative);
 
 
         Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, (Inc.Start != 0), LogicalNotNextValue);
@@ -10017,6 +10047,12 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
       {
         RequireToken(Parser, CTokenType_CloseBrace);
       } break;
+
+      case CT_KeywordAttribute:
+      {
+        TryEatAttributes(Parser);
+      } break;
+
 
       InvalidDefaultError(Parser, CSz("Unexpected token encountered while scanning for datatypes"), T);
     }

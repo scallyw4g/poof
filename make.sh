@@ -10,7 +10,7 @@
 
 # RunPreemptivePoof=1
 
-# BuildAllBinariesRunAllTests=1
+BuildAllBinariesRunAllTests=1
 
 # RunPoof=1
 # BuildPoof=1
@@ -20,8 +20,8 @@
 # BuildPoofEmcc=1
 # RollupEmcc=1
 
-RunParserTests=1
-BuildParserTests=1
+# RunParserTests=1
+# BuildParserTests=1
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 # TEST_DEBUGGER="gdb --args"
 
@@ -433,7 +433,6 @@ function RunExtendedIntegrationTests
     "$BIN/poof                     \
       -I .                         \
       gf2.cpp"
-  echo "           - NOTE(Jesse): poof is known to not handle gf correctly yet.  This failure is expected"
 
 
   echo -e ""

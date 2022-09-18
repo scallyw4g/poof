@@ -1359,12 +1359,12 @@ var tempDouble;
 var tempI64;
 
 var ASM_CONSTS = {
- 239244: () => {
+ 239324: () => {
   return withBuiltinMalloc(function() {
    return allocateUTF8(Module["UBSAN_OPTIONS"] || 0);
   });
  },
- 239342: () => {
+ 239422: () => {
   var setting = Module["printWithColors"];
   if (setting != null) {
    return setting;
