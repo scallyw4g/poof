@@ -7957,7 +7957,7 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
           IsRelative = False;
           PathT = T;
           Path = EatBetween_Str(Parser, CTokenType_LT, CTokenType_GT);
-          StripBookends(Path, '<', '>');
+          Path = StripBookends(Path, '<', '>');
         }
         else
         {

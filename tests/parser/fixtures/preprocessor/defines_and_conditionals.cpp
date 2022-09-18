@@ -677,13 +677,11 @@ foo_func(valid_path, invalid_path)
   #endif
 
 
-#if 0
-  #if __has_include(<errors.cpp>)
+  #if __has_include(<tests/parser/fixtures/preprocessor/errors.cpp>)
     valid_path
   #else
     invalid_path
   #endif
-#endif
 
 #else
 
