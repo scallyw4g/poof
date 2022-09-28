@@ -10,10 +10,10 @@
 
 # RunPreemptivePoof=1
 
-BuildAllBinariesRunAllTests=1
+# BuildAllBinariesRunAllTests=1
 
-# RunPoof=1
-# BuildPoof=1
+RunPoof=1
+BuildPoof=1
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 # POOF_DEBUGGER="gdb --args"
 
@@ -186,6 +186,7 @@ function RunPoof {
                                   \
     $POOF_LOG_LEVEL               \
     poof/poof.cpp                 \
+    --do-debug-window \
     -D BONSAI_PREPROCESSOR        \
     -D BONSAI_LINUX               \
     -I "."                        \

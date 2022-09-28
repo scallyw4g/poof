@@ -2,7 +2,7 @@
   #define PLATFORM_LIBRARY_AND_WINDOW_IMPLEMENTATIONS 1
   #define PLATFORM_GL_IMPLEMENTATIONS 1
   #define BONSAI_DEBUG_SYSTEM_API 1
-  #define DEBUG_PRINT 1
+  #define DEBUG_PRINT 0
 #endif
 
 #include <bonsai_stdlib/bonsai_stdlib.h>
@@ -1546,7 +1546,7 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
 
     if (Global_LogLevel <= LogLevel_Error)
     {
-      LogDirect(FullErrorText);
+      LogDirect("%S", FullErrorText);
     }
 
 
@@ -1571,8 +1571,8 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
   }
   else
   {
-    LogDirect( CSz("Error determining where the error occurred \n"));
-    LogDirect( CSz("Error messsage was : %S \n"), Message);
+    LogDirect(CSz("%S"), CSz("Error determining where the error occurred \n"));
+    LogDirect(CSz("%S"),  CSz("Error messsage was : %S \n"), Message);
   }
 
   return;
@@ -4241,8 +4241,6 @@ TryTransmuteIdentifierToken(c_token *T)
 link_internal b32
 TryTransmuteOperatorToken(c_token *T)
 {
-  TIMED_FUNCTION();
-
   Assert(T->Type == CT_PreprocessorPaste_InvalidToken);
 
   // TODO(Jesse): Implement me.
@@ -4254,8 +4252,6 @@ TryTransmuteOperatorToken(c_token *T)
 link_internal b32
 TryTransmuteKeywordToken(c_token *T, c_token *LastTokenPushed)
 {
-  TIMED_FUNCTION();
-
   c_token_type StartType = T->Type;
 
   Assert(T->Type == CT_PreprocessorPaste_InvalidToken ||
@@ -5525,6 +5521,8 @@ ParserForFile(parse_context *Ctx, counted_string Filename, token_cursor_source S
 link_internal parser *
 PreprocessedParserForFile(parse_context *Ctx, counted_string Filename, token_cursor_source Source, parser *Parent)
 {
+  TIMED_FUNCTION();
+
   parser *Result = ParserForFile(Ctx, Filename, Source);
 
   if (Result && Result->ErrorCode == ParseErrorCode_None)
@@ -8137,7 +8135,7 @@ ParseIfDefinedValue(parser *Parser)
 link_internal macro_def *
 GetMacroDef(parse_context *Ctx, counted_string DefineValue)
 {
-  TIMED_FUNCTION();
+  /* TIMED_FUNCTION(); */
   macro_def *Macro = GetByName(&Ctx->Datatypes.Macros, DefineValue);
 
   macro_def *Result = 0;
@@ -10168,31 +10166,13 @@ BootstrapDebugSystem()
   shared_lib DebugLib = OpenLibrary(DEFAULT_DEBUG_LIB);
   if (!DebugLib) { Error("Loading DebugLib :( "); return False; }
 
-  /* GetDebugState = (get_debug_state_proc)GetProcFromLib(DebugLib, DebugLibName_GetDebugState); */
-  /* if (!GetDebugState) { Error("Retreiving GetDebugState from Debug Lib :( "); return False; } */
+  init_debug_system_proc OpenAndInitializeDebugWindow = (init_debug_system_proc)GetProcFromLib(DebugLib, DebugLibName_OpenAndInitializeDebugWindow);
+  if (!OpenAndInitializeDebugWindow) { Error("Retreiving OpenAndInitializeDebugWindow from Debug Lib :( "); return False; }
 
-  b32 WindowSuccess = OpenAndInitializeWindow(&Os, &Plat);
-  if (!WindowSuccess) { Error("Initializing Window :( "); return False; }
-  Assert(Os.Window);
-
-  InitializeOpengl(&Os);
-
-  init_debug_system_proc InitDebugSystem = (init_debug_system_proc)GetProcFromLib(DebugLib, DebugLibName_InitDebugSystem);
-  if (!InitDebugSystem) { Error("Retreiving InitDebugSystem from Debug Lib :( "); return False; }
-
-  GetDebugState = InitDebugSystem(&GL);
+  GetDebugState = OpenAndInitializeDebugWindow(&Os, &Plat);
 
   debug_state* DebugState = GetDebugState();
   DebugState->DebugDoScopeProfiling = True;
-  DebugState->Plat = &Plat;
-
-  GL.ClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-  GL.ClearDepth(1.0f);
-
-  DebugState->ClearFramebuffers();
-
-  GL.BindFramebuffer(GL_FRAMEBUFFER, 0);
-  GL.Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   return True;
 }
@@ -11581,6 +11561,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
         {
           case polymorphic_func:
           {
+            TIMED_NAMED_BLOCK("polymorphic_func");
             /* function_decl F = ParseFunctionDef(Parser, Memory); */
             /* DebugPrint(F); */
           } break;
@@ -11647,6 +11628,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
           case named_list:
           {
+            TIMED_NAMED_BLOCK("named_list");
             RequireToken(Parser, CTokenType_OpenParen);
 
             tagged_counted_string_stream NameList = {};
@@ -11670,6 +11652,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
           case for_datatypes:
           {
+            TIMED_NAMED_BLOCK("for_datatypes");
             RequireToken(Parser, CTokenType_OpenParen);
             RequireToken(Parser, CToken(CSz("all")));
             RequireToken(Parser, CTokenType_CloseParen);
@@ -11732,6 +11715,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
           case d_union:
           {
+            TIMED_NAMED_BLOCK("d_union");
             c_token *DatatypeT = RequireTokenPointer(Parser, CTokenType_Identifier);
             d_union_decl dUnion = ParseDiscriminatedUnion(Ctx, Parser, Datatypes, DatatypeT, Memory);
             if (Parser->ErrorCode == ParseErrorCode_None)
@@ -11766,6 +11750,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
           default:
           {
+            TIMED_NAMED_BLOCK("default func");
             meta_func* Func = StreamContains(FunctionDefs, DirectiveT->Value);
             if (Func)
             {
@@ -12039,6 +12024,8 @@ PrintHashtable(datatype_hashtable *Table)
 void
 ScanForMutationsAndOutput(parser *Parser, counted_string OutputPath, memory_arena *Memory)
 {
+  TIMED_FUNCTION();
+
   c_token_cursor *Tokens = Parser->Tokens;
 
   umm TotalTokens = TotalElements(Tokens);
@@ -12136,9 +12123,21 @@ DoPoofForWeb(char *zInput, umm InputLen)
   return Result;
 }
 
+global_variable r64 Global_LastTime = 0;
+r64 GetDt()
+{
+
+  r64 ThisTime = GetHighPrecisionClock();
+  r64 Result = ThisTime - Global_LastTime;
+  Global_LastTime = ThisTime;
+  return Result;
+}
+
 s32
 main(s32 ArgCount_, const char** ArgStrings)
 {
+  Global_LastTime = GetHighPrecisionClock();
+
   u32 ArgCount = (u32)ArgCount_;
   SetupStdout(ArgCount, ArgStrings);
 
@@ -12166,7 +12165,8 @@ main(s32 ArgCount_, const char** ArgStrings)
   {
     if (BootstrapDebugSystem() == 1)
     {
-      GetDebugState()->MainThreadAdvanceDebugSystem(0);
+      GetDebugState()->DebugDoScopeProfiling = True;
+      MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt());
       DEBUG_REGISTER_ARENA(Memory);
       DEBUG_REGISTER_ARENA(&Global_PermMemory);
     }
@@ -12201,7 +12201,7 @@ main(s32 ArgCount_, const char** ArgStrings)
 
     parser *Parser = PreprocessedParserForFile(&Ctx, ParserFilename, TokenCursorSource_RootFile, 0);
 
-    MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(0.0);
+    MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt());
 
     if (Parser->ErrorCode == ParseErrorCode_None)
     {
@@ -12215,11 +12215,10 @@ main(s32 ArgCount_, const char** ArgStrings)
 
       /* PrintHashtable(&Ctx.ParserHashtable); */
 
-      MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(0);
-
       FullRewind(Ctx.CurrentParser);
 
-      MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(0);
+      MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt());
+
       GoGoGadgetMetaprogramming(&Ctx, &TodoInfo);
 
       auto Table = &Ctx.ParserHashtable;
@@ -12287,20 +12286,27 @@ main(s32 ArgCount_, const char** ArgStrings)
   if (GetDebugState)
   {
     debug_state *DebugState = GetDebugState();
-    DebugState->UIType = DebugUIType_Memory;
+    DebugState->UIType = DebugUIType_CallGraph;
     DebugState->DisplayDebugMenu = True;
-    DebugState->DebugDoScopeProfiling = False;
+    /* DebugState->DebugDoScopeProfiling = False; */
 
-    DebugState->MainThreadAdvanceDebugSystem(0);
+    MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt());
+    MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(1);
+    MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(1);
+    MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(1);
+    MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(1);
 
     hotkeys Hotkeys = {};
     while (Os.ContinueRunning)
     {
+    /* MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt()); */
       ClearClickedFlags(&Plat.Input);
 
       v2 LastMouseP = Plat.MouseP;
       while ( ProcessOsMessages(&Os, &Plat) );
       Plat.MouseDP = LastMouseP - Plat.MouseP;
+
+      Assert(Plat.WindowWidth && Plat.WindowHeight);
 
       BindHotkeysToInput(&Hotkeys, &Plat.Input);
 
