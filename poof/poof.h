@@ -1222,11 +1222,12 @@ b32 AreEqual(c_token T1, c_token T2)
 {
   b32 Result = (T1.Type == T2.Type);
 
-  if (Result && T1.Type == CTokenType_Newline)
+  if (Result && (T1.Type == CTokenType_Newline ||
+                 T1.Type == CTokenType_EscapedNewline ) )
   {
     // NOTE(Jesse): On Windows newline chars can be length 2 (\r\n) so we don't
     // check that the Value strings match for that case
-    Assert(T2.Type == CTokenType_Newline);
+    Assert(T2.Type == CTokenType_Newline || T2.Type == CTokenType_EscapedNewline );
   }
   else
   {
@@ -1582,10 +1583,10 @@ struct tuple_CountedString_CountedString
   counted_string E[2];
 };
 poof(generate_stream(tuple_CountedString_CountedString))
-#include </home/scallywag/work/poof/generated/generate_stream_tuple_CountedString_CountedString.h>
+#include <generated/generate_stream_tuple_CountedString_CountedString.h>
 
 poof( buffer_builder(tuple_CountedString_CountedString) )
-#include </home/scallywag/work/poof/generated/buffer_builder_tuple_CountedString_CountedString.h>
+#include <generated/buffer_builder_tuple_CountedString_CountedString.h>
 
 
 tuple_CountedString_CountedString

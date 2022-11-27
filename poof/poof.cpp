@@ -1,9 +1,9 @@
 #if !BONSAI_EMCC
   #define PLATFORM_LIBRARY_AND_WINDOW_IMPLEMENTATIONS 1
   #define PLATFORM_GL_IMPLEMENTATIONS 1
-  #define BONSAI_DEBUG_SYSTEM_API 1
-  #define DEBUG_PRINT 1
+  #define BONSAI_DEBUG_SYSTEM_API 0
 #endif
+
 
 #include <bonsai_stdlib/bonsai_stdlib.h>
 #include <bonsai_stdlib/bonsai_stdlib.cpp>
@@ -25,6 +25,7 @@ global_variable memory_arena Global_PermMemory = {};
 
 
 
+#define DEBUG_PRINT 0
 #if DEBUG_PRINT
 #include <bonsai_stdlib/headers/debug_print.h>
 
@@ -5095,10 +5096,9 @@ TokenizeAnsiStream(ansi_stream Code, memory_arena* Memory, b32 IgnoreQuotes, par
         umm Count = (umm)(Code.At - CommentToken->Value.Start);
 
         // We finished parsing a comment on this token
-        if (PushT.Type == CTokenType_Newline || PushT.Type == CTokenType_CarrigeReturn)
+        if (PushT.Type == CTokenType_Newline)
         {
-          // TODO(Jesse): Is this actually busted for \r\n ?  Seems like we should sub 2 for that case?
-          if (Count) { Count -= 1; } // Exclude the \r or \n from single line comments
+          if (Count >= PushT.Value.Count) { Count -= PushT.Value.Count; } // Exclude the \n from single line comments (could also be \r\n)
           LastTokenPushed = Push(PushT, Tokens);
         }
 
