@@ -3118,7 +3118,6 @@ ExpandMacro( parse_context *Ctx,
   }
   END_BLOCK();
 
-
   parser *Result = AllocateParserPtr(
                       CSz("macro_expansion TODO(Jesse): What do we say here?"),
                       0,
@@ -3137,6 +3136,8 @@ ExpandMacro( parse_context *Ctx,
   }
 
   Rewind(FirstPass->Tokens);
+
+  Macro->IsExpanding = True;
 
 #if 0
     umm CurrentSize = TotalSize(Result->Tokens);
@@ -3234,6 +3235,8 @@ ExpandMacro( parse_context *Ctx,
 
   Result->ErrorCode = FirstPass->ErrorCode;
   Parser->ErrorCode = FirstPass->ErrorCode;
+
+  Macro->IsExpanding = False;
 
   return Result;
 }
@@ -4150,32 +4153,35 @@ MacroShouldBeExpanded(parser *Parser, c_token *T, macro_def *ThisMacro, macro_de
 
   b32 Result = False;
 
-  switch (ThisMacro->Type)
+  if (ThisMacro->IsExpanding == False)
   {
-    case type_macro_function:
+    switch (ThisMacro->Type)
     {
-      if (PeekToken(Parser, 1).Type == CTokenType_OpenParen)
+      case type_macro_function:
       {
-        Result = True;
-      }
-    } break;
+        if (PeekToken(Parser, 1).Type == CTokenType_OpenParen)
+        {
+          Result = True;
+        }
+      } break;
 
-    case type_macro_keyword:
-    {
-      if (ExpandingMacro && StringsMatch(ExpandingMacro->NameT->Value, ThisMacro->NameT->Value))
+      case type_macro_keyword:
       {
-        // TODO(Jesse): This is the path that's preventing self-referential macros
-        // from expanding, but we should take this out in favor of the code at
-        // @mark_keyword_macros_self_referential.
-        /* Info("Prevented recursive macro expansion of (%S)",  ExpandingMacro->Name); */
-      }
-      else
-      {
-        Result = True;
-      }
-    } break;
+        if (ExpandingMacro && StringsMatch(ExpandingMacro->NameT->Value, ThisMacro->NameT->Value))
+        {
+          // TODO(Jesse): This is the path that's preventing self-referential macros
+          // from expanding, but we should take this out in favor of the code at
+          // @mark_keyword_macros_self_referential.
+          /* Info("Prevented recursive macro expansion of (%S)",  ExpandingMacro->Name); */
+        }
+        else
+        {
+          Result = True;
+        }
+      } break;
 
-    InvalidDefaultCase;
+      InvalidDefaultCase;
+    }
   }
 
 

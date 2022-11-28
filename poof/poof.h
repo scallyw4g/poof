@@ -900,7 +900,7 @@ struct macro_def
   counted_string_buffer NamedArguments;
   b32 Variadic;
   b32 Undefed; // Gets toggled when we hit an undef
-  /* b32 IsExpanding; */
+  b32 IsExpanding;
 };
 poof(generate_stream(macro_def))
 #include <generated/generate_stream_macro_def.h>

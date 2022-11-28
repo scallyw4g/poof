@@ -216,7 +216,6 @@ MacroFunction10(Macro,Keyword,) // this_is_a_variable_name
 self_including_macro_keyword // should expand to "self_including_macro_keyword 42"
 #undef self_including_macro_keyword
 
-#if BUG_RECURSIVE_MACRO_EXPANSION
 #define self_including_macro_keyword MacroFunction(self_including_macro_keyword 42)
 self_including_macro_keyword // should expand to "self_including_macro_keyword 42"
 #undef self_including_macro_keyword
@@ -231,13 +230,10 @@ self_including_macro_keyword // should expand to "self_including_macro_keyword 4
   #define m1() m2()
   #define m2() m1()
   m2()
-#endif
 
 
-#if BUG_SELF_INCLUDING_MACRO_FUNCTION
 #define self_including_macro_function() self_including_macro_function()
 self_including_macro_function()
-#endif
 
 
 #ifndef _DEBUG

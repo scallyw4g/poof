@@ -1283,22 +1283,16 @@ MacroAndIncludetest(memory_arena *Memory)
     TestThat(RequireToken(Parser, CToken(CSz("self_including_macro_keyword"))));
     TestThat(RequireToken(Parser, CToken(42u)));
 
-#if BUG_RECURSIVE_MACRO_EXPANSION
     TestThat(RequireToken(Parser, CToken(CSz("self_including_macro_keyword"))));
     TestThat(RequireToken(Parser, CToken(42u)));
-
-    /* DumpEntireParser(Parser); */
 
     TestThat(RequireToken(Parser, CToken(CSz("m2"))));
     TestThat(RequireToken(Parser, CTokenType_OpenParen));
     TestThat(RequireToken(Parser, CTokenType_CloseParen));
-#endif
 
-#if BUG_SELF_INCLUDING_MACRO_FUNCTION
-    TestThat(RequireToken(Parser, CToken(CSz("temp__"))));
+    TestThat(RequireToken(Parser, CToken(CSz("self_including_macro_function"))));
     TestThat(RequireToken(Parser, CTokenType_OpenParen));
     TestThat(RequireToken(Parser, CTokenType_CloseParen));
-#endif
 
     TestThat(RequireToken(Parser, CToken(CSz("valid_path"))));
 
@@ -2637,6 +2631,20 @@ TestRelativeIncludes(memory_arena *Memory)
 
 }
 
+link_internal void
+RunTempTestIfNotEmpty(memory_arena *Memory)
+{
+  const char* TempTestFilepath = PARSER_FIXTURES_PATH "/preprocessor/temp_test.cpp";
+  if (FileExists(TempTestFilepath))
+  {
+    parse_context Ctx = AllocateParseContext(Memory);
+
+    parser *Parser = PreprocessedParserForFile( &Ctx,
+                                                CS(TempTestFilepath),
+                                                TokenCursorSource_RootFile, {});
+  }
+}
+
 s32
 main(s32 ArgCount, const char** Args)
 {
@@ -2645,6 +2653,8 @@ main(s32 ArgCount, const char** Args)
   memory_arena* Memory = AllocateArena();
 
 #if 1
+  RunTempTestIfNotEmpty(Memory);
+
   TestSingleCursorTokenControl(Memory);
   TestMultiCursorTokenControl(Memory);
   // TODO(Jesse): Axe this or turn it into something more meaningful
