@@ -1139,7 +1139,11 @@ enum output_mode
 };
 
 
-#define WriteTo(Dest, S) if (Dest) { CopyToDest(Dest, S); } else { DebugChars(CSz("%S"), S); }
+inline void
+WriteTo(char_cursor *Dest, counted_string S)
+{
+  if (Dest) { CopyToDest(Dest, S); } else { DebugChars(CSz("%S"), S); }
+}
 
 inline void
 PrintToken(c_token *Token, char_cursor *Dest = 0)

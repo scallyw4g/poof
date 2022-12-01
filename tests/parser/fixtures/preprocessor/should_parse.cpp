@@ -298,6 +298,11 @@ signed       Int4 = 42;
 
 typedef unsigned short int u16;
 
+/* #undef foo */
+/*  #define foo bar */
+/*  typedef foo int; */
+/* #undef foo */
+
 typedef long int __int64;
 typedef long int s64;
 

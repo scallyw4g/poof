@@ -722,3 +722,49 @@ foo_func(valid_path, invalid_path)
 #else
   invalid_path
 #endif
+
+#ifndef __has_cpp_attribute
+  valid_path
+#elif 0
+  invalid_path
+#elif 0
+  invalid_path
+#else
+  invalid_path
+#endif
+
+
+#define blank
+
+#ifdef blank
+  valid_path
+#else
+  invalid_path
+#endif
+
+#if undefined || defined(blank)
+  valid_path
+#else
+  invalid_path
+#endif
+
+
+#define compound_true  (defined(undefined) || defined(blank))
+/* compound_true */
+
+#if compound_true
+  valid_path
+#else
+  invalid_path
+#endif
+
+#if 0
+#define compound_false (defined(undefined) || !defined(undefined))
+/* compound_false */
+
+#if compound_false
+  valid_path
+#else
+  invalid_path
+#endif
+#endif

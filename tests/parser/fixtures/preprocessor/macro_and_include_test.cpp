@@ -328,3 +328,4 @@ foo_arg_func(a1, a2)
 #undef foo
 
 foo_arg_func(a1, a2)
+

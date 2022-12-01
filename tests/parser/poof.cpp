@@ -985,10 +985,10 @@ TestAst(memory_arena *Memory)
       /* DebugPrint(Fing); */
 
       /* WalkAst(Func->Ast); */
-      DebugLine("Function Name(%S) Type(%S)", Func->NameT->Value, ToString(Func->Type));
+      /* DebugLine("Function Name(%S) Type(%S)", Func->NameT->Value, ToString(Func->Type)); */
       if (Func->Body.Tokens)
       {
-        DebugLine("Has Function Body");
+        /* DebugLine("Has Function Body"); */
 
         // TODO(Jesse): Read GetBodyTextForNextScope for more information on
         // why the assert firesin DumpCursorSimple fires.  I think we should be
@@ -1005,7 +1005,7 @@ TestAst(memory_arena *Memory)
       }
       else
       {
-        DebugLine("No Function Body");
+        /* DebugLine("No Function Body"); */
       }
     }
   }
@@ -1373,7 +1373,8 @@ TestDefinesAndConditionals(memory_arena *Memory)
   if (Parser)
   {
     Ctx.CurrentParser = Parser;
-    /* DumpEntireParser(Parser); */
+    /* DumpCursorSimple(Parser->Tokens); */
+    /* Rewind(Parser->Tokens); */
 
     while(TokensRemain(Parser))
     {
@@ -2637,11 +2638,16 @@ RunTempTestIfNotEmpty(memory_arena *Memory)
   const char* TempTestFilepath = PARSER_FIXTURES_PATH "/preprocessor/temp_test.cpp";
   if (FileExists(TempTestFilepath))
   {
+    /* RuntimeBreak(); */
+
     parse_context Ctx = AllocateParseContext(Memory);
 
     parser *Parser = PreprocessedParserForFile( &Ctx,
                                                 CS(TempTestFilepath),
                                                 TokenCursorSource_RootFile, {});
+
+    Rewind(Parser->Tokens);
+    DumpCursorSimple(Parser->Tokens);
   }
 }
 
