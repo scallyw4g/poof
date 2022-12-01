@@ -522,8 +522,6 @@ TestFunc(int foo)
 
 #define link_internal static
 #define global_variable static
-#define CSz(NullTerminatedCString) \
-  CS(NullTerminatedCString, sizeof(NullTerminatedCString)-1)
 
 #include <include/bonsai_stdlib/headers/console_macros.h>
 
