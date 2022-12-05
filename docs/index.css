@@ -14,7 +14,7 @@
 code
 {
   background: var(--hi-background);
-  color: var(--hi-text);
+  color: var(--med-text);
   padding: 5px;
   margin: 5px;
 }
