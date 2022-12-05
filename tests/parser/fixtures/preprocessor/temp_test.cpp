@@ -1,6 +1,11 @@
 
-#define __MACHINEARM_ARM64     __MACHINEZ
-#define __MACHINEZ(X)       /* NOTHING */
+#define thunk     ignore
+#define ignore(X)       /* NOTHING */
 
-__MACHINEARM_ARM64(void __dmb(unsigned int _Type))
+thunk(fooofdasfdsafsda)
+
+int main()
+{
+  return 0;
+}
 

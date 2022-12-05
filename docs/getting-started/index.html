@@ -1,0 +1,117 @@
+<div id='getting-started'>
+
+  <h2> Getting Started </h2>
+  <h3> Quickstart </h3>
+  <p>
+    <code>git clone --recursive https://github.com/scallyw4g/poof.git poof</code>
+    <code>cd poof && ./make.sh BuildAllBinariesRunAllTests</code>
+  </p>
+
+  <h3> Installing Dependencies</h3>
+  <p>
+    `poof` requires a C++ compiler to build, though I'm making an effort to
+    remove the use of C++ features in favor of using `poof` itself.  The
+    officially supported compiler is `clang++`, version 6.0.0.  Poof should
+    compile and run correctly on newer versions, but I make no promises.
+  </p>
+
+  <h4> Ubuntu 18.04 </h4>
+  <p>
+    <code>sudo apt install clang-6.0</code>
+  </p>
+
+  <h4> Windows </h4>
+  <p>
+    Poof requires `bash` to build on Windows.  I believe [Git for
+    Windows](https://gitforwindows.org/) comes with a shell that should work.
+    You'll also need `clang++` (preferably 6.0.0), which I'll leave as an
+    exercise to the reader.  https://releases.llvm.org/
+  </p>
+  <p>
+    NOTE(Jesse): Once upon a time I targeted MSVC on Windows, but have since
+    given up on Microsoft products.  Clang has been reliable enough, though it
+    is slightly more onerous to set up.
+  </p>
+
+  <h4> Mac </h4>
+  <p>
+    Currently unsupported.  If you're interested in compiling poof on OSX
+    please open an issue :)
+  </p>
+
+
+  <h3> Get the code </h3>
+  <p>
+    Clone the repository:
+    <code>git clone --recursive https://github.com/scallyw4g/poof.git poof</code>
+  </p>
+
+  <h3> Build </h3>
+
+  <p>
+    <code>./make.sh BuildAllBinariesRunAllTests</code> Builds everything and runs all tests
+
+    <hr>
+
+    <code>./make.sh BuildAllBinaries</code> Builds `poof` and test binaries
+
+    <code>./make.sh BuildPoof</code> Builds poof binary; required for running integration tests
+
+    <code>./make.sh BuildParserTests</code> Builds parser test suite binary
+
+    <hr>
+
+    <code>./make.sh BuildPoofEmcc</code> Build poof targeting WASM.  Requires `emcc` to be installed
+
+    <code>./make.sh BootstrapWeb</code> Once you've installed emcc, this bootstraps the rest of the WASM compilation tools
+
+    <hr>
+
+    <code>./make.sh RunPoof</code> Runs poof against its own codebase.  Useful for development
+
+    <hr>
+
+    <code>./make.sh RunAllTests</code> Run all test suites
+
+    <code>./make.sh RunParserTests</code> Runs parser test suite
+
+    <code>./make.sh RunIntegrationTests</code> Runs integration test suite
+
+    <hr>
+
+    <code>./make.sh BootstrapExtendedIntegrationTests</code> Downloads source for extended integration tests
+
+    <code>./make.sh RunExtendedIntegrationTests</code> Runs extended integration test suite
+  </p>
+
+  <h2> Compiler-specific pitfalls </h2>
+  <h4> MSVC 2019 and Older </h4>
+  <p>
+    Codebases targeting versions of cl.exe previous to 2019 v16.5 should be
+    aware that the preprocessor shipped on these version was non-conforming
+    (read: broken) in a few subtle-but-important ways, and poof may fail to
+    parse headers shipped with these compilers.
+  </p>
+
+  <p>
+    https://learn.microsoft.com/en-us/cpp/preprocessor/preprocessor-experimental-overview?view=msvc-170
+  </p>
+
+  <p>
+    Options for getting around this issue are limited to pointing poof at headers
+    that are well-formed according to the specification .. ie. not the MSVC headers.
+  </p>
+
+  <p>
+    If you have clang installed, you may define '__clang__ 1', '__clang_major__ 10'
+    and '__clang_minor__ 0' on the CLI when invoking poof which should convince
+    it to take the clang path which should be similar enough for most
+    programs.
+  </p>
+
+  <p>
+    If you encounter this issue, and would like to contribute (or sponsor) a
+    more real solution, please feel free to open an issue.
+  </p>
+
+</div>
