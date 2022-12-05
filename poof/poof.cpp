@@ -4282,18 +4282,10 @@ IdentifierShouldBeExpanded(parse_context *Ctx, parser *Parser, c_token *T, macro
   return Result;
 }
 
-/* #define thunk(a) ignore */
-/* #define ignore(a) */
-/* thunk(fdafdsa) */
-
 link_internal macro_def *
 TryTransmuteIdentifierToMacro(parse_context *Ctx, parser *Parser, c_token *T, macro_def *ExpandingMacro)
 {
   Assert(T->Type == CTokenType_Identifier);
-
-  _BitScanForward(0, 0, 0);
-
-  /* __dmb(3u); */
 
   macro_def *Result = IdentifierShouldBeExpanded(Ctx, Parser, T, ExpandingMacro);
   if (Result)
