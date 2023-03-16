@@ -9,6 +9,7 @@ struct variable_decl_stream
   memory_arena *Memory;
   variable_decl_stream_chunk* FirstChunk;
   variable_decl_stream_chunk* LastChunk;
+  umm ChunkCount;
 };
 
 link_internal void
@@ -82,6 +83,8 @@ Push(variable_decl_stream* Stream, variable_decl Element)
 
   Assert(NextChunk->Next == 0);
   Assert(Stream->LastChunk->Next == 0);
+
+  Stream->ChunkCount += 1;
 
   variable_decl *Result = &NextChunk->Element;
   return Result;

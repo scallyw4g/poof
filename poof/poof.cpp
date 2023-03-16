@@ -12254,6 +12254,8 @@ main(s32 ArgCount_, const char** ArgStrings)
   memory_arena* Memory = &Memory_;
   Memory->NextBlockSize = Megabytes(256);
 
+  Global_ThreadStates = Initialize_ThreadLocal_ThreadStates(1, 0, Memory);
+  SetThreadLocal_ThreadIndex(0);
 
   parse_context Ctx = AllocateParseContext(Memory);
 

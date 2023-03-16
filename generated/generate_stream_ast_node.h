@@ -9,6 +9,7 @@ struct ast_node_stream
   memory_arena *Memory;
   ast_node_stream_chunk* FirstChunk;
   ast_node_stream_chunk* LastChunk;
+  umm ChunkCount;
 };
 
 link_internal void
@@ -82,6 +83,8 @@ Push(ast_node_stream* Stream, ast_node Element)
 
   Assert(NextChunk->Next == 0);
   Assert(Stream->LastChunk->Next == 0);
+
+  Stream->ChunkCount += 1;
 
   ast_node *Result = &NextChunk->Element;
   return Result;

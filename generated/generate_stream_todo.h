@@ -9,6 +9,7 @@ struct todo_stream
   memory_arena *Memory;
   todo_stream_chunk* FirstChunk;
   todo_stream_chunk* LastChunk;
+  umm ChunkCount;
 };
 
 link_internal void
@@ -82,6 +83,8 @@ Push(todo_stream* Stream, todo Element)
 
   Assert(NextChunk->Next == 0);
   Assert(Stream->LastChunk->Next == 0);
+
+  Stream->ChunkCount += 1;
 
   todo *Result = &NextChunk->Element;
   return Result;

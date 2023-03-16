@@ -8,9 +8,9 @@
 # Calling functions by name on the command line shouldn't be affected by these.
 
 
-RunPreemptivePoof=0
+# RunPreemptivePoof=1
 
-BuildAllBinariesRunAllTests=0
+# BuildAllBinariesRunAllTests=1
 
 BuildPoof=1
 RunPoof=1
@@ -180,11 +180,12 @@ function RunPoof {
   fi
 
   : "${POOF_EXECUTABLE:=./bin/poof}"
-  : "${POOF_EXECUTABLE:=./bin/poof}"
+  # : "${POOF_EXECUTABLE:=./bin/poof}"
 
   $POOF_DEBUGGER $POOF_EXECUTABLE \
                                   \
     $POOF_LOG_LEVEL               \
+    -c0 \
     poof/poof.cpp                 \
     -D BONSAI_PREPROCESSOR        \
     -D BONSAI_LINUX               \

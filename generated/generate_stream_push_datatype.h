@@ -25,6 +25,8 @@ Push(declaration_stream* Stream, declaration Element)
   Assert(NextChunk->Next == 0);
   Assert(Stream->LastChunk->Next == 0);
 
+  Stream->ChunkCount += 1;
+
   declaration *Result = &NextChunk->Element;
   return Result;
 }

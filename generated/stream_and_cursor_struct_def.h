@@ -28,6 +28,7 @@ struct compound_decl_stream
   memory_arena *Memory;
   compound_decl_stream_chunk* FirstChunk;
   compound_decl_stream_chunk* LastChunk;
+  umm ChunkCount;
 };
 
 link_internal void
@@ -101,6 +102,8 @@ Push(compound_decl_stream* Stream, compound_decl Element)
 
   Assert(NextChunk->Next == 0);
   Assert(Stream->LastChunk->Next == 0);
+
+  Stream->ChunkCount += 1;
 
   compound_decl *Result = &NextChunk->Element;
   return Result;

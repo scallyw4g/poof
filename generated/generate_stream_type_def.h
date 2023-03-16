@@ -9,6 +9,7 @@ struct type_def_stream
   memory_arena *Memory;
   type_def_stream_chunk* FirstChunk;
   type_def_stream_chunk* LastChunk;
+  umm ChunkCount;
 };
 
 link_internal void
@@ -82,6 +83,8 @@ Push(type_def_stream* Stream, type_def Element)
 
   Assert(NextChunk->Next == 0);
   Assert(Stream->LastChunk->Next == 0);
+
+  Stream->ChunkCount += 1;
 
   type_def *Result = &NextChunk->Element;
   return Result;

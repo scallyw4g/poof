@@ -28,6 +28,7 @@ struct enum_decl_stream
   memory_arena *Memory;
   enum_decl_stream_chunk* FirstChunk;
   enum_decl_stream_chunk* LastChunk;
+  umm ChunkCount;
 };
 
 link_internal void
@@ -101,6 +102,8 @@ Push(enum_decl_stream* Stream, enum_decl Element)
 
   Assert(NextChunk->Next == 0);
   Assert(Stream->LastChunk->Next == 0);
+
+  Stream->ChunkCount += 1;
 
   enum_decl *Result = &NextChunk->Element;
   return Result;

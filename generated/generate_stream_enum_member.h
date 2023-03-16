@@ -9,6 +9,7 @@ struct enum_member_stream
   memory_arena *Memory;
   enum_member_stream_chunk* FirstChunk;
   enum_member_stream_chunk* LastChunk;
+  umm ChunkCount;
 };
 
 link_internal void
@@ -82,6 +83,8 @@ Push(enum_member_stream* Stream, enum_member Element)
 
   Assert(NextChunk->Next == 0);
   Assert(Stream->LastChunk->Next == 0);
+
+  Stream->ChunkCount += 1;
 
   enum_member *Result = &NextChunk->Element;
   return Result;

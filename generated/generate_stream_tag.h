@@ -9,6 +9,7 @@ struct tag_stream
   memory_arena *Memory;
   tag_stream_chunk* FirstChunk;
   tag_stream_chunk* LastChunk;
+  umm ChunkCount;
 };
 
 link_internal void
@@ -82,6 +83,8 @@ Push(tag_stream* Stream, tag Element)
 
   Assert(NextChunk->Next == 0);
   Assert(Stream->LastChunk->Next == 0);
+
+  Stream->ChunkCount += 1;
 
   tag *Result = &NextChunk->Element;
   return Result;

@@ -1,35 +1,35 @@
-struct meta_func_arg_stream_chunk
+struct v3i_stream_chunk
 {
-  meta_func_arg Element;
-  meta_func_arg_stream_chunk* Next;
+  v3i Element;
+  v3i_stream_chunk* Next;
 };
 
-struct meta_func_arg_stream
+struct v3i_stream
 {
   memory_arena *Memory;
-  meta_func_arg_stream_chunk* FirstChunk;
-  meta_func_arg_stream_chunk* LastChunk;
+  v3i_stream_chunk* FirstChunk;
+  v3i_stream_chunk* LastChunk;
   umm ChunkCount;
 };
 
 link_internal void
-Deallocate(meta_func_arg_stream *Stream)
+Deallocate(v3i_stream *Stream)
 {
   Stream->LastChunk = 0;
   Stream->FirstChunk = 0;
   VaporizeArena(Stream->Memory);
 }
 
-struct meta_func_arg_iterator
+struct v3i_iterator
 {
-  meta_func_arg_stream* Stream;
-  meta_func_arg_stream_chunk* At;
+  v3i_stream* Stream;
+  v3i_stream_chunk* At;
 };
 
-link_internal meta_func_arg_iterator
-Iterator(meta_func_arg_stream* Stream)
+link_internal v3i_iterator
+Iterator(v3i_stream* Stream)
 {
-  meta_func_arg_iterator Iterator = {
+  v3i_iterator Iterator = {
     .Stream = Stream,
     .At = Stream->FirstChunk
   };
@@ -37,28 +37,28 @@ Iterator(meta_func_arg_stream* Stream)
 }
 
 link_internal b32
-IsValid(meta_func_arg_iterator* Iter)
+IsValid(v3i_iterator* Iter)
 {
   b32 Result = Iter->At != 0;
   return Result;
 }
 
 link_internal void
-Advance(meta_func_arg_iterator* Iter)
+Advance(v3i_iterator* Iter)
 {
   Iter->At = Iter->At->Next;
 }
 
 link_internal b32
-IsLastElement(meta_func_arg_iterator* Iter)
+IsLastElement(v3i_iterator* Iter)
 {
   b32 Result = Iter->At->Next == 0;
   return Result;
 }
 
 
-link_internal meta_func_arg *
-Push(meta_func_arg_stream* Stream, meta_func_arg Element)
+link_internal v3i *
+Push(v3i_stream* Stream, v3i Element)
 {
   if (Stream->Memory == 0)
   {
@@ -66,7 +66,7 @@ Push(meta_func_arg_stream* Stream, meta_func_arg Element)
   }
 
   /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
-  meta_func_arg_stream_chunk* NextChunk = (meta_func_arg_stream_chunk*)PushStruct(Stream->Memory, sizeof(meta_func_arg_stream_chunk), 1, 0);
+  v3i_stream_chunk* NextChunk = (v3i_stream_chunk*)PushStruct(Stream->Memory, sizeof(v3i_stream_chunk), 1, 0);
   NextChunk->Element = Element;
 
   if (!Stream->FirstChunk)
@@ -86,7 +86,7 @@ Push(meta_func_arg_stream* Stream, meta_func_arg Element)
 
   Stream->ChunkCount += 1;
 
-  meta_func_arg *Result = &NextChunk->Element;
+  v3i *Result = &NextChunk->Element;
   return Result;
 }
 

@@ -9,6 +9,7 @@ struct d_union_member_stream
   memory_arena *Memory;
   d_union_member_stream_chunk* FirstChunk;
   d_union_member_stream_chunk* LastChunk;
+  umm ChunkCount;
 };
 
 link_internal void
@@ -82,6 +83,8 @@ Push(d_union_member_stream* Stream, d_union_member Element)
 
   Assert(NextChunk->Next == 0);
   Assert(Stream->LastChunk->Next == 0);
+
+  Stream->ChunkCount += 1;
 
   d_union_member *Result = &NextChunk->Element;
   return Result;
