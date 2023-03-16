@@ -8,20 +8,24 @@ poof(
     })
   }
 )
-#include <tests/integration/generated/accessors/anonymous_bar_struct_rHXPMI2N.h>
+#include <tests/integration/generated/accessors/anonymous_bar_struct_XqHSO27n.h>
+
 
 
 poof(
   func (array_struct B)
   {
     B.member(0, (M) {
-        /* M.is_array? { isarray } { notarray } */
-        M.map_array (Index) {
+        M.is_array? { isarray } { notarray }
+        M.map_array () {
+          foo
         }
-      /* M.type M.name M.value M.array */
+      M.type M.name M.value
+      /* M.array */
     })
   }
 )
-#include <tests/integration/generated/accessors/anonymous_array_struct_jBUFDQ5P.h>
+#include <tests/integration/generated/accessors/anonymous_array_struct_R1CjBJgY.h>
+
 
 

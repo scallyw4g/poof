@@ -1,3 +1,5 @@
+#define poof(...)
+
 typedef __ undefined_type;
 
 // NOTE(Jesse): Copied from bonsai_stdlib/primitives.h

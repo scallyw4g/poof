@@ -7640,7 +7640,7 @@ ResolveConstantExpression(parser *Parser, ast_node *Node)
     );
   }
 
-  return 0;
+  return Result;
 }
 
 #if 0

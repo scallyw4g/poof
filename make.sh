@@ -8,12 +8,11 @@
 # Calling functions by name on the command line shouldn't be affected by these.
 
 
-RunPreemptivePoof=1
-
+# RunPreemptivePoof=1
 # BuildAllBinariesRunAllTests=1
 
 BuildPoof=1
-RunPoof=1
+# RunPoof=1
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 # POOF_DEBUGGER="gdb --args"
 
@@ -29,7 +28,7 @@ RunPoof=1
 
 # RunIntegrationTests=1
 # INTEGRATION_TEST_INDEX=0
-# INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
+# INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug -c0"
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 
 # RunExtendedIntegrationTests=1
@@ -279,6 +278,8 @@ function RunIntegrationTests()
       fi
 
       mkdir -p $test_output_dir
+
+      echo "$INTEGRATION_TEST_DEBUGGER bin/poof $INTEGRATION_TEST_LOG_LEVEL $filename -o $test_output_dir"
 
       $INTEGRATION_TEST_DEBUGGER bin/poof \
         $INTEGRATION_TEST_LOG_LEVEL       \

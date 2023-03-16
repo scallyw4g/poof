@@ -419,7 +419,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
               case map_array:
               {
                 RequireToken(Scope, CTokenType_OpenParen);
-                counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value;
+                /* counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value; */
                 RequireToken(Scope, CTokenType_CloseParen);
 
                 parser MapMemberScope = GetBodyTextForNextScope(Scope, Memory);
@@ -428,6 +428,8 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                 u64 Size = ResolveConstantExpression(Scope, Node);
                 for (u64 Index = 0; Index < Size; ++Index)
                 {
+                  // TODO(Jesse): We need to make meta_func_args have room for more than just datatypes
+                  // We now need to have literals
                   meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
                   /* Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Index))); */
                   Rewind(MapMemberScope.Tokens);
