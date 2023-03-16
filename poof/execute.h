@@ -339,6 +339,57 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
 
               } break;
 
+              case member:
+              {
+                RequireToken(Scope, CTokenType_OpenParen);
+                u64 MemberIndex = RequireToken(Scope, CTokenType_IntLiteral).UnsignedValue;
+                RequireToken(Scope, CTokenType_Comma);
+
+                RequireToken(Scope, CTokenType_OpenParen);
+                counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value;
+                RequireToken(Scope, CTokenType_CloseParen);
+
+                auto MemberScope = GetBodyTextForNextScope(Scope, Memory);
+                RequireToken(Scope, CTokenType_CloseParen);
+
+                declaration_stream *Members = GetMembersFor(&Replace->Data);
+                if (Members)
+                {
+                  u32 AtIndex = 0;
+                  declaration_stream_chunk *IndexedMember = Members->FirstChunk;
+                  while ( IndexedMember && AtIndex < MemberIndex )
+                  {
+                    IndexedMember = IndexedMember->Next;
+                    AtIndex ++;
+                  }
+
+                  if (IndexedMember && AtIndex == MemberIndex)
+                  {
+                  }
+                  else
+                  {
+                    PoofTypeError( Scope,
+                                   ParseErrorCode_InvalidArgument,
+                                   FormatCountedString( TranArena,
+                                                        CSz("Attempted to access member index (%u) on (%S), which didn't enough members!"),
+                                                        MemberIndex,
+                                                        GetNameForDatatype(&Replace->Data, TranArena)),
+                                   MetaOperatorToken);
+                  }
+                }
+                else
+                {
+                  PoofTypeError( Scope,
+                                 ParseErrorCode_InvalidArgument,
+                                 FormatCountedString( TranArena,
+                                                      CSz("Attempted to access member index (%u) on (%S), which didn't have any members!"),
+                                                      MemberIndex,
+                                                      GetNameForDatatype(&Replace->Data, TranArena)),
+                                 MetaOperatorToken);
+                }
+
+              } break;
+
               case map_members:
               {
                 RequireToken(Scope, CTokenType_OpenParen);

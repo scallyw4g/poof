@@ -32,6 +32,9 @@ enum meta_arg_operator
   map_values,
   map_members,
 
+  // accessors
+  member,
+
   // predicates
   is_enum,
   is_struct,
@@ -1581,11 +1584,11 @@ IsValidForCursor(c_token_cursor *Tokens, c_token *T)
   return Result;
 }
 
-
 struct tuple_CountedString_CountedString
 {
   counted_string E[2];
 };
+
 poof(generate_stream(tuple_CountedString_CountedString))
 #include <generated/generate_stream_tuple_CountedString_CountedString.h>
 

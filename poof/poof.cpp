@@ -6412,6 +6412,7 @@ RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Fi
         if (T->IncludePath.Start)
         {
           Assert(StringsMatch(T->Value, CSz("\n")));
+          FileWritesSucceeded &= WriteToFile(&TempFile, CSz("\n"));
           FileWritesSucceeded &= WriteToFile(&TempFile, CSz("#include <"));
           FileWritesSucceeded &= WriteToFile(&TempFile, Concat(OutputPath, T->IncludePath, TranArena) ); // TODO(Jesse, begin_temporary_memory)
           FileWritesSucceeded &= WriteToFile(&TempFile, CSz(">"));
@@ -10991,6 +10992,7 @@ GetMembersFor(datatype *Data)
     {
     } break;
   }
+
   return Result;
 }
 
