@@ -497,6 +497,7 @@ struct declaration_stream
   memory_arena *Memory = AllocateArena();
   declaration_stream_chunk *FirstChunk;
   declaration_stream_chunk *LastChunk;
+  u64 ChunkCount;
 };
 
 struct compound_decl // structs and unions
