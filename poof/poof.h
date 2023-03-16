@@ -27,8 +27,10 @@ enum meta_arg_operator
   name,
   type,
   value,
+  array,
 
   // iterative
+  map_array,
   map_values,
   map_members,
 
@@ -43,7 +45,9 @@ enum meta_arg_operator
   is_compound,
   is_primitive,
   is_function,
+  is_array,
 };
+
 poof( generate_value_table(meta_arg_operator) )
 #include <generated/generate_value_table_meta_arg_operator.h>
 
@@ -433,6 +437,7 @@ enum parse_error_code
   ParseErrorCode_InvalidMetaTransformOp,
   ParseErrorCode_InvalidArgument,
   ParseErrorCode_InvalidName,
+  ParseErrorCode_NotImplemented, // NOTE(Jesse): This means the compiler should support this case, but doesn't
 
 
   // General errors
@@ -497,7 +502,7 @@ struct declaration_stream
   memory_arena *Memory = AllocateArena();
   declaration_stream_chunk *FirstChunk;
   declaration_stream_chunk *LastChunk;
-  u64 ChunkCount;
+  umm ChunkCount;
 };
 
 struct compound_decl // structs and unions
@@ -1067,6 +1072,10 @@ poof(
 poof(generate_stream(ast_node))
 #include <generated/generate_stream_ast_node.h>
 
+poof(string_and_value_tables(ast_node_type))
+#include <generated/string_and_value_tables_ast_node_type.h>
+
+
 link_internal ast_node*
 AllocateAstNode(ast_node_type T, ast_node **Result, memory_arena* Memory)
 {
@@ -1419,7 +1428,6 @@ PeekToken(ansi_stream* Stream, u32 Lookahead = 0)
     // TODO(Jesse, id: 193, tags: metaprogramming): Metaprogram this.  I've had bugs multiple times because of it.
     switch (At)
     {
-
       case CT_ControlChar_Start_of_Heading:
       case CT_ControlChar_Start_of_Text:
       case CT_ControlChar_End_of_Text:

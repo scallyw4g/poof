@@ -7,6 +7,8 @@ MetaArgOperator(counted_string S)
   if (StringsMatch(S, CSz("name"))) { return name; }
   if (StringsMatch(S, CSz("type"))) { return type; }
   if (StringsMatch(S, CSz("value"))) { return value; }
+  if (StringsMatch(S, CSz("array"))) { return array; }
+  if (StringsMatch(S, CSz("map_array"))) { return map_array; }
   if (StringsMatch(S, CSz("map_values"))) { return map_values; }
   if (StringsMatch(S, CSz("map_members"))) { return map_members; }
   if (StringsMatch(S, CSz("member"))) { return member; }
@@ -17,6 +19,7 @@ MetaArgOperator(counted_string S)
   if (StringsMatch(S, CSz("is_compound"))) { return is_compound; }
   if (StringsMatch(S, CSz("is_primitive"))) { return is_primitive; }
   if (StringsMatch(S, CSz("is_function"))) { return is_function; }
+  if (StringsMatch(S, CSz("is_array"))) { return is_array; }
 
 
   return Result;

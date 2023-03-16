@@ -17,6 +17,7 @@ ToString( parse_error_code Type)
     case ParseErrorCode_InvalidMetaTransformOp: { Result = CSz("ParseErrorCode_InvalidMetaTransformOp"); } break;
     case ParseErrorCode_InvalidArgument: { Result = CSz("ParseErrorCode_InvalidArgument"); } break;
     case ParseErrorCode_InvalidName: { Result = CSz("ParseErrorCode_InvalidName"); } break;
+    case ParseErrorCode_NotImplemented: { Result = CSz("ParseErrorCode_NotImplemented"); } break;
     case ParseErrorCode_InputStreamNull: { Result = CSz("ParseErrorCode_InputStreamNull"); } break;
     case ParseErrorCode_InternalCompilerError: { Result = CSz("ParseErrorCode_InternalCompilerError"); } break;
     case ParseErrorCode_Unknown: { Result = CSz("ParseErrorCode_Unknown"); } break;

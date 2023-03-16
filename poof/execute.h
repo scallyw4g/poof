@@ -274,6 +274,13 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                 DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
               } break;
 
+              case is_array:
+              {
+                RequireToken(Scope, CTokenType_Question);
+                b32 DoTrueBranch = DatatypeIsArray(Ctx, Scope, &Replace->Data, MetaOperatorToken);
+                DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
+              } break;
+
               case is_function:
               {
                 RequireToken(Scope, CTokenType_Question);
@@ -300,6 +307,11 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
 
                 b32 DoTrueBranch = (IsFunc || D != 0);
                 DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
+              } break;
+
+              case array:
+              {
+                Assert(false);
               } break;
 
               case value:
@@ -365,15 +377,29 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
 
                   if (IndexedMember && AtIndex == MemberIndex)
                   {
+                    meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
+                    Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(&IndexedMember->Element)));
+                    counted_string StructFieldOutput = Execute(&MemberScope, &NewArgs, Ctx, Memory, Depth);
+                    if (MemberScope.ErrorCode)
+                    {
+                      Scope->ErrorCode = MemberScope.ErrorCode;
+                    }
+                    else
+                    {
+                      TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
+                      Append(&OutputBuilder, StructFieldOutput);
+                    }
                   }
                   else
                   {
                     PoofTypeError( Scope,
                                    ParseErrorCode_InvalidArgument,
                                    FormatCountedString( TranArena,
-                                                        CSz("Attempted to access member index (%u) on (%S), which didn't enough members!"),
+                                                        CSz("Attempted to access member index (%u) on (%S), which has (%d) members!"),
                                                         MemberIndex,
-                                                        GetNameForDatatype(&Replace->Data, TranArena)),
+                                                        GetNameForDatatype(&Replace->Data, TranArena),
+                                                        Members->ChunkCount
+                                                        ),
                                    MetaOperatorToken);
                   }
                 }
@@ -388,6 +414,34 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                                  MetaOperatorToken);
                 }
 
+              } break;
+
+              case map_array:
+              {
+                RequireToken(Scope, CTokenType_OpenParen);
+                counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value;
+                RequireToken(Scope, CTokenType_CloseParen);
+
+                parser MapMemberScope = GetBodyTextForNextScope(Scope, Memory);
+
+                ast_node *Node = DatatypeStaticBufferSize(Ctx, Scope, &Replace->Data, MetaOperatorToken);
+                u64 Size = ResolveConstantExpression(Scope, Node);
+                for (u64 Index = 0; Index < Size; ++Index)
+                {
+                  meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
+                  /* Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Index))); */
+                  Rewind(MapMemberScope.Tokens);
+                  counted_string StructFieldOutput = Execute(&MapMemberScope, &NewArgs, Ctx, Memory, Depth);
+                  if (MapMemberScope.ErrorCode)
+                  {
+                    Scope->ErrorCode = MapMemberScope.ErrorCode;
+                  }
+                  else
+                  {
+                    TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
+                    Append(&OutputBuilder, StructFieldOutput);
+                  }
+                }
               } break;
 
               case map_members:

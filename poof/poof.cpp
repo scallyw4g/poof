@@ -1624,6 +1624,12 @@ ParseError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
 }
 
 link_internal void
+PoofNotImplementedError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
+{
+  OutputContextMessage(Parser, ParseErrorCode_NotImplemented, CSz("Poof Not-Implemented Error"), ErrorMessage, ErrorToken);
+}
+
+link_internal void
 PoofTypeError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken)
 {
   OutputContextMessage(Parser, ErrorCode, CSz("Poof Type Error"), ErrorMessage, ErrorToken);
@@ -6403,16 +6409,16 @@ RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Fi
         FileWritesSucceeded &= WriteToFile(&TempFile, CS((const char*)&T->Type, 1));
       }
 
-      // We mutated this token from its original type to signify we should
-      // insert an include here.  At the moment it was always a newline, but
-      // that could change in the future.
-      //
+      // The original token can be anything; the file could end with something
+      // that's not a newline, in which case we have to write our own out.
       if (T->Type == CT_PoofInsertedCode)
       {
         if (T->IncludePath.Start)
         {
-          Assert(StringsMatch(T->Value, CSz("\n")));
-          FileWritesSucceeded &= WriteToFile(&TempFile, CSz("\n"));
+          if (!StringsMatch(T->Value, CSz("\n")))
+          {
+            FileWritesSucceeded &= WriteToFile(&TempFile, CSz("\n"));
+          }
           FileWritesSucceeded &= WriteToFile(&TempFile, CSz("#include <"));
           FileWritesSucceeded &= WriteToFile(&TempFile, Concat(OutputPath, T->IncludePath, TranArena) ); // TODO(Jesse, begin_temporary_memory)
           FileWritesSucceeded &= WriteToFile(&TempFile, CSz(">"));
@@ -7586,6 +7592,55 @@ FinalizeOperatorFunction(parse_context *Ctx, type_spec *TypeSpec)
   }
 
   return Result;
+}
+
+link_internal u64
+ResolveConstantExpression(parser *Parser, ast_node *Node)
+{
+  u64 Result = 0;
+  switch(Node->Type)
+  {
+    case type_ast_node_expression:
+    {
+      auto Expr = SafeAccess(ast_node_expression, Node);
+      if (Expr->Next)
+      {
+        PoofNotImplementedError(Parser, CSz("ResolveConstantExpression currently unable to resolve compound expressions."), PeekTokenPointer(Parser));
+      }
+
+      switch (Expr->Value->Type)
+      {
+        case type_ast_node_literal:
+        {
+          auto Literal = SafeAccess(ast_node_literal, Expr->Value);
+          switch (Literal->Token.Type)
+          {
+            case CTokenType_IntLiteral:
+            {
+              Result = Literal->Token.UnsignedValue;
+            } break;
+
+            InvalidDefaultWhileParsing(Parser,
+              FormatCountedString( TranArena,
+                CSz("Invalid literal type passed to ResolveConstantExpression.  Type was (%S)"), ToString(Literal->Token.Type) ) );
+          }
+        } break;
+
+        InvalidDefaultWhileParsing(Parser,
+          FormatCountedString( TranArena,
+            CSz("Invalid expression type passed to ResolveConstantExpression.  Type was (%S)"), ToString(Expr->Value->Type) )
+        );
+      }
+
+    } break;
+
+    InvalidDefaultWhileParsing(Parser,
+      FormatCountedString( TranArena,
+        CSz("Invalid node type passed to ResolveConstantExpression.  Type was (%S)"), ToString(Node->Type) )
+    );
+  }
+
+  return 0;
 }
 
 #if 0
@@ -9193,8 +9248,7 @@ ParseSingleStatement(parse_context *Ctx, ast_node_statement *Result)
         if (Result->LHS)
         {
           DebugPrint(Result);
-          ParseError(Parser, CSz("Unable to parse L-value, LHS of expression already set!"), T);
-          RuntimeBreak();
+          InternalCompilerError(Parser, CSz("Unable to parse L-value, LHS of expression already set!"), T);
         }
 
         Result->LHS = ParseExpression(Ctx);
@@ -9310,8 +9364,7 @@ ParseSingleStatement(parse_context *Ctx, ast_node_statement *Result)
         if (Result->LHS)
         {
           DebugPrint(Result);
-          ParseError(Parser, CSz("Unable to parse L-value, LHS of expression already set!"), T);
-          RuntimeBreak();
+          InternalCompilerError(Parser, CSz("Unable to parse L-value, LHS of expression already set!"), T);
         }
         else
         {
@@ -9959,7 +10012,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec)
   {
     ParseError( Parser,
                 ParseErrorCode_MalformedType,
-                CSz("Malformed type specifier near here"),
+                CSz("Malformed type specifier near here."),
                 PeekTokenPointer(Parser, -1));
   }
 
@@ -11006,6 +11059,12 @@ DatatypeIsVariableDecl(datatype *Data)
   switch (Data->Type)
   {
     case type_datatype_noop:
+    {
+      // TODO(Jesse): ?
+      Assert(false);
+      /* InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); */
+    } break;
+
     case type_primitive_def:
     case type_enum_member:
     {
@@ -11041,6 +11100,62 @@ DatatypeIsVariableDecl(datatype *Data)
       }
     }
   }
+  return Result;
+}
+
+link_internal ast_node*
+DatatypeStaticBufferSize(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
+{
+  ast_node *Result = {};
+  switch (Data->Type)
+  {
+    case type_datatype_noop:
+    {
+      // TODO(Jesse): ?
+      InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT);
+    } break;
+
+    case type_type_def:
+    case type_enum_member:
+    case type_primitive_def:
+    {
+    } break;
+
+    case type_declaration:
+    {
+      declaration *Decl = SafeAccess(declaration, Data);
+
+      switch(Decl->Type)
+      {
+        case type_declaration_noop:
+        {
+          // TODO(Jesse): ?
+          InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT);
+        } break;
+
+        case type_function_decl:
+        case type_enum_decl:
+        case type_compound_decl:
+        {
+        } break;
+
+        case type_variable_decl:
+        {
+          variable_decl *VDecl = SafeAccess(variable_decl, Decl);
+          Result = VDecl->StaticBufferSize;
+        } break;
+      }
+
+    } break;
+  }
+
+  return Result;
+}
+
+link_internal b32
+DatatypeIsArray(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
+{
+  b32 Result = (DatatypeStaticBufferSize(Ctx, Scope, Data, MetaOperatorT) != 0);
   return Result;
 }
 
@@ -12254,8 +12369,7 @@ main(s32 ArgCount_, const char** ArgStrings)
   memory_arena* Memory = &Memory_;
   Memory->NextBlockSize = Megabytes(256);
 
-  Global_ThreadStates = Initialize_ThreadLocal_ThreadStates(1, 0, Memory);
-  SetThreadLocal_ThreadIndex(0);
+  AllocateAndInitThreadStates(Memory);
 
   parse_context Ctx = AllocateParseContext(Memory);
 
