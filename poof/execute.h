@@ -122,6 +122,11 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                                  MetaOperatorToken);
                 } break;
 
+                case sep:
+                {
+                  InvalidCodePath();
+                } break;
+
                 case is_defined:
                 {
                   RequireToken(Scope, CTokenType_Question);
@@ -511,6 +516,22 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                   counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value;
                   RequireToken(Scope, CTokenType_CloseParen);
 
+                  cs Sep = {};
+                  if (OptionalTokenRaw(Scope, CTokenType_Dot))
+                  {
+                    cs Modifier = RequireToken(Scope, CTokenType_Identifier).Value;
+                    meta_arg_operator ModOp = MetaArgOperator(Modifier);
+                    switch (ModOp)
+                    {
+                      case sep:
+                      {
+                        Sep = EatBetweenExcluding_Str(Scope, CTokenType_OpenParen, CTokenType_CloseParen);
+                      } break;
+
+                      InvalidDefaultCase;
+                    }
+                  }
+
                   parser MapMemberScope = GetBodyTextForNextScope(Scope, Memory);
 
                   ast_node *Node = DatatypeStaticBufferSize(Ctx, Scope, ReplaceData, MetaOperatorToken);
@@ -531,6 +552,10 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                     {
                       TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
                       Append(&OutputBuilder, StructFieldOutput);
+                      if (Index+1 < Size)
+                      {
+                        Append(&OutputBuilder, Sep);
+                      }
                     }
                   }
                 } break;

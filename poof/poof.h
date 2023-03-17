@@ -34,6 +34,9 @@ enum meta_arg_operator
   map_values,
   map_members,
 
+  // utility
+  sep,
+
   // accessors
   member,
 
@@ -46,7 +49,6 @@ enum meta_arg_operator
   is_primitive,
   is_function,
   is_array,
-
   is_type,
   is_named,
   contains_type,

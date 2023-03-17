@@ -6690,6 +6690,25 @@ EatBetween(parser* Parser, c_token_type Open, c_token_type Close)
 }
 
 link_internal counted_string
+EatBetweenExcluding_Str(parser* Parser, c_token_type Open, c_token_type Close)
+{
+  counted_string Result = {};
+
+  string_from_parser Builder = StartStringFromParser(Parser);
+  EatBetween(Parser, Open, Close);
+  Result = FinalizeStringFromParser(&Builder);
+
+  if (Result.Count > 1)
+  {
+    Assert(Result.Start);
+    Result.Count -= 2;
+    Result.Start++;
+  }
+
+  return Result;
+}
+
+link_internal counted_string
 EatBetween_Str(parser* Parser, c_token_type Open, c_token_type Close)
 {
   counted_string Result = {};
