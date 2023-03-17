@@ -43,14 +43,18 @@ poof(
     {
       M.is_union?
       {
-        M.map_members(UM).containing(nested_struct)
+        M.map_members(UM)
         {
-          (UM.type) (UM.name)
+          UM.contains_type(nested_struct)?
+          {
+            (UM.type) (UM.name)
+          }
         }
       }
     }
 
     -- filtered members end --
+
 
   }
 )

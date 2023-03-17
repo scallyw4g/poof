@@ -309,9 +309,49 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                 DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
               } break;
 
+              case is_type:
+              {
+                NotImplemented;
+              } break;
+
+              case is_named:
+              {
+                NotImplemented;
+              } break;
+
+              case contains_type:
+              {
+                RequireToken(Scope, CTokenType_OpenParen);
+                cs TypeName = RequireToken(Scope, CTokenType_Identifier).Value;
+                RequireToken(Scope, CTokenType_CloseParen);
+                RequireToken(Scope, CTokenType_Question);
+
+                auto Decl = SafeAccess(declaration, &Replace->Data);
+                auto Var = SafeAccess(variable_decl, Decl);
+                Assert(Var->Type.DatatypeToken);
+                auto DT = GetDatatypeByName(Ctx, Var->Type.DatatypeToken->Value);
+                auto VarMembers = GetMembersFor(&DT);
+
+                b32 Contains = False;
+                if (VarMembers)
+                {
+                  ITERATE_OVER_AS(VarMember, VarMembers)
+                  {
+                    declaration* VarDecl = GET_ELEMENT(VarMemberIter);
+                    counted_string MemberName = GetTypeNameForDecl(Ctx, VarDecl, Memory);
+                    if (StringsMatch(MemberName, TypeName))
+                    {
+                      Contains = True;
+                    }
+                  }
+                }
+
+                DoTrueFalse(Ctx, Scope, ReplacePatterns, Contains, &OutputBuilder, Memory, Depth);
+              } break;
+
               case array:
               {
-                Assert(false);
+                NotImplemented;
               } break;
 
               case value:
@@ -453,18 +493,12 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                 RequireToken(Scope, CTokenType_CloseParen);
 
                 counted_string ContainingConstraint = {};
-                counted_string ChildName = {};
                 if ( OptionalToken(Scope, CTokenType_Dot) )
                 {
+                  InvalidCodePath();
                   RequireToken(Scope, CToken(CSz("containing")));
                   RequireToken(Scope, CTokenType_OpenParen);
                   ContainingConstraint = RequireToken(Scope, CTokenType_Identifier).Value;
-
-                  if ( OptionalToken(Scope, CToken(CSz("as"))) )
-                  {
-                    ChildName = RequireToken(Scope, CTokenType_Identifier).Value;
-                  }
-
                   RequireToken(Scope, CTokenType_CloseParen);
                 }
 

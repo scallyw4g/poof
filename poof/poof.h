@@ -27,7 +27,7 @@ enum meta_arg_operator
   name,
   type,
   value,
-  array,
+  array, // not implemented
 
   // iterative
   map_array,
@@ -46,6 +46,10 @@ enum meta_arg_operator
   is_primitive,
   is_function,
   is_array,
+
+  is_type,
+  is_named,
+  contains_type,
 };
 
 poof( generate_value_table(meta_arg_operator) )
@@ -1121,15 +1125,14 @@ struct for_enum_constraints
   counted_string ValueName;
 };
 
-struct body_text_constraints
-{
-  counted_string MemberContains;
-
-  // Replacement Patterns
-  counted_string TypeTag;
-  counted_string TypeName;
-  counted_string ValueName;
-};
+/* struct body_text_constraints */
+/* { */
+/*   counted_string MemberContains; */
+/*   // Replacement Patterns */
+/*   counted_string TypeTag; */
+/*   counted_string TypeName; */
+/*   counted_string ValueName; */
+/* }; */
 
 struct todo_list_info
 {

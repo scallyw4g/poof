@@ -3,7 +3,7 @@
 #define poof(...)
 
 //
-// In this example we'll learn how to use the .containing() constraint to
+// In this example we'll learn how to use the .contains_type() constraint to
 // filter a set of members.  Let's start off by generating the d_union from
 // the previous example.
 //
@@ -45,7 +45,7 @@ int main()
 {
   poof(
     //
-    // Using the `containing` constraint allows us to filter members which
+    // Using the `contains_type` constraint allows us to filter members which
     // contain a specified type.
     //
     // This is incredibly useful in rare cases.  I expect to add more of these
@@ -71,9 +71,12 @@ int main()
       {
         M.is_union?
         {
-          M.map_members(UM).containing(nested_struct)
+          M.map_members(UM)
           {
-            printf("UM.type UM.name\n");
+            UM.contains_type(nested_struct)?
+            {
+              printf("UM.type UM.name\n");
+            }
           }
         }
       }
