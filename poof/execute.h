@@ -94,15 +94,19 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
         ITERATE_OVER_AS(Replace, ReplacePatterns)
         {
           meta_func_arg* Replace = GET_ELEMENT(ReplaceIter);
-          if (auto ReplaceData = TryCast(datatype, Replace))
+          if ( (ImpetusWasIdentifier && StringsMatch(Replace->Match, BodyToken->Value)) ||
+               (ImpetusWasOpenParen  && OptionalTokenRaw(Scope, CToken(Replace->Match)))
+             )
           {
-            Assert(ReplaceData->Type);
-
-            if ( (ImpetusWasIdentifier && StringsMatch(Replace->Match, BodyToken->Value)) ||
-                 (ImpetusWasOpenParen  && OptionalTokenRaw(Scope, CToken(Replace->Match)))
-               )
+            ExecutedChildFunc = True;
+            if (auto RepIndex = TryCast(poof_index, Replace))
             {
-              ExecutedChildFunc = True;
+              counted_string S = FormatCountedString(Memory, CSz("%u"), RepIndex->Index);
+              Append(&OutputBuilder, S);
+            }
+            else if (auto ReplaceData = TryCast(datatype, Replace))
+            {
+              Assert(ReplaceData->Type);
               RequireToken(Scope, CTokenType_Dot);
 
               c_token *MetaOperatorToken = RequireTokenPointer(Scope, CTokenType_Identifier);
@@ -504,7 +508,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                 case map_array:
                 {
                   RequireToken(Scope, CTokenType_OpenParen);
-                  /* counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value; */
+                  counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value;
                   RequireToken(Scope, CTokenType_CloseParen);
 
                   parser MapMemberScope = GetBodyTextForNextScope(Scope, Memory);
@@ -516,7 +520,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                     // TODO(Jesse): We need to make meta_func_args have room for more than just datatypes
                     // We now need to have literals
                     meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
-                    /* Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Index))); */
+                    Push(&NewArgs, ReplacementPattern(MatchPattern, PoofIndex(SafeTruncateToU32(Index), SafeTruncateToU32(Size))));
                     Rewind(MapMemberScope.Tokens);
                     counted_string StructFieldOutput = Execute(&MapMemberScope, &NewArgs, Ctx, Memory, Depth);
                     if (MapMemberScope.ErrorCode)

@@ -10790,11 +10790,18 @@ ReplacementPattern(counted_string Match, meta_func_arg *Arg)
 }
 
 link_internal meta_func_arg
+ReplacementPattern(counted_string Match, poof_index Index)
+{
+  meta_func_arg Result = MetaFuncArg(Index);
+  Result.Match = Match;
+  return Result;
+}
+
+link_internal meta_func_arg
 ReplacementPattern(counted_string Match, datatype Data)
 {
   meta_func_arg Result = MetaFuncArg(Data);
   Result.Match = Match;
-
   return Result;
 }
 

@@ -9,6 +9,15 @@ MetaFuncArg(datatype A)
   };
   return Reuslt;
 }
+link_internal meta_func_arg
+MetaFuncArg(poof_index A)
+{
+  meta_func_arg Reuslt = {
+    .Type = type_poof_index,
+    .poof_index = A
+  };
+  return Reuslt;
+}
 
 
 

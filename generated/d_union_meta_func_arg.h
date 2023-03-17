@@ -2,6 +2,7 @@ enum meta_func_arg_type
 {
   type_meta_func_arg_noop,
   type_datatype,
+  type_poof_index,
 };
 
 struct meta_func_arg
@@ -12,6 +13,7 @@ struct meta_func_arg
   union
   {
     struct datatype datatype;
+    struct poof_index poof_index;
   };
 };
 

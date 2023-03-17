@@ -17,7 +17,7 @@ poof(
   {
     B.member(0, (M) {
         M.is_array? { isarray } { notarray }
-        M.map_array () {
+        M.map_array (Index) {
           foo
         }
       M.type M.name M.value

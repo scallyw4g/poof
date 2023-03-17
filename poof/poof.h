@@ -869,10 +869,29 @@ Datatype(type_spec S)
 }
 
 
+struct poof_index
+{
+  u32 Index;
+  u32 MaxIndex;
+};
+
+link_internal poof_index
+PoofIndex(u32 Index, u32 MaxIndex)
+{
+  poof_index Result = {
+    .Index = Index,
+    .MaxIndex = MaxIndex
+  };
+  return Result;
+}
+
+/* poof(constructors(poof_index) */
+
 poof(
   d_union meta_func_arg
   {
     datatype
+    poof_index
   },
   {
     counted_string Match;
