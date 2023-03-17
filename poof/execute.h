@@ -84,164 +84,261 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
         }
       } break;
 
-      case CTokenType_OpenParen:
       case CTokenType_Identifier:
+      case CTokenType_OpenParen:
       {
-        b32 ImpetusWasOpenParen = BodyToken->Type == CTokenType_OpenParen;
         b32 ImpetusWasIdentifier = BodyToken->Type == CTokenType_Identifier;
+        b32 ImpetusWasOpenParen  = BodyToken->Type == CTokenType_OpenParen;
 
         b32 ExecutedChildFunc = False;
         ITERATE_OVER_AS(Replace, ReplacePatterns)
         {
           meta_func_arg* Replace = GET_ELEMENT(ReplaceIter);
-
-          Assert(Replace->Data.Type);
-
-          if ( (ImpetusWasIdentifier && StringsMatch(Replace->Match, BodyToken->Value) ) ||
-               (ImpetusWasOpenParen  && OptionalTokenRaw(Scope, CToken(Replace->Match)))
-             )
+          if (auto ReplaceData = TryCast(datatype, Replace))
           {
-            ExecutedChildFunc = True;
-            RequireToken(Scope, CTokenType_Dot);
+            Assert(ReplaceData->Type);
 
-            c_token *MetaOperatorToken = RequireTokenPointer(Scope, CTokenType_Identifier);
-
-            meta_arg_operator Operator = MetaArgOperator( MetaOperatorToken->Value );
-            switch (Operator)
+            if ( (ImpetusWasIdentifier && StringsMatch(Replace->Match, BodyToken->Value)) ||
+                 (ImpetusWasOpenParen  && OptionalTokenRaw(Scope, CToken(Replace->Match)))
+               )
             {
-              case meta_arg_operator_noop:
-              {
-                PoofTypeError( Scope,
-                               ParseErrorCode_InvalidOperator,
-                               FormatCountedString(TranArena, CSz("(%S) is not a valid poof operator"), MetaOperatorToken->Value),
-                               MetaOperatorToken);
-              } break;
+              ExecutedChildFunc = True;
+              RequireToken(Scope, CTokenType_Dot);
 
-              case is_defined:
-              {
-                RequireToken(Scope, CTokenType_Question);
-                /* auto S1 = GetTypeTypeForDatatype(&Replace->Data, TranArena); */
-                /* auto S2 = GetTypeNameForDatatype(Ctx, &Replace->Data, TranArena); */
+              c_token *MetaOperatorToken = RequireTokenPointer(Scope, CTokenType_Identifier);
 
-                b32 DoTrueBranch = False;
-                switch(Replace->Data.Type)
+              meta_arg_operator Operator = MetaArgOperator( MetaOperatorToken->Value );
+              switch (Operator)
+              {
+                case meta_arg_operator_noop:
                 {
-                  case type_datatype_noop:
-                  {
-                    // TODO(Jesse): When would this ever fire?  I thought this
-                    // was an undefined case..
-                    DoTrueBranch = False;
-                  } break;
+                  PoofTypeError( Scope,
+                                 ParseErrorCode_InvalidOperator,
+                                 FormatCountedString(TranArena, CSz("(%S) is not a valid poof operator"), MetaOperatorToken->Value),
+                                 MetaOperatorToken);
+                } break;
 
-                  case type_declaration:
-                  case type_enum_member:
-                  case type_primitive_def:
-                  {
-                    datatype ResolvedT = ResolveToBaseType(Ctx, &Replace->Data);
-                    DoTrueBranch = (ResolvedT.Type != type_datatype_noop);
-                  } break;
-
-                  case type_type_def:
-                  {
-                    InvalidCodePath();
-                  } break;
-                }
-
-                DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
-              } break;
-
-              case is_primitive:
-              {
-                RequireToken(Scope, CTokenType_Question);
-
-                datatype Dt = ResolveToBaseType(Ctx, &Replace->Data);
-                b32 DoTrueBranch = (Dt.Type == type_primitive_def);
-
-                counted_string DTName = GetNameForDatatype(&Dt, TranArena);
-
-                // @counted_string_primitive_hack
-                if (StringsMatch(DTName, CSz("counted_string")))
+                case is_defined:
                 {
-                  DoTrueBranch = True;
-                }
+                  RequireToken(Scope, CTokenType_Question);
+                  /* auto S1 = GetTypeTypeForDatatype(ReplaceData, TranArena); */
+                  /* auto S2 = GetTypeNameForDatatype(Ctx, ReplaceData, TranArena); */
 
-                DoTrueFalse(Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
-              } break;
-
-              case is_compound:
-              {
-                RequireToken(Scope, CTokenType_Question);
-                compound_decl *CD = DatatypeIsCompoundDecl(Ctx, Scope, &Replace->Data, MetaOperatorToken);
-
-                b32 DoTrueBranch = (CD != 0);
-
-                // @counted_string_primitive_hack
-                if (CD)
-                {
-                  declaration TempDecl = Declaration(CD);
-                  counted_string DTName = GetNameForDecl(&TempDecl);
-                  if (StringsMatch(DTName, CSz("counted_string")))
+                  b32 DoTrueBranch = False;
+                  switch(ReplaceData->Type)
                   {
-                    DoTrueBranch = False;
+                    case type_datatype_noop:
+                    {
+                      // TODO(Jesse): When would this ever fire?  I thought this
+                      // was an undefined case..
+                      DoTrueBranch = False;
+                    } break;
+
+                    case type_declaration:
+                    case type_enum_member:
+                    case type_primitive_def:
+                    {
+                      datatype ResolvedT = ResolveToBaseType(Ctx, ReplaceData);
+                      DoTrueBranch = (ResolvedT.Type != type_datatype_noop);
+                    } break;
+
+                    case type_type_def:
+                    {
+                      InvalidCodePath();
+                    } break;
                   }
-                }
 
-                DoTrueFalse(Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
-              } break;
+                  DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
+                } break;
 
-              case is_struct:
-              case is_union:
-              {
-                RequireToken(Scope, CTokenType_Question);
-                compound_decl *CD = DatatypeIsCompoundDecl(Ctx, Scope, &Replace->Data, MetaOperatorToken);
-
-                b32 DoTrueBranch = False;
-                if (CD)
+                case is_primitive:
                 {
-                  b32 Negate = (Operator == is_struct);
-                  DoTrueBranch = (CD->IsUnion ^ Negate);
+                  RequireToken(Scope, CTokenType_Question);
+
+                  datatype Dt = ResolveToBaseType(Ctx, ReplaceData);
+                  b32 DoTrueBranch = (Dt.Type == type_primitive_def);
+
+                  counted_string DTName = GetNameForDatatype(&Dt, TranArena);
 
                   // @counted_string_primitive_hack
-                  declaration TempDecl = Declaration(CD);
-                  counted_string DTName = GetNameForDecl(&TempDecl);
                   if (StringsMatch(DTName, CSz("counted_string")))
                   {
-                    DoTrueBranch = False;
+                    DoTrueBranch = True;
                   }
 
-                }
+                  DoTrueFalse(Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
+                } break;
 
-                DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
-              } break;
-
-              case is_enum:
-              {
-                RequireToken(Scope, CTokenType_Question);
-                b32 DoTrueBranch = False;
-                switch (Replace->Data.Type)
+                case is_compound:
                 {
-                  case type_datatype_noop:
-                  {
-                    InvalidCodePath();
-                  } break;
+                  RequireToken(Scope, CTokenType_Question);
+                  compound_decl *CD = DatatypeIsCompoundDecl(Ctx, Scope, ReplaceData, MetaOperatorToken);
 
-                  case type_type_def:
-                  {
-                    NotImplemented;
-                  } break;
+                  b32 DoTrueBranch = (CD != 0);
 
-                  case type_primitive_def:
+                  // @counted_string_primitive_hack
+                  if (CD)
                   {
-                  } break;
+                    declaration TempDecl = Declaration(CD);
+                    counted_string DTName = GetNameForDecl(&TempDecl);
+                    if (StringsMatch(DTName, CSz("counted_string")))
+                    {
+                      DoTrueBranch = False;
+                    }
+                  }
 
-                  case type_enum_member:
-                  {
-                    DoTrueBranch = True;
-                  } break;
+                  DoTrueFalse(Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
+                } break;
 
-                  case type_declaration:
+                case is_struct:
+                case is_union:
+                {
+                  RequireToken(Scope, CTokenType_Question);
+                  compound_decl *CD = DatatypeIsCompoundDecl(Ctx, Scope, ReplaceData, MetaOperatorToken);
+
+                  b32 DoTrueBranch = False;
+                  if (CD)
                   {
-                    declaration *Decl = SafeAccess(declaration, &Replace->Data);
+                    b32 Negate = (Operator == is_struct);
+                    DoTrueBranch = (CD->IsUnion ^ Negate);
+
+                    // @counted_string_primitive_hack
+                    declaration TempDecl = Declaration(CD);
+                    counted_string DTName = GetNameForDecl(&TempDecl);
+                    if (StringsMatch(DTName, CSz("counted_string")))
+                    {
+                      DoTrueBranch = False;
+                    }
+
+                  }
+
+                  DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
+                } break;
+
+                case is_enum:
+                {
+                  RequireToken(Scope, CTokenType_Question);
+                  b32 DoTrueBranch = False;
+                  switch (ReplaceData->Type)
+                  {
+                    case type_datatype_noop:
+                    {
+                      InvalidCodePath();
+                    } break;
+
+                    case type_type_def:
+                    {
+                      NotImplemented;
+                    } break;
+
+                    case type_primitive_def:
+                    {
+                    } break;
+
+                    case type_enum_member:
+                    {
+                      DoTrueBranch = True;
+                    } break;
+
+                    case type_declaration:
+                    {
+                      declaration *Decl = SafeAccess(declaration, ReplaceData);
+                      switch (Decl->Type)
+                      {
+                        case type_declaration_noop:
+                        {
+                          InvalidCodePath();
+                        } break;
+
+                        case type_compound_decl:
+                        case type_function_decl:
+                        {
+                        } break;
+
+                        case type_enum_decl:
+                        {
+                          DoTrueBranch = True;
+                        } break;
+
+                        case type_variable_decl:
+                        {
+                          variable_decl *VDecl = SafeAccess(variable_decl, Decl);
+                          enum_decl *E = {};
+                          if (VDecl->Type.DatatypeToken)
+                          {
+                            E = GetEnumByType(&Datatypes->Enums, VDecl->Type.DatatypeToken->Value);
+                          }
+                          DoTrueBranch = (E != 0);
+                        } break;
+                      }
+                    } break;
+                  }
+
+                  DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
+                } break;
+
+                case is_array:
+                {
+                  RequireToken(Scope, CTokenType_Question);
+                  b32 DoTrueBranch = DatatypeIsArray(Ctx, Scope, ReplaceData, MetaOperatorToken);
+                  DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
+                } break;
+
+                case is_function:
+                {
+                  RequireToken(Scope, CTokenType_Question);
+                  b32 IsFunc = DatatypeIsFunction(Ctx, Scope, ReplaceData, MetaOperatorToken);
+                  function_decl *D = DatatypeIsFunctionDecl(Ctx, Scope, ReplaceData, MetaOperatorToken);
+
+
+                  if (D)
+                  {
+                    datatype Base = ResolveToBaseType(Ctx, ReplaceData);
+
+                    /* Info("(%S) (%S) (%S)", */
+                    /*     GetTypeTypeForDatatype(ReplaceData, Memory), */
+                    /*     GetNameForDatatype(ReplaceData, TranArena), */
+                    /*     GetTypeNameForDatatype(ReplaceData, Memory)); */
+
+                    /* Info("(%S) (%S) (%S)", */
+                    /*     GetTypeTypeForDatatype(&Base, Memory), */
+                    /*     GetNameForDatatype(&Base, TranArena), */
+                    /*     GetTypeNameForDatatype(&Base, Memory)); */
+
+                  }
+
+
+                  b32 DoTrueBranch = (IsFunc || D != 0);
+                  DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
+                } break;
+
+                case is_type:
+                {
+                  RequireToken(Scope, CTokenType_OpenParen);
+                  cs QueryTypeName = RequireToken(Scope, CTokenType_Identifier).Value;
+                  RequireToken(Scope, CTokenType_CloseParen);
+                  RequireToken(Scope, CTokenType_Question);
+
+                  cs ThisTypeName = GetTypeNameForDatatype(Ctx, ReplaceData, Memory);
+
+                  b32 TypesMatch = StringsMatch(ThisTypeName, QueryTypeName);
+                  DoTrueFalse(Ctx, Scope, ReplacePatterns, TypesMatch, &OutputBuilder, Memory, Depth);
+                } break;
+
+                case is_named:
+                {
+                  NotImplemented;
+                } break;
+
+                case contains_type:
+                {
+                  RequireToken(Scope, CTokenType_OpenParen);
+                  cs TypeName = RequireToken(Scope, CTokenType_Identifier).Value;
+                  RequireToken(Scope, CTokenType_CloseParen);
+                  RequireToken(Scope, CTokenType_Question);
+
+                  if (auto Decl = TryCast(declaration, ReplaceData))
+                  {
                     switch (Decl->Type)
                     {
                       case type_declaration_noop:
@@ -249,232 +346,146 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                         InvalidCodePath();
                       } break;
 
-                      case type_compound_decl:
+                      case type_enum_decl:
                       case type_function_decl:
                       {
                       } break;
 
-                      case type_enum_decl:
-                      {
-                        DoTrueBranch = True;
-                      } break;
-
                       case type_variable_decl:
+                      case type_compound_decl:
                       {
-                        variable_decl *VDecl = SafeAccess(variable_decl, Decl);
-                        enum_decl *E = {};
-                        if (VDecl->Type.DatatypeToken)
+                        b32 Contains = False;
+                        declaration_stream* Members = 0;
+
+                        if (auto Var = TryCast(variable_decl, Decl))
                         {
-                          E = GetEnumByType(&Datatypes->Enums, VDecl->Type.DatatypeToken->Value);
-                        }
-                        DoTrueBranch = (E != 0);
-                      } break;
-                    }
-                  } break;
-                }
-
-                DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
-              } break;
-
-              case is_array:
-              {
-                RequireToken(Scope, CTokenType_Question);
-                b32 DoTrueBranch = DatatypeIsArray(Ctx, Scope, &Replace->Data, MetaOperatorToken);
-                DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
-              } break;
-
-              case is_function:
-              {
-                RequireToken(Scope, CTokenType_Question);
-                b32 IsFunc = DatatypeIsFunction(Ctx, Scope, &Replace->Data, MetaOperatorToken);
-                function_decl *D = DatatypeIsFunctionDecl(Ctx, Scope, &Replace->Data, MetaOperatorToken);
-
-
-                if (D)
-                {
-                  datatype Base = ResolveToBaseType(Ctx, &Replace->Data);
-
-                  /* Info("(%S) (%S) (%S)", */
-                  /*     GetTypeTypeForDatatype(&Replace->Data, Memory), */
-                  /*     GetNameForDatatype(&Replace->Data, TranArena), */
-                  /*     GetTypeNameForDatatype(&Replace->Data, Memory)); */
-
-                  /* Info("(%S) (%S) (%S)", */
-                  /*     GetTypeTypeForDatatype(&Base, Memory), */
-                  /*     GetNameForDatatype(&Base, TranArena), */
-                  /*     GetTypeNameForDatatype(&Base, Memory)); */
-
-                }
-
-
-                b32 DoTrueBranch = (IsFunc || D != 0);
-                DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
-              } break;
-
-              case is_type:
-              {
-                RequireToken(Scope, CTokenType_OpenParen);
-                cs QueryTypeName = RequireToken(Scope, CTokenType_Identifier).Value;
-                RequireToken(Scope, CTokenType_CloseParen);
-                RequireToken(Scope, CTokenType_Question);
-
-                cs ThisTypeName = GetTypeNameForDatatype(Ctx, &Replace->Data, Memory);
-
-                b32 TypesMatch = StringsMatch(ThisTypeName, QueryTypeName);
-                DoTrueFalse(Ctx, Scope, ReplacePatterns, TypesMatch, &OutputBuilder, Memory, Depth);
-              } break;
-
-              case is_named:
-              {
-                NotImplemented;
-              } break;
-
-              case contains_type:
-              {
-                RequireToken(Scope, CTokenType_OpenParen);
-                cs TypeName = RequireToken(Scope, CTokenType_Identifier).Value;
-                RequireToken(Scope, CTokenType_CloseParen);
-                RequireToken(Scope, CTokenType_Question);
-
-                if (auto Decl = TryCast(declaration, &Replace->Data))
-                {
-                  switch (Decl->Type)
-                  {
-                    case type_declaration_noop:
-                    {
-                      InvalidCodePath();
-                    } break;
-
-                    case type_enum_decl:
-                    case type_function_decl:
-                    {
-                    } break;
-
-                    case type_variable_decl:
-                    case type_compound_decl:
-                    {
-                      b32 Contains = False;
-                      declaration_stream* Members = 0;
-
-                      if (auto Var = TryCast(variable_decl, Decl))
-                      {
-                        // We could be asking about a primitive type
-                        if (Var->Type.DatatypeToken)
-                        {
-                          auto DT = GetDatatypeByName(Ctx, Var->Type.DatatypeToken->Value);
-                          Members = GetMembersFor(&DT);
-
-                        }
-                      }
-                      else
-                      {
-                        // Compound decls must have members .. right?
-                        Members = GetMembersFor(Decl);
-                        Assert(Members);
-                      }
-
-                      if (Members)
-                      {
-                        ITERATE_OVER_AS(Member, Members)
-                        {
-                          declaration* MemberDecl = GET_ELEMENT(MemberIter);
-                          counted_string MemberName = GetTypeNameForDecl(Ctx, MemberDecl, Memory);
-                          if (StringsMatch(MemberName, TypeName))
+                          // We could be asking about a primitive type
+                          if (Var->Type.DatatypeToken)
                           {
-                            Contains = True;
+                            auto DT = GetDatatypeByName(Ctx, Var->Type.DatatypeToken->Value);
+                            Members = GetMembersFor(&DT);
+
                           }
                         }
-                      }
+                        else
+                        {
+                          // Compound decls must have members .. right?
+                          Members = GetMembersFor(Decl);
+                          Assert(Members);
+                        }
 
-                      DoTrueFalse(Ctx, Scope, ReplacePatterns, Contains, &OutputBuilder, Memory, Depth);
-                    } break;
+                        if (Members)
+                        {
+                          ITERATE_OVER_AS(Member, Members)
+                          {
+                            declaration* MemberDecl = GET_ELEMENT(MemberIter);
+                            counted_string MemberName = GetTypeNameForDecl(Ctx, MemberDecl, Memory);
+                            if (StringsMatch(MemberName, TypeName))
+                            {
+                              Contains = True;
+                            }
+                          }
+                        }
+
+                        DoTrueFalse(Ctx, Scope, ReplacePatterns, Contains, &OutputBuilder, Memory, Depth);
+                      } break;
+                    }
                   }
-                }
-#if 0
-#endif
 
+                } break;
 
-              } break;
-
-              case array:
-              {
-                NotImplemented;
-              } break;
-
-              case value:
-              {
-                counted_string Value = GetValueForDatatype(&Replace->Data, Memory);
-                Append(&OutputBuilder, Value);
-              } break;
-
-              case type:
-              {
-                counted_string TypeName = GetTypeNameForDatatype(Ctx, &Replace->Data, Memory);
-                meta_transform_op Transformations = ParseTransformations(Scope);
-                if (Scope->ErrorCode == ParseErrorCode_None)
+                case array:
                 {
-                  counted_string TransformedName = ApplyTransformations(Transformations, TypeName, Memory);
-                  Append(&OutputBuilder, TransformedName);
-                }
-              } break;
+                  NotImplemented;
+                } break;
 
-              case name:
-              {
-                counted_string Name = GetNameForDatatype(&Replace->Data, Memory);
-                if (OptionalToken(Scope, CTokenType_Question))
+                case value:
                 {
-                  b32 DoTrueBranch = StringsMatch(Name, CSz("(anonymous)")) == False;
-                  DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
-                }
-                else
+                  counted_string Value = GetValueForDatatype(ReplaceData, Memory);
+                  Append(&OutputBuilder, Value);
+                } break;
+
+                case type:
                 {
+                  counted_string TypeName = GetTypeNameForDatatype(Ctx, ReplaceData, Memory);
                   meta_transform_op Transformations = ParseTransformations(Scope);
                   if (Scope->ErrorCode == ParseErrorCode_None)
                   {
-                    counted_string TransformedName = ApplyTransformations(Transformations, Name, Memory);
+                    counted_string TransformedName = ApplyTransformations(Transformations, TypeName, Memory);
                     Append(&OutputBuilder, TransformedName);
                   }
-                }
+                } break;
 
-              } break;
-
-              case member:
-              {
-                RequireToken(Scope, CTokenType_OpenParen);
-                u64 MemberIndex = RequireToken(Scope, CTokenType_IntLiteral).UnsignedValue;
-                RequireToken(Scope, CTokenType_Comma);
-
-                RequireToken(Scope, CTokenType_OpenParen);
-                counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value;
-                RequireToken(Scope, CTokenType_CloseParen);
-
-                auto MemberScope = GetBodyTextForNextScope(Scope, Memory);
-                RequireToken(Scope, CTokenType_CloseParen);
-
-                declaration_stream *Members = GetMembersFor(&Replace->Data);
-                if (Members)
+                case name:
                 {
-                  u32 AtIndex = 0;
-                  declaration_stream_chunk *IndexedMember = Members->FirstChunk;
-                  while ( IndexedMember && AtIndex < MemberIndex )
+                  counted_string Name = GetNameForDatatype(ReplaceData, Memory);
+                  if (OptionalToken(Scope, CTokenType_Question))
                   {
-                    IndexedMember = IndexedMember->Next;
-                    AtIndex ++;
+                    b32 DoTrueBranch = StringsMatch(Name, CSz("(anonymous)")) == False;
+                    DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
+                  }
+                  else
+                  {
+                    meta_transform_op Transformations = ParseTransformations(Scope);
+                    if (Scope->ErrorCode == ParseErrorCode_None)
+                    {
+                      counted_string TransformedName = ApplyTransformations(Transformations, Name, Memory);
+                      Append(&OutputBuilder, TransformedName);
+                    }
                   }
 
-                  if (IndexedMember && AtIndex == MemberIndex)
+                } break;
+
+                case member:
+                {
+                  RequireToken(Scope, CTokenType_OpenParen);
+                  u64 MemberIndex = RequireToken(Scope, CTokenType_IntLiteral).UnsignedValue;
+                  RequireToken(Scope, CTokenType_Comma);
+
+                  RequireToken(Scope, CTokenType_OpenParen);
+                  counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value;
+                  RequireToken(Scope, CTokenType_CloseParen);
+
+                  auto MemberScope = GetBodyTextForNextScope(Scope, Memory);
+                  RequireToken(Scope, CTokenType_CloseParen);
+
+                  declaration_stream *Members = GetMembersFor(ReplaceData);
+                  if (Members)
                   {
-                    meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
-                    Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(&IndexedMember->Element)));
-                    counted_string StructFieldOutput = Execute(&MemberScope, &NewArgs, Ctx, Memory, Depth);
-                    if (MemberScope.ErrorCode)
+                    u32 AtIndex = 0;
+                    declaration_stream_chunk *IndexedMember = Members->FirstChunk;
+                    while ( IndexedMember && AtIndex < MemberIndex )
                     {
-                      Scope->ErrorCode = MemberScope.ErrorCode;
+                      IndexedMember = IndexedMember->Next;
+                      AtIndex ++;
+                    }
+
+                    if (IndexedMember && AtIndex == MemberIndex)
+                    {
+                      meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
+                      Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(&IndexedMember->Element)));
+                      counted_string StructFieldOutput = Execute(&MemberScope, &NewArgs, Ctx, Memory, Depth);
+                      if (MemberScope.ErrorCode)
+                      {
+                        Scope->ErrorCode = MemberScope.ErrorCode;
+                      }
+                      else
+                      {
+                        TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
+                        Append(&OutputBuilder, StructFieldOutput);
+                      }
                     }
                     else
                     {
-                      TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
-                      Append(&OutputBuilder, StructFieldOutput);
+                      PoofTypeError( Scope,
+                                     ParseErrorCode_InvalidArgument,
+                                     FormatCountedString( TranArena,
+                                                          CSz("Attempted to access member index (%u) on (%S), which has (%d) members!"),
+                                                          MemberIndex,
+                                                          GetNameForDatatype(ReplaceData, TranArena),
+                                                          Members->ChunkCount
+                                                          ),
+                                     MetaOperatorToken);
                     }
                   }
                   else
@@ -482,146 +493,143 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                     PoofTypeError( Scope,
                                    ParseErrorCode_InvalidArgument,
                                    FormatCountedString( TranArena,
-                                                        CSz("Attempted to access member index (%u) on (%S), which has (%d) members!"),
+                                                        CSz("Attempted to access member index (%u) on (%S), which didn't have any members!"),
                                                         MemberIndex,
-                                                        GetNameForDatatype(&Replace->Data, TranArena),
-                                                        Members->ChunkCount
-                                                        ),
+                                                        GetNameForDatatype(ReplaceData, TranArena)),
                                    MetaOperatorToken);
                   }
-                }
-                else
+
+                } break;
+
+                case map_array:
                 {
-                  PoofTypeError( Scope,
-                                 ParseErrorCode_InvalidArgument,
-                                 FormatCountedString( TranArena,
-                                                      CSz("Attempted to access member index (%u) on (%S), which didn't have any members!"),
-                                                      MemberIndex,
-                                                      GetNameForDatatype(&Replace->Data, TranArena)),
-                                 MetaOperatorToken);
-                }
+                  RequireToken(Scope, CTokenType_OpenParen);
+                  /* counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value; */
+                  RequireToken(Scope, CTokenType_CloseParen);
 
-              } break;
+                  parser MapMemberScope = GetBodyTextForNextScope(Scope, Memory);
 
-              case map_array:
-              {
-                RequireToken(Scope, CTokenType_OpenParen);
-                /* counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value; */
-                RequireToken(Scope, CTokenType_CloseParen);
-
-                parser MapMemberScope = GetBodyTextForNextScope(Scope, Memory);
-
-                ast_node *Node = DatatypeStaticBufferSize(Ctx, Scope, &Replace->Data, MetaOperatorToken);
-                u64 Size = ResolveConstantExpression(Scope, Node);
-                for (u64 Index = 0; Index < Size; ++Index)
-                {
-                  // TODO(Jesse): We need to make meta_func_args have room for more than just datatypes
-                  // We now need to have literals
-                  meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
-                  /* Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Index))); */
-                  Rewind(MapMemberScope.Tokens);
-                  counted_string StructFieldOutput = Execute(&MapMemberScope, &NewArgs, Ctx, Memory, Depth);
-                  if (MapMemberScope.ErrorCode)
+                  ast_node *Node = DatatypeStaticBufferSize(Ctx, Scope, ReplaceData, MetaOperatorToken);
+                  u64 Size = ResolveConstantExpression(Scope, Node);
+                  for (u64 Index = 0; Index < Size; ++Index)
                   {
-                    Scope->ErrorCode = MapMemberScope.ErrorCode;
+                    // TODO(Jesse): We need to make meta_func_args have room for more than just datatypes
+                    // We now need to have literals
+                    meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
+                    /* Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Index))); */
+                    Rewind(MapMemberScope.Tokens);
+                    counted_string StructFieldOutput = Execute(&MapMemberScope, &NewArgs, Ctx, Memory, Depth);
+                    if (MapMemberScope.ErrorCode)
+                    {
+                      Scope->ErrorCode = MapMemberScope.ErrorCode;
+                    }
+                    else
+                    {
+                      TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
+                      Append(&OutputBuilder, StructFieldOutput);
+                    }
+                  }
+                } break;
+
+                case map_members:
+                {
+                  RequireToken(Scope, CTokenType_OpenParen);
+                  counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value;
+                  RequireToken(Scope, CTokenType_CloseParen);
+
+                  parser MapMemberScope = GetBodyTextForNextScope(Scope, Memory);
+                  declaration_stream *Members = GetMembersFor(ReplaceData);
+
+                  if (Members)
+                  {
+                    ITERATE_OVER_AS(Member, Members)
+                    {
+                      declaration* Member = GET_ELEMENT(MemberIter);
+
+                      switch (Member->Type)
+                      {
+                        case type_declaration_noop:
+                        {
+                          InvalidCodePath();
+                        } break;
+
+                        case type_enum_decl:
+                        case type_function_decl:
+                        {
+                          // What do we do for functions and enum declaratons ..?  Maybe the same thing as compound_decl?
+                        } break;
+
+                        case type_variable_decl:
+                        case type_compound_decl:
+                        {
+                          meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
+                          Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)));
+                          Rewind(MapMemberScope.Tokens);
+                          counted_string StructFieldOutput = Execute(&MapMemberScope, &NewArgs, Ctx, Memory, Depth);
+                          if (MapMemberScope.ErrorCode)
+                          {
+                            Scope->ErrorCode = MapMemberScope.ErrorCode;
+                          }
+                          else
+                          {
+                            TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
+                            Append(&OutputBuilder, StructFieldOutput);
+                          }
+                        } break;
+                      }
+                      continue;
+                    }
                   }
                   else
                   {
-                    TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
-                    Append(&OutputBuilder, StructFieldOutput);
+                    PoofTypeError( Scope,
+                                   ParseErrorCode_InvalidArgument,
+                                   FormatCountedString( TranArena,
+                                                        CSz("Called map_members on a datatype that didn't have members (%S)"),
+                                                        GetNameForDatatype(ReplaceData, TranArena)),
+                                   MetaOperatorToken);
                   }
-                }
-              } break;
 
-              case map_members:
-              {
-                RequireToken(Scope, CTokenType_OpenParen);
-                counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value;
-                RequireToken(Scope, CTokenType_CloseParen);
+                } break;
 
-                parser MapMemberScope = GetBodyTextForNextScope(Scope, Memory);
-                declaration_stream *Members = GetMembersFor(&Replace->Data);
-
-                if (Members)
+                case map_values:
                 {
-                  ITERATE_OVER_AS(Member, Members)
+                  RequireToken(Scope, CTokenType_OpenParen);
+                  c_token *EnumValueMatch  = RequireTokenPointer(Scope, CTokenType_Identifier);
+                  RequireToken(Scope, CTokenType_CloseParen);
+                  parser NextScope = GetBodyTextForNextScope(Scope, Memory);
+
+                  if (ReplaceData->Type == type_declaration)
                   {
-                    declaration* Member = GET_ELEMENT(MemberIter);
-
-                    switch (Member->Type)
+                    declaration *D = SafeAccess(declaration, ReplaceData);
+                    if (D->Type == type_enum_decl)
                     {
-                      case type_declaration_noop:
+                      ITERATE_OVER(&D->enum_decl.Members)
                       {
-                        InvalidCodePath();
-                      } break;
-
-                      case type_enum_decl:
-                      case type_function_decl:
-                      {
-                        // What do we do for functions and enum declaratons ..?  Maybe the same thing as compound_decl?
-                      } break;
-
-                      case type_variable_decl:
-                      case type_compound_decl:
-                      {
+                        enum_member* EnumMember = GET_ELEMENT(Iter);
                         meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
-                        Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)));
-                        Rewind(MapMemberScope.Tokens);
-                        counted_string StructFieldOutput = Execute(&MapMemberScope, &NewArgs, Ctx, Memory, Depth);
-                        if (MapMemberScope.ErrorCode)
+                        Push(&NewArgs, ReplacementPattern(EnumValueMatch->Value, Datatype(EnumMember)));
+                        Rewind(NextScope.Tokens);
+                        counted_string EnumFieldOutput = Execute(&NextScope, &NewArgs, Ctx, Memory, Depth);
+                        if (NextScope.ErrorCode)
                         {
-                          Scope->ErrorCode = MapMemberScope.ErrorCode;
+                          Scope->ErrorCode = NextScope.ErrorCode;
                         }
                         else
                         {
                           TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
-                          Append(&OutputBuilder, StructFieldOutput);
+                          Append(&OutputBuilder, EnumFieldOutput);
                         }
-                      } break;
+                      }
                     }
-                    continue;
-                  }
-                }
-                else
-                {
-                  PoofTypeError( Scope,
-                                 ParseErrorCode_InvalidArgument,
-                                 FormatCountedString( TranArena,
-                                                      CSz("Called map_members on a datatype that didn't have members (%S)"),
-                                                      GetNameForDatatype(&Replace->Data, TranArena)),
-                                 MetaOperatorToken);
-                }
-
-              } break;
-
-              case map_values:
-              {
-                RequireToken(Scope, CTokenType_OpenParen);
-                c_token *EnumValueMatch  = RequireTokenPointer(Scope, CTokenType_Identifier);
-                RequireToken(Scope, CTokenType_CloseParen);
-                parser NextScope = GetBodyTextForNextScope(Scope, Memory);
-
-                if (Replace->Data.Type == type_declaration)
-                {
-                  declaration *D = SafeAccess(declaration, &Replace->Data);
-                  if (D->Type == type_enum_decl)
-                  {
-                    ITERATE_OVER(&D->enum_decl.Members)
+                    else
                     {
-                      enum_member* EnumMember = GET_ELEMENT(Iter);
-                      meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
-                      Push(&NewArgs, ReplacementPattern(EnumValueMatch->Value, Datatype(EnumMember)));
-                      Rewind(NextScope.Tokens);
-                      counted_string EnumFieldOutput = Execute(&NextScope, &NewArgs, Ctx, Memory, Depth);
-                      if (NextScope.ErrorCode)
-                      {
-                        Scope->ErrorCode = NextScope.ErrorCode;
-                      }
-                      else
-                      {
-                        TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
-                        Append(&OutputBuilder, EnumFieldOutput);
-                      }
+                      PoofTypeError( Scope,
+                                     ParseErrorCode_InvalidArgument,
+                                     FormatCountedString( TranArena,
+                                                          CSz("Called map_values on a datatype that wasn't an enum (%S)"),
+                                                          GetNameForDatatype(ReplaceData, Memory)),
+                                     MetaOperatorToken);
                     }
                   }
                   else
@@ -630,26 +638,17 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                                    ParseErrorCode_InvalidArgument,
                                    FormatCountedString( TranArena,
                                                         CSz("Called map_values on a datatype that wasn't an enum (%S)"),
-                                                        GetNameForDatatype(&Replace->Data, Memory)),
+                                                        GetNameForDatatype(ReplaceData, Memory)),
                                    MetaOperatorToken);
                   }
-                }
-                else
-                {
-                  PoofTypeError( Scope,
-                                 ParseErrorCode_InvalidArgument,
-                                 FormatCountedString( TranArena,
-                                                      CSz("Called map_values on a datatype that wasn't an enum (%S)"),
-                                                      GetNameForDatatype(&Replace->Data, Memory)),
-                                 MetaOperatorToken);
-                }
 
-              } break;
-            }
+                } break;
+              }
 
-            if (ImpetusWasOpenParen)
-            {
-              RequireToken(Scope, CTokenType_CloseParen);
+              if (ImpetusWasOpenParen)
+              {
+                RequireToken(Scope, CTokenType_CloseParen);
+              }
             }
           }
         }
@@ -670,7 +669,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
             RequireToken(Scope, CTokenType_CloseParen);
 
             meta_func_arg_stream NewArgs = {};
-            Push(&NewArgs, ReplacementPattern(NestedFunc->ArgName, Arg->Data));
+            Push(&NewArgs, ReplacementPattern(NestedFunc->ArgName, Arg));
             counted_string NestedCode = Execute(NestedFunc, &NewArgs, Ctx, Memory, Depth);
             if (NestedFunc->Body.ErrorCode)
             {

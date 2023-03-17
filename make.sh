@@ -8,10 +8,10 @@
 # Calling functions by name on the command line shouldn't be affected by these.
 
 
-RunPreemptivePoof=1
+# RunPreemptivePoof=1
 # BuildAllBinariesRunAllTests=1
 
-# BuildPoof=1
+BuildPoof=1
 # RunPoof=1
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 # POOF_DEBUGGER="gdb --args"
@@ -281,10 +281,10 @@ function RunIntegrationTests()
 
       echo "$INTEGRATION_TEST_DEBUGGER bin/poof $INTEGRATION_TEST_LOG_LEVEL $filename -o $test_output_dir"
 
-      # $INTEGRATION_TEST_DEBUGGER bin/poof \
-      #   $INTEGRATION_TEST_LOG_LEVEL       \
-      #   $filename                         \
-      #   -o $test_output_dir
+      $INTEGRATION_TEST_DEBUGGER bin/poof \
+        $INTEGRATION_TEST_LOG_LEVEL       \
+        $filename                         \
+        -o $test_output_dir
 
       if [[ $? == 0 ]]; then
         DIFF_CHANGED=$(git diff --ignore-all-space --ignore-blank-lines $test_output_dir | wc -l)

@@ -10782,12 +10782,18 @@ ParseTransformations(parser* Scope)
 }
 
 link_internal meta_func_arg
+ReplacementPattern(counted_string Match, meta_func_arg *Arg)
+{
+  meta_func_arg Result = *Arg;
+  Result.Match = Match;
+  return Result;
+}
+
+link_internal meta_func_arg
 ReplacementPattern(counted_string Match, datatype Data)
 {
-  meta_func_arg Result = {
-    .Match = Match,
-    .Data = Data
-  };
+  meta_func_arg Result = MetaFuncArg(Data);
+  Result.Match = Match;
 
   return Result;
 }

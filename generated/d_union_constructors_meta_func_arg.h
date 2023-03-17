@@ -6,7 +6,7 @@ MetaFuncArg(datatype A)
   meta_func_arg Reuslt = {
     .Type = type_datatype,
     .datatype = A
-  }
+  };
   return Reuslt;
 }
 
