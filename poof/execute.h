@@ -555,6 +555,7 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                       if (Index+1 < Size)
                       {
                         Append(&OutputBuilder, Sep);
+                        Append(&OutputBuilder, CS("")); // NOTE(Jesse): This is a dirty hack to preserve the seperator if it has whitespace on the end
                       }
                     }
                   }
