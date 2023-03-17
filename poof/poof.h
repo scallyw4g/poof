@@ -869,11 +869,18 @@ Datatype(type_spec S)
 }
 
 
-struct meta_func_arg
-{
-  counted_string Match;
-  datatype Data;
-};
+poof(
+  d_union meta_func_arg
+  {
+    datatype
+  },
+  {
+    counted_string Match;
+  }
+)
+#include <generated/d_union_meta_func_arg.h>
+
+
 poof(generate_stream(meta_func_arg))
 #include <generated/generate_stream_meta_func_arg.h>
 
