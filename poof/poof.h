@@ -880,6 +880,9 @@ poof(
 )
 #include <generated/d_union_meta_func_arg.h>
 
+poof(d_union_constructors(meta_func_arg))
+#include <generated/d_union_constructors_meta_func_arg.h>
+
 
 poof(generate_stream(meta_func_arg))
 #include <generated/generate_stream_meta_func_arg.h>
