@@ -11,23 +11,23 @@
 # RunPreemptivePoof=1
 # BuildAllBinariesRunAllTests=1
 
-BuildPoof=1
-RunPoof=1
+# BuildPoof=1
+# RunPoof=1
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 # POOF_DEBUGGER="gdb --args"
 
 # BuildPoofEmcc=1
 # RollupEmcc=1
 
-BuildParserTests=1
-RunParserTests=1
+# BuildParserTests=1
+# RunParserTests=1
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 # TEST_DEBUGGER="gdb --args"
 
 # BuildAndRunAllExamples=1
 
 RunIntegrationTests=1
-# INTEGRATION_TEST_INDEX=4
+INTEGRATION_TEST_INDEX=2
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug -c0"
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 
@@ -281,13 +281,10 @@ function RunIntegrationTests()
 
       echo "$INTEGRATION_TEST_DEBUGGER bin/poof $INTEGRATION_TEST_LOG_LEVEL $filename -o $test_output_dir"
 
-      $INTEGRATION_TEST_DEBUGGER bin/poof \
-        $INTEGRATION_TEST_LOG_LEVEL       \
-        $filename                         \
-        -o $test_output_dir
-
-      # echo "$CMD"
-      # $CMD
+      # $INTEGRATION_TEST_DEBUGGER bin/poof \
+      #   $INTEGRATION_TEST_LOG_LEVEL       \
+      #   $filename                         \
+      #   -o $test_output_dir
 
       if [[ $? == 0 ]]; then
         DIFF_CHANGED=$(git diff --ignore-all-space --ignore-blank-lines $test_output_dir | wc -l)

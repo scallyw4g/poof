@@ -45,8 +45,13 @@ struct array_struct
   void* a3[420];
 };
 
+struct doubly_nested_struct
+{
+};
+
 struct nested_struct
 {
+  doubly_nested_struct DoublyNested;
 };
 
 struct bar_struct

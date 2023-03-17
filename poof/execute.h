@@ -120,14 +120,16 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
               case is_defined:
               {
                 RequireToken(Scope, CTokenType_Question);
-                auto S1 = GetTypeTypeForDatatype(&Replace->Data, TranArena);
-                auto S2 = GetTypeNameForDatatype(Ctx, &Replace->Data, TranArena);
+                /* auto S1 = GetTypeTypeForDatatype(&Replace->Data, TranArena); */
+                /* auto S2 = GetTypeNameForDatatype(Ctx, &Replace->Data, TranArena); */
 
                 b32 DoTrueBranch = False;
                 switch(Replace->Data.Type)
                 {
                   case type_datatype_noop:
                   {
+                    // TODO(Jesse): When would this ever fire?  I thought this
+                    // was an undefined case..
                     DoTrueBranch = False;
                   } break;
 
@@ -311,7 +313,15 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
 
               case is_type:
               {
-                NotImplemented;
+                RequireToken(Scope, CTokenType_OpenParen);
+                cs QueryTypeName = RequireToken(Scope, CTokenType_Identifier).Value;
+                RequireToken(Scope, CTokenType_CloseParen);
+                RequireToken(Scope, CTokenType_Question);
+
+                cs ThisTypeName = GetTypeNameForDatatype(Ctx, &Replace->Data, Memory);
+
+                b32 TypesMatch = StringsMatch(ThisTypeName, QueryTypeName);
+                DoTrueFalse(Ctx, Scope, ReplacePatterns, TypesMatch, &OutputBuilder, Memory, Depth);
               } break;
 
               case is_named:
@@ -326,27 +336,64 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                 RequireToken(Scope, CTokenType_CloseParen);
                 RequireToken(Scope, CTokenType_Question);
 
-                auto Decl = SafeAccess(declaration, &Replace->Data);
-                auto Var = SafeAccess(variable_decl, Decl);
-                Assert(Var->Type.DatatypeToken);
-                auto DT = GetDatatypeByName(Ctx, Var->Type.DatatypeToken->Value);
-                auto VarMembers = GetMembersFor(&DT);
-
-                b32 Contains = False;
-                if (VarMembers)
+                if (auto Decl = TryCast(declaration, &Replace->Data))
                 {
-                  ITERATE_OVER_AS(VarMember, VarMembers)
+                  switch (Decl->Type)
                   {
-                    declaration* VarDecl = GET_ELEMENT(VarMemberIter);
-                    counted_string MemberName = GetTypeNameForDecl(Ctx, VarDecl, Memory);
-                    if (StringsMatch(MemberName, TypeName))
+                    case type_declaration_noop:
                     {
-                      Contains = True;
-                    }
+                      InvalidCodePath();
+                    } break;
+
+                    case type_enum_decl:
+                    case type_function_decl:
+                    {
+                    } break;
+
+                    case type_variable_decl:
+                    case type_compound_decl:
+                    {
+                      b32 Contains = False;
+                      declaration_stream* Members = 0;
+
+                      if (auto Var = TryCast(variable_decl, Decl))
+                      {
+                        // We could be asking about a primitive type
+                        if (Var->Type.DatatypeToken)
+                        {
+                          auto DT = GetDatatypeByName(Ctx, Var->Type.DatatypeToken->Value);
+                          Members = GetMembersFor(&DT);
+
+                        }
+                      }
+                      else
+                      {
+                        // Compound decls must have members .. right?
+                        Members = GetMembersFor(Decl);
+                        Assert(Members);
+                      }
+
+                      if (Members)
+                      {
+                        ITERATE_OVER_AS(Member, Members)
+                        {
+                          declaration* MemberDecl = GET_ELEMENT(MemberIter);
+                          counted_string MemberName = GetTypeNameForDecl(Ctx, MemberDecl, Memory);
+                          if (StringsMatch(MemberName, TypeName))
+                          {
+                            Contains = True;
+                          }
+                        }
+                      }
+
+                      DoTrueFalse(Ctx, Scope, ReplacePatterns, Contains, &OutputBuilder, Memory, Depth);
+                    } break;
                   }
                 }
+#if 0
+#endif
 
-                DoTrueFalse(Ctx, Scope, ReplacePatterns, Contains, &OutputBuilder, Memory, Depth);
+
               } break;
 
               case array:
@@ -492,16 +539,6 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                 counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value;
                 RequireToken(Scope, CTokenType_CloseParen);
 
-                counted_string ContainingConstraint = {};
-                if ( OptionalToken(Scope, CTokenType_Dot) )
-                {
-                  InvalidCodePath();
-                  RequireToken(Scope, CToken(CSz("containing")));
-                  RequireToken(Scope, CTokenType_OpenParen);
-                  ContainingConstraint = RequireToken(Scope, CTokenType_Identifier).Value;
-                  RequireToken(Scope, CTokenType_CloseParen);
-                }
-
                 parser MapMemberScope = GetBodyTextForNextScope(Scope, Memory);
                 declaration_stream *Members = GetMembersFor(&Replace->Data);
 
@@ -525,51 +562,6 @@ Execute(parser *Scope, meta_func_arg_stream* ReplacePatterns, parse_context* Ctx
                       } break;
 
                       case type_variable_decl:
-                      {
-                        b32 ConstraintPassed = False;
-                        b32 HaveConstraint = ContainingConstraint.Count > 0;
-
-                        if (HaveConstraint)
-                        {
-                          auto Var = SafeAccess(variable_decl, Member);
-                          Assert(Var->Type.DatatypeToken);
-                          auto DT = GetDatatypeByName(Ctx, Var->Type.DatatypeToken->Value);
-                          auto VarMembers = GetMembersFor(&DT);
-
-                          if (VarMembers)
-                          {
-                            ITERATE_OVER_AS(VarMember, VarMembers)
-                            {
-                              declaration* Decl = GET_ELEMENT(VarMemberIter);
-                              counted_string MemberName = GetTypeNameForDecl(Ctx, Decl, Memory);
-                              if (StringsMatch(MemberName, ContainingConstraint))
-                              {
-                                ConstraintPassed = True;
-                              }
-                            }
-                          }
-                        }
-
-                        if (HaveConstraint == False           ||
-                           (HaveConstraint && ConstraintPassed) )
-                        {
-                          meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);
-                          Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)));
-                          Rewind(MapMemberScope.Tokens);
-                          counted_string StructFieldOutput = Execute(&MapMemberScope, &NewArgs, Ctx, Memory, Depth);
-                          if (MapMemberScope.ErrorCode)
-                          {
-                            Scope->ErrorCode = MapMemberScope.ErrorCode;
-                          }
-                          else
-                          {
-                            TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
-                            Append(&OutputBuilder, StructFieldOutput);
-                          }
-                        }
-
-                      } break;
-
                       case type_compound_decl:
                       {
                         meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory);

@@ -11019,6 +11019,24 @@ GetTypeNameForDatatype(parse_context *Ctx, datatype *Data, memory_arena *Memory)
 }
 
 link_internal declaration_stream*
+GetMembersFor(declaration *Decl)
+{
+  declaration_stream *Result = {};
+  switch(Decl->Type)
+  {
+    case type_compound_decl:
+    {
+      compound_decl *Anon = SafeAccess(compound_decl, Decl);
+      Result = &Anon->Members;
+    } break;
+
+    default: {} break;;
+  }
+
+  return Result;
+}
+
+link_internal declaration_stream*
 GetMembersFor(datatype *Data)
 {
   declaration_stream *Result = {};
@@ -11026,19 +11044,8 @@ GetMembersFor(datatype *Data)
   {
     case type_declaration:
     {
-      declaration *S = SafeAccess(declaration, Data);
-
-      switch(S->Type)
-      {
-        case type_compound_decl:
-        {
-          compound_decl *Anon = SafeAccess(compound_decl, S);
-          Result = &Anon->Members;
-        } break;
-
-        default: {} break;;
-      }
-
+      declaration *Decl = SafeAccess(declaration, Data);
+      Result = GetMembersFor(Decl);
     } break;
 
     default:
