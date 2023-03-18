@@ -11840,6 +11840,63 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
         metaprogramming_directive Directive = MetaprogrammingDirective(DirectiveT->Value);
         switch (Directive)
         {
+          case meta_directive_noop:
+          {
+            meta_func* Func = StreamContains(FunctionDefs, DirectiveT->Value);
+            if (Func)
+            {
+              RequireToken(Parser, CTokenType_OpenParen);
+              c_token *DatatypeNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
+              counted_string DatatypeName = DatatypeNameT->Value;
+              RequireToken(Parser, CTokenType_CloseParen);
+              RequireToken(Parser, CTokenType_CloseParen);
+
+              datatype Arg = GetDatatypeByName(&Ctx->Datatypes, DatatypeName);
+
+              if (Arg.Type)
+              {
+                meta_func_arg_stream Args = {};
+                Push(&Args, ReplacementPattern(Func->ArgName, Arg));
+                umm Depth = 0;
+                counted_string Code = Execute(Func, &Args, Ctx, Memory, &Depth);
+
+                if (Func->Body.ErrorCode)
+                {
+                  Parser->ErrorCode = Func->Body.ErrorCode;
+                  ParseInfoMessage( Parser,
+                                    FormatCountedString(TranArena,
+                                                        CSz("Unable to generate code for (func %S)"), Func->Name),
+                                    DirectiveT);
+                }
+                else
+                {
+                  counted_string OutfileName = GenerateOutfileNameFor(Func->Name, DatatypeName, Memory);
+                  counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
+                  Append(&Builder, Tuple(ActualOutputFile, Code));
+                }
+              }
+              else
+              {
+                PoofTypeError( Parser,
+                               ParseErrorCode_UndefinedDatatype,
+                               FormatCountedString( TranArena,
+                                                    CSz("(%S) is not a defined datatype"),
+                                                    DatatypeName ),
+                               DatatypeNameT );
+              }
+
+            }
+            else
+            {
+              PoofTypeError( Parser,
+                             ParseErrorCode_InvalidName,
+                             FormatCountedString( TranArena,
+                                                  CSz("(%S) is not a poof keyword or function name"),
+                                                  DirectiveT->Value ),
+                             DirectiveT );
+            }
+          } break;
+
           case polymorphic_func:
           {
             /* function_decl F = ParseFunctionDef(Parser, Memory); */
@@ -12025,62 +12082,10 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
           } break;
 
-          default:
+          case enum_only:
           {
-            meta_func* Func = StreamContains(FunctionDefs, DirectiveT->Value);
-            if (Func)
-            {
-              RequireToken(Parser, CTokenType_OpenParen);
-              c_token *DatatypeNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
-              counted_string DatatypeName = DatatypeNameT->Value;
-              RequireToken(Parser, CTokenType_CloseParen);
-              RequireToken(Parser, CTokenType_CloseParen);
-
-              datatype Arg = GetDatatypeByName(&Ctx->Datatypes, DatatypeName);
-
-              if (Arg.Type)
-              {
-                meta_func_arg_stream Args = {};
-                Push(&Args, ReplacementPattern(Func->ArgName, Arg));
-                umm Depth = 0;
-                counted_string Code = Execute(Func, &Args, Ctx, Memory, &Depth);
-
-                if (Func->Body.ErrorCode)
-                {
-                  Parser->ErrorCode = Func->Body.ErrorCode;
-                  ParseInfoMessage( Parser,
-                                    FormatCountedString(TranArena,
-                                                        CSz("Unable to generate code for (func %S)"), Func->Name),
-                                    DirectiveT);
-                }
-                else
-                {
-                  counted_string OutfileName = GenerateOutfileNameFor(Func->Name, DatatypeName, Memory);
-                  counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
-                  Append(&Builder, Tuple(ActualOutputFile, Code));
-                }
-              }
-              else
-              {
-                PoofTypeError( Parser,
-                               ParseErrorCode_UndefinedDatatype,
-                               FormatCountedString( TranArena,
-                                                    CSz("(%S) is not a defined datatype"),
-                                                    DatatypeName ),
-                               DatatypeNameT );
-              }
-
-            }
-            else
-            {
-              PoofTypeError( Parser,
-                             ParseErrorCode_InvalidName,
-                             FormatCountedString( TranArena,
-                                                  CSz("(%S) is not a poof keyword or function name"),
-                                                  DirectiveT->Value ),
-                             DirectiveT );
-            }
-          }
+            Assert(false);
+          } break;
 
         }
       } break;
