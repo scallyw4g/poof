@@ -18,6 +18,15 @@ MetaFuncArg(poof_index A)
   };
   return Reuslt;
 }
+link_internal meta_func_arg
+MetaFuncArg(poof_symbol A)
+{
+  meta_func_arg Reuslt = {
+    .Type = type_poof_symbol,
+    .poof_symbol = A
+  };
+  return Reuslt;
+}
 
 
 

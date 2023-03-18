@@ -889,11 +889,19 @@ PoofIndex(u32 Index, u32 MaxIndex)
 
 /* poof(constructors(poof_index) */
 
+struct poof_symbol
+{
+  cs Value;
+};
+
+// TODO(Jesse): Should probably rename this to meta_func_arg_inst cause it's
+// the counterpart to meta_func_arg_def
 poof(
   d_union meta_func_arg
   {
     datatype
     poof_index
+    poof_symbol
   },
   {
     counted_string Match;
@@ -904,9 +912,12 @@ poof(
 poof(d_union_constructors(meta_func_arg))
 #include <generated/d_union_constructors_meta_func_arg.h>
 
-
 poof(generate_stream(meta_func_arg))
 #include <generated/generate_stream_meta_func_arg.h>
+
+poof(buffer(meta_func_arg))
+#include <C:/Users/scallywag/work/poof/generated/buffer_meta_func_arg.h>
+
 
 
 
@@ -964,6 +975,7 @@ poof(hashtable(macro_def))
 struct meta_func
 {
   counted_string Name;
+  /* meta_func_arg_buffer Args; */
   counted_string ArgName;
   parser Body;
 };
