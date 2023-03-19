@@ -31,6 +31,3 @@ MetaFuncArg(poof_symbol A)
 
 
 
-
-
-

@@ -11698,6 +11698,7 @@ ParseAndTypecheckArgument(parse_context *Ctx, parser *Parser, meta_func_arg *Par
           }
           else if (meta_func_arg *ScopedArg = GetByMatch(CurrentScope, Token->Value))
           {
+            Assert(ScopedArg->Type == type_datatype);
             *ParsedArg = *ScopedArg;
             ParsedArg->Match = ArgDef->Match;
           }
@@ -11746,7 +11747,10 @@ ParseAndTypecheckArgument(parse_context *Ctx, parser *Parser, meta_func_arg *Par
 
       case type_poof_symbol:
       {
-        NotImplemented;
+        cs Value = EatBetweenExcluding_Str(Parser, CTokenType_OpenBrace, CTokenType_CloseBrace);
+        ParsedArg->Match = ArgDef->Match;
+        ParsedArg->Type = type_poof_symbol;
+        ParsedArg->poof_symbol = PoofSymbol(Value);
       } break;
     }
   }
@@ -11759,6 +11763,7 @@ ParseAndTypecheckArgument(parse_context *Ctx, parser *Parser, meta_func_arg *Par
                    Token );
   }
 
+  OptionalToken(Parser, CTokenType_Comma);
   b32 Result = (ParsedArg->Type != type_meta_func_arg_noop);
   return Result;
 }
@@ -11770,37 +11775,44 @@ ParseMetaFuncDefArg(parser *Parser, meta_func_arg_stream *Stream)
   cs Match = {};
   cs Type = {};
 
-  cs FirstT = RequireToken(Parser, CTokenType_Identifier).Value;
-
+  c_token *FirstT = RequireTokenPointer(Parser, CTokenType_Identifier);
   if (c_token *SecondT = OptionalToken(Parser, CTokenType_Identifier))
   {
-    Type = FirstT;
+    Type = FirstT->Value;
     Match = SecondT->Value;
   }
   else
   {
-    Match = FirstT;
+    Match = FirstT->Value;
   }
 
   meta_func_arg Arg = {
     .Match = Match
   };
 
-  meta_func_arg_type ArgT = MetaFuncArgType(Type);
-  switch (ArgT)
+  if (Type.Start)
   {
-    // NOTE(Jesse): Default to datatype if nothing was specified
-    case type_meta_func_arg_noop:
+    meta_func_arg_type ArgT = MetaFuncArgType(Type);
+    switch (ArgT)
     {
-      Arg.Type = type_datatype;
-    } break;
+      case type_meta_func_arg_noop:
+      {
+        // Type error
+        Assert(False);
+      } break;
 
-    case type_datatype:
-    case type_poof_index:
-    case type_poof_symbol:
-    {
-      Arg.Type = ArgT;
-    } break;
+      case type_datatype:
+      case type_poof_index:
+      case type_poof_symbol:
+      {
+        Arg.Type = ArgT;
+      } break;
+    }
+  }
+  else
+  {
+    // Default to datatype if no type specified
+    Arg.Type = type_datatype;
   }
 
   Push(Stream, Arg);

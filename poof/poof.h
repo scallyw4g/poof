@@ -887,13 +887,24 @@ PoofIndex(u32 Index, u32 MaxIndex)
   };
   return Result;
 }
-
 /* poof(constructors(poof_index) */
 
 struct poof_symbol
 {
   cs Value;
 };
+/* poof(constructors(poof_symbol)) */
+/* #include <C:/Users/scallywag/work/poof/generated/poof_symbol.h> */
+
+
+link_internal poof_symbol
+PoofSymbol(cs Value)
+{
+  poof_symbol Result = {
+    .Value = Value,
+  };
+  return Result;
+}
 
 poof(
   d_union meta_func_arg
