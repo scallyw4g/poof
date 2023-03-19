@@ -12023,6 +12023,78 @@ ParseComment_old_dead_deprecated()
 #endif
 }
 
+link_internal tuple_CountedString_CountedString
+CallFunction(parse_context *Ctx, parser *Parser, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgsInScope, memory_arena *Memory)
+{
+  tuple_CountedString_CountedString Result = {};
+
+  parser ArgParser = EatBetweenExcluding_Parser(Parser, CTokenType_OpenParen, CTokenType_CloseParen, Memory);
+
+  b32 TypeCheckPassed = True;
+  meta_func_arg_buffer ArgInstances = MetaFuncArgBuffer(Func->Args.Count, Memory);
+  for (u32 ArgIndex = 0; ArgIndex < Func->Args.Count; ++ArgIndex)
+  {
+    meta_func_arg *ArgDef = Func->Args.Start + ArgIndex;
+    if (ParseAndTypecheckArgument(Ctx, &ArgParser, &ArgInstances.Start[ArgIndex], ArgDef, ArgsInScope))
+    {
+    }
+    else
+    {
+      TypeCheckPassed = False;
+      // NOTE(Jesse): Need this because the errors emitted from
+      // ParseAndTypecheckArgument don't contain the whole parse
+      // context, just the arguments.  Also, we have to propagate
+      // the error code to the main parser.
+      ParseError( Parser,
+                  ArgParser.ErrorCode,
+                  FormatCountedString( TranArena,
+                                       CSz("Could't parse args for (%S)."),
+                                       FunctionT->Value ),
+                  FunctionT );
+      break;
+    }
+  }
+
+  if (TokensRemain(&ArgParser))
+  {
+    ParseInfoMessage( &ArgParser,
+                      FormatCountedString(TranArena,
+                                          CSz("Shiiiiit dawg"), 0 ),
+                      FunctionT);
+    Assert(false);
+  }
+  else
+  {
+    // TODO(Jesse): Can we plz remove this
+    RequireToken(Parser, CTokenType_CloseParen);
+
+    if (TypeCheckPassed)
+    {
+      umm Depth = 0;
+      counted_string Code = Execute(Func, &ArgInstances, Ctx, Memory, &Depth);
+      if (Func->Body.ErrorCode)
+      {
+        Parser->ErrorCode = Func->Body.ErrorCode;
+        ParseInfoMessage( Parser,
+                          FormatCountedString(TranArena,
+                                              CSz("Unable to generate code for (func %S)."), Func->Name),
+                          FunctionT);
+      }
+      else
+      {
+        counted_string OutfileName = GenerateOutfileNameFor(Ctx, &ArgInstances, Memory);
+        /* counted_string OutfileName = GenerateOutfileNameFor(Func->Name, Func->Args, Memory); */
+        counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, {} /*TodoInfo*/, Memory);
+        /* Append(&Builder, Tuple(ActualOutputFile, Code)); */
+        Result = Tuple(ActualOutputFile, Code);
+      }
+    }
+  }
+
+  return Result;
+}
+
+
 link_internal tuple_CountedString_CountedString_buffer
 GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 {
@@ -12070,66 +12142,11 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
             meta_func* Func = StreamContains(FunctionDefs, DirectiveT->Value);
             if (Func)
             {
-              parser ArgParser = EatBetweenExcluding_Parser(Parser, CTokenType_OpenParen, CTokenType_CloseParen, Memory);
-
-              b32 TypeCheckPassed = True;
-              meta_func_arg_buffer ArgInstances = MetaFuncArgBuffer(Func->Args.Count, Memory);
-              for (u32 ArgIndex = 0; ArgIndex < Func->Args.Count; ++ArgIndex)
+              auto FuncResult = CallFunction(Ctx, Parser, DirectiveT, Func, {}, Memory);
+              // TODO(Jesse): Pretty wonky..
+              if (FuncResult.E[0].Start)
               {
-                meta_func_arg *ArgDef = Func->Args.Start + ArgIndex;
-                if (ParseAndTypecheckArgument(Ctx, &ArgParser, &ArgInstances.Start[ArgIndex], ArgDef, {}))
-                {
-                }
-                else
-                {
-                  TypeCheckPassed = False;
-                  // NOTE(Jesse): Need this because the errors emitted from
-                  // ParseAndTypecheckArgument don't contain the whole parse
-                  // context, just the arguments.  Also, we have to propagate
-                  // the error code to the main parser.
-                  ParseError( Parser,
-                              ArgParser.ErrorCode,
-                              FormatCountedString( TranArena,
-                                                   CSz("Could't parse args for (%S)."),
-                                                   DirectiveT->Value ),
-                              DirectiveT );
-                  break;
-                }
-              }
-
-              if (TokensRemain(&ArgParser))
-              {
-                ParseInfoMessage( &ArgParser,
-                                  FormatCountedString(TranArena,
-                                                      CSz("Shiiiiit dawg"), 0 ),
-                                  DirectiveT);
-                Assert(false);
-              }
-              else
-              {
-                // TODO(Jesse): Can we plz remove this
-                RequireToken(Parser, CTokenType_CloseParen);
-
-                if (TypeCheckPassed)
-                {
-                  umm Depth = 0;
-                  counted_string Code = Execute(Func, &ArgInstances, Ctx, Memory, &Depth);
-                  if (Func->Body.ErrorCode)
-                  {
-                    Parser->ErrorCode = Func->Body.ErrorCode;
-                    ParseInfoMessage( Parser,
-                                      FormatCountedString(TranArena,
-                                                          CSz("Unable to generate code for (func %S)."), Func->Name),
-                                      DirectiveT);
-                  }
-                  else
-                  {
-                    counted_string OutfileName = GenerateOutfileNameFor(Ctx, &ArgInstances, Memory);
-                    /* counted_string OutfileName = GenerateOutfileNameFor(Func->Name, Func->Args, Memory); */
-                    counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
-                    Append(&Builder, Tuple(ActualOutputFile, Code));
-                  }
-                }
+                Append(&Builder, FuncResult);
               }
             }
             else
