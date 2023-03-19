@@ -155,6 +155,9 @@ link_internal counted_string Execute(meta_func* Func, parse_context* Ctx, memory
 link_internal counted_string Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_arena* Memory, umm *Depth);
 link_internal void           DoTrueFalse( parse_context *Ctx, parser *Scope, meta_func_arg_buffer *ReplacePatterns, b32 DoTrueBranch, string_builder *OutputBuilder, memory_arena *Memory, umm *Depth);
 
+link_internal b32 ParseAndTypeCheckArgs(parse_context *Ctx, parser *Parser, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, meta_func_arg_buffer *ArgsInScope, memory_arena *Memory);
+link_internal counted_string CallFunction(parse_context *Ctx, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, memory_arena *Memory, umm *Depth);
+
 
 inline c_token_cursor *
 HasValidDownPointer(c_token *T)
@@ -12023,19 +12026,18 @@ ParseComment_old_dead_deprecated()
 #endif
 }
 
-link_internal tuple_CountedString_CountedString
-CallFunction(parse_context *Ctx, parser *Parser, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgsInScope, memory_arena *Memory)
+link_internal b32
+ParseAndTypeCheckArgs(parse_context *Ctx, parser *Parser, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, meta_func_arg_buffer *ArgsInScope, memory_arena *Memory)
 {
-  tuple_CountedString_CountedString Result = {};
+  b32 TypeCheckPassed = True;
 
   parser ArgParser = EatBetweenExcluding_Parser(Parser, CTokenType_OpenParen, CTokenType_CloseParen, Memory);
 
-  b32 TypeCheckPassed = True;
-  meta_func_arg_buffer ArgInstances = MetaFuncArgBuffer(Func->Args.Count, Memory);
+  *ArgInstances = MetaFuncArgBuffer(Func->Args.Count, Memory);
   for (u32 ArgIndex = 0; ArgIndex < Func->Args.Count; ++ArgIndex)
   {
     meta_func_arg *ArgDef = Func->Args.Start + ArgIndex;
-    if (ParseAndTypecheckArgument(Ctx, &ArgParser, &ArgInstances.Start[ArgIndex], ArgDef, ArgsInScope))
+    if (ParseAndTypecheckArgument(Ctx, &ArgParser, ArgInstances->Start+ArgIndex, ArgDef, ArgsInScope))
     {
     }
     else
@@ -12057,40 +12059,34 @@ CallFunction(parse_context *Ctx, parser *Parser, c_token *FunctionT, meta_func *
 
   if (TokensRemain(&ArgParser))
   {
+    // TODO(Jesse): This check might be buggy, whitespace could trigger it.. ?
+    // TODO(Jesse): Real error message; too many arguments.
     ParseInfoMessage( &ArgParser,
                       FormatCountedString(TranArena,
                                           CSz("Shiiiiit dawg"), 0 ),
                       FunctionT);
-    Assert(false);
+
+    TypeCheckPassed = False;
   }
-  else
+
+  // TODO(Jesse): Can we plz remove this
+  RequireToken(Parser, CTokenType_CloseParen);
+
+  return TypeCheckPassed;
+}
+
+link_internal counted_string
+CallFunction(parse_context *Ctx, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, memory_arena *Memory, umm *Depth)
+{
+  cs Result = Execute(Func, ArgInstances, Ctx, Memory, Depth);
+  if (Func->Body.ErrorCode)
   {
-    // TODO(Jesse): Can we plz remove this
-    RequireToken(Parser, CTokenType_CloseParen);
-
-    if (TypeCheckPassed)
-    {
-      umm Depth = 0;
-      counted_string Code = Execute(Func, &ArgInstances, Ctx, Memory, &Depth);
-      if (Func->Body.ErrorCode)
-      {
-        Parser->ErrorCode = Func->Body.ErrorCode;
-        ParseInfoMessage( Parser,
-                          FormatCountedString(TranArena,
-                                              CSz("Unable to generate code for (func %S)."), Func->Name),
-                          FunctionT);
-      }
-      else
-      {
-        counted_string OutfileName = GenerateOutfileNameFor(Ctx, &ArgInstances, Memory);
-        /* counted_string OutfileName = GenerateOutfileNameFor(Func->Name, Func->Args, Memory); */
-        counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, {} /*TodoInfo*/, Memory);
-        /* Append(&Builder, Tuple(ActualOutputFile, Code)); */
-        Result = Tuple(ActualOutputFile, Code);
-      }
-    }
+    // TODO(Jesse): Should we emit an error here?
+    Assert(Result.Start == 0);
+    /* ParseInfoMessage( &Func->Body, */
+    /*                   FormatCountedString(TranArena, */
+    /*                                       CSz("Unable to generate code for (func %S)."), Func->Name), 0); */
   }
-
   return Result;
 }
 
@@ -12142,11 +12138,19 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
             meta_func* Func = StreamContains(FunctionDefs, DirectiveT->Value);
             if (Func)
             {
-              auto FuncResult = CallFunction(Ctx, Parser, DirectiveT, Func, {}, Memory);
-              // TODO(Jesse): Pretty wonky..
-              if (FuncResult.E[0].Start)
+              meta_func_arg_buffer ArgInstances = {};
+              if (ParseAndTypeCheckArgs(Ctx, Parser, DirectiveT, Func, &ArgInstances, {}, Memory))
               {
-                Append(&Builder, FuncResult);
+                umm Depth = 0;
+                auto Code = CallFunction(Ctx, DirectiveT, Func, &ArgInstances, Memory, &Depth);
+                if (Code.Start)
+                {
+                  counted_string OutfileName = GenerateOutfileNameFor(Ctx, &ArgInstances, Memory);
+                  counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, {} /*TodoInfo*/, Memory);
+
+                  auto FilenameAndCode = Tuple(ActualOutputFile, Code);
+                  Append(&Builder, FilenameAndCode);
+                }
               }
             }
             else

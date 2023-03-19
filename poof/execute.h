@@ -726,6 +726,20 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
         meta_func* NestedFunc = StreamContains( FunctionDefs, PeekToken(Scope).Value );
         if (NestedFunc)
         {
+#if 1
+          c_token *FuncT = PopTokenPointer(Scope);
+          meta_func_arg_buffer ArgInstances = {};
+          if (ParseAndTypeCheckArgs(Ctx, Scope, FuncT, NestedFunc, &ArgInstances, ReplacePatterns, Memory))
+          {
+            auto Code = CallFunction(Ctx, FuncT, NestedFunc, &ArgInstances, Memory, Depth);
+            if (Code.Start)
+            {
+              TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
+              Append(&OutputBuilder, Code);
+            }
+          }
+
+#else
           RequireToken(Scope, CToken(NestedFunc->Name));
 
           RequireToken(Scope, CTokenType_OpenParen);
@@ -763,7 +777,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                            CSz("Unable to resolve poof function argument."),
                            ArgNameT);
           }
-
+#endif
         }
         else if (ExecutedChildFunc)
         {
