@@ -90,7 +90,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
         b32 ImpetusWasIdentifier = BodyToken->Type == CTokenType_Identifier;
         b32 ImpetusWasOpenParen  = BodyToken->Type == CTokenType_OpenParen;
 
-        b32 ExecutedChildFunc = False;
+        b32 DidPoofOp = False;
         for (u32 ArgIndex = 0; ArgIndex < ReplacePatterns->Count; ++ArgIndex)
         /* ITERATE_OVER_AS(Replace, ReplacePatterns) */
         {
@@ -99,7 +99,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                (ImpetusWasOpenParen  && OptionalTokenRaw(Scope, CToken(Replace->Match)))
              )
           {
-            ExecutedChildFunc = True;
+            DidPoofOp = True;
             switch (Replace->Type)
             {
               case type_meta_func_arg_noop:
@@ -711,11 +711,6 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
 
                   } break;
                 }
-
-                if (ImpetusWasOpenParen)
-                {
-                  RequireToken(Scope, CTokenType_CloseParen);
-                }
               } break;
 
             }
@@ -723,69 +718,50 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
           }
         }
 
-        meta_func* NestedFunc = StreamContains( FunctionDefs, PeekToken(Scope).Value );
+        meta_func *NestedFunc = {};
+        c_token *NestedFuncT = {};
+
+        if (ImpetusWasOpenParen)
+        {
+          NestedFunc = StreamContains( FunctionDefs, PeekToken(Scope).Value );
+          if (NestedFunc) { NestedFuncT = RequireTokenPointer(Scope, CTokenType_Identifier); }
+        }
+        else
+        {
+          Assert(ImpetusWasIdentifier);
+          NestedFunc = StreamContains( FunctionDefs, BodyToken->Value );
+          NestedFuncT = BodyToken;
+        }
+
         if (NestedFunc)
         {
-#if 1
-          c_token *FuncT = PopTokenPointer(Scope);
+          Assert(NestedFuncT);
+          DidPoofOp = True;
+
           meta_func_arg_buffer ArgInstances = {};
-          if (ParseAndTypeCheckArgs(Ctx, Scope, FuncT, NestedFunc, &ArgInstances, ReplacePatterns, Memory))
+          if (ParseAndTypeCheckArgs(Ctx, Scope, NestedFuncT, NestedFunc, &ArgInstances, ReplacePatterns, Memory))
           {
-            auto Code = CallFunction(Ctx, FuncT, NestedFunc, &ArgInstances, Memory, Depth);
+            auto Code = CallFunction(Ctx, NestedFuncT, NestedFunc, &ArgInstances, Memory, Depth);
             if (Code.Start)
             {
               TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
               Append(&OutputBuilder, Code);
             }
           }
-
-#else
-          RequireToken(Scope, CToken(NestedFunc->Name));
-
-          RequireToken(Scope, CTokenType_OpenParen);
-
-          c_token *ArgNameT = RequireTokenPointer(Scope, CTokenType_Identifier);
-          meta_func_arg *Arg = GetByMatch(ReplacePatterns, ArgNameT->Value);
-
-          if (Arg)
-          {
-            RequireToken(Scope, CTokenType_CloseParen);
-            RequireToken(Scope, CTokenType_CloseParen);
-
-            /* meta_func_arg_stream NewArgs = {}; */
-            /* Push(&NewArgs, ReplacementPattern(NestedFunc->ArgName, Arg)); */
-
-            Assert(NestedFunc->Args.Count == 1);
-            meta_func_arg_buffer NewArgs = MetaFuncArgBuffer(1, Memory); //ExtendBuffer(ReplacePatterns, 1, Memory);
-            SetLast(&NewArgs, ReplacementPattern(NestedFunc->Args.Start[0].Match, Arg));
-
-            counted_string NestedCode = Execute(NestedFunc, &NewArgs, Ctx, Memory, Depth);
-            if (NestedFunc->Body.ErrorCode)
-            {
-              Scope->ErrorCode = NestedFunc->Body.ErrorCode;
-            }
-            else
-            {
-              TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
-              Append(&OutputBuilder, NestedCode);
-            }
-          }
-          else
-          {
-            PoofTypeError( Scope,
-                           ParseErrorCode_InvalidArgument,
-                           CSz("Unable to resolve poof function argument."),
-                           ArgNameT);
-          }
-#endif
         }
-        else if (ExecutedChildFunc)
+
+        if (DidPoofOp)
         {
+          if (ImpetusWasOpenParen)
+          {
+            RequireToken(Scope, CTokenType_CloseParen);
+          }
         }
         else
         {
           Append(&OutputBuilder, BodyToken->Value);
         }
+
       } break;
 
       default:

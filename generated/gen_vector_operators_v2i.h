@@ -40,7 +40,7 @@ operator>=( v2i P1, v2i P2 )
   return Result;
 }
 
-/* gen_vector_operator_set(Type, +) */
+/* (gen_vector_operator(Type, {+})) */
 /* gen_vector_operator_set(Type, -) */
 /* gen_vector_operator_set(Type, *) */
 /* gen_vector_operator_set(Type, /) */

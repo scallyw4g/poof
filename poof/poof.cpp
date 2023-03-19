@@ -6704,6 +6704,7 @@ EatBetweenExcluding_Str(parser* Parser, c_token_type Open, c_token_type Close)
 {
   counted_string Result = {};
 
+  EatWhitespace(Parser);
   string_from_parser Builder = StartStringFromParser(Parser);
   EatBetween(Parser, Open, Close);
   Result = FinalizeStringFromParser(&Builder);
@@ -10662,7 +10663,7 @@ ToString(parse_context *Ctx, meta_func_arg *Arg, memory_arena *Memory)
       // contain spaces.  This gets used (at the moment) to generate output
       // filenames so we don't want to expand the whole thing.. TBD.
       NotImplemented;
-      Result = FormatCountedString(Memory, CSz("%S"), Arg->poof_index.Index);
+      Result = FormatCountedString(Memory, CSz("%S"), Arg->poof_symbol.Value);
     } break;
   }
   return Result;
@@ -11678,8 +11679,8 @@ ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_s
 link_internal b32
 ParseAndTypecheckArgument(parse_context *Ctx, parser *Parser, meta_func_arg *ParsedArg, meta_func_arg *ArgDef, meta_func_arg_buffer *CurrentScope)
 {
-  c_token *Token = PopTokenPointer(Parser);
-  if (Token)
+  c_token *Peek = PeekTokenPointer(Parser);
+  if (Peek)
   {
     ParsedArg->Match = ArgDef->Match;
     switch (ArgDef->Type)
@@ -11688,6 +11689,7 @@ ParseAndTypecheckArgument(parse_context *Ctx, parser *Parser, meta_func_arg *Par
 
       case type_datatype:
       {
+        c_token *Token = PopTokenPointer(Parser);
         if (Token->Type == CTokenType_Identifier)
         {
           datatype Datatype = GetDatatypeByName(Ctx, Token->Value);
@@ -11726,6 +11728,7 @@ ParseAndTypecheckArgument(parse_context *Ctx, parser *Parser, meta_func_arg *Par
 
       case type_poof_index:
       {
+        c_token *Token = PopTokenPointer(Parser);
         switch (Token->Type)
         {
           case CTokenType_IntLiteral:
@@ -11760,7 +11763,7 @@ ParseAndTypecheckArgument(parse_context *Ctx, parser *Parser, meta_func_arg *Par
     PoofTypeError( Parser,
                    ParseErrorCode_InvalidArgumentCount,
                    CSz("Not enough arguments."),
-                   Token );
+                   Peek );
   }
 
   OptionalToken(Parser, CTokenType_Comma);
@@ -12080,9 +12083,6 @@ ParseAndTypeCheckArgs(parse_context *Ctx, parser *Parser, c_token *FunctionT, me
 
     TypeCheckPassed = False;
   }
-
-  // TODO(Jesse): Can we plz remove this
-  RequireToken(Parser, CTokenType_CloseParen);
 
   return TypeCheckPassed;
 }
