@@ -233,7 +233,8 @@ FinalizeStringFromParser(string_from_parser* Builder)
       // implicitly included, so we have to have this weird check.
       if (Parser->Tokens->At == Parser->Tokens->End)
       {
-        Count = (umm)(Parser->Tokens->At[-1].Value.Start - Builder->StartToken->Value.Start);
+        auto LastTokenValue = Parser->Tokens->At[-1].Value;
+        Count = (umm)( (LastTokenValue.Start+LastTokenValue.Count) - Builder->StartToken->Value.Start );
       }
       else
       {
