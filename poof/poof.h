@@ -442,6 +442,7 @@ enum parse_error_code
   ParseErrorCode_InvalidOperator,
   ParseErrorCode_InvalidMetaTransformOp,
   ParseErrorCode_InvalidArgument,
+  ParseErrorCode_InvalidArgumentCount,
   ParseErrorCode_InvalidName,
   ParseErrorCode_NotImplemented, // NOTE(Jesse): This means the compiler should support this case, but doesn't
 
@@ -894,8 +895,6 @@ struct poof_symbol
   cs Value;
 };
 
-// TODO(Jesse): Should probably rename this to meta_func_arg_inst cause it's
-// the counterpart to meta_func_arg_def
 poof(
   d_union meta_func_arg
   {
@@ -909,6 +908,9 @@ poof(
 )
 #include <generated/d_union_meta_func_arg.h>
 
+poof(string_and_value_tables(meta_func_arg_type))
+#include <generated/string_and_value_tables_meta_func_arg_type.h>
+
 poof(d_union_constructors(meta_func_arg))
 #include <generated/d_union_constructors_meta_func_arg.h>
 
@@ -916,10 +918,65 @@ poof(generate_stream(meta_func_arg))
 #include <generated/generate_stream_meta_func_arg.h>
 
 poof(buffer(meta_func_arg))
-#include <C:/Users/scallywag/work/poof/generated/buffer_meta_func_arg.h>
+#include <generated/buffer_meta_func_arg.h>
+
+poof(generate_stream_compact(meta_func_arg))
+#include <generated/generate_stream_compact_meta_func_arg.h>
+
+// TODO(Jesse)(metaprogramming): Generate this!  There's a bunch of this kind
+// of code that could be generated.  I think some functions I wrote by hand are
+// called "GetByName" or something.
+//
+link_internal meta_func_arg *
+GetByMatch(meta_func_arg_buffer *Buf, counted_string Match)
+{
+  meta_func_arg *Result = {};
+
+  // NOTE(Jesse): This handles null buffers as a convenience for the callers to
+  // be able to not check, such that we can do `if (auto Match = GetByMatch(...)) { ... }`
+  //
+  // If we did not handle nulls the calling code gets a lot uglier
+  if (Buf)
+  {
+    for (u32 ArgIndex = 0; ArgIndex < Buf->Count; ++ArgIndex)
+    {
+      meta_func_arg *Arg = Buf->Start + ArgIndex;
+      if (AreEqual(Arg->Match, Match))
+      {
+        Result = Arg;
+        break;
+      }
+    }
+  }
+  return Result;
+}
 
 
 
+link_internal void
+CopyBufferIntoBuffer(meta_func_arg_buffer *Buf1, meta_func_arg_buffer *Buf2)
+{
+  Assert(Buf1->Count <= Buf2->Count);
+  for (u32 Index = 0; Index < Buf1->Count; ++Index)
+  {
+    Buf2->Start[Index] = Buf1->Start[Index];
+  }
+}
+
+link_internal meta_func_arg_buffer
+ExtendBuffer(meta_func_arg_buffer *Buf, umm ExtendCount, memory_arena *Memory)
+{
+  meta_func_arg_buffer Result = MetaFuncArgBuffer(Buf->Count + ExtendCount, Memory);
+  CopyBufferIntoBuffer(Buf, &Result);
+  return Result;
+}
+
+link_internal void
+SetLast(meta_func_arg_buffer *Buf, meta_func_arg Arg)
+{
+  Assert(Buf->Count);
+  Buf->Start[Buf->Count-1] = Arg;
+}
 
 
 
@@ -975,8 +1032,8 @@ poof(hashtable(macro_def))
 struct meta_func
 {
   counted_string Name;
-  /* meta_func_arg_buffer Args; */
-  counted_string ArgName;
+  meta_func_arg_buffer Args;
+  /* counted_string ArgName; */
   parser Body;
 };
 poof(generate_stream(meta_func))
@@ -1400,6 +1457,8 @@ CTokenCursor(c_token_cursor *Result, c_token *Buffer, umm Count, counted_string 
   Result->Up = Up;
 }
 
+// TODO(Jesse)(safety, memory): Remove this; these are not allowed to be
+// stack-allocated so we might as well not have a function that returns one..
 link_internal c_token_cursor
 CTokenCursor(c_token *Start, c_token *End, counted_string Filename, token_cursor_source Source, c_token_cursor_up Up)
 {

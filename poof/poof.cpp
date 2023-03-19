@@ -151,8 +151,9 @@ link_internal datatype ResolveToBaseType(parse_context *Ctx, type_spec );
 link_internal datatype ResolveToBaseType(parse_context *Ctx, datatype *);
 link_internal datatype ResolveToBaseType(parse_context *Ctx, type_def *);
 
-link_internal counted_string Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory, umm *Depth);
-link_internal void           DoTrueFalse( parse_context *Ctx, parser *Scope, meta_func_arg_stream* ReplacePatterns, b32 DoTrueBranch, string_builder *OutputBuilder, memory_arena *Memory, umm *Depth);
+link_internal counted_string Execute(meta_func* Func, parse_context* Ctx, memory_arena* Memory, umm *Depth);
+link_internal counted_string Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_arena* Memory, umm *Depth);
+link_internal void           DoTrueFalse( parse_context *Ctx, parser *Scope, meta_func_arg_buffer *ReplacePatterns, b32 DoTrueBranch, string_builder *OutputBuilder, memory_arena *Memory, umm *Depth);
 
 
 inline c_token_cursor *
@@ -2818,6 +2819,7 @@ ExpandMacro( parse_context *Ctx,
       c_token *Start = PeekTokenPointer(Parser);
       if (Start && Start->Type == CTokenType_OpenParen)
       {
+        // TODO(Jesse)(safety, immediate): This is super janky.  We can only snap a pointer to this and access it while it's on the stack..
         c_token_cursor Tokens = CTokenCursor(Start, Start, CSz(DEFAULT_FILE_IDENTIFIER), TokenCursorSource_IntermediateRepresentaton, {0,0} );
         parser InstanceArgs_ = { .Tokens = &Tokens };
         parser *InstanceArgs = &InstanceArgs_;
@@ -4120,6 +4122,11 @@ DefineMacro(parse_context *Ctx, parser *Parser, macro_def *Macro)
   // that the valid macro body tokens will not be erased and will not have
   // undergone macro expansion. That assumption is invalidated if we don't copy
   // tokens.
+  //
+  // TODO(Jesse): It actually seems to me that we shouldn't have to duplicate
+  // because why would the preprocessor ever run on the actual macro definition?
+  // I'd be more on-board with this statement in "ExpandMacro"
+  //
   parser *InstanceParser = DuplicateParserTokens(&InstanceBody, Memory);
 
   RequireToken(InstanceParser, CToken(CT_MacroLiteral, Macro->NameT->Value));
@@ -6720,6 +6727,34 @@ EatBetween_Str(parser* Parser, c_token_type Open, c_token_type Close)
   return Result;
 }
 
+link_internal parser
+EatBetween_Parser(parser *Parser, c_token_type Open, c_token_type Close, memory_arena *Memory)
+{
+  c_token *Start = PeekTokenPointer(Parser);
+
+  c_token_cursor *Tokens = Allocate(c_token_cursor, Memory, 1);
+  CTokenCursor( Tokens,
+                Start, 0,
+                CSz("(anonymous parser)"),
+                TokenCursorSource_IntermediateRepresentaton,
+                {0,0} );
+
+  parser Result = { .Tokens = Tokens };
+
+  EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
+  Result.Tokens->End = Parser->Tokens->At;
+  return Result;
+}
+
+link_internal parser
+EatBetweenExcluding_Parser(parser *Parser, c_token_type Open, c_token_type Close, memory_arena *Memory)
+{
+  parser Result = EatBetween_Parser(Parser, Open, Close, Memory);
+  TrimFirstToken(&Result, Open);
+  TrimLastToken(&Result, Close);
+  return Result;
+}
+
 link_internal compound_decl
 StructDef(c_token *StructNameT) // , counted_string Sourcefile)
 {
@@ -6757,6 +6792,8 @@ TrimFirstToken(parser* Parser, c_token_type TokenType)
   Parser->Tokens->Start = Parser->Tokens->At;
 }
 
+// TODO(Jesse): WTF?  I would assume this would just look at the last token and
+// strip it.  Is this being used to trim whitespace as well or something?
 link_internal void
 TrimLastToken(parser* Parser, c_token_type TokenType)
 {
@@ -10596,6 +10633,57 @@ ParseAllTodosFromFile(counted_string Filename, memory_arena* Memory)
 }
 
 link_internal counted_string
+GetTypeNameForDatatype(parse_context *Ctx, datatype *Data, memory_arena *Memory);
+
+link_internal cs
+ToString(parse_context *Ctx, meta_func_arg *Arg, memory_arena *Memory)
+{
+  cs Result = {};
+  switch (Arg->Type)
+  {
+    InvalidCase(type_meta_func_arg_noop);
+
+    case type_datatype:
+    {
+      Result = GetTypeNameForDatatype(Ctx, &Arg->datatype, Memory);
+    } break;
+
+    case type_poof_index:
+    {
+      Result = FormatCountedString(Memory, CSz("%u"), Arg->poof_index.Index);
+    } break;
+
+    case type_poof_symbol:
+    {
+      // TODO(Jesse): What should we do here?  Symbols can be really big and
+      // contain spaces.  This gets used (at the moment) to generate output
+      // filenames so we don't want to expand the whole thing.. TBD.
+      NotImplemented;
+      Result = FormatCountedString(Memory, CSz("%S"), Arg->poof_index.Index);
+    } break;
+  }
+  return Result;
+}
+
+link_internal counted_string
+GenerateOutfileNameFor(parse_context *Ctx, meta_func_arg_buffer *Args, memory_arena* Memory, counted_string Modifier = {})
+{
+  string_builder OutfileBuilder = {};
+  for (u32 ArgIndex = 0; ArgIndex < Args->Count; ++ArgIndex)
+  {
+    meta_func_arg *Arg = Args->Start + ArgIndex;
+    Append(&OutfileBuilder, ToString(Ctx, Arg, Memory));
+    if ( ArgIndex+1 != Args->Count )
+    {
+      Append(&OutfileBuilder, CSz("_"));
+    }
+  }
+  Append(&OutfileBuilder, CSz(".h"));
+  counted_string Result = Finalize(&OutfileBuilder, Memory);
+  return Result;
+}
+
+link_internal counted_string
 GenerateOutfileNameFor(counted_string Name, counted_string DatatypeName, memory_arena* Memory, counted_string Modifier = {})
 {
   string_builder OutfileBuilder = {};
@@ -11583,19 +11671,156 @@ ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_s
   return Result;
 }
 
+// NOTE(Jesse): This parses the argument list for a function call instance
+link_internal b32
+ParseAndTypecheckArgument(parse_context *Ctx, parser *Parser, meta_func_arg *ParsedArg, meta_func_arg *ArgDef, meta_func_arg_buffer *CurrentScope)
+{
+  c_token *Token = PopTokenPointer(Parser);
+  if (Token)
+  {
+    ParsedArg->Match = ArgDef->Match;
+    switch (ArgDef->Type)
+    {
+      InvalidCase(type_meta_func_arg_noop);
+
+      case type_datatype:
+      {
+        if (Token->Type == CTokenType_Identifier)
+        {
+          datatype Datatype = GetDatatypeByName(Ctx, Token->Value);
+          if (Datatype.Type)
+          {
+            ParsedArg->Type = type_datatype;
+            ParsedArg->datatype = Datatype;
+          }
+          else if (meta_func_arg *ScopedArg = GetByMatch(CurrentScope, Token->Value))
+          {
+            *ParsedArg = *ScopedArg;
+            ParsedArg->Match = ArgDef->Match;
+          }
+          else
+          {
+            PoofTypeError( Parser,
+                           ParseErrorCode_UndefinedDatatype,
+                           FormatCountedString( TranArena,
+                                                CSz("Could't find datatype or local variable for (%S)."),
+                                                Token->Value ),
+                           Token );
+          }
+        }
+        else
+        {
+          PoofTypeError( Parser,
+                         ParseErrorCode_PoofTypeError,
+                         FormatCountedString( TranArena,
+                                              CSz("Expected (%S), got (%S)."),
+                                              ToString(CTokenType_Identifier),
+                                              ToString(Token->Type) ),
+                         Token );
+        }
+      } break;
+
+      case type_poof_index:
+      {
+        switch (Token->Type)
+        {
+          case CTokenType_IntLiteral:
+          {
+            NotImplemented;
+          } break;
+
+          case CTokenType_Identifier:
+          {
+            // TODO(Jesse): Look up into current scope to see if we've got an index
+            // type with the same name
+            NotImplemented;
+          } break;
+
+          // TODO(Jesse): Emit a type error here?
+          InvalidDefaultCase;
+        }
+      } break;
+
+      case type_poof_symbol:
+      {
+        NotImplemented;
+      } break;
+    }
+  }
+  else
+  {
+    // TODO(Jesse)(error-message): Could make this error quite a bit better..
+    PoofTypeError( Parser,
+                   ParseErrorCode_InvalidArgumentCount,
+                   CSz("Not enough arguments."),
+                   Token );
+  }
+
+  b32 Result = (ParsedArg->Type != type_meta_func_arg_noop);
+  return Result;
+}
+
+// NOTE(Jesse): This parses the argument list for a function definition
+link_internal b32
+ParseMetaFuncDefArg(parser *Parser, meta_func_arg_stream *Stream)
+{
+  cs Match = {};
+  cs Type = {};
+
+  cs FirstT = RequireToken(Parser, CTokenType_Identifier).Value;
+
+  if (c_token *SecondT = OptionalToken(Parser, CTokenType_Identifier))
+  {
+    Type = FirstT;
+    Match = SecondT->Value;
+  }
+  else
+  {
+    Match = FirstT;
+  }
+
+  meta_func_arg Arg = {
+    .Match = Match
+  };
+
+  meta_func_arg_type ArgT = MetaFuncArgType(Type);
+  switch (ArgT)
+  {
+    // NOTE(Jesse): Default to datatype if nothing was specified
+    case type_meta_func_arg_noop:
+    {
+      Arg.Type = type_datatype;
+    } break;
+
+    case type_datatype:
+    case type_poof_index:
+    case type_poof_symbol:
+    {
+      Arg.Type = ArgT;
+    } break;
+  }
+
+  Push(Stream, Arg);
+
+  b32 Result = (OptionalToken(Parser, CTokenType_Comma) != 0);
+  return Result;
+}
+
 link_internal meta_func
 ParseMetaFunctionDef(parser* Parser, counted_string FuncName, memory_arena *Memory)
 {
   TIMED_FUNCTION();
 
   RequireToken(Parser, CTokenType_OpenParen);
-  counted_string ArgName = RequireToken(Parser, CTokenType_Identifier).Value;
+  meta_func_arg_stream ArgStream = {};
+  while (ParseMetaFuncDefArg(Parser, &ArgStream));
   RequireToken(Parser, CTokenType_CloseParen);
+
   parser Body = GetBodyTextForNextScope(Parser, Memory);
 
   meta_func Func = {
     .Name = FuncName,
-    .ArgName = ArgName,
+    .Args = Compact(&ArgStream, Memory),
     .Body = Body,
   };
 
@@ -11845,53 +12070,74 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
             meta_func* Func = StreamContains(FunctionDefs, DirectiveT->Value);
             if (Func)
             {
-              RequireToken(Parser, CTokenType_OpenParen);
-              c_token *DatatypeNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
-              counted_string DatatypeName = DatatypeNameT->Value;
-              RequireToken(Parser, CTokenType_CloseParen);
-              RequireToken(Parser, CTokenType_CloseParen);
+              parser ArgParser = EatBetweenExcluding_Parser(Parser, CTokenType_OpenParen, CTokenType_CloseParen, Memory);
 
-              datatype Arg = GetDatatypeByName(&Ctx->Datatypes, DatatypeName);
-
-              if (Arg.Type)
+              b32 TypeCheckPassed = True;
+              meta_func_arg_buffer ArgInstances = MetaFuncArgBuffer(Func->Args.Count, Memory);
+              for (u32 ArgIndex = 0; ArgIndex < Func->Args.Count; ++ArgIndex)
               {
-                meta_func_arg_stream Args = {};
-                Push(&Args, ReplacementPattern(Func->ArgName, Arg));
-                umm Depth = 0;
-                counted_string Code = Execute(Func, &Args, Ctx, Memory, &Depth);
-
-                if (Func->Body.ErrorCode)
+                meta_func_arg *ArgDef = Func->Args.Start + ArgIndex;
+                if (ParseAndTypecheckArgument(Ctx, &ArgParser, &ArgInstances.Start[ArgIndex], ArgDef, {}))
                 {
-                  Parser->ErrorCode = Func->Body.ErrorCode;
-                  ParseInfoMessage( Parser,
-                                    FormatCountedString(TranArena,
-                                                        CSz("Unable to generate code for (func %S)"), Func->Name),
-                                    DirectiveT);
                 }
                 else
                 {
-                  counted_string OutfileName = GenerateOutfileNameFor(Func->Name, DatatypeName, Memory);
-                  counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
-                  Append(&Builder, Tuple(ActualOutputFile, Code));
+                  TypeCheckPassed = False;
+                  // NOTE(Jesse): Need this because the errors emitted from
+                  // ParseAndTypecheckArgument don't contain the whole parse
+                  // context, just the arguments.  Also, we have to propagate
+                  // the error code to the main parser.
+                  ParseError( Parser,
+                              ArgParser.ErrorCode,
+                              FormatCountedString( TranArena,
+                                                   CSz("Could't parse args for (%S)."),
+                                                   DirectiveT->Value ),
+                              DirectiveT );
+                  break;
                 }
+              }
+
+              if (TokensRemain(&ArgParser))
+              {
+                ParseInfoMessage( &ArgParser,
+                                  FormatCountedString(TranArena,
+                                                      CSz("Shiiiiit dawg"), 0 ),
+                                  DirectiveT);
+                Assert(false);
               }
               else
               {
-                PoofTypeError( Parser,
-                               ParseErrorCode_UndefinedDatatype,
-                               FormatCountedString( TranArena,
-                                                    CSz("(%S) is not a defined datatype"),
-                                                    DatatypeName ),
-                               DatatypeNameT );
-              }
+                // TODO(Jesse): Can we plz remove this
+                RequireToken(Parser, CTokenType_CloseParen);
 
+                if (TypeCheckPassed)
+                {
+                  umm Depth = 0;
+                  counted_string Code = Execute(Func, &ArgInstances, Ctx, Memory, &Depth);
+                  if (Func->Body.ErrorCode)
+                  {
+                    Parser->ErrorCode = Func->Body.ErrorCode;
+                    ParseInfoMessage( Parser,
+                                      FormatCountedString(TranArena,
+                                                          CSz("Unable to generate code for (func %S)."), Func->Name),
+                                      DirectiveT);
+                  }
+                  else
+                  {
+                    counted_string OutfileName = GenerateOutfileNameFor(Ctx, &ArgInstances, Memory);
+                    /* counted_string OutfileName = GenerateOutfileNameFor(Func->Name, Func->Args, Memory); */
+                    counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
+                    Append(&Builder, Tuple(ActualOutputFile, Code));
+                  }
+                }
+              }
             }
             else
             {
               PoofTypeError( Parser,
                              ParseErrorCode_InvalidName,
                              FormatCountedString( TranArena,
-                                                  CSz("(%S) is not a poof keyword or function name"),
+                                                  CSz("(%S) is not a poof keyword or function name."),
                                                   DirectiveT->Value ),
                              DirectiveT );
             }
@@ -11913,20 +12159,22 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               counted_string ArgName = RequireToken(Parser, CTokenType_Identifier).Value;
               RequireToken(Parser, CTokenType_CloseParen);
 
+              datatype D = GetDatatypeByName(Ctx, ArgType);
+
+
               parser Body = GetBodyTextForNextScope(Parser, Memory);
 
               meta_func Func = {
                 .Name = CSz("anonymous"),
-                .ArgName = ArgName,
                 .Body = Body,
               };
 
-              datatype Arg = GetDatatypeByName(&Ctx->Datatypes, ArgType);
+              datatype ArgDatatype = GetDatatypeByName(&Ctx->Datatypes, ArgType);
 
-              if (Arg.Type)
+              if (ArgDatatype.Type)
               {
-                meta_func_arg_stream Args = {};
-                Push(&Args, ReplacementPattern(ArgName, Arg));
+                auto Args = MetaFuncArgBuffer(1, Memory);
+                Args.Start[0] = ReplacementPattern(ArgName, ArgDatatype);
                 umm Depth = 0;
                 counted_string Code = Execute(&Func, &Args, Ctx, Memory, &Depth);
                 RequireToken(Parser, CTokenType_CloseParen);
@@ -12019,10 +12267,12 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
               if (!StreamContains(&Excludes, Struct->Type->Value))
               {
-                meta_func_arg_stream Args = {};
-                Push(&Args, ReplacementPattern(StructFunc.ArgName, Datatype(Struct)));
+                /* Assert(StructFunc.Args.Count == 1); */
+                /* auto Args = MetaFuncArgBuffer(1, Memory); */
+                /* Args.Start[0] = ReplacementPattern(StructFunc.Args.Start[0].Match, Datatype(Struct)); */
+
                 umm Depth = 0;
-                counted_string Code = Execute(&StructFunc, &Args, Ctx, Memory, &Depth);
+                counted_string Code = Execute(&StructFunc, Ctx, Memory, &Depth);
                 Append(&OutputBuilder, Code);
               }
             }
@@ -12034,10 +12284,10 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               enum_decl* Enum = &Iter.At->Element;
               if (!StreamContains(&Excludes, Enum->Name))
               {
-                meta_func_arg_stream Args = {};
-                Push(&Args, ReplacementPattern(EnumFunc.ArgName, Datatype(Enum)));
+                /* meta_func_arg_stream Args = {}; */
+                /* Push(&Args, ReplacementPattern(EnumFunc.ArgName, Datatype(Enum))); */
                 umm Depth = 0;
-                counted_string Code = Execute(&EnumFunc, &Args, Ctx, Memory, &Depth);
+                counted_string Code = Execute(&EnumFunc, Ctx, Memory, &Depth);
                 Append(&OutputBuilder, Code);
               }
             }
