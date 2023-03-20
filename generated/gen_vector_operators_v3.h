@@ -211,6 +211,16 @@ operator+=( v3 &P1, v3 P2 )
   return P1;
 }
 
+inline v3 &
+operator+=( v3 &P1, r32 Scalar )
+{
+  P1.E[0] += Scalar;
+  P1.E[1] += Scalar;
+  P1.E[2] += Scalar;
+
+  return P1;
+}
+
 
 inline v3 &
 operator-=( v3 &P1, v3 P2 )
@@ -218,6 +228,16 @@ operator-=( v3 &P1, v3 P2 )
   P1.E[0] -= P2.E[0];
   P1.E[1] -= P2.E[1];
   P1.E[2] -= P2.E[2];
+
+  return P1;
+}
+
+inline v3 &
+operator-=( v3 &P1, r32 Scalar )
+{
+  P1.E[0] -= Scalar;
+  P1.E[1] -= Scalar;
+  P1.E[2] -= Scalar;
 
   return P1;
 }
@@ -233,6 +253,16 @@ operator*=( v3 &P1, v3 P2 )
   return P1;
 }
 
+inline v3 &
+operator*=( v3 &P1, r32 Scalar )
+{
+  P1.E[0] *= Scalar;
+  P1.E[1] *= Scalar;
+  P1.E[2] *= Scalar;
+
+  return P1;
+}
+
 
 inline v3 &
 operator/=( v3 &P1, v3 P2 )
@@ -240,6 +270,16 @@ operator/=( v3 &P1, v3 P2 )
   P1.E[0] /= P2.E[0];
   P1.E[1] /= P2.E[1];
   P1.E[2] /= P2.E[2];
+
+  return P1;
+}
+
+inline v3 &
+operator/=( v3 &P1, r32 Scalar )
+{
+  P1.E[0] /= Scalar;
+  P1.E[1] /= Scalar;
+  P1.E[2] /= Scalar;
 
   return P1;
 }

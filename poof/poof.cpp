@@ -10663,17 +10663,19 @@ ToString(parse_context *Ctx, meta_func_arg *Arg, memory_arena *Memory)
       // TODO(Jesse): What should we do here?  Symbols can be really big and
       // contain spaces.  This gets used (at the moment) to generate output
       // filenames so we don't want to expand the whole thing.. TBD.
-      NotImplemented;
-      Result = FormatCountedString(Memory, CSz("%S"), Arg->poof_symbol.Value);
+      /* NotImplemented; */
+      Result = FormatCountedString(Memory, CSz("%lu"), Hash(Arg->poof_symbol.Value));
     } break;
   }
   return Result;
 }
 
 link_internal counted_string
-GenerateOutfileNameFor(parse_context *Ctx, meta_func_arg_buffer *Args, memory_arena* Memory, counted_string Modifier = {})
+GenerateOutfileNameFor(parse_context *Ctx, meta_func *Func, meta_func_arg_buffer *Args, memory_arena* Memory, counted_string Modifier = {})
 {
   string_builder OutfileBuilder = {};
+  Append(&OutfileBuilder, Func->Name);
+  Append(&OutfileBuilder, CSz("_"));
   for (u32 ArgIndex = 0; ArgIndex < Args->Count; ++ArgIndex)
   {
     meta_func_arg *Arg = Args->Start + ArgIndex;
@@ -11063,11 +11065,12 @@ GetNameForDatatype(datatype *Data, memory_arena *Memory)
 
     case type_type_def:
     {
-      NotImplemented;
+      Result = Data->type_def->Alias;
     } break;
 
     case type_datatype_noop:
     {
+      // TODO(Jesse): Is this actually a valid case?
       Result = CSz("type_datatype_noop");
     } break;
   }
@@ -12158,7 +12161,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
                 auto Code = CallFunction(Ctx, DirectiveT, Func, &ArgInstances, Memory, &Depth);
                 if (Code.Start)
                 {
-                  counted_string OutfileName = GenerateOutfileNameFor(Ctx, &ArgInstances, Memory);
+                  counted_string OutfileName = GenerateOutfileNameFor(Ctx, Func, &ArgInstances, Memory);
                   counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, {} /*TodoInfo*/, Memory);
 
                   auto FilenameAndCode = Tuple(ActualOutputFile, Code);
