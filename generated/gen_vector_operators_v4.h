@@ -1,7 +1,7 @@
 inline b32
 operator==( v4 P1, v4 P2 )
 {
-  b32 Result = (P1.E[0] == P2.E[0] && P1.E[1] == P2.E[1] && P1.E[2] == P2.E[2] && P1.E[3] == P2.E[3]);
+  b32 Result = ( P1.E[0] == P2.E[0]  && P1.E[1] == P2.E[1]  && P1.E[2] == P2.E[2]  && P1.E[3] == P2.E[3] );
   return Result;
 }
 
@@ -20,7 +20,7 @@ operator!=( v4 P1, v4 P2 )
 inline b32
 operator<( v4 P1, v4 P2 )
 {
-  b32 Result = (P1.E[0] < P2.E[0] && P1.E[1] < P2.E[1] && P1.E[2] < P2.E[2] && P1.E[3] < P2.E[3]);
+  b32 Result = ( P1.E[0] < P2.E[0]  && P1.E[1] < P2.E[1]  && P1.E[2] < P2.E[2]  && P1.E[3] < P2.E[3] );
   return Result;
 }
 
@@ -28,7 +28,7 @@ operator<( v4 P1, v4 P2 )
 inline b32
 operator<=( v4 P1, v4 P2 )
 {
-  b32 Result = (P1.E[0] <= P2.E[0] && P1.E[1] <= P2.E[1] && P1.E[2] <= P2.E[2] && P1.E[3] <= P2.E[3]);
+  b32 Result = ( P1.E[0] <= P2.E[0]  && P1.E[1] <= P2.E[1]  && P1.E[2] <= P2.E[2]  && P1.E[3] <= P2.E[3] );
   return Result;
 }
 
@@ -36,7 +36,7 @@ operator<=( v4 P1, v4 P2 )
 inline b32
 operator>( v4 P1, v4 P2 )
 {
-  b32 Result = (P1.E[0] > P2.E[0] && P1.E[1] > P2.E[1] && P1.E[2] > P2.E[2] && P1.E[3] > P2.E[3]);
+  b32 Result = ( P1.E[0] > P2.E[0]  && P1.E[1] > P2.E[1]  && P1.E[2] > P2.E[2]  && P1.E[3] > P2.E[3] );
   return Result;
 }
 
@@ -44,7 +44,7 @@ operator>( v4 P1, v4 P2 )
 inline b32
 operator>=( v4 P1, v4 P2 )
 {
-  b32 Result = (P1.E[0] >= P2.E[0] && P1.E[1] >= P2.E[1] && P1.E[2] >= P2.E[2] && P1.E[3] >= P2.E[3]);
+  b32 Result = ( P1.E[0] >= P2.E[0]  && P1.E[1] >= P2.E[1]  && P1.E[2] >= P2.E[2]  && P1.E[3] >= P2.E[3] );
   return Result;
 }
 
@@ -57,7 +57,6 @@ operator+( v4 P1, v4 P2 )
     .E[1] = P1.E[1] + P2.E[1],
     .E[2] = P1.E[2] + P2.E[2],
     .E[3] = P1.E[3] + P2.E[3],
-
   };
   return Result;
 }
@@ -70,7 +69,6 @@ operator+( v4 P1, r32 Scalar )
     .E[1] = P1.E[1] + Scalar,
     .E[2] = P1.E[2] + Scalar,
     .E[3] = P1.E[3] + Scalar,
-
   };
   return Result;
 }
@@ -83,7 +81,6 @@ operator+( r32 Scalar, v4 P1 )
     .E[1] = P1.E[1] + Scalar,
     .E[2] = P1.E[2] + Scalar,
     .E[3] = P1.E[3] + Scalar,
-
   };
   return Result;
 }
@@ -98,7 +95,6 @@ operator-( v4 P1, v4 P2 )
     .E[1] = P1.E[1] - P2.E[1],
     .E[2] = P1.E[2] - P2.E[2],
     .E[3] = P1.E[3] - P2.E[3],
-
   };
   return Result;
 }
@@ -111,7 +107,6 @@ operator-( v4 P1, r32 Scalar )
     .E[1] = P1.E[1] - Scalar,
     .E[2] = P1.E[2] - Scalar,
     .E[3] = P1.E[3] - Scalar,
-
   };
   return Result;
 }
@@ -124,7 +119,6 @@ operator-( r32 Scalar, v4 P1 )
     .E[1] = P1.E[1] - Scalar,
     .E[2] = P1.E[2] - Scalar,
     .E[3] = P1.E[3] - Scalar,
-
   };
   return Result;
 }
@@ -139,7 +133,6 @@ operator*( v4 P1, v4 P2 )
     .E[1] = P1.E[1] * P2.E[1],
     .E[2] = P1.E[2] * P2.E[2],
     .E[3] = P1.E[3] * P2.E[3],
-
   };
   return Result;
 }
@@ -152,7 +145,6 @@ operator*( v4 P1, r32 Scalar )
     .E[1] = P1.E[1] * Scalar,
     .E[2] = P1.E[2] * Scalar,
     .E[3] = P1.E[3] * Scalar,
-
   };
   return Result;
 }
@@ -165,7 +157,6 @@ operator*( r32 Scalar, v4 P1 )
     .E[1] = P1.E[1] * Scalar,
     .E[2] = P1.E[2] * Scalar,
     .E[3] = P1.E[3] * Scalar,
-
   };
   return Result;
 }
@@ -180,7 +171,6 @@ operator/( v4 P1, v4 P2 )
     .E[1] = P1.E[1] / P2.E[1],
     .E[2] = P1.E[2] / P2.E[2],
     .E[3] = P1.E[3] / P2.E[3],
-
   };
   return Result;
 }
@@ -193,7 +183,6 @@ operator/( v4 P1, r32 Scalar )
     .E[1] = P1.E[1] / Scalar,
     .E[2] = P1.E[2] / Scalar,
     .E[3] = P1.E[3] / Scalar,
-
   };
   return Result;
 }
@@ -206,7 +195,6 @@ operator/( r32 Scalar, v4 P1 )
     .E[1] = P1.E[1] / Scalar,
     .E[2] = P1.E[2] / Scalar,
     .E[3] = P1.E[3] / Scalar,
-
   };
   return Result;
 }
@@ -220,7 +208,6 @@ operator+=( v4 &P1, v4 P2 )
   P1.E[1] += P2.E[1];
   P1.E[2] += P2.E[2];
   P1.E[3] += P2.E[3];
-
   return P1;
 }
 
@@ -231,7 +218,6 @@ operator+=( v4 &P1, r32 Scalar )
   P1.E[1] += Scalar;
   P1.E[2] += Scalar;
   P1.E[3] += Scalar;
-
   return P1;
 }
 
@@ -243,7 +229,6 @@ operator-=( v4 &P1, v4 P2 )
   P1.E[1] -= P2.E[1];
   P1.E[2] -= P2.E[2];
   P1.E[3] -= P2.E[3];
-
   return P1;
 }
 
@@ -254,7 +239,6 @@ operator-=( v4 &P1, r32 Scalar )
   P1.E[1] -= Scalar;
   P1.E[2] -= Scalar;
   P1.E[3] -= Scalar;
-
   return P1;
 }
 
@@ -266,7 +250,6 @@ operator*=( v4 &P1, v4 P2 )
   P1.E[1] *= P2.E[1];
   P1.E[2] *= P2.E[2];
   P1.E[3] *= P2.E[3];
-
   return P1;
 }
 
@@ -277,7 +260,6 @@ operator*=( v4 &P1, r32 Scalar )
   P1.E[1] *= Scalar;
   P1.E[2] *= Scalar;
   P1.E[3] *= Scalar;
-
   return P1;
 }
 
@@ -289,7 +271,6 @@ operator/=( v4 &P1, v4 P2 )
   P1.E[1] /= P2.E[1];
   P1.E[2] /= P2.E[2];
   P1.E[3] /= P2.E[3];
-
   return P1;
 }
 
@@ -300,7 +281,6 @@ operator/=( v4 &P1, r32 Scalar )
   P1.E[1] /= Scalar;
   P1.E[2] /= Scalar;
   P1.E[3] /= Scalar;
-
   return P1;
 }
 

@@ -48,7 +48,7 @@ link_internal peek_result PeekTokenRawCursor(peek_result *Peek, s32 TokenLookahe
 link_internal peek_result PeekTokenRawCursor(c_token_cursor *Tokens, s32 TokenLookahead, b32 CanSearchDown = True);
 link_internal peek_result PeekTokenRawCursor(parser *Parser, s32 TokenLookahead = 0);
 
-link_internal peek_result PeekTokenCursor(peek_result *Peek, s32 TokenLookahead = 0);
+/* link_internal peek_result PeekTokenCursor(peek_result *Peek, s32 TokenLookahead = 0); */
 link_internal peek_result PeekTokenCursor(c_token_cursor *Tokens, s32 TokenLookahead = 0);
 link_internal peek_result PeekTokenCursor(parser *Parser, s32 TokenLookahead = 0);
 
@@ -2280,8 +2280,6 @@ TokensRemain(parser *Parser, u32 Count)
 link_internal c_token *
 PopTokenPointer(parser* Parser)
 {
-  peek_result NextT = PeekTokenCursor(Parser);
-
   // TODO(Jesse): This is kinda tortured .. should probably work on the API
   // here. In particular it's not obvious what AdvanceTo returns, and it
   // actually returns what I wouldn't expect if I guessed.
@@ -2293,7 +2291,9 @@ PopTokenPointer(parser* Parser)
   // without the intermediate AdvanceTo .. I think
   //
 
+  peek_result NextT = PeekTokenCursor(Parser);
   AdvanceTo(Parser, &NextT);
+
   peek_result NextRawT = PeekTokenRawCursor(&NextT, 1);
   c_token *Result = AdvanceTo(Parser, &NextRawT);
 
@@ -3469,17 +3469,49 @@ TrimLeadingWhitespace(parser* Parser)
   }
 }
 
+link_internal c_token
+LastNonNBSPToken(parser* Parser)
+{
+  c_token* CurrentToken = Parser->Tokens->End-1;
+
+  while (CurrentToken >= Parser->Tokens->Start)
+  {
+    // TODO(Jesse)(correctness) This function fails if we hit one of these!
+    // Rewrite it such that we properly traverse "Down" pointers.
+    Assert( ! (CurrentToken->Type == CT_InsertedCode ||
+               CurrentToken->Type == CT_MacroLiteral) );
+
+    if ( IsNBSP(CurrentToken) )
+    {
+      CurrentToken -= 1;
+    }
+    else
+    {
+      break;
+    }
+
+    --CurrentToken;
+  }
+
+  c_token Result = {};
+  if (CurrentToken >= Parser->Tokens->Start && !IsNBSP(CurrentToken) )
+  {
+    Result = *CurrentToken;
+  }
+  return Result;
+}
+
 link_internal void
-TrimTrailingWhitespace(parser* Parser)
+TrimTrailingNBSP(parser* Parser)
 {
   c_token* CurrentToken = Parser->Tokens->End-1;
 
   while (CurrentToken > Parser->Tokens->Start)
   {
-    // TODO(Jesse, correctness) This function fails if we hit one of these!
+    // TODO(Jesse)(correctness) This function fails if we hit one of these!
     // Rewrite it such that we properly traverse "Down" pointers.
-    Assert( ! (Parser->Tokens->At->Type == CT_InsertedCode ||
-               Parser->Tokens->At->Type == CT_MacroLiteral) );
+    /* Assert( ! (Parser->Tokens->At->Type == CT_InsertedCode || */
+    /*            Parser->Tokens->At->Type == CT_MacroLiteral) ); */
 
     if ( CurrentToken->Type == CTokenType_Space ||
          CurrentToken->Type == CTokenType_Tab )
@@ -6780,7 +6812,7 @@ NextTokenIsSpaceOrTab(parser *Parser)
 }
 
 link_internal void
-TrimUntilNewline(parser* Parser)
+TrimNBSPUntilNewline(parser* Parser)
 {
   Assert(Parser->Tokens->At == Parser->Tokens->Start);
 
@@ -6823,8 +6855,21 @@ TokenValidFor(c_token_cursor *Tokens, c_token *T)
   return Result;
 }
 
+link_internal c_token
+FirstNonNBSPToken(parser *Parser)
+{
+  peek_result At = PeekTokenRawCursor(Parser);
+  while (IsValid(&At) && IsNBSP(At.At))
+  {
+    At = PeekTokenRawCursor(&At, 1);
+  }
+  c_token Result = {};
+  if (IsValid(&At)) { Result = *At.At; }
+  return Result;
+}
+
 link_internal parser
-GetBodyTextForNextScope(parser* Parser, memory_arena *Memory)
+GetBodyTextForNextScope(parser *Parser, memory_arena *Memory)
 {
   // TODO(Jesse, immediate): This should return c_token_cursor .. I think ..
   parser BodyText = {};
@@ -6862,9 +6907,18 @@ GetBodyTextForNextScope(parser* Parser, memory_arena *Memory)
     CTokenCursor(Tokens, Start, (umm)(End-Start) + 1, Start->Filename, TokenCursorSource_BodyText, {});
 
     TrimFirstToken(&BodyText, CTokenType_OpenBrace);
-    TrimUntilNewline(&BodyText);
+    /* TrimLeadingWhitespace(&BodyText); */
+    if (FirstNonNBSPToken(&BodyText).Type == CTokenType_Newline)
+    {
+      TrimNBSPUntilNewline(&BodyText);
+    }
+
     TrimLastToken(&BodyText, CTokenType_CloseBrace);
-    TrimTrailingWhitespace(&BodyText);
+    if (LastNonNBSPToken(&BodyText).Type == CTokenType_Newline)
+    {
+      TrimTrailingNBSP(&BodyText);
+    }
+
     Rewind(BodyText.Tokens);
 
     Assert(BodyText.Tokens->At == BodyText.Tokens->Start);

@@ -1,42 +1,34 @@
 
-link_internal umm
-SafeDecrement(umm *N)
-{
-  umm Result = *N;
-  if (Result > 0)
-  {
-    Result -= 1;
-  }
-  return Result;
-}
-
 link_internal c_token
 NormalizeWhitespaceTokens(c_token *T, c_token* PrevT, c_token *NextT, umm *Depth)
 {
   c_token Result = *T;
 
-  if (T->Type == '{')
+  if (T->Type == '{' || T->Type == '(')
   {
     *Depth += 1;
   }
 
-  if (T->Type == '}')
+  if (T->Type == '}' || T->Type == ')')
   {
     *Depth = SafeDecrement(Depth);
   }
 
-  if ( (T->Type == ' ' && PrevT && PrevT->Type == CTokenType_Newline) ||
-       (T->Type == ' ' && PrevT == 0) )
+  if ( (IsNBSP(T) && PrevT && PrevT->Type == CTokenType_Newline) ||
+       (IsNBSP(T) && PrevT == 0) )
   {
-    Result.Value.Count = Min(T->Value.Count, (*Depth)*2);
+    if ( NextT && (NextT->Type == '}' || NextT->Type == ')'))
+    {
+      Result.Value.Count = Min(T->Value.Count, (SafeDecrement(Depth))*2);
+    }
+    else
+    {
+      Result.Value.Count = Min(T->Value.Count, (*Depth)*2);
+    }
   }
 
   if (IsNBSP(T))
   {
-    if ( NextT && NextT->Type == '}')
-    {
-      Result.Value.Count = Min(T->Value.Count, (SafeDecrement(Depth))*2);
-    }
 
     if ( PrevT && PrevT->Type == T->Type )
     {
@@ -46,6 +38,66 @@ NormalizeWhitespaceTokens(c_token *T, c_token* PrevT, c_token *NextT, umm *Depth
   }
 
   return Result;
+}
+
+link_internal b32
+IsAllWhitespace(cs *Str)
+{
+  b32 Result = True;
+  for (u32 Index = 0; Index < Str->Count; ++Index)
+  {
+    Result &= IsWhitespace((c_token_type)Str->Start[Index]);
+    if (!Result) break;
+  }
+  return Result;
+}
+
+link_internal void
+HandleWhitespaceAndAppend( string_builder *OutputBuilder, counted_string Output, counted_string Sep = {}, b32 TrimOutputTrailingNewline = False)
+{
+  if (IsAllWhitespace(&Output))
+  {
+    // Skip anything that just amounts to whitespace
+  }
+  else
+  {
+    cs *LastStr = &OutputBuilder->Chunks.LastChunk->Element;
+    if (LastStr)
+    {
+      if (IsAllWhitespace(LastStr))
+      {
+        LastStr->Count = 0;
+      }
+
+      if (LastNBSPChar(&Output) == '\n')
+      {
+        TrimTrailingNBSP(&Output);
+        if (TrimOutputTrailingNewline)
+        {
+          TrimTrailingNewline(&Output);
+        }
+      }
+
+      if (LastNBSPChar(LastStr) == '\n')
+      {
+        TrimTrailingNBSP(LastStr);
+      }
+
+      if (Sep.Count)
+      {
+        if (TrimTrailingNewline(&Output))
+        {
+          if (LastChar(Sep) != '\n')
+          {
+            Sep = Concat(Sep, CSz("\n"), OutputBuilder->Memory);
+          }
+        }
+      }
+    }
+
+    Append(OutputBuilder, Output);
+    if (Sep.Count) { Append(OutputBuilder, Sep); }
+  }
 }
 
 // TODO(Jesse id: 222, tags: immediate, parsing, metaprogramming) : Re-add [[nodiscard]] here
@@ -92,7 +144,6 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
 
         b32 DidPoofOp = False;
         for (u32 ArgIndex = 0; ArgIndex < ReplacePatterns->Count; ++ArgIndex)
-        /* ITERATE_OVER_AS(Replace, ReplacePatterns) */
         {
           meta_func_arg *Replace = ReplacePatterns->Start + ArgIndex; //GET_ELEMENT(ReplaceIter);
           if ( (ImpetusWasIdentifier && StringsMatch(Replace->Match, BodyToken->Value)) ||
@@ -503,8 +554,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                         }
                         else
                         {
-                          TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
-                          Append(&OutputBuilder, StructFieldOutput);
+                          HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput);
                         }
                       }
                       else
@@ -558,16 +608,16 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                     parser MapMemberScope = GetBodyTextForNextScope(Scope, Memory);
 
                     ast_node *Node = DatatypeStaticBufferSize(Ctx, Scope, ReplaceData, MetaOperatorToken);
-                    u64 Size = ResolveConstantExpression(Scope, Node);
-                    for (u64 Index = 0; Index < Size; ++Index)
+                    u64 ArrayLength = ResolveConstantExpression(Scope, Node);
+                    for (u64 ArrayIndex = 0; ArrayIndex < ArrayLength; ++ArrayIndex)
                     {
                       // TODO(Jesse): We need to make meta_func_args have room for more than just datatypes
                       // We now need to have literals
                       /* meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory); */
-                      /* Push(&NewArgs, ReplacementPattern(MatchPattern, PoofIndex(SafeTruncateToU32(Index), SafeTruncateToU32(Size)))); */
+                      /* Push(&NewArgs, ReplacementPattern(MatchPattern, PoofIndex(SafeTruncateToU32(ArrayIndex), SafeTruncateToU32(ArrayLength)))); */
 
                       meta_func_arg_buffer NewArgs = ExtendBuffer(ReplacePatterns, 1, Memory);
-                      SetLast(&NewArgs, ReplacementPattern(MatchPattern, PoofIndex(SafeTruncateToU32(Index), SafeTruncateToU32(Size))));
+                      SetLast(&NewArgs, ReplacementPattern(MatchPattern, PoofIndex(SafeTruncateToU32(ArrayIndex), SafeTruncateToU32(ArrayLength))));
 
                       Rewind(MapMemberScope.Tokens);
                       counted_string StructFieldOutput = Execute(&MapMemberScope, &NewArgs, Ctx, Memory, Depth);
@@ -577,12 +627,15 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                       }
                       else
                       {
-                        TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
-                        Append(&OutputBuilder, StructFieldOutput);
-                        if (Index+1 < Size)
+                        if (ArrayIndex+1 < ArrayLength)
                         {
-                          Append(&OutputBuilder, Sep);
-                          Append(&OutputBuilder, CS("")); // NOTE(Jesse): This is a dirty hack to preserve the seperator if it has whitespace on the end
+                          HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput, Sep);
+                        }
+                        else
+                        {
+                          // TODO(Jesse): The boolean here is hella wonky .. when the map functions
+                          // get collapsed down we should have a better/more systemic way of dealing with this
+                          HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput, {}, True);
                         }
                       }
                     }
@@ -634,8 +687,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                             }
                             else
                             {
-                              TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
-                              Append(&OutputBuilder, StructFieldOutput);
+                              HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput);
                             }
                           } break;
                         }
@@ -684,8 +736,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                           }
                           else
                           {
-                            TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
-                            Append(&OutputBuilder, EnumFieldOutput);
+                            HandleWhitespaceAndAppend(&OutputBuilder, EnumFieldOutput);
                           }
                         }
                       }
@@ -716,6 +767,8 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
             }
 
           }
+
+          if (DidPoofOp) break;
         }
 
         meta_func *NestedFunc = {};
@@ -744,8 +797,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
             auto Code = CallFunction(Ctx, NestedFuncT, NestedFunc, &ArgInstances, Memory, Depth);
             if (Code.Start)
             {
-              TrimTrailingNBSP(&OutputBuilder.Chunks.LastChunk->Element);
-              Append(&OutputBuilder, Code);
+              HandleWhitespaceAndAppend(&OutputBuilder, Code);
             }
           }
         }
@@ -759,7 +811,9 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
         }
         else
         {
-          Append(&OutputBuilder, BodyToken->Value);
+          // NOTE(Jesse): Have to call this here to track depth properly
+          c_token ToPush = NormalizeWhitespaceTokens(BodyToken, PeekTokenRawPointer(Scope, -2), PeekTokenRawPointer(Scope), Depth);
+          Append(&OutputBuilder, ToPush.Value);
         }
 
       } break;
@@ -774,6 +828,9 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
 
     continue;
   }
+
+  /* TrimLeadingWhitespace(&OutputBuilder.Chunks.FirstChunk->Element); */
+  /* TrimTrailingWhitespace(&OutputBuilder.Chunks.LastChunk->Element); */
 
   counted_string Result = Finalize(&OutputBuilder, Memory);
   return Result;
@@ -807,8 +864,7 @@ DoTrueFalse( parse_context *Ctx,
     }
     else
     {
-      TrimTrailingNBSP(&OutputBuilder->Chunks.LastChunk->Element);
-      Append(OutputBuilder, Code);
+      HandleWhitespaceAndAppend(OutputBuilder, Code);
     }
   }
 }

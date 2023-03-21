@@ -60,4 +60,4 @@ Insert(datatype Element, datatype_hashtable *Table, memory_arena *Memory)
   Insert(Bucket, Table);
   return &Bucket->Element;
 }
-
+ 

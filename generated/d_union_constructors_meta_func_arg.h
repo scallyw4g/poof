@@ -1,5 +1,3 @@
-
-
 link_internal meta_func_arg
 MetaFuncArg(datatype A)
 {
