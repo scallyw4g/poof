@@ -8,9 +8,7 @@ union (anonymous) (value unsupported for compound declaration types)
 
 -- filtered members start --
 
-
 foo_struct_1 foo_struct_1
-
 
 
 

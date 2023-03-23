@@ -1,8 +1,8 @@
-isarray
+isarray 
 foo
 foo
+int  a1
 
-int  a1 
 /* M.array */
 
 

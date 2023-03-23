@@ -20,7 +20,8 @@ poof(
         M.map_array (Index) {
           foo
         }
-      M.type M.name M.value
+      M.type M.name
+      M.value
       /* M.array */
     })
   }
