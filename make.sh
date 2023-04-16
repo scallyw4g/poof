@@ -8,14 +8,16 @@
 # Calling functions by name on the command line shouldn't be affected by these.
 
 
-# RunPreemptivePoof=1
+RunPreemptivePoof=1
 
 # BuildAllBinariesRunAllTests=1
+
+FetchBonsaiDebug=1
 
 RunPoof=1
 BuildPoof=1
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
-# POOF_DEBUGGER="gdb --args"
+POOF_DEBUGGER="gdb --args"
 
 # BuildPoofEmcc=1
 # RollupEmcc=1
@@ -504,6 +506,12 @@ function BuildAndRunAllExamples
   echo -e ""
 }
 
+function FetchBonsaiDebug
+{
+  [ -d lib_bonsai_debug ] && rm -Rf lib_bonsai_debug
+  cp -R ../bonsai/releases/debug_lib lib_bonsai_debug
+}
+
 function BuildAllBinaries
 {
   BuildPoof
@@ -574,6 +582,10 @@ else
     POOF_LOG_LEVEL=$old_poof_log_level
     POOF_DEBUGGER=$old_poof_debugger
     POOF_EXECUTABLE=$old_poof_executable
+  fi
+
+  if [[ $FetchBonsaiDebug == 1 ]]; then
+    FetchBonsaiDebug
   fi
 
   if [[ $BuildPoof == 1 ]]; then

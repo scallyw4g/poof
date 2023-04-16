@@ -1,7 +1,10 @@
 #if !BONSAI_EMCC
   #define PLATFORM_LIBRARY_AND_WINDOW_IMPLEMENTATIONS 1
   #define PLATFORM_GL_IMPLEMENTATIONS 1
+
+  #define BONSAI_DEBUG_LIB_LOADER_API 1
   #define BONSAI_DEBUG_SYSTEM_API 1
+
   #define DEBUG_PRINT 0
 #endif
 
@@ -10151,33 +10154,6 @@ FlushOutputToDisk( parse_context *Ctx,
   return OutputPath;
 }
 
-// TODO(Jesse, id: 113, tags: cleanup): Remove these?
-debug_global platform Plat = {};
-debug_global os Os = {};
-
-/* TODO(Jesse, id: 112, tags: bootstrap_debug_system, copy_paste): This is
- * copy-pasted from the callgraph tests .. should we be able to call this from
- * anywhere?  It's also in the platform layer
- */
-#if BONSAI_DEBUG_SYSTEM_API
-link_internal b32
-BootstrapDebugSystem()
-{
-  shared_lib DebugLib = OpenLibrary(DEFAULT_DEBUG_LIB);
-  if (!DebugLib) { Error("Loading DebugLib :( "); return False; }
-
-  init_debug_system_proc OpenAndInitializeDebugWindow = (init_debug_system_proc)GetProcFromLib(DebugLib, DebugLibName_OpenAndInitializeDebugWindow);
-  if (!OpenAndInitializeDebugWindow) { Error("Retreiving OpenAndInitializeDebugWindow from Debug Lib :( "); return False; }
-
-  GetDebugState = OpenAndInitializeDebugWindow(&Os, &Plat);
-
-  debug_state* DebugState = GetDebugState();
-  DebugState->DebugDoScopeProfiling = True;
-
-  return True;
-}
-#endif
-
 link_internal meta_func_arg*
 StreamContains(meta_func_arg_stream* Stream, counted_string Match)
 {
@@ -12163,9 +12139,11 @@ main(s32 ArgCount_, const char** ArgStrings)
 #if BONSAI_DEBUG_SYSTEM_API
   if (Ctx.Args.DoDebugWindow)
   {
-    if (BootstrapDebugSystem() == 1)
+    if (InitializeBonsaiDebug(BonsaiDebug_DefaultLibPath))
     {
-      GetDebugState()->DebugDoScopeProfiling = True;
+      GetDebugState()->OpenAndInitializeDebugWindow();
+      GetDebugState()->FrameBegin(True, True);
+
       MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt());
       DEBUG_REGISTER_ARENA(Memory);
       DEBUG_REGISTER_ARENA(&Global_PermMemory);
@@ -12283,11 +12261,10 @@ main(s32 ArgCount_, const char** ArgStrings)
 
 #if BONSAI_DEBUG_SYSTEM_API
   // BootstrapDebugSystem is behind a flag, or it could have failed.
-  if (GetDebugState)
+  if (debug_state *DebugState = GetDebugState())
   {
-    debug_state *DebugState = GetDebugState();
     DebugState->UIType = DebugUIType_CallGraph;
-    DebugState->DisplayDebugMenu = True;
+    /* DebugState->DisplayDebugMenu = True; */
     /* DebugState->DebugDoScopeProfiling = False; */
 
     MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt());
@@ -12296,27 +12273,25 @@ main(s32 ArgCount_, const char** ArgStrings)
     MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(1);
     MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(1);
 
-    hotkeys Hotkeys = {};
-    while (Os.ContinueRunning)
+    while (DebugState->ProcessInputAndRedrawWindow())
     {
-    /* MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt()); */
-      ClearClickedFlags(&Plat.Input);
+      /* ClearClickedFlags(&Plat.Input); */
 
-      v2 LastMouseP = Plat.MouseP;
-      while ( ProcessOsMessages(&Os, &Plat) );
-      Plat.MouseDP = LastMouseP - Plat.MouseP;
+      /* v2 LastMouseP = Plat.MouseP; */
+      /* while ( ProcessOsMessages(&Os, &Plat) ); */
+      /* Plat.MouseDP = LastMouseP - Plat.MouseP; */
 
-      Assert(Plat.WindowWidth && Plat.WindowHeight);
+      /* Assert(Plat.WindowWidth && Plat.WindowHeight); */
 
-      BindHotkeysToInput(&Hotkeys, &Plat.Input);
+      /* BindHotkeysToInput(&Hotkeys, &Plat.Input); */
 
-      DebugState->OpenDebugWindowAndLetUsDoStuff();
-      BonsaiSwapBuffers(&Os);
+      /* DebugState->OpenDebugWindowAndLetUsDoStuff(); */
+      /* BonsaiSwapBuffers(&Os); */
 
-      DebugState->ClearFramebuffers();
+      /* DebugState->ClearFramebuffers(); */
 
-      GL.BindFramebuffer(GL_FRAMEBUFFER, 0);
-      GL.Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      /* GL.BindFramebuffer(GL_FRAMEBUFFER, 0); */
+      /* GL.Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); */
 
       /* Ensure(RewindArena(TranArena)); */
     }
