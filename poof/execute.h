@@ -583,6 +583,11 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
 
                   } break;
 
+                  case map:
+                  {
+                    NotImplemented;
+                  } break;
+
                   case map_array:
                   {
                     RequireToken(Scope, CTokenType_OpenParen);

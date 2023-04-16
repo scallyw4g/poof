@@ -55,8 +55,8 @@ link_internal peek_result PeekTokenRawCursor(parser *Parser, s32 TokenLookahead 
 link_internal peek_result PeekTokenCursor(c_token_cursor *Tokens, s32 TokenLookahead = 0);
 link_internal peek_result PeekTokenCursor(parser *Parser, s32 TokenLookahead = 0);
 
-link_internal c_token* PeekTokenRawPointer(parser *Parser, u32 TokenLookahead);
-link_internal c_token* PeekTokenRawPointer(parser *Parser, s32 TokenLookahead = 0);
+link_internal c_token * PeekTokenRawPointer(parser *Parser, u32 TokenLookahead);
+link_internal c_token * PeekTokenRawPointer(parser *Parser, s32 TokenLookahead = 0);
 
 link_internal c_token * PeekTokenPointer(c_token_cursor *Tokens, s32 TokenLookahead = 0);
 link_internal c_token * PeekTokenPointer(parser *Parser, u32 TokenLookahead = 0);

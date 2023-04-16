@@ -15,7 +15,7 @@ RunPreemptivePoof=1
 FetchBonsaiDebug=0
 
 RunPoof=0
-BuildPoof=0
+BuildPoof=1
 
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 POOF_DEBUGGER="gdb --args"

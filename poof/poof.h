@@ -33,6 +33,7 @@ enum meta_arg_operator
   map_array,
   map_values,
   map_members,
+  map,
 
   // utility
   sep,
