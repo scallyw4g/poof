@@ -1,3 +1,5 @@
+#define poof(...)
+
 typedef __ undefined_type;
 
 // NOTE(Jesse): Copied from bonsai_stdlib/primitives.h
@@ -36,8 +38,20 @@ enum foo_enum
 };
 
 
+struct array_struct
+{
+  int a1[2];
+  u64 a2[42];
+  void* a3[420];
+};
+
+struct doubly_nested_struct
+{
+};
+
 struct nested_struct
 {
+  doubly_nested_struct DoublyNested;
 };
 
 struct bar_struct

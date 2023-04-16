@@ -1,6 +1,7 @@
 struct counted_string_cursor
 {
   counted_string *Start;
+  // TODO(Jesse)(immediate): For the love of fucksakes change these to indices
   counted_string *At;
   counted_string *End;
 };
@@ -8,7 +9,7 @@ struct counted_string_cursor
 link_internal counted_string_cursor
 CountedStringCursor(umm ElementCount, memory_arena* Memory)
 {
-  counted_string *Start = (counted_string*)PushStruct(Memory, sizeof(counted_string), 1, 0);
+  counted_string *Start = (counted_string*)PushStruct(Memory, sizeof(counted_string)*ElementCount, 1, 0);
   counted_string_cursor Result = {
     .Start = Start,
     .End = Start+ElementCount,
@@ -28,6 +29,7 @@ struct counted_string_stream
   memory_arena *Memory;
   counted_string_stream_chunk* FirstChunk;
   counted_string_stream_chunk* LastChunk;
+  umm ChunkCount;
 };
 
 link_internal void
@@ -101,6 +103,8 @@ Push(counted_string_stream* Stream, counted_string Element)
 
   Assert(NextChunk->Next == 0);
   Assert(Stream->LastChunk->Next == 0);
+
+  Stream->ChunkCount += 1;
 
   counted_string *Result = &NextChunk->Element;
   return Result;

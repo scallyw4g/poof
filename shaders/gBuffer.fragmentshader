@@ -1,0 +1,26 @@
+in vec3 vertexP_worldspace;
+in vec3 vertexN_worldspace;
+in vec4 MaterialColor;
+
+layout (location = 0) out vec4 gColor;
+layout (location = 1) out vec3 gNormal;
+layout (location = 2) out vec4 gPosition;
+
+uniform float FarClip;
+uniform float NearClip;
+
+float
+Linearize(float Depth)
+{
+  float Result = (2.0 * NearClip) / (FarClip + NearClip - Depth * (FarClip - NearClip));
+  return Result;
+}
+
+void main()
+{
+  gPosition.xyz = vertexP_worldspace;
+  gPosition.w = Linearize(gl_FragCoord.z); // Depth
+
+  gNormal = vertexN_worldspace;
+  gColor = MaterialColor;
+}

@@ -9,6 +9,7 @@ struct meta_func_stream
   memory_arena *Memory;
   meta_func_stream_chunk* FirstChunk;
   meta_func_stream_chunk* LastChunk;
+  umm ChunkCount;
 };
 
 link_internal void
@@ -82,6 +83,8 @@ Push(meta_func_stream* Stream, meta_func Element)
 
   Assert(NextChunk->Next == 0);
   Assert(Stream->LastChunk->Next == 0);
+
+  Stream->ChunkCount += 1;
 
   meta_func *Result = &NextChunk->Element;
   return Result;

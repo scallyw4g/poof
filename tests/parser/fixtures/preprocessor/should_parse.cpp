@@ -298,6 +298,11 @@ signed       Int4 = 42;
 
 typedef unsigned short int u16;
 
+/* #undef foo */
+/*  #define foo bar */
+/*  typedef foo int; */
+/* #undef foo */
+
 typedef long int __int64;
 typedef long int s64;
 
@@ -517,8 +522,6 @@ TestFunc(int foo)
 
 #define link_internal static
 #define global_variable static
-#define CSz(NullTerminatedCString) \
-  CS(NullTerminatedCString, sizeof(NullTerminatedCString)-1)
 
 #include <include/bonsai_stdlib/headers/console_macros.h>
 

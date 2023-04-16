@@ -9,6 +9,7 @@ struct tuple_CountedString_CountedString_stream
   memory_arena *Memory;
   tuple_CountedString_CountedString_stream_chunk* FirstChunk;
   tuple_CountedString_CountedString_stream_chunk* LastChunk;
+  umm ChunkCount;
 };
 
 link_internal void
@@ -82,6 +83,8 @@ Push(tuple_CountedString_CountedString_stream* Stream, tuple_CountedString_Count
 
   Assert(NextChunk->Next == 0);
   Assert(Stream->LastChunk->Next == 0);
+
+  Stream->ChunkCount += 1;
 
   tuple_CountedString_CountedString *Result = &NextChunk->Element;
   return Result;

@@ -985,10 +985,10 @@ TestAst(memory_arena *Memory)
       /* DebugPrint(Fing); */
 
       /* WalkAst(Func->Ast); */
-      DebugLine("Function Name(%S) Type(%S)", Func->NameT->Value, ToString(Func->Type));
+      /* DebugLine("Function Name(%S) Type(%S)", Func->NameT->Value, ToString(Func->Type)); */
       if (Func->Body.Tokens)
       {
-        DebugLine("Has Function Body");
+        /* DebugLine("Has Function Body"); */
 
         // TODO(Jesse): Read GetBodyTextForNextScope for more information on
         // why the assert firesin DumpCursorSimple fires.  I think we should be
@@ -1005,7 +1005,7 @@ TestAst(memory_arena *Memory)
       }
       else
       {
-        DebugLine("No Function Body");
+        /* DebugLine("No Function Body"); */
       }
     }
   }
@@ -1283,22 +1283,16 @@ MacroAndIncludetest(memory_arena *Memory)
     TestThat(RequireToken(Parser, CToken(CSz("self_including_macro_keyword"))));
     TestThat(RequireToken(Parser, CToken(42u)));
 
-#if BUG_RECURSIVE_MACRO_EXPANSION
     TestThat(RequireToken(Parser, CToken(CSz("self_including_macro_keyword"))));
     TestThat(RequireToken(Parser, CToken(42u)));
-
-    /* DumpEntireParser(Parser); */
 
     TestThat(RequireToken(Parser, CToken(CSz("m2"))));
     TestThat(RequireToken(Parser, CTokenType_OpenParen));
     TestThat(RequireToken(Parser, CTokenType_CloseParen));
-#endif
 
-#if BUG_SELF_INCLUDING_MACRO_FUNCTION
-    TestThat(RequireToken(Parser, CToken(CSz("temp__"))));
+    TestThat(RequireToken(Parser, CToken(CSz("self_including_macro_function"))));
     TestThat(RequireToken(Parser, CTokenType_OpenParen));
     TestThat(RequireToken(Parser, CTokenType_CloseParen));
-#endif
 
     TestThat(RequireToken(Parser, CToken(CSz("valid_path"))));
 
@@ -1379,7 +1373,8 @@ TestDefinesAndConditionals(memory_arena *Memory)
   if (Parser)
   {
     Ctx.CurrentParser = Parser;
-    /* DumpEntireParser(Parser); */
+    /* DumpCursorSimple(Parser->Tokens); */
+    /* Rewind(Parser->Tokens); */
 
     while(TokensRemain(Parser))
     {
@@ -2637,6 +2632,25 @@ TestRelativeIncludes(memory_arena *Memory)
 
 }
 
+link_internal void
+RunTempTestIfNotEmpty(memory_arena *Memory)
+{
+  const char* TempTestFilepath = PARSER_FIXTURES_PATH "/preprocessor/temp_test.cpp";
+  if (FileExists(TempTestFilepath))
+  {
+    /* RuntimeBreak(); */
+
+    parse_context Ctx = AllocateParseContext(Memory);
+
+    parser *Parser = PreprocessedParserForFile( &Ctx,
+                                                CS(TempTestFilepath),
+                                                TokenCursorSource_RootFile, {});
+
+    Rewind(Parser->Tokens);
+    DumpCursorSimple(Parser->Tokens);
+  }
+}
+
 s32
 main(s32 ArgCount, const char** Args)
 {
@@ -2645,6 +2659,8 @@ main(s32 ArgCount, const char** Args)
   memory_arena* Memory = AllocateArena();
 
 #if 1
+  RunTempTestIfNotEmpty(Memory);
+
   TestSingleCursorTokenControl(Memory);
   TestMultiCursorTokenControl(Memory);
   // TODO(Jesse): Axe this or turn it into something more meaningful

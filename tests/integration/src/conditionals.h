@@ -116,3 +116,46 @@ poof(
 )
 #include <tests/integration/generated/conditionals/anonymous_foo_struct_1_YvJnQLUi.h>
 #endif
+
+
+
+#if 1
+poof(
+  func (foo_struct_1 TFooStruct)
+  {
+    TFooStruct.map_members(Member)
+    {
+      Member.contains_type(doubly_nested_struct)?
+      {
+        (Member.type) (Member.name) contains a doubly_nested_struct
+      }
+    }
+  }
+)
+#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_KLiRNdrO.h>
+
+
+
+#endif
+
+
+#if 1
+poof(
+  func (foo_struct_1 TFooStruct)
+  {
+    TFooStruct.map_members(Member)
+    {
+      Member.is_type(nested_struct)?
+      {
+        (Member.type) (Member.name) is a nested_struct
+      }
+    }
+  }
+)
+#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_gB856lL7.h>
+
+
+
+#endif
+
+

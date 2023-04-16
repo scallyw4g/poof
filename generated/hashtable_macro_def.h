@@ -60,4 +60,4 @@ Insert(macro_def Element, macro_def_hashtable *Table, memory_arena *Memory)
   Insert(Bucket, Table);
   return &Bucket->Element;
 }
-
+ 

@@ -12,26 +12,27 @@ RunPreemptivePoof=1
 
 # BuildAllBinariesRunAllTests=1
 
-FetchBonsaiDebug=1
+FetchBonsaiDebug=0
 
-RunPoof=1
-BuildPoof=1
+RunPoof=0
+BuildPoof=0
+
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 POOF_DEBUGGER="gdb --args"
 
 # BuildPoofEmcc=1
 # RollupEmcc=1
 
-# RunParserTests=1
 # BuildParserTests=1
+# RunParserTests=1
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 # TEST_DEBUGGER="gdb --args"
 
 # BuildAndRunAllExamples=1
 
 # RunIntegrationTests=1
-# INTEGRATION_TEST_INDEX=0
-# INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug"
+# INTEGRATION_TEST_INDEX=2
+# INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug -c0"
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 
 # RunExtendedIntegrationTests=1
@@ -176,19 +177,21 @@ function RunPoof {
   # to special-case that one file.
   #
 
-  if [ -d $META_OUT ]; then
-    rm -Rf $META_OUT
-    git checkout poof/generated/generate_cursor_c_token.h
-  fi
+  # if [ -d $META_OUT ]; then
+  #   rm -Rf $META_OUT
+  #   git checkout poof/generated/generate_cursor_c_token.h
+  # fi
 
   : "${POOF_EXECUTABLE:=./bin/poof}"
-  : "${POOF_EXECUTABLE:=./bin/poof}"
+  # : "${POOF_EXECUTABLE:=./bin/poof}"
+
+    # --do-debug-window \
 
   $POOF_DEBUGGER $POOF_EXECUTABLE \
                                   \
     $POOF_LOG_LEVEL               \
+    -c0 \
     poof/poof.cpp                 \
-    --do-debug-window \
     -D BONSAI_PREPROCESSOR        \
     -D BONSAI_LINUX               \
     -I "."                        \
@@ -199,7 +202,7 @@ function RunPoof {
     echo -e "$Success Poofed"
   else
     echo -e "$Failed Poofing"
-    git checkout $META_OUT
+    # git checkout $META_OUT
   fi
 
   echo -e ""
@@ -281,6 +284,8 @@ function RunIntegrationTests()
       fi
 
       mkdir -p $test_output_dir
+
+      echo "$INTEGRATION_TEST_DEBUGGER bin/poof $INTEGRATION_TEST_LOG_LEVEL $filename -o $test_output_dir"
 
       $INTEGRATION_TEST_DEBUGGER bin/poof \
         $INTEGRATION_TEST_LOG_LEVEL       \

@@ -1,5 +1,6 @@
 :root {
-  --background: #2d1e22;
+  --hi-background: #1d1a1f;
+  --background: #080509;
 
   --hi-text: #cc9a30;
   --med-text: #a57f2c;
@@ -8,6 +9,14 @@
   /* --hi-clickable: #a51053; */
   --hi-clickable: #b2135b;
   --lo-clickable: #870e44;
+}
+
+code
+{
+  background: var(--hi-background);
+  color: var(--med-text);
+  padding: 5px;
+  margin: 5px;
 }
 
 .nav-link {

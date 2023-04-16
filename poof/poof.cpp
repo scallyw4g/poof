@@ -2,11 +2,12 @@
   #define PLATFORM_LIBRARY_AND_WINDOW_IMPLEMENTATIONS 1
   #define PLATFORM_GL_IMPLEMENTATIONS 1
 
-  #define BONSAI_DEBUG_LIB_LOADER_API 1
-  #define BONSAI_DEBUG_SYSTEM_API 1
+  #define BONSAI_DEBUG_LIB_LOADER_API 0
+  #define BONSAI_DEBUG_SYSTEM_API 0
 
   #define DEBUG_PRINT 0
 #endif
+
 
 #include <bonsai_stdlib/bonsai_stdlib.h>
 #include <bonsai_stdlib/bonsai_stdlib.cpp>
@@ -28,6 +29,7 @@ global_variable memory_arena Global_PermMemory = {};
 
 
 
+#define DEBUG_PRINT 0
 #if DEBUG_PRINT
 #include <bonsai_stdlib/headers/debug_print.h>
 
@@ -50,7 +52,7 @@ link_internal peek_result PeekTokenRawCursor(peek_result *Peek, s32 TokenLookahe
 link_internal peek_result PeekTokenRawCursor(c_token_cursor *Tokens, s32 TokenLookahead, b32 CanSearchDown = True);
 link_internal peek_result PeekTokenRawCursor(parser *Parser, s32 TokenLookahead = 0);
 
-link_internal peek_result PeekTokenCursor(peek_result *Peek, s32 TokenLookahead = 0);
+/* link_internal peek_result PeekTokenCursor(peek_result *Peek, s32 TokenLookahead = 0); */
 link_internal peek_result PeekTokenCursor(c_token_cursor *Tokens, s32 TokenLookahead = 0);
 link_internal peek_result PeekTokenCursor(parser *Parser, s32 TokenLookahead = 0);
 
@@ -107,12 +109,13 @@ link_internal parser *         DuplicateCTokenCursor2(c_token_cursor *Tokens, me
 
 link_internal b32         TryTransmuteKeywordToken(c_token *T, c_token *LastTokenPushed);
 link_internal b32         TryTransmuteOperatorToken(c_token *T);
+link_internal b32         TryTransmuteNumericToken(c_token *T);
 link_internal b32         TryTransmuteIdentifierToken(c_token *T);
 link_internal macro_def * TryTransmuteIdentifierToMacro(parse_context *Ctx, parser *Parser, c_token *T, macro_def *ExpandingMacro);
 link_internal macro_def * IdentifierShouldBeExpanded(parse_context *Ctx, parser *Parser, c_token *T, macro_def *ExpandingMacro);
 
 link_internal c_token_cursor * ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T);
-link_internal parser * ExpandMacro(parse_context *Ctx, parser *Parser, macro_def *Macro, memory_arena *PermMemory, memory_arena *TempMemory, b32 ScanArgsForAdditionalMacros = False);
+link_internal parser * ExpandMacro(parse_context *Ctx, parser *Parser, macro_def *Macro, memory_arena *PermMemory, memory_arena *TempMemory, b32 ScanArgsForAdditionalMacros = False, b32 WasCalledFromExpandMacroConstantExpression = False);
 link_internal u64      ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena *PermMemory, memory_arena *TempMemory, u64 PreviousValue, b32 LogicalNotNextValue);
 
 link_internal macro_def * GetMacroDef(parse_context *Ctx, counted_string DefineValue) ;
@@ -124,7 +127,7 @@ link_internal void EraseBetweenExcluding(parser *Parser, c_token *StartToken, c_
 
 link_internal void DumpLocalTokens(parser *Parser);
 link_internal void PrintTray(char_cursor *Dest, c_token *T, u32 Columns, counted_string Color);
-link_internal void PrintTraySimple(c_token *T, b32 Force = False);
+link_internal void PrintTraySimple(c_token *T, b32 Force = False, u32 Depth = 0);
 
 link_internal void PoofTypeError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken);
 
@@ -152,8 +155,12 @@ link_internal datatype ResolveToBaseType(parse_context *Ctx, type_spec );
 link_internal datatype ResolveToBaseType(parse_context *Ctx, datatype *);
 link_internal datatype ResolveToBaseType(parse_context *Ctx, type_def *);
 
-link_internal counted_string Execute(meta_func* Func, meta_func_arg_stream *Args, parse_context* Ctx, memory_arena* Memory, umm *Depth);
-link_internal void           DoTrueFalse( parse_context *Ctx, parser *Scope, meta_func_arg_stream* ReplacePatterns, b32 DoTrueBranch, string_builder *OutputBuilder, memory_arena *Memory, umm *Depth);
+link_internal counted_string Execute(meta_func* Func, parse_context* Ctx, memory_arena* Memory, umm *Depth);
+link_internal counted_string Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_arena* Memory, umm *Depth);
+link_internal void           DoTrueFalse( parse_context *Ctx, parser *Scope, meta_func_arg_buffer *ReplacePatterns, b32 DoTrueBranch, string_builder *OutputBuilder, memory_arena *Memory, umm *Depth);
+
+link_internal b32 ParseAndTypeCheckArgs(parse_context *Ctx, parser *Parser, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, meta_func_arg_buffer *ArgsInScope, memory_arena *Memory);
+link_internal counted_string CallFunction(parse_context *Ctx, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, memory_arena *Memory, umm *Depth);
 
 
 inline c_token_cursor *
@@ -230,7 +237,8 @@ FinalizeStringFromParser(string_from_parser* Builder)
       // implicitly included, so we have to have this weird check.
       if (Parser->Tokens->At == Parser->Tokens->End)
       {
-        Count = (umm)(Parser->Tokens->At[-1].Value.Start - Builder->StartToken->Value.Start);
+        auto LastTokenValue = Parser->Tokens->At[-1].Value;
+        Count = (umm)( (LastTokenValue.Start+LastTokenValue.Count) - Builder->StartToken->Value.Start );
       }
       else
       {
@@ -906,53 +914,62 @@ DumpCursorSlice(c_token_cursor* Tokens, umm PrevTokens, umm NextTokens)
 void
 DumpCursorSimple(c_token_cursor* Tokens, c_token *AbsoluteAt = 0, u32 Depth = 0)
 {
-  DebugLine("\n%*s>> Dumping Cursor %S", Depth*4, "", Tokens->Filename);
-
-  b32 Force = True;
-  PrintTraySimple(Tokens->Start, Force);
-
-  c_token *LastToken = 0;
   umm TotalTokens = TotalElements(Tokens);
-  for (umm TIndex = 0; TIndex < TotalTokens; ++TIndex)
+  if (TotalTokens)
   {
-    c_token *T = Tokens->Start + TIndex;
+    b32 Force = True;
+    DebugChars("\n");
+
+    PrintTraySimple(0, Force, Depth);
+    DebugLine(">> Dumping Cursor >> %S", Tokens->Filename);
+
+    PrintTraySimple(Tokens->Start, Force, Depth);
+
+    c_token *LastToken = 0;
+    for (umm TIndex = 0; TIndex < TotalTokens; ++TIndex)
+    {
+      c_token *T = Tokens->Start + TIndex;
 
 #if 1
-    PrintToken(T);
-    if (TIndex+1 < TotalTokens) { PrintTraySimple(T); }
-    else { LastToken = T; }
+      PrintToken(T);
+      if (TIndex+1 < TotalTokens) { PrintTraySimple(T, False, Depth); }
+      else { LastToken = T; }
 #else
-    PrintTokenVerbose(Tokens, T, AbsoluteAt, Depth);
+      PrintTokenVerbose(Tokens, T, AbsoluteAt, Depth);
 #endif
 
-    switch (T->Type)
-    {
-      case CT_MacroLiteral:
-      case CT_InsertedCode:
+      switch (T->Type)
       {
-        if (T->Down)
+        case CT_MacroLiteral:
+        case CT_InsertedCode:
         {
-          Assert(T->Down->Up.Tokens == Tokens);
-          DumpCursorSimple(T->Down, AbsoluteAt, Depth+1);
-        }
-      } break;
+          if (T->Down)
+          {
+            Assert(T->Down->Up.Tokens == Tokens);
+            DumpCursorSimple(T->Down, AbsoluteAt, Depth+1);
+            PrintTraySimple(T, Force, Depth);
+          }
+        } break;
 
-      default: {} break;;
+        default: {} break;;
+      }
     }
-  }
 
-  if (AbsoluteAt == Tokens->End)
-  {
-    c_token UnknownMarkerToken = {};
-    UnknownMarkerToken.Filename = Tokens->Start->Filename;
-    PrintTokenVerbose(Tokens, &UnknownMarkerToken, &UnknownMarkerToken, Depth);
-  }
+    if (AbsoluteAt == Tokens->End)
+    {
+      c_token UnknownMarkerToken = {};
+      UnknownMarkerToken.Filename = Tokens->Start->Filename;
+      PrintTokenVerbose(Tokens, &UnknownMarkerToken, &UnknownMarkerToken, Depth);
+    }
 
-  if (LastToken == 0 || LastToken->Type != CTokenType_Newline)
-  {
-    DebugChars("\n");
+    if (LastToken == 0 || LastToken->Type != CTokenType_Newline)
+    {
+      DebugChars("\n");
+    }
+
+    PrintTraySimple(0, Force, Depth);
+    DebugLine(">> done");
   }
-  DebugLine("%*s>> done", Depth*4, "");
 }
 
 #if 0
@@ -1178,17 +1195,20 @@ OutputIdentifierUnderline(char_cursor *Dest, u32 IdentifierLength, counted_strin
 }
 
 link_internal void
-PrintTraySimple(c_token *T, b32 Force)
+PrintTraySimple(c_token *T, b32 Force, u32 Depth)
 {
   if (T)
   {
+    Assert(T->LineNumber < 100000);
     if (Force || T->Type == CTokenType_Newline || T->Type == CTokenType_EscapedNewline)
     {
-      DebugChars(CSz("%*d |"), 6, T->LineNumber);
+      DebugChars("%*s", Depth*4, "");
+      DebugChars(CSz("%*u |"), 6, T->LineNumber);
     }
   }
   else
   {
+    DebugChars("%*s", Depth*4, "");
     DebugChars(CSz("%*c |"), 6, ' ');
   }
 }
@@ -1284,6 +1304,8 @@ PrintContext(c_token_cursor_up *Up)
 link_internal void
 OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string MessageContext, counted_string Message, c_token* ErrorToken)
 {
+  /* DumpCursorSimple(Parser->Tokens); */
+
   parse_error_code PrevErrorCode = Parser->ErrorCode;
   Parser->ErrorCode = ParseErrorCode_None;
 
@@ -1298,6 +1320,10 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
   if (!ErrorToken)
   {
     ErrorToken = PeekTokenRawPointer(Parser);
+    if (ErrorToken == 0)
+    {
+      ErrorToken = PeekTokenRawPointer(Parser, -1);
+    }
     AdvanceTo(Parser, ErrorToken);
   }
 
@@ -1307,7 +1333,7 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
   ParseErrorCursor->At = Global_ParseErrorBuffer;
   ParseErrorCursor->End = Global_ParseErrorBuffer+Global_ParseErrorBufferSize;
 
-  u32 LinesOfContext = 3;
+  u32 LinesOfContext = 7;
 
   counted_string ParserName = {};
 
@@ -1604,6 +1630,12 @@ link_internal void
 ParseError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
 {
   ParseError(Parser, ParseErrorCode_Unknown, ErrorMessage, ErrorToken);
+}
+
+link_internal void
+PoofNotImplementedError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
+{
+  OutputContextMessage(Parser, ParseErrorCode_NotImplemented, CSz("Poof Not-Implemented Error"), ErrorMessage, ErrorToken);
 }
 
 link_internal void
@@ -2252,8 +2284,6 @@ TokensRemain(parser *Parser, u32 Count)
 link_internal c_token *
 PopTokenPointer(parser* Parser)
 {
-  peek_result NextT = PeekTokenCursor(Parser);
-
   // TODO(Jesse): This is kinda tortured .. should probably work on the API
   // here. In particular it's not obvious what AdvanceTo returns, and it
   // actually returns what I wouldn't expect if I guessed.
@@ -2265,7 +2295,9 @@ PopTokenPointer(parser* Parser)
   // without the intermediate AdvanceTo .. I think
   //
 
+  peek_result NextT = PeekTokenCursor(Parser);
   AdvanceTo(Parser, &NextT);
+
   peek_result NextRawT = PeekTokenRawCursor(&NextT, 1);
   c_token *Result = AdvanceTo(Parser, &NextRawT);
 
@@ -2658,6 +2690,29 @@ CopyRemainingIntoCursor(c_token_cursor *Src, c_token_cursor *Dest)
   }
 }
 
+// TODO(Jesse, metaprogramming): Almost an exact duplicate of CopyBufferIntoCursor
+// @duplicate_copy_x_into_cursor
+link_internal void
+CopyCursorIntoCursor(c_token_cursor *Src, c_token_cursor *Dest, u32 Skip = 0)
+{
+  u32 SrcCount = (u32)Count(Src);
+  u32 DestRem = (u32)Remaining(Dest);
+  if ( SrcCount <= DestRem )
+  {
+    for ( u32 TokenIndex = Skip;
+          TokenIndex < SrcCount;
+          ++TokenIndex)
+    {
+      Push(Src->Start[TokenIndex], Dest);
+    }
+  }
+  else
+  {
+    Error("Dest c_token_cursor was too full to hold entire source buffer!" );
+  }
+}
+
+// @duplicate_copy_x_into_cursor
 link_internal void
 CopyBufferIntoCursor(c_token_buffer *Src, c_token_cursor *Dest, u32 Skip = 0)
 {
@@ -2719,19 +2774,22 @@ ExpandMacro( parse_context *Ctx,
              macro_def *Macro,
              memory_arena *PermMemory,
              memory_arena *TempMemory,
-             b32 ScanArgsForAdditionalMacros
+             b32 ScanArgsForAdditionalMacros,
+             b32 WasCalledFromExpandMacroConstantExpression
            )
 {
   TIMED_FUNCTION();
 
+  temp_memory_handle MemHandle = BeginTemporaryMemory(TempMemory);
+
   parser *FirstPass = AllocateParserPtr(
-                        CSz("macro_expansion TODO(Jesse): What do we say here?"),
+                        CSz("IF YOU SEE THIS IT'S A BUG"),
                         0,
                         (u32)Kilobytes(32),
                         TokenCursorSource_MacroExpansion,
                         0,
                         {0, 0},
-                        TranArena
+                        TempMemory
                       );
 
   Assert(Macro->Body.At == Macro->Body.Start);
@@ -2769,6 +2827,7 @@ ExpandMacro( parse_context *Ctx,
       c_token *Start = PeekTokenPointer(Parser);
       if (Start && Start->Type == CTokenType_OpenParen)
       {
+        // TODO(Jesse)(safety, immediate): This is super janky.  We can only snap a pointer to this and access it while it's on the stack..
         c_token_cursor Tokens = CTokenCursor(Start, Start, CSz(DEFAULT_FILE_IDENTIFIER), TokenCursorSource_IntermediateRepresentaton, {0,0} );
         parser InstanceArgs_ = { .Tokens = &Tokens };
         parser *InstanceArgs = &InstanceArgs_;
@@ -2798,7 +2857,6 @@ ExpandMacro( parse_context *Ctx,
 
         if ( TotalElements(InstanceArgs->Tokens) == 1 &&
               Macro->NamedArguments.Count == 0 )
-
         {
           OptionalToken(InstanceArgs, CToken(CTokenType_Void, CSz("void")));
         }
@@ -3007,8 +3065,8 @@ ExpandMacro( parse_context *Ctx,
 
           if (Next && Next->Type == CT_MacroLiteral)
           {
-            // NOTE(Jesse, tags: begin_temporary_memory): We need BeginTemporaryMemory here
-            parser *Expanded = ExpandMacro(Ctx, &Temp, Next->Macro.Def, TranArena, TempMemory);
+            // NOTE(Jesse, tags: begin_temporary_memory, memory_leak): We need BeginTemporaryMemory here
+            parser *Expanded = ExpandMacro(Ctx, &Temp, Next->Macro.Def, PermMemory, TempMemory);
             if (Expanded->ErrorCode)
             {
               // TOOD(Jesse, tags: immediate): Write a test that exercises this
@@ -3074,13 +3132,12 @@ ExpandMacro( parse_context *Ctx,
           {
             Prev->Type = CT_PreprocessorPaste_InvalidToken;
             Prev->Value = Concat(Prev->Value, Next->Value, &Global_PermMemory);
-
-            // TODO(Jesse, correctness): Pasting numeric tokens together should
-            // result in new numeric tokens .. yes..?  Write TryTransmuteNumber()
-            //
             Prev->UnsignedValue = 0;
 
             if (TryTransmuteKeywordToken(Prev, 0))
+            {
+            }
+            else if (TryTransmuteNumericToken(Prev))
             {
             }
             else if (TryTransmuteOperatorToken(Prev))
@@ -3120,15 +3177,15 @@ ExpandMacro( parse_context *Ctx,
   }
   END_BLOCK();
 
-
   parser *Result = AllocateParserPtr(
-                      CSz("macro_expansion TODO(Jesse): What do we say here?"),
+                      FormatCountedString(PermMemory, CSz("macro_expansion(%S)"), Macro->NameT->Value),
                       0,
                       (u32)Kilobytes(32),
                       TokenCursorSource_MacroExpansion,
                       0,
                       {0,0},
-                      PermMemory
+                      /* PermMemory */
+                      TempMemory
                     );
 
 
@@ -3140,6 +3197,8 @@ ExpandMacro( parse_context *Ctx,
 
   Rewind(FirstPass->Tokens);
 
+  Macro->IsExpanding = True;
+
 #if 0
     umm CurrentSize = TotalSize(Result->Tokens);
     TruncateToCurrentElements(Result->Tokens);
@@ -3148,6 +3207,7 @@ ExpandMacro( parse_context *Ctx,
   {
     TIMED_BLOCK("Expand Body");
 
+    u32 IdentifiersToSkip = 0;
     while (c_token *T = PeekTokenRawPointer(FirstPass))
     {
       T->LineNumber = MacroNameT.LineNumber;
@@ -3157,10 +3217,19 @@ ExpandMacro( parse_context *Ctx,
       {
         case CTokenType_Identifier:
         {
+
+          if (WasCalledFromExpandMacroConstantExpression)
+          {
+            if (StringsMatch(CSz("defined"), T->Value))
+            {
+              IdentifiersToSkip = 2;
+            }
+          }
+
           // TODO(Jesse): What is specified to happen if a named argument
           // has the same value as a defined macro?  Is this correct?
 
-          if (TryTransmuteIdentifierToMacro(Ctx, FirstPass, T, Macro))
+          if ( (IdentifiersToSkip == 0) && TryTransmuteIdentifierToMacro(Ctx, FirstPass, T, Macro))
           {
             parser *Expanded = ExpandMacro(Ctx, FirstPass, T->Macro.Def, PermMemory, TempMemory);
             if (Expanded->ErrorCode)
@@ -3176,9 +3245,13 @@ ExpandMacro( parse_context *Ctx,
           }
           else
           {
-            // @token_control_pointers
-            Ensure(PopTokenRawPointer(FirstPass) == T);
-            Push(*T, Result->Tokens);
+            if (IdentifiersToSkip != 0) {--IdentifiersToSkip;}
+            /* if (!WasCalledFromExpandMacroConstantExpression) */
+            {
+              // @token_control_pointers
+              Ensure(PopTokenRawPointer(FirstPass) == T);
+              Push(*T, Result->Tokens);
+            }
           }
 
         } break;
@@ -3213,22 +3286,34 @@ ExpandMacro( parse_context *Ctx,
   }
 #endif
 
-  if (FirstPass->ErrorCode == ParseErrorCode_None)
+#if 1
   {
-    umm CurrentSize = TotalSize(FirstPass->Tokens);
-    TruncateToCurrentElements(FirstPass->Tokens);
-    /* umm NewSize = TotalSize(FirstPass->Tokens); */
-    /* Reallocate((u8*)FirstPass->Tokens->Start, TranArena, CurrentSize, NewSize); */
-  }
+    parser *Temp = AllocateParserPtr( Result->Tokens->Filename,
+                                      0,
+                                      (u32)AtElements(Result->Tokens),
+                                      Result->Tokens->Source,
+                                      0,
+                                      {},
+                                      PermMemory);
 
-  {
-    umm CurrentSize = TotalSize(Result->Tokens);
+    Assert(AtElements(Result->Tokens) == Count(Temp->Tokens));
+
     TruncateToCurrentElements(Result->Tokens);
-    /* umm NewSize = TotalSize(Result->Tokens); */
-    /* Reallocate((u8*)Result->Tokens->Start, PermMemory, CurrentSize, NewSize); */
+    Rewind(Result->Tokens);
+
+    Assert(Count(Result->Tokens) == Count(Temp->Tokens));
+    Assert(AtElements(Result->Tokens) == 0);
+    Assert(AtElements(Temp->Tokens) == 0);
+
+    CopyCursorIntoCursor(Result->Tokens, Temp->Tokens);
+    Result = Temp;
   }
+#else
+    TruncateToCurrentElements(Result->Tokens);
+#endif
 
   Rewind(Result->Tokens);
+
   /* LogDirect("\n\n -- %S\n", Macro->Name); */
   /* DumpChain(FirstPass); */
   /* DumpChain(Result); */
@@ -3236,6 +3321,10 @@ ExpandMacro( parse_context *Ctx,
 
   Result->ErrorCode = FirstPass->ErrorCode;
   Parser->ErrorCode = FirstPass->ErrorCode;
+
+  Macro->IsExpanding = False;
+
+  EndTemporaryMemory(&MemHandle);
 
   return Result;
 }
@@ -3384,17 +3473,49 @@ TrimLeadingWhitespace(parser* Parser)
   }
 }
 
+link_internal c_token
+LastNonNBSPToken(parser* Parser)
+{
+  c_token* CurrentToken = Parser->Tokens->End-1;
+
+  while (CurrentToken >= Parser->Tokens->Start)
+  {
+    // TODO(Jesse)(correctness) This function fails if we hit one of these!
+    // Rewrite it such that we properly traverse "Down" pointers.
+    Assert( ! (CurrentToken->Type == CT_InsertedCode ||
+               CurrentToken->Type == CT_MacroLiteral) );
+
+    if ( IsNBSP(CurrentToken) )
+    {
+      CurrentToken -= 1;
+    }
+    else
+    {
+      break;
+    }
+
+    --CurrentToken;
+  }
+
+  c_token Result = {};
+  if (CurrentToken >= Parser->Tokens->Start && !IsNBSP(CurrentToken) )
+  {
+    Result = *CurrentToken;
+  }
+  return Result;
+}
+
 link_internal void
-TrimTrailingWhitespace(parser* Parser)
+TrimTrailingNBSP(parser* Parser)
 {
   c_token* CurrentToken = Parser->Tokens->End-1;
 
   while (CurrentToken > Parser->Tokens->Start)
   {
-    // TODO(Jesse, correctness) This function fails if we hit one of these!
+    // TODO(Jesse)(correctness) This function fails if we hit one of these!
     // Rewrite it such that we properly traverse "Down" pointers.
-    Assert( ! (Parser->Tokens->At->Type == CT_InsertedCode ||
-               Parser->Tokens->At->Type == CT_MacroLiteral) );
+    /* Assert( ! (Parser->Tokens->At->Type == CT_InsertedCode || */
+    /*            Parser->Tokens->At->Type == CT_MacroLiteral) ); */
 
     if ( CurrentToken->Type == CTokenType_Space ||
          CurrentToken->Type == CTokenType_Tab )
@@ -4041,6 +4162,11 @@ DefineMacro(parse_context *Ctx, parser *Parser, macro_def *Macro)
   // that the valid macro body tokens will not be erased and will not have
   // undergone macro expansion. That assumption is invalidated if we don't copy
   // tokens.
+  //
+  // TODO(Jesse): It actually seems to me that we shouldn't have to duplicate
+  // because why would the preprocessor ever run on the actual macro definition?
+  // I'd be more on-board with this statement in "ExpandMacro"
+  //
   parser *InstanceParser = DuplicateParserTokens(&InstanceBody, Memory);
 
   RequireToken(InstanceParser, CToken(CT_MacroLiteral, Macro->NameT->Value));
@@ -4152,32 +4278,39 @@ MacroShouldBeExpanded(parser *Parser, c_token *T, macro_def *ThisMacro, macro_de
 
   b32 Result = False;
 
-  switch (ThisMacro->Type)
+  if (ThisMacro->IsExpanding == False)
   {
-    case type_macro_function:
+    switch (ThisMacro->Type)
     {
-      if (PeekToken(Parser, 1).Type == CTokenType_OpenParen)
+      case type_macro_function:
       {
-        Result = True;
-      }
-    } break;
+        if (PeekToken(Parser, 1).Type == CTokenType_OpenParen)
+        {
+          Result = True;
+        }
+      } break;
 
-    case type_macro_keyword:
-    {
-      if (ExpandingMacro && StringsMatch(ExpandingMacro->NameT->Value, ThisMacro->NameT->Value))
+      case type_macro_keyword:
       {
-        // TODO(Jesse): This is the path that's preventing self-referential macros
-        // from expanding, but we should take this out in favor of the code at
-        // @mark_keyword_macros_self_referential.
-        /* Info("Prevented recursive macro expansion of (%S)",  ExpandingMacro->Name); */
-      }
-      else
-      {
-        Result = True;
-      }
-    } break;
+        if (ExpandingMacro && StringsMatch(ExpandingMacro->NameT->Value, ThisMacro->NameT->Value))
+        {
+          // TODO(Jesse): This is the path that's preventing self-referential macros
+          // from expanding, but we should take this out in favor of the code at
+          // @mark_keyword_macros_self_referential.
+          //
+          /* Info("Prevented recursive macro expansion of (%S)",  ExpandingMacro->Name); */
 
-    InvalidDefaultCase;
+          // NOTE(Jesse): Pretty sure this _SHOULD_ be a dead path after adding (b32 IsExpanding) back into macros
+          // Unfortunately, that doesn't appear to be the case..
+        }
+        else
+        {
+          Result = True;
+        }
+      } break;
+
+      InvalidDefaultCase;
+    }
   }
 
 
@@ -4241,12 +4374,27 @@ TryTransmuteIdentifierToken(c_token *T)
   return Result;
 }
 
+// TODO(Jesse, preprocessor, correctness): Implement me.
 link_internal b32
-TryTransmuteOperatorToken(c_token *T)
+TryTransmuteNumericToken(c_token *T)
 {
   Assert(T->Type == CT_PreprocessorPaste_InvalidToken);
 
-  // TODO(Jesse): Implement me.
+#if BUG_NUMERIC_PASTE
+  NotImplemented;
+#endif
+
+  b32 Result = T->Type != CT_PreprocessorPaste_InvalidToken;
+  return Result;
+}
+
+// TODO(Jesse, preprocessor, correctness): Implement me.
+link_internal b32
+TryTransmuteOperatorToken(c_token *T)
+{
+  TIMED_FUNCTION();
+
+  Assert(T->Type == CT_PreprocessorPaste_InvalidToken);
 
   b32 Result = T->Type != CT_PreprocessorPaste_InvalidToken;
   return Result;
@@ -5094,10 +5242,9 @@ TokenizeAnsiStream(ansi_stream Code, memory_arena* Memory, b32 IgnoreQuotes, par
         umm Count = (umm)(Code.At - CommentToken->Value.Start);
 
         // We finished parsing a comment on this token
-        if (PushT.Type == CTokenType_Newline || PushT.Type == CTokenType_CarrigeReturn)
+        if (PushT.Type == CTokenType_Newline)
         {
-          // TODO(Jesse): Is this actually busted for \r\n ?  Seems like we should sub 2 for that case?
-          if (Count) { Count -= 1; } // Exclude the \r or \n from single line comments
+          if (Count >= PushT.Value.Count) { Count -= PushT.Value.Count; } // Exclude the \n from single line comments (could also be \r\n)
           LastTokenPushed = Push(PushT, Tokens);
         }
 
@@ -5177,7 +5324,7 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena
 {
   TIMED_FUNCTION();
 
-  memory_arena TempMemory = {};
+  memory_arena *TempMemory = TranArena; //AllocateArena();
 
   c_token *LastT = 0;
   while (TokensRemain(Parser))
@@ -5203,7 +5350,7 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena
         {
           if (GetByValue(&Ctx->Datatypes.FilesParsed, T->Filename))
           {
-            // TODO(Jesse, tags: memory): Free all memory
+            // TODO(Jesse, tags: memory_leak): Free all memory
             Parser->Tokens->At = Parser->Tokens->Start;
             Parser->Tokens->End = Parser->Tokens->Start;
             T = 0;
@@ -5292,7 +5439,7 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena
           if (macro_def *Macro = TryTransmuteIdentifierToMacro(Ctx, Parser, T, 0))
           {
             AdvanceTo(Parser, T);
-            parser *Expanded = ExpandMacro(Ctx, Parser, Macro, Memory, &TempMemory, True);
+            parser *Expanded = ExpandMacro(Ctx, Parser, Macro, Memory, TempMemory, True);
             if (Expanded->ErrorCode)
             {
               ParseInfoMessage( Parser,
@@ -5338,6 +5485,7 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena
           {
             if (!Macro->Undefed)
             {
+#if 1
               parser *PrevParser = Get(&Ctx->ParserHashtable, Macro->NameT->Filename);
               ParseInfoMessage( PrevParser,
                                 CSz("Previous definition here"),
@@ -5347,6 +5495,7 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena
                          ParseWarnCode_MacroRedefined,
                          FormatCountedString(TranArena, CSz("Macro (%S) already defined"), MacroNameT->Value),
                          MacroNameT);
+#endif
             }
             else
             {
@@ -5393,7 +5542,7 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena
       case CT_PreprocessorElif:
       {
         RequireToken(Parser, T->Type);
-        if (ResolveMacroConstantExpression(Ctx, Parser, Memory, &TempMemory, 0, False))
+        if (ResolveMacroConstantExpression(Ctx, Parser, Memory, TempMemory, 0, False))
         {
           // @optimize_call_advance_instead_of_being_dumb
           c_token *RewindT = PeekTokenRawPointer(Parser);
@@ -5474,7 +5623,7 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena
   Assert (Parser->Tokens->Up.Tokens == 0);
   Rewind(Parser->Tokens);
 
-  Ensure(RewindArena(&TempMemory));
+  /* Ensure(VaporizeArena(TempMemory)); */
 
   return (Parser->ErrorCode == ParseErrorCode_None);
 }
@@ -6305,15 +6454,16 @@ RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Fi
         FileWritesSucceeded &= WriteToFile(&TempFile, CS((const char*)&T->Type, 1));
       }
 
-      // We mutated this token from its original type to signify we should
-      // insert an include here.  At the moment it was always a newline, but
-      // that could change in the future.
-      //
+      // The original token can be anything; the file could end with something
+      // that's not a newline, in which case we have to write our own out.
       if (T->Type == CT_PoofInsertedCode)
       {
         if (T->IncludePath.Start)
         {
-          Assert(StringsMatch(T->Value, CSz("\n")));
+          if (!StringsMatch(T->Value, CSz("\n")))
+          {
+            FileWritesSucceeded &= WriteToFile(&TempFile, CSz("\n"));
+          }
           FileWritesSucceeded &= WriteToFile(&TempFile, CSz("#include <"));
           FileWritesSucceeded &= WriteToFile(&TempFile, Concat(OutputPath, T->IncludePath, TranArena) ); // TODO(Jesse, begin_temporary_memory)
           FileWritesSucceeded &= WriteToFile(&TempFile, CSz(">"));
@@ -6561,7 +6711,6 @@ EatBetween(parser* Parser, c_token_type Open, c_token_type Close)
 
     while ( c_token *T = PopTokenPointer(Parser) )
     {
-
       if (T->Type == Open)
       {
         ++Depth;
@@ -6586,6 +6735,26 @@ EatBetween(parser* Parser, c_token_type Open, c_token_type Close)
 }
 
 link_internal counted_string
+EatBetweenExcluding_Str(parser* Parser, c_token_type Open, c_token_type Close)
+{
+  counted_string Result = {};
+
+  EatWhitespace(Parser);
+  string_from_parser Builder = StartStringFromParser(Parser);
+  EatBetween(Parser, Open, Close);
+  Result = FinalizeStringFromParser(&Builder);
+
+  if (Result.Count > 1)
+  {
+    Assert(Result.Start);
+    Result.Count -= 2;
+    Result.Start++;
+  }
+
+  return Result;
+}
+
+link_internal counted_string
 EatBetween_Str(parser* Parser, c_token_type Open, c_token_type Close)
 {
   counted_string Result = {};
@@ -6594,6 +6763,34 @@ EatBetween_Str(parser* Parser, c_token_type Open, c_token_type Close)
   EatBetween(Parser, Open, Close);
   Result = FinalizeStringFromParser(&Builder);
 
+  return Result;
+}
+
+link_internal parser
+EatBetween_Parser(parser *Parser, c_token_type Open, c_token_type Close, memory_arena *Memory)
+{
+  c_token *Start = PeekTokenPointer(Parser);
+
+  c_token_cursor *Tokens = Allocate(c_token_cursor, Memory, 1);
+  CTokenCursor( Tokens,
+                Start, 0,
+                CSz("(anonymous parser)"),
+                TokenCursorSource_IntermediateRepresentaton,
+                {0,0} );
+
+  parser Result = { .Tokens = Tokens };
+
+  EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
+  Result.Tokens->End = Parser->Tokens->At;
+  return Result;
+}
+
+link_internal parser
+EatBetweenExcluding_Parser(parser *Parser, c_token_type Open, c_token_type Close, memory_arena *Memory)
+{
+  parser Result = EatBetween_Parser(Parser, Open, Close, Memory);
+  TrimFirstToken(&Result, Open);
+  TrimLastToken(&Result, Close);
   return Result;
 }
 
@@ -6617,7 +6814,7 @@ NextTokenIsSpaceOrTab(parser *Parser)
 }
 
 link_internal void
-TrimUntilNewline(parser* Parser)
+TrimNBSPUntilNewline(parser* Parser)
 {
   Assert(Parser->Tokens->At == Parser->Tokens->Start);
 
@@ -6634,6 +6831,8 @@ TrimFirstToken(parser* Parser, c_token_type TokenType)
   Parser->Tokens->Start = Parser->Tokens->At;
 }
 
+// TODO(Jesse): WTF?  I would assume this would just look at the last token and
+// strip it.  Is this being used to trim whitespace as well or something?
 link_internal void
 TrimLastToken(parser* Parser, c_token_type TokenType)
 {
@@ -6658,8 +6857,21 @@ TokenValidFor(c_token_cursor *Tokens, c_token *T)
   return Result;
 }
 
+link_internal c_token
+FirstNonNBSPToken(parser *Parser)
+{
+  peek_result At = PeekTokenRawCursor(Parser);
+  while (IsValid(&At) && IsNBSP(At.At))
+  {
+    At = PeekTokenRawCursor(&At, 1);
+  }
+  c_token Result = {};
+  if (IsValid(&At)) { Result = *At.At; }
+  return Result;
+}
+
 link_internal parser
-GetBodyTextForNextScope(parser* Parser, memory_arena *Memory)
+GetBodyTextForNextScope(parser *Parser, memory_arena *Memory)
 {
   // TODO(Jesse, immediate): This should return c_token_cursor .. I think ..
   parser BodyText = {};
@@ -6697,9 +6909,18 @@ GetBodyTextForNextScope(parser* Parser, memory_arena *Memory)
     CTokenCursor(Tokens, Start, (umm)(End-Start) + 1, Start->Filename, TokenCursorSource_BodyText, {});
 
     TrimFirstToken(&BodyText, CTokenType_OpenBrace);
-    TrimUntilNewline(&BodyText);
+    /* TrimLeadingWhitespace(&BodyText); */
+    if (FirstNonNBSPToken(&BodyText).Type == CTokenType_Newline)
+    {
+      TrimNBSPUntilNewline(&BodyText);
+    }
+
     TrimLastToken(&BodyText, CTokenType_CloseBrace);
-    TrimTrailingWhitespace(&BodyText);
+    if (LastNonNBSPToken(&BodyText).Type == CTokenType_Newline)
+    {
+      TrimTrailingNBSP(&BodyText);
+    }
+
     Rewind(BodyText.Tokens);
 
     Assert(BodyText.Tokens->At == BodyText.Tokens->Start);
@@ -7490,6 +7711,55 @@ FinalizeOperatorFunction(parse_context *Ctx, type_spec *TypeSpec)
   return Result;
 }
 
+link_internal u64
+ResolveConstantExpression(parser *Parser, ast_node *Node)
+{
+  u64 Result = 0;
+  switch(Node->Type)
+  {
+    case type_ast_node_expression:
+    {
+      auto Expr = SafeAccess(ast_node_expression, Node);
+      if (Expr->Next)
+      {
+        PoofNotImplementedError(Parser, CSz("ResolveConstantExpression currently unable to resolve compound expressions."), PeekTokenPointer(Parser));
+      }
+
+      switch (Expr->Value->Type)
+      {
+        case type_ast_node_literal:
+        {
+          auto Literal = SafeAccess(ast_node_literal, Expr->Value);
+          switch (Literal->Token.Type)
+          {
+            case CTokenType_IntLiteral:
+            {
+              Result = Literal->Token.UnsignedValue;
+            } break;
+
+            InvalidDefaultWhileParsing(Parser,
+              FormatCountedString( TranArena,
+                CSz("Invalid literal type passed to ResolveConstantExpression.  Type was (%S)"), ToString(Literal->Token.Type) ) );
+          }
+        } break;
+
+        InvalidDefaultWhileParsing(Parser,
+          FormatCountedString( TranArena,
+            CSz("Invalid expression type passed to ResolveConstantExpression.  Type was (%S)"), ToString(Expr->Value->Type) )
+        );
+      }
+
+    } break;
+
+    InvalidDefaultWhileParsing(Parser,
+      FormatCountedString( TranArena,
+        CSz("Invalid node type passed to ResolveConstantExpression.  Type was (%S)"), ToString(Node->Type) )
+    );
+  }
+
+  return Result;
+}
+
 #if 0
 // NOTE(Jesse): This function is not meant to parse struct-member specific
 // functions such as constructors and destructors.  It parses variables or free functions
@@ -7732,6 +8002,8 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
   {
     switch (T->Type)
     {
+/* compound_true */
+
       case CT_MacroLiteral:
       {
         if (T->Erased)
@@ -7787,7 +8059,7 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
             case CT_MacroLiteral:
             case CTokenType_Identifier:
             {
-              // TODO(Jesse, tags: correctness): Should this path has to set the next token to CT_MacroLiteral
+              // TODO(Jesse, tags: correctness): Should this path set the next token to CT_MacroLiteral
               c_token *PotentialMacroToken = PeekTokenRawPointer(Parser);
               macro_def *M = GetMacroDef(Ctx, PotentialMacroToken->Value);
               b64 NextTokenIsMacro = (M && !M->Undefed);
@@ -7845,7 +8117,7 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
             Assert(pT->Macro.Expansion == 0);
 
             // TODO(Jesse): Is it actually even possible for this to fail?
-            parser *Expanded = ExpandMacro(Ctx, Parser, Macro, PermMemory, TempMemory);
+            parser *Expanded = ExpandMacro(Ctx, Parser, Macro, PermMemory, TempMemory, False, True);
             if (Expanded->ErrorCode)
             {
               ParseInfoMessage( Parser,
@@ -8048,7 +8320,11 @@ EraseAllRemainingIfBlocks(parser *Parser)
       }
     }
 
-    if (!Result)
+    if (Result)
+    {
+      Assert(Result->Type == CT_PreprocessorEndif);
+    }
+    else
     {
       ParseError( Parser,
                   FormatCountedString(TranArena, CSz("Unable to find closing token for %S."), ToString(CT_PreprocessorIf)),
@@ -9013,6 +9289,7 @@ ParseTypedef(parse_context *Ctx)
         RequireToken(Parser, Name);
         Enum.Name = Name.Value;
       }
+      MaybeEatAdditionalCommaSeperatedNames(Ctx);
     }
 
   }
@@ -9088,8 +9365,7 @@ ParseSingleStatement(parse_context *Ctx, ast_node_statement *Result)
         if (Result->LHS)
         {
           DebugPrint(Result);
-          ParseError(Parser, CSz("Unable to parse L-value, LHS of expression already set!"), T);
-          RuntimeBreak();
+          InternalCompilerError(Parser, CSz("Unable to parse L-value, LHS of expression already set!"), T);
         }
 
         Result->LHS = ParseExpression(Ctx);
@@ -9205,8 +9481,7 @@ ParseSingleStatement(parse_context *Ctx, ast_node_statement *Result)
         if (Result->LHS)
         {
           DebugPrint(Result);
-          ParseError(Parser, CSz("Unable to parse L-value, LHS of expression already set!"), T);
-          RuntimeBreak();
+          InternalCompilerError(Parser, CSz("Unable to parse L-value, LHS of expression already set!"), T);
         }
         else
         {
@@ -9854,7 +10129,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec)
   {
     ParseError( Parser,
                 ParseErrorCode_MalformedType,
-                CSz("Malformed type specifier near here"),
+                CSz("Malformed type specifier near here."),
                 PeekTokenPointer(Parser, -1));
   }
 
@@ -10374,6 +10649,59 @@ ParseAllTodosFromFile(counted_string Filename, memory_arena* Memory)
 }
 
 link_internal counted_string
+GetTypeNameForDatatype(parse_context *Ctx, datatype *Data, memory_arena *Memory);
+
+link_internal cs
+ToString(parse_context *Ctx, meta_func_arg *Arg, memory_arena *Memory)
+{
+  cs Result = {};
+  switch (Arg->Type)
+  {
+    InvalidCase(type_meta_func_arg_noop);
+
+    case type_datatype:
+    {
+      Result = GetTypeNameForDatatype(Ctx, &Arg->datatype, Memory);
+    } break;
+
+    case type_poof_index:
+    {
+      Result = FormatCountedString(Memory, CSz("%u"), Arg->poof_index.Index);
+    } break;
+
+    case type_poof_symbol:
+    {
+      // TODO(Jesse): What should we do here?  Symbols can be really big and
+      // contain spaces.  This gets used (at the moment) to generate output
+      // filenames so we don't want to expand the whole thing.. TBD.
+      /* NotImplemented; */
+      Result = FormatCountedString(Memory, CSz("%lu"), Hash(Arg->poof_symbol.Value));
+    } break;
+  }
+  return Result;
+}
+
+link_internal counted_string
+GenerateOutfileNameFor(parse_context *Ctx, meta_func *Func, meta_func_arg_buffer *Args, memory_arena* Memory, counted_string Modifier = {})
+{
+  string_builder OutfileBuilder = {};
+  Append(&OutfileBuilder, Func->Name);
+  Append(&OutfileBuilder, CSz("_"));
+  for (u32 ArgIndex = 0; ArgIndex < Args->Count; ++ArgIndex)
+  {
+    meta_func_arg *Arg = Args->Start + ArgIndex;
+    Append(&OutfileBuilder, ToString(Ctx, Arg, Memory));
+    if ( ArgIndex+1 != Args->Count )
+    {
+      Append(&OutfileBuilder, CSz("_"));
+    }
+  }
+  Append(&OutfileBuilder, CSz(".h"));
+  counted_string Result = Finalize(&OutfileBuilder, Memory);
+  return Result;
+}
+
+link_internal counted_string
 GenerateOutfileNameFor(counted_string Name, counted_string DatatypeName, memory_arena* Memory, counted_string Modifier = {})
 {
   string_builder OutfileBuilder = {};
@@ -10579,13 +10907,26 @@ ParseTransformations(parser* Scope)
 }
 
 link_internal meta_func_arg
+ReplacementPattern(counted_string Match, meta_func_arg *Arg)
+{
+  meta_func_arg Result = *Arg;
+  Result.Match = Match;
+  return Result;
+}
+
+link_internal meta_func_arg
+ReplacementPattern(counted_string Match, poof_index Index)
+{
+  meta_func_arg Result = MetaFuncArg(Index);
+  Result.Match = Match;
+  return Result;
+}
+
+link_internal meta_func_arg
 ReplacementPattern(counted_string Match, datatype Data)
 {
-  meta_func_arg Result = {
-    .Match = Match,
-    .Data = Data
-  };
-
+  meta_func_arg Result = MetaFuncArg(Data);
+  Result.Match = Match;
   return Result;
 }
 
@@ -10735,11 +11076,12 @@ GetNameForDatatype(datatype *Data, memory_arena *Memory)
 
     case type_type_def:
     {
-      NotImplemented;
+      Result = Data->type_def->Alias;
     } break;
 
     case type_datatype_noop:
     {
+      // TODO(Jesse): Is this actually a valid case?
       Result = CSz("type_datatype_noop");
     } break;
   }
@@ -10816,6 +11158,24 @@ GetTypeNameForDatatype(parse_context *Ctx, datatype *Data, memory_arena *Memory)
 }
 
 link_internal declaration_stream*
+GetMembersFor(declaration *Decl)
+{
+  declaration_stream *Result = {};
+  switch(Decl->Type)
+  {
+    case type_compound_decl:
+    {
+      compound_decl *Anon = SafeAccess(compound_decl, Decl);
+      Result = &Anon->Members;
+    } break;
+
+    default: {} break;;
+  }
+
+  return Result;
+}
+
+link_internal declaration_stream*
 GetMembersFor(datatype *Data)
 {
   declaration_stream *Result = {};
@@ -10823,25 +11183,15 @@ GetMembersFor(datatype *Data)
   {
     case type_declaration:
     {
-      declaration *S = SafeAccess(declaration, Data);
-
-      switch(S->Type)
-      {
-        case type_compound_decl:
-        {
-          compound_decl *Anon = SafeAccess(compound_decl, S);
-          Result = &Anon->Members;
-        } break;
-
-        default: {} break;;
-      }
-
+      declaration *Decl = SafeAccess(declaration, Data);
+      Result = GetMembersFor(Decl);
     } break;
 
     default:
     {
     } break;
   }
+
   return Result;
 }
 
@@ -10855,6 +11205,12 @@ DatatypeIsVariableDecl(datatype *Data)
   switch (Data->Type)
   {
     case type_datatype_noop:
+    {
+      // TODO(Jesse): ?
+      Assert(false);
+      /* InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); */
+    } break;
+
     case type_primitive_def:
     case type_enum_member:
     {
@@ -10890,6 +11246,62 @@ DatatypeIsVariableDecl(datatype *Data)
       }
     }
   }
+  return Result;
+}
+
+link_internal ast_node*
+DatatypeStaticBufferSize(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
+{
+  ast_node *Result = {};
+  switch (Data->Type)
+  {
+    case type_datatype_noop:
+    {
+      // TODO(Jesse): ?
+      InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT);
+    } break;
+
+    case type_type_def:
+    case type_enum_member:
+    case type_primitive_def:
+    {
+    } break;
+
+    case type_declaration:
+    {
+      declaration *Decl = SafeAccess(declaration, Data);
+
+      switch(Decl->Type)
+      {
+        case type_declaration_noop:
+        {
+          // TODO(Jesse): ?
+          InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT);
+        } break;
+
+        case type_function_decl:
+        case type_enum_decl:
+        case type_compound_decl:
+        {
+        } break;
+
+        case type_variable_decl:
+        {
+          variable_decl *VDecl = SafeAccess(variable_decl, Decl);
+          Result = VDecl->StaticBufferSize;
+        } break;
+      }
+
+    } break;
+  }
+
+  return Result;
+}
+
+link_internal b32
+DatatypeIsArray(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
+{
+  b32 Result = (DatatypeStaticBufferSize(Ctx, Scope, Data, MetaOperatorT) != 0);
   return Result;
 }
 
@@ -11278,19 +11690,170 @@ ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_s
   return Result;
 }
 
+// NOTE(Jesse): This parses the argument list for a function call instance
+link_internal b32
+ParseAndTypecheckArgument(parse_context *Ctx, parser *Parser, meta_func_arg *ParsedArg, meta_func_arg *ArgDef, meta_func_arg_buffer *CurrentScope)
+{
+  c_token *Peek = PeekTokenPointer(Parser);
+  if (Peek)
+  {
+    ParsedArg->Match = ArgDef->Match;
+    switch (ArgDef->Type)
+    {
+      InvalidCase(type_meta_func_arg_noop);
+
+      case type_datatype:
+      {
+        c_token *Token = PopTokenPointer(Parser);
+        if (Token->Type == CTokenType_Identifier)
+        {
+          datatype Datatype = GetDatatypeByName(Ctx, Token->Value);
+          if (Datatype.Type)
+          {
+            ParsedArg->Type = type_datatype;
+            ParsedArg->datatype = Datatype;
+          }
+          else if (meta_func_arg *ScopedArg = GetByMatch(CurrentScope, Token->Value))
+          {
+            Assert(ScopedArg->Type == type_datatype);
+            *ParsedArg = *ScopedArg;
+            ParsedArg->Match = ArgDef->Match;
+          }
+          else
+          {
+            PoofTypeError( Parser,
+                           ParseErrorCode_UndefinedDatatype,
+                           FormatCountedString( TranArena,
+                                                CSz("Could't find datatype or local variable for (%S)."),
+                                                Token->Value ),
+                           Token );
+          }
+        }
+        else
+        {
+          PoofTypeError( Parser,
+                         ParseErrorCode_PoofTypeError,
+                         FormatCountedString( TranArena,
+                                              CSz("Expected (%S), got (%S)."),
+                                              ToString(CTokenType_Identifier),
+                                              ToString(Token->Type) ),
+                         Token );
+        }
+      } break;
+
+      case type_poof_index:
+      {
+        c_token *Token = PopTokenPointer(Parser);
+        switch (Token->Type)
+        {
+          case CTokenType_IntLiteral:
+          {
+            NotImplemented;
+          } break;
+
+          case CTokenType_Identifier:
+          {
+            // TODO(Jesse): Look up into current scope to see if we've got an index
+            // type with the same name
+            NotImplemented;
+          } break;
+
+          // TODO(Jesse): Emit a type error here?
+          InvalidDefaultCase;
+        }
+      } break;
+
+      case type_poof_symbol:
+      {
+        cs Value = EatBetweenExcluding_Str(Parser, CTokenType_OpenBrace, CTokenType_CloseBrace);
+        ParsedArg->Match = ArgDef->Match;
+        ParsedArg->Type = type_poof_symbol;
+        ParsedArg->poof_symbol = PoofSymbol(Value);
+      } break;
+    }
+  }
+  else
+  {
+    // TODO(Jesse)(error-message): Could make this error quite a bit better..
+    PoofTypeError( Parser,
+                   ParseErrorCode_InvalidArgumentCount,
+                   CSz("Not enough arguments."),
+                   Peek );
+  }
+
+  OptionalToken(Parser, CTokenType_Comma);
+  b32 Result = (ParsedArg->Type != type_meta_func_arg_noop);
+  return Result;
+}
+
+// NOTE(Jesse): This parses the argument list for a function definition
+link_internal b32
+ParseMetaFuncDefArg(parser *Parser, meta_func_arg_stream *Stream)
+{
+  cs Match = {};
+  cs Type = {};
+
+  c_token *FirstT = RequireTokenPointer(Parser, CTokenType_Identifier);
+  if (c_token *SecondT = OptionalToken(Parser, CTokenType_Identifier))
+  {
+    Type = FirstT->Value;
+    Match = SecondT->Value;
+  }
+  else
+  {
+    Match = FirstT->Value;
+  }
+
+  meta_func_arg Arg = {
+    .Match = Match
+  };
+
+  if (Type.Start)
+  {
+    meta_func_arg_type ArgT = MetaFuncArgType(Type);
+    switch (ArgT)
+    {
+      case type_meta_func_arg_noop:
+      {
+        // Type error
+        Assert(False);
+      } break;
+
+      case type_datatype:
+      case type_poof_index:
+      case type_poof_symbol:
+      {
+        Arg.Type = ArgT;
+      } break;
+    }
+  }
+  else
+  {
+    // Default to datatype if no type specified
+    Arg.Type = type_datatype;
+  }
+
+  Push(Stream, Arg);
+
+  b32 Result = (OptionalToken(Parser, CTokenType_Comma) != 0);
+  return Result;
+}
+
 link_internal meta_func
 ParseMetaFunctionDef(parser* Parser, counted_string FuncName, memory_arena *Memory)
 {
   TIMED_FUNCTION();
 
   RequireToken(Parser, CTokenType_OpenParen);
-  counted_string ArgName = RequireToken(Parser, CTokenType_Identifier).Value;
+  meta_func_arg_stream ArgStream = {};
+  while (ParseMetaFuncDefArg(Parser, &ArgStream));
   RequireToken(Parser, CTokenType_CloseParen);
+
   parser Body = GetBodyTextForNextScope(Parser, Memory);
 
   meta_func Func = {
     .Name = FuncName,
-    .ArgName = ArgName,
+    .Args = Compact(&ArgStream, Memory),
     .Body = Body,
   };
 
@@ -11493,6 +12056,68 @@ ParseComment_old_dead_deprecated()
 #endif
 }
 
+link_internal b32
+ParseAndTypeCheckArgs(parse_context *Ctx, parser *Parser, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, meta_func_arg_buffer *ArgsInScope, memory_arena *Memory)
+{
+  b32 TypeCheckPassed = True;
+
+  parser ArgParser = EatBetweenExcluding_Parser(Parser, CTokenType_OpenParen, CTokenType_CloseParen, Memory);
+
+  *ArgInstances = MetaFuncArgBuffer(Func->Args.Count, Memory);
+  for (u32 ArgIndex = 0; ArgIndex < Func->Args.Count; ++ArgIndex)
+  {
+    meta_func_arg *ArgDef = Func->Args.Start + ArgIndex;
+    if (ParseAndTypecheckArgument(Ctx, &ArgParser, ArgInstances->Start+ArgIndex, ArgDef, ArgsInScope))
+    {
+    }
+    else
+    {
+      TypeCheckPassed = False;
+      // NOTE(Jesse): Need this because the errors emitted from
+      // ParseAndTypecheckArgument don't contain the whole parse
+      // context, just the arguments.  Also, we have to propagate
+      // the error code to the main parser.
+      ParseError( Parser,
+                  ArgParser.ErrorCode,
+                  FormatCountedString( TranArena,
+                                       CSz("Could't parse args for (%S)."),
+                                       FunctionT->Value ),
+                  FunctionT );
+      break;
+    }
+  }
+
+  if (TokensRemain(&ArgParser))
+  {
+    // TODO(Jesse): This check might be buggy, whitespace could trigger it.. ?
+    // TODO(Jesse): Real error message; too many arguments.
+    ParseInfoMessage( &ArgParser,
+                      FormatCountedString(TranArena,
+                                          CSz("Shiiiiit dawg"), 0 ),
+                      FunctionT);
+
+    TypeCheckPassed = False;
+  }
+
+  return TypeCheckPassed;
+}
+
+link_internal counted_string
+CallFunction(parse_context *Ctx, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, memory_arena *Memory, umm *Depth)
+{
+  cs Result = Execute(Func, ArgInstances, Ctx, Memory, Depth);
+  if (Func->Body.ErrorCode)
+  {
+    // TODO(Jesse): Should we emit an error here?
+    Assert(Result.Start == 0);
+    /* ParseInfoMessage( &Func->Body, */
+    /*                   FormatCountedString(TranArena, */
+    /*                                       CSz("Unable to generate code for (func %S)."), Func->Name), 0); */
+  }
+  return Result;
+}
+
+
 link_internal tuple_CountedString_CountedString_buffer
 GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 {
@@ -11535,6 +12160,37 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
         metaprogramming_directive Directive = MetaprogrammingDirective(DirectiveT->Value);
         switch (Directive)
         {
+          case meta_directive_noop:
+          {
+            meta_func* Func = StreamContains(FunctionDefs, DirectiveT->Value);
+            if (Func)
+            {
+              meta_func_arg_buffer ArgInstances = {};
+              if (ParseAndTypeCheckArgs(Ctx, Parser, DirectiveT, Func, &ArgInstances, {}, Memory))
+              {
+                umm Depth = 0;
+                auto Code = CallFunction(Ctx, DirectiveT, Func, &ArgInstances, Memory, &Depth);
+                if (Code.Start)
+                {
+                  counted_string OutfileName = GenerateOutfileNameFor(Ctx, Func, &ArgInstances, Memory);
+                  counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, {} /*TodoInfo*/, Memory);
+
+                  auto FilenameAndCode = Tuple(ActualOutputFile, Code);
+                  Append(&Builder, FilenameAndCode);
+                }
+              }
+            }
+            else
+            {
+              PoofTypeError( Parser,
+                             ParseErrorCode_InvalidName,
+                             FormatCountedString( TranArena,
+                                                  CSz("(%S) is not a poof keyword or function name."),
+                                                  DirectiveT->Value ),
+                             DirectiveT );
+            }
+          } break;
+
           case polymorphic_func:
           {
             TIMED_NAMED_BLOCK("polymorphic_func");
@@ -11552,20 +12208,22 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               counted_string ArgName = RequireToken(Parser, CTokenType_Identifier).Value;
               RequireToken(Parser, CTokenType_CloseParen);
 
+              datatype D = GetDatatypeByName(Ctx, ArgType);
+
+
               parser Body = GetBodyTextForNextScope(Parser, Memory);
 
               meta_func Func = {
                 .Name = CSz("anonymous"),
-                .ArgName = ArgName,
                 .Body = Body,
               };
 
-              datatype Arg = GetDatatypeByName(&Ctx->Datatypes, ArgType);
+              datatype ArgDatatype = GetDatatypeByName(&Ctx->Datatypes, ArgType);
 
-              if (Arg.Type)
+              if (ArgDatatype.Type)
               {
-                meta_func_arg_stream Args = {};
-                Push(&Args, ReplacementPattern(ArgName, Arg));
+                auto Args = MetaFuncArgBuffer(1, Memory);
+                Args.Start[0] = ReplacementPattern(ArgName, ArgDatatype);
                 umm Depth = 0;
                 counted_string Code = Execute(&Func, &Args, Ctx, Memory, &Depth);
                 RequireToken(Parser, CTokenType_CloseParen);
@@ -11660,10 +12318,12 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
               if (!StreamContains(&Excludes, Struct->Type->Value))
               {
-                meta_func_arg_stream Args = {};
-                Push(&Args, ReplacementPattern(StructFunc.ArgName, Datatype(Struct)));
+                /* Assert(StructFunc.Args.Count == 1); */
+                /* auto Args = MetaFuncArgBuffer(1, Memory); */
+                /* Args.Start[0] = ReplacementPattern(StructFunc.Args.Start[0].Match, Datatype(Struct)); */
+
                 umm Depth = 0;
-                counted_string Code = Execute(&StructFunc, &Args, Ctx, Memory, &Depth);
+                counted_string Code = Execute(&StructFunc, Ctx, Memory, &Depth);
                 Append(&OutputBuilder, Code);
               }
             }
@@ -11675,10 +12335,10 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               enum_decl* Enum = &Iter.At->Element;
               if (!StreamContains(&Excludes, Enum->Name))
               {
-                meta_func_arg_stream Args = {};
-                Push(&Args, ReplacementPattern(EnumFunc.ArgName, Datatype(Enum)));
+                /* meta_func_arg_stream Args = {}; */
+                /* Push(&Args, ReplacementPattern(EnumFunc.ArgName, Datatype(Enum))); */
                 umm Depth = 0;
-                counted_string Code = Execute(&EnumFunc, &Args, Ctx, Memory, &Depth);
+                counted_string Code = Execute(&EnumFunc, Ctx, Memory, &Depth);
                 Append(&OutputBuilder, Code);
               }
             }
@@ -11724,8 +12384,11 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
           } break;
 
-          default:
+          case enum_only:
           {
+            InvalidCodePath();
+
+#if 0
             TIMED_NAMED_BLOCK("default func");
             meta_func* Func = StreamContains(FunctionDefs, DirectiveT->Value);
             if (Func)
@@ -11780,8 +12443,9 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
                                                   DirectiveT->Value ),
                              DirectiveT );
             }
-          }
+#endif
 
+          }
         }
       } break;
 
@@ -12122,6 +12786,7 @@ main(s32 ArgCount_, const char** ArgStrings)
   memory_arena* Memory = &Memory_;
   Memory->NextBlockSize = Megabytes(256);
 
+  AllocateAndInitThreadStates(Memory);
 
   parse_context Ctx = AllocateParseContext(Memory);
 

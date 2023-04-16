@@ -9,6 +9,7 @@ struct person_stream
   memory_arena *Memory;
   person_stream_chunk* FirstChunk;
   person_stream_chunk* LastChunk;
+  umm ChunkCount;
 };
 
 link_internal void
@@ -82,6 +83,8 @@ Push(person_stream* Stream, person Element)
 
   Assert(NextChunk->Next == 0);
   Assert(Stream->LastChunk->Next == 0);
+
+  Stream->ChunkCount += 1;
 
   person *Result = &NextChunk->Element;
   return Result;

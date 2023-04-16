@@ -27,10 +27,18 @@ enum meta_arg_operator
   name,
   type,
   value,
+  array, // not implemented
 
   // iterative
+  map_array,
   map_values,
   map_members,
+
+  // utility
+  sep,
+
+  // accessors
+  member,
 
   // predicates
   is_enum,
@@ -40,7 +48,12 @@ enum meta_arg_operator
   is_compound,
   is_primitive,
   is_function,
+  is_array,
+  is_type,
+  is_named,
+  contains_type,
 };
+
 poof( generate_value_table(meta_arg_operator) )
 #include <generated/generate_value_table_meta_arg_operator.h>
 
@@ -429,7 +442,9 @@ enum parse_error_code
   ParseErrorCode_InvalidOperator,
   ParseErrorCode_InvalidMetaTransformOp,
   ParseErrorCode_InvalidArgument,
+  ParseErrorCode_InvalidArgumentCount,
   ParseErrorCode_InvalidName,
+  ParseErrorCode_NotImplemented, // NOTE(Jesse): This means the compiler should support this case, but doesn't
 
 
   // General errors
@@ -494,6 +509,7 @@ struct declaration_stream
   memory_arena *Memory = AllocateArena();
   declaration_stream_chunk *FirstChunk;
   declaration_stream_chunk *LastChunk;
+  umm ChunkCount;
 };
 
 struct compound_decl // structs and unions
@@ -856,15 +872,122 @@ Datatype(type_spec S)
 }
 
 
-struct meta_func_arg
+struct poof_index
 {
-  counted_string Match;
-  datatype Data;
+  u32 Index;
+  u32 MaxIndex;
 };
+
+link_internal poof_index
+PoofIndex(u32 Index, u32 MaxIndex)
+{
+  poof_index Result = {
+    .Index = Index,
+    .MaxIndex = MaxIndex
+  };
+  return Result;
+}
+/* poof(constructors(poof_index) */
+
+struct poof_symbol
+{
+  cs Value;
+};
+/* poof(constructors(poof_symbol)) */
+/* #include <C:/Users/scallywag/work/poof/generated/poof_symbol.h> */
+
+
+link_internal poof_symbol
+PoofSymbol(cs Value)
+{
+  poof_symbol Result = {
+    .Value = Value,
+  };
+  return Result;
+}
+
+poof(
+  d_union meta_func_arg
+  {
+    datatype
+    poof_index
+    poof_symbol
+  },
+  {
+    counted_string Match;
+  }
+)
+#include <generated/d_union_meta_func_arg.h>
+
+poof(string_and_value_tables(meta_func_arg_type))
+#include <generated/string_and_value_tables_meta_func_arg_type.h>
+
+poof(d_union_constructors(meta_func_arg))
+#include <generated/d_union_constructors_meta_func_arg.h>
+
 poof(generate_stream(meta_func_arg))
 #include <generated/generate_stream_meta_func_arg.h>
 
+poof(buffer(meta_func_arg))
+#include <generated/buffer_meta_func_arg.h>
 
+poof(generate_stream_compact(meta_func_arg))
+#include <generated/generate_stream_compact_meta_func_arg.h>
+
+// TODO(Jesse)(metaprogramming): Generate this!  There's a bunch of this kind
+// of code that could be generated.  I think some functions I wrote by hand are
+// called "GetByName" or something.
+//
+link_internal meta_func_arg *
+GetByMatch(meta_func_arg_buffer *Buf, counted_string Match)
+{
+  meta_func_arg *Result = {};
+
+  // NOTE(Jesse): This handles null buffers as a convenience for the callers to
+  // be able to not check, such that we can do `if (auto Match = GetByMatch(...)) { ... }`
+  //
+  // If we did not handle nulls the calling code gets a lot uglier
+  if (Buf)
+  {
+    for (u32 ArgIndex = 0; ArgIndex < Buf->Count; ++ArgIndex)
+    {
+      meta_func_arg *Arg = Buf->Start + ArgIndex;
+      if (AreEqual(Arg->Match, Match))
+      {
+        Result = Arg;
+        break;
+      }
+    }
+  }
+  return Result;
+}
+
+
+
+link_internal void
+CopyBufferIntoBuffer(meta_func_arg_buffer *Buf1, meta_func_arg_buffer *Buf2)
+{
+  Assert(Buf1->Count <= Buf2->Count);
+  for (u32 Index = 0; Index < Buf1->Count; ++Index)
+  {
+    Buf2->Start[Index] = Buf1->Start[Index];
+  }
+}
+
+link_internal meta_func_arg_buffer
+ExtendBuffer(meta_func_arg_buffer *Buf, umm ExtendCount, memory_arena *Memory)
+{
+  meta_func_arg_buffer Result = MetaFuncArgBuffer(Buf->Count + ExtendCount, Memory);
+  CopyBufferIntoBuffer(Buf, &Result);
+  return Result;
+}
+
+link_internal void
+SetLast(meta_func_arg_buffer *Buf, meta_func_arg Arg)
+{
+  Assert(Buf->Count);
+  Buf->Start[Buf->Count-1] = Arg;
+}
 
 
 
@@ -900,7 +1023,7 @@ struct macro_def
   counted_string_buffer NamedArguments;
   b32 Variadic;
   b32 Undefed; // Gets toggled when we hit an undef
-  /* b32 IsExpanding; */
+  b32 IsExpanding;
 };
 poof(generate_stream(macro_def))
 #include <generated/generate_stream_macro_def.h>
@@ -920,7 +1043,8 @@ poof(hashtable(macro_def))
 struct meta_func
 {
   counted_string Name;
-  counted_string ArgName;
+  meta_func_arg_buffer Args;
+  /* counted_string ArgName; */
   parser Body;
 };
 poof(generate_stream(meta_func))
@@ -1063,6 +1187,10 @@ poof(
 poof(generate_stream(ast_node))
 #include <generated/generate_stream_ast_node.h>
 
+poof(string_and_value_tables(ast_node_type))
+#include <generated/string_and_value_tables_ast_node_type.h>
+
+
 link_internal ast_node*
 AllocateAstNode(ast_node_type T, ast_node **Result, memory_arena* Memory)
 {
@@ -1108,15 +1236,14 @@ struct for_enum_constraints
   counted_string ValueName;
 };
 
-struct body_text_constraints
-{
-  counted_string MemberContains;
-
-  // Replacement Patterns
-  counted_string TypeTag;
-  counted_string TypeName;
-  counted_string ValueName;
-};
+/* struct body_text_constraints */
+/* { */
+/*   counted_string MemberContains; */
+/*   // Replacement Patterns */
+/*   counted_string TypeTag; */
+/*   counted_string TypeName; */
+/*   counted_string ValueName; */
+/* }; */
 
 struct todo_list_info
 {
@@ -1139,7 +1266,11 @@ enum output_mode
 };
 
 
-#define WriteTo(Dest, S) if (Dest) { CopyToDest(Dest, S); } else { DebugChars(CSz("%S"), S); }
+inline void
+WriteTo(char_cursor *Dest, counted_string S)
+{
+  if (Dest) { CopyToDest(Dest, S); } else { DebugChars(CSz("%S"), S); }
+}
 
 inline void
 PrintToken(c_token *Token, char_cursor *Dest = 0)
@@ -1222,11 +1353,12 @@ b32 AreEqual(c_token T1, c_token T2)
 {
   b32 Result = (T1.Type == T2.Type);
 
-  if (Result && T1.Type == CTokenType_Newline)
+  if (Result && (T1.Type == CTokenType_Newline ||
+                 T1.Type == CTokenType_EscapedNewline ) )
   {
     // NOTE(Jesse): On Windows newline chars can be length 2 (\r\n) so we don't
     // check that the Value strings match for that case
-    Assert(T2.Type == CTokenType_Newline);
+    Assert(T2.Type == CTokenType_Newline || T2.Type == CTokenType_EscapedNewline );
   }
   else
   {
@@ -1336,6 +1468,8 @@ CTokenCursor(c_token_cursor *Result, c_token *Buffer, umm Count, counted_string 
   Result->Up = Up;
 }
 
+// TODO(Jesse)(safety, memory): Remove this; these are not allowed to be
+// stack-allocated so we might as well not have a function that returns one..
 link_internal c_token_cursor
 CTokenCursor(c_token *Start, c_token *End, counted_string Filename, token_cursor_source Source, c_token_cursor_up Up)
 {
@@ -1410,7 +1544,6 @@ PeekToken(ansi_stream* Stream, u32 Lookahead = 0)
     // TODO(Jesse, id: 193, tags: metaprogramming): Metaprogram this.  I've had bugs multiple times because of it.
     switch (At)
     {
-
       case CT_ControlChar_Start_of_Heading:
       case CT_ControlChar_Start_of_Text:
       case CT_ControlChar_End_of_Text:
@@ -1576,16 +1709,16 @@ IsValidForCursor(c_token_cursor *Tokens, c_token *T)
   return Result;
 }
 
-
 struct tuple_CountedString_CountedString
 {
   counted_string E[2];
 };
+
 poof(generate_stream(tuple_CountedString_CountedString))
-#include </home/scallywag/work/poof/generated/generate_stream_tuple_CountedString_CountedString.h>
+#include <generated/generate_stream_tuple_CountedString_CountedString.h>
 
 poof( buffer_builder(tuple_CountedString_CountedString) )
-#include </home/scallywag/work/poof/generated/buffer_builder_tuple_CountedString_CountedString.h>
+#include <generated/buffer_builder_tuple_CountedString_CountedString.h>
 
 
 tuple_CountedString_CountedString
