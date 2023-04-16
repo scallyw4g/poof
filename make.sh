@@ -190,7 +190,6 @@ function RunPoof {
   $POOF_DEBUGGER $POOF_EXECUTABLE \
                                   \
     $POOF_LOG_LEVEL               \
-    -c0 \
     poof/poof.cpp                 \
     -D BONSAI_PREPROCESSOR        \
     -D BONSAI_LINUX               \

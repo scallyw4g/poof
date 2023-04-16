@@ -1,6 +1,7 @@
 struct declaration_cursor
 {
   declaration *Start;
+  // TODO(Jesse)(immediate): For the love of fucksakes change these to indices
   declaration *At;
   declaration *End;
 };
@@ -8,7 +9,7 @@ struct declaration_cursor
 link_internal declaration_cursor
 DeclarationCursor(umm ElementCount, memory_arena* Memory)
 {
-  declaration *Start = (declaration*)PushStruct(Memory, sizeof(declaration), 1, 0);
+  declaration *Start = (declaration*)PushStruct(Memory, sizeof(declaration)*ElementCount, 1, 0);
   declaration_cursor Result = {
     .Start = Start,
     .End = Start+ElementCount,

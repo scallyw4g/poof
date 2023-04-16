@@ -1,6 +1,7 @@
 struct compound_decl_cursor
 {
   compound_decl *Start;
+  // TODO(Jesse)(immediate): For the love of fucksakes change these to indices
   compound_decl *At;
   compound_decl *End;
 };
@@ -8,7 +9,7 @@ struct compound_decl_cursor
 link_internal compound_decl_cursor
 CompoundDeclCursor(umm ElementCount, memory_arena* Memory)
 {
-  compound_decl *Start = (compound_decl*)PushStruct(Memory, sizeof(compound_decl), 1, 0);
+  compound_decl *Start = (compound_decl*)PushStruct(Memory, sizeof(compound_decl)*ElementCount, 1, 0);
   compound_decl_cursor Result = {
     .Start = Start,
     .End = Start+ElementCount,
@@ -28,6 +29,7 @@ struct compound_decl_stream
   memory_arena *Memory;
   compound_decl_stream_chunk* FirstChunk;
   compound_decl_stream_chunk* LastChunk;
+  umm ChunkCount;
 };
 
 link_internal void
@@ -101,6 +103,8 @@ Push(compound_decl_stream* Stream, compound_decl Element)
 
   Assert(NextChunk->Next == 0);
   Assert(Stream->LastChunk->Next == 0);
+
+  Stream->ChunkCount += 1;
 
   compound_decl *Result = &NextChunk->Element;
   return Result;

@@ -1,6 +1,7 @@
 struct enum_decl_cursor
 {
   enum_decl *Start;
+  // TODO(Jesse)(immediate): For the love of fucksakes change these to indices
   enum_decl *At;
   enum_decl *End;
 };
@@ -8,7 +9,7 @@ struct enum_decl_cursor
 link_internal enum_decl_cursor
 EnumDeclCursor(umm ElementCount, memory_arena* Memory)
 {
-  enum_decl *Start = (enum_decl*)PushStruct(Memory, sizeof(enum_decl), 1, 0);
+  enum_decl *Start = (enum_decl*)PushStruct(Memory, sizeof(enum_decl)*ElementCount, 1, 0);
   enum_decl_cursor Result = {
     .Start = Start,
     .End = Start+ElementCount,
@@ -28,6 +29,7 @@ struct enum_decl_stream
   memory_arena *Memory;
   enum_decl_stream_chunk* FirstChunk;
   enum_decl_stream_chunk* LastChunk;
+  umm ChunkCount;
 };
 
 link_internal void
@@ -101,6 +103,8 @@ Push(enum_decl_stream* Stream, enum_decl Element)
 
   Assert(NextChunk->Next == 0);
   Assert(Stream->LastChunk->Next == 0);
+
+  Stream->ChunkCount += 1;
 
   enum_decl *Result = &NextChunk->Element;
   return Result;

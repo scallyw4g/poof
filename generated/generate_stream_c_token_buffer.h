@@ -9,6 +9,7 @@ struct c_token_buffer_stream
   memory_arena *Memory;
   c_token_buffer_stream_chunk* FirstChunk;
   c_token_buffer_stream_chunk* LastChunk;
+  umm ChunkCount;
 };
 
 link_internal void
@@ -82,6 +83,8 @@ Push(c_token_buffer_stream* Stream, c_token_buffer Element)
 
   Assert(NextChunk->Next == 0);
   Assert(Stream->LastChunk->Next == 0);
+
+  Stream->ChunkCount += 1;
 
   c_token_buffer *Result = &NextChunk->Element;
   return Result;

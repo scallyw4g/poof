@@ -1,6 +1,7 @@
 struct parser_cursor
 {
   parser *Start;
+  // TODO(Jesse)(immediate): For the love of fucksakes change these to indices
   parser *At;
   parser *End;
 };
@@ -8,7 +9,7 @@ struct parser_cursor
 link_internal parser_cursor
 ParserCursor(umm ElementCount, memory_arena* Memory)
 {
-  parser *Start = (parser*)PushStruct(Memory, sizeof(parser), 1, 0);
+  parser *Start = (parser*)PushStruct(Memory, sizeof(parser)*ElementCount, 1, 0);
   parser_cursor Result = {
     .Start = Start,
     .End = Start+ElementCount,
