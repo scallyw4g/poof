@@ -456,6 +456,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                     DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
                   } break;
 
+                  case is_named:
                   case is_type:
                   {
                     RequireToken(Scope, CTokenType_OpenParen);
@@ -467,11 +468,6 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
 
                     b32 TypesMatch = StringsMatch(ThisTypeName, QueryTypeName);
                     DoTrueFalse(Ctx, Scope, ReplacePatterns, TypesMatch, &OutputBuilder, Memory, Depth);
-                  } break;
-
-                  case is_named:
-                  {
-                    NotImplemented;
                   } break;
 
                   case contains_type:

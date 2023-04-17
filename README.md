@@ -1,9 +1,3 @@
-### Pre-alpha Disclaimer
-
-`poof` is quickly approaching 0.1.0-alpha where features will stabilize
-somewhat, however it's not quite there yet.  Expect some churn in the next few
-weeks.
-
 # Quickstart
 
 ```
@@ -13,16 +7,15 @@ cd poof && ./make.sh BuildAllBinariesRunAllTests
 
 # Documentation
 
-There's a [website](https://scallyw4g.github.io/poof/) with examples and an
-interactive playground if you want quickly give poof a try.
+There is a language primer and reference in [language_introduction.md](language_introduction.md)
 
-Proper documentation is currently a WIP, but there is example code on the
-website as well as in this repository.
+There's a [website](https://scallyw4g.github.io/poof/) with some more in-depth
+examples and an interactive playground if you want quickly give poof a try.
 
 # About
 
-`poof` is a 'metaprogramming language' that aims to bring some of the niceties
-of more modern languages to C.
+`poof` is a metaprogramming environment that aims to augment the C programming
+language with modern (and sometimes experimental) metaprogramming techniques.
 
 # Getting started
 
@@ -30,14 +23,12 @@ See [https://scallyw4g.github.io/poof](https://scallyw4g.github.io/poof)
 
 # Project Status
 
-`poof` is currently undergoing a hardening phase before a 0.1.0-alpha release.
-
-At the time of this writing, the tool relies on itself to generate ~3.5k LoC
-(14k if you count debug printing code) and makes use of every documented
+At the time of this writing, `poof` relies on itself to generate ~8k LoC
+(much more if you count debug printing code) and makes use of every documented
 feature.  [Bonsai](https://github.com/scallyw4g/bonsai) relies on `poof` to
-generate ~15k LoC (>30k including DebugPrint).
+generate a similar amount of code.
 
-## Roadmap to 0.1.0-alpha
+## Roadmap to 0.2.0
 
 [✓] = finished
 
@@ -50,9 +41,11 @@ generate ~15k LoC (>30k including DebugPrint).
 ### Documentation
 [✓] Write example code
 
-[o] Formally specify feature set for 0.1.0-alpha
+[✓] Formally specify feature set for 0.2.0
 
-[\_] Write language documentation
+[o] Write language documentation
+
+[o] Complete implementation of feature set for 0.2.0
 
 ### Behavior & Testing
 [✓] Parse include graph of `poof` (excluding CRT headers)
@@ -91,13 +84,7 @@ generate ~15k LoC (>30k including DebugPrint).
 
 # Examples
 
-See the [examples](https://github.com/scallyw4g/poof/tree/master/examples)
-folder for, well, examples of how to use `poof`.  Take note that these examples
-are meant to demonstrate language features, and make heavy use of printf.  This
-is not a typical use-case, but it makes visualizing the output of `poof` easier.
-
-For less contrived examples of using `poof` have a look at the
-[functions](https://github.com/scallyw4g/poof/blob/master/poof/functions.h) used
-to build `poof`, and their
-[output](https://github.com/scallyw4g/poof/tree/master/poof/generated).
+For examples that are less contrived than the ones found in the documentation
+section, take a look at the [functions](https://github.com/scallyw4g/bonsai_stdlib/blob/master/headers/poof_functions.h)
+used to build `poof`, and their [output](https://github.com/scallyw4g/poof/tree/master/poof/generated).
 
