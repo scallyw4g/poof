@@ -410,7 +410,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                             enum_decl *E = {};
                             if (VDecl->Type.DatatypeToken)
                             {
-                              E = GetEnumByType(&Datatypes->Enums, VDecl->Type.DatatypeToken->Value);
+                              E = GetEnumDeclByName(&Datatypes->Enums, VDecl->Type.DatatypeToken->Value);
                             }
                             DoTrueBranch = (E != 0);
                           } break;

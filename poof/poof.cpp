@@ -5948,27 +5948,41 @@ GenerateStructDef(parse_context *Ctx, d_union_decl* dUnion, memory_arena* Memory
   return Result;
 }
 
-link_internal type_def*
-GetTypedefByAlias(type_def_stream* Typedefs, counted_string Alias)
-{
-  type_def *Result = 0;
-  ITERATE_OVER(Typedefs)
+poof(
+  func gen_stream_getter(type_datatype Type, type_poof_symbol Key)
   {
-    type_def* T = GET_ELEMENT(Iter);
-    if (StringsMatch(T->Alias, Alias))
+    link_internal Type.name*
+    Get(Type.name.to_capital_case)By(Key)( (Type.name)_stream* Stream, Type.member(0, (M) { M.type }) Key )
     {
-      Result = T;
-      break;
+      (Type.name) *Result = 0;
+      ITERATE_OVER(Stream)
+      {
+        Type.name* T = GET_ELEMENT(Iter);
+        if (AreEqual(T->(Key), Key))
+        {
+          Result = T;
+          break;
+        }
+      }
+
+      return Result;
     }
   }
+)
 
-  return Result;
-}
+poof( gen_stream_getter(type_def, {Alias}) )
+#include <generated/gen_stream_getter_type_def_822865913.h>
 
 
+
+poof( gen_stream_getter(enum_decl, {Name}) )
+#include </home/scallywag/work/poof/generated/gen_stream_getter_enum_decl_689333910.h>
+
+
+#if 0
 // TODO(Jesse id: 301, tags: metaprogramming):  These functions are super repetitive, generate them!
 link_internal enum_decl*
-GetEnumByType(enum_decl_stream* ProgramEnums, counted_string EnumType)
+GetEnumDeclByName(enum_decl_stream* ProgramEnums, counted_string EnumType)
 {
   TIMED_FUNCTION();
 
@@ -5987,6 +6001,7 @@ GetEnumByType(enum_decl_stream* ProgramEnums, counted_string EnumType)
 
   return Result;
 }
+#endif
 
 link_internal function_decl*
 GetFunctionByName(function_decl_stream* Functions, counted_string FuncName)
@@ -6054,8 +6069,8 @@ GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
 
   // TODO(Jesse id: 295, tags: speed): This could be optimized significantly by shuffling the logic around, not to mention using hashtables.
   compound_decl *S = GetStructByType(&Datatypes->Structs, Name);
-  enum_decl     *E = GetEnumByType(&Datatypes->Enums, Name);
-  type_def      *T = GetTypedefByAlias(&Datatypes->Typedefs, Name);
+  enum_decl     *E = GetEnumDeclByName(&Datatypes->Enums, Name);
+  type_def      *T = GetTypeDefByAlias(&Datatypes->Typedefs, Name);
   function_decl *F = GetFunctionByName(&Datatypes->Functions, Name);
 
   datatype Result = {};
@@ -6116,7 +6131,7 @@ ParseDiscriminatedUnion(parse_context *Ctx, parser* Parser, program_datatypes* D
   {
     dUnion.CustomEnumType = EnumTypeT->Value;
 
-    enum_decl* EnumDef = GetEnumByType(&Datatypes->Enums, dUnion.CustomEnumType);
+    enum_decl* EnumDef = GetEnumDeclByName(&Datatypes->Enums, dUnion.CustomEnumType);
     if (EnumDef)
     {
       ITERATE_OVER(&EnumDef->Members)
@@ -11662,7 +11677,7 @@ ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_s
     counted_string DatatypeName = NameT->Value;
 
     compound_decl* Struct              = GetStructByType(&Datatypes->Structs, DatatypeName);
-    enum_decl* Enum                    = GetEnumByType(&Datatypes->Enums, DatatypeName);
+    enum_decl* Enum                    = GetEnumDeclByName(&Datatypes->Enums, DatatypeName);
     tagged_counted_string_stream* List = StreamContains(NameLists, DatatypeName);
 
     if (Struct || Enum)
@@ -11814,8 +11829,7 @@ ParseMetaFuncDefArg(parser *Parser, meta_func_arg_stream *Stream)
     {
       case type_meta_func_arg_noop:
       {
-        // Type error
-        Assert(False);
+        ParseError(Parser, ParseErrorCode_InvalidArgumentType, CSz("Invalid Type Token"), FirstT);
       } break;
 
       case type_datatype:

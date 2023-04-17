@@ -443,6 +443,7 @@ enum parse_error_code
   ParseErrorCode_InvalidOperator,
   ParseErrorCode_InvalidMetaTransformOp,
   ParseErrorCode_InvalidArgument,
+  ParseErrorCode_InvalidArgumentType,
   ParseErrorCode_InvalidArgumentCount,
   ParseErrorCode_InvalidName,
   ParseErrorCode_NotImplemented, // NOTE(Jesse): This means the compiler should support this case, but doesn't
@@ -755,8 +756,8 @@ poof(generate_stream(d_union_member))
 
 struct type_def
 {
-  type_spec Type;
   counted_string Alias;
+  type_spec Type;
 };
 poof(generate_stream(type_def))
 #include <generated/generate_stream_type_def.h>

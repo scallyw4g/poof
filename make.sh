@@ -8,14 +8,14 @@
 # Calling functions by name on the command line shouldn't be affected by these.
 
 
-RunPreemptivePoof=0
+RunPreemptivePoof=1
 
 # BuildAllBinariesRunAllTests=1
 
 FetchBonsaiDebug=0
 
 BuildPoof=1
-RunPoof=0
+RunPoof=1
 
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 # POOF_DEBUGGER="gdb --args"
