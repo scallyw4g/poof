@@ -73,4 +73,3 @@ foofunc2 FooFun2 not enum
 func_type_name AnotherFunc not enum
 
 
-

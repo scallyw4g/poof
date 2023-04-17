@@ -8,7 +8,6 @@ ToString( meta_func_arg_type Type)
     case type_datatype: { Result = CSz("type_datatype"); } break;
     case type_poof_index: { Result = CSz("type_poof_index"); } break;
     case type_poof_symbol: { Result = CSz("type_poof_symbol"); } break;
-
   }
   return Result;
 }
@@ -22,7 +21,6 @@ MetaFuncArgType(counted_string S)
   if (StringsMatch(S, CSz("type_datatype"))) { return type_datatype; }
   if (StringsMatch(S, CSz("type_poof_index"))) { return type_poof_index; }
   if (StringsMatch(S, CSz("type_poof_symbol"))) { return type_poof_symbol; }
-
 
   return Result;
 }

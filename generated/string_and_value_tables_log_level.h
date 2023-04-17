@@ -10,7 +10,6 @@ ToString( log_level Type)
     case LogLevel_Info: { Result = CSz("LogLevel_Info"); } break;
     case LogLevel_Error: { Result = CSz("LogLevel_Error"); } break;
     case LogLevel_Shush: { Result = CSz("LogLevel_Shush"); } break;
-
   }
   return Result;
 }
@@ -26,7 +25,6 @@ LogLevel(counted_string S)
   if (StringsMatch(S, CSz("LogLevel_Info"))) { return LogLevel_Info; }
   if (StringsMatch(S, CSz("LogLevel_Error"))) { return LogLevel_Error; }
   if (StringsMatch(S, CSz("LogLevel_Shush"))) { return LogLevel_Shush; }
-
 
   return Result;
 }

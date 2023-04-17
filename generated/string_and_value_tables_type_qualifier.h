@@ -32,7 +32,6 @@ ToString( type_qualifier Type)
     case TypeQual_Operator: { Result = CSz("TypeQual_Operator"); } break;
     case TypeQual_Virtual: { Result = CSz("TypeQual_Virtual"); } break;
     case TypeQual_Noreturn: { Result = CSz("TypeQual_Noreturn"); } break;
-
   }
   return Result;
 }
@@ -70,7 +69,6 @@ TypeQualifier(counted_string S)
   if (StringsMatch(S, CSz("TypeQual_Operator"))) { return TypeQual_Operator; }
   if (StringsMatch(S, CSz("TypeQual_Virtual"))) { return TypeQual_Virtual; }
   if (StringsMatch(S, CSz("TypeQual_Noreturn"))) { return TypeQual_Noreturn; }
-
 
   return Result;
 }

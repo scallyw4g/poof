@@ -9,7 +9,6 @@ ToString( function_type Type)
     case function_type_destructor: { Result = CSz("function_type_destructor"); } break;
     case function_type_operator: { Result = CSz("function_type_operator"); } break;
     case function_type_normal: { Result = CSz("function_type_normal"); } break;
-
   }
   return Result;
 }
@@ -24,7 +23,6 @@ FunctionType(counted_string S)
   if (StringsMatch(S, CSz("function_type_destructor"))) { return function_type_destructor; }
   if (StringsMatch(S, CSz("function_type_operator"))) { return function_type_operator; }
   if (StringsMatch(S, CSz("function_type_normal"))) { return function_type_normal; }
-
 
   return Result;
 }

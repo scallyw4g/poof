@@ -17,7 +17,6 @@ ToString( ast_node_type Type)
     case type_ast_node_symbol: { Result = CSz("type_ast_node_symbol"); } break;
     case type_ast_node_variable_def: { Result = CSz("type_ast_node_variable_def"); } break;
     case type_ast_node_type_specifier: { Result = CSz("type_ast_node_type_specifier"); } break;
-
   }
   return Result;
 }
@@ -40,7 +39,6 @@ AstNodeType(counted_string S)
   if (StringsMatch(S, CSz("type_ast_node_symbol"))) { return type_ast_node_symbol; }
   if (StringsMatch(S, CSz("type_ast_node_variable_def"))) { return type_ast_node_variable_def; }
   if (StringsMatch(S, CSz("type_ast_node_type_specifier"))) { return type_ast_node_type_specifier; }
-
 
   return Result;
 }

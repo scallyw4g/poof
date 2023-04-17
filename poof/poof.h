@@ -879,33 +879,18 @@ struct poof_index
   u32 MaxIndex;
 };
 
-link_internal poof_index
-PoofIndex(u32 Index, u32 MaxIndex)
-{
-  poof_index Result = {
-    .Index = Index,
-    .MaxIndex = MaxIndex
-  };
-  return Result;
-}
-/* poof(constructors(poof_index) */
+poof(gen_constructor(poof_index))
+#include <generated/gen_constructor_poof_index.h>
+
 
 struct poof_symbol
 {
   cs Value;
 };
-/* poof(constructors(poof_symbol)) */
-/* #include <C:/Users/scallywag/work/poof/generated/poof_symbol.h> */
+poof(gen_constructor(poof_symbol))
+#include <generated/gen_constructor_poof_symbol.h>
 
 
-link_internal poof_symbol
-PoofSymbol(cs Value)
-{
-  poof_symbol Result = {
-    .Value = Value,
-  };
-  return Result;
-}
 
 poof(
   d_union meta_func_arg
@@ -1045,11 +1030,13 @@ struct meta_func
 {
   counted_string Name;
   meta_func_arg_buffer Args;
-  /* counted_string ArgName; */
   parser Body;
 };
 poof(generate_stream(meta_func))
 #include <generated/generate_stream_meta_func.h>
+
+poof(gen_constructor(meta_func))
+#include <generated/gen_constructor_meta_func.h>
 
 
 struct todo

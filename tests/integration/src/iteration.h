@@ -12,6 +12,18 @@ poof(
 #include <tests/integration/generated/iteration/anonymous_function_foo_1.h>
 
 poof(
+  func (foo_enum Type)
+  {
+    Type.map (Value)
+    {
+      (Value.name) (Value.value)
+    }
+  }
+)
+#include <tests/integration/generated/iteration/anonymous_foo_enum_5DGxlNu5.h>
+
+
+poof(
   func (foo_struct_1 Type)
   {
     Type.map_members (Value)
@@ -21,6 +33,18 @@ poof(
   }
 )
 #include <tests/integration/generated/iteration/anonymous_foo_struct_1_M6dQmZmw.h>
+
+poof(
+  func (foo_struct_1 Type)
+  {
+    Type.map (Value)
+    {
+      (Value.type) (Value.name) (Value.value)
+    }
+  }
+)
+#include <tests/integration/generated/iteration/anonymous_foo_struct_1_03rZn5Ny.h>
+
 
 poof(d_union foobar_dunion { foo_struct_1 bar_struct } )
 #include <tests/integration/generated/iteration/d_union_foobar_union.h>

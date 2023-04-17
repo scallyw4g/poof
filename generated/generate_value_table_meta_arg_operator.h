@@ -26,7 +26,6 @@ MetaArgOperator(counted_string S)
   if (StringsMatch(S, CSz("is_named"))) { return is_named; }
   if (StringsMatch(S, CSz("contains_type"))) { return contains_type; }
 
-
   return Result;
 }
 

@@ -100,6 +100,71 @@ HandleWhitespaceAndAppend( string_builder *OutputBuilder, counted_string Output,
   }
 }
 
+poof(
+  func maybe(ValueType, ErrorType)
+  {
+    struct maybe_(ValueType.name.to_lowercase)
+    {
+      ValueType.name E;
+      ErrorType.name Error;
+    };
+  }
+)
+
+// TODO(Jesse)(abstract): How would we articulate this if we wanted to have
+// multiple different maybe boxes for counted string?  I guess we'd have to
+// mangle the name to include both types.. but that seems like it sucks a lot..
+poof( maybe(counted_string, parse_error_code) )
+#include <generated/maybe_counted_string_parse_error_code.h>
+
+link_internal maybe_counted_string
+MapEnumValues(parse_context *Ctx, enum_decl *Enum, meta_func *EnumFunc, cs *EnumValueMatch, cs *Sep, memory_arena *Memory, umm *Depth)
+{
+  maybe_counted_string Result = {};
+  string_builder OutputBuilder = {};
+
+  meta_func_arg_buffer NewArgs = ExtendBuffer(&EnumFunc->Args, 1, Memory);
+  ITERATE_OVER(&Enum->Members)
+  {
+    Rewind(EnumFunc->Body.Tokens);
+
+    enum_member* EnumMember = GET_ELEMENT(Iter);
+    SetLast(&NewArgs, ReplacementPattern(*EnumValueMatch, Datatype(EnumMember)));
+
+    counted_string EnumFieldOutput = Execute(EnumFunc, &NewArgs, Ctx, Memory, Depth);
+    if (EnumFunc->Body.ErrorCode)
+    {
+      Result.Error = EnumFunc->Body.ErrorCode;
+      break;
+    }
+    else
+    {
+      // TODO(Jesse): Pretty sure there should be a better way of handling this now that
+      // all the map paths have collapsed..
+      if (Iter.At->Next)
+      {
+        HandleWhitespaceAndAppend(&OutputBuilder, EnumFieldOutput, *Sep);
+      }
+      else
+      {
+        HandleWhitespaceAndAppend(&OutputBuilder, EnumFieldOutput, {}, True);
+      }
+    }
+  }
+
+
+  if (Result.Error == 0)
+  {
+    Result.E = Finalize(&OutputBuilder, Memory);
+  }
+  else
+  {
+    Discard(&OutputBuilder);
+  }
+
+  return Result;
+}
+
 // TODO(Jesse id: 222, tags: immediate, parsing, metaprogramming) : Re-add [[nodiscard]] here
 link_internal counted_string
 Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx, memory_arena *Memory, umm *Depth)
@@ -145,7 +210,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
         b32 DidPoofOp = False;
         for (u32 ArgIndex = 0; ArgIndex < ReplacePatterns->Count; ++ArgIndex)
         {
-          meta_func_arg *Replace = ReplacePatterns->Start + ArgIndex; //GET_ELEMENT(ReplaceIter);
+          meta_func_arg *Replace = ReplacePatterns->Start + ArgIndex;
           if ( (ImpetusWasIdentifier && StringsMatch(Replace->Match, BodyToken->Value)) ||
                (ImpetusWasOpenParen  && OptionalTokenRaw(Scope, CToken(Replace->Match)))
              )
@@ -173,7 +238,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
 
               case type_datatype:
               {
-                auto ReplaceData = SafeCast(datatype, Replace);
+                datatype *ReplaceData = SafeCast(datatype, Replace);
                 Assert(ReplaceData->Type);
 
                 RequireToken(Scope, CTokenType_Dot);
@@ -193,7 +258,8 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
 
                   case sep:
                   {
-                    InvalidCodePath();
+                    // TODO(Jesse): Emit error message here.
+                    NotImplemented;
                   } break;
 
                   case is_defined:
@@ -584,14 +650,12 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                   } break;
 
                   case map:
-                  {
-                    NotImplemented;
-                  } break;
-
                   case map_array:
+                  case map_values:
+                  case map_members:
                   {
                     RequireToken(Scope, CTokenType_OpenParen);
-                    counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value;
+                    c_token *MatchPattern  = RequireTokenPointer(Scope, CTokenType_Identifier);
                     RequireToken(Scope, CTokenType_CloseParen);
 
                     cs Sep = {};
@@ -610,162 +674,187 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                       }
                     }
 
-                    parser MapMemberScope = GetBodyTextForNextScope(Scope, Memory);
+                    parser MapScope = GetBodyTextForNextScope(Scope, Memory);
+                    meta_func_arg_buffer NewArgs = ExtendBuffer(ReplacePatterns, 1, Memory);
 
-                    ast_node *Node = DatatypeStaticBufferSize(Ctx, Scope, ReplaceData, MetaOperatorToken);
-                    u64 ArrayLength = ResolveConstantExpression(Scope, Node);
-                    for (u64 ArrayIndex = 0; ArrayIndex < ArrayLength; ++ArrayIndex)
+                    switch (ReplaceData->Type)
                     {
-                      // TODO(Jesse): We need to make meta_func_args have room for more than just datatypes
-                      // We now need to have literals
-                      /* meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory); */
-                      /* Push(&NewArgs, ReplacementPattern(MatchPattern, PoofIndex(SafeTruncateToU32(ArrayIndex), SafeTruncateToU32(ArrayLength)))); */
-
-                      meta_func_arg_buffer NewArgs = ExtendBuffer(ReplacePatterns, 1, Memory);
-                      SetLast(&NewArgs, ReplacementPattern(MatchPattern, PoofIndex(SafeTruncateToU32(ArrayIndex), SafeTruncateToU32(ArrayLength))));
-
-                      Rewind(MapMemberScope.Tokens);
-                      counted_string StructFieldOutput = Execute(&MapMemberScope, &NewArgs, Ctx, Memory, Depth);
-                      if (MapMemberScope.ErrorCode)
+                      case type_datatype_noop:
                       {
-                        Scope->ErrorCode = MapMemberScope.ErrorCode;
-                      }
-                      else
+                        InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorToken);
+                      } break;
+
+                      case type_declaration:
                       {
-                        if (ArrayIndex+1 < ArrayLength)
-                        {
-                          HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput, Sep);
-                        }
-                        else
-                        {
-                          // TODO(Jesse): The boolean here is hella wonky .. when the map functions
-                          // get collapsed down we should have a better/more systemic way of dealing with this
-                          HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput, {}, True);
-                        }
-                      }
-                    }
-                  } break;
+                        declaration *Decl = SafeAccess(declaration, ReplaceData);
 
-                  case map_members:
-                  {
-                    RequireToken(Scope, CTokenType_OpenParen);
-                    counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value;
-                    RequireToken(Scope, CTokenType_CloseParen);
-
-                    parser MapMemberScope = GetBodyTextForNextScope(Scope, Memory);
-                    declaration_stream *Members = GetMembersFor(ReplaceData);
-
-                    if (Members)
-                    {
-                      ITERATE_OVER_AS(Member, Members)
-                      {
-                        declaration* Member = GET_ELEMENT(MemberIter);
-
-                        switch (Member->Type)
+                        switch(Decl->Type)
                         {
                           case type_declaration_noop:
                           {
-                            InvalidCodePath();
+                            InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorToken);
+                          } break;
+
+                          case type_function_decl:
+                          {
+                            // TODO(Jesse): Does mapping over a function mean anything?
+                            // TODO(Jesse)(error_messages): If it doesn't, emit a sensible error.
+                            NotImplemented;
                           } break;
 
                           case type_enum_decl:
-                          case type_function_decl:
                           {
-                            // What do we do for functions and enum declaratons ..?  Maybe the same thing as compound_decl?
-                          } break;
-
-                          case type_variable_decl:
-                          case type_compound_decl:
-                          {
-                            Rewind(MapMemberScope.Tokens);
-
-                            /* meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory); */
-                            /* Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member))); */
-
-                            meta_func_arg_buffer NewArgs = ExtendBuffer(ReplacePatterns, 1, Memory);
-                            SetLast(&NewArgs, ReplacementPattern(MatchPattern, Datatype(Member)));
-
-                            counted_string StructFieldOutput = Execute(&MapMemberScope, &NewArgs, Ctx, Memory, Depth);
-                            if (MapMemberScope.ErrorCode)
+                            if (Operator == map || Operator == map_values)
                             {
-                              Scope->ErrorCode = MapMemberScope.ErrorCode;
+                              auto EnumDecl = SafeAccess(enum_decl, Decl);
+                              meta_func EnumFunc = MetaFunc(CSz("map_enum_values"), *ReplacePatterns, MapScope);
+
+                              maybe_counted_string MapResult = MapEnumValues(Ctx, EnumDecl, &EnumFunc, &MatchPattern->Value, &Sep, Memory, Depth);
+                              if (MapResult.Error)
+                              {
+                              }
+                              else
+                              {
+                                HandleWhitespaceAndAppend(&OutputBuilder, MapResult.E);
+                              }
                             }
                             else
                             {
-                              HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput);
+                              PoofTypeError( Scope,
+                                             ParseErrorCode_InvalidArgument,
+                                             FormatCountedString( TranArena,
+                                                                  CSz("Incorrectly called (%S) on an enum."),
+                                                                  MetaOperatorToken->Value),
+                                             MetaOperatorToken);
+                            }
+                          } break;
+
+                          case type_compound_decl:
+                          {
+                            if (Operator == map || Operator == map_members)
+                            {
+                              declaration_stream *Members = GetMembersFor(ReplaceData);
+                              if (Members)
+                              {
+                                ITERATE_OVER_AS(Member, Members)
+                                {
+                                  declaration* Member = GET_ELEMENT(MemberIter);
+
+                                  switch (Member->Type)
+                                  {
+                                    case type_declaration_noop:
+                                    {
+                                      InvalidCodePath();
+                                    } break;
+
+                                    case type_enum_decl:
+                                    case type_function_decl:
+                                    {
+                                      // What do we do for functions and enum declaratons ..?  Maybe the same thing as compound_decl?
+                                    } break;
+
+                                    case type_variable_decl:
+                                    case type_compound_decl:
+                                    {
+                                      Rewind(MapScope.Tokens);
+
+                                      SetLast(&NewArgs, ReplacementPattern(MatchPattern->Value, Datatype(Member)));
+
+                                      counted_string StructFieldOutput = Execute(&MapScope, &NewArgs, Ctx, Memory, Depth);
+                                      if (MapScope.ErrorCode)
+                                      {
+                                        Scope->ErrorCode = MapScope.ErrorCode;
+                                      }
+                                      else
+                                      {
+                                        // TODO(Jesse): Pretty sure there should be a better way of handling this now that
+                                        // all the map paths have collapsed..
+                                        if (MemberIter.At->Next)
+                                        {
+                                          HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput, Sep);
+                                        }
+                                        else
+                                        {
+                                          HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput, {}, True);
+                                        }
+                                      }
+                                    } break;
+                                  }
+                                  continue;
+                                }
+                              }
+                              else
+                              {
+                                // TODO(Jesse): Pretty sure this is InternalCompilerError
+                                NotImplemented;
+                              }
+                            }
+                            else
+                            {
+                              PoofTypeError( Scope,
+                                             ParseErrorCode_InvalidArgument,
+                                             FormatCountedString( TranArena,
+                                                                  CSz("Incorrectly called (%S) on a compound decl."),
+                                                                  MetaOperatorToken->Value),
+                                             MetaOperatorToken);
+                            }
+                          } break;
+
+                          case type_variable_decl:
+                          {
+                            if (Operator == map || Operator == map_array)
+                            {
+                              variable_decl *VDecl = SafeAccess(variable_decl, Decl);
+                              ast_node *ArraySizeNode = VDecl->StaticBufferSize;
+
+                              u64 ArrayLength = ResolveConstantExpression(Scope, ArraySizeNode);
+                              for (u64 ArrayIndex = 0; ArrayIndex < ArrayLength; ++ArrayIndex)
+                              {
+                                SetLast(&NewArgs, ReplacementPattern(MatchPattern->Value, PoofIndex(SafeTruncateToU32(ArrayIndex), SafeTruncateToU32(ArrayLength))));
+
+                                Rewind(MapScope.Tokens);
+                                counted_string StructFieldOutput = Execute(&MapScope, &NewArgs, Ctx, Memory, Depth);
+                                if (MapScope.ErrorCode)
+                                {
+                                  Scope->ErrorCode = MapScope.ErrorCode;
+                                }
+                                else
+                                {
+                                  // TODO(Jesse): Pretty sure there should be a better way of handling this now that
+                                  // all the map paths have collapsed..
+                                  if (ArrayIndex+1 < ArrayLength)
+                                  {
+                                    HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput, Sep);
+                                  }
+                                  else
+                                  {
+                                    HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput, {}, True);
+                                  }
+                                }
+                              }
                             }
                           } break;
                         }
-                        continue;
-                      }
-                    }
-                    else
-                    {
-                      PoofTypeError( Scope,
-                                     ParseErrorCode_InvalidArgument,
-                                     FormatCountedString( TranArena,
-                                                          CSz("Called map_members on a datatype that didn't have members (%S)"),
-                                                          GetNameForDatatype(ReplaceData, TranArena)),
-                                     MetaOperatorToken);
+                      } break;
+
+                      case type_enum_member:
+                      {
+                        NotImplemented; // TODO(Jesse)(error_messages): emit error message
+                      } break;
+
+                      case type_primitive_def:
+                      {
+                        NotImplemented; // TODO(Jesse)(error_messages): emit error message
+                      } break;
+
+                      case type_type_def:
+                      {
+                        NotImplemented; // TODO(Jesse): Resolve to base type and try again?
+                      } break;
                     }
 
                   } break;
 
-                  case map_values:
-                  {
-                    RequireToken(Scope, CTokenType_OpenParen);
-                    c_token *EnumValueMatch  = RequireTokenPointer(Scope, CTokenType_Identifier);
-                    RequireToken(Scope, CTokenType_CloseParen);
-                    parser NextScope = GetBodyTextForNextScope(Scope, Memory);
-
-                    if (ReplaceData->Type == type_declaration)
-                    {
-                      declaration *D = SafeAccess(declaration, ReplaceData);
-                      if (D->Type == type_enum_decl)
-                      {
-                        ITERATE_OVER(&D->enum_decl.Members)
-                        {
-                          Rewind(NextScope.Tokens);
-
-                          enum_member* EnumMember = GET_ELEMENT(Iter);
-                          /* meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory); */
-                          /* Push(&NewArgs, ReplacementPattern(EnumValueMatch->Value, Datatype(EnumMember))); */
-
-                          meta_func_arg_buffer NewArgs = ExtendBuffer(ReplacePatterns, 1, Memory);
-                          SetLast(&NewArgs, ReplacementPattern(EnumValueMatch->Value, Datatype(EnumMember)));
-
-                          counted_string EnumFieldOutput = Execute(&NextScope, &NewArgs, Ctx, Memory, Depth);
-                          if (NextScope.ErrorCode)
-                          {
-                            Scope->ErrorCode = NextScope.ErrorCode;
-                          }
-                          else
-                          {
-                            HandleWhitespaceAndAppend(&OutputBuilder, EnumFieldOutput);
-                          }
-                        }
-                      }
-                      else
-                      {
-                        PoofTypeError( Scope,
-                                       ParseErrorCode_InvalidArgument,
-                                       FormatCountedString( TranArena,
-                                                            CSz("Called map_values on a datatype that wasn't an enum (%S)"),
-                                                            GetNameForDatatype(ReplaceData, Memory)),
-                                       MetaOperatorToken);
-                      }
-                    }
-                    else
-                    {
-                      PoofTypeError( Scope,
-                                     ParseErrorCode_InvalidArgument,
-                                     FormatCountedString( TranArena,
-                                                          CSz("Called map_values on a datatype that wasn't an enum (%S)"),
-                                                          GetNameForDatatype(ReplaceData, Memory)),
-                                     MetaOperatorToken);
-                    }
-
-                  } break;
                 }
               } break;
 

@@ -22,7 +22,6 @@ ToString( parse_error_code Type)
     case ParseErrorCode_InputStreamNull: { Result = CSz("ParseErrorCode_InputStreamNull"); } break;
     case ParseErrorCode_InternalCompilerError: { Result = CSz("ParseErrorCode_InternalCompilerError"); } break;
     case ParseErrorCode_Unknown: { Result = CSz("ParseErrorCode_Unknown"); } break;
-
   }
   return Result;
 }

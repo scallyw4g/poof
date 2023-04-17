@@ -9,7 +9,6 @@ ToString( declaration_type Type)
     case type_function_decl: { Result = CSz("type_function_decl"); } break;
     case type_compound_decl: { Result = CSz("type_compound_decl"); } break;
     case type_variable_decl: { Result = CSz("type_variable_decl"); } break;
-
   }
   return Result;
 }
@@ -24,7 +23,6 @@ DeclarationType(counted_string S)
   if (StringsMatch(S, CSz("type_function_decl"))) { return type_function_decl; }
   if (StringsMatch(S, CSz("type_compound_decl"))) { return type_compound_decl; }
   if (StringsMatch(S, CSz("type_variable_decl"))) { return type_variable_decl; }
-
 
   return Result;
 }

@@ -9,7 +9,6 @@ ToString( datatype_type Type)
     case type_enum_member: { Result = CSz("type_enum_member"); } break;
     case type_type_def: { Result = CSz("type_type_def"); } break;
     case type_primitive_def: { Result = CSz("type_primitive_def"); } break;
-
   }
   return Result;
 }
