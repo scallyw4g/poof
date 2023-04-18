@@ -3858,7 +3858,7 @@ GetByValue(counted_string_hashtable *Table, counted_string Value)
 {
   counted_string *Result = {};
 
-  counted_string_linked_list_node *Bucket = GetHashBucket(Hash(&Value), Table);
+  counted_string_linked_list_node *Bucket = GetHashBucket(umm(Hash(&Value)), Table);
   while (Bucket)
   {
     counted_string *Element = &Bucket->Element;
@@ -3882,7 +3882,7 @@ Get(parser_hashtable *Table, counted_string Value)
 {
   parser *Result = {};
 
-  auto *Bucket = GetHashBucket(Hash(&Value), Table);
+  auto *Bucket = GetHashBucket(umm(Hash(&Value)), Table);
   while (Bucket)
   {
     parser *Element = &Bucket->Element;
@@ -3906,7 +3906,7 @@ GetByName(macro_def_hashtable *Table, counted_string Name)
 {
   macro_def *Result = {};
 
-  macro_def_linked_list_node *Bucket = GetHashBucket(Hash(&Name), Table);
+  macro_def_linked_list_node *Bucket = GetHashBucket(umm(Hash(&Name)), Table);
   while (Bucket)
   {
     macro_def *M = &Bucket->Element;
@@ -12251,7 +12251,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
                 }
                 else
                 {
-                  counted_string OutfileName = GenerateOutfileNameFor( Func.Name, ArgType, Memory, GetRandomString(8, Hash(&Code), Memory));
+                  counted_string OutfileName = GenerateOutfileNameFor( Func.Name, ArgType, Memory, GetRandomString(8, umm(Hash(&Code)), Memory));
                   counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory, True);
                   Append(&Builder, Tuple(ActualOutputFile, Code));
                 }
@@ -12852,7 +12852,7 @@ main(s32 ArgCount_, const char** ArgStrings)
 
     Info("Poofing %S", ParserFilename);
 
-    umm ParserFilenameHash = Hash(&ParserFilename);
+    umm ParserFilenameHash = umm(Hash(&ParserFilename));
     TempFileEntropy.Seed = ParserFilenameHash;
 
     parser *Parser = PreprocessedParserForFile(&Ctx, ParserFilename, TokenCursorSource_RootFile, 0);

@@ -261,53 +261,53 @@ Module.expectedDataFileDownloads++;
   }, {
    "filename": "/examples/007_type_constraints/main.c",
    "start": 57314,
-   "end": 58825
+   "end": 58880
   }, {
    "filename": "/examples/008_named_list/main",
-   "start": 58825,
-   "end": 66761
+   "start": 58880,
+   "end": 66816
   }, {
    "filename": "/examples/008_named_list/main.c",
-   "start": 66761,
-   "end": 67072
+   "start": 66816,
+   "end": 67127
   }, {
    "filename": "/examples/009_debug_print/generated/d_union_my_discriminated_union.h",
-   "start": 67072,
-   "end": 67416
+   "start": 67127,
+   "end": 67471
   }, {
    "filename": "/examples/009_debug_print/generated/for_datatypes_all_F8GpeIx4.h",
-   "start": 67416,
-   "end": 69880
+   "start": 67471,
+   "end": 69935
   }, {
    "filename": "/examples/009_debug_print/generated/for_datatypes_all_Hm28xSLw.h",
-   "start": 69880,
-   "end": 70270
+   "start": 69935,
+   "end": 70325
   }, {
    "filename": "/examples/009_debug_print/main",
-   "start": 70270,
-   "end": 78830
+   "start": 70325,
+   "end": 78885
   }, {
    "filename": "/examples/009_debug_print/main.c",
-   "start": 78830,
-   "end": 85270
+   "start": 78885,
+   "end": 85325
   }, {
    "filename": "/examples/009_debug_print/print_primitives.h",
-   "start": 85270,
-   "end": 85381
+   "start": 85325,
+   "end": 85436
   }, {
    "filename": "/examples/make_all_examples.sh",
-   "start": 85381,
-   "end": 85651
+   "start": 85436,
+   "end": 85706
   }, {
    "filename": "/examples/make_individual_example.sh",
-   "start": 85651,
-   "end": 86134
+   "start": 85706,
+   "end": 86189
   }, {
    "filename": "/examples/tags",
-   "start": 86134,
-   "end": 93467
+   "start": 86189,
+   "end": 93522
   } ],
-  "remote_package_size": 93467
+  "remote_package_size": 93522
  });
 })();
 
@@ -1359,12 +1359,12 @@ var tempDouble;
 var tempI64;
 
 var ASM_CONSTS = {
- 239356: () => {
+ 255260: () => {
   return withBuiltinMalloc(function() {
    return allocateUTF8(Module["UBSAN_OPTIONS"] || 0);
   });
  },
- 239454: () => {
+ 255358: () => {
   var setting = Module["printWithColors"];
   if (setting != null) {
    return setting;
@@ -4325,11 +4325,6 @@ function _emscripten_asm_const_int(code, sigPtr, argbuf) {
  return ASM_CONSTS[code].apply(null, args);
 }
 
-function _emscripten_console_error(str) {
- assert(typeof str == "number");
- console.error(UTF8ToString(str));
-}
-
 function getHeapMax() {
  return 2147483648;
 }
@@ -5255,7 +5250,6 @@ var asmLibraryArg = {
  "abort": _abort,
  "alignfault": alignfault,
  "emscripten_asm_const_int": _emscripten_asm_const_int,
- "emscripten_console_error": _emscripten_console_error,
  "emscripten_get_heap_max": _emscripten_get_heap_max,
  "emscripten_get_module_name": _emscripten_get_module_name,
  "emscripten_get_now": _emscripten_get_now,

@@ -475,10 +475,10 @@ poof(generate_cursor(parser))
 poof(generate_stream(parser))
 #include <generated/generate_stream_parser.h>
 
-link_internal umm
+link_internal u64
 Hash(parser *Parser)
 {
-  umm Result = Hash(&Parser->Tokens->Filename);
+  u64 Result = Hash(&Parser->Tokens->Filename);
   return Result;
 }
 
@@ -1015,10 +1015,10 @@ struct macro_def
 poof(generate_stream(macro_def))
 #include <generated/generate_stream_macro_def.h>
 
-link_internal umm
+link_internal u64
 Hash(macro_def *M)
 {
-  umm Result = Hash(&M->NameT->Value);
+  u64 Result = Hash(&M->NameT->Value);
   // TODO(Jesse): Hash arguments and incorporate Type & Variadic ..?
   return Result;
 }
