@@ -87,9 +87,6 @@ poof(
 //
 // void DebugPrint_the_enum_type(enum the_enum_type Enum);
 //
-// When targeting C compilers this feature is heavily utilized.  When targeting
-// C++ compilers it's less common, but still very useful.
-//
 poof(
   for_datatypes(all)
     func (TStruct)

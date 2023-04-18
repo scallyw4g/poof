@@ -12313,53 +12313,57 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
               RequireToken(Parser, CTokenType_CloseParen);
             }
 
-            RequireToken(Parser, CToken(ToString(func)));
-            meta_func StructFunc = ParseMetaFunctionDef(Parser, CSz("for_datatypes_struct_callback"), Memory);
-
-            RequireToken(Parser, CToken(ToString(func)));
-            meta_func EnumFunc = ParseMetaFunctionDef(Parser, CSz("for_datatypes_enum_callback"), Memory);
-
-            RequireToken(Parser, CTokenType_CloseParen);
-
-            string_builder OutputBuilder = {};
-
-            for ( compound_decl_iterator Iter = Iterator(&Datatypes->Structs);
-                  IsValid(&Iter);
-                  Advance(&Iter) )
+            // ParseDatatypeList can fail if you pass in an undefined dataype
+            // in the excludes constraint
+            if (Parser->ErrorCode == ParseErrorCode_None)
             {
-              compound_decl* Struct = &Iter.At->Element;
+              RequireToken(Parser, CToken(ToString(func)));
+              meta_func StructFunc = ParseMetaFunctionDef(Parser, CSz("for_datatypes_struct_callback"), Memory);
 
-              if (!StreamContains(&Excludes, Struct->Type->Value))
+              RequireToken(Parser, CToken(ToString(func)));
+              meta_func EnumFunc = ParseMetaFunctionDef(Parser, CSz("for_datatypes_enum_callback"), Memory);
+
+              RequireToken(Parser, CTokenType_CloseParen);
+
+              string_builder OutputBuilder = {};
+
+              for ( compound_decl_iterator Iter = Iterator(&Datatypes->Structs);
+                    IsValid(&Iter);
+                    Advance(&Iter) )
               {
-                /* Assert(StructFunc.Args.Count == 1); */
-                /* auto Args = MetaFuncArgBuffer(1, Memory); */
-                /* Args.Start[0] = ReplacementPattern(StructFunc.Args.Start[0].Match, Datatype(Struct)); */
+                compound_decl* Struct = &Iter.At->Element;
 
-                umm Depth = 0;
-                counted_string Code = Execute(&StructFunc, Ctx, Memory, &Depth);
-                Append(&OutputBuilder, Code);
+                if (!StreamContains(&Excludes, Struct->Type->Value))
+                {
+                  Assert(StructFunc.Args.Count == 1);
+                  StructFunc.Args.Start[0] = ReplacementPattern(StructFunc.Args.Start[0].Match, Datatype(Struct));
+
+                  umm Depth = 0;
+                  counted_string Code = Execute(&StructFunc, Ctx, Memory, &Depth);
+                  Append(&OutputBuilder, Code);
+                }
               }
-            }
 
-            for ( auto Iter = Iterator(&Datatypes->Enums);
-                  IsValid(&Iter);
-                  Advance(&Iter) )
-            {
-              enum_decl* Enum = &Iter.At->Element;
-              if (!StreamContains(&Excludes, Enum->Name))
+              for ( auto Iter = Iterator(&Datatypes->Enums);
+                    IsValid(&Iter);
+                    Advance(&Iter) )
               {
-                /* meta_func_arg_stream Args = {}; */
-                /* Push(&Args, ReplacementPattern(EnumFunc.ArgName, Datatype(Enum))); */
-                umm Depth = 0;
-                counted_string Code = Execute(&EnumFunc, Ctx, Memory, &Depth);
-                Append(&OutputBuilder, Code);
+                enum_decl* Enum = &Iter.At->Element;
+                if (!StreamContains(&Excludes, Enum->Name))
+                {
+                  Assert(EnumFunc.Args.Count == 1);
+                  EnumFunc.Args.Start[0] = ReplacementPattern(EnumFunc.Args.Start[0].Match, Datatype(Enum));
+                  umm Depth = 0;
+                  counted_string Code = Execute(&EnumFunc, Ctx, Memory, &Depth);
+                  Append(&OutputBuilder, Code);
+                }
               }
-            }
 
-            counted_string Code = Finalize(&OutputBuilder, Memory);
-            counted_string OutfileName = GenerateOutfileNameFor(ToString(Directive), CSz("debug_print"), Memory);
-            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
-            Append(&Builder, Tuple(ActualOutputFile, Code));
+              counted_string Code = Finalize(&OutputBuilder, Memory);
+              counted_string OutfileName = GenerateOutfileNameFor(ToString(Directive), CSz("debug_print"), Memory);
+              counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, TodoInfo, Memory);
+              Append(&Builder, Tuple(ActualOutputFile, Code));
+            }
           } break;
 
           case d_union:
@@ -12724,6 +12728,8 @@ DoPoofForWeb(char *zInput, umm InputLen)
 
   memory_arena tmpMemory = {};
   memory_arena *Memory = &tmpMemory;
+
+  AllocateAndInitThreadStates(Memory);
 
   parse_context CtxObj = AllocateParseContext(Memory);
   parse_context *Ctx = &CtxObj;

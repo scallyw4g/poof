@@ -205,109 +205,109 @@ Module.expectedDataFileDownloads++;
   }, {
    "filename": "/examples/004_enum_iteration/generated/anonymous_function_my_enum_fd8fda1m.h",
    "start": 20640,
-   "end": 20855
+   "end": 20854
   }, {
    "filename": "/examples/004_enum_iteration/main",
-   "start": 20855,
-   "end": 29031
+   "start": 20854,
+   "end": 29030
   }, {
    "filename": "/examples/004_enum_iteration/main.c",
-   "start": 29031,
-   "end": 29615
+   "start": 29030,
+   "end": 29614
   }, {
    "filename": "/examples/005_struct_iteration/generated/anonymous_function_my_struct_f8p25x1m.h",
-   "start": 29615,
-   "end": 29686
+   "start": 29614,
+   "end": 29684
   }, {
    "filename": "/examples/005_struct_iteration/main",
-   "start": 29686,
-   "end": 37862
+   "start": 29684,
+   "end": 37860
   }, {
    "filename": "/examples/005_struct_iteration/main.c",
-   "start": 37862,
-   "end": 38431
+   "start": 37860,
+   "end": 38429
   }, {
    "filename": "/examples/006_discriminated_unions/generated/d_union_my_discriminated_union.h",
-   "start": 38431,
-   "end": 38775
+   "start": 38429,
+   "end": 38773
   }, {
    "filename": "/examples/006_discriminated_unions/generated/print_enum_values_fd9ff432f.h",
-   "start": 38775,
-   "end": 38934
+   "start": 38773,
+   "end": 38931
   }, {
    "filename": "/examples/006_discriminated_unions/generated/print_struct_members_my_struct.h",
-   "start": 38934,
-   "end": 39013
+   "start": 38931,
+   "end": 39009
   }, {
    "filename": "/examples/006_discriminated_unions/main",
-   "start": 39013,
-   "end": 47189
+   "start": 39009,
+   "end": 47185
   }, {
    "filename": "/examples/006_discriminated_unions/main.c",
-   "start": 47189,
-   "end": 48553
+   "start": 47185,
+   "end": 48549
   }, {
    "filename": "/examples/007_type_constraints/generated/d_union_my_discriminated_union.h",
-   "start": 48553,
-   "end": 48897
+   "start": 48549,
+   "end": 48893
   }, {
    "filename": "/examples/007_type_constraints/generated/print_struct_members_my_struct.h",
-   "start": 48897,
-   "end": 49138
+   "start": 48893,
+   "end": 49130
   }, {
    "filename": "/examples/007_type_constraints/main",
-   "start": 49138,
-   "end": 57314
+   "start": 49130,
+   "end": 57306
   }, {
    "filename": "/examples/007_type_constraints/main.c",
-   "start": 57314,
-   "end": 58880
+   "start": 57306,
+   "end": 58872
   }, {
    "filename": "/examples/008_named_list/main",
-   "start": 58880,
-   "end": 66816
+   "start": 58872,
+   "end": 66808
   }, {
    "filename": "/examples/008_named_list/main.c",
-   "start": 66816,
-   "end": 67127
+   "start": 66808,
+   "end": 67119
   }, {
    "filename": "/examples/009_debug_print/generated/d_union_my_discriminated_union.h",
-   "start": 67127,
-   "end": 67471
+   "start": 67119,
+   "end": 67463
   }, {
    "filename": "/examples/009_debug_print/generated/for_datatypes_all_F8GpeIx4.h",
-   "start": 67471,
-   "end": 69935
+   "start": 67463,
+   "end": 71528
   }, {
    "filename": "/examples/009_debug_print/generated/for_datatypes_all_Hm28xSLw.h",
-   "start": 69935,
-   "end": 70325
+   "start": 71528,
+   "end": 72081
   }, {
    "filename": "/examples/009_debug_print/main",
-   "start": 70325,
-   "end": 78885
+   "start": 72081,
+   "end": 80641
   }, {
    "filename": "/examples/009_debug_print/main.c",
-   "start": 78885,
-   "end": 85325
+   "start": 80641,
+   "end": 86940
   }, {
    "filename": "/examples/009_debug_print/print_primitives.h",
-   "start": 85325,
-   "end": 85436
+   "start": 86940,
+   "end": 87051
   }, {
    "filename": "/examples/make_all_examples.sh",
-   "start": 85436,
-   "end": 85706
+   "start": 87051,
+   "end": 87320
   }, {
    "filename": "/examples/make_individual_example.sh",
-   "start": 85706,
-   "end": 86189
+   "start": 87320,
+   "end": 87803
   }, {
    "filename": "/examples/tags",
-   "start": 86189,
-   "end": 93522
+   "start": 87803,
+   "end": 95136
   } ],
-  "remote_package_size": 93522
+  "remote_package_size": 95136
  });
 })();
 
@@ -1359,12 +1359,12 @@ var tempDouble;
 var tempI64;
 
 var ASM_CONSTS = {
- 255260: () => {
+ 276236: () => {
   return withBuiltinMalloc(function() {
    return allocateUTF8(Module["UBSAN_OPTIONS"] || 0);
   });
  },
- 255358: () => {
+ 276334: () => {
   var setting = Module["printWithColors"];
   if (setting != null) {
    return setting;
@@ -1607,6 +1607,89 @@ function getWasmTableEntry(funcPtr) {
 
 function ___call_sighandler(fp, sig) {
  getWasmTableEntry(fp)(sig);
+}
+
+function ___cxa_allocate_exception(size) {
+ return _malloc(size + 24) + 24;
+}
+
+function ExceptionInfo(excPtr) {
+ this.excPtr = excPtr;
+ this.ptr = excPtr - 24;
+ this.set_type = function(type) {
+  SAFE_HEAP_STORE((this.ptr + 4 >> 2) * 4, type, 4);
+ };
+ this.get_type = function() {
+  return SAFE_HEAP_LOAD((this.ptr + 4 >> 2) * 4, 4, 1);
+ };
+ this.set_destructor = function(destructor) {
+  SAFE_HEAP_STORE((this.ptr + 8 >> 2) * 4, destructor, 4);
+ };
+ this.get_destructor = function() {
+  return SAFE_HEAP_LOAD((this.ptr + 8 >> 2) * 4, 4, 1);
+ };
+ this.set_refcount = function(refcount) {
+  SAFE_HEAP_STORE((this.ptr >> 2) * 4, refcount, 4);
+ };
+ this.set_caught = function(caught) {
+  caught = caught ? 1 : 0;
+  SAFE_HEAP_STORE(this.ptr + 12 >> 0, caught, 1);
+ };
+ this.get_caught = function() {
+  return SAFE_HEAP_LOAD(this.ptr + 12 >> 0, 1, 0) != 0;
+ };
+ this.set_rethrown = function(rethrown) {
+  rethrown = rethrown ? 1 : 0;
+  SAFE_HEAP_STORE(this.ptr + 13 >> 0, rethrown, 1);
+ };
+ this.get_rethrown = function() {
+  return SAFE_HEAP_LOAD(this.ptr + 13 >> 0, 1, 0) != 0;
+ };
+ this.init = function(type, destructor) {
+  this.set_adjusted_ptr(0);
+  this.set_type(type);
+  this.set_destructor(destructor);
+  this.set_refcount(0);
+  this.set_caught(false);
+  this.set_rethrown(false);
+ };
+ this.add_ref = function() {
+  var value = SAFE_HEAP_LOAD((this.ptr >> 2) * 4, 4, 0);
+  SAFE_HEAP_STORE((this.ptr >> 2) * 4, value + 1, 4);
+ };
+ this.release_ref = function() {
+  var prev = SAFE_HEAP_LOAD((this.ptr >> 2) * 4, 4, 0);
+  SAFE_HEAP_STORE((this.ptr >> 2) * 4, prev - 1, 4);
+  assert(prev > 0);
+  return prev === 1;
+ };
+ this.set_adjusted_ptr = function(adjustedPtr) {
+  SAFE_HEAP_STORE((this.ptr + 16 >> 2) * 4, adjustedPtr, 4);
+ };
+ this.get_adjusted_ptr = function() {
+  return SAFE_HEAP_LOAD((this.ptr + 16 >> 2) * 4, 4, 1);
+ };
+ this.get_exception_ptr = function() {
+  var isPointer = ___cxa_is_pointer_type(this.get_type());
+  if (isPointer) {
+   return SAFE_HEAP_LOAD((this.excPtr >> 2) * 4, 4, 1);
+  }
+  var adjusted = this.get_adjusted_ptr();
+  if (adjusted !== 0) return adjusted;
+  return this.excPtr;
+ };
+}
+
+var exceptionLast = 0;
+
+var uncaughtExceptionCount = 0;
+
+function ___cxa_throw(ptr, type, destructor) {
+ var info = new ExceptionInfo(ptr);
+ info.init(type, destructor);
+ exceptionLast = ptr;
+ uncaughtExceptionCount++;
+ throw ptr + " - Exception catching is disabled, this exception cannot be caught. Compile with -sNO_DISABLE_EXCEPTION_CATCHING or -sEXCEPTION_CATCHING_ALLOWED=[..] to catch.";
 }
 
 var PATH = {
@@ -5234,6 +5317,8 @@ function checkIncomingModuleAPI() {
 
 var asmLibraryArg = {
  "__call_sighandler": ___call_sighandler,
+ "__cxa_allocate_exception": ___cxa_allocate_exception,
+ "__cxa_throw": ___cxa_throw,
  "__syscall_dup": ___syscall_dup,
  "__syscall_fcntl64": ___syscall_fcntl64,
  "__syscall_ioctl": ___syscall_ioctl,
@@ -5345,7 +5430,7 @@ var unexportedRuntimeSymbols = [ "run", "UTF8ArrayToString", "UTF8ToString", "st
 
 unexportedRuntimeSymbols.forEach(unexportedRuntimeSymbol);
 
-var missingLibrarySymbols = [ "ptrToString", "stringToNewUTF8", "exitJS", "inetPton4", "inetNtop4", "inetPton6", "inetNtop6", "readSockaddr", "writeSockaddr", "getHostByName", "traverseStack", "mainThreadEM_ASM", "jstoi_q", "jstoi_s", "getExecutableName", "listenOnce", "autoResumeAudioContext", "dynCallLegacy", "getDynCaller", "dynCall", "runtimeKeepalivePush", "runtimeKeepalivePop", "callUserCallback", "maybeExit", "safeSetTimeout", "asmjsMangle", "writeI53ToI64", "writeI53ToI64Clamped", "writeI53ToI64Signaling", "writeI53ToU64Clamped", "writeI53ToU64Signaling", "readI53FromI64", "readI53FromU64", "convertI32PairToI53", "convertU32PairToI53", "reallyNegative", "strLen", "reSign", "formatString", "getSocketFromFD", "getSocketAddress", "registerKeyEventCallback", "maybeCStringToJsString", "findEventTarget", "findCanvasEventTarget", "getBoundingClientRect", "fillMouseEventData", "registerMouseEventCallback", "registerWheelEventCallback", "registerUiEventCallback", "registerFocusEventCallback", "fillDeviceOrientationEventData", "registerDeviceOrientationEventCallback", "fillDeviceMotionEventData", "registerDeviceMotionEventCallback", "screenOrientation", "fillOrientationChangeEventData", "registerOrientationChangeEventCallback", "fillFullscreenChangeEventData", "registerFullscreenChangeEventCallback", "JSEvents_requestFullscreen", "JSEvents_resizeCanvasForFullscreen", "registerRestoreOldStyle", "hideEverythingExceptGivenElement", "restoreHiddenElements", "setLetterbox", "softFullscreenResizeWebGLRenderTarget", "doRequestFullscreen", "fillPointerlockChangeEventData", "registerPointerlockChangeEventCallback", "registerPointerlockErrorEventCallback", "requestPointerLock", "fillVisibilityChangeEventData", "registerVisibilityChangeEventCallback", "registerTouchEventCallback", "fillGamepadEventData", "registerGamepadEventCallback", "registerBeforeUnloadEventCallback", "fillBatteryEventData", "battery", "registerBatteryEventCallback", "setCanvasElementSize", "getCanvasElementSize", "getEnvStrings", "checkWasiClock", "setImmediateWrapped", "clearImmediateWrapped", "polyfillSetImmediate", "ExceptionInfo", "exception_addRef", "exception_decRef", "setMainLoop", "_setNetworkCallback", "heapObjectForWebGLType", "heapAccessShiftForWebGLHeap", "emscriptenWebGLGet", "computeUnpackAlignedImageSize", "emscriptenWebGLGetTexPixelData", "emscriptenWebGLGetUniform", "webglGetUniformLocation", "webglPrepareUniformLocationsBeforeFirstUse", "webglGetLeftBracePos", "emscriptenWebGLGetVertexAttrib", "writeGLArray", "SDL_unicode", "SDL_ttfContext", "SDL_audio", "GLFW_Window", "runAndAbortIfError" ];
+var missingLibrarySymbols = [ "ptrToString", "stringToNewUTF8", "exitJS", "inetPton4", "inetNtop4", "inetPton6", "inetNtop6", "readSockaddr", "writeSockaddr", "getHostByName", "traverseStack", "mainThreadEM_ASM", "jstoi_q", "jstoi_s", "getExecutableName", "listenOnce", "autoResumeAudioContext", "dynCallLegacy", "getDynCaller", "dynCall", "runtimeKeepalivePush", "runtimeKeepalivePop", "callUserCallback", "maybeExit", "safeSetTimeout", "asmjsMangle", "writeI53ToI64", "writeI53ToI64Clamped", "writeI53ToI64Signaling", "writeI53ToU64Clamped", "writeI53ToU64Signaling", "readI53FromI64", "readI53FromU64", "convertI32PairToI53", "convertU32PairToI53", "reallyNegative", "strLen", "reSign", "formatString", "getSocketFromFD", "getSocketAddress", "registerKeyEventCallback", "maybeCStringToJsString", "findEventTarget", "findCanvasEventTarget", "getBoundingClientRect", "fillMouseEventData", "registerMouseEventCallback", "registerWheelEventCallback", "registerUiEventCallback", "registerFocusEventCallback", "fillDeviceOrientationEventData", "registerDeviceOrientationEventCallback", "fillDeviceMotionEventData", "registerDeviceMotionEventCallback", "screenOrientation", "fillOrientationChangeEventData", "registerOrientationChangeEventCallback", "fillFullscreenChangeEventData", "registerFullscreenChangeEventCallback", "JSEvents_requestFullscreen", "JSEvents_resizeCanvasForFullscreen", "registerRestoreOldStyle", "hideEverythingExceptGivenElement", "restoreHiddenElements", "setLetterbox", "softFullscreenResizeWebGLRenderTarget", "doRequestFullscreen", "fillPointerlockChangeEventData", "registerPointerlockChangeEventCallback", "registerPointerlockErrorEventCallback", "requestPointerLock", "fillVisibilityChangeEventData", "registerVisibilityChangeEventCallback", "registerTouchEventCallback", "fillGamepadEventData", "registerGamepadEventCallback", "registerBeforeUnloadEventCallback", "fillBatteryEventData", "battery", "registerBatteryEventCallback", "setCanvasElementSize", "getCanvasElementSize", "getEnvStrings", "checkWasiClock", "setImmediateWrapped", "clearImmediateWrapped", "polyfillSetImmediate", "exception_addRef", "exception_decRef", "setMainLoop", "_setNetworkCallback", "heapObjectForWebGLType", "heapAccessShiftForWebGLHeap", "emscriptenWebGLGet", "computeUnpackAlignedImageSize", "emscriptenWebGLGetTexPixelData", "emscriptenWebGLGetUniform", "webglGetUniformLocation", "webglPrepareUniformLocationsBeforeFirstUse", "webglGetLeftBracePos", "emscriptenWebGLGetVertexAttrib", "writeGLArray", "SDL_unicode", "SDL_ttfContext", "SDL_audio", "GLFW_Window", "runAndAbortIfError" ];
 
 missingLibrarySymbols.forEach(missingLibrarySymbol);
 

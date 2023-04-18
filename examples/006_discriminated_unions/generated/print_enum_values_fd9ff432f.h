@@ -4,4 +4,3 @@ printf("type_bar_struct\n");
 printf("type_baz_struct\n");
 printf("type_flazz\n");
 
-
