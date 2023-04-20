@@ -143,7 +143,23 @@ poof( func my_poof_func(type_poof_index Arg1) {} )
 
 ### anonymous function arguments
 
-TODO
+Anonymous functions are unnamed, and take type arguments that are defined.
+
+```
+struct my_struct { int foo; float bar; };
+
+// Here we declare an anonymous function, and it executes immediately.
+//
+poof( func (my_struct Arg1) {} )
+#include <generated/anonymous_function_my_struct_9fk15od.h>
+
+
+// Passing undefined types, while legal for named functions, is not legal for
+// anonymous functions.
+//
+poof( func (totally_bogus_undefind_type_name Arg1) {} ) // <-- Poof Type Error
+
+```
 
 ## Function Bodies
 
@@ -158,7 +174,7 @@ C++ templates.
 
 poof( func make_new_struct(Arg1) {
   struct new_struct {
-    Arg1.name ArgValue;
+    Arg1.name value;
   };
 })
 
@@ -166,6 +182,7 @@ poof( make_new_struct(int) )
 #include <generated/make_new_struct_int.h>
 
 new_struct instance;
+instance.value = 1;
 
 
 //
@@ -173,22 +190,24 @@ new_struct instance;
 
 #define make_new_struct(Arg1) \
   struct new_struct {         \
-    Arg1 ArgValue;            \
+    Arg1 value;            \
   };
 
 make_new_struct(int)
 
 new_struct instance;
+instance.value = 1;
 
 //
 // Or using C++ templates
 
 template <typename Arg1>
 struct new_struct {
-  Arg1 ArgValue;
+  Arg1 value;
 };
 
 new_struct<int> instance;
+instance.value = 1;
 ```
 
 
@@ -262,6 +281,44 @@ the named enum member needs to be known.
 
 NOTE: This only emits a value if the member has a default value.  It seems
 plausibly useful that, for enums specifically, it always emits their integer value.
+
+Given this example enum:
+
+```
+enum example_enum
+{
+  enum_value_0,
+  enum_value_1,
+  enum_value_2 = 42,
+  enum_value_3 = (1 << 31),
+};
+```
+
+The .value operator for enum_value_0 outputs:
+
+The .value operator for enum_value_1 outputs:
+
+The .value operator for enum_value_2 outputs: 42
+
+The .value operator for enum_value_3 outputs: (1 << 31)
+
+Given this example struct:
+
+```
+struct example_struct
+{
+  int foo;
+  int bar = 0;
+  float the_answer = 42.f;
+};
+```
+
+The .value operator for foo outputs:
+
+The .value operator for bar outputs: 0
+
+The .value operator for the_answer outputs: 42.f
+
 
 * array
 
