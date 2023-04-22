@@ -578,36 +578,86 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
 
                   case member:
                   {
-                    RequireToken(Scope, CTokenType_OpenParen);
-                    u64 MemberIndex = RequireToken(Scope, CTokenType_IntLiteral).UnsignedValue;
-                    RequireToken(Scope, CTokenType_Comma);
-
-                    RequireToken(Scope, CTokenType_OpenParen);
-                    counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value;
-                    RequireToken(Scope, CTokenType_CloseParen);
-
-                    auto MemberScope = GetBodyTextForNextScope(Scope, Memory);
-                    RequireToken(Scope, CTokenType_CloseParen);
-
                     declaration_stream *Members = GetMembersFor(ReplaceData);
                     if (Members)
                     {
-                      u32 AtIndex = 0;
-                      declaration_stream_chunk *IndexedMember = Members->FirstChunk;
-                      while ( IndexedMember && AtIndex < MemberIndex )
+                      RequireToken(Scope, CTokenType_OpenParen);
+                      u64 MemberIndex = u64_MAX;
+                      declaration_stream_chunk *TargetMember = 0;
+
+                      if (PeekToken(Scope).Type == CTokenType_IntLiteral)
                       {
-                        IndexedMember = IndexedMember->Next;
-                        AtIndex ++;
+                        MemberIndex = RequireToken(Scope, CTokenType_IntLiteral).UnsignedValue;
+
+                        u32 AtIndex = 0;
+                        declaration_stream_chunk *IndexedMember = Members->FirstChunk;
+                        while ( IndexedMember && AtIndex < MemberIndex )
+                        {
+                          IndexedMember = IndexedMember->Next;
+                          AtIndex ++;
+                        }
+                        TargetMember = IndexedMember;
+
+                        if (TargetMember)
+                        {
+                        }
+                        else
+                        {
+                          PoofTypeError( Scope,
+                                         ParseErrorCode_InvalidArgument,
+                                         FormatCountedString( TranArena,
+                                                              CSz("Attempted to access member index (%u) on (%S), which has (%d) members!"),
+                                                              MemberIndex,
+                                                              GetNameForDatatype(ReplaceData, TranArena),
+                                                              Members->ChunkCount
+                                                              ),
+                                         MetaOperatorToken);
+                        }
+                      }
+                      else if (PeekToken(Scope).Type == CTokenType_Identifier)
+                      {
+                        cs MemberName = RequireToken(Scope, CTokenType_Identifier).Value;
+                        declaration_stream_chunk *IndexedMember = Members->FirstChunk;
+                        while ( IndexedMember )
+                        {
+                          // TODO(Jesse)(memory_leak): begin/end temporary memory here!
+                          if (AreEqual(MemberName, GetNameForDecl(&IndexedMember->Element)))
+                          {
+                            TargetMember = IndexedMember;
+                            break;
+                          }
+
+                          IndexedMember = IndexedMember->Next;
+                        }
+
+                        if (!TargetMember)
+                        {
+                          PoofTypeError( Scope,
+                                         ParseErrorCode_InvalidArgument,
+                                         FormatCountedString( TranArena,
+                                                              CSz("Attempted to access member (%S) on (%S), which does not have that member!"),
+                                                              MemberName,
+                                                              GetNameForDatatype(ReplaceData, TranArena)),
+                                         MetaOperatorToken);
+                        }
                       }
 
-                      if (IndexedMember && AtIndex == MemberIndex)
-                      {
+                      RequireToken(Scope, CTokenType_Comma);
 
+                      RequireToken(Scope, CTokenType_OpenParen);
+                      counted_string MatchPattern  = RequireToken(Scope, CTokenType_Identifier).Value;
+                      RequireToken(Scope, CTokenType_CloseParen);
+
+                      auto MemberScope = GetBodyTextForNextScope(Scope, Memory);
+                      RequireToken(Scope, CTokenType_CloseParen);
+
+                      if (TargetMember)
+                      {
                         /* meta_func_arg_stream NewArgs = CopyStream(ReplacePatterns, Memory); */
-                        /* Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(&IndexedMember->Element))); */
+                        /* Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(&TargetMember->Element))); */
 
                         meta_func_arg_buffer NewArgs = ExtendBuffer(ReplacePatterns, 1, Memory);
-                        SetLast(&NewArgs, ReplacementPattern(MatchPattern, Datatype(&IndexedMember->Element)));
+                        SetLast(&NewArgs, ReplacementPattern(MatchPattern, Datatype(&TargetMember->Element)));
 
                         counted_string StructFieldOutput = Execute(&MemberScope, &NewArgs, Ctx, Memory, Depth);
                         if (MemberScope.ErrorCode)
@@ -619,26 +669,13 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                           HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput);
                         }
                       }
-                      else
-                      {
-                        PoofTypeError( Scope,
-                                       ParseErrorCode_InvalidArgument,
-                                       FormatCountedString( TranArena,
-                                                            CSz("Attempted to access member index (%u) on (%S), which has (%d) members!"),
-                                                            MemberIndex,
-                                                            GetNameForDatatype(ReplaceData, TranArena),
-                                                            Members->ChunkCount
-                                                            ),
-                                       MetaOperatorToken);
-                      }
                     }
                     else
                     {
                       PoofTypeError( Scope,
                                      ParseErrorCode_InvalidArgument,
                                      FormatCountedString( TranArena,
-                                                          CSz("Attempted to access member index (%u) on (%S), which didn't have any members!"),
-                                                          MemberIndex,
+                                                          CSz("Attempted to access member on (%S), which didn't have any members!"),
                                                           GetNameForDatatype(ReplaceData, TranArena)),
                                      MetaOperatorToken);
                     }
