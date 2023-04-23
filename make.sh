@@ -8,7 +8,7 @@
 # Calling functions by name on the command line shouldn't be affected by these.
 
 
-RunPreemptivePoof=1
+RunPreemptivePoof=2
 
 # BuildAllBinariesRunAllTests=1
 

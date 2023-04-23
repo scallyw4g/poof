@@ -1727,9 +1727,8 @@ IsValidForCursor(c_token_cursor *Tokens, c_token *T)
   return Result;
 }
 
-/* poof(tuple({cs cs})) */
-/* #include </home/scallywag/work/poof/generated/tuple_822959015.h> */
-
+poof(tuple({cs cs}))
+#include <generated/tuple_822959015.h>
 
 struct tuple_CountedString_CountedString
 {
