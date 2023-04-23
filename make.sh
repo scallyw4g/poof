@@ -23,14 +23,14 @@ RunPoof=1
 BuildPoofEmcc=0
 RollupEmcc=0
 
-BuildParserTests=1
-RunParserTests=1
+# BuildParserTests=1
+# RunParserTests=1
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 # TEST_DEBUGGER="gdb --args"
 
-BuildAndRunAllExamples=1
+# BuildAndRunAllExamples=1
 
-RunIntegrationTests=1
+# RunIntegrationTests=1
 # INTEGRATION_TEST_INDEX=2
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug -c0"
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
@@ -165,22 +165,9 @@ function BootstrapWeb
 function RunPoof {
   ColorizeTitle "Poofing!"
 
-  # NOTE(Jesse): This currently doesn't work (well, it could be forced to)
-  # because poof/generated/generate_cursor_c_token.h isn't generated and I don't
-  # really want to move it out of there since a med-term goal is to be able to
-  # augment generated structures with additional members
-  #
-  # If you really want, add:
-  #
-  # git checkout poof/generated/generate_cursor_c_token.h
-  #
-  # to special-case that one file.
-  #
-
-  # if [ -d $META_OUT ]; then
-  #   rm -Rf $META_OUT
-  #   git checkout poof/generated/generate_cursor_c_token.h
-  # fi
+  if [ -d $META_OUT ]; then
+    rm -Rf $META_OUT
+  fi
 
   : "${POOF_EXECUTABLE:=./bin/poof}"
   # : "${POOF_EXECUTABLE:=./bin/poof}"

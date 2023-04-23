@@ -149,7 +149,7 @@ link_internal counted_string PrintTypeSpec(type_spec *TypeSpec, memory_arena *Me
 link_internal counted_string GetTypeNameForDecl(parse_context *Ctx, declaration* Decl, memory_arena *Memory);
 link_internal counted_string GetNameForDecl(declaration* Decl);
 link_internal counted_string GetTypeTypeForDatatype(datatype *Data, memory_arena *);
-link_internal counted_string GetTypeNameForDatatype(parse_context*, datatype *Data, memory_arena *);
+link_internal counted_string GetResolvedTypeNameForDatatype(parse_context*, datatype *Data, memory_arena *);
 link_internal datatype ResolveToBaseType(parse_context *Ctx, type_spec );
 link_internal datatype ResolveToBaseType(parse_context *Ctx, datatype *);
 link_internal datatype ResolveToBaseType(parse_context *Ctx, type_def *);
@@ -10663,7 +10663,7 @@ ParseAllTodosFromFile(counted_string Filename, memory_arena* Memory)
 }
 
 link_internal counted_string
-GetTypeNameForDatatype(parse_context *Ctx, datatype *Data, memory_arena *Memory);
+GetResolvedTypeNameForDatatype(parse_context *Ctx, datatype *Data, memory_arena *Memory);
 
 link_internal cs
 ToString(parse_context *Ctx, meta_func_arg *Arg, memory_arena *Memory)
@@ -10675,7 +10675,7 @@ ToString(parse_context *Ctx, meta_func_arg *Arg, memory_arena *Memory)
 
     case type_datatype:
     {
-      Result = GetTypeNameForDatatype(Ctx, &Arg->datatype, Memory);
+      Result = GetResolvedTypeNameForDatatype(Ctx, &Arg->datatype, Memory);
     } break;
 
     case type_poof_index:
@@ -11135,7 +11135,7 @@ GetTypeTypeForDatatype(datatype *Data, memory_arena *Memory)
 }
 
 link_internal counted_string
-GetTypeNameForDatatype(parse_context *Ctx, datatype *Data, memory_arena *Memory)
+GetResolvedTypeNameForDatatype(parse_context *Ctx, datatype *Data, memory_arena *Memory)
 {
   counted_string Result = {};
   switch (Data->Type)
@@ -11145,7 +11145,8 @@ GetTypeNameForDatatype(parse_context *Ctx, datatype *Data, memory_arena *Memory)
     case type_type_def:
     {
       type_def *TD = SafeAccessPtr(type_def, Data);
-      Result = PrintTypeSpec(&TD->Type, Memory);
+      /* Result = PrintTypeSpec(&TD->Type, Memory); */
+      Result = TD->Alias;
     } break;
 
     case type_primitive_def:
