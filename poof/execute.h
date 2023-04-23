@@ -191,7 +191,53 @@ MaybeParseSepOperator(parser *Scope)
 link_internal counted_string
 Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx, memory_arena *Memory, umm *Depth)
 {
+   meta_func F = MetaFunc(CSz("(anonymous)"), *ReplacePatterns, *Scope);
+   cs Result = Execute(&F, Ctx, Memory, Depth);
+   return Result;
+}
+
+link_internal void
+DoTrueFalse( parse_context *Ctx,
+             parser *Scope,
+             meta_func_arg_buffer *ReplacePatterns,
+             b32 DoTrueBranch,
+             string_builder *OutputBuilder,
+             memory_arena *Memory,
+             umm *Depth)
+{
+  parser TrueScope = GetBodyTextForNextScope(Scope, Memory);
+  parser FalseScope = {};
+
+  if (PeekToken(Scope).Type == CTokenType_OpenBrace)
+  {
+    FalseScope = GetBodyTextForNextScope(Scope, Memory);
+  }
+
+  parser *ParserToUse = DoTrueBranch ? &TrueScope : &FalseScope;
+
+  if (ParserToUse->Tokens)
+  {
+    counted_string Code = Execute(ParserToUse, ReplacePatterns, Ctx, Memory, Depth);
+    if (ParserToUse->ErrorCode)
+    {
+      Scope->ErrorCode = ParserToUse->ErrorCode;
+    }
+    else
+    {
+      HandleWhitespaceAndAppend(OutputBuilder, Code);
+    }
+  }
+}
+
+link_internal counted_string
+Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_arena* Memory, umm *Depth)
+{
   TIMED_FUNCTION();
+  Assert(Func->Body.Tokens->At == Func->Body.Tokens->Start);
+
+  /* counted_string Result = Execute(&Func->Body, Args, Ctx, Memory, Depth); */
+  parser *Scope = &Func->Body;
+  meta_func_arg_buffer *ReplacePatterns = Args;
 
   program_datatypes* Datatypes = &Ctx->Datatypes;
   meta_func_stream* FunctionDefs = &Ctx->MetaFunctions;
@@ -279,7 +325,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                     parser *SymbolParser = ParserForAnsiStream(Ctx, AnsiStream(Symbol->Value), TokenCursorSource_MetaprogrammingExpansion);
                     cs Sep = MaybeParseSepOperator(Scope);
 
-                    meta_func MapFunc = ParseMapMetaFunctionInstance(Scope, CSz("(symbol.map)"), Memory);
+                    meta_func MapFunc = ParseMapMetaFunctionInstance(Scope, CSz("(builtin.map.symbol)"), Memory);
                     Assert(MapFunc.Args.Count == 1 || MapFunc.Args.Count == 2);
 
                     meta_func_arg_buffer NewArgs = MergeBuffers(ReplacePatterns, &MapFunc.Args, Memory);
@@ -303,6 +349,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                       if (MapFunc.Body.ErrorCode)
                       {
                         Scope->ErrorCode = MapFunc.Body.ErrorCode;
+                        break;
                       }
                       else
                       {
@@ -992,17 +1039,29 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
 
         if (NestedFunc)
         {
-          Assert(NestedFuncT);
-          DidPoofOp = True;
-
-          meta_func_arg_buffer ArgInstances = {};
-          if (ParseAndTypeCheckArgs(Ctx, Scope, NestedFuncT, NestedFunc, &ArgInstances, ReplacePatterns, Memory))
+          if (NestedFunc != Func)
           {
-            auto Code = CallFunction(Ctx, NestedFuncT, NestedFunc, &ArgInstances, Memory, Depth);
-            if (Code.Start)
+            Assert(NestedFuncT);
+            DidPoofOp = True;
+
+            meta_func_arg_buffer ArgInstances = {};
+            if (ParseAndTypeCheckArgs(Ctx, Scope, NestedFuncT, NestedFunc, &ArgInstances, ReplacePatterns, Memory))
             {
-              HandleWhitespaceAndAppend(&OutputBuilder, Code);
+              auto Code = CallFunction(Ctx, NestedFuncT, NestedFunc, &ArgInstances, Memory, Depth);
+              if (Code.Start)
+              {
+                HandleWhitespaceAndAppend(&OutputBuilder, Code);
+              }
             }
+          }
+          else
+          {
+            PoofTypeError( Scope,
+                           ParseErrorCode_InvalidFunction,
+                           FormatCountedString( TranArena,
+                                                CSz("Could not call poof func (%S): recursive functions are illegal."),
+                                                NestedFuncT->Value),
+                           NestedFuncT);
           }
         }
 
@@ -1037,49 +1096,6 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
   /* TrimTrailingWhitespace(&OutputBuilder.Chunks.LastChunk->Element); */
 
   counted_string Result = Finalize(&OutputBuilder, Memory);
-  return Result;
-}
-
-link_internal void
-DoTrueFalse( parse_context *Ctx,
-             parser *Scope,
-             meta_func_arg_buffer *ReplacePatterns,
-             b32 DoTrueBranch,
-             string_builder *OutputBuilder,
-             memory_arena *Memory,
-             umm *Depth)
-{
-  parser TrueScope = GetBodyTextForNextScope(Scope, Memory);
-  parser FalseScope = {};
-
-  if (PeekToken(Scope).Type == CTokenType_OpenBrace)
-  {
-    FalseScope = GetBodyTextForNextScope(Scope, Memory);
-  }
-
-  parser *ParserToUse = DoTrueBranch ? &TrueScope : &FalseScope;
-
-  if (ParserToUse->Tokens)
-  {
-    counted_string Code = Execute(ParserToUse, ReplacePatterns, Ctx, Memory, Depth);
-    if (ParserToUse->ErrorCode)
-    {
-      Scope->ErrorCode = ParserToUse->ErrorCode;
-    }
-    else
-    {
-      HandleWhitespaceAndAppend(OutputBuilder, Code);
-    }
-  }
-}
-
-
-link_internal counted_string
-Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_arena* Memory, umm *Depth)
-{
-  Assert(Func->Body.Tokens->At == Func->Body.Tokens->Start);
-
-  counted_string Result = Execute(&Func->Body, Args, Ctx, Memory, Depth);
 
   Assert(Func->Body.Tokens->At == Func->Body.Tokens->End);
   Rewind(Func->Body.Tokens);

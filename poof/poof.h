@@ -447,6 +447,7 @@ enum parse_error_code
   ParseErrorCode_InvalidArgumentType,
   ParseErrorCode_InvalidArgumentCount,
   ParseErrorCode_InvalidName,
+  ParseErrorCode_InvalidFunction,
   ParseErrorCode_NotImplemented, // NOTE(Jesse): This means the compiler should support this case, but doesn't
 
 
@@ -456,6 +457,7 @@ enum parse_error_code
 
   // Well, shit.
   ParseErrorCode_InternalCompilerError,
+  ParseErrorCode_StackOverflow, // Poof stack overflow.  Usually from calling a function recursively
 
 
   // We hit an error, but didn't classify it.
@@ -1673,6 +1675,8 @@ struct parse_context
   tagged_counted_string_stream_stream NamedLists;
 
   arguments Args;
+
+  u32 CallStackDepth;
 };
 
 enum erase_token_mode

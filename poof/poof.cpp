@@ -1639,6 +1639,12 @@ PoofNotImplementedError(parser* Parser, counted_string ErrorMessage, c_token* Er
 }
 
 link_internal void
+PoofError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken)
+{
+  OutputContextMessage(Parser, ErrorCode, CSz("Poof Error"), ErrorMessage, ErrorToken);
+}
+
+link_internal void
 PoofTypeError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken)
 {
   OutputContextMessage(Parser, ErrorCode, CSz("Poof Type Error"), ErrorMessage, ErrorToken);
@@ -12164,18 +12170,35 @@ ParseAndTypeCheckArgs(parse_context *Ctx, parser *Parser, c_token *FunctionT, me
 link_internal counted_string
 CallFunction(parse_context *Ctx, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, memory_arena *Memory, umm *Depth)
 {
-  cs Result = Execute(Func, ArgInstances, Ctx, Memory, Depth);
-  if (Func->Body.ErrorCode)
+  cs Result = {};
+  if (Ctx->CallStackDepth < 128)
   {
-    // TODO(Jesse): Should we emit an error here?
-    Assert(Result.Start == 0);
-    /* ParseInfoMessage( &Func->Body, */
-    /*                   FormatCountedString(TranArena, */
-    /*                                       CSz("Unable to generate code for (func %S)."), Func->Name), 0); */
+    ++Ctx->CallStackDepth;
+    Result = Execute(Func, ArgInstances, Ctx, Memory, Depth);
+    --Ctx->CallStackDepth;
+
+    if (Func->Body.ErrorCode)
+    {
+      Result.Start = 0;
+      Result.Count = 0;
+      /* ParseInfoMessage( Ctx->CurrentParser, */
+      /*                   FormatCountedString(TranArena, */
+      /*                                       CSz("Unable to generate code for (func %S)."), Func->Name), FunctionT); */
+    }
   }
+  else
+  {
+    PoofError(Ctx->CurrentParser,
+              ParseErrorCode_StackOverflow,
+              FormatCountedString( TranArena,
+                                   CSz("Stack Overflow when trying to execute (%S)! Poof has a stack frame limit of (%u) frames."),
+                                   Func->Name,
+                                   Ctx->CallStackDepth-1),
+              FunctionT);
+  }
+
   return Result;
 }
-
 
 link_internal tuple_CountedString_CountedString_buffer
 GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
@@ -12236,6 +12259,14 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 
                   auto FilenameAndCode = Tuple(ActualOutputFile, Code);
                   Append(&Builder, FilenameAndCode);
+                }
+                else
+                {
+                  ParseInfoMessage( Parser,
+                                    FormatCountedString( TranArena,
+                                                         CSz("Function execution (%S) failed."),
+                                                         DirectiveT->Value ),
+                                    DirectiveT );
                 }
               }
             }
