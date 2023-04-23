@@ -20,17 +20,17 @@ RunPoof=1
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 # POOF_DEBUGGER="gdb --args"
 
-BuildPoofEmcc=0
-RollupEmcc=0
+# BuildPoofEmcc=0
+# RollupEmcc=0
 
-# BuildParserTests=1
-# RunParserTests=1
+BuildParserTests=1
+RunParserTests=1
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 # TEST_DEBUGGER="gdb --args"
 
-# BuildAndRunAllExamples=1
+BuildAndRunAllExamples=1
 
-# RunIntegrationTests=1
+RunIntegrationTests=1
 # INTEGRATION_TEST_INDEX=2
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug -c0"
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
@@ -159,8 +159,6 @@ function BootstrapWeb
   popd > /dev/null 2>&1
 }
 
-# git checkout $META_OUT
-
 
 function RunPoof {
   ColorizeTitle "Poofing!"
@@ -170,7 +168,6 @@ function RunPoof {
   fi
 
   : "${POOF_EXECUTABLE:=./bin/poof}"
-  # : "${POOF_EXECUTABLE:=./bin/poof}"
 
     # --do-debug-window \
 
@@ -188,7 +185,7 @@ function RunPoof {
     echo -e "$Success Poofed"
   else
     echo -e "$Failed Poofing"
-    # git checkout $META_OUT
+    git checkout $META_OUT
   fi
 
   echo -e ""

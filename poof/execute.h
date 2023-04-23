@@ -435,21 +435,20 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                     function_decl *D = DatatypeIsFunctionDecl(Ctx, Scope, ReplaceData, MetaOperatorToken);
 
 
+#if 0
                     if (D)
                     {
                       datatype Base = ResolveToBaseType(Ctx, ReplaceData);
-
-                      /* Info("(%S) (%S) (%S)", */
-                      /*     GetTypeTypeForDatatype(ReplaceData, Memory), */
-                      /*     GetNameForDatatype(ReplaceData, TranArena), */
-                      /*     GetTypeNameForDatatype(ReplaceData, Memory)); */
-
-                      /* Info("(%S) (%S) (%S)", */
-                      /*     GetTypeTypeForDatatype(&Base, Memory), */
-                      /*     GetNameForDatatype(&Base, TranArena), */
-                      /*     GetTypeNameForDatatype(&Base, Memory)); */
-
+                      Info("(%S) (%S) (%S)",
+                          GetTypeTypeForDatatype(ReplaceData, Memory),
+                          GetNameForDatatype(ReplaceData, TranArena),
+                          GetTypeNameForDatatype(ReplaceData, Memory));
+                      Info("(%S) (%S) (%S)",
+                          GetTypeTypeForDatatype(&Base, Memory),
+                          GetNameForDatatype(&Base, TranArena),
+                          GetTypeNameForDatatype(&Base, Memory));
                     }
+#endif
 
 
                     b32 DoTrueBranch = (IsFunc || D != 0);
