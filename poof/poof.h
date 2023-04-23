@@ -389,6 +389,7 @@ enum token_cursor_source
   TokenCursorSource_Include,
   TokenCursorSource_MacroExpansion,
   TokenCursorSource_MetaprogrammingExpansion,
+  TokenCursorSource_PoofSymbolIteration,
   TokenCursorSource_PasteOperator,
   TokenCursorSource_CommandLineOption,
   TokenCursorSource_BodyText,
@@ -763,6 +764,14 @@ poof(generate_stream(type_def))
 #include <generated/generate_stream_type_def.h>
 
 link_internal datatype
+Datatype()
+{
+  datatype Result = {
+  };
+  return Result;
+}
+
+link_internal datatype
 Datatype(declaration* M)
 {
   datatype Result = {
@@ -952,11 +961,12 @@ GetByMatch(meta_func_arg_buffer *Buf, counted_string Match)
 
 
 link_internal void
-CopyBufferIntoBuffer(meta_func_arg_buffer *Buf1, meta_func_arg_buffer *Buf2)
+CopyBufferIntoBuffer(meta_func_arg_buffer *Buf1, meta_func_arg_buffer *Buf2, umm Offset = 0)
 {
-  Assert(Buf1->Count <= Buf2->Count);
-  for (u32 Index = 0; Index < Buf1->Count; ++Index)
+  Assert( (Buf1->Count+Offset) <= Buf2->Count);
+  for (umm Index = Offset; Index < Buf1->Count; ++Index)
   {
+    Assert(Index < Buf1->Count && Index < Buf2->Count);
     Buf2->Start[Index] = Buf1->Start[Index];
   }
 }
@@ -969,19 +979,30 @@ ExtendBuffer(meta_func_arg_buffer *Buf, umm ExtendCount, memory_arena *Memory)
   return Result;
 }
 
+link_internal meta_func_arg_buffer
+MergeBuffers(meta_func_arg_buffer *Buf1, meta_func_arg_buffer *Buf2, memory_arena *Memory)
+{
+  meta_func_arg_buffer Result = MetaFuncArgBuffer(Buf1->Count + Buf2->Count, Memory);
+  CopyBufferIntoBuffer(Buf1, &Result);
+  CopyBufferIntoBuffer(Buf2, &Result, Buf1->Count);
+  return Result;
+}
+
+link_internal void
+SetReverse(s32 IndexMod, meta_func_arg_buffer *Buf, meta_func_arg Arg)
+{
+  Assert(Buf->Count);
+  s32 Index = (s32(Buf->Count-1) - IndexMod);
+  Assert (Index >= 0 && Index < s32(Buf->Count));
+  Buf->Start[Index] = Arg;
+}
+
 link_internal void
 SetLast(meta_func_arg_buffer *Buf, meta_func_arg Arg)
 {
   Assert(Buf->Count);
-  Buf->Start[Buf->Count-1] = Arg;
+  SetReverse(0, Buf, Arg);
 }
-
-
-
-
-
-
-
 
 struct d_union_decl
 {
@@ -1705,6 +1726,10 @@ IsValidForCursor(c_token_cursor *Tokens, c_token *T)
   b32 Result = T < Tokens->End && T >= Tokens->Start;
   return Result;
 }
+
+/* poof(tuple({cs cs})) */
+/* #include </home/scallywag/work/poof/generated/tuple_822959015.h> */
+
 
 struct tuple_CountedString_CountedString
 {

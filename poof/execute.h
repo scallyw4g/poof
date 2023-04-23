@@ -165,6 +165,28 @@ MapEnumValues(parse_context *Ctx, enum_decl *Enum, meta_func *EnumFunc, cs *Enum
   return Result;
 }
 
+link_internal cs
+MaybeParseSepOperator(parser *Scope)
+{
+  cs Sep = {};
+  if (OptionalTokenRaw(Scope, CTokenType_Dot))
+  {
+    cs Modifier = RequireToken(Scope, CTokenType_Identifier).Value;
+    meta_arg_operator ModOp = MetaArgOperator(Modifier);
+    switch (ModOp)
+    {
+      case sep:
+      {
+        Sep = EatBetweenExcluding_Str(Scope, CTokenType_OpenParen, CTokenType_CloseParen);
+      } break;
+
+      InvalidDefaultCase;
+    }
+  }
+
+  return Sep;
+}
+
 // TODO(Jesse id: 222, tags: immediate, parsing, metaprogramming) : Re-add [[nodiscard]] here
 link_internal counted_string
 Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx, memory_arena *Memory, umm *Depth)
@@ -216,10 +238,20 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
              )
           {
             DidPoofOp = True;
+            meta_arg_operator Operator = meta_arg_operator_noop;
+
+            c_token *MetaOperatorToken = {};
+            if (OptionalTokenRaw(Scope, CTokenType_Dot))
+            {
+              MetaOperatorToken = RequireTokenPointer(Scope, CTokenType_Identifier);
+              Operator = MetaArgOperator( MetaOperatorToken->Value );
+            }
+
             switch (Replace->Type)
             {
               case type_meta_func_arg_noop:
               {
+                // TODO(Jesse)(error_messages): internal compiler error?
                 InvalidCodePath();
               } break;
 
@@ -233,7 +265,72 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
               case type_poof_symbol:
               {
                 auto Symbol = SafeCast(poof_symbol, Replace);
-                Append(&OutputBuilder, Symbol->Value);
+                switch (Operator)
+                {
+                  case meta_arg_operator_noop:
+                  {
+                    Append(&OutputBuilder, Symbol->Value);
+                  } break;
+
+                  case map:
+                  case map_values:
+                  case map_members:
+                  {
+                    parser *SymbolParser = ParserForAnsiStream(Ctx, AnsiStream(Symbol->Value), TokenCursorSource_MetaprogrammingExpansion);
+                    cs Sep = MaybeParseSepOperator(Scope);
+
+                    meta_func MapFunc = ParseMapMetaFunctionInstance(Scope, CSz("(symbol.map)"), Memory);
+                    Assert(MapFunc.Args.Count == 1 || MapFunc.Args.Count == 2);
+
+                    meta_func_arg_buffer NewArgs = MergeBuffers(ReplacePatterns, &MapFunc.Args, Memory);
+
+                    meta_func_arg A0 = MapFunc.Args.Start[0];
+                    meta_func_arg *A1 = {};
+
+                    if (MapFunc.Args.Count == 2) { A1 = MapFunc.Args.Start + 1; }
+
+                    u32 Index = 0;
+                    u32 MaxIndex = 0; // TODO(Jesse): Should we just axe the upper bound?  I don't think it's useful for anything..
+                    while (c_token *MapToken = PopTokenPointer(SymbolParser))
+                    {
+                      datatype D = GetDatatypeByName(Ctx, MapToken->Value);
+                      SetReverse(0, &NewArgs, ReplacementPattern(A0.Match, D));
+                      if (A1) { SetReverse(1, &NewArgs, ReplacementPattern(A1->Match, PoofIndex(Index, MaxIndex))); }
+
+                      Rewind(MapFunc.Body.Tokens);
+                      counted_string Code = Execute(&MapFunc.Body, &NewArgs, Ctx, Memory, Depth);
+
+                      if (MapFunc.Body.ErrorCode)
+                      {
+                        Scope->ErrorCode = MapFunc.Body.ErrorCode;
+                      }
+                      else
+                      {
+                        // TODO(Jesse): Pretty sure there should be a better way of handling this now that
+                        // all the map paths have collapsed..
+                        if (PeekTokenPointer(SymbolParser))
+                        {
+                          HandleWhitespaceAndAppend(&OutputBuilder, Code, Sep);
+                        }
+                        else
+                        {
+                          HandleWhitespaceAndAppend(&OutputBuilder, Code, {}, True);
+                        }
+                      }
+
+                      ++Index;
+                    }
+
+                  } break;
+
+                  default:
+                  {
+                    PoofTypeError( Scope,
+                                   ParseErrorCode_InvalidOperator,
+                                   FormatCountedString(TranArena, CSz("Operator (%S) is not valid on a symbol."), MetaOperatorToken->Value),
+                                   MetaOperatorToken);
+                  } break;
+                }
               } break;
 
               case type_datatype:
@@ -241,11 +338,6 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                 datatype *ReplaceData = SafeCast(datatype, Replace);
                 Assert(ReplaceData->Type);
 
-                RequireToken(Scope, CTokenType_Dot);
-
-                c_token *MetaOperatorToken = RequireTokenPointer(Scope, CTokenType_Identifier);
-
-                meta_arg_operator Operator = MetaArgOperator( MetaOperatorToken->Value );
                 switch (Operator)
                 {
                   case meta_arg_operator_noop:
@@ -690,21 +782,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                     c_token *MatchPattern  = RequireTokenPointer(Scope, CTokenType_Identifier);
                     RequireToken(Scope, CTokenType_CloseParen);
 
-                    cs Sep = {};
-                    if (OptionalTokenRaw(Scope, CTokenType_Dot))
-                    {
-                      cs Modifier = RequireToken(Scope, CTokenType_Identifier).Value;
-                      meta_arg_operator ModOp = MetaArgOperator(Modifier);
-                      switch (ModOp)
-                      {
-                        case sep:
-                        {
-                          Sep = EatBetweenExcluding_Str(Scope, CTokenType_OpenParen, CTokenType_CloseParen);
-                        } break;
-
-                        InvalidDefaultCase;
-                      }
-                    }
+                    cs Sep = MaybeParseSepOperator(Scope);
 
                     parser MapScope = GetBodyTextForNextScope(Scope, Memory);
                     meta_func_arg_buffer NewArgs = ExtendBuffer(ReplacePatterns, 1, Memory);

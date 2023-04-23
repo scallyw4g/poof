@@ -160,6 +160,7 @@ link_internal void           DoTrueFalse( parse_context *Ctx, parser *Scope, met
 
 link_internal b32 ParseAndTypeCheckArgs(parse_context *Ctx, parser *Parser, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, meta_func_arg_buffer *ArgsInScope, memory_arena *Memory);
 link_internal counted_string CallFunction(parse_context *Ctx, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, memory_arena *Memory, umm *Depth);
+link_internal meta_func ParseMapMetaFunctionInstance(parser *, cs, memory_arena *);
 
 
 inline c_token_cursor *
@@ -10929,6 +10930,14 @@ ReplacementPattern(counted_string Match, meta_func_arg *Arg)
 }
 
 link_internal meta_func_arg
+ReplacementPattern(counted_string Match, poof_symbol Symbol)
+{
+  meta_func_arg Result = MetaFuncArg(Symbol);
+  Result.Match = Match;
+  return Result;
+}
+
+link_internal meta_func_arg
 ReplacementPattern(counted_string Match, poof_index Index)
 {
   meta_func_arg Result = MetaFuncArg(Index);
@@ -11860,6 +11869,35 @@ ParseMetaFuncDefArg(parser *Parser, meta_func_arg_stream *Stream)
   return Result;
 }
 
+link_internal meta_func
+ParseMapMetaFunctionInstance(parser* Parser, cs FuncName, memory_arena *Memory)
+{
+  TIMED_FUNCTION();
+
+  RequireToken(Parser, CTokenType_OpenParen);
+  c_token T1 = RequireToken(Parser, CTokenType_Identifier);
+  c_token *T2 = {};
+  if (OptionalToken(Parser, CTokenType_Comma)) { T2 = RequireTokenPointer(Parser, CTokenType_Identifier); }
+
+  RequireToken(Parser, CTokenType_CloseParen);
+  parser Body = GetBodyTextForNextScope(Parser, Memory);
+
+
+
+  u32 ArgCount = T2 ? 2 : 1;
+  meta_func_arg_buffer Args = MetaFuncArgBuffer(ArgCount, Memory);
+
+  Args.Start[0] = ReplacementPattern(T1.Value, Datatype());
+  if (T2) { SetLast(&Args, ReplacementPattern(T2->Value, PoofIndex(0,0))); }
+
+  meta_func Func = {
+    .Name = FuncName,
+    .Args = Args,
+    .Body = Body,
+  };
+
+  return Func;
+}
 link_internal meta_func
 ParseMetaFunctionDef(parser* Parser, counted_string FuncName, memory_arena *Memory)
 {

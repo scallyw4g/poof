@@ -9,6 +9,7 @@ ToString( token_cursor_source Type)
     case TokenCursorSource_Include: { Result = CSz("TokenCursorSource_Include"); } break;
     case TokenCursorSource_MacroExpansion: { Result = CSz("TokenCursorSource_MacroExpansion"); } break;
     case TokenCursorSource_MetaprogrammingExpansion: { Result = CSz("TokenCursorSource_MetaprogrammingExpansion"); } break;
+    case TokenCursorSource_PoofSymbolIteration: { Result = CSz("TokenCursorSource_PoofSymbolIteration"); } break;
     case TokenCursorSource_PasteOperator: { Result = CSz("TokenCursorSource_PasteOperator"); } break;
     case TokenCursorSource_CommandLineOption: { Result = CSz("TokenCursorSource_CommandLineOption"); } break;
     case TokenCursorSource_BodyText: { Result = CSz("TokenCursorSource_BodyText"); } break;
