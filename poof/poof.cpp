@@ -146,10 +146,10 @@ link_internal declaration FinalizeDeclaration(parse_context *Ctx, parser *Parser
 
 link_internal counted_string PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory);
 
-link_internal counted_string GetTypeNameForDecl(parse_context *Ctx, declaration* Decl, memory_arena *Memory);
+link_internal counted_string GetTypeNameFor(parse_context *Ctx, declaration* Decl, memory_arena *Memory);
 link_internal counted_string GetNameForDecl(declaration* Decl);
 link_internal counted_string GetTypeTypeForDatatype(datatype *Data, memory_arena *);
-link_internal counted_string GetTypeNameForDatatype(parse_context*, datatype *Data, typedef_resolution_behavior TDResBehavior, memory_arena *);
+link_internal counted_string GetTypeNameFor(parse_context*, datatype *Data, typedef_resolution_behavior TDResBehavior, memory_arena *);
 link_internal datatype ResolveToBaseType(parse_context *Ctx, type_spec );
 link_internal datatype ResolveToBaseType(parse_context *Ctx, datatype *);
 link_internal datatype ResolveToBaseType(parse_context *Ctx, type_def *);
@@ -5917,7 +5917,7 @@ GenerateStructDef(parse_context *Ctx, d_union_decl* dUnion, memory_arena* Memory
     Result = Concat( Result,
                       FormatCountedString( Memory,
                                            CSz("  %S %S;\n"),
-                                           GetTypeNameForDecl(Ctx, Member, Memory),
+                                           GetTypeNameFor(Ctx, Member, Memory),
                                            GetNameForDecl(Member)),
                       Memory);
   }
@@ -10675,7 +10675,7 @@ ToString(parse_context *Ctx, meta_func_arg *Arg, memory_arena *Memory)
 
     case type_datatype:
     {
-      Result = GetTypeNameForDatatype(Ctx, &Arg->datatype, TypedefResoultion_ResolveTypedefs, Memory);
+      Result = GetTypeNameFor(Ctx, &Arg->datatype, TypedefResoultion_ResolveTypedefs, Memory);
     } break;
 
     case type_poof_index:
@@ -10734,7 +10734,7 @@ GenerateOutfileNameFor(counted_string Name, counted_string DatatypeName, memory_
 }
 
 link_internal counted_string
-GetTypeNameForCompoundDecl(compound_decl *CDecl)
+GetTypeNameFor(compound_decl *CDecl)
 {
   counted_string Result = {};
   if (CDecl->Type)
@@ -10750,7 +10750,7 @@ GetTypeNameForCompoundDecl(compound_decl *CDecl)
 }
 
 link_internal counted_string
-GetTypeNameForDecl(parse_context *Ctx, declaration* Decl, memory_arena *Memory)
+GetTypeNameFor(parse_context *Ctx, declaration* Decl, memory_arena *Memory)
 {
   counted_string Result = {};
 
@@ -10772,7 +10772,7 @@ GetTypeNameForDecl(parse_context *Ctx, declaration* Decl, memory_arena *Memory)
     case type_compound_decl:
     {
       compound_decl *CDecl = SafeAccess(compound_decl, Decl);
-      Result = GetTypeNameForCompoundDecl(CDecl);
+      Result = GetTypeNameFor(CDecl);
     } break;
 
     case type_enum_decl:
@@ -10974,7 +10974,7 @@ PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
     //
     // Seems like we might actually just want to have typespecs basically be datatypes ??
     //
-    Result = CSz("this_is_a_bug"); // GetTypeNameForDatatype(Ctx, TypeSpec->BaseType, Memory);
+    Result = CSz("this_is_a_bug"); // GetTypeNameFor(Ctx, TypeSpec->BaseType, Memory);
   }
   else
   {
@@ -11135,7 +11135,7 @@ GetTypeTypeForDatatype(datatype *Data, memory_arena *Memory)
 }
 
 link_internal counted_string
-GetTypeNameForDatatype(parse_context *Ctx, datatype *Data, typedef_resolution_behavior TDResBehavior, memory_arena *Memory)
+GetTypeNameFor(parse_context *Ctx, datatype *Data, typedef_resolution_behavior TDResBehavior, memory_arena *Memory)
 {
   counted_string Result = {};
   switch (Data->Type)
@@ -11172,7 +11172,7 @@ GetTypeNameForDatatype(parse_context *Ctx, datatype *Data, typedef_resolution_be
     case type_declaration:
     {
       declaration *Decl = SafeAccess(declaration, Data);
-      Result = GetTypeNameForDecl(Ctx, Decl, Memory);
+      Result = GetTypeNameFor(Ctx, Decl, Memory);
     } break;
   }
 

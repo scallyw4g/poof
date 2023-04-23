@@ -266,7 +266,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                   {
                     RequireToken(Scope, CTokenType_Question);
                     /* auto S1 = GetTypeTypeForDatatype(ReplaceData, TranArena); */
-                    /* auto S2 = GetTypeNameForDatatype(Ctx, ReplaceData, TranArena); */
+                    /* auto S2 = GetTypeNameFor(Ctx, ReplaceData, TranArena); */
 
                     b32 DoTrueBranch = False;
                     switch(ReplaceData->Type)
@@ -442,11 +442,11 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                       Info("(%S) (%S) (%S)",
                           GetTypeTypeForDatatype(ReplaceData, Memory),
                           GetNameForDatatype(ReplaceData, TranArena),
-                          GetTypeNameForDatatype(ReplaceData, Memory));
+                          GetTypeNameFor(ReplaceData, Memory));
                       Info("(%S) (%S) (%S)",
                           GetTypeTypeForDatatype(&Base, Memory),
                           GetNameForDatatype(&Base, TranArena),
-                          GetTypeNameForDatatype(&Base, Memory));
+                          GetTypeNameFor(&Base, Memory));
                     }
 #endif
 
@@ -463,7 +463,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                     RequireToken(Scope, CTokenType_CloseParen);
                     RequireToken(Scope, CTokenType_Question);
 
-                    cs ThisTypeName = GetTypeNameForDatatype(Ctx, ReplaceData, TypedefResoultion_ResolveTypedefs, Memory);
+                    cs ThisTypeName = GetTypeNameFor(Ctx, ReplaceData, TypedefResoultion_ResolveTypedefs, Memory);
 
                     b32 TypesMatch = StringsMatch(ThisTypeName, QueryTypeName);
                     DoTrueFalse(Ctx, Scope, ReplacePatterns, TypesMatch, &OutputBuilder, Memory, Depth);
@@ -518,7 +518,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                             ITERATE_OVER_AS(Member, Members)
                             {
                               declaration* MemberDecl = GET_ELEMENT(MemberIter);
-                              counted_string MemberName = GetTypeNameForDecl(Ctx, MemberDecl, Memory);
+                              counted_string MemberName = GetTypeNameFor(Ctx, MemberDecl, Memory);
                               if (StringsMatch(MemberName, TypeName))
                               {
                                 Contains = True;
@@ -546,7 +546,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
 
                   case type:
                   {
-                    counted_string TypeName = GetTypeNameForDatatype(Ctx, ReplaceData, TypedefResoultion_ResolveTypedefs, Memory);
+                    counted_string TypeName = GetTypeNameFor(Ctx, ReplaceData, TypedefResoultion_ResolveTypedefs, Memory);
                     meta_transform_op Transformations = ParseTransformations(Scope);
                     if (Scope->ErrorCode == ParseErrorCode_None)
                     {
