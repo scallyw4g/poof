@@ -10368,7 +10368,7 @@ AllocateTokenizedFiles(u32 Count, memory_arena* Memory)
   return Result;
 }
 
-/* link_internal tuple_CountedString_CountedString_buffer */
+/* link_internal tuple_cs_cs_buffer */
 /* GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo); */
 
 link_internal counted_string
@@ -12200,12 +12200,12 @@ CallFunction(parse_context *Ctx, c_token *FunctionT, meta_func *Func, meta_func_
   return Result;
 }
 
-link_internal tuple_CountedString_CountedString_buffer
+link_internal tuple_cs_cs_buffer
 GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
 {
   TIMED_FUNCTION();
 
-  tuple_CountedString_CountedString_buffer_builder Builder = {};
+  tuple_cs_cs_buffer_builder Builder = {};
 
   program_datatypes *Datatypes   = &Ctx->Datatypes;
   meta_func_stream *FunctionDefs = &Ctx->MetaFunctions;
@@ -12552,7 +12552,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
     continue;
   }
 
-  tuple_CountedString_CountedString_buffer Result = Finalize(&Builder, Memory);
+  tuple_cs_cs_buffer Result = Finalize(&Builder, Memory);
   return Result;
 }
 
@@ -12821,15 +12821,15 @@ DoPoofForWeb(char *zInput, umm InputLen)
     ParseDatatypes(Ctx, Parser);
 
     FullRewind(Ctx->CurrentParser);
-    tuple_CountedString_CountedString_buffer OutputBuffer = GoGoGadgetMetaprogramming(Ctx, 0);
+    tuple_cs_cs_buffer OutputBuffer = GoGoGadgetMetaprogramming(Ctx, 0);
 
     if (Parser->ErrorCode == ParseErrorCode_None)
     {
       string_builder Builder = {};
       for (u32 TupleIndex = 0; TupleIndex < OutputBuffer.Count; ++TupleIndex)
       {
-        counted_string Filename = OutputBuffer.E[TupleIndex].E[0];
-        counted_string Code = OutputBuffer.E[TupleIndex].E[1];
+        counted_string Filename = OutputBuffer.E[TupleIndex].E0;
+        counted_string Code = OutputBuffer.E[TupleIndex].E1;
 
         Append(&Builder, CSz("// "));
         Append(&Builder, Filename);

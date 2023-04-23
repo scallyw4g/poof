@@ -1734,24 +1734,8 @@ IsValidForCursor(c_token_cursor *Tokens, c_token *T)
 poof(tuple({cs cs}))
 #include <generated/tuple_822959015.h>
 
-struct tuple_CountedString_CountedString
-{
-  counted_string E[2];
-};
+poof(generate_stream(tuple_cs_cs))
+#include </home/scallywag/work/poof/generated/generate_stream_tuple_cs_cs.h>
 
-poof(generate_stream(tuple_CountedString_CountedString))
-#include <generated/generate_stream_tuple_CountedString_CountedString.h>
-
-poof( buffer_builder(tuple_CountedString_CountedString) )
-#include <generated/buffer_builder_tuple_CountedString_CountedString.h>
-
-
-tuple_CountedString_CountedString
-Tuple(counted_string E0, counted_string E1)
-{
-  tuple_CountedString_CountedString Result = {};
-  Result.E[0] = E0;
-  Result.E[1] = E1;
-
-  return Result;
-}
+poof( buffer_builder(tuple_cs_cs) )
+#include </home/scallywag/work/poof/generated/buffer_builder_tuple_cs_cs.h>
