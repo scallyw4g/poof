@@ -149,7 +149,7 @@ link_internal counted_string PrintTypeSpec(type_spec *TypeSpec, memory_arena *Me
 link_internal counted_string GetTypeNameForDecl(parse_context *Ctx, declaration* Decl, memory_arena *Memory);
 link_internal counted_string GetNameForDecl(declaration* Decl);
 link_internal counted_string GetTypeTypeForDatatype(datatype *Data, memory_arena *);
-link_internal counted_string GetResolvedTypeNameForDatatype(parse_context*, datatype *Data, memory_arena *);
+link_internal counted_string GetTypeNameForDatatype(parse_context*, datatype *Data, typedef_resolution_behavior TDResBehavior, memory_arena *);
 link_internal datatype ResolveToBaseType(parse_context *Ctx, type_spec );
 link_internal datatype ResolveToBaseType(parse_context *Ctx, datatype *);
 link_internal datatype ResolveToBaseType(parse_context *Ctx, type_def *);
@@ -10675,7 +10675,7 @@ ToString(parse_context *Ctx, meta_func_arg *Arg, memory_arena *Memory)
 
     case type_datatype:
     {
-      Result = GetResolvedTypeNameForDatatype(Ctx, &Arg->datatype, Memory);
+      Result = GetTypeNameForDatatype(Ctx, &Arg->datatype, TypedefResoultion_ResolveTypedefs, Memory);
     } break;
 
     case type_poof_index:
@@ -11135,7 +11135,7 @@ GetTypeTypeForDatatype(datatype *Data, memory_arena *Memory)
 }
 
 link_internal counted_string
-GetResolvedTypeNameForDatatype(parse_context *Ctx, datatype *Data, memory_arena *Memory)
+GetTypeNameForDatatype(parse_context *Ctx, datatype *Data, typedef_resolution_behavior TDResBehavior, memory_arena *Memory)
 {
   counted_string Result = {};
   switch (Data->Type)
@@ -11145,8 +11145,15 @@ GetResolvedTypeNameForDatatype(parse_context *Ctx, datatype *Data, memory_arena 
     case type_type_def:
     {
       type_def *TD = SafeAccessPtr(type_def, Data);
-      /* Result = PrintTypeSpec(&TD->Type, Memory); */
-      Result = TD->Alias;
+      if (TDResBehavior == TypedefResoultion_ResolveTypedefs)
+      {
+        Result = PrintTypeSpec(&TD->Type, Memory);
+      }
+      else
+      {
+        Assert(TDResBehavior == TypedefResoultion_DoNotResolveTypedefs);
+        Result = TD->Alias;
+      }
     } break;
 
     case type_primitive_def:

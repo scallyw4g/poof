@@ -464,7 +464,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
                     RequireToken(Scope, CTokenType_CloseParen);
                     RequireToken(Scope, CTokenType_Question);
 
-                    cs ThisTypeName = GetResolvedTypeNameForDatatype(Ctx, ReplaceData, Memory);
+                    cs ThisTypeName = GetTypeNameForDatatype(Ctx, ReplaceData, TypedefResoultion_ResolveTypedefs, Memory);
 
                     b32 TypesMatch = StringsMatch(ThisTypeName, QueryTypeName);
                     DoTrueFalse(Ctx, Scope, ReplacePatterns, TypesMatch, &OutputBuilder, Memory, Depth);
@@ -547,7 +547,7 @@ Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx
 
                   case type:
                   {
-                    counted_string TypeName = GetResolvedTypeNameForDatatype(Ctx, ReplaceData, Memory);
+                    counted_string TypeName = GetTypeNameForDatatype(Ctx, ReplaceData, TypedefResoultion_ResolveTypedefs, Memory);
                     meta_transform_op Transformations = ParseTransformations(Scope);
                     if (Scope->ErrorCode == ParseErrorCode_None)
                     {

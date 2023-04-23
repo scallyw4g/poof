@@ -1675,6 +1675,14 @@ struct d_list
   d_list *Next;
 };
 
+enum typedef_resolution_behavior
+{
+  TypedefResoultion_Undefined,
+
+  TypedefResoultion_ResolveTypedefs,
+  TypedefResoultion_DoNotResolveTypedefs,
+};
+
 link_internal parse_context
 AllocateParseContext(memory_arena *Memory)
 {
