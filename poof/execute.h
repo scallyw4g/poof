@@ -292,7 +292,8 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
           case poof_error:
           {
             parser Body = GetBodyTextForNextScope(Scope, Memory);
-            cs ErrorText = ToString(&Body, Memory);
+            cs ErrorText = Execute(&Body, ReplacePatterns, Ctx, Memory, Depth);
+            if (ErrorText.Count == 0) { ErrorText = ToString(&Body, Memory); }
             PoofUserlandError(Scope, ErrorText, BodyToken);
           } break;
         }

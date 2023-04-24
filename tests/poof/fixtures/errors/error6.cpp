@@ -5,9 +5,9 @@ struct foo
 };
 
 poof(
-  func (foo A)
+  func (foo Arg)
   {
-    poof_error { this is the rror message }
+    poof_error { this is the rror message for type ((Arg.type)) }
   }
 )
 
