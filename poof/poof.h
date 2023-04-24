@@ -5,6 +5,16 @@ enum d_union_flags
   d_union_flag_enum_only
 };
 
+enum poof_global_keyword
+{
+  poof_global_keyword_noop,
+
+  poof_error,
+};
+poof( string_and_value_tables(poof_global_keyword) )
+#include <generated/string_and_value_tables_poof_global_keyword.h>
+
+
 enum metaprogramming_directive
 {
   meta_directive_noop,
@@ -438,6 +448,7 @@ enum parse_error_code
 
 
   // Poof errors
+  ParseErrorCode_PoofUserlandError,
   ParseErrorCode_PoofTypeError,
   ParseErrorCode_DUnionParse,
   ParseErrorCode_UndefinedDatatype,

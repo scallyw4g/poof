@@ -2076,6 +2076,27 @@ TestPoofErrors(memory_arena *Memory)
     TestThat(Parser->WarnCode == ParseWarnCode_None);
   }
 
+  {
+    parse_context Ctx = AllocateParseContext(Memory);
+    counted_string ParserFilename = CSz(POOF_FIXTURES_PATH "/errors/error6.cpp");
+    parser *Parser = PreprocessedParserForFile(&Ctx, ParserFilename, TokenCursorSource_RootFile, 0);
+    Ctx.CurrentParser = Parser;
+    ParseDatatypes(&Ctx, Parser);
+
+    TestThat(Parser->ErrorCode == ParseErrorCode_None);
+    TestThat(Parser->WarnCode == ParseWarnCode_None);
+
+    FullRewind(Parser);
+    GoGoGadgetMetaprogramming(&Ctx, 0);
+
+    TestThat(Parser->ErrorCode == ParseErrorCode_PoofUserlandError);
+    TestThat(Parser->WarnCode == ParseWarnCode_None);
+
+    /* TestThat(StringsMatch(Parser->Filename, ParserFilename)); */
+    /* TestThat(Parser->ErrorToken->LineNumber == 2); */
+    /* TestThat( OptionalToken(Parser, CToken(132151u)) ); */
+  }
+
 }
 
 
@@ -2681,13 +2702,13 @@ main(s32 ArgCount, const char** Args)
 
   auto PrevLogLevel = Global_LogLevel;
   Global_LogLevel = LogLevel_Shush;
-  /* Global_LogLevel = LogLevel_Debug; */
+  Global_LogLevel = LogLevel_Debug;
   TestParserErrors(Memory);
   Global_LogLevel = PrevLogLevel;
 
   PrevLogLevel = Global_LogLevel;
   Global_LogLevel = LogLevel_Shush;
-  /* Global_LogLevel = LogLevel_Debug; */
+  Global_LogLevel = LogLevel_Debug;
   TestPoofErrors(Memory);
   Global_LogLevel = PrevLogLevel;
 #endif
