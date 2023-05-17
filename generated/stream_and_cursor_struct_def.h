@@ -18,6 +18,72 @@ CompoundDeclCursor(umm ElementCount, memory_arena* Memory)
   return Result;
 }
 
+link_internal compound_decl
+Get(compound_decl_cursor *Cursor, umm ElementIndex)
+{
+  Assert(ElementIndex < CurrentCount(Cursor));
+  compound_decl Result = Cursor->Start[ElementIndex];
+  return Result;
+}
+
+link_internal void
+Set(compound_decl_cursor *Cursor, umm ElementIndex, compound_decl Element)
+{
+  umm CurrentElementCount = CurrentCount(Cursor);
+  Assert (ElementIndex <= CurrentElementCount);
+
+  Cursor->Start[ElementIndex] = Element;
+  if (ElementIndex == CurrentElementCount)
+  {
+    Cursor->At++;
+  }
+}
+
+link_internal compound_decl *
+Push(compound_decl_cursor *Cursor, compound_decl Element)
+{
+  Assert( Cursor->At < Cursor->End );
+  compound_decl *Result = Cursor->At;
+  *Cursor->At++ = Element;
+  return Result;
+}
+
+link_internal compound_decl
+Pop(compound_decl_cursor *Cursor)
+{
+  Assert( Cursor->At > Cursor->Start );
+  compound_decl Result = Cursor->At[-1];
+  Cursor->At--;
+  return Result;
+}
+
+link_internal s32
+LastIndex(compound_decl_cursor *Cursor)
+{
+  s32 Result = s32(CurrentCount(Cursor))-1;
+  return Result;
+}
+
+link_internal b32
+Remove(compound_decl_cursor *Cursor, compound_decl Query)
+{
+  b32 Result = False;
+  CursorIterator(ElementIndex, Cursor)
+  {
+    compound_decl Element = Get(Cursor, ElementIndex);
+    if (AreEqual(Element, Query))
+    {
+      b32 IsLastIndex = LastIndex(Cursor) == s32(ElementIndex);
+      compound_decl Tmp = Pop(Cursor);
+
+      if (IsLastIndex) { Assert(AreEqual(Tmp, Query)); }
+      else { Set(Cursor, ElementIndex, Tmp); }
+      Result = True;
+    }
+  }
+  return Result;
+}
+
 struct compound_decl_stream_chunk
 {
   compound_decl Element;

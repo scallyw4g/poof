@@ -22,3 +22,11 @@ CTokenBufferBuffer(umm ElementCount, memory_arena* Memory)
   return Result;
 }
 
+link_inline c_token_buffer *
+Get(c_token_buffer_buffer *Buf, u32 Index)
+{
+  Assert(Index < Buf->Count);
+  c_token_buffer *Result = Buf->Start + Index;
+  return Result;
+}
+

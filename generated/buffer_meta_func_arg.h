@@ -22,3 +22,11 @@ MetaFuncArgBuffer(umm ElementCount, memory_arena* Memory)
   return Result;
 }
 
+link_inline meta_func_arg *
+Get(meta_func_arg_buffer *Buf, u32 Index)
+{
+  Assert(Index < Buf->Count);
+  meta_func_arg *Result = Buf->Start + Index;
+  return Result;
+}
+

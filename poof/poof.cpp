@@ -2950,7 +2950,7 @@ ExpandMacro( parse_context *Ctx,
         {
           T = PopTokenRawPointer(MacroBody);
 
-          if (T->Type == CT_Preprocessor__VA_ARGS__)
+          if (T->Type == CT_Preprocessor_VA_ARGS_)
           {
             Assert(T->Flags == 0);
             T->Flags |= va_args_flags_expand_with_commas;
@@ -3000,7 +3000,7 @@ ExpandMacro( parse_context *Ctx,
 
     switch (T->Type)
     {
-      case CT_Preprocessor__VA_ARGS__:
+      case CT_Preprocessor_VA_ARGS_:
       {
         RequireToken(MacroBody, T->Type);
         CopyVaArgsInto(&VarArgs, FirstPass->Tokens, T->Flags & va_args_flags_expand_with_commas);
@@ -3130,7 +3130,7 @@ ExpandMacro( parse_context *Ctx,
           // @non_portable_va_args_paste for more information on wtf is going
           // on.  Somebody is definitely fired.
           if ( Prev->Type == CTokenType_Comma &&
-               Next->Type == CT_Preprocessor__VA_ARGS__ &&
+               Next->Type == CT_Preprocessor_VA_ARGS_ &&
                VarArgs.FirstChunk == 0 )
           {
             Prev->Type = CT_Preprocessor_Nuked;
@@ -3138,7 +3138,7 @@ ExpandMacro( parse_context *Ctx,
             Prev->Value.Start = 0;
             Prev->Value.Count = 0;
           }
-          else if ( Next->Type == CT_Preprocessor__VA_ARGS__ )
+          else if ( Next->Type == CT_Preprocessor_VA_ARGS_ )
           {
             // Don't paste __VA_ARGS__ onto stuff
             //
@@ -3633,7 +3633,7 @@ ToFractional(counted_string S)
 {
   r64 Result = 0;
   if (S.Count) { Result = (r64)ToU64(S) * Exp(10.0, -SafeTruncateToS32(S.Count)); }
-  Assert(Result < 1.0f);
+  Assert(Result < 1.0);
   return Result;
 }
 
@@ -4690,7 +4690,7 @@ TryTransmuteKeywordToken(c_token *T, c_token *LastTokenPushed)
   }
   else if ( StringsMatch(T->Value, CSz("__VA_ARGS__")) )
   {
-    T->Type = CT_Preprocessor__VA_ARGS__;
+    T->Type = CT_Preprocessor_VA_ARGS_;
   }
   else if (LastTokenPushed && LastTokenPushed->Type == CT_ScopeResolutionOperator)
   {
@@ -5832,7 +5832,7 @@ ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
 {
   TIMED_FUNCTION();
 
-  if (const char *INCLUDE_ENV = PlatformGetEnvironmentVar("INCLUDE"))
+  if (const char *INCLUDE_ENV = PlatformGetEnvironmentVar("INCLUDE", TranArena))
   {
     Warn("poof does not support the environemnt variable INCLUDE (%s)", INCLUDE_ENV);
   }
@@ -5995,7 +5995,7 @@ poof( gen_stream_getter(type_def, {Alias}) )
 
 
 poof( gen_stream_getter(enum_decl, {Name}) )
-#include </home/scallywag/work/poof/generated/gen_stream_getter_enum_decl_689333910.h>
+#include <generated/gen_stream_getter_enum_decl_689333910.h>
 
 
 #if 0
@@ -6500,7 +6500,6 @@ RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Fi
           FileWritesSucceeded &= WriteToFile(&TempFile, CSz("#include <"));
           FileWritesSucceeded &= WriteToFile(&TempFile, Concat(OutputPath, T->IncludePath, TranArena) ); // TODO(Jesse, begin_temporary_memory)
           FileWritesSucceeded &= WriteToFile(&TempFile, CSz(">"));
-          FileWritesSucceeded &= WriteToFile(&TempFile, CSz("\n"));
         }
       }
     }
@@ -10706,7 +10705,7 @@ ToString(parse_context *Ctx, meta_func_arg *Arg, memory_arena *Memory)
 
     case type_datatype:
     {
-      Result = GetTypeNameFor(Ctx, &Arg->datatype, TypedefResoultion_ResolveTypedefs, Memory);
+      Result = GetTypeNameFor(Ctx, &Arg->datatype, TypedefResoultion_DoNotResolveTypedefs, Memory);
     } break;
 
     case type_poof_index:

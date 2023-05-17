@@ -289,7 +289,7 @@ enum c_token_type
   CT_PreprocessorPragma,
   CT_PreprocessorError,
   CT_PreprocessorWarning,
-  CT_Preprocessor__VA_ARGS__,
+  CT_Preprocessor_VA_ARGS_,
   CT_Preprocessor_Nuked,
 
   CT_InsertedCode,     // This is how macros and includes get inserted
@@ -483,6 +483,14 @@ struct parser
   parse_error_code ErrorCode;
   c_token_cursor *Tokens;
 };
+
+link_internal b32
+AreEqual(parser P1, parser P2)
+{
+  NotImplemented;
+  return False;
+}
+
 poof(generate_cursor(parser))
 #include <generated/generate_cursor_parser.h>
 
@@ -534,6 +542,14 @@ struct compound_decl // structs and unions
   declaration_stream Members;
   b32 IsUnion;
 };
+
+link_internal b32 
+AreEqual(compound_decl D1, compound_decl D2)
+{
+  NotImplemented;
+  return False;
+}
+
 poof(stream_and_cursor(compound_decl))
 #include <generated/stream_and_cursor_struct_def.h> // TODO(Jesse): Change this name
 
@@ -694,6 +710,14 @@ struct enum_decl
   counted_string Name;
   enum_member_stream Members;
 };
+
+link_internal b32 
+AreEqual(enum_decl D1, enum_decl D2)
+{
+  NotImplemented;
+  return False;
+}
+
 poof(stream_and_cursor(enum_decl))
 #include <generated/stream_and_cursor_enum_def.h>
 
@@ -707,6 +731,13 @@ poof(
   }
 )
 #include <generated/d_union_declaration.h>
+
+link_internal b32 
+AreEqual(declaration D1, declaration D2)
+{
+  NotImplemented;
+  return False;
+}
 
 poof(string_and_value_tables(declaration_type))
 #include <generated/string_and_value_tables_declaration_type.h>
@@ -1321,7 +1352,7 @@ PrintToken(c_token *Token, char_cursor *Dest = 0)
       case CT_PreprocessorPragma:
       case CT_PreprocessorError:
       case CT_PreprocessorWarning:
-      case CT_Preprocessor__VA_ARGS__:
+      case CT_Preprocessor_VA_ARGS_:
       {
         if (Token->Erased)
         {
@@ -1442,8 +1473,8 @@ CToken(r32 FloatValue)
 {
   c_token Result = {
     .Type = CTokenType_Float,
-    .Value = FormatCountedString(TranArena, CSz("%f"), FloatValue), // TODO(Jesse id: 350, tags: memory_leak)
-    .FloatValue = FloatValue
+    .Value = FormatCountedString(TranArena, CSz("%f"), r64(FloatValue)), // TODO(Jesse id: 350, tags: memory_leak)
+    .FloatValue = r64(FloatValue)
   };
   return Result;
 }
@@ -1746,7 +1777,7 @@ poof(tuple({cs cs}))
 #include <generated/tuple_822959015.h>
 
 poof(generate_stream(tuple_cs_cs))
-#include </home/scallywag/work/poof/generated/generate_stream_tuple_cs_cs.h>
+#include <generated/generate_stream_tuple_cs_cs.h>
 
 poof( buffer_builder(tuple_cs_cs) )
-#include </home/scallywag/work/poof/generated/buffer_builder_tuple_cs_cs.h>
+#include <generated/buffer_builder_tuple_cs_cs.h>

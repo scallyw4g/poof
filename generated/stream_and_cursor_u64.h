@@ -1,16 +1,16 @@
-struct counted_string_cursor
+struct u64_cursor
 {
-  counted_string *Start;
+  u64 *Start;
   // TODO(Jesse)(immediate): For the love of fucksakes change these to indices
-  counted_string *At;
-  counted_string *End;
+  u64 *At;
+  u64 *End;
 };
 
-link_internal counted_string_cursor
-CountedStringCursor(umm ElementCount, memory_arena* Memory)
+link_internal u64_cursor
+U64Cursor(umm ElementCount, memory_arena* Memory)
 {
-  counted_string *Start = (counted_string*)PushStruct(Memory, sizeof(counted_string)*ElementCount, 1, 0);
-  counted_string_cursor Result = {
+  u64 *Start = (u64*)PushStruct(Memory, sizeof(u64)*ElementCount, 1, 0);
+  u64_cursor Result = {
     .Start = Start,
     .End = Start+ElementCount,
     .At = Start,
@@ -18,16 +18,16 @@ CountedStringCursor(umm ElementCount, memory_arena* Memory)
   return Result;
 }
 
-link_internal counted_string
-Get(counted_string_cursor *Cursor, umm ElementIndex)
+link_internal u64
+Get(u64_cursor *Cursor, umm ElementIndex)
 {
   Assert(ElementIndex < CurrentCount(Cursor));
-  counted_string Result = Cursor->Start[ElementIndex];
+  u64 Result = Cursor->Start[ElementIndex];
   return Result;
 }
 
 link_internal void
-Set(counted_string_cursor *Cursor, umm ElementIndex, counted_string Element)
+Set(u64_cursor *Cursor, umm ElementIndex, u64 Element)
 {
   umm CurrentElementCount = CurrentCount(Cursor);
   Assert (ElementIndex <= CurrentElementCount);
@@ -39,42 +39,42 @@ Set(counted_string_cursor *Cursor, umm ElementIndex, counted_string Element)
   }
 }
 
-link_internal counted_string *
-Push(counted_string_cursor *Cursor, counted_string Element)
+link_internal u64 *
+Push(u64_cursor *Cursor, u64 Element)
 {
   Assert( Cursor->At < Cursor->End );
-  counted_string *Result = Cursor->At;
+  u64 *Result = Cursor->At;
   *Cursor->At++ = Element;
   return Result;
 }
 
-link_internal counted_string
-Pop(counted_string_cursor *Cursor)
+link_internal u64
+Pop(u64_cursor *Cursor)
 {
   Assert( Cursor->At > Cursor->Start );
-  counted_string Result = Cursor->At[-1];
+  u64 Result = Cursor->At[-1];
   Cursor->At--;
   return Result;
 }
 
 link_internal s32
-LastIndex(counted_string_cursor *Cursor)
+LastIndex(u64_cursor *Cursor)
 {
   s32 Result = s32(CurrentCount(Cursor))-1;
   return Result;
 }
 
 link_internal b32
-Remove(counted_string_cursor *Cursor, counted_string Query)
+Remove(u64_cursor *Cursor, u64 Query)
 {
   b32 Result = False;
   CursorIterator(ElementIndex, Cursor)
   {
-    counted_string Element = Get(Cursor, ElementIndex);
+    u64 Element = Get(Cursor, ElementIndex);
     if (AreEqual(Element, Query))
     {
       b32 IsLastIndex = LastIndex(Cursor) == s32(ElementIndex);
-      counted_string Tmp = Pop(Cursor);
+      u64 Tmp = Pop(Cursor);
 
       if (IsLastIndex) { Assert(AreEqual(Tmp, Query)); }
       else { Set(Cursor, ElementIndex, Tmp); }
@@ -84,38 +84,38 @@ Remove(counted_string_cursor *Cursor, counted_string Query)
   return Result;
 }
 
-struct counted_string_stream_chunk
+struct u64_stream_chunk
 {
-  counted_string Element;
-  counted_string_stream_chunk* Next;
+  u64 Element;
+  u64_stream_chunk* Next;
 };
 
-struct counted_string_stream
+struct u64_stream
 {
   memory_arena *Memory;
-  counted_string_stream_chunk* FirstChunk;
-  counted_string_stream_chunk* LastChunk;
+  u64_stream_chunk* FirstChunk;
+  u64_stream_chunk* LastChunk;
   umm ChunkCount;
 };
 
 link_internal void
-Deallocate(counted_string_stream *Stream)
+Deallocate(u64_stream *Stream)
 {
   Stream->LastChunk = 0;
   Stream->FirstChunk = 0;
   VaporizeArena(Stream->Memory);
 }
 
-struct counted_string_iterator
+struct u64_iterator
 {
-  counted_string_stream* Stream;
-  counted_string_stream_chunk* At;
+  u64_stream* Stream;
+  u64_stream_chunk* At;
 };
 
-link_internal counted_string_iterator
-Iterator(counted_string_stream* Stream)
+link_internal u64_iterator
+Iterator(u64_stream* Stream)
 {
-  counted_string_iterator Iterator = {
+  u64_iterator Iterator = {
     .Stream = Stream,
     .At = Stream->FirstChunk
   };
@@ -123,28 +123,28 @@ Iterator(counted_string_stream* Stream)
 }
 
 link_internal b32
-IsValid(counted_string_iterator* Iter)
+IsValid(u64_iterator* Iter)
 {
   b32 Result = Iter->At != 0;
   return Result;
 }
 
 link_internal void
-Advance(counted_string_iterator* Iter)
+Advance(u64_iterator* Iter)
 {
   Iter->At = Iter->At->Next;
 }
 
 link_internal b32
-IsLastElement(counted_string_iterator* Iter)
+IsLastElement(u64_iterator* Iter)
 {
   b32 Result = Iter->At->Next == 0;
   return Result;
 }
 
 
-link_internal counted_string *
-Push(counted_string_stream* Stream, counted_string Element)
+link_internal u64 *
+Push(u64_stream* Stream, u64 Element)
 {
   if (Stream->Memory == 0)
   {
@@ -152,7 +152,7 @@ Push(counted_string_stream* Stream, counted_string Element)
   }
 
   /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
-  counted_string_stream_chunk* NextChunk = (counted_string_stream_chunk*)PushStruct(Stream->Memory, sizeof(counted_string_stream_chunk), 1, 0);
+  u64_stream_chunk* NextChunk = (u64_stream_chunk*)PushStruct(Stream->Memory, sizeof(u64_stream_chunk), 1, 0);
   NextChunk->Element = Element;
 
   if (!Stream->FirstChunk)
@@ -172,7 +172,7 @@ Push(counted_string_stream* Stream, counted_string Element)
 
   Stream->ChunkCount += 1;
 
-  counted_string *Result = &NextChunk->Element;
+  u64 *Result = &NextChunk->Element;
   return Result;
 }
 

@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
 # set -o nounset
 # set -o pipefail
@@ -7,15 +7,14 @@
 # NOTE(Jesse): The following are switches for twiddling during development.
 # Calling functions by name on the command line shouldn't be affected by these.
 
-
-RunPreemptivePoof=1
+# RunPreemptivePoof=1
 
 # BuildAllBinariesRunAllTests=1
 
-FetchBonsaiDebug=0
+# FetchBonsaiDebug=0
 
-BuildPoof=0
-RunPoof=0
+BuildPoof=1
+RunPoof=1
 
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 # POOF_DEBUGGER="gdb --args"
@@ -23,8 +22,8 @@ RunPoof=0
 # BuildPoofEmcc=0
 # RollupEmcc=0
 
-BuildParserTests=1
-RunParserTests=1
+BuildParserTests=0
+RunParserTests=0
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 # TEST_DEBUGGER="gdb --args"
 
@@ -51,11 +50,13 @@ if [ $# -gt 1 ]; then
   echo "make.sh supports a maximum of 1 argument"
 fi
 
-ROOT="$(pwd)"
+# NOTE(Jesse): Can't do this cause it fucks with the paths poof outputs
+# ROOT="$(pwd)"
+ROOT="."
 SRC="$ROOT/poof"
 BIN="$ROOT/bin"
 BIN_TEST="$BIN/tests"
-META_OUT="$ROOT/generated"
+META_OUT="generated"
 EXTENDED_INTEGRATION_TESTS_SRC="$ROOT/tests/integration_extended"
 
 function RollupEmcc
