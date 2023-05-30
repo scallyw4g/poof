@@ -17,6 +17,19 @@ examples and an interactive playground if you want quickly give poof a try.
 `poof` is a metaprogramming environment that aims to augment the C programming
 language with modern (and sometimes experimental) metaprogramming techniques.
 
+`poof` was born out of frustration with the lack of ergonomics when
+metaprogramming with C++ templates.  The canonical example is printing an enum
+value as a string.  What _should_ be an extremly simple operation turns into an
+almost comical dance of macros and templates.  If you don't to use macros,
+well, it gets even more hilarious.  In `poof`, printing any enum value as it's
+human-readable string is one concise line of poof, and going back the other way
+from-string-to-int is also a 1-liner.
+
+For anyone that objects with a notion similar to: "HEY!  C++ 20-whatever adds
+feature X that solves this!", my response is "they've taken 45 years to solve
+this problem.  Poof solved it in the first week of development.  How long will
+it take C++ to solve the ergonomics problems I fixed a year into development?"
+
 # Getting started
 
 See [https://scallyw4g.github.io/poof](https://scallyw4g.github.io/poof)
