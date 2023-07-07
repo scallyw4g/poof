@@ -1048,7 +1048,6 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                         NotImplemented; // TODO(Jesse): Resolve to base type and try again?
                       } break;
                     }
-
                   } break;
 
                 }
