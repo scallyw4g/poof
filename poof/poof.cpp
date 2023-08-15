@@ -3697,8 +3697,8 @@ HexStringToU64(counted_string S)
       CharIndex < S.Count;
       ++CharIndex)
   {
-    u64 Digit = HexToU64(S.Start[CharIndex]);
-    Result |= Digit << ((S.Count - CharIndex - 1L) * 4);
+    u64 Nibble = HexToU64(S.Start[CharIndex]);
+    Result |= Nibble << ((S.Count - CharIndex - 1L) * 4);
   }
 
   return Result;
