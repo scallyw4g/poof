@@ -18,6 +18,16 @@ V3Cursor(umm ElementCount, memory_arena* Memory)
   return Result;
 }
 
+link_internal v3*
+GetPtr(v3_cursor *Cursor, umm ElementIndex)
+{
+  v3 *Result = {};
+  if (ElementIndex < AtElements(Cursor)) {
+    Result = Cursor->Start+ElementIndex;
+  }
+  return Result;
+}
+
 link_internal v3
 Get(v3_cursor *Cursor, umm ElementIndex)
 {

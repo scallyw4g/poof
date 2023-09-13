@@ -18,6 +18,16 @@ CountedStringCursor(umm ElementCount, memory_arena* Memory)
   return Result;
 }
 
+link_internal counted_string*
+GetPtr(counted_string_cursor *Cursor, umm ElementIndex)
+{
+  counted_string *Result = {};
+  if (ElementIndex < AtElements(Cursor)) {
+    Result = Cursor->Start+ElementIndex;
+  }
+  return Result;
+}
+
 link_internal counted_string
 Get(counted_string_cursor *Cursor, umm ElementIndex)
 {

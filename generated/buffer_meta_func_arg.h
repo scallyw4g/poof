@@ -22,6 +22,13 @@ MetaFuncArgBuffer(umm ElementCount, memory_arena* Memory)
   return Result;
 }
 
+link_inline umm
+CurrentCount(meta_func_arg_buffer *Buf)
+{
+  umm Result = Buf->Count;
+  return Result;
+}
+
 link_inline meta_func_arg *
 Get(meta_func_arg_buffer *Buf, u32 Index)
 {

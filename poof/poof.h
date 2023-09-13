@@ -491,6 +491,12 @@ AreEqual(parser P1, parser P2)
   return False;
 }
 
+link_internal void
+DeepCopy( parser *Src, parser *Dest)
+{
+  NotImplemented;
+}
+
 poof(generate_cursor(parser))
 #include <generated/generate_cursor_parser.h>
 
@@ -1473,7 +1479,7 @@ CToken(r32 FloatValue)
 {
   c_token Result = {
     .Type = CTokenType_Float,
-    .Value = FormatCountedString(TranArena, CSz("%f"), r64(FloatValue)), // TODO(Jesse id: 350, tags: memory_leak)
+    .Value = FormatCountedString(GetTranArena(), CSz("%f"), r64(FloatValue)), // TODO(Jesse id: 350, tags: memory_leak)
     .FloatValue = r64(FloatValue)
   };
   return Result;
@@ -1484,7 +1490,7 @@ CToken(u32 UnsignedValue)
 {
   c_token Result = {
     .Type = CTokenType_IntLiteral,
-    .Value = FormatCountedString(TranArena, CSz("%u"), UnsignedValue), // TODO(Jesse id: 351, tags: memory_leak)
+    .Value = FormatCountedString(GetTranArena(), CSz("%u"), UnsignedValue), // TODO(Jesse id: 351, tags: memory_leak)
     .UnsignedValue = UnsignedValue,
   };
   return Result;

@@ -18,6 +18,16 @@ U64Cursor(umm ElementCount, memory_arena* Memory)
   return Result;
 }
 
+link_internal u64*
+GetPtr(u64_cursor *Cursor, umm ElementIndex)
+{
+  u64 *Result = {};
+  if (ElementIndex < AtElements(Cursor)) {
+    Result = Cursor->Start+ElementIndex;
+  }
+  return Result;
+}
+
 link_internal u64
 Get(u64_cursor *Cursor, umm ElementIndex)
 {

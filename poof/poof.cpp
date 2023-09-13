@@ -8,6 +8,7 @@
   #define DEBUG_PRINT 0
 #endif
 
+#include <poof/defines.h>
 
 #include <bonsai_stdlib/bonsai_stdlib.h>
 #include <bonsai_stdlib/bonsai_stdlib.cpp>
@@ -1234,11 +1235,11 @@ PrintTray(char_cursor *Dest, c_token *T, u32 Columns, counted_string Color = Ter
 {
   if (T)
   {
-    FormatCountedString_(Dest, CSz("%*d |"), Columns, T->LineNumber);
+    FormatCountedString_(Dest->Start, TotalElements(Dest), CSz("%*d |"), Columns, T->LineNumber);
   }
   else
   {
-    FormatCountedString_(Dest, CSz("%*c %S|%S"), Columns, ' ', Color, TerminalColors.White);
+    FormatCountedString_(Dest->Start, TotalElements(Dest), CSz("%*c %S|%S"), Columns, ' ', Color, TerminalColors.White);
   }
 }
 
@@ -1569,7 +1570,7 @@ OutputContextMessage(parser* Parser, parse_error_code ErrorCode, counted_string 
 
     // TODO(Jesse, tags: bug): This isn't working for some reason.  I think
     // GetLongestLineInCursor is busted here.
-    counted_string NameLine = FormatCountedString(TranArena, CSz("  %S:%u  "), ParserName, ErrorLineNumber);
+    counted_string NameLine = FormatCountedString(GetTranArena(), CSz("  %S:%u  "), ParserName, ErrorLineNumber);
     u64 LongestLine = Max(MinLineLen, GetLongestLineInCursor(ParseErrorCursor));
     LongestLine = Max(MinLineLen, (u64)NameLine.Count+4);
 
@@ -1683,7 +1684,7 @@ InternalCompilerError(parser* Parser, counted_string ErrorMessage, c_token* Erro
 link_internal counted_string
 ParseError_StreamEndedUnexpectedly(parser *Parser)
 {
-  counted_string Result = FormatCountedString(TranArena, CSz("Stream ended unexpectedly in file : %S"), ???->Filename);
+  counted_string Result = FormatCountedString(GetTranArena(), CSz("Stream ended unexpectedly in file : %S"), ???->Filename);
   ParseError(Parser, ParseErrorCode_StreamEndedUnexpectedly, Result);
   return Result;
 }
@@ -1696,7 +1697,7 @@ link_internal counted_string
 ParseError_ExpectedSemicolonEqualsCommaOrOpenBrace(parser *Parser, c_token *T)
 {
   counted_string Result =
-    FormatCountedString_(TranArena, CSz("Got %S(%S)\n\nExpected %S(%c), %S(%c), %S(%c) or %S(%c) while parsing variable declaration."),
+    FormatCountedString_(GetTranArena(), CSz("Got %S(%S)\n\nExpected %S(%c), %S(%c), %S(%c) or %S(%c) while parsing variable declaration."),
         ParseErrorTokenHelper(T),
         ToString(CTokenType_Semicolon), CTokenType_Semicolon,
         ToString(CTokenType_Equals), CTokenType_Equals,
@@ -1711,7 +1712,7 @@ ParseError_ExpectedSemicolonEqualsCommaOrOpenBrace(parser *Parser, c_token *T)
 link_internal counted_string
 ParseError_RequireTokenFailed(parser *Parser, counted_string FuncName, c_token *Got, c_token *Expected)
 {
-  counted_string Result = FormatCountedString( TranArena,
+  counted_string Result = FormatCountedString( GetTranArena(),
                                                CSz("%S Failed \n\nExpected %S(%S)\nGot      %S(%S)"),
                                                FuncName,
                                                ParseErrorTokenHelper(Expected),
@@ -2676,7 +2677,7 @@ RequireOperatorToken(parser* Parser)
 
       default:
       {
-        ParseError(Parser, FormatCountedString(TranArena, CSz("Expected operator, got %S(%S)"), ToString(Result->Type), Result->Value), Result);
+        ParseError(Parser, FormatCountedString(GetTranArena(), CSz("Expected operator, got %S(%S)"), ToString(Result->Type), Result->Value), Result);
         Result = 0;
       } break;
     }
@@ -2699,7 +2700,7 @@ CopyRemainingIntoCursor(c_token_cursor *Src, c_token_cursor *Dest)
   u32 SrcElements = (u32)Remaining(Src);
   u32 DestElements = (u32)Remaining(Dest);
 
-  /* DebugLine(FormatCountedString(TranArena, CSz("copy %lu -> %lu"), SrcElements, DestElements)); */
+  /* DebugLine(FormatCountedString(GetTranArena(), CSz("copy %lu -> %lu"), SrcElements, DestElements)); */
   /* DumpSingle(Src, Src->Start); */
   /* DumpSingle(Dest, Dest->Start); */
 
@@ -3053,7 +3054,7 @@ ExpandMacro( parse_context *Ctx,
               else
               {
                 ParseInfoMessage( FirstPass,
-                                  FormatCountedString(TranArena, CSz("While Expanding %S"), ArgToken->Value),
+                                  FormatCountedString(GetTranArena(), CSz("While Expanding %S"), ArgToken->Value),
                                   ArgToken);
               }
             }
@@ -3100,7 +3101,7 @@ ExpandMacro( parse_context *Ctx,
               // TOOD(Jesse, tags: immediate): Write a test that exercises this
               // path.  Right now there's a bug blocking it
               ParseInfoMessage( &Temp,
-                                FormatCountedString(TranArena, CSz("0 While Expanding %S"), Next->Value),
+                                FormatCountedString(GetTranArena(), CSz("0 While Expanding %S"), Next->Value),
                                 Next);
             }
             else
@@ -3179,11 +3180,11 @@ ExpandMacro( parse_context *Ctx,
               umm CurrentSize = TotalSize(FirstPass->Tokens);
               TruncateToCurrentElements(FirstPass->Tokens);
               /* umm NewSize = TotalSize(&FirstPass->Tokens); */
-              /* Reallocate((u8*)FirstPass->Tokens->Start, TranArena, CurrentSize, NewSize); */
+              /* Reallocate((u8*)FirstPass->Tokens->Start, GetTranArena(), CurrentSize, NewSize); */
 
               ParseError( FirstPass,
                           ParseErrorCode_InvalidTokenGenerated,
-                          FormatCountedString(TranArena, CSz("Invalid token generated during paste (%S)"), Prev->Value),
+                          FormatCountedString(GetTranArena(), CSz("Invalid token generated during paste (%S)"), Prev->Value),
                           Prev);
             }
 
@@ -3263,7 +3264,7 @@ ExpandMacro( parse_context *Ctx,
             if (Expanded->ErrorCode)
             {
               ParseInfoMessage( FirstPass,
-                                FormatCountedString(TranArena, CSz("While Expanding %S"), T->Value),
+                                FormatCountedString(GetTranArena(), CSz("While Expanding %S"), T->Value),
                                 T);
             }
             else
@@ -3290,7 +3291,7 @@ ExpandMacro( parse_context *Ctx,
           if (Expanded->ErrorCode)
           {
             ParseInfoMessage( FirstPass,
-                              FormatCountedString(TranArena, CSz("While Expanding %S"), T->Value),
+                              FormatCountedString(GetTranArena(), CSz("While Expanding %S"), T->Value),
                               T);
           }
           else
@@ -5352,7 +5353,7 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena
 {
   TIMED_FUNCTION();
 
-  memory_arena *TempMemory = TranArena; //AllocateArena();
+  memory_arena *TempMemory = GetTranArena(); //AllocateArena();
 
   c_token *LastT = 0;
   while (TokensRemain(Parser))
@@ -5471,7 +5472,7 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena
             if (Expanded->ErrorCode)
             {
               ParseInfoMessage( Parser,
-                                FormatCountedString(TranArena, CSz("While Expanding %S"), T->Value),
+                                FormatCountedString(GetTranArena(), CSz("While Expanding %S"), T->Value),
                                 T);
             }
             else
@@ -5521,7 +5522,7 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena
 
               ParseWarn( Parser,
                          ParseWarnCode_MacroRedefined,
-                         FormatCountedString(TranArena, CSz("Macro (%S) already defined"), MacroNameT->Value),
+                         FormatCountedString(GetTranArena(), CSz("Macro (%S) already defined"), MacroNameT->Value),
                          MacroNameT);
 #endif
             }
@@ -5774,7 +5775,7 @@ ResolveIncludePath(parse_context *Ctx, parser *Parser, c_token *T, counted_strin
     {
       Assert(Current->Filename.Count);
       PartialPath = StripQuotes(PartialPath);
-      counted_string CurrentFilepath = Concat(Dirname(Current->Filename), PartialPath, TranArena);
+      counted_string CurrentFilepath = Concat(Dirname(Current->Filename), PartialPath, GetTranArena());
       if (FileExists(CurrentFilepath))
       {
         Result = CurrentFilepath;
@@ -5799,7 +5800,7 @@ ResolveIncludePath(parse_context *Ctx, parser *Parser, c_token *T, counted_strin
               ++PrefixIndex )
         {
           counted_string PrefixPath = IncludePaths->Start[PrefixIndex];
-          counted_string FullPath = Concat(PrefixPath, PartialPath, TranArena); // TODO(Jesse id: 304): only do this work once
+          counted_string FullPath = Concat(PrefixPath, PartialPath, GetTranArena()); // TODO(Jesse id: 304): only do this work once
 
           if (FileExists(FullPath))
           {
@@ -5842,7 +5843,7 @@ ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
 {
   TIMED_FUNCTION();
 
-  if (const char *INCLUDE_ENV = PlatformGetEnvironmentVar("INCLUDE", TranArena))
+  if (const char *INCLUDE_ENV = PlatformGetEnvironmentVar("INCLUDE", GetTranArena()))
   {
     Warn("poof does not support the environemnt variable INCLUDE (%s)", INCLUDE_ENV);
   }
@@ -6508,7 +6509,7 @@ RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Fi
             FileWritesSucceeded &= WriteToFile(&TempFile, CSz("\n"));
           }
           FileWritesSucceeded &= WriteToFile(&TempFile, CSz("#include <"));
-          FileWritesSucceeded &= WriteToFile(&TempFile, Concat(OutputPath, T->IncludePath, TranArena) ); // TODO(Jesse, begin_temporary_memory)
+          FileWritesSucceeded &= WriteToFile(&TempFile, Concat(OutputPath, T->IncludePath, GetTranArena()) ); // TODO(Jesse, begin_temporary_memory)
           FileWritesSucceeded &= WriteToFile(&TempFile, CSz(">"));
         }
       }
@@ -6645,7 +6646,7 @@ EatUntil_TrackingDepth(parser *Parser, c_token_type Open, c_token_type Close, c_
 
   if (!Success)
   {
-    ParseError(Parser, FormatCountedString(TranArena, CSz("Unable to find closing token %S"), ToString(Close)), StartToken);
+    ParseError(Parser, FormatCountedString(GetTranArena(), CSz("Unable to find closing token %S"), ToString(Close)), StartToken);
   }
 
   return;
@@ -6680,7 +6681,7 @@ EatBetweenRaw(parser* Parser, c_token_type Open, c_token_type Close)
 
   if (!Success)
   {
-    ParseError(Parser, FormatCountedString(TranArena, CSz("Unable to find closing token %S"), ToString(Close)));
+    ParseError(Parser, FormatCountedString(GetTranArena(), CSz("Unable to find closing token %S"), ToString(Close)));
   }
 
   return;
@@ -6725,7 +6726,7 @@ EatBetweenExcluding(ansi_stream *Code, char Open, char Close)
   if (!Success)
   {
     InvalidCodePath();
-    /* ParseError(Code, FormatCountedString(TranArena, CSz("Unable to find closing token %S"), ToString(Close))); */
+    /* ParseError(Code, FormatCountedString(GetTranArena(), CSz("Unable to find closing token %S"), ToString(Close))); */
   }
 
   Assert(Code->At-1 >= Code->Start);
@@ -6771,7 +6772,7 @@ EatBetween(parser* Parser, c_token_type Open, c_token_type Close)
 
     if (!Success)
     {
-      ParseError(Parser, FormatCountedString(TranArena, CSz("Unable to find closing token %S"), ToString(Close)), TErr);
+      ParseError(Parser, FormatCountedString(GetTranArena(), CSz("Unable to find closing token %S"), ToString(Close)), TErr);
     }
   }
 }
@@ -7615,7 +7616,7 @@ MaybeParseDeleteOrDefault(parser *Parser, function_decl *Result)
     if ( Result->ImplIsDefault && Result->ImplIsDeleted )
     {
       ParseError(Parser,
-          FormatCountedString(TranArena, CSz("Cannot delete and default implementation of %S %S"), ToString(Type), Result->NameT->Value) );
+          FormatCountedString(GetTranArena(), CSz("Cannot delete and default implementation of %S %S"), ToString(Type), Result->NameT->Value) );
     }
   }
 }
@@ -7780,13 +7781,13 @@ ResolveConstantExpression(parser *Parser, ast_node *Node)
             } break;
 
             InvalidDefaultWhileParsing(Parser,
-              FormatCountedString( TranArena,
+              FormatCountedString( GetTranArena(),
                 CSz("Invalid literal type passed to ResolveConstantExpression.  Type was (%S)"), ToString(Literal->Token.Type) ) );
           }
         } break;
 
         InvalidDefaultWhileParsing(Parser,
-          FormatCountedString( TranArena,
+          FormatCountedString( GetTranArena(),
             CSz("Invalid expression type passed to ResolveConstantExpression.  Type was (%S)"), ToString(Expr->Value->Type) )
         );
       }
@@ -7794,7 +7795,7 @@ ResolveConstantExpression(parser *Parser, ast_node *Node)
     } break;
 
     InvalidDefaultWhileParsing(Parser,
-      FormatCountedString( TranArena,
+      FormatCountedString( GetTranArena(),
         CSz("Invalid node type passed to ResolveConstantExpression.  Type was (%S)"), ToString(Node->Type) )
     );
   }
@@ -8143,7 +8144,7 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
             } break;
 
             InvalidDefaultError( Parser,
-                                 FormatCountedString_(TranArena, CSz(" ResolveMacroConstantExpression failed : Invalid %S(%S)"), ToString(NextToken->Type), NextToken->Value ),
+                                 FormatCountedString_(GetTranArena(), CSz(" ResolveMacroConstantExpression failed : Invalid %S(%S)"), ToString(NextToken->Type), NextToken->Value ),
                                  NextToken );
           }
         }
@@ -8163,7 +8164,7 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
             if (Expanded->ErrorCode)
             {
               ParseInfoMessage( Parser,
-                                FormatCountedString(TranArena, CSz("While Expanding %S"), pT->Value),
+                                FormatCountedString(GetTranArena(), CSz("While Expanding %S"), pT->Value),
                                 pT);
             }
             else
@@ -8292,7 +8293,7 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
       } break;
 
       InvalidDefaultError( Parser,
-                           FormatCountedString_(TranArena, CSz("ResolveMacroConstantExpression failed : Invalid %S(%S)"), ToString(T->Type), T->Value ),
+                           FormatCountedString_(GetTranArena(), CSz("ResolveMacroConstantExpression failed : Invalid %S(%S)"), ToString(T->Type), T->Value ),
                            T);
     }
   }
@@ -8369,7 +8370,7 @@ EraseAllRemainingIfBlocks(parser *Parser)
     else
     {
       ParseError( Parser,
-                  FormatCountedString(TranArena, CSz("Unable to find closing token for %S."), ToString(CT_PreprocessorIf)),
+                  FormatCountedString(GetTranArena(), CSz("Unable to find closing token for %S."), ToString(CT_PreprocessorIf)),
                   StartToken);
     }
   }
@@ -8423,7 +8424,7 @@ EatIfBlock(parser *Parser, erase_token_mode EraseMode)
     if (!Result)
     {
       ParseError( Parser,
-                  FormatCountedString(TranArena, CSz("Unable to find closing token for %S."), ToString(CT_PreprocessorIf)),
+                  FormatCountedString(GetTranArena(), CSz("Unable to find closing token for %S."), ToString(CT_PreprocessorIf)),
                   StartToken );
     }
   }
@@ -8561,7 +8562,7 @@ ParseStructMemberConstructorFn(parse_context *Ctx, type_spec *TypeSpec, declarat
   else
   {
     ParseError(Parser,
-        FormatCountedString(TranArena, CSz("Constructor (%S) name must match the struct name (%S)"), ConstructorNameT->Value, StructNameT->Value),
+        FormatCountedString(GetTranArena(), CSz("Constructor (%S) name must match the struct name (%S)"), ConstructorNameT->Value, StructNameT->Value),
         ConstructorNameT );
   }
 }
@@ -8587,12 +8588,12 @@ ParseStructMemberDestructorFn(parse_context *Ctx, declaration *Result, c_token *
     }
     else
     {
-      ParseError(Parser, FormatCountedString(TranArena, CSz("Destructor (%S) must have an empty parameter list!"), FuncNameT->Value) );
+      ParseError(Parser, FormatCountedString(GetTranArena(), CSz("Destructor (%S) must have an empty parameter list!"), FuncNameT->Value) );
     }
   }
   else
   {
-    ParseError(Parser, FormatCountedString(TranArena, CSz("Destructor (%S) name must match the struct name (%S)"), FuncNameT->Value, StructNameT->Value ) );
+    ParseError(Parser, FormatCountedString(GetTranArena(), CSz("Destructor (%S) name must match the struct name (%S)"), FuncNameT->Value, StructNameT->Value ) );
   }
 
   Result->Type = type_function_decl;
@@ -8722,7 +8723,7 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
       } break;
 
       InvalidDefaultWhileParsing(Parser,
-          FormatCountedString(TranArena, CSz("Unexpected token encountered while parsing struct %S"), StructNameT->Value));
+          FormatCountedString(GetTranArena(), CSz("Unexpected token encountered while parsing struct %S"), StructNameT->Value));
     }
   }
 
@@ -11753,7 +11754,7 @@ ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_s
     {
       PoofTypeError(Parser,
                     ParseErrorCode_InvalidName,
-                    FormatCountedString( TranArena,
+                    FormatCountedString( GetTranArena(),
                                          CSz("(%S) could not be resolved to a struct name, enum name, or named_list"),
                                          DatatypeName),
                     NameT);
@@ -11798,7 +11799,7 @@ ParseAndTypecheckArgument(parse_context *Ctx, parser *Parser, meta_func_arg *Par
           {
             PoofTypeError( Parser,
                            ParseErrorCode_UndefinedDatatype,
-                           FormatCountedString( TranArena,
+                           FormatCountedString( GetTranArena(),
                                                 CSz("Could't find datatype or local variable for (%S)."),
                                                 Token->Value ),
                            Token );
@@ -11808,7 +11809,7 @@ ParseAndTypecheckArgument(parse_context *Ctx, parser *Parser, meta_func_arg *Par
         {
           PoofTypeError( Parser,
                          ParseErrorCode_PoofTypeError,
-                         FormatCountedString( TranArena,
+                         FormatCountedString( GetTranArena(),
                                               CSz("Expected (%S), got (%S)."),
                                               ToString(CTokenType_Identifier),
                                               ToString(Token->Type) ),
@@ -12182,7 +12183,7 @@ ParseAndTypeCheckArgs(parse_context *Ctx, parser *Parser, c_token *FunctionT, me
       // the error code to the main parser.
       ParseError( Parser,
                   ArgParser.ErrorCode,
-                  FormatCountedString( TranArena,
+                  FormatCountedString( GetTranArena(),
                                        CSz("Could't parse args for (%S)."),
                                        FunctionT->Value ),
                   FunctionT );
@@ -12195,7 +12196,7 @@ ParseAndTypeCheckArgs(parse_context *Ctx, parser *Parser, c_token *FunctionT, me
     // TODO(Jesse): This check might be buggy, whitespace could trigger it.. ?
     // TODO(Jesse): Real error message; too many arguments.
     ParseInfoMessage( &ArgParser,
-                      FormatCountedString(TranArena,
+                      FormatCountedString(GetTranArena(),
                                           CSz("Shiiiiit dawg"), 0 ),
                       FunctionT);
 
@@ -12220,7 +12221,7 @@ CallFunction(parse_context *Ctx, c_token *FunctionT, meta_func *Func, meta_func_
       Result.Start = 0;
       Result.Count = 0;
       /* ParseInfoMessage( Ctx->CurrentParser, */
-      /*                   FormatCountedString(TranArena, */
+      /*                   FormatCountedString(GetTranArena(), */
       /*                                       CSz("Unable to generate code for (func %S)."), Func->Name), FunctionT); */
     }
   }
@@ -12228,7 +12229,7 @@ CallFunction(parse_context *Ctx, c_token *FunctionT, meta_func *Func, meta_func_
   {
     PoofError(Ctx->CurrentParser,
               ParseErrorCode_StackOverflow,
-              FormatCountedString( TranArena,
+              FormatCountedString( GetTranArena(),
                                    CSz("Stack Overflow when trying to execute (%S)! Poof has a stack frame limit of (%u) frames."),
                                    Func->Name,
                                    Ctx->CallStackDepth-1),
@@ -12794,7 +12795,7 @@ main(s32 ArgCount_, const char** ArgStrings)
       /* GL.BindFramebuffer(GL_FRAMEBUFFER, 0); */
       /* GL.Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); */
 
-      /* Ensure(RewindArena(TranArena)); */
+      /* Ensure(RewindArena(GetTranArena())); */
     }
   }
 #endif

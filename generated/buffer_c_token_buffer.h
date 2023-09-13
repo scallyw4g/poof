@@ -22,6 +22,13 @@ CTokenBufferBuffer(umm ElementCount, memory_arena* Memory)
   return Result;
 }
 
+link_inline umm
+CurrentCount(c_token_buffer_buffer *Buf)
+{
+  umm Result = Buf->Count;
+  return Result;
+}
+
 link_inline c_token_buffer *
 Get(c_token_buffer_buffer *Buf, u32 Index)
 {

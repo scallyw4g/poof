@@ -18,6 +18,16 @@ DeclarationCursor(umm ElementCount, memory_arena* Memory)
   return Result;
 }
 
+link_internal declaration*
+GetPtr(declaration_cursor *Cursor, umm ElementIndex)
+{
+  declaration *Result = {};
+  if (ElementIndex < AtElements(Cursor)) {
+    Result = Cursor->Start+ElementIndex;
+  }
+  return Result;
+}
+
 link_internal declaration
 Get(declaration_cursor *Cursor, umm ElementIndex)
 {

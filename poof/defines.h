@@ -1,7 +1,11 @@
 
-#define poof(...)
-
 #if BONSAI_PREPROCESSOR
+
+#define WINAPI
+#define APIENTRY
+
+#define DWORD int
+#define BOOL int
 
 /* #include <massive_include_list.h> */
 

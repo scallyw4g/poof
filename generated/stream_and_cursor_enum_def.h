@@ -18,6 +18,16 @@ EnumDeclCursor(umm ElementCount, memory_arena* Memory)
   return Result;
 }
 
+link_internal enum_decl*
+GetPtr(enum_decl_cursor *Cursor, umm ElementIndex)
+{
+  enum_decl *Result = {};
+  if (ElementIndex < AtElements(Cursor)) {
+    Result = Cursor->Start+ElementIndex;
+  }
+  return Result;
+}
+
 link_internal enum_decl
 Get(enum_decl_cursor *Cursor, umm ElementIndex)
 {

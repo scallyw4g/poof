@@ -1,16 +1,16 @@
-struct parser_cursor
+struct texture_cursor
 {
-  parser *Start;
+  texture *Start;
   // TODO(Jesse)(immediate): For the love of fucksakes change these to indices
-  parser *At;
-  parser *End;
+  texture *At;
+  texture *End;
 };
 
-link_internal parser_cursor
-ParserCursor(umm ElementCount, memory_arena* Memory)
+link_internal texture_cursor
+TextureCursor(umm ElementCount, memory_arena* Memory)
 {
-  parser *Start = (parser*)PushStruct(Memory, sizeof(parser)*ElementCount, 1, 0);
-  parser_cursor Result = {
+  texture *Start = (texture*)PushStruct(Memory, sizeof(texture)*ElementCount, 1, 0);
+  texture_cursor Result = {
     .Start = Start,
     .End = Start+ElementCount,
     .At = Start,
@@ -18,26 +18,26 @@ ParserCursor(umm ElementCount, memory_arena* Memory)
   return Result;
 }
 
-link_internal parser*
-GetPtr(parser_cursor *Cursor, umm ElementIndex)
+link_internal texture*
+GetPtr(texture_cursor *Cursor, umm ElementIndex)
 {
-  parser *Result = {};
+  texture *Result = {};
   if (ElementIndex < AtElements(Cursor)) {
     Result = Cursor->Start+ElementIndex;
   }
   return Result;
 }
 
-link_internal parser
-Get(parser_cursor *Cursor, umm ElementIndex)
+link_internal texture
+Get(texture_cursor *Cursor, umm ElementIndex)
 {
   Assert(ElementIndex < CurrentCount(Cursor));
-  parser Result = Cursor->Start[ElementIndex];
+  texture Result = Cursor->Start[ElementIndex];
   return Result;
 }
 
 link_internal void
-Set(parser_cursor *Cursor, umm ElementIndex, parser Element)
+Set(texture_cursor *Cursor, umm ElementIndex, texture Element)
 {
   umm CurrentElementCount = CurrentCount(Cursor);
   Assert (ElementIndex <= CurrentElementCount);
@@ -49,42 +49,42 @@ Set(parser_cursor *Cursor, umm ElementIndex, parser Element)
   }
 }
 
-link_internal parser *
-Push(parser_cursor *Cursor, parser Element)
+link_internal texture *
+Push(texture_cursor *Cursor, texture Element)
 {
   Assert( Cursor->At < Cursor->End );
-  parser *Result = Cursor->At;
+  texture *Result = Cursor->At;
   *Cursor->At++ = Element;
   return Result;
 }
 
-link_internal parser
-Pop(parser_cursor *Cursor)
+link_internal texture
+Pop(texture_cursor *Cursor)
 {
   Assert( Cursor->At > Cursor->Start );
-  parser Result = Cursor->At[-1];
+  texture Result = Cursor->At[-1];
   Cursor->At--;
   return Result;
 }
 
 link_internal s32
-LastIndex(parser_cursor *Cursor)
+LastIndex(texture_cursor *Cursor)
 {
   s32 Result = s32(CurrentCount(Cursor))-1;
   return Result;
 }
 
 link_internal b32
-Remove(parser_cursor *Cursor, parser Query)
+Remove(texture_cursor *Cursor, texture Query)
 {
   b32 Result = False;
   CursorIterator(ElementIndex, Cursor)
   {
-    parser Element = Get(Cursor, ElementIndex);
+    texture Element = Get(Cursor, ElementIndex);
     if (AreEqual(Element, Query))
     {
       b32 IsLastIndex = LastIndex(Cursor) == s32(ElementIndex);
-      parser Tmp = Pop(Cursor);
+      texture Tmp = Pop(Cursor);
 
       if (IsLastIndex) { Assert(AreEqual(Tmp, Query)); }
       else { Set(Cursor, ElementIndex, Tmp); }

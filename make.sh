@@ -177,7 +177,7 @@ function RunPoof {
     $POOF_LOG_LEVEL               \
     poof/poof.cpp                 \
     -D BONSAI_PREPROCESSOR        \
-    -D BONSAI_LINUX               \
+    $PLATFORM_DEFINES             \
     -I "."                        \
     -I "$ROOT/include"            \
     -o $META_OUT

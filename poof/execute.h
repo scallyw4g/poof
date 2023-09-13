@@ -332,7 +332,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
               /* { */
               /*   parser Body = GetBodyTextForNextScope(Scope, Memory); */
               /*   PoofUserlandError( Scope, */
-              /*                      FormatCountedString(TranArena, CSz("!"), MetaOperatorToken->Value), */
+              /*                      FormatCountedString(GetTranArena(), CSz("!"), MetaOperatorToken->Value), */
               /*                      MetaOperatorToken); */
               /* } break; */
 
@@ -410,7 +410,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                   {
                     PoofTypeError( Scope,
                                    ParseErrorCode_InvalidOperator,
-                                   FormatCountedString(TranArena, CSz("Operator (%S) is not valid on a symbol."), MetaOperatorToken->Value),
+                                   FormatCountedString(GetTranArena(), CSz("Operator (%S) is not valid on a symbol."), MetaOperatorToken->Value),
                                    MetaOperatorToken);
                   } break;
                 }
@@ -429,7 +429,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                     {
                       PoofTypeError( Scope,
                                      ParseErrorCode_InvalidOperator,
-                                     FormatCountedString(TranArena, CSz("(%S) is not a valid poof operator"), MetaOperatorToken->Value),
+                                     FormatCountedString(GetTranArena(), CSz("(%S) is not a valid poof operator"), MetaOperatorToken->Value),
                                      MetaOperatorToken);
                     }
                   } break;
@@ -443,8 +443,8 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                   case is_defined:
                   {
                     RequireToken(Scope, CTokenType_Question);
-                    /* auto S1 = GetTypeTypeForDatatype(ReplaceData, TranArena); */
-                    /* auto S2 = GetTypeNameFor(Ctx, ReplaceData, TranArena); */
+                    /* auto S1 = GetTypeTypeForDatatype(ReplaceData, GetTranArena()); */
+                    /* auto S2 = GetTypeNameFor(Ctx, ReplaceData, GetTranArena()); */
 
                     b32 DoTrueBranch = False;
                     switch(ReplaceData->Type)
@@ -480,7 +480,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                     datatype Dt = ResolveToBaseType(Ctx, ReplaceData);
                     b32 DoTrueBranch = (Dt.Type == type_primitive_def);
 
-                    counted_string DTName = GetNameForDatatype(&Dt, TranArena);
+                    counted_string DTName = GetNameForDatatype(&Dt, GetTranArena());
 
                     // @counted_string_primitive_hack
                     if (StringsMatch(DTName, CSz("counted_string")))
@@ -619,11 +619,11 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                       datatype Base = ResolveToBaseType(Ctx, ReplaceData);
                       Info("(%S) (%S) (%S)",
                           GetTypeTypeForDatatype(ReplaceData, Memory),
-                          GetNameForDatatype(ReplaceData, TranArena),
+                          GetNameForDatatype(ReplaceData, GetTranArena()),
                           GetTypeNameFor(ReplaceData, Memory));
                       Info("(%S) (%S) (%S)",
                           GetTypeTypeForDatatype(&Base, Memory),
-                          GetNameForDatatype(&Base, TranArena),
+                          GetNameForDatatype(&Base, GetTranArena()),
                           GetTypeNameFor(&Base, Memory));
                     }
 #endif
@@ -782,10 +782,10 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                         {
                           PoofTypeError( Scope,
                                          ParseErrorCode_InvalidArgument,
-                                         FormatCountedString( TranArena,
+                                         FormatCountedString( GetTranArena(),
                                                               CSz("Attempted to access member index (%u) on (%S), which has (%d) members!"),
                                                               MemberIndex,
-                                                              GetNameForDatatype(ReplaceData, TranArena),
+                                                              GetNameForDatatype(ReplaceData, GetTranArena()),
                                                               Members->ChunkCount
                                                               ),
                                          MetaOperatorToken);
@@ -811,10 +811,10 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                         {
                           PoofTypeError( Scope,
                                          ParseErrorCode_InvalidArgument,
-                                         FormatCountedString( TranArena,
+                                         FormatCountedString( GetTranArena(),
                                                               CSz("Attempted to access member (%S) on (%S), which does not have that member!"),
                                                               MemberName,
-                                                              GetNameForDatatype(ReplaceData, TranArena)),
+                                                              GetNameForDatatype(ReplaceData, GetTranArena())),
                                          MetaOperatorToken);
                         }
                       }
@@ -851,9 +851,9 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                     {
                       PoofTypeError( Scope,
                                      ParseErrorCode_InvalidArgument,
-                                     FormatCountedString( TranArena,
+                                     FormatCountedString( GetTranArena(),
                                                           CSz("Attempted to access member on (%S), which didn't have any members!"),
-                                                          GetNameForDatatype(ReplaceData, TranArena)),
+                                                          GetNameForDatatype(ReplaceData, GetTranArena())),
                                      MetaOperatorToken);
                     }
 
@@ -918,7 +918,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                             {
                               PoofTypeError( Scope,
                                              ParseErrorCode_InvalidArgument,
-                                             FormatCountedString( TranArena,
+                                             FormatCountedString( GetTranArena(),
                                                                   CSz("Incorrectly called (%S) on an enum."),
                                                                   MetaOperatorToken->Value),
                                              MetaOperatorToken);
@@ -989,7 +989,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                             {
                               PoofTypeError( Scope,
                                              ParseErrorCode_InvalidArgument,
-                                             FormatCountedString( TranArena,
+                                             FormatCountedString( GetTranArena(),
                                                                   CSz("Incorrectly called (%S) on a compound decl."),
                                                                   MetaOperatorToken->Value),
                                              MetaOperatorToken);
@@ -1096,7 +1096,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
           {
             PoofTypeError( Scope,
                            ParseErrorCode_InvalidFunction,
-                           FormatCountedString( TranArena,
+                           FormatCountedString( GetTranArena(),
                                                 CSz("Could not call poof func (%S): recursive functions are illegal."),
                                                 NestedFuncT->Value),
                            NestedFuncT);
@@ -1178,7 +1178,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           else
           {
             ParseInfoMessage( Parser,
-                              FormatCountedString( TranArena,
+                              FormatCountedString( GetTranArena(),
                                                    CSz("Function execution (%S) failed."),
                                                    DirectiveT->Value ),
                               DirectiveT );
@@ -1189,7 +1189,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
       {
         PoofTypeError( Parser,
                        ParseErrorCode_InvalidName,
-                       FormatCountedString( TranArena,
+                       FormatCountedString( GetTranArena(),
                                             CSz("(%S) is not a poof keyword or function name."),
                                             DirectiveT->Value ),
                        DirectiveT );
@@ -1237,7 +1237,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           {
             Parser->ErrorCode = Func.Body.ErrorCode;
             ParseInfoMessage( Parser,
-                              FormatCountedString(TranArena,
+                              FormatCountedString(GetTranArena(),
                                                   CSz("Unable to generate code for (func %S)"), Func.Name),
                               DirectiveT);
           }
@@ -1252,7 +1252,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         {
           PoofTypeError( Parser,
                          ParseErrorCode_UndefinedDatatype,
-                         FormatCountedString(TranArena, CSz("Unable to find definition for datatype (%S)"), ArgTypeT->Value),
+                         FormatCountedString(GetTranArena(), CSz("Unable to find definition for datatype (%S)"), ArgTypeT->Value),
                          ArgTypeT);
         }
       }

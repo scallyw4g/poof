@@ -18,6 +18,16 @@ CompoundDeclCursor(umm ElementCount, memory_arena* Memory)
   return Result;
 }
 
+link_internal compound_decl*
+GetPtr(compound_decl_cursor *Cursor, umm ElementIndex)
+{
+  compound_decl *Result = {};
+  if (ElementIndex < AtElements(Cursor)) {
+    Result = Cursor->Start+ElementIndex;
+  }
+  return Result;
+}
+
 link_internal compound_decl
 Get(compound_decl_cursor *Cursor, umm ElementIndex)
 {
