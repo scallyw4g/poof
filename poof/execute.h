@@ -259,7 +259,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
       case CTokenType_StringLiteral:
       {
         counted_string TempStr = StripQuotes(BodyToken->Value);
-        parser *StringParse = ParserForAnsiStream(Ctx, AnsiStream(TempStr), TokenCursorSource_MetaprogrammingExpansion);
+        parser *StringParse = ParserForAnsiStream(Ctx, AnsiStream(TempStr), TokenCursorSource_MetaprogrammingExpansion, Ctx->Memory);
 
         umm IgnoreDepth = 0;
         counted_string Code = Execute(StringParse, ReplacePatterns, Ctx, Memory, &IgnoreDepth);
@@ -358,7 +358,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                   case map_values:
                   case map_members:
                   {
-                    parser *SymbolParser = ParserForAnsiStream(Ctx, AnsiStream(Symbol->Value), TokenCursorSource_MetaprogrammingExpansion);
+                    parser *SymbolParser = ParserForAnsiStream(Ctx, AnsiStream(Symbol->Value), TokenCursorSource_MetaprogrammingExpansion, Ctx->Memory);
                     cs Sep = MaybeParseSepOperator(Scope);
 
                     meta_func MapFunc = ParseMapMetaFunctionInstance(Scope, CSz("(builtin.map.symbol)"), Memory);
