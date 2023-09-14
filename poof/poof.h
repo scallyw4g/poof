@@ -115,43 +115,6 @@ enum va_args_flags
 
 global_variable c_token NullToken = {};
 
-enum token_cursor_source
-{
-  TokenCursorSource_Unknown,
-
-  TokenCursorSource_RootFile,
-  TokenCursorSource_Include,
-  TokenCursorSource_MacroExpansion,
-  TokenCursorSource_MetaprogrammingExpansion,
-  TokenCursorSource_PoofSymbolIteration,
-  TokenCursorSource_PasteOperator,
-  TokenCursorSource_CommandLineOption,
-  TokenCursorSource_BodyText,
-
-  // NOTE(Jesse): These should be created temporarily and discarded.  This type
-  // should never be seen in "user" code.. it's just used in parsing.
-  TokenCursorSource_IntermediateRepresentaton,
-
-  TokenCursorSource_Count,
-};
-poof(generate_string_table(token_cursor_source));
-#include <generated/generate_string_table_token_cursor_source.h>
-
-// TODO(Jesse): Add a way to append additional members to generated datatypes
-// then reenable this.
-/* poof(generate_cursor(c_token)) */
-#include <generated/generate_cursor_c_token.h>
-
-
-poof(buffer(c_token))
-#include <generated/buffer_c_token.h>
-
-poof(buffer(c_token_buffer))
-#include <generated/buffer_c_token_buffer.h>
-
-poof(generate_stream(c_token_buffer))
-#include <generated/generate_stream_c_token_buffer.h>
-
 link_internal b32
 AreEqual(parser P1, parser P2)
 {
