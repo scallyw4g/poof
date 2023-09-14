@@ -904,12 +904,6 @@ struct todo_list_info
   tagged_counted_string_stream_stream NameLists;
 };
 
-struct string_from_parser
-{
-  parser *Parser;
-  c_token *StartToken;
-};
-
 enum output_mode
 {
   Output_NoOverwrite,

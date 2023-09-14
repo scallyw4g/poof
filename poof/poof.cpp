@@ -160,59 +160,6 @@ SanityCheckParserChain(parser *Parser)
 #define SanityCheckCTokenCursor(...)
 #endif
 
-link_internal string_from_parser
-StartStringFromParser(parser* Parser)
-{
-  c_token *T = PeekTokenRawPointer(Parser);
-
-  string_from_parser Result = {};
-
-  if (T)
-  {
-    Result.Parser = Parser;
-    Result.StartToken = T;
-  }
-
-  return Result;
-}
-
-link_internal counted_string
-FinalizeStringFromParser(string_from_parser* Builder)
-{
-  counted_string Result = {};
-
-  parser *Parser = Builder->Parser;
-  c_token *StartToken = Builder->StartToken;
-
-  if (Parser)
-  {
-    if (Contains(Parser, StartToken))
-    {
-      umm Count = 0;
-      // NOTE(Jesse): This would be better if it excluded the At token, but
-      // unfortunately we wrote the calling code such that the At token is
-      // implicitly included, so we have to have this weird check.
-      if (Parser->Tokens->At == Parser->Tokens->End)
-      {
-        auto LastTokenValue = Parser->Tokens->At[-1].Value;
-        Count = (umm)( (LastTokenValue.Start+LastTokenValue.Count) - Builder->StartToken->Value.Start );
-      }
-      else
-      {
-        Count = (umm)(Parser->Tokens->At->Value.Start - Builder->StartToken->Value.Start);
-      }
-
-      Result = CS(Builder->StartToken->Value.Start, Count);
-    }
-    else
-    {
-      Warn(CSz("Unable to call FinalizeStringFromParser due to having spanned a parser chain link."));
-    }
-  }
-
-  return Result;
-}
-
 #if 0
 link_internal void
 SinglyLinkedListSwapInplace(c_token_cursor *P0, c_token_cursor *P1)
@@ -318,24 +265,22 @@ DoublyLinkedListSwap(d_list *P0, d_list *P1)
 }
 #endif
 
-inline void
-Invalidate(peek_result *Peek)
-{
-  Peek->At = 0;
-}
 
-inline void
-Invalidate(c_token_cursor *Tokens)
-{
-  Tokens->At = Tokens->End;
-}
 
-inline b32
-IsValid(peek_result *Peek)
-{
-  b32 Result = Peek->At != 0;
-  return Result;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 link_internal b32
 TokenShouldModifyLineCount(c_token *T, token_cursor_source Source)
