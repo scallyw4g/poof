@@ -94,6 +94,7 @@ Remove(enum_decl_cursor *Cursor, enum_decl Query)
   return Result;
 }
 
+
 struct enum_decl_stream_chunk
 {
   enum_decl Element;

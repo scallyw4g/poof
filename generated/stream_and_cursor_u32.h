@@ -94,6 +94,7 @@ Remove(u32_cursor *Cursor, u32 Query)
   return Result;
 }
 
+
 struct u32_stream_chunk
 {
   u32 Element;

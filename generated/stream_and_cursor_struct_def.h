@@ -94,6 +94,7 @@ Remove(compound_decl_cursor *Cursor, compound_decl Query)
   return Result;
 }
 
+
 struct compound_decl_stream_chunk
 {
   compound_decl Element;

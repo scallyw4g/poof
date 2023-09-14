@@ -94,3 +94,4 @@ Remove(declaration_cursor *Cursor, declaration Query)
   return Result;
 }
 
+

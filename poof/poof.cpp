@@ -22,13 +22,6 @@ global_variable counted_string_stream Global_ErrorStream = {};
 global_variable memory_arena Global_PermMemory = {};
 
 
-#define InvalidDefaultWhileParsing(P, ErrorMessage) \
-    default: { ParseError(P, ErrorMessage, PeekTokenPointer(P)); } break;
-
-#define InvalidDefaultError(P, ErrorMessage, Token) \
-    default: { ParseError(P, ErrorMessage, Token); } break;
-
-
 
 #if DEBUG_PRINT
 #include <bonsai_stdlib/headers/debug_print.h>
@@ -47,61 +40,6 @@ _Pragma("clang diagnostic pop") // unused-macros
 #endif
 
 
-
-link_internal peek_result PeekTokenRawCursor(peek_result *Peek, s32 TokenLookahead = 0);
-link_internal peek_result PeekTokenRawCursor(c_token_cursor *Tokens, s32 TokenLookahead, b32 CanSearchDown = True);
-link_internal peek_result PeekTokenRawCursor(parser *Parser, s32 TokenLookahead = 0);
-
-/* link_internal peek_result PeekTokenCursor(peek_result *Peek, s32 TokenLookahead = 0); */
-link_internal peek_result PeekTokenCursor(c_token_cursor *Tokens, s32 TokenLookahead = 0);
-link_internal peek_result PeekTokenCursor(parser *Parser, s32 TokenLookahead = 0);
-
-link_internal c_token * PeekTokenRawPointer(parser *Parser, u32 TokenLookahead);
-link_internal c_token * PeekTokenRawPointer(parser *Parser, s32 TokenLookahead = 0);
-
-link_internal c_token * PeekTokenPointer(c_token_cursor *Tokens, s32 TokenLookahead = 0);
-link_internal c_token * PeekTokenPointer(parser *Parser, u32 TokenLookahead = 0);
-
-link_internal c_token   PeekTokenRaw(parser *Parser, s32 Lookahead = 0);
-link_internal c_token   PeekToken(parser *Parser, s32 Lookahead = 0);
-link_internal c_token   PopTokenRaw(parser *Parser);
-link_internal c_token * PopTokenRawPointer(parser *Parser);
-link_internal c_token   PopToken(parser *Parser);
-link_internal b32       OptionalTokenRaw(parser *Parser, c_token_type Type);
-link_internal c_token * OptionalToken(parser *Parser, c_token T);
-link_internal c_token * OptionalToken(parser *Parser, c_token_type Type);
-link_internal c_token   RequireToken(parser *Parser, c_token *ExpectedToken);
-link_internal c_token   RequireToken(parser *Parser, c_token ExpectedToken);
-link_internal c_token   RequireToken(parser *Parser, c_token_type ExpectedType);
-link_internal c_token   RequireTokenRaw(parser *Parser, c_token Expected);
-link_internal c_token   RequireTokenRaw(parser *Parser, c_token *Expected);
-link_internal c_token   RequireTokenRaw(parser *Parser, c_token_type ExpectedType);
-
-link_internal b32       TokensRemain(parser *Parser, u32 TokenLookahead = 0);
-link_internal b32       RawTokensRemain(parser *Parser, u32 TokenLookahead = 0);
-
-link_internal b32       TokenIsOperator(c_token_type T);
-link_internal b32       NextTokenIsOperator(parser *Parser);
-link_internal c_token * RequireOperatorToken(parser *Parser);
-
-link_internal void      TrimFirstToken(parser* Parser, c_token_type TokenType);
-link_internal void      TrimLastToken(parser* Parser, c_token_type TokenType);
-link_internal void      TrimLeadingWhitespace(parser* Parser);
-
-link_internal counted_string EatBetweenExcluding(ansi_stream*, char Open, char Close);
-
-link_internal void           EatBetween(parser* Parser, c_token_type Open, c_token_type Close);
-link_internal counted_string EatBetween_Str(parser* Parser, c_token_type Open, c_token_type Close);
-link_internal b32            EatWhitespace(parser* Parser);
-link_internal b32            EatSpacesTabsAndEscapedNewlines(parser *Parser);
-link_internal void           EatWhitespaceAndComments(parser *Parser);
-
-link_internal void      FullRewind(parser* Parser);
-
-link_internal parser * DuplicateParserTokens(parser *Parser, memory_arena *Memory);
-link_internal parser * DuplicateParser(parser *Parser, memory_arena *Memory);
-link_internal c_token_cursor * DuplicateCTokenCursor(c_token_cursor *Tokens, memory_arena *Memory);
-link_internal parser *         DuplicateCTokenCursor2(c_token_cursor *Tokens, memory_arena *Memory);
 
 //
 // Preprocessor stuff

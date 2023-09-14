@@ -94,6 +94,7 @@ Remove(counted_string_cursor *Cursor, counted_string Query)
   return Result;
 }
 
+
 struct counted_string_stream_chunk
 {
   counted_string Element;

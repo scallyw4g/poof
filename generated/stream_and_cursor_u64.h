@@ -94,6 +94,7 @@ Remove(u64_cursor *Cursor, u64 Query)
   return Result;
 }
 
+
 struct u64_stream_chunk
 {
   u64 Element;
