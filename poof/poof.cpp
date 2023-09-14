@@ -8,8 +8,6 @@
   #define DEBUG_PRINT 0
 #endif
 
-#include <poof/defines.h>
-
 #include <bonsai_stdlib/bonsai_stdlib.h>
 #include <bonsai_stdlib/bonsai_stdlib.cpp>
 
