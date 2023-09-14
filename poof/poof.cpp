@@ -7154,7 +7154,6 @@ ResolveToBaseType(parse_context *Ctx, datatype *Data)
 }
 
 #include <poof/execute.h>
-
 link_internal b32
 IsMetaprogrammingOutput(counted_string Filename, counted_string OutputDirectory)
 {
@@ -8036,6 +8035,7 @@ DoPoofForWeb(char *zInput, umm InputLen)
 global_variable r64 Global_LastTime = 0;
 r64 GetDt()
 {
+
   r64 ThisTime = GetHighPrecisionClock();
   r64 Result = ThisTime - Global_LastTime;
   Global_LastTime = ThisTime;
