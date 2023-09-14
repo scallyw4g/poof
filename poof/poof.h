@@ -959,12 +959,6 @@ struct comma_separated_decl
   ast_node *Value;
 };
 
-struct d_list
-{
-  d_list *Prev;
-  d_list *Next;
-};
-
 enum typedef_resolution_behavior
 {
   TypedefResoultion_Undefined,
