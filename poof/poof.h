@@ -85,15 +85,8 @@ poof(generate_value_table(meta_transform_op))
 
 
 
-enum c_token_flags
-{
-  CTFlags_None = 0,
-
-  CTFlags_RelativeInclude = 1 << 0,
-};
-
-struct c_token_cursor;
 #if 0
+struct c_token_cursor;
 struct c_token;
 struct up_info
 {
@@ -113,57 +106,11 @@ UpInfo(c_token_cursor *Tokens, c_token *At)
 #endif
 
 
-struct macro_def;
-struct macro_expansion
-{
-  c_token_cursor *Expansion;
-  macro_def *Def;
-};
-
 
 enum va_args_flags
 {
   va_args_flags_none = 0,
   va_args_flags_expand_with_commas = (1 << 0),
-};
-
-struct parser;
-struct c_token
-{
-  c_token_type Type;
-  counted_string Value;
-
-  counted_string Filename;
-  u32 LineNumber;
-  b32 Erased; // TODO(Jesse): Pack this into Flags
-
-  u8 Flags;
-
-  union
-  {
-     /* s64         SignedValue; */ // TODO(Jesse id: 272): Fold `-` sign into this value at tokenization time?
-     u64            UnsignedValue;
-     r64            FloatValue;
-     c_token        *QualifierName;
-
-     // NOTE(Jesse): I ordered the 'macro_expansion' struct such that the
-     // pointer to the expanded macro will be at the same place as the `Down`
-     // poninter.  This is sketchy as fuck, but it'll work, and this the
-     // assertions at @janky-macro-expansion-struct-ordering should catch the
-     // bug if we reorder the pointers.
-     c_token_cursor  *Down;
-     macro_expansion Macro;
-
-     counted_string IncludePath; // TODO(Jesse): We probably care that this (and Macro) increase struct size by 8.  Heap allocate to fix?
-  };
-
-  // TODO(Jesse)(correctness): The preprocessor doesn't support this for some reason..
-  operator bool()
-  {
-    b32 Result = (b32)((u64)Type | Value.Count);
-    return Result;
-  }
-
 };
 
 global_variable c_token NullToken = {};
@@ -204,62 +151,6 @@ poof(buffer(c_token_buffer))
 
 poof(generate_stream(c_token_buffer))
 #include <generated/generate_stream_c_token_buffer.h>
-
-enum parse_warn_code
-{
-  ParseWarnCode_None,
-
-  ParseWarnCode_MacroRedefined,
-};
-
-enum parse_error_code
-{
-  ParseErrorCode_None,
-
-  // C parsing errors
-  ParseErrorCode_ExpectedSemicolonOrEquals,
-  ParseErrorCode_StreamEndedUnexpectedly,
-  ParseErrorCode_RequireTokenFailed,
-  ParseErrorCode_InvalidTokenGenerated,
-  ParseErrorCode_MalformedType,
-
-
-  // Poof errors
-  ParseErrorCode_PoofUserlandError,
-  ParseErrorCode_PoofTypeError,
-  ParseErrorCode_DUnionParse,
-  ParseErrorCode_UndefinedDatatype,
-  ParseErrorCode_InvalidOperator,
-  ParseErrorCode_InvalidMetaTransformOp,
-  ParseErrorCode_InvalidArgument,
-  ParseErrorCode_InvalidArgumentType,
-  ParseErrorCode_InvalidArgumentCount,
-  ParseErrorCode_InvalidName,
-  ParseErrorCode_InvalidFunction,
-  ParseErrorCode_NotImplemented, // NOTE(Jesse): This means the compiler should support this case, but doesn't
-
-
-  // General errors
-  ParseErrorCode_InputStreamNull,
-
-
-  // Well, shit.
-  ParseErrorCode_InternalCompilerError,
-  ParseErrorCode_StackOverflow, // Poof stack overflow.  Usually from calling a function recursively
-
-
-  // We hit an error, but didn't classify it.
-  ParseErrorCode_Unknown,
-};
-poof(generate_string_table(parse_error_code))
-#include <generated/generate_string_table_parse_error_code.h>
-
-struct parser
-{
-  parse_warn_code WarnCode;
-  parse_error_code ErrorCode;
-  c_token_cursor *Tokens;
-};
 
 link_internal b32
 AreEqual(parser P1, parser P2)
