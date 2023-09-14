@@ -42,7 +42,16 @@ _Pragma("clang diagnostic pop") // unused-macros
 
 
 //
-// Preprocessor stuff
+// Error Reporting
+//
+
+link_internal void PoofTypeError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken);
+link_internal void ParseError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken = 0);
+link_internal void ParseError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken = 0);
+
+
+//
+// Preprocessor
 //
 
 link_internal b32         TryTransmuteKeywordToken(c_token *T, c_token *LastTokenPushed);
@@ -60,39 +69,28 @@ link_internal macro_def * GetMacroDef(parse_context *Ctx, counted_string DefineV
 link_internal c_token *   EatIfBlock(parser *Parser, erase_token_mode Erased);
 link_internal c_token *   EraseAllRemainingIfBlocks(parser *Parser);
 
-link_internal void EraseToken(c_token *Token);
-link_internal void EraseBetweenExcluding(parser *Parser, c_token *StartToken, c_token *OnePastLastToken);
 
-link_internal void DumpLocalTokens(parser *Parser);
-link_internal void PrintTray(char_cursor *Dest, c_token *T, u32 Columns, counted_string Color);
-link_internal void PrintTraySimple(c_token *T, b32 Force = False, u32 Depth = 0);
-
-
-
-
-link_internal ast_node_expression* ParseExpression(parse_context *Ctx);
-link_internal void                 ParseExpression(parse_context *Ctx, ast_node_expression *Result);
-link_internal void                 ParseExpression(parse_context *Ctx, ast_node** Result);
+//
+// C Parser
+//
 
 link_internal compound_decl ParseStructBody(parse_context *, c_token *);
 link_internal declaration   ParseStructMember(parse_context *Ctx, c_token *StructNameT);
 
+link_internal ast_node_expression* ParseExpression(parse_context *Ctx);
+link_internal void                 ParseExpression(parse_context *Ctx, ast_node_expression *Result);
+link_internal void                 ParseExpression(parse_context *Ctx, ast_node** Result);
 
 link_internal parser MaybeParseFunctionBody(parser *Parser, memory_arena *Memory);
 link_internal void MaybeParseStaticBuffers(parse_context *Ctx, parser *Parser, ast_node **Dest);
 link_internal declaration FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec);
 
 
-
-
-
-link_internal void PoofTypeError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken);
-link_internal void ParseError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken = 0);
-link_internal void ParseError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken = 0);
-
+//
+// C type manipulation & resolution
+//
 
 link_internal counted_string PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory);
-
 
 link_internal counted_string GetTypeNameFor(parse_context *Ctx, declaration* Decl, memory_arena *Memory);
 link_internal counted_string GetNameForDecl(declaration* Decl);
@@ -102,6 +100,11 @@ link_internal datatype ResolveToBaseType(parse_context *Ctx, type_spec );
 link_internal datatype ResolveToBaseType(parse_context *Ctx, datatype *);
 link_internal datatype ResolveToBaseType(parse_context *Ctx, type_def *);
 
+
+//
+// Poof
+//
+
 // TODO(Jesse): Maybe formalize this; make distinct from calling `.map` on a
 // symbol (which is untyped) and guarantee the types are defined ..?
 link_internal counted_string_stream ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_string_stream_stream* NameLists, memory_arena* Memory);
@@ -109,7 +112,6 @@ link_internal counted_string_stream ParseDatatypeList(parser* Parser, program_da
 link_internal b32       ParseAndTypeCheckArgs(parse_context *Ctx, parser *Parser, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, meta_func_arg_buffer *ArgsInScope, memory_arena *Memory);
 link_internal meta_func ParseMetaFunctionDef(parser* Parser, counted_string FuncName, memory_arena *Memory);
 link_internal meta_func ParseMapMetaFunctionInstance(parser *, cs, memory_arena *);
-
 
 link_internal counted_string Execute(meta_func* Func, parse_context* Ctx, memory_arena* Memory, umm *Depth);
 link_internal counted_string Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_arena* Memory, umm *Depth);
