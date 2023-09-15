@@ -1,3 +1,2 @@
-// defined
-
+int  foo;
 

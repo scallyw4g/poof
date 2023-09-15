@@ -7045,6 +7045,10 @@ ResolveToBaseType(parse_context *Ctx, type_def *TD)
       type_def *ResolvedTD = SafeAccessPtr(type_def, &Resolved);
       Result = ResolveToBaseType(Ctx, ResolvedTD);
     }
+    else
+    {
+      Result = Resolved;
+    }
   }
   else
   {
