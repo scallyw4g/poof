@@ -14,7 +14,7 @@
 # FetchBonsaiDebug=0
 
 BuildPoof=1
-RunPoof=1
+# RunPoof=1
 
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 # POOF_DEBUGGER="gdb --args"
@@ -22,14 +22,14 @@ RunPoof=1
 # BuildPoofEmcc=0
 # RollupEmcc=0
 
-BuildParserTests=0
-RunParserTests=0
+BuildParserTests=1
+RunParserTests=1
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 # TEST_DEBUGGER="gdb --args"
 
 # BuildAndRunAllExamples=1
 
-RunIntegrationTests=1
+# RunIntegrationTests=1
 # INTEGRATION_TEST_INDEX=5
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug -c0"
 # INTEGRATION_TEST_DEBUGGER="gdb --args"

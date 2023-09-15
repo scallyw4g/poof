@@ -2477,7 +2477,8 @@ void TestSingleCursorTokenControl(memory_arena *Memory)
 
   parser *Parser = ParserForFile( &Ctx,
                                   CSz(PARSER_FIXTURES_PATH "/preprocessor/single_cursor_token_control.cpp"),
-                                  TokenCursorSource_RootFile);
+                                  TokenCursorSource_RootFile,
+                                  Ctx.Memory);
   {
     c_token ExpectedTokens[] =
     {
@@ -2527,14 +2528,16 @@ void TestMultiCursorTokenControl(memory_arena *Memory)
 
   parser *Parser = ParserForFile( &Ctx,
                                   CSz(PARSER_FIXTURES_PATH "/preprocessor/multi_cursor_token_control.cpp"),
-                                  TokenCursorSource_RootFile);
+                                  TokenCursorSource_RootFile,
+                                  Ctx.Memory);
 
   // TODO(Jesse): Make an actual function that does this?  Seems like that
   // would be slightly better factored so we don't have to leak the parser
   // struct here.  This also happens in real code at: @leak_parser_struct
   c_token_cursor *DownTokens = ParserForFile( &Ctx,
                                               CSz(PARSER_FIXTURES_PATH "/preprocessor/single_cursor_token_control.cpp"),
-                                              TokenCursorSource_RootFile)->Tokens;
+                                              TokenCursorSource_RootFile,
+                                              Ctx.Memory)->Tokens;
 
   {
     c_token *T = PeekTokenPointer(Parser, 1);
