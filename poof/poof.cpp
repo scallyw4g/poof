@@ -3281,46 +3281,49 @@ link_internal u64
 ResolveConstantExpression(parser *Parser, ast_node *Node)
 {
   u64 Result = 0;
-  switch(Node->Type)
+  if (Node)
   {
-    case type_ast_node_expression:
+    switch(Node->Type)
     {
-      auto Expr = SafeAccess(ast_node_expression, Node);
-      if (Expr->Next)
+      case type_ast_node_expression:
       {
-        PoofNotImplementedError(Parser, CSz("ResolveConstantExpression currently unable to resolve compound expressions."), PeekTokenPointer(Parser));
-      }
-
-      switch (Expr->Value->Type)
-      {
-        case type_ast_node_literal:
+        auto Expr = SafeAccess(ast_node_expression, Node);
+        if (Expr->Next)
         {
-          auto Literal = SafeAccess(ast_node_literal, Expr->Value);
-          switch (Literal->Token.Type)
+          PoofNotImplementedError(Parser, CSz("ResolveConstantExpression currently unable to resolve compound expressions."), PeekTokenPointer(Parser));
+        }
+
+        switch (Expr->Value->Type)
+        {
+          case type_ast_node_literal:
           {
-            case CTokenType_IntLiteral:
+            auto Literal = SafeAccess(ast_node_literal, Expr->Value);
+            switch (Literal->Token.Type)
             {
-              Result = Literal->Token.UnsignedValue;
-            } break;
+              case CTokenType_IntLiteral:
+              {
+                Result = Literal->Token.UnsignedValue;
+              } break;
 
-            InvalidDefaultWhileParsing(Parser,
-              FormatCountedString( GetTranArena(),
-                CSz("Invalid literal type passed to ResolveConstantExpression.  Type was (%S)"), ToString(Literal->Token.Type) ) );
-          }
-        } break;
+              InvalidDefaultWhileParsing(Parser,
+                FormatCountedString( GetTranArena(),
+                  CSz("Invalid literal type passed to ResolveConstantExpression.  Type was (%S)"), ToString(Literal->Token.Type) ) );
+            }
+          } break;
 
-        InvalidDefaultWhileParsing(Parser,
-          FormatCountedString( GetTranArena(),
-            CSz("Invalid expression type passed to ResolveConstantExpression.  Type was (%S)"), ToString(Expr->Value->Type) )
-        );
-      }
+          InvalidDefaultWhileParsing(Parser,
+            FormatCountedString( GetTranArena(),
+              CSz("Invalid expression type passed to ResolveConstantExpression.  Type was (%S)"), ToString(Expr->Value->Type) )
+          );
+        }
 
-    } break;
+      } break;
 
-    InvalidDefaultWhileParsing(Parser,
-      FormatCountedString( GetTranArena(),
-        CSz("Invalid node type passed to ResolveConstantExpression.  Type was (%S)"), ToString(Node->Type) )
-    );
+      InvalidDefaultWhileParsing(Parser,
+        FormatCountedString( GetTranArena(),
+          CSz("Invalid node type passed to ResolveConstantExpression.  Type was (%S)"), ToString(Node->Type) )
+      );
+    }
   }
 
   return Result;

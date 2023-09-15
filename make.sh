@@ -7,7 +7,7 @@
 # NOTE(Jesse): The following are switches for twiddling during development.
 # Calling functions by name on the command line shouldn't be affected by these.
 
-RunPreemptivePoof=1
+# RunPreemptivePoof=1
 
 # BuildAllBinariesRunAllTests=1
 
@@ -29,8 +29,8 @@ RunParserTests=0
 
 # BuildAndRunAllExamples=1
 
-# RunIntegrationTests=1
-# INTEGRATION_TEST_INDEX=2
+RunIntegrationTests=1
+INTEGRATION_TEST_INDEX=5
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug -c0"
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 
