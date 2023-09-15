@@ -9,7 +9,7 @@
 
 # RunPreemptivePoof=1
 
-# BuildAllBinariesRunAllTests=1
+BuildAllBinariesRunAllTests=1
 
 # FetchBonsaiDebug=0
 
