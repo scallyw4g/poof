@@ -7096,6 +7096,11 @@ ResolveToBaseType(parse_context *Ctx, datatype *Data)
     case type_datatype_noop: { InvalidCodePath(); } break;
 
     case type_type_def:
+    {
+      type_def *TDef = SafeAccessPtr(type_def, Data);
+      Result = ResolveToBaseType(Ctx, TDef->Type);
+    } break;
+
     case type_enum_member:
     {
       NotImplemented;

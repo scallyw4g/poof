@@ -515,17 +515,13 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                         DoTrueBranch = False;
                       } break;
 
+                      case type_type_def:
                       case type_declaration:
                       case type_enum_member:
                       case type_primitive_def:
                       {
                         datatype ResolvedT = ResolveToBaseType(Ctx, ReplaceData);
                         DoTrueBranch = (ResolvedT.Type != type_datatype_noop);
-                      } break;
-
-                      case type_type_def:
-                      {
-                        InvalidCodePath();
                       } break;
                     }
 
