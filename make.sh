@@ -9,11 +9,11 @@
 
 # RunPreemptivePoof=1
 
-# BuildAllBinariesRunAllTests=1
+BuildAllBinariesRunAllTests=1
 
 # FetchBonsaiDebug=0
 
-BuildPoof=1
+# BuildPoof=1
 # RunPoof=1
 
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
@@ -22,8 +22,8 @@ BuildPoof=1
 # BuildPoofEmcc=0
 # RollupEmcc=0
 
-BuildParserTests=1
-RunParserTests=1
+# BuildParserTests=1
+# RunParserTests=1
 # TEST_LOG_LEVEL="--log-level LogLevel_Debug"
 # TEST_DEBUGGER="gdb --args"
 

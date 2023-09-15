@@ -7177,7 +7177,6 @@ ResolveToBaseType(parse_context *Ctx, datatype *Data)
     }
   )
 #endif
-
 }
 
 #include <poof/execute.h>

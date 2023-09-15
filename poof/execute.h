@@ -236,7 +236,7 @@ DoTrueFalse( parse_context *Ctx,
 }
 
 link_internal void
-MapCompoundDeclMembers(parse_context *Ctx, parser *ParentScope, parser *MapScope, datatype *CompoundDatatype, cs *MatchValue, cs *Sep, meta_func_arg_buffer *NewArgs, string_builder *OutputBuilder, memory_arena *Memory, umm *Depth)
+MapCompoundDeclMembers(parse_context *Ctx, parser *ParentScope, parser *MapScope, datatype *CompoundDatatype, cs *MatchValue, cs *Sep, meta_func_arg_buffer *ReplacePatterns, string_builder *OutputBuilder, memory_arena *Memory, umm *Depth)
 {
   declaration_stream *Members = GetMembersFor(Ctx, CompoundDatatype);
   if (Members)
@@ -263,9 +263,10 @@ MapCompoundDeclMembers(parse_context *Ctx, parser *ParentScope, parser *MapScope
         {
           Rewind(MapScope->Tokens);
 
-          SetLast(NewArgs, ReplacementPattern(*MatchValue, Datatype(Member)));
+          meta_func_arg_buffer NewArgs = ExtendBuffer(ReplacePatterns, 1, Memory);
+          SetLast(&NewArgs, ReplacementPattern(*MatchValue, Datatype(Member)));
 
-          counted_string StructFieldOutput = Execute(MapScope, NewArgs, Ctx, Memory, Depth);
+          counted_string StructFieldOutput = Execute(MapScope, &NewArgs, Ctx, Memory, Depth);
           if (MapScope->ErrorCode)
           {
             ParentScope->ErrorCode = MapScope->ErrorCode;
@@ -297,7 +298,22 @@ MapCompoundDeclMembers(parse_context *Ctx, parser *ParentScope, parser *MapScope
 
 
 link_internal void
-Map(parse_context *Ctx, meta_arg_operator Operator, c_token *MetaOperatorToken, parser *ParentScope, parser *MapScope, datatype *ReplaceData, cs *MatchValue, cs *Sep, meta_func_arg_buffer *NewArgs, string_builder *OutputBuilder, memory_arena *Memory, umm *Depth)
+Map( parse_context *Ctx,
+
+     meta_arg_operator Operator,
+     c_token *MetaOperatorToken,
+
+     parser *ParentScope,
+     parser *MapScope,
+
+     datatype *ReplaceData,
+     cs *MatchValue,
+     cs *Sep,
+     meta_func_arg_buffer *ReplacePatterns,
+
+     string_builder *OutputBuilder,
+     memory_arena *Memory,
+     umm *Depth )
 {
   switch (ReplaceData->Type)
   {
@@ -329,7 +345,7 @@ Map(parse_context *Ctx, meta_arg_operator Operator, c_token *MetaOperatorToken, 
           if (Operator == map || Operator == map_values)
           {
             auto EnumDecl = SafeAccess(enum_decl, Decl);
-            meta_func EnumFunc = MetaFunc(CSz("map_enum_values"), *NewArgs, *MapScope);
+            meta_func EnumFunc = MetaFunc(CSz("map_enum_values"), *ReplacePatterns, *MapScope);
 
             maybe_counted_string MapResult = MapEnumValues(Ctx, EnumDecl, &EnumFunc, MatchValue, Sep, Memory, Depth);
             if (MapResult.Error)
@@ -355,8 +371,7 @@ Map(parse_context *Ctx, meta_arg_operator Operator, c_token *MetaOperatorToken, 
         {
           if (Operator == map || Operator == map_members)
           {
-            /* MapCompoundDeclMembers(Ctx, ParentScope, MapScope, datatype *CompoundDatatype, cs *MatchValue, cs *Sep, meta_func_arg_buffer *NewArgs, string_builder *OutputBuilder, memory_arena *Memory, umm *Depth) */
-            MapCompoundDeclMembers(Ctx, ParentScope, MapScope, ReplaceData, MatchValue, Sep, NewArgs, OutputBuilder, Memory, Depth);
+            MapCompoundDeclMembers(Ctx, ParentScope, MapScope, ReplaceData, MatchValue, Sep, ReplacePatterns, OutputBuilder, Memory, Depth);
           }
           else
           {
@@ -387,7 +402,7 @@ Map(parse_context *Ctx, meta_arg_operator Operator, c_token *MetaOperatorToken, 
 
             case map_members:
             {
-              MapCompoundDeclMembers(Ctx, ParentScope, MapScope, ReplaceData, MatchValue, Sep, NewArgs, OutputBuilder, Memory, Depth);
+              MapCompoundDeclMembers(Ctx, ParentScope, MapScope, ReplaceData, MatchValue, Sep, ReplacePatterns, OutputBuilder, Memory, Depth);
             } break;
 
             case map_array:
@@ -398,10 +413,11 @@ Map(parse_context *Ctx, meta_arg_operator Operator, c_token *MetaOperatorToken, 
               u64 ArrayLength = ResolveConstantExpression(ParentScope, ArraySizeNode);
               for (u64 ArrayIndex = 0; ArrayIndex < ArrayLength; ++ArrayIndex)
               {
-                SetLast(NewArgs, ReplacementPattern(*MatchValue, PoofIndex(SafeTruncateToU32(ArrayIndex), SafeTruncateToU32(ArrayLength))));
+                meta_func_arg_buffer NewArgs = ExtendBuffer(ReplacePatterns, 1, Memory);
+                SetLast(&NewArgs, ReplacementPattern(*MatchValue, PoofIndex(SafeTruncateToU32(ArrayIndex), SafeTruncateToU32(ArrayLength))));
 
                 Rewind(MapScope->Tokens);
-                counted_string StructFieldOutput = Execute(MapScope, NewArgs, Ctx, Memory, Depth);
+                counted_string StructFieldOutput = Execute(MapScope, &NewArgs, Ctx, Memory, Depth);
                 if (MapScope->ErrorCode)
                 {
                   ParentScope->ErrorCode = MapScope->ErrorCode;
@@ -451,7 +467,7 @@ Map(parse_context *Ctx, meta_arg_operator Operator, c_token *MetaOperatorToken, 
     case type_type_def:
     {
       auto T = ResolveToBaseType(Ctx, ReplaceData);
-      Map(Ctx, Operator, MetaOperatorToken, ParentScope, MapScope, &T, MatchValue, Sep, NewArgs, OutputBuilder, Memory, Depth);
+      Map(Ctx, Operator, MetaOperatorToken, ParentScope, MapScope, &T, MatchValue, Sep, ReplacePatterns, OutputBuilder, Memory, Depth);
     } break;
   }
 }
@@ -546,7 +562,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
               case type_meta_func_arg_noop:
               {
                 // TODO(Jesse)(error_messages): internal compiler error?
-                InvalidCodePath();
+                InternalCompilerError(Scope, CSz("Got a ReplaceType of type_meta_func_arg_noop!"), MetaOperatorToken);
               } break;
 
               /* case poof_error: */
@@ -597,7 +613,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                     while (c_token *MapToken = PopTokenPointer(SymbolParser))
                     {
                       datatype D = GetDatatypeByName(Ctx, MapToken->Value);
-                      SetReverse(0, &NewArgs, ReplacementPattern(A0.Match, D));
+                      SetLast(&NewArgs, ReplacementPattern(A0.Match, D));
                       if (A1) { SetReverse(1, &NewArgs, ReplacementPattern(A1->Match, PoofIndex(Index, MaxIndex))); }
 
                       Rewind(MapFunc.Body.Tokens);
@@ -1087,9 +1103,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                     cs Sep = MaybeParseSepOperator(Scope);
 
                     parser MapScope = GetBodyTextForNextScope(Scope, Memory);
-                    meta_func_arg_buffer NewArgs = ExtendBuffer(ReplacePatterns, 1, Memory);
-
-                    Map(Ctx, Operator, MetaOperatorToken, Scope, &MapScope, ReplaceData, &MatchPattern->Value, &Sep, &NewArgs, &OutputBuilder, Memory, Depth);
+                    Map(Ctx, Operator, MetaOperatorToken, Scope, &MapScope, ReplaceData, &MatchPattern->Value, &Sep, Args, &OutputBuilder, Memory, Depth);
                   } break;
 
                 }
