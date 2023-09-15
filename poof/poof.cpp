@@ -6680,44 +6680,6 @@ GetTypeNameFor(parse_context *Ctx, datatype *Data, typedef_resolution_behavior T
   return Result;
 }
 
-link_internal declaration_stream*
-GetMembersFor(declaration *Decl)
-{
-  declaration_stream *Result = {};
-  switch(Decl->Type)
-  {
-    case type_compound_decl:
-    {
-      compound_decl *Anon = SafeAccess(compound_decl, Decl);
-      Result = &Anon->Members;
-    } break;
-
-    default: {} break;;
-  }
-
-  return Result;
-}
-
-link_internal declaration_stream*
-GetMembersFor(datatype *Data)
-{
-  declaration_stream *Result = {};
-  switch (Data->Type)
-  {
-    case type_declaration:
-    {
-      declaration *Decl = SafeAccess(declaration, Data);
-      Result = GetMembersFor(Decl);
-    } break;
-
-    default:
-    {
-    } break;
-  }
-
-  return Result;
-}
-
 // NOTE(Jesse): This function isn't quite an exact duplicate, but it's close
 // enough that we could probably merge all three with a templating thing
 // @duplicate_DatatypeIs_Decl
@@ -6951,7 +6913,7 @@ DatatypeIsFunctionDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
 
 // @duplicate_DatatypeIs_Decl
 link_internal compound_decl *
-DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
+DatatypeIsCompoundDecl(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token *MetaOperatorT = 0)
 {
   compound_decl *Result = {};
   switch (Data->Type)
@@ -6969,7 +6931,7 @@ DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
 
       type_def *TDef = SafeAccessPtr(type_def, Data);
       datatype DT = ResolveToBaseType(Ctx, TDef);
-      Result = DatatypeIsCompoundDecl(Ctx, Scope, &DT, MetaOperatorT);
+      Result = DatatypeIsCompoundDecl(Ctx, &DT, Scope, MetaOperatorT);
     } break;
 
     case type_declaration:
@@ -6980,8 +6942,8 @@ DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
       {
         case type_declaration_noop:
         {
-          // TODO(Jesse) ?
-          InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT);
+          // TODO(Jesse): ?
+          if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); }
         } break;
 
         case type_enum_decl:
@@ -7000,10 +6962,63 @@ DatatypeIsCompoundDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
           variable_decl *VDecl = SafeAccess(variable_decl, Decl);
           datatype DT = ResolveToBaseType(Ctx, VDecl->Type);
           /* Assert(DatatypeIsVariableDecl(&DT) == False); */
-          Result = DatatypeIsCompoundDecl(Ctx, Scope, &DT, MetaOperatorT);
+          Result = DatatypeIsCompoundDecl(Ctx, &DT, Scope, MetaOperatorT);
         } break;
       }
 
+    } break;
+  }
+
+  return Result;
+}
+
+link_internal declaration_stream*
+GetMembersFor(parse_context *Ctx, declaration *Decl)
+{
+  declaration_stream *Result = {};
+  switch(Decl->Type)
+  {
+    case type_compound_decl:
+    {
+      compound_decl *Anon = SafeAccess(compound_decl, Decl);
+      Result = &Anon->Members;
+    } break;
+
+    case type_variable_decl:
+    {
+      variable_decl *VDecl = SafeAccess(variable_decl, Decl);
+      datatype DT = ResolveToBaseType(Ctx, VDecl->Type);
+      /* Assert(DatatypeIsVariableDecl(&DT) == False); */
+      auto Compound = DatatypeIsCompoundDecl(Ctx, &DT);
+      if (Compound) { Result = &Compound->Members; }
+    } break;
+
+    default: {} break;;
+  }
+
+  return Result;
+}
+
+link_internal declaration_stream*
+GetMembersFor(parse_context *Ctx, datatype *Data)
+{
+  declaration_stream *Result = {};
+  switch (Data->Type)
+  {
+    case type_declaration:
+    {
+      declaration *Decl = SafeAccess(declaration, Data);
+      Result = GetMembersFor(Ctx, Decl);
+    } break;
+
+    case type_type_def:
+    {
+      // TODO(Jesse): Resolve typedef here?
+      /* NotImplemented; */
+    } break;
+
+    default:
+    {
     } break;
   }
 

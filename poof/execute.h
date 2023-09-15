@@ -235,6 +235,66 @@ DoTrueFalse( parse_context *Ctx,
   }
 }
 
+link_internal void
+MapCompoundDeclMembers(parse_context *Ctx, parser *ParentScope, parser *MapScope, datatype *CompoundDatatype, cs *MatchValue, cs *Sep, meta_func_arg_buffer *NewArgs, string_builder *OutputBuilder, memory_arena *Memory, umm *Depth)
+{
+  declaration_stream *Members = GetMembersFor(Ctx, CompoundDatatype);
+  if (Members)
+  {
+    ITERATE_OVER_AS(Member, Members)
+    {
+      declaration* Member = GET_ELEMENT(MemberIter);
+
+      switch (Member->Type)
+      {
+        case type_declaration_noop:
+        {
+          InvalidCodePath();
+        } break;
+
+        case type_enum_decl:
+        case type_function_decl:
+        {
+          // What do we do for functions and enum declaratons ..?  Maybe the same thing as compound_decl?
+        } break;
+
+        case type_variable_decl:
+        case type_compound_decl:
+        {
+          Rewind(MapScope->Tokens);
+
+          SetLast(NewArgs, ReplacementPattern(*MatchValue, Datatype(Member)));
+
+          counted_string StructFieldOutput = Execute(MapScope, NewArgs, Ctx, Memory, Depth);
+          if (MapScope->ErrorCode)
+          {
+            ParentScope->ErrorCode = MapScope->ErrorCode;
+          }
+          else
+          {
+            // TODO(Jesse): Pretty sure there should be a better way of handling this now that
+            // all the map paths have collapsed..
+            if (MemberIter.At->Next)
+            {
+              HandleWhitespaceAndAppend(OutputBuilder, StructFieldOutput, *Sep);
+            }
+            else
+            {
+              HandleWhitespaceAndAppend(OutputBuilder, StructFieldOutput, {}, True);
+            }
+          }
+        } break;
+      }
+      continue;
+    }
+  }
+  else
+  {
+    // TODO(Jesse): Pretty sure this is InternalCompilerError
+    NotImplemented;
+  }
+}
+
 // TODO(Jesse): Instead of the error living on the parser, it should live in the result from this fn
 link_internal counted_string
 Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_arena* Memory, umm *Depth)
@@ -451,8 +511,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                     {
                       case type_datatype_noop:
                       {
-                        // TODO(Jesse): When would this ever fire?  I thought this
-                        // was an undefined case..
+                        // TODO(Jesse): When would this ever fire?  I thought this was an undefined case..
                         DoTrueBranch = False;
                       } break;
 
@@ -494,7 +553,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                   case is_compound:
                   {
                     RequireToken(Scope, CTokenType_Question);
-                    compound_decl *CD = DatatypeIsCompoundDecl(Ctx, Scope, ReplaceData, MetaOperatorToken);
+                    compound_decl *CD = DatatypeIsCompoundDecl(Ctx, ReplaceData, Scope, MetaOperatorToken);
 
                     b32 DoTrueBranch = (CD != 0);
 
@@ -516,7 +575,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                   case is_union:
                   {
                     RequireToken(Scope, CTokenType_Question);
-                    compound_decl *CD = DatatypeIsCompoundDecl(Ctx, Scope, ReplaceData, MetaOperatorToken);
+                    compound_decl *CD = DatatypeIsCompoundDecl(Ctx, ReplaceData, Scope, MetaOperatorToken);
 
                     b32 DoTrueBranch = False;
                     if (CD)
@@ -680,14 +739,14 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                             if (Var->Type.DatatypeToken)
                             {
                               auto DT = GetDatatypeByName(Ctx, Var->Type.DatatypeToken->Value);
-                              Members = GetMembersFor(&DT);
+                              Members = GetMembersFor(Ctx, &DT);
 
                             }
                           }
                           else
                           {
                             // Compound decls must have members .. right?
-                            Members = GetMembersFor(Decl);
+                            Members = GetMembersFor(Ctx, Decl);
                             Assert(Members);
                           }
 
@@ -755,7 +814,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
 
                   case member:
                   {
-                    declaration_stream *Members = GetMembersFor(ReplaceData);
+                    declaration_stream *Members = GetMembersFor(Ctx, ReplaceData);
                     if (Members)
                     {
                       RequireToken(Scope, CTokenType_OpenParen);
@@ -929,61 +988,8 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                           {
                             if (Operator == map || Operator == map_members)
                             {
-                              declaration_stream *Members = GetMembersFor(ReplaceData);
-                              if (Members)
-                              {
-                                ITERATE_OVER_AS(Member, Members)
-                                {
-                                  declaration* Member = GET_ELEMENT(MemberIter);
-
-                                  switch (Member->Type)
-                                  {
-                                    case type_declaration_noop:
-                                    {
-                                      InvalidCodePath();
-                                    } break;
-
-                                    case type_enum_decl:
-                                    case type_function_decl:
-                                    {
-                                      // What do we do for functions and enum declaratons ..?  Maybe the same thing as compound_decl?
-                                    } break;
-
-                                    case type_variable_decl:
-                                    case type_compound_decl:
-                                    {
-                                      Rewind(MapScope.Tokens);
-
-                                      SetLast(&NewArgs, ReplacementPattern(MatchPattern->Value, Datatype(Member)));
-
-                                      counted_string StructFieldOutput = Execute(&MapScope, &NewArgs, Ctx, Memory, Depth);
-                                      if (MapScope.ErrorCode)
-                                      {
-                                        Scope->ErrorCode = MapScope.ErrorCode;
-                                      }
-                                      else
-                                      {
-                                        // TODO(Jesse): Pretty sure there should be a better way of handling this now that
-                                        // all the map paths have collapsed..
-                                        if (MemberIter.At->Next)
-                                        {
-                                          HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput, Sep);
-                                        }
-                                        else
-                                        {
-                                          HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput, {}, True);
-                                        }
-                                      }
-                                    } break;
-                                  }
-                                  continue;
-                                }
-                              }
-                              else
-                              {
-                                // TODO(Jesse): Pretty sure this is InternalCompilerError
-                                NotImplemented;
-                              }
+                              /* MapCompoundDeclMembers(Ctx, ParentScope, MapScope, datatype *CompoundDatatype, cs *MatchValue, cs *Sep, meta_func_arg_buffer *NewArgs, string_builder *OutputBuilder, memory_arena *Memory, umm *Depth) */
+                              MapCompoundDeclMembers(Ctx, Scope, &MapScope, ReplaceData, &MatchPattern->Value, &Sep, &NewArgs, &OutputBuilder, Memory, Depth);
                             }
                             else
                             {
@@ -998,37 +1004,69 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
 
                           case type_variable_decl:
                           {
-                            if (Operator == map || Operator == map_array)
+                            switch (Operator)
                             {
-                              variable_decl *VDecl = SafeAccess(variable_decl, Decl);
-                              ast_node *ArraySizeNode = VDecl->StaticBufferSize;
+                              default: {} break;;
 
-                              u64 ArrayLength = ResolveConstantExpression(Scope, ArraySizeNode);
-                              for (u64 ArrayIndex = 0; ArrayIndex < ArrayLength; ++ArrayIndex)
+                              case map:
                               {
-                                SetLast(&NewArgs, ReplacementPattern(MatchPattern->Value, PoofIndex(SafeTruncateToU32(ArrayIndex), SafeTruncateToU32(ArrayLength))));
+                                PoofTypeError( Scope,
+                                               ParseErrorCode_InvalidArgument,
+                                               FormatCountedString( GetTranArena(),
+                                                                    CSz("Calling (%S) on a variable decl is underspecified; use `map_members` or `map_array` specifically."),
+                                                                    MetaOperatorToken->Value),
+                                               MetaOperatorToken);
+                              } break;
 
-                                Rewind(MapScope.Tokens);
-                                counted_string StructFieldOutput = Execute(&MapScope, &NewArgs, Ctx, Memory, Depth);
-                                if (MapScope.ErrorCode)
+                              case map_members:
+                              {
+                                MapCompoundDeclMembers(Ctx, Scope, &MapScope, ReplaceData, &MatchPattern->Value, &Sep, &NewArgs, &OutputBuilder, Memory, Depth);
+                              } break;
+
+                              case map_array:
+                              {
+                                variable_decl *VDecl = SafeAccess(variable_decl, Decl);
+                                ast_node *ArraySizeNode = VDecl->StaticBufferSize;
+
+                                u64 ArrayLength = ResolveConstantExpression(Scope, ArraySizeNode);
+                                for (u64 ArrayIndex = 0; ArrayIndex < ArrayLength; ++ArrayIndex)
                                 {
-                                  Scope->ErrorCode = MapScope.ErrorCode;
-                                }
-                                else
-                                {
-                                  // TODO(Jesse): Pretty sure there should be a better way of handling this now that
-                                  // all the map paths have collapsed..
-                                  if (ArrayIndex+1 < ArrayLength)
+                                  SetLast(&NewArgs, ReplacementPattern(MatchPattern->Value, PoofIndex(SafeTruncateToU32(ArrayIndex), SafeTruncateToU32(ArrayLength))));
+
+                                  Rewind(MapScope.Tokens);
+                                  counted_string StructFieldOutput = Execute(&MapScope, &NewArgs, Ctx, Memory, Depth);
+                                  if (MapScope.ErrorCode)
                                   {
-                                    HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput, Sep);
+                                    Scope->ErrorCode = MapScope.ErrorCode;
                                   }
                                   else
                                   {
-                                    HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput, {}, True);
+                                    // TODO(Jesse): Pretty sure there should be a better way of handling this now that
+                                    // all the map paths have collapsed..
+                                    if (ArrayIndex+1 < ArrayLength)
+                                    {
+                                      HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput, Sep);
+                                    }
+                                    else
+                                    {
+                                      HandleWhitespaceAndAppend(&OutputBuilder, StructFieldOutput, {}, True);
+                                    }
                                   }
                                 }
-                              }
+                              } break;
+
+                              case map_values:
+                              {
+                                PoofTypeError( Scope,
+                                               ParseErrorCode_InvalidArgument,
+                                               FormatCountedString( GetTranArena(),
+                                                                    CSz("Incorrectly called (%S) on a variable decl."),
+                                                                    MetaOperatorToken->Value),
+                                               MetaOperatorToken);
+                              } break;
+
                             }
+
                           } break;
                         }
                       } break;
