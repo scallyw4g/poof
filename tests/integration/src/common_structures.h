@@ -156,5 +156,7 @@ struct foo_struct_1
   foofunc2 FooFun2;
 
   void **(*func_type_name)(void) AnotherFunc[2];
+
+  u32 NamedThing;
 };
 

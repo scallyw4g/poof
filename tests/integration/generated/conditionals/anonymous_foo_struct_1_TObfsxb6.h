@@ -72,4 +72,6 @@ foofunc2 FooFun2 not primitive
 
 func_type_name AnotherFunc not primitive
 
+u32 NamedThing is primitive
+
 

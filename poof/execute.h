@@ -873,9 +873,24 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                     RequireToken(Scope, CTokenType_CloseParen);
                     RequireToken(Scope, CTokenType_Question);
 
-                    cs ThisTypeName = GetTypeNameFor(Ctx, ReplaceData, TypedefResoultion_ResolveTypedefs, Memory);
+                    cs ThisName = {};
 
-                    b32 TypesMatch = StringsMatch(ThisTypeName, QueryTypeName);
+                    switch (Operator)
+                    {
+                      case is_named:
+                      {
+                        ThisName = GetNameForDatatype(ReplaceData, Memory);
+                      } break;
+
+                      case is_type:
+                      {
+                        ThisName = GetTypeNameFor(Ctx, ReplaceData, TypedefResoultion_ResolveTypedefs, Memory);
+                      } break;
+
+                      InvalidDefaultCase;
+                    }
+
+                    b32 TypesMatch = StringsMatch(ThisName, QueryTypeName);
                     DoTrueFalse(Ctx, Scope, ReplacePatterns, TypesMatch, &OutputBuilder, Memory, Depth);
                   } break;
 

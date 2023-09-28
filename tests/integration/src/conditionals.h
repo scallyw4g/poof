@@ -153,9 +153,18 @@ poof(
   }
 )
 #include <tests/integration/generated/conditionals/anonymous_foo_struct_1_gB856lL7.h>
-
-
-
 #endif
 
-
+poof(
+  func (foo_struct_1 TFooStruct)
+  {
+    TFooStruct.map_members(Member)
+    {
+      Member.is_named(NamedThing)?
+      {
+        (Member.type) (Member.name) is named NamedThing
+      }
+    }
+  }
+)
+#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_rHXPMI2N.h>

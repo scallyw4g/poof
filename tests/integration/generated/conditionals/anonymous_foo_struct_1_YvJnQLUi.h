@@ -72,4 +72,6 @@ foofunc2 FooFun2 is a function
 
 func_type_name AnotherFunc is a function
 
+u32 NamedThing not a function
+
 

@@ -72,4 +72,6 @@ foofunc2 FooFun2 not enum
 
 func_type_name AnotherFunc not enum
 
+u32 NamedThing not enum
+
 

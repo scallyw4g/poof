@@ -72,4 +72,6 @@ foofunc2 FooFun2 not struct
 
 func_type_name AnotherFunc not struct
 
+u32 NamedThing not struct
+
 

@@ -35,4 +35,5 @@ foofunc0 FooFun
 foofunc1 FooFun1 
 foofunc2 FooFun2 
 func_type_name AnotherFunc 
+u32 NamedThing 
 

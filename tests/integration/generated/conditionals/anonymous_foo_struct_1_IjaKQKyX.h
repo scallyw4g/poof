@@ -72,4 +72,6 @@ foofunc2 FooFun2 defined
 
 func_type_name AnotherFunc not defined
 
+u32 NamedThing defined
+
 
