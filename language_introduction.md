@@ -255,7 +255,7 @@ contains_type
 
 ### Literal Operators
 
-* name
+:fire: name
 
 Replaces the type argument with the name of the type.
 
@@ -268,12 +268,12 @@ struct my_struct
 };
 ```
 
-* type
+:fire: type
 
 Replaces the type argument with the type of the type.  The type of a struct is
 `struct`, the type of an enum is `enum`, the type of an integer literal is `int` .. etc.
 
-* value
+:fire: value
 
 Replaces the type argument with the default value of the type.  A common
 use case for this is when iterating over bitfield enums and the value of
@@ -320,7 +320,7 @@ The .value operator for bar outputs: 0
 The .value operator for the_answer outputs: 42.f
 
 
-* array
+:fire: array
 
 Replaces the type argument with the array size of the type.  This is currently
 not implemented, and will remain so until I discover a use-case. I expect I
@@ -330,7 +330,7 @@ will discover one eventually, so I'm putting it on the Alpha roadmap.
 
 Iterators are the bread-and-butter of most poof functions.
 
-* map_members
+:fire: map_members
 
 Iterator that visits each member of a struct or union, in the order they are defined.
 
@@ -356,7 +356,7 @@ float bar
 
 ```
 
-* map_values
+:fire: map_values
 
 Iterator that visits each member of an enum, in the order they are defined.
 
@@ -387,19 +387,19 @@ myenum_value2 (1 << 31)
 
 ```
 
-* map_array
+:fire: map_array
 
 Iterator that visits each index of an array, in the order they are defined.
 
 This iterator is difficult to produce a contrived example for, but will be
 explored later in more advanced examples.
 
-* map
+:fire: map
 
 Iterator that is agnostic of the input type.  Any of the input types above will
 work.  If the input type cannot be iterated, `poof` will emit an error.
 
-* sep
+:fire: sep
 
 Utility operator used in conjunction with iterators.  Sep accepts a symbol as
 an argument and interleaves that symbol between executions of the iterator.
@@ -422,7 +422,7 @@ foo && bar
 
 ### Accessor Operators
 
-* member
+:fire: member
 
 The member operator accesses a member by index, or by name.
 
@@ -481,7 +481,7 @@ to have the branches be implicitly one-after-the-other.  This is somewhat
 subject to change in the future; there are problems with this approach as well.
 
 
-* is_enum
+:fire: is_enum
 
 ```
 struct my_struct { int foo; float bar; };
@@ -499,7 +499,7 @@ is not an enum
 
 ```
 
-* is_struct
+:fire: is_struct
 
 ```
 struct my_struct { int foo; float bar; };
@@ -517,43 +517,41 @@ is a struct!
 
 ```
 
-* is_union
+:fire: is_union
 
 Checks if the given type a union.
 
-* is_defined
+:fire: is_defined
 
 Checks if the given type is defined.  Extremely useful in rare cases.
 
-* is_compound
+:fire: is_compound
 
 Checks if the given type is either a struct or union.
 
-* is_primitive
+:fire: is_primitive
 
 Checks if the given type is primitive.  Primitive types are the following (including valid combinations, and pointers to these types):
 
 `int, float, long, double, char, unsigned, void`
 
-* is_function
+:fire: is_function
 
 Checks if the given type is a function.
 
-* is_array
+:fire: is_array
 
 Checks if the given type has an array length.
 
-* is_type
+:fire: is_type
 
 Checks if the given type is equal to the type name specified.
 
-Synonym for is_named.  One of these will be removed in a future revision;
+:fire: is_named
 
-* is_named
+Checks if the member has a specific name.
 
-Synonym for is_type.  One of these will be removed in a future revision;
-
-* contains_type
+:fire: contains_type
 
 Checks if a compound type (struct or union) contains a given type.  This is a
 sugar operator; it could be implemented by users with a loop and conditional,
