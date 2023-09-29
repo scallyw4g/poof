@@ -56,7 +56,7 @@ link_internal macro_def * IdentifierShouldBeExpanded(parse_context *Ctx, parser 
 
 link_internal c_token_cursor * ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T);
 link_internal parser * ExpandMacro(parse_context *Ctx, parser *Parser, macro_def *Macro, memory_arena *PermMemory, memory_arena *TempMemory, b32 ScanArgsForAdditionalMacros = False, b32 WasCalledFromExpandMacroConstantExpression = False);
-link_internal u64      ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena *PermMemory, memory_arena *TempMemory, u64 PreviousValue, b32 LogicalNotNextValue);
+link_internal s64      ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena *PermMemory, memory_arena *TempMemory, s64 PreviousValue, b32 LogicalNotNextValue);
 
 link_internal macro_def * GetMacroDef(parse_context *Ctx, counted_string DefineValue) ;
 link_internal c_token *   EatIfBlock(parser *Parser, erase_token_mode Erased);
@@ -3379,10 +3379,10 @@ ParseFunctionOrVariableDecl(parse_context *Ctx, type_spec *TypeSpec, type_indire
 }
 #endif
 
-link_internal u64
-ApplyOperator(parser *Parser, u64 LHS, c_token_type OperatorType, u64 RHS)
+link_internal s64
+ApplyOperator(parser *Parser, s64 LHS, c_token_type OperatorType, s64 RHS)
 {
-  u64 Result = 0;
+  s64 Result = 0;
   switch (OperatorType)
   {
     case CTokenType_LT:
@@ -3531,8 +3531,6 @@ ApplyOperator(parser *Parser, u64 LHS, c_token_type OperatorType, u64 RHS)
       Result = LHS ^ RHS;
     } break;
 
-
-
     InvalidDefaultWhileParsing(Parser, CSz("Invalid operator type passed to ApplyOperator."));
   }
 
@@ -3556,14 +3554,12 @@ IsNextTokenMacro(parse_context *Ctx, parser *Parser)
 // track each macro expansion and where we're at in each.  That seemed onerous
 // and annoying, so I did it the 'lazy' recursive way.
 //
-// TODO(Jesse): Should this function not return a signed value?!  Pretty sure
-// constant expressions can resolve to negative values.. just sayin..
-link_internal u64
-ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena *PermMemory, memory_arena *TempMemory, u64 PreviousValue, b32 LogicalNotNextValue)
+link_internal s64
+ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena *PermMemory, memory_arena *TempMemory, s64 PreviousValue, b32 LogicalNotNextValue)
 {
   TIMED_FUNCTION();
 
-  u64 Result = PreviousValue;
+  s64 Result = PreviousValue;
 
   EatSpacesTabsAndEscapedNewlines(Parser);
 
@@ -3571,8 +3567,6 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
   {
     switch (T->Type)
     {
-/* compound_true */
-
       case CT_MacroLiteral:
       {
         if (T->Erased)
@@ -3598,7 +3592,7 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
       case CTokenType_Question:
       {
         RequireTokenRaw(Parser, T);
-        u64 Operator = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, Result, LogicalNotNextValue);
+        s64 Operator = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, Result, LogicalNotNextValue);
         if (Operator)
         {
           Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, Result, LogicalNotNextValue);
@@ -3631,7 +3625,7 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
               // TODO(Jesse, tags: correctness): Should this path set the next token to CT_MacroLiteral
               c_token *PotentialMacroToken = PeekTokenRawPointer(Parser);
               macro_def *M = GetMacroDef(Ctx, PotentialMacroToken->Value);
-              b64 NextTokenIsMacro = (M && !M->Undefed);
+              b32 NextTokenIsMacro = (M && !M->Undefed);
               RequireTokenRaw(Parser, PotentialMacroToken->Type); // @optimize_call_advance_instead_of_being_dumb
 
               Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, LogicalNotNextValue ? !NextTokenIsMacro : NextTokenIsMacro, False);
@@ -3650,7 +3644,7 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
               // TODO(Jesse, tags: correctness): Should this path has to set the next token to CT_MacroLiteral
               c_token *PotentialMacroToken = PeekTokenRawPointer(Parser);
               macro_def *M = GetMacroDef(Ctx, PotentialMacroToken->Value);
-              b64 NextTokenIsMacro = (M && !M->Undefed);
+              b32 NextTokenIsMacro = (M && !M->Undefed);
               RequireTokenRaw(Parser, PotentialMacroToken->Type); // @optimize_call_advance_instead_of_being_dumb
 
               while (ParenCount--)
@@ -3695,7 +3689,7 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
             }
             else
             {
-              u64 MacroExpansion = ResolveMacroConstantExpression(Ctx, Expanded, PermMemory, TempMemory, Result, LogicalNotNextValue);
+              s64 MacroExpansion = ResolveMacroConstantExpression(Ctx, Expanded, PermMemory, TempMemory, Result, LogicalNotNextValue);
               Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, MacroExpansion, False);
             }
           }
@@ -3716,8 +3710,17 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
       {
         RequireTokenRaw(Parser, T->Type);
 
-        u64 ThisValue = LogicalNotNextValue ? !T->UnsignedValue : T->UnsignedValue;
-        Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, ThisValue, False);
+        s64 ThisValue = LogicalNotNextValue ? !T->as_s64 : T->as_s64;
+
+        if (T->Flags & CTFlags_Signed)
+        {
+          s64 OperationResult = ApplyOperator(Parser, PreviousValue, CTokenType_Plus, ThisValue);
+          Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, OperationResult, False);
+        }
+        else
+        {
+          Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, ThisValue, False);
+        }
 
       } break;
 
@@ -3764,8 +3767,8 @@ ResolveMacroConstantExpression(parse_context *Ctx, parser *Parser, memory_arena 
       {
         RequireTokenRaw(Parser, T->Type);
         c_token_type OperatorToApply = T->Type;
-        u64 NextValue = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, Result, False);
-        u64 OperationResult = ApplyOperator(Parser, Result, OperatorToApply, NextValue);
+        s64 NextValue = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, Result, False);
+        s64 OperationResult = ApplyOperator(Parser, Result, OperatorToApply, NextValue);
         Result = ResolveMacroConstantExpression(Ctx, Parser, PermMemory, TempMemory, OperationResult, False);
       } break;
 

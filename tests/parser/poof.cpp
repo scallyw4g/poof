@@ -405,7 +405,7 @@ TestBasicTokenizationAndParsing(memory_arena* Memory)
     {
       c_token T = PopToken(Parser);
       TestThat(T.Type == CTokenType_IntLiteral);
-      TestThat(T.as_s32 == -42);
+      TestThat(T.as_s64 == -42);
     }
 
     //
