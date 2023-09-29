@@ -7920,8 +7920,6 @@ WalkAst(ast_node* Ast)
 }
 
 #ifndef EXCLUDE_PREPROCESSOR_MAIN
-#define SUCCESS_EXIT_CODE 0
-#define FAILURE_EXIT_CODE 1
 
 link_internal void
 PrintHashtable(parser_hashtable *Table)
@@ -8090,7 +8088,7 @@ main(s32 ArgCount_, const char** ArgStrings)
 
   if (Ctx.Args.HelpTextPrinted)
   {
-    return SUCCESS_EXIT_CODE;
+    return CLI_SUCCESS_EXIT_CODE;
   }
 
   TryCreateDirectory(TMP_DIR_ROOT);
@@ -8111,7 +8109,7 @@ main(s32 ArgCount_, const char** ArgStrings)
     else
     {
       Error("Booting debug system");
-      return FAILURE_EXIT_CODE;
+      return CLI_FAILURE_EXIT_CODE;
     }
   }
 #endif
@@ -8262,7 +8260,7 @@ main(s32 ArgCount_, const char** ArgStrings)
 
   /* DebugPrint(Ctx); */
 
-  s32 Result = Success ? SUCCESS_EXIT_CODE : FAILURE_EXIT_CODE ;
+  s32 Result = Success ? CLI_SUCCESS_EXIT_CODE : CLI_FAILURE_EXIT_CODE ;
   return Result;
 }
 #endif
