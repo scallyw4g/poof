@@ -111,18 +111,21 @@ poof(
   }
 )
 
+#if 0
 // TODO(Jesse)(abstract): How would we articulate this if we wanted to have
 // multiple different maybe boxes for counted string?  I guess we'd have to
 // mangle the name to include both types.. but that seems like it sucks a lot..
-/* poof( maybe(counted_string) ) */
-/* #include <generated/maybe_counted_string_parse_error_code.h> */
+poof( maybe(counted_string, parse_error_code) )
+#include <generated/maybe_counted_string_parse_error_code.h>
 
+#else
 // TODO(Jesse): WTF is this nonsense??
 struct maybe_counted_string
 {
   parse_error_code Error;
   counted_string E;
 };
+#endif
 
 
 link_internal maybe_counted_string

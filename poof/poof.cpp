@@ -4467,6 +4467,8 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
           {
             comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
 
+            if (Ctx->CurrentParser->ErrorCode) break;
+
             switch (Member.Type)
             {
               case type_variable_decl:
@@ -4496,7 +4498,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
                 // TmpMember.variable_decl.TypeSpec.Datatype = Datatype(StructDecl);
 
                 TmpMember.variable_decl.Name             = Decl.NameT->Value;
-                TmpMember.variable_decl.Type.Indirection      = Decl.Indirection;
+                TmpMember.variable_decl.Type.Indirection = Decl.Indirection;
                 TmpMember.variable_decl.StaticBufferSize = Decl.StaticBufferSize;
                 TmpMember.variable_decl.Value            = Decl.Value;
                 TmpMember.variable_decl.Value            = Decl.Value;

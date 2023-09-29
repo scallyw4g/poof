@@ -40,6 +40,12 @@ WriteStructTo(d_union_decl* dUnion, native_file* OutFile, memory_arena* Memory)
 42ul
 42ull
 
+
+-42
+-42l
+-42ll
+-42LL
+
 //
 // Hex Constant tests
 //

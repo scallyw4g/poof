@@ -394,13 +394,18 @@ TestBasicTokenizationAndParsing(memory_arena* Memory)
     // Integral contant tests
     //
 
-    for (u32 Count = 0;
-        Count < 15;
-        ++Count)
+    for (u32 Count = 0; Count < 15; ++Count)
     {
       c_token T = PopToken(Parser);
       TestThat(T.Type == CTokenType_IntLiteral);
       TestThat(T.UnsignedValue == 42);
+    }
+
+    RangeIterator(Count, 4)
+    {
+      c_token T = PopToken(Parser);
+      TestThat(T.Type == CTokenType_IntLiteral);
+      TestThat(T.as_s32 == -42);
     }
 
     //
@@ -2714,6 +2719,7 @@ main(s32 ArgCount, const char** Args)
   Global_LogLevel = LogLevel_Debug;
   TestPoofErrors(Memory);
   Global_LogLevel = PrevLogLevel;
+
 #endif
 
   TestAst(Memory);

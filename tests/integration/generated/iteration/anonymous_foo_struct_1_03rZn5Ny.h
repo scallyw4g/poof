@@ -1,7 +1,7 @@
 int  first 42
-int  second  - 1
+int  second -1
 int  bar 0
-int  baz (1 << 1) - 1
+int  baz (1 << 1)-1
 float  fbaz 42.0f
 double  dbaz 42.0
 long double  ldbaz 42.0

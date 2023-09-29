@@ -7,13 +7,13 @@
 # NOTE(Jesse): The following are switches for twiddling during development.
 # Calling functions by name on the command line shouldn't be affected by these.
 
-RunPreemptivePoof=1
+# RunPreemptivePoof=1
 
-# BuildAllBinariesRunAllTests=1
+BuildAllBinariesRunAllTests=1
 
 # FetchBonsaiDebug=0
 
-BuildPoof=1
+# BuildPoof=1
 # RunPoof=1
 
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
@@ -30,7 +30,7 @@ BuildPoof=1
 # BuildAndRunAllExamples=1
 
 # RunIntegrationTests=1
-# INTEGRATION_TEST_INDEX=2
+# INTEGRATION_TEST_INDEX=1
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug -c0"
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 
