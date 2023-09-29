@@ -25,11 +25,6 @@ well, it gets even more hilarious.  In `poof`, printing any enum value as it's
 human-readable string is one concise line of poof, and going back the other way
 from-string-to-int is also a 1-liner.
 
-For anyone that objects with a notion similar to: "HEY!  C++ 20-whatever adds
-feature X that solves this!", my response is "they've taken 45 years to solve
-this problem.  Poof solved it in the first week of development.  How long will
-it take C++ to solve the ergonomics problems I fixed a year into development?"
-
 # Getting started
 
 See [https://scallyw4g.github.io/poof](https://scallyw4g.github.io/poof)
