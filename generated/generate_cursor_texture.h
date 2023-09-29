@@ -6,6 +6,7 @@ struct texture_cursor
   texture *End;
 };
 
+
 link_internal texture_cursor
 TextureCursor(umm ElementCount, memory_arena* Memory)
 {
@@ -23,6 +24,16 @@ GetPtr(texture_cursor *Cursor, umm ElementIndex)
 {
   texture *Result = {};
   if (ElementIndex < AtElements(Cursor)) {
+    Result = Cursor->Start+ElementIndex;
+  }
+  return Result;
+}
+
+link_internal texture*
+GetPtrUnsafe(texture_cursor *Cursor, umm ElementIndex)
+{
+  texture *Result = {};
+  if (ElementIndex < TotalElements(Cursor)) {
     Result = Cursor->Start+ElementIndex;
   }
   return Result;
@@ -47,6 +58,14 @@ Set(texture_cursor *Cursor, umm ElementIndex, texture Element)
   {
     Cursor->At++;
   }
+}
+
+link_internal texture*
+Advance(texture_cursor *Cursor)
+{
+  texture * Result = {};
+  if ( Cursor->At < Cursor->End ) { Result = Cursor->At++; }
+  return Result;
 }
 
 link_internal texture *
@@ -93,5 +112,22 @@ Remove(texture_cursor *Cursor, texture Query)
   }
   return Result;
 }
+
+
+link_internal b32
+ResizeCursor(texture_cursor *Cursor, umm Count, memory_arena *Memory)
+{
+  umm CurrentSize = TotalSize(Cursor);
+
+  TruncateToElementCount(Cursor, Count);
+  umm NewSize = TotalSize(Cursor);
+
+  Assert(NewSize/sizeof(texture) == Count);
+
+  /* Info("Attempting to reallocate CurrentSize(%u), NewSize(%u)", CurrentSize, NewSize); */
+  Ensure(Reallocate((u8*)Cursor->Start, Memory, CurrentSize, NewSize));
+  return 0;
+}
+
 
 

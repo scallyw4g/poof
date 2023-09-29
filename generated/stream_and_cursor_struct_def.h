@@ -6,6 +6,7 @@ struct compound_decl_cursor
   compound_decl *End;
 };
 
+
 link_internal compound_decl_cursor
 CompoundDeclCursor(umm ElementCount, memory_arena* Memory)
 {
@@ -23,6 +24,16 @@ GetPtr(compound_decl_cursor *Cursor, umm ElementIndex)
 {
   compound_decl *Result = {};
   if (ElementIndex < AtElements(Cursor)) {
+    Result = Cursor->Start+ElementIndex;
+  }
+  return Result;
+}
+
+link_internal compound_decl*
+GetPtrUnsafe(compound_decl_cursor *Cursor, umm ElementIndex)
+{
+  compound_decl *Result = {};
+  if (ElementIndex < TotalElements(Cursor)) {
     Result = Cursor->Start+ElementIndex;
   }
   return Result;
@@ -47,6 +58,14 @@ Set(compound_decl_cursor *Cursor, umm ElementIndex, compound_decl Element)
   {
     Cursor->At++;
   }
+}
+
+link_internal compound_decl*
+Advance(compound_decl_cursor *Cursor)
+{
+  compound_decl * Result = {};
+  if ( Cursor->At < Cursor->End ) { Result = Cursor->At++; }
+  return Result;
 }
 
 link_internal compound_decl *
@@ -92,6 +111,22 @@ Remove(compound_decl_cursor *Cursor, compound_decl Query)
     }
   }
   return Result;
+}
+
+
+link_internal b32
+ResizeCursor(compound_decl_cursor *Cursor, umm Count, memory_arena *Memory)
+{
+  umm CurrentSize = TotalSize(Cursor);
+
+  TruncateToElementCount(Cursor, Count);
+  umm NewSize = TotalSize(Cursor);
+
+  Assert(NewSize/sizeof(compound_decl) == Count);
+
+  /* Info("Attempting to reallocate CurrentSize(%u), NewSize(%u)", CurrentSize, NewSize); */
+  Ensure(Reallocate((u8*)Cursor->Start, Memory, CurrentSize, NewSize));
+  return 0;
 }
 
 

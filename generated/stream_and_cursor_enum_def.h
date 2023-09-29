@@ -6,6 +6,7 @@ struct enum_decl_cursor
   enum_decl *End;
 };
 
+
 link_internal enum_decl_cursor
 EnumDeclCursor(umm ElementCount, memory_arena* Memory)
 {
@@ -23,6 +24,16 @@ GetPtr(enum_decl_cursor *Cursor, umm ElementIndex)
 {
   enum_decl *Result = {};
   if (ElementIndex < AtElements(Cursor)) {
+    Result = Cursor->Start+ElementIndex;
+  }
+  return Result;
+}
+
+link_internal enum_decl*
+GetPtrUnsafe(enum_decl_cursor *Cursor, umm ElementIndex)
+{
+  enum_decl *Result = {};
+  if (ElementIndex < TotalElements(Cursor)) {
     Result = Cursor->Start+ElementIndex;
   }
   return Result;
@@ -47,6 +58,14 @@ Set(enum_decl_cursor *Cursor, umm ElementIndex, enum_decl Element)
   {
     Cursor->At++;
   }
+}
+
+link_internal enum_decl*
+Advance(enum_decl_cursor *Cursor)
+{
+  enum_decl * Result = {};
+  if ( Cursor->At < Cursor->End ) { Result = Cursor->At++; }
+  return Result;
 }
 
 link_internal enum_decl *
@@ -92,6 +111,22 @@ Remove(enum_decl_cursor *Cursor, enum_decl Query)
     }
   }
   return Result;
+}
+
+
+link_internal b32
+ResizeCursor(enum_decl_cursor *Cursor, umm Count, memory_arena *Memory)
+{
+  umm CurrentSize = TotalSize(Cursor);
+
+  TruncateToElementCount(Cursor, Count);
+  umm NewSize = TotalSize(Cursor);
+
+  Assert(NewSize/sizeof(enum_decl) == Count);
+
+  /* Info("Attempting to reallocate CurrentSize(%u), NewSize(%u)", CurrentSize, NewSize); */
+  Ensure(Reallocate((u8*)Cursor->Start, Memory, CurrentSize, NewSize));
+  return 0;
 }
 
 

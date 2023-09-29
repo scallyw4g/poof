@@ -6,6 +6,7 @@ struct counted_string_cursor
   counted_string *End;
 };
 
+
 link_internal counted_string_cursor
 CountedStringCursor(umm ElementCount, memory_arena* Memory)
 {
@@ -23,6 +24,16 @@ GetPtr(counted_string_cursor *Cursor, umm ElementIndex)
 {
   counted_string *Result = {};
   if (ElementIndex < AtElements(Cursor)) {
+    Result = Cursor->Start+ElementIndex;
+  }
+  return Result;
+}
+
+link_internal counted_string*
+GetPtrUnsafe(counted_string_cursor *Cursor, umm ElementIndex)
+{
+  counted_string *Result = {};
+  if (ElementIndex < TotalElements(Cursor)) {
     Result = Cursor->Start+ElementIndex;
   }
   return Result;
@@ -47,6 +58,14 @@ Set(counted_string_cursor *Cursor, umm ElementIndex, counted_string Element)
   {
     Cursor->At++;
   }
+}
+
+link_internal counted_string*
+Advance(counted_string_cursor *Cursor)
+{
+  counted_string * Result = {};
+  if ( Cursor->At < Cursor->End ) { Result = Cursor->At++; }
+  return Result;
 }
 
 link_internal counted_string *
@@ -92,6 +111,22 @@ Remove(counted_string_cursor *Cursor, counted_string Query)
     }
   }
   return Result;
+}
+
+
+link_internal b32
+ResizeCursor(counted_string_cursor *Cursor, umm Count, memory_arena *Memory)
+{
+  umm CurrentSize = TotalSize(Cursor);
+
+  TruncateToElementCount(Cursor, Count);
+  umm NewSize = TotalSize(Cursor);
+
+  Assert(NewSize/sizeof(counted_string) == Count);
+
+  /* Info("Attempting to reallocate CurrentSize(%u), NewSize(%u)", CurrentSize, NewSize); */
+  Ensure(Reallocate((u8*)Cursor->Start, Memory, CurrentSize, NewSize));
+  return 0;
 }
 
 

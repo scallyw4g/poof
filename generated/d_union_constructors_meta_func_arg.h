@@ -9,9 +9,6 @@ MetaFuncArg(datatype A)
   return Result;
 }
 
-// TODO(Jesse)(poof): This is bugged!  It can't find the members for the ConstructorArgT.
-// Pasting the implementation here does not help.
-/* gen_constructor(ConstructorArgT) */
 link_internal meta_func_arg
 MetaFuncArg(poof_index A)
 {
@@ -22,9 +19,6 @@ MetaFuncArg(poof_index A)
   return Result;
 }
 
-// TODO(Jesse)(poof): This is bugged!  It can't find the members for the ConstructorArgT.
-// Pasting the implementation here does not help.
-/* gen_constructor(ConstructorArgT) */
 link_internal meta_func_arg
 MetaFuncArg(poof_symbol A)
 {
@@ -35,8 +29,5 @@ MetaFuncArg(poof_symbol A)
   return Result;
 }
 
-// TODO(Jesse)(poof): This is bugged!  It can't find the members for the ConstructorArgT.
-// Pasting the implementation here does not help.
-/* gen_constructor(ConstructorArgT) */
 
 

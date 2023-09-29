@@ -6,6 +6,7 @@ struct v3_cursor
   v3 *End;
 };
 
+
 link_internal v3_cursor
 V3Cursor(umm ElementCount, memory_arena* Memory)
 {
@@ -23,6 +24,16 @@ GetPtr(v3_cursor *Cursor, umm ElementIndex)
 {
   v3 *Result = {};
   if (ElementIndex < AtElements(Cursor)) {
+    Result = Cursor->Start+ElementIndex;
+  }
+  return Result;
+}
+
+link_internal v3*
+GetPtrUnsafe(v3_cursor *Cursor, umm ElementIndex)
+{
+  v3 *Result = {};
+  if (ElementIndex < TotalElements(Cursor)) {
     Result = Cursor->Start+ElementIndex;
   }
   return Result;
@@ -47,6 +58,14 @@ Set(v3_cursor *Cursor, umm ElementIndex, v3 Element)
   {
     Cursor->At++;
   }
+}
+
+link_internal v3*
+Advance(v3_cursor *Cursor)
+{
+  v3 * Result = {};
+  if ( Cursor->At < Cursor->End ) { Result = Cursor->At++; }
+  return Result;
 }
 
 link_internal v3 *
@@ -93,5 +112,22 @@ Remove(v3_cursor *Cursor, v3 Query)
   }
   return Result;
 }
+
+
+link_internal b32
+ResizeCursor(v3_cursor *Cursor, umm Count, memory_arena *Memory)
+{
+  umm CurrentSize = TotalSize(Cursor);
+
+  TruncateToElementCount(Cursor, Count);
+  umm NewSize = TotalSize(Cursor);
+
+  Assert(NewSize/sizeof(v3) == Count);
+
+  /* Info("Attempting to reallocate CurrentSize(%u), NewSize(%u)", CurrentSize, NewSize); */
+  Ensure(Reallocate((u8*)Cursor->Start, Memory, CurrentSize, NewSize));
+  return 0;
+}
+
 
 

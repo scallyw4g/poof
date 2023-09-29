@@ -1,17 +1,8 @@
-struct v3i_cursor
+link_internal c_token_cursor
+CTokenCursor(umm ElementCount, memory_arena* Memory)
 {
-  v3i *Start;
-  // TODO(Jesse)(immediate): For the love of fucksakes change these to indices
-  v3i *At;
-  v3i *End;
-};
-
-
-link_internal v3i_cursor
-V3iCursor(umm ElementCount, memory_arena* Memory)
-{
-  v3i *Start = (v3i*)PushStruct(Memory, sizeof(v3i)*ElementCount, 1, 0);
-  v3i_cursor Result = {
+  c_token *Start = (c_token*)PushStruct(Memory, sizeof(c_token)*ElementCount, 1, 0);
+  c_token_cursor Result = {
     .Start = Start,
     .End = Start+ElementCount,
     .At = Start,
@@ -19,36 +10,36 @@ V3iCursor(umm ElementCount, memory_arena* Memory)
   return Result;
 }
 
-link_internal v3i*
-GetPtr(v3i_cursor *Cursor, umm ElementIndex)
+link_internal c_token*
+GetPtr(c_token_cursor *Cursor, umm ElementIndex)
 {
-  v3i *Result = {};
+  c_token *Result = {};
   if (ElementIndex < AtElements(Cursor)) {
     Result = Cursor->Start+ElementIndex;
   }
   return Result;
 }
 
-link_internal v3i*
-GetPtrUnsafe(v3i_cursor *Cursor, umm ElementIndex)
+link_internal c_token*
+GetPtrUnsafe(c_token_cursor *Cursor, umm ElementIndex)
 {
-  v3i *Result = {};
+  c_token *Result = {};
   if (ElementIndex < TotalElements(Cursor)) {
     Result = Cursor->Start+ElementIndex;
   }
   return Result;
 }
 
-link_internal v3i
-Get(v3i_cursor *Cursor, umm ElementIndex)
+link_internal c_token
+Get(c_token_cursor *Cursor, umm ElementIndex)
 {
   Assert(ElementIndex < CurrentCount(Cursor));
-  v3i Result = Cursor->Start[ElementIndex];
+  c_token Result = Cursor->Start[ElementIndex];
   return Result;
 }
 
 link_internal void
-Set(v3i_cursor *Cursor, umm ElementIndex, v3i Element)
+Set(c_token_cursor *Cursor, umm ElementIndex, c_token Element)
 {
   umm CurrentElementCount = CurrentCount(Cursor);
   Assert (ElementIndex <= CurrentElementCount);
@@ -60,50 +51,50 @@ Set(v3i_cursor *Cursor, umm ElementIndex, v3i Element)
   }
 }
 
-link_internal v3i*
-Advance(v3i_cursor *Cursor)
+link_internal c_token*
+Advance(c_token_cursor *Cursor)
 {
-  v3i * Result = {};
+  c_token * Result = {};
   if ( Cursor->At < Cursor->End ) { Result = Cursor->At++; }
   return Result;
 }
 
-link_internal v3i *
-Push(v3i_cursor *Cursor, v3i Element)
+link_internal c_token *
+Push(c_token_cursor *Cursor, c_token Element)
 {
   Assert( Cursor->At < Cursor->End );
-  v3i *Result = Cursor->At;
+  c_token *Result = Cursor->At;
   *Cursor->At++ = Element;
   return Result;
 }
 
-link_internal v3i
-Pop(v3i_cursor *Cursor)
+link_internal c_token
+Pop(c_token_cursor *Cursor)
 {
   Assert( Cursor->At > Cursor->Start );
-  v3i Result = Cursor->At[-1];
+  c_token Result = Cursor->At[-1];
   Cursor->At--;
   return Result;
 }
 
 link_internal s32
-LastIndex(v3i_cursor *Cursor)
+LastIndex(c_token_cursor *Cursor)
 {
   s32 Result = s32(CurrentCount(Cursor))-1;
   return Result;
 }
 
 link_internal b32
-Remove(v3i_cursor *Cursor, v3i Query)
+Remove(c_token_cursor *Cursor, c_token Query)
 {
   b32 Result = False;
   CursorIterator(ElementIndex, Cursor)
   {
-    v3i Element = Get(Cursor, ElementIndex);
+    c_token Element = Get(Cursor, ElementIndex);
     if (AreEqual(Element, Query))
     {
       b32 IsLastIndex = LastIndex(Cursor) == s32(ElementIndex);
-      v3i Tmp = Pop(Cursor);
+      c_token Tmp = Pop(Cursor);
 
       if (IsLastIndex) { Assert(AreEqual(Tmp, Query)); }
       else { Set(Cursor, ElementIndex, Tmp); }
@@ -115,19 +106,18 @@ Remove(v3i_cursor *Cursor, v3i Query)
 
 
 link_internal b32
-ResizeCursor(v3i_cursor *Cursor, umm Count, memory_arena *Memory)
+ResizeCursor(c_token_cursor *Cursor, umm Count, memory_arena *Memory)
 {
   umm CurrentSize = TotalSize(Cursor);
 
   TruncateToElementCount(Cursor, Count);
   umm NewSize = TotalSize(Cursor);
 
-  Assert(NewSize/sizeof(v3i) == Count);
+  Assert(NewSize/sizeof(c_token) == Count);
 
   /* Info("Attempting to reallocate CurrentSize(%u), NewSize(%u)", CurrentSize, NewSize); */
   Ensure(Reallocate((u8*)Cursor->Start, Memory, CurrentSize, NewSize));
   return 0;
 }
-
 
 

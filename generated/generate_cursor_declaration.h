@@ -6,6 +6,7 @@ struct declaration_cursor
   declaration *End;
 };
 
+
 link_internal declaration_cursor
 DeclarationCursor(umm ElementCount, memory_arena* Memory)
 {
@@ -23,6 +24,16 @@ GetPtr(declaration_cursor *Cursor, umm ElementIndex)
 {
   declaration *Result = {};
   if (ElementIndex < AtElements(Cursor)) {
+    Result = Cursor->Start+ElementIndex;
+  }
+  return Result;
+}
+
+link_internal declaration*
+GetPtrUnsafe(declaration_cursor *Cursor, umm ElementIndex)
+{
+  declaration *Result = {};
+  if (ElementIndex < TotalElements(Cursor)) {
     Result = Cursor->Start+ElementIndex;
   }
   return Result;
@@ -47,6 +58,14 @@ Set(declaration_cursor *Cursor, umm ElementIndex, declaration Element)
   {
     Cursor->At++;
   }
+}
+
+link_internal declaration*
+Advance(declaration_cursor *Cursor)
+{
+  declaration * Result = {};
+  if ( Cursor->At < Cursor->End ) { Result = Cursor->At++; }
+  return Result;
 }
 
 link_internal declaration *
@@ -93,5 +112,22 @@ Remove(declaration_cursor *Cursor, declaration Query)
   }
   return Result;
 }
+
+
+link_internal b32
+ResizeCursor(declaration_cursor *Cursor, umm Count, memory_arena *Memory)
+{
+  umm CurrentSize = TotalSize(Cursor);
+
+  TruncateToElementCount(Cursor, Count);
+  umm NewSize = TotalSize(Cursor);
+
+  Assert(NewSize/sizeof(declaration) == Count);
+
+  /* Info("Attempting to reallocate CurrentSize(%u), NewSize(%u)", CurrentSize, NewSize); */
+  Ensure(Reallocate((u8*)Cursor->Start, Memory, CurrentSize, NewSize));
+  return 0;
+}
+
 
 
