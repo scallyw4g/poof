@@ -397,6 +397,8 @@ Map( parse_context *Ctx,
 
         case type_variable_decl:
         {
+          variable_decl *VDecl = SafeAccess(variable_decl, Decl);
+
           switch (Operator)
           {
             default: {} break;;
@@ -406,7 +408,7 @@ Map( parse_context *Ctx,
               PoofTypeError( ParentScope,
                              ParseErrorCode_InvalidArgument,
                              FormatCountedString( GetTranArena(),
-                                                  CSz("Calling (%S) on a variable decl is underspecified; use `map_members` or `map_array` specifically."),
+                                                  CSz("Calling (%S) on a variable decl is underspecified; use `map_members`, `map_values` or `map_array` specifically."),
                                                   MetaOperatorToken->Value),
                              MetaOperatorToken);
             } break;
@@ -418,7 +420,6 @@ Map( parse_context *Ctx,
 
             case map_array:
             {
-              variable_decl *VDecl = SafeAccess(variable_decl, Decl);
               ast_node *ArraySizeNode = VDecl->StaticBufferSize;
 
               u64 ArrayLength = ResolveConstantExpression(ParentScope, ArraySizeNode);
@@ -451,12 +452,57 @@ Map( parse_context *Ctx,
 
             case map_values:
             {
-              PoofTypeError( ParentScope,
-                             ParseErrorCode_InvalidArgument,
-                             FormatCountedString( GetTranArena(),
-                                                  CSz("Incorrectly called (%S) on a variable decl."),
-                                                  MetaOperatorToken->Value),
-                             MetaOperatorToken);
+              datatype Base = ResolveToBaseType(Ctx, VDecl->Type);
+
+              switch (Base.Type)
+              {
+                InvalidCase(type_datatype_noop);
+
+                case type_declaration:
+                {
+                  declaration *BaseDecl = SafeAccess(declaration, &Base);
+                  if (BaseDecl->Type == type_enum_decl)
+                  {
+                    auto EnumDecl = SafeAccess(enum_decl, BaseDecl);
+                    meta_func EnumFunc = MetaFunc(CSz("map_enum_values"), *ReplacePatterns, *MapScope);
+                    maybe_counted_string MapResult = MapEnumValues(Ctx, EnumDecl, &EnumFunc, MatchValue, Sep, Memory, Depth);
+                    if (MapResult.Error)
+                    {
+                    }
+                    else
+                    {
+                      HandleWhitespaceAndAppend(OutputBuilder, MapResult.E);
+                    }
+
+                  }
+                  else
+                  {
+                    PoofTypeError( ParentScope,
+                                   ParseErrorCode_InvalidArgumentType,
+                                   FormatCountedString( GetTranArena(),
+                                                        CSz("Incorrectly called (%S) on a variable decl of non-enum type."),
+                                                        MetaOperatorToken->Value),
+                                   MetaOperatorToken);
+                  }
+                } break;
+
+                case type_enum_member:
+                case type_type_def:
+                {
+                  InternalCompilerError(ParentScope, CSz("Got type_def or declaration when resolving base type of a variable_decl during map_values"), MetaOperatorToken);
+                } break;
+
+                case type_primitive_def:
+                {
+                  PoofTypeError( ParentScope,
+                                 ParseErrorCode_InvalidArgumentType,
+                                 FormatCountedString( GetTranArena(),
+                                                      CSz("Incorrectly called (%S) on a variable decl of a primitive type."),
+                                                      MetaOperatorToken->Value),
+                                 MetaOperatorToken);
+                } break;
+              }
+
             } break;
 
           }
