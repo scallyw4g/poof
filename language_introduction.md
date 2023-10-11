@@ -441,10 +441,10 @@ poof(
       FirstMember.name
     })
 
-    S.member ({foo}, (fooMember) {
+    S.member (foo, (fooMember) {
       fooMember.name
     })
-    S.member ({bar}, (barMember) {
+    S.member (bar, (barMember) {
       barMember.name
     })
   }

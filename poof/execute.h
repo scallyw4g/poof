@@ -1066,61 +1066,76 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                       u64 MemberIndex = u64_MAX;
                       declaration_stream_chunk *TargetMember = 0;
 
-                      if (PeekToken(Scope).Type == CTokenType_IntLiteral)
+                      c_token *NextT = PeekTokenPointer(Scope);
+                      if (NextT)
                       {
-                        MemberIndex = RequireToken(Scope, CTokenType_IntLiteral).UnsignedValue;
-
-                        u32 AtIndex = 0;
-                        declaration_stream_chunk *IndexedMember = Members->FirstChunk;
-                        while ( IndexedMember && AtIndex < MemberIndex )
+                        if (NextT->Type == CTokenType_IntLiteral)
                         {
-                          IndexedMember = IndexedMember->Next;
-                          AtIndex ++;
+                          MemberIndex = RequireToken(Scope, CTokenType_IntLiteral).UnsignedValue;
+
+                          u32 AtIndex = 0;
+                          declaration_stream_chunk *IndexedMember = Members->FirstChunk;
+                          while ( IndexedMember && AtIndex < MemberIndex )
+                          {
+                            IndexedMember = IndexedMember->Next;
+                            AtIndex ++;
+                          }
+                          TargetMember = IndexedMember;
+
+                          if (TargetMember)
+                          {
+                          }
+                          else
+                          {
+                            PoofTypeError( Scope,
+                                           ParseErrorCode_InvalidArgument,
+                                           FormatCountedString( GetTranArena(),
+                                                                CSz("Attempted to access member index (%u) on (%S), which has (%d) members!"),
+                                                                MemberIndex,
+                                                                GetNameForDatatype(ReplaceData, GetTranArena()),
+                                                                Members->ChunkCount
+                                                                ),
+                                           MetaOperatorToken);
+                          }
                         }
-                        TargetMember = IndexedMember;
-
-                        if (TargetMember)
+                        else if (NextT->Type == CTokenType_Identifier)
                         {
+                          cs MemberName = RequireToken(Scope, CTokenType_Identifier).Value;
+                          declaration_stream_chunk *IndexedMember = Members->FirstChunk;
+                          while ( IndexedMember )
+                          {
+                            // TODO(Jesse)(memory_leak): begin/end temporary memory here!
+                            if (AreEqual(MemberName, GetNameForDecl(&IndexedMember->Element)))
+                            {
+                              TargetMember = IndexedMember;
+                              break;
+                            }
+
+                            IndexedMember = IndexedMember->Next;
+                          }
+
+                          if (!TargetMember)
+                          {
+                            PoofTypeError( Scope,
+                                           ParseErrorCode_InvalidArgument,
+                                           FormatCountedString( GetTranArena(),
+                                                                CSz("Attempted to access member (%S) on (%S), which does not have that member!"),
+                                                                MemberName,
+                                                                GetNameForDatatype(ReplaceData, GetTranArena())),
+                                           MetaOperatorToken);
+                          }
                         }
                         else
                         {
-                          PoofTypeError( Scope,
-                                         ParseErrorCode_InvalidArgument,
-                                         FormatCountedString( GetTranArena(),
-                                                              CSz("Attempted to access member index (%u) on (%S), which has (%d) members!"),
-                                                              MemberIndex,
-                                                              GetNameForDatatype(ReplaceData, GetTranArena()),
-                                                              Members->ChunkCount
-                                                              ),
-                                         MetaOperatorToken);
+                          PoofSyntaxError( Scope,
+                                           FormatCountedString(GetTranArena(), CSz("Wanted CTokenType_Identifier or CTokenType_IntLiteral, got (%S)"), ToString(NextT->Type)),
+                                           NextT);
                         }
                       }
-                      else if (PeekToken(Scope).Type == CTokenType_Identifier)
+                      else
                       {
-                        cs MemberName = RequireToken(Scope, CTokenType_Identifier).Value;
-                        declaration_stream_chunk *IndexedMember = Members->FirstChunk;
-                        while ( IndexedMember )
-                        {
-                          // TODO(Jesse)(memory_leak): begin/end temporary memory here!
-                          if (AreEqual(MemberName, GetNameForDecl(&IndexedMember->Element)))
-                          {
-                            TargetMember = IndexedMember;
-                            break;
-                          }
-
-                          IndexedMember = IndexedMember->Next;
-                        }
-
-                        if (!TargetMember)
-                        {
-                          PoofTypeError( Scope,
-                                         ParseErrorCode_InvalidArgument,
-                                         FormatCountedString( GetTranArena(),
-                                                              CSz("Attempted to access member (%S) on (%S), which does not have that member!"),
-                                                              MemberName,
-                                                              GetNameForDatatype(ReplaceData, GetTranArena())),
-                                         MetaOperatorToken);
-                        }
+                        // NOTE(Jesse): Stream ended unexpectedly
+                        NotImplemented;
                       }
 
                       RequireToken(Scope, CTokenType_Comma);

@@ -141,6 +141,12 @@ PoofError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessag
 }
 
 link_internal void
+PoofSyntaxError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
+{
+  OutputContextMessage(Parser, ParseErrorCode_SyntaxError, CSz("Poof Syntax Error"), ErrorMessage, ErrorToken);
+}
+
+link_internal void
 PoofTypeError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMessage, c_token* ErrorToken)
 {
   OutputContextMessage(Parser, ErrorCode, CSz("Poof Type Error"), ErrorMessage, ErrorToken);
