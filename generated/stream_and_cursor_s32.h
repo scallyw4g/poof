@@ -1,19 +1,19 @@
-struct compound_decl_cursor
+struct s32_cursor
 {
-  compound_decl *Start;
+  s32 *Start;
   // TODO(Jesse)(immediate): For the love of fucksakes change these to indices
-  compound_decl *At;
-  compound_decl *End;
+  s32 *At;
+  s32 *End;
   OWNED_BY_THREAD_MEMBER()
 };
 
 
 
-link_internal compound_decl_cursor
-CompoundDeclCursor(umm ElementCount, memory_arena* Memory)
+link_internal s32_cursor
+S32Cursor(umm ElementCount, memory_arena* Memory)
 {
-  compound_decl *Start = (compound_decl*)PushStruct(Memory, sizeof(compound_decl)*ElementCount, 1, 0);
-  compound_decl_cursor Result = {
+  s32 *Start = (s32*)PushStruct(Memory, sizeof(s32)*ElementCount, 1, 0);
+  s32_cursor Result = {
     .Start = Start,
     .End = Start+ElementCount,
     .At = Start,
@@ -22,42 +22,42 @@ CompoundDeclCursor(umm ElementCount, memory_arena* Memory)
   return Result;
 }
 
-link_internal compound_decl*
-GetPtr(compound_decl_cursor *Cursor, umm ElementIndex)
+link_internal s32*
+GetPtr(s32_cursor *Cursor, umm ElementIndex)
 {
   ENSURE_OWNED_BY_THREAD(Cursor);
 
-  compound_decl *Result = {};
+  s32 *Result = {};
   if (ElementIndex < AtElements(Cursor)) {
     Result = Cursor->Start+ElementIndex;
   }
   return Result;
 }
 
-link_internal compound_decl*
-GetPtrUnsafe(compound_decl_cursor *Cursor, umm ElementIndex)
+link_internal s32*
+GetPtrUnsafe(s32_cursor *Cursor, umm ElementIndex)
 {
   ENSURE_OWNED_BY_THREAD(Cursor);
 
-  compound_decl *Result = {};
+  s32 *Result = {};
   if (ElementIndex < TotalElements(Cursor)) {
     Result = Cursor->Start+ElementIndex;
   }
   return Result;
 }
 
-link_internal compound_decl
-Get(compound_decl_cursor *Cursor, umm ElementIndex)
+link_internal s32
+Get(s32_cursor *Cursor, umm ElementIndex)
 {
   ENSURE_OWNED_BY_THREAD(Cursor);
 
   Assert(ElementIndex < CurrentCount(Cursor));
-  compound_decl Result = Cursor->Start[ElementIndex];
+  s32 Result = Cursor->Start[ElementIndex];
   return Result;
 }
 
 link_internal void
-Set(compound_decl_cursor *Cursor, umm ElementIndex, compound_decl Element)
+Set(s32_cursor *Cursor, umm ElementIndex, s32 Element)
 {
   ENSURE_OWNED_BY_THREAD(Cursor);
 
@@ -71,40 +71,40 @@ Set(compound_decl_cursor *Cursor, umm ElementIndex, compound_decl Element)
   }
 }
 
-link_internal compound_decl*
-Advance(compound_decl_cursor *Cursor)
+link_internal s32*
+Advance(s32_cursor *Cursor)
 {
   ENSURE_OWNED_BY_THREAD(Cursor);
 
-  compound_decl * Result = {};
+  s32 * Result = {};
   if ( Cursor->At < Cursor->End ) { Result = Cursor->At++; }
   return Result;
 }
 
-link_internal compound_decl *
-Push(compound_decl_cursor *Cursor, compound_decl Element)
+link_internal s32 *
+Push(s32_cursor *Cursor, s32 Element)
 {
   ENSURE_OWNED_BY_THREAD(Cursor);
 
   Assert( Cursor->At < Cursor->End );
-  compound_decl *Result = Cursor->At;
+  s32 *Result = Cursor->At;
   *Cursor->At++ = Element;
   return Result;
 }
 
-link_internal compound_decl
-Pop(compound_decl_cursor *Cursor)
+link_internal s32
+Pop(s32_cursor *Cursor)
 {
   ENSURE_OWNED_BY_THREAD(Cursor);
 
   Assert( Cursor->At > Cursor->Start );
-  compound_decl Result = Cursor->At[-1];
+  s32 Result = Cursor->At[-1];
   Cursor->At--;
   return Result;
 }
 
 link_internal s32
-LastIndex(compound_decl_cursor *Cursor)
+LastIndex(s32_cursor *Cursor)
 {
   ENSURE_OWNED_BY_THREAD(Cursor);
 
@@ -113,18 +113,18 @@ LastIndex(compound_decl_cursor *Cursor)
 }
 
 link_internal b32
-Remove(compound_decl_cursor *Cursor, compound_decl Query)
+Remove(s32_cursor *Cursor, s32 Query)
 {
   ENSURE_OWNED_BY_THREAD(Cursor);
 
   b32 Result = False;
   CursorIterator(ElementIndex, Cursor)
   {
-    compound_decl Element = Get(Cursor, ElementIndex);
+    s32 Element = Get(Cursor, ElementIndex);
     if (AreEqual(Element, Query))
     {
       b32 IsLastIndex = LastIndex(Cursor) == s32(ElementIndex);
-      compound_decl Tmp = Pop(Cursor);
+      s32 Tmp = Pop(Cursor);
 
       if (IsLastIndex) { Assert(AreEqual(Tmp, Query)); }
       else { Set(Cursor, ElementIndex, Tmp); }
@@ -136,7 +136,7 @@ Remove(compound_decl_cursor *Cursor, compound_decl Query)
 
 
 link_internal b32
-ResizeCursor(compound_decl_cursor *Cursor, umm Count, memory_arena *Memory)
+ResizeCursor(s32_cursor *Cursor, umm Count, memory_arena *Memory)
 {
   ENSURE_OWNED_BY_THREAD(Cursor);
 
@@ -145,7 +145,7 @@ ResizeCursor(compound_decl_cursor *Cursor, umm Count, memory_arena *Memory)
   TruncateToElementCount(Cursor, Count);
   umm NewSize = TotalSize(Cursor);
 
-  Assert(NewSize/sizeof(compound_decl) == Count);
+  Assert(NewSize/sizeof(s32) == Count);
 
   /* Info("Attempting to reallocate CurrentSize(%u), NewSize(%u)", CurrentSize, NewSize); */
   Ensure(Reallocate((u8*)Cursor->Start, Memory, CurrentSize, NewSize));
@@ -153,7 +153,7 @@ ResizeCursor(compound_decl_cursor *Cursor, umm Count, memory_arena *Memory)
 }
 
 link_internal void
-Unshift( compound_decl_cursor *Cursor )
+Unshift( s32_cursor *Cursor )
 {
   ENSURE_OWNED_BY_THREAD(Cursor);
 
@@ -165,38 +165,38 @@ Unshift( compound_decl_cursor *Cursor )
 }
 
 
-struct compound_decl_stream_chunk
+struct s32_stream_chunk
 {
-  compound_decl Element;
-  compound_decl_stream_chunk* Next;
+  s32 Element;
+  s32_stream_chunk* Next;
 };
 
-struct compound_decl_stream
+struct s32_stream
 {
   memory_arena *Memory;
-  compound_decl_stream_chunk* FirstChunk;
-  compound_decl_stream_chunk* LastChunk;
+  s32_stream_chunk* FirstChunk;
+  s32_stream_chunk* LastChunk;
   umm ChunkCount;
 };
 
 link_internal void
-Deallocate(compound_decl_stream *Stream)
+Deallocate(s32_stream *Stream)
 {
   Stream->LastChunk = 0;
   Stream->FirstChunk = 0;
   VaporizeArena(Stream->Memory);
 }
 
-struct compound_decl_iterator
+struct s32_iterator
 {
-  compound_decl_stream* Stream;
-  compound_decl_stream_chunk* At;
+  s32_stream* Stream;
+  s32_stream_chunk* At;
 };
 
-link_internal compound_decl_iterator
-Iterator(compound_decl_stream* Stream)
+link_internal s32_iterator
+Iterator(s32_stream* Stream)
 {
-  compound_decl_iterator Iterator = {
+  s32_iterator Iterator = {
     .Stream = Stream,
     .At = Stream->FirstChunk
   };
@@ -204,28 +204,28 @@ Iterator(compound_decl_stream* Stream)
 }
 
 link_internal b32
-IsValid(compound_decl_iterator* Iter)
+IsValid(s32_iterator* Iter)
 {
   b32 Result = Iter->At != 0;
   return Result;
 }
 
 link_internal void
-Advance(compound_decl_iterator* Iter)
+Advance(s32_iterator* Iter)
 {
   Iter->At = Iter->At->Next;
 }
 
 link_internal b32
-IsLastElement(compound_decl_iterator* Iter)
+IsLastElement(s32_iterator* Iter)
 {
   b32 Result = Iter->At->Next == 0;
   return Result;
 }
 
 
-link_internal compound_decl *
-Push(compound_decl_stream* Stream, compound_decl Element)
+link_internal s32 *
+Push(s32_stream* Stream, s32 Element)
 {
   if (Stream->Memory == 0)
   {
@@ -233,7 +233,7 @@ Push(compound_decl_stream* Stream, compound_decl Element)
   }
 
   /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
-  compound_decl_stream_chunk* NextChunk = (compound_decl_stream_chunk*)PushStruct(Stream->Memory, sizeof(compound_decl_stream_chunk), 1, 0);
+  s32_stream_chunk* NextChunk = (s32_stream_chunk*)PushStruct(Stream->Memory, sizeof(s32_stream_chunk), 1, 0);
   NextChunk->Element = Element;
 
   if (!Stream->FirstChunk)
@@ -253,7 +253,7 @@ Push(compound_decl_stream* Stream, compound_decl Element)
 
   Stream->ChunkCount += 1;
 
-  compound_decl *Result = &NextChunk->Element;
+  s32 *Result = &NextChunk->Element;
   return Result;
 }
 

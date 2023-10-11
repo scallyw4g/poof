@@ -7,7 +7,7 @@
 # NOTE(Jesse): The following are switches for twiddling during development.
 # Calling functions by name on the command line shouldn't be affected by these.
 
-# RunPreemptivePoof=1
+RunPreemptivePoof=1
 
 BuildAllBinariesRunAllTests=1
 
