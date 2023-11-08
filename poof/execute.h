@@ -734,6 +734,34 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                     NotImplemented;
                   } break;
 
+                  case is_pointer:
+                  {
+                    RequireToken(Scope, CTokenType_Question);
+                    /* auto S1 = GetTypeTypeForDatatype(ReplaceData, GetTranArena()); */
+                    /* auto S2 = GetTypeNameFor(Ctx, ReplaceData, GetTranArena()); */
+
+                    b32 DoTrueBranch = False;
+                    switch(ReplaceData->Type)
+                    {
+                      case type_datatype_noop:
+                      {
+                        // TODO(Jesse): When would this ever fire?  I thought this was an undefined case..
+                        InternalCompilerError(Scope, CSz("Got datatype_noop for replace datatype?"), MetaOperatorToken);
+                      } break;
+
+                      case type_type_def:
+                      case type_declaration:
+                      case type_enum_member:
+                      case type_primitive_def:
+                      {
+                        datatype ResolvedT = ResolveToBaseType(Ctx, ReplaceData);
+                        DoTrueBranch       = DatatypeIsPointer(Ctx, &ResolvedT, Scope, MetaOperatorToken) == True;
+                      } break;
+                    }
+
+                    DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
+                  } break;
+
                   case is_defined:
                   {
                     RequireToken(Scope, CTokenType_Question);
@@ -747,6 +775,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                       {
                         // TODO(Jesse): When would this ever fire?  I thought this was an undefined case..
                         DoTrueBranch = False;
+                        InternalCompilerError(Scope, CSz("Got datatype_noop for replace datatype?"), MetaOperatorToken);
                       } break;
 
                       case type_type_def:

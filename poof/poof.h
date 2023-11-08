@@ -55,6 +55,7 @@ enum meta_arg_operator
   is_enum,
   is_struct,
   is_union,
+  is_pointer,
   is_defined,
   is_compound,
   is_primitive,
