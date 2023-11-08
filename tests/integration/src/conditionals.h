@@ -168,3 +168,20 @@ poof(
   }
 )
 #include <tests/integration/generated/conditionals/anonymous_foo_struct_1_rHXPMI2N.h>
+
+poof(
+  func (foo_struct_1 TFooStruct)
+  {
+    TFooStruct.map_members(Member)
+    {
+      Member.is_pointer?
+      {
+        (Member.type) (Member.name) is a pointer
+      }
+      {
+        (Member.type) (Member.name) not a pointer
+      }
+    }
+  }
+)
+#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_ACfUY3gL.h>

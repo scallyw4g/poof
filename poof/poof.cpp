@@ -7027,8 +7027,8 @@ DatatypeIsPointer(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token
         } break;
 
         case type_enum_decl:
-        case type_function_decl:
         case type_compound_decl:
+        case type_function_decl:
         {
         } break;
 

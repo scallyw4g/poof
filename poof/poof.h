@@ -237,7 +237,6 @@ struct datatype;
 struct type_spec
 {
   c_token *QualifierNameT;
-
   c_token *DatatypeToken;
 
   // @base_type_hack
