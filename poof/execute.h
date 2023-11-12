@@ -737,28 +737,8 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                   case is_pointer:
                   {
                     RequireToken(Scope, CTokenType_Question);
-                    /* auto S1 = GetTypeTypeForDatatype(ReplaceData, GetTranArena()); */
-                    /* auto S2 = GetTypeNameFor(Ctx, ReplaceData, GetTranArena()); */
 
-                    b32 DoTrueBranch = False;
-                    switch(ReplaceData->Type)
-                    {
-                      case type_datatype_noop:
-                      {
-                        // TODO(Jesse): When would this ever fire?  I thought this was an undefined case..
-                        InternalCompilerError(Scope, CSz("Got datatype_noop for replace datatype?"), MetaOperatorToken);
-                      } break;
-
-                      case type_type_def:
-                      case type_declaration:
-                      case type_enum_member:
-                      case type_primitive_def:
-                      {
-                        datatype ResolvedT = ResolveToBaseType(Ctx, ReplaceData);
-                        DoTrueBranch       = DatatypeIsPointer(Ctx, &ResolvedT, Scope, MetaOperatorToken) == True;
-                      } break;
-                    }
-
+                    b32 DoTrueBranch = DatatypeIsPointer(Ctx, ReplaceData, Scope, MetaOperatorToken) == True;
                     DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
                   } break;
 
@@ -1046,7 +1026,8 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
 
                   case array:
                   {
-                    NotImplemented;
+                    PrintAstNode(DatatypeStaticBufferSize(Ctx, Scope, ReplaceData, MetaOperatorToken), &OutputBuilder);
+                    /* Append(&OutputBuilder, CS(ArraySize)); */
                   } break;
 
                   case value:

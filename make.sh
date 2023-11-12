@@ -13,7 +13,7 @@ RunPreemptivePoof=1
 
 # FetchBonsaiDebug=0
 
-BuildPoof=1
+# BuildPoof=1
 # RunPoof=1
 
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"

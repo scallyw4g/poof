@@ -6997,9 +6997,8 @@ DatatypeIsPointer(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token
   b32 Result = False;
   switch (Data->Type)
   {
-    case type_datatype_noop:
-    case type_enum_member:
-    {} break;
+    case type_datatype_noop: { if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); } } break;
+    case type_enum_member: {} break;
 
     case type_primitive_def:
     {
@@ -7009,9 +7008,9 @@ DatatypeIsPointer(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token
 
     case type_type_def:
     {
-      type_def *TDef = SafeAccessPtr(type_def, Data);
-      datatype Base = ResolveToBaseType(Ctx, TDef);
-      Result = DatatypeIsPointer(Ctx, &Base, Scope, MetaOperatorT);
+      InvalidCodePath();
+      /* type_def *TDef = SafeAccessPtr(type_def, Data); */
+      /* Result = TypeSpecIsPointer(&TDef->Type); */
     } break;
 
     case type_declaration:
@@ -7020,11 +7019,7 @@ DatatypeIsPointer(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token
 
       switch(Decl->Type)
       {
-        case type_declaration_noop:
-        {
-          // TODO(Jesse): ?
-          if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); }
-        } break;
+        case type_declaration_noop: { if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); } } break;
 
         case type_enum_decl:
         case type_compound_decl:
@@ -7035,6 +7030,8 @@ DatatypeIsPointer(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token
         case type_variable_decl:
         {
           variable_decl *VDecl = SafeAccess(variable_decl, Decl);
+          datatype Resolved = ResolveToBaseType(Ctx, VDecl->Type);
+          /* Result = TypeSpecIsPointer(&VDecl->Type); */
           Result = TypeSpecIsPointer(&VDecl->Type);
         } break;
       }

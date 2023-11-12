@@ -11,7 +11,6 @@ poof(
 #include <tests/integration/generated/accessors/anonymous_bar_struct_XqHSO27n.h>
 
 
-
 poof(
   func (array_struct B)
   {
@@ -22,10 +21,14 @@ poof(
         }
       M.type M.name
       M.value
-      /* M.array */
+      M.array
     })
+
+    B.map (member)
+    {
+      member.name member.array
+    }
   }
 )
 #include <tests/integration/generated/accessors/anonymous_array_struct_R1CjBJgY.h>
-
 
