@@ -8,7 +8,7 @@ struct datatype_hashtable
 {
   umm Size;
   datatype_linked_list_node **Elements;
-  OWNED_BY_THREAD_MEMBER()
+  /* OWNED_BY_THREAD_MEMBER() */
 };
 
 link_internal datatype_linked_list_node *
@@ -24,7 +24,7 @@ Allocate_datatype_hashtable(umm ElementCount, memory_arena *Memory)
   datatype_hashtable Result = {
     .Elements = Allocate( datatype_linked_list_node*, Memory, ElementCount),
     .Size = ElementCount,
-    OWNED_BY_THREAD_MEMBER_INIT()
+    /* OWNED_BY_THREAD_MEMBER_INIT() */
   };
   return Result;
 }
@@ -32,7 +32,7 @@ Allocate_datatype_hashtable(umm ElementCount, memory_arena *Memory)
 link_internal datatype_linked_list_node *
 GetHashBucket(umm HashValue, datatype_hashtable *Table)
 {
-  ENSURE_OWNED_BY_THREAD(Table);
+  /* ENSURE_OWNED_BY_THREAD(Table); */
 
   Assert(Table->Size);
   datatype_linked_list_node *Result = Table->Elements[HashValue % Table->Size];
@@ -42,7 +42,7 @@ GetHashBucket(umm HashValue, datatype_hashtable *Table)
 link_internal datatype *
 GetFirstAtBucket(umm HashValue, datatype_hashtable *Table)
 {
-  ENSURE_OWNED_BY_THREAD(Table);
+  /* ENSURE_OWNED_BY_THREAD(Table); */
 
   datatype_linked_list_node *Bucket = GetHashBucket(HashValue, Table);
   datatype *Result = &Bucket->Element;
@@ -52,7 +52,7 @@ GetFirstAtBucket(umm HashValue, datatype_hashtable *Table)
 link_internal datatype *
 Insert(datatype_linked_list_node *Node, datatype_hashtable *Table)
 {
-  ENSURE_OWNED_BY_THREAD(Table);
+  /* ENSURE_OWNED_BY_THREAD(Table); */
 
   Assert(Table->Size);
   umm HashValue = Hash(&Node->Element) % Table->Size;
@@ -65,7 +65,7 @@ Insert(datatype_linked_list_node *Node, datatype_hashtable *Table)
 link_internal datatype*
 Insert(datatype Element, datatype_hashtable *Table, memory_arena *Memory)
 {
-  ENSURE_OWNED_BY_THREAD(Table);
+  /* ENSURE_OWNED_BY_THREAD(Table); */
 
   datatype_linked_list_node *Bucket = Allocate_datatype_linked_list_node(Memory);
   Bucket->Element = Element;

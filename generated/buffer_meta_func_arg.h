@@ -23,23 +23,29 @@ MetaFuncArgBuffer(umm ElementCount, memory_arena* Memory)
 }
 
 link_inline umm
+AtElements(meta_func_arg_buffer *Buf)
+{
+  umm Result = Buf->Count;
+  return Result;
+}
+
+link_inline umm
 CurrentCount(meta_func_arg_buffer *Buf)
 {
   umm Result = Buf->Count;
   return Result;
 }
 
-// TODO(Jesse): Collapse these duplicates
 link_inline meta_func_arg *
-GetPtr(meta_func_arg_buffer *Buf, u32 Index)
+GetPtr(meta_func_arg_buffer *Buf, umm Index)
 {
-  Assert(Index < Buf->Count);
-  meta_func_arg *Result = Buf->Start + Index;
+  meta_func_arg *Result = 0;
+  if (Index < Buf->Count) { Result = Buf->Start + Index; }
   return Result;
 }
 
 link_inline meta_func_arg *
-Get(meta_func_arg_buffer *Buf, u32 Index)
+Get(meta_func_arg_buffer *Buf, umm Index)
 {
   meta_func_arg *Result = GetPtr(Buf, Index);
   return Result;

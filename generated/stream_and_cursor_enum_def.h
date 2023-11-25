@@ -4,7 +4,7 @@ struct enum_decl_cursor
   // TODO(Jesse)(immediate): For the love of fucksakes change these to indices
   enum_decl *At;
   enum_decl *End;
-  OWNED_BY_THREAD_MEMBER()
+  /* OWNED_BY_THREAD_MEMBER(); */
 };
 
 
@@ -17,7 +17,7 @@ EnumDeclCursor(umm ElementCount, memory_arena* Memory)
     .Start = Start,
     .End = Start+ElementCount,
     .At = Start,
-    OWNED_BY_THREAD_MEMBER_INIT()
+    /* OWNED_BY_THREAD_MEMBER_INIT() */
   };
   return Result;
 }
@@ -25,31 +25,27 @@ EnumDeclCursor(umm ElementCount, memory_arena* Memory)
 link_internal enum_decl*
 GetPtr(enum_decl_cursor *Cursor, umm ElementIndex)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   enum_decl *Result = {};
-  if (ElementIndex < AtElements(Cursor)) {
-    Result = Cursor->Start+ElementIndex;
-  }
+  if (ElementIndex < AtElements(Cursor)) { Result = Cursor->Start+ElementIndex; }
   return Result;
 }
 
 link_internal enum_decl*
 GetPtrUnsafe(enum_decl_cursor *Cursor, umm ElementIndex)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   enum_decl *Result = {};
-  if (ElementIndex < TotalElements(Cursor)) {
-    Result = Cursor->Start+ElementIndex;
-  }
+  if (ElementIndex < TotalElements(Cursor)) { Result = Cursor->Start+ElementIndex; }
   return Result;
 }
 
 link_internal enum_decl
 Get(enum_decl_cursor *Cursor, umm ElementIndex)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   Assert(ElementIndex < CurrentCount(Cursor));
   enum_decl Result = Cursor->Start[ElementIndex];
@@ -59,7 +55,7 @@ Get(enum_decl_cursor *Cursor, umm ElementIndex)
 link_internal void
 Set(enum_decl_cursor *Cursor, umm ElementIndex, enum_decl Element)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   umm CurrentElementCount = CurrentCount(Cursor);
   Assert (ElementIndex <= CurrentElementCount);
@@ -74,7 +70,7 @@ Set(enum_decl_cursor *Cursor, umm ElementIndex, enum_decl Element)
 link_internal enum_decl*
 Advance(enum_decl_cursor *Cursor)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   enum_decl * Result = {};
   if ( Cursor->At < Cursor->End ) { Result = Cursor->At++; }
@@ -84,7 +80,7 @@ Advance(enum_decl_cursor *Cursor)
 link_internal enum_decl *
 Push(enum_decl_cursor *Cursor, enum_decl Element)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   Assert( Cursor->At < Cursor->End );
   enum_decl *Result = Cursor->At;
@@ -95,7 +91,7 @@ Push(enum_decl_cursor *Cursor, enum_decl Element)
 link_internal enum_decl
 Pop(enum_decl_cursor *Cursor)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   Assert( Cursor->At > Cursor->Start );
   enum_decl Result = Cursor->At[-1];
@@ -106,7 +102,7 @@ Pop(enum_decl_cursor *Cursor)
 link_internal s32
 LastIndex(enum_decl_cursor *Cursor)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   s32 Result = s32(CurrentCount(Cursor))-1;
   return Result;
@@ -115,7 +111,7 @@ LastIndex(enum_decl_cursor *Cursor)
 link_internal b32
 Remove(enum_decl_cursor *Cursor, enum_decl Query)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   b32 Result = False;
   CursorIterator(ElementIndex, Cursor)
@@ -138,7 +134,7 @@ Remove(enum_decl_cursor *Cursor, enum_decl Query)
 link_internal b32
 ResizeCursor(enum_decl_cursor *Cursor, umm Count, memory_arena *Memory)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   umm CurrentSize = TotalSize(Cursor);
 
@@ -155,12 +151,20 @@ ResizeCursor(enum_decl_cursor *Cursor, umm Count, memory_arena *Memory)
 link_internal void
 Unshift( enum_decl_cursor *Cursor )
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
-
-  umm Count = TotalElements(Cursor);
-  for (umm Index = 1; Index < Count; ++Index)
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
+  umm Count = AtElements(Cursor);
+  if (Count)
   {
-    Cursor->Start[Index-1] = Cursor->Start[Index];
+    for (umm Index = 1; Index < Count; ++Index)
+    {
+      Cursor->Start[Index-1] = Cursor->Start[Index];
+    }
+
+    // NOTE(Jesse): This is actually correct, even though it doesn't look
+    // like it at first glance.  At is OnePastLast, so decrementing and
+    // then clearing overwrites the last value that was set.
+    Cursor->At--;
+    *Cursor->At = {};
   }
 }
 

@@ -4,7 +4,7 @@ struct declaration_cursor
   // TODO(Jesse)(immediate): For the love of fucksakes change these to indices
   declaration *At;
   declaration *End;
-  OWNED_BY_THREAD_MEMBER()
+  /* OWNED_BY_THREAD_MEMBER(); */
 };
 
 
@@ -17,7 +17,7 @@ DeclarationCursor(umm ElementCount, memory_arena* Memory)
     .Start = Start,
     .End = Start+ElementCount,
     .At = Start,
-    OWNED_BY_THREAD_MEMBER_INIT()
+    /* OWNED_BY_THREAD_MEMBER_INIT() */
   };
   return Result;
 }
@@ -25,31 +25,27 @@ DeclarationCursor(umm ElementCount, memory_arena* Memory)
 link_internal declaration*
 GetPtr(declaration_cursor *Cursor, umm ElementIndex)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   declaration *Result = {};
-  if (ElementIndex < AtElements(Cursor)) {
-    Result = Cursor->Start+ElementIndex;
-  }
+  if (ElementIndex < AtElements(Cursor)) { Result = Cursor->Start+ElementIndex; }
   return Result;
 }
 
 link_internal declaration*
 GetPtrUnsafe(declaration_cursor *Cursor, umm ElementIndex)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   declaration *Result = {};
-  if (ElementIndex < TotalElements(Cursor)) {
-    Result = Cursor->Start+ElementIndex;
-  }
+  if (ElementIndex < TotalElements(Cursor)) { Result = Cursor->Start+ElementIndex; }
   return Result;
 }
 
 link_internal declaration
 Get(declaration_cursor *Cursor, umm ElementIndex)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   Assert(ElementIndex < CurrentCount(Cursor));
   declaration Result = Cursor->Start[ElementIndex];
@@ -59,7 +55,7 @@ Get(declaration_cursor *Cursor, umm ElementIndex)
 link_internal void
 Set(declaration_cursor *Cursor, umm ElementIndex, declaration Element)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   umm CurrentElementCount = CurrentCount(Cursor);
   Assert (ElementIndex <= CurrentElementCount);
@@ -74,7 +70,7 @@ Set(declaration_cursor *Cursor, umm ElementIndex, declaration Element)
 link_internal declaration*
 Advance(declaration_cursor *Cursor)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   declaration * Result = {};
   if ( Cursor->At < Cursor->End ) { Result = Cursor->At++; }
@@ -84,7 +80,7 @@ Advance(declaration_cursor *Cursor)
 link_internal declaration *
 Push(declaration_cursor *Cursor, declaration Element)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   Assert( Cursor->At < Cursor->End );
   declaration *Result = Cursor->At;
@@ -95,7 +91,7 @@ Push(declaration_cursor *Cursor, declaration Element)
 link_internal declaration
 Pop(declaration_cursor *Cursor)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   Assert( Cursor->At > Cursor->Start );
   declaration Result = Cursor->At[-1];
@@ -106,7 +102,7 @@ Pop(declaration_cursor *Cursor)
 link_internal s32
 LastIndex(declaration_cursor *Cursor)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   s32 Result = s32(CurrentCount(Cursor))-1;
   return Result;
@@ -115,7 +111,7 @@ LastIndex(declaration_cursor *Cursor)
 link_internal b32
 Remove(declaration_cursor *Cursor, declaration Query)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   b32 Result = False;
   CursorIterator(ElementIndex, Cursor)
@@ -138,7 +134,7 @@ Remove(declaration_cursor *Cursor, declaration Query)
 link_internal b32
 ResizeCursor(declaration_cursor *Cursor, umm Count, memory_arena *Memory)
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
   umm CurrentSize = TotalSize(Cursor);
 
@@ -155,12 +151,20 @@ ResizeCursor(declaration_cursor *Cursor, umm Count, memory_arena *Memory)
 link_internal void
 Unshift( declaration_cursor *Cursor )
 {
-  ENSURE_OWNED_BY_THREAD(Cursor);
-
-  umm Count = TotalElements(Cursor);
-  for (umm Index = 1; Index < Count; ++Index)
+  /* ENSURE_OWNED_BY_THREAD(Cursor); */
+  umm Count = AtElements(Cursor);
+  if (Count)
   {
-    Cursor->Start[Index-1] = Cursor->Start[Index];
+    for (umm Index = 1; Index < Count; ++Index)
+    {
+      Cursor->Start[Index-1] = Cursor->Start[Index];
+    }
+
+    // NOTE(Jesse): This is actually correct, even though it doesn't look
+    // like it at first glance.  At is OnePastLast, so decrementing and
+    // then clearing overwrites the last value that was set.
+    Cursor->At--;
+    *Cursor->At = {};
   }
 }
 
