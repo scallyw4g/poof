@@ -1369,9 +1369,19 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena
             {
 #if 1
               parser *PrevParser = Get(&Ctx->ParserHashtable, Macro->NameT->Filename);
-              ParseInfoMessage( PrevParser,
-                                CSz("Previous definition here"),
-                                Macro->NameT);
+              // NOTE(Jesse): 
+              if (PrevParser)
+              {
+                ParseInfoMessage( PrevParser,
+                                  CSz("Previous definition here"),
+                                  Macro->NameT);
+              }
+              else
+              {
+                ParseInfoMessage( Parser,
+                                  CSz("Previous definition on CLI."),
+                                  MacroNameT);
+              }
 
               ParseWarn( Parser,
                          ParseWarnCode_MacroRedefined,
@@ -6435,7 +6445,7 @@ ReplacementPattern(counted_string Match, meta_func_arg *Arg)
 link_internal meta_func_arg
 ReplacementPattern(counted_string Match, poof_symbol Symbol)
 {
-  meta_func_arg Result = MetaFuncArg(Symbol);
+  meta_func_arg Result = MetaFuncArg(Symbol, Match);
   Result.Match = Match;
   return Result;
 }
@@ -6443,7 +6453,7 @@ ReplacementPattern(counted_string Match, poof_symbol Symbol)
 link_internal meta_func_arg
 ReplacementPattern(counted_string Match, poof_index Index)
 {
-  meta_func_arg Result = MetaFuncArg(Index);
+  meta_func_arg Result = MetaFuncArg(Index, Match);
   Result.Match = Match;
   return Result;
 }
@@ -6451,7 +6461,7 @@ ReplacementPattern(counted_string Match, poof_index Index)
 link_internal meta_func_arg
 ReplacementPattern(counted_string Match, datatype Data)
 {
-  meta_func_arg Result = MetaFuncArg(Data);
+  meta_func_arg Result = MetaFuncArg(Data, Match);
   Result.Match = Match;
   return Result;
 }
