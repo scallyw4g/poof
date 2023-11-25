@@ -1,5 +1,5 @@
 link_internal counted_string
-ToString( meta_func_arg_type Type)
+ToString(meta_func_arg_type Type)
 {
   counted_string Result = {};
   switch (Type)

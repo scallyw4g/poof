@@ -1,9 +1,6 @@
 [submodule "include/bonsai_stdlib"]
 	path = include/bonsai_stdlib
 	url = ../bonsai_stdlib.git
-[submodule "scripts"]
-	path = scripts
-	url = ../bonsai_build_scripts.git
 [submodule "include/bonsai_debug"]
 	path = include/bonsai_debug
 	url = ../bonsai_debug.git

@@ -1,5 +1,5 @@
 link_internal counted_string
-ToString( ast_node_type Type)
+ToString(ast_node_type Type)
 {
   counted_string Result = {};
   switch (Type)

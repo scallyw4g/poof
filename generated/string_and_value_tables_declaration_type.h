@@ -1,5 +1,5 @@
 link_internal counted_string
-ToString( declaration_type Type)
+ToString(declaration_type Type)
 {
   counted_string Result = {};
   switch (Type)

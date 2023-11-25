@@ -30,6 +30,13 @@ AtElements(meta_func_arg_buffer *Buf)
 }
 
 link_inline umm
+TotalElements(meta_func_arg_buffer *Buf)
+{
+  umm Result = Buf->Count;
+  return Result;
+}
+
+link_inline umm
 CurrentCount(meta_func_arg_buffer *Buf)
 {
   umm Result = Buf->Count;

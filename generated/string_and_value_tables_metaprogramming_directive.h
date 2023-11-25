@@ -1,5 +1,5 @@
 link_internal counted_string
-ToString( metaprogramming_directive Type)
+ToString(metaprogramming_directive Type)
 {
   counted_string Result = {};
   switch (Type)

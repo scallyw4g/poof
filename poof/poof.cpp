@@ -1678,7 +1678,7 @@ ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
 
   if (FinalIncludePath.Count)
   {
-    LogSuccess("Including (%S)", FinalIncludePath);
+    Info("Including (%S)", FinalIncludePath);
     parser *IncludeParser = PreprocessedParserForFile(Ctx, FinalIncludePath, TokenCursorSource_Include, Parser);
     if (IncludeParser)
     {
@@ -1691,11 +1691,15 @@ ResolveInclude(parse_context *Ctx, parser *Parser, c_token *T)
   }
   else
   {
-    const char *FmtMessage = IsIncludeNext ?
-      "Unable to resolve include_next for file : (%S)" :
-      "Unable to resolve include for file : (%S)";
+    if (IsIncludeNext)
+    {
+      Warn("Unable to resolve include_next for file : (%S)", T->IncludePath);
+    } 
+    else
+    {
+      Warn("Unable to resolve include for file : (%S)", T->IncludePath);
+    }
 
-    Warn(FmtMessage, T->IncludePath);
   }
 
   return Result;
@@ -5892,7 +5896,7 @@ FlushOutputToDisk( parse_context *Ctx,
 
   if (Parser->ErrorCode)
   {
-    Warn(CSz("Parse error encountered, not flushing code generated in (%S) to disk."), Parser->Tokens->Filename);
+    Warn("Parse error encountered, not flushing code generated in (%S) to disk.", Parser->Tokens->Filename);
     return {};
   }
 

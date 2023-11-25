@@ -42,9 +42,10 @@ RunIntegrationTests=1
 
 
 
-
-. scripts/preamble.sh
-. scripts/setup_for_cxx.sh
+stdlib_build_scripts='include/bonsai_stdlib/scripts'
+. $stdlib_build_scripts/preamble.sh
+. $stdlib_build_scripts/setup_for_cxx.sh
+. external/bonsai_debug/make.sh
 
 if [ $# -gt 1 ]; then
   echo "make.sh supports a maximum of 1 argument"

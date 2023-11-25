@@ -1,5 +1,5 @@
 link_internal counted_string
-ToString( function_type Type)
+ToString(function_type Type)
 {
   counted_string Result = {};
   switch (Type)

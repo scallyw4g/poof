@@ -1,5 +1,5 @@
 link_internal counted_string
-ToString( poof_global_keyword Type)
+ToString(poof_global_keyword Type)
 {
   counted_string Result = {};
   switch (Type)

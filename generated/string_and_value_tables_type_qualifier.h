@@ -1,5 +1,5 @@
 link_internal counted_string
-ToString( type_qualifier Type)
+ToString(type_qualifier Type)
 {
   counted_string Result = {};
   switch (Type)
