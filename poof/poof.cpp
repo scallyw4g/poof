@@ -7342,7 +7342,7 @@ ParseAndTypecheckArgument(parse_context *Ctx, parser *Parser, meta_func_arg *Par
             PoofTypeError( Parser,
                            ParseErrorCode_UndefinedDatatype,
                            FormatCountedString( GetTranArena(),
-                                                CSz("Could't find datatype or local variable for (%S)."),
+                                                CSz("Could not find datatype or local variable for (%S)."),
                                                 Token->Value ),
                            Token );
           }
@@ -7726,7 +7726,7 @@ ParseAndTypeCheckArgs(parse_context *Ctx, parser *Parser, c_token *FunctionT, me
       ParseError( Parser,
                   ArgParser.ErrorCode,
                   FormatCountedString( GetTranArena(),
-                                       CSz("Could't parse args for (%S)."),
+                                       CSz("Could not parse args for (%S)."),
                                        FunctionT->Value ),
                   FunctionT );
       break;
