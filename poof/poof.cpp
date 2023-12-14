@@ -2164,6 +2164,8 @@ ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_aren
 "\n"
 " -c0      | --colors-off         : disable color escape codes in console output\n"
 "\n"
+"          | --no-normalize-output-whitespace : disable normalizing whitespace.  Useful to emit whitespace-sensitive languages.\n"
+"\n"
 " --log-level <LogLevel_Value>    : One of "));
 
 DumpValidLogLevelOptions();
@@ -2183,6 +2185,10 @@ PrintToStdout(CSz(
              StringsMatch(CSz("--do-debug-window"), Arg) )
     {
       Result.DoDebugWindow = True;
+    }
+    else if ( StringsMatch(CSz("--no-normalize-output-whitespace"), Arg) )
+    {
+      Result.DoNotNormalizeWhitespace = True;
     }
     else if ( StringsMatch(CSz("-I"), Arg) ||
               StringsMatch(CSz("--include-path"), Arg) )
@@ -5917,7 +5923,6 @@ FlushOutputToDisk( parse_context *Ctx,
 
   c_token *LastTokenBeforeNewline = PeekTokenPointer(Parser, -1);
 
-  b32 FoundValidInclude = False;
   c_token *T = PeekTokenRawPointer(Parser);
   if (T && T->Type == CT_PreprocessorInclude)
   {
@@ -5929,15 +5934,17 @@ FlushOutputToDisk( parse_context *Ctx,
     /* Info("INCLUDE PATH %S", IncludePath); */
     /* OutputPath = Concat(Ctx->Args.Outpath, Basename(IncludePath), Memory); */
     OutputPath = IncludePath;
-    FoundValidInclude = True;
   }
 
   if (OmitInclude && T && T->Type == CTokenType_CommentSingleLine)
   {
+    OutputPath = T->Value;
+    Frontcate(&OutputPath, 3);
+    /* Info("OmitInclude (%S)", OutputPath); */
   }
 
   cs CodeToInsert = {};
-  if (FoundValidInclude == False)
+  if (OutputPath.Start == False)
   {
     Assert(PeekTokenRaw(Parser, -1).Type == CTokenType_Newline);
 

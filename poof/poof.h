@@ -880,6 +880,7 @@ struct arguments
 
   b32 DoDebugWindow;
   b32 HelpTextPrinted;
+  b32 DoNotNormalizeWhitespace;
 };
 
 struct program_datatypes

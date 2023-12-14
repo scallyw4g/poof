@@ -1,4 +1,20 @@
 
+poof(
+  func foobaz(type) @omit_include
+  {
+    foobaZ!
+  }
+)
+
+struct thing
+{
+  int foo;
+  int baz;
+};
+
+poof(foobaz(thing))
+// generated/fdadfsafoobaz_thing.h
+
 link_internal c_token
 NormalizeWhitespaceTokens(c_token *T, c_token* PrevT, c_token *NextT, umm *Depth)
 {
@@ -1277,7 +1293,9 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
         else
         {
           // NOTE(Jesse): Have to call this here to track depth properly
-          c_token ToPush = NormalizeWhitespaceTokens(BodyToken, PeekTokenRawPointer(Scope, -2), PeekTokenRawPointer(Scope), Depth);
+          c_token ToPush = {};
+          if (Ctx->Args.DoNotNormalizeWhitespace) { ToPush = *BodyToken; }
+          else                               { ToPush = NormalizeWhitespaceTokens(BodyToken, PeekTokenRawPointer(Scope, -2), PeekTokenRawPointer(Scope), Depth); }
           Append(&OutputBuilder, ToPush.Value);
         }
 
@@ -1285,7 +1303,9 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
 
       default:
       {
-        c_token ToPush = NormalizeWhitespaceTokens(BodyToken, PeekTokenRawPointer(Scope, -2), PeekTokenRawPointer(Scope), Depth);
+        c_token ToPush = {};
+        if (Ctx->Args.DoNotNormalizeWhitespace) { ToPush = *BodyToken; }
+        else                               { ToPush = NormalizeWhitespaceTokens(BodyToken, PeekTokenRawPointer(Scope, -2), PeekTokenRawPointer(Scope), Depth); }
         Append(&OutputBuilder, ToPush.Value);
       } break;
 
