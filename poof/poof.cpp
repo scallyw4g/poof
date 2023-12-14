@@ -2327,15 +2327,10 @@ RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Fi
       // that's not a newline, in which case we have to write our own out.
       if (T->Type == CT_PoofInsertedCode)
       {
-        if (T->IncludePath.Start)
+        if (T->CodeToInsert.Start)
         {
-          if (!StringsMatch(T->Value, CSz("\n")))
-          {
-            FileWritesSucceeded &= WriteToFile(&TempFile, CSz("\n"));
-          }
-          FileWritesSucceeded &= WriteToFile(&TempFile, CSz("#include <"));
-          FileWritesSucceeded &= WriteToFile(&TempFile, Concat(OutputPath, T->IncludePath, GetTranArena()) ); // TODO(Jesse, begin_temporary_memory)
-          FileWritesSucceeded &= WriteToFile(&TempFile, CSz(">"));
+          if (!StringsMatch(T->Value, CSz("\n"))) { FileWritesSucceeded &= WriteToFile(&TempFile, CSz("\n")); }
+          FileWritesSucceeded &= WriteToFile(&TempFile, T->CodeToInsert);
         }
       }
     }
@@ -2376,9 +2371,9 @@ Output(counted_string Code, counted_string OutputFilename, memory_arena* Memory,
   native_file TempFile = GetTempFile(&TempFileEntropy, Memory);
   if (TempFile.Handle)
   {
-    b32 FileWritesSucceeded = WriteToFile(&TempFile, Code);
-    FileWritesSucceeded &= WriteToFile(&TempFile, CS("\n"));
-    FileWritesSucceeded &= CloseFile(&TempFile);
+    b32 FileWritesSucceeded  = WriteToFile(&TempFile, Code);
+        FileWritesSucceeded &= WriteToFile(&TempFile, CS("\n"));
+        FileWritesSucceeded &= CloseFile(&TempFile);
 
     if (FileWritesSucceeded)
     {
@@ -5897,7 +5892,8 @@ FlushOutputToDisk( parse_context *Ctx,
                    counted_string NewFilename,
                    todo_list_info* TodoInfo,
                    memory_arena* Memory,
-                   b32 IsInlineCode = False)
+                   b32 IsInlineCode = False,
+                   b32 OmitInclude = False)
 {
   TIMED_FUNCTION();
   parser *Parser = Ctx->CurrentParser;
@@ -5936,26 +5932,52 @@ FlushOutputToDisk( parse_context *Ctx,
     FoundValidInclude = True;
   }
 
+  if (OmitInclude && T && T->Type == CTokenType_CommentSingleLine)
+  {
+  }
+
+  cs CodeToInsert = {};
   if (FoundValidInclude == False)
   {
     Assert(PeekTokenRaw(Parser, -1).Type == CTokenType_Newline);
 
     OutputPath = Concat(Ctx->Args.Outpath, NewFilename, Memory);
-    Assert(LastTokenBeforeNewline->IncludePath.Start == 0);
-    Assert(LastTokenBeforeNewline->IncludePath.Count == 0);
+    Assert(LastTokenBeforeNewline->CodeToInsert.Start == 0);
+    Assert(LastTokenBeforeNewline->CodeToInsert.Count == 0);
 
+    if (OmitInclude)
+    {
+      if (T->Type != CTokenType_CommentSingleLine)
+      {
+        CodeToInsert = Concat(CSz("// "), OutputPath, Memory);
+      }
+    }
+    else
+    {
+      CodeToInsert = Concat(CSz("#include <"), OutputPath, CSz(">"), Memory);
+    }
+  }
+
+  if (CodeToInsert.Count)
+  {
     // NOTE(Jesse): Keep the value intact so we can still print it
     LastTokenBeforeNewline->Type = CT_PoofInsertedCode;
-    LastTokenBeforeNewline->IncludePath = NewFilename;
+    LastTokenBeforeNewline->CodeToInsert = CodeToInsert;
   }
+
 
   Output(OutputForThisParser, OutputPath, Memory);
   parser *OutputParse = ParserForAnsiStream(Ctx, AnsiStream(OutputForThisParser, OutputPath), TokenCursorSource_MetaprogrammingExpansion, Ctx->Memory);
 
+
   if (IsInlineCode)
   {
-    // TODO(Jesse, id: 226, tags: metaprogramming, output): Should we handle this differently?
+    // TODO(Jesse, id: 226, tags: metaprogramming, output): Should we handle this differently?l
     Info("Not parsing inlined code (%S)", OutputPath);
+  }
+  else if (OmitInclude)
+  {
+    Info("Skipping parsing code for function marked `omit_include` (%S)", OutputPath);
   }
   else
   {
@@ -7508,13 +7530,32 @@ ParseMetaFunctionDef(parser* Parser, counted_string FuncName, memory_arena *Memo
   while (ParseMetaFuncDefArg(Parser, &ArgStream));
   RequireToken(Parser, CTokenType_CloseParen);
 
+  b32 OmitInclude = {};
+  if (OptionalToken(Parser, CTokenType_At))
+  {
+    c_token *FuncDirectiveT = RequireTokenPointer(Parser, CTokenType_Identifier);
+
+    cs DirectiveString = FuncDirectiveT->Value;
+    meta_func_directive FuncDirective = MetaFuncDirective(DirectiveString);
+
+    switch(FuncDirective)
+    {
+      case meta_func_directive_noop:
+      {
+        PoofTypeError(Parser, ParseErrorCode_PoofTypeError, CSz("Invalid meta_func_directive"), FuncDirectiveT);
+      } break;
+
+      case omit_include:
+      {
+        OmitInclude = True;
+      } break;
+    }
+  }
+
+
   parser Body = GetBodyTextForNextScope(Parser, Memory);
 
-  meta_func Func = {
-    .Name = FuncName,
-    .Args = Compact(&ArgStream, Memory),
-    .Body = Body,
-  };
+  meta_func Func = MetaFunc(FuncName, Compact(&ArgStream, Memory), Body, OmitInclude);
 
   return Func;
 }

@@ -15,10 +15,10 @@ poof(
   func (array_struct B)
   {
     B.member(0, (M) {
-        M.is_array? { isarray } { notarray }
-        M.map_array (Index) {
-          foo
-        }
+      M.is_array? { isarray } { notarray }
+      M.map_array (Index) {
+        foo
+      }
       M.type M.name
       M.value
       M.array

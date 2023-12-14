@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
 
-. make.sh
+# ./make.sh BuildAllBinariesRunAllTests
 
 
-BuildAllBinariesRunAllTests
+# BuildAllBinariesRunAllTests
 
 # FetchBonsaiDebug
 
-RunInstalledPoof
-BuildPoof
-RunPoof
+# ./make.sh RunInstalledPoof
+# ./make.sh BuildPoof
+# ./make.sh RunPoof
+
+# ./make.sh RunInstalledPoof
+# ./make.sh BuildPoof
+./make.sh RunIntegrationTests
+./make.sh BuildAndRunAllExamples
 
 # RollupEmcc
 # BuildPoofEmcc
@@ -18,9 +23,7 @@ RunPoof
 # RunParserTests
 
 
-# RunIntegrationTests
 
-# BuildAndRunAllExamples
 
 # RunExtendedIntegrationTests
 

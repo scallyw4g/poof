@@ -17,13 +17,18 @@ NormalizeWhitespaceTokens(c_token *T, c_token* PrevT, c_token *NextT, umm *Depth
   if ( (IsNBSP(T) && PrevT && PrevT->Type == CTokenType_Newline) ||
        (IsNBSP(T) && PrevT == 0) )
   {
+
+    s32 NewCount = s32((*Depth)*2);
+    /* s32 NewCount = Max(0, s32(T->Value.Count) - s32((*Depth)*2)-4); */
+    /* s32 NewCount = Max(0, s32(T->Value.Count) - s32((*Depth)*2)); */
     if ( NextT && (NextT->Type == '}' || NextT->Type == ')'))
     {
-      Result.Value.Count = Min(T->Value.Count, (SafeDecrement(Depth))*2);
+      NewCount = Max(0, NewCount-2);
+      Result.Value.Count = Min(T->Value.Count, umm(NewCount));
     }
     else
     {
-      Result.Value.Count = Min(T->Value.Count, (*Depth)*2);
+      Result.Value.Count = Min(T->Value.Count, umm(NewCount));
     }
   }
 
@@ -208,7 +213,7 @@ MaybeParseSepOperator(parser *Scope)
 link_internal counted_string
 Execute(parser *Scope, meta_func_arg_buffer *ReplacePatterns, parse_context *Ctx, memory_arena *Memory, umm *Depth)
 {
-   meta_func F = MetaFunc(CSz("(anonymous)"), *ReplacePatterns, *Scope);
+   meta_func F = MetaFunc(CSz("(anonymous)"), *ReplacePatterns, *Scope, False);
    cs Result = Execute(&F, Ctx, Memory, Depth);
    if (F.Body.ErrorCode)
    {
@@ -362,7 +367,7 @@ Map( parse_context *Ctx,
           if (Operator == map || Operator == map_values)
           {
             auto EnumDecl = SafeAccess(enum_decl, Decl);
-            meta_func EnumFunc = MetaFunc(CSz("map_enum_values"), *ReplacePatterns, *MapScope);
+            meta_func EnumFunc = MetaFunc(CSz("map_enum_values"), *ReplacePatterns, *MapScope, False);
 
             maybe_counted_string MapResult = MapEnumValues(Ctx, EnumDecl, &EnumFunc, MatchValue, Sep, Memory, Depth);
             if (MapResult.Error)
@@ -470,7 +475,7 @@ Map( parse_context *Ctx,
                   if (BaseDecl->Type == type_enum_decl)
                   {
                     auto EnumDecl = SafeAccess(enum_decl, BaseDecl);
-                    meta_func EnumFunc = MetaFunc(CSz("map_enum_values"), *ReplacePatterns, *MapScope);
+                    meta_func EnumFunc = MetaFunc(CSz("map_enum_values"), *ReplacePatterns, *MapScope, False);
                     maybe_counted_string MapResult = MapEnumValues(Ctx, EnumDecl, &EnumFunc, MatchValue, Sep, Memory, Depth);
                     if (MapResult.Error)
                     {
@@ -1296,6 +1301,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
 
   Assert(Func->Body.Tokens->At == Func->Body.Tokens->End);
   Rewind(Func->Body.Tokens);
+
   return Result;
 }
 
@@ -1312,7 +1318,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
   program_datatypes *Datatypes   = &Ctx->Datatypes;
   meta_func_stream *FunctionDefs = &Ctx->MetaFunctions;
   memory_arena *Memory           = Ctx->Memory;
-  parser *Parser = Ctx->CurrentParser;
+  parser *Parser                 = Ctx->CurrentParser;
 
   switch (Directive)
   {
@@ -1329,7 +1335,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           if (Code.Start)
           {
             counted_string OutfileName = GenerateOutfileNameFor(Ctx, Func, &ArgInstances, Memory);
-            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, {} /*TodoInfo*/, Memory);
+            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, {} /*TodoInfo*/, Memory, False, Func->OmitInclude);
 
             auto FilenameAndCode = Tuple(ActualOutputFile, Code);
             Append(Builder, FilenameAndCode);
@@ -1369,18 +1375,14 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         c_token *ArgTypeT = RequireTokenPointer(Parser, CTokenType_Identifier);
 
         counted_string ArgType = ArgTypeT->Value;
+        datatype D = GetDatatypeByName(Ctx, ArgType);
+
         counted_string ArgName = RequireToken(Parser, CTokenType_Identifier).Value;
         RequireToken(Parser, CTokenType_CloseParen);
 
-        datatype D = GetDatatypeByName(Ctx, ArgType);
-
-
         parser Body = GetBodyTextForNextScope(Parser, Memory);
 
-        meta_func Func = {
-          .Name = CSz("anonymous"),
-          .Body = Body,
-        };
+        meta_func Func = MetaFunc(CSz("anonymous"), {}, Body, True);
 
         datatype ArgDatatype = GetDatatypeByName(&Ctx->Datatypes, ArgType);
 

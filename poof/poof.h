@@ -12,7 +12,9 @@ enum poof_global_keyword
   poof_error,
 };
 poof( string_and_value_tables(poof_global_keyword) )
-#include <generated/string_and_value_tables_poof_global_keyword.h>
+#include <string_and_value_tables_poof_global_keyword.h>
+/* #include <string_and_value_tables_poof_global_keyword.h> */
+/* #include <generated/string_and_value_tables_poof_global_keyword.h> */
 
 
 enum metaprogramming_directive
@@ -28,6 +30,17 @@ enum metaprogramming_directive
 };
 poof( string_and_value_tables(metaprogramming_directive) )
 #include <generated/string_and_value_tables_metaprogramming_directive.h>
+
+enum meta_func_directive
+{
+  meta_func_directive_noop,
+
+  omit_include,
+};
+poof( string_and_value_tables(meta_func_directive) )
+#include <string_and_value_tables_meta_func_directive.h>
+
+
 
 enum meta_arg_operator
 {
@@ -696,6 +709,7 @@ struct meta_func
   counted_string Name;
   meta_func_arg_buffer Args;
   parser Body;
+  b32 OmitInclude;
 };
 poof(generate_stream(meta_func))
 #include <generated/generate_stream_meta_func.h>
