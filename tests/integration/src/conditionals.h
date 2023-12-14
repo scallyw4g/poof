@@ -2,7 +2,7 @@
 
 #if 1
 poof(
-  func (foo_struct_1 TFooStruct)
+  func (foo_struct_1 TFooStruct) @omit_include
   {
     TFooStruct.map_members(Member)
     {
@@ -16,12 +16,12 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_ZpWJur7o.h>
+// tests\integration\generated\conditionals/anonymous_foo_struct_1_8guZPTf0.h
 #endif
 
 #if 1
 poof(
-  func (foo_struct_1 TFooStruct)
+  func (foo_struct_1 TFooStruct) @omit_include
   {
     TFooStruct.map_members(Member)
     {
@@ -35,12 +35,12 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_m33iB55j.h>
+// tests\integration\generated\conditionals/anonymous_foo_struct_1_h7hirkAZ.h
 #endif
 
 #if 1
 poof(
-  func (foo_struct_1 TFooStruct)
+  func (foo_struct_1 TFooStruct) @omit_include
   {
     TFooStruct.map_members(Member)
     {
@@ -54,13 +54,13 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_IjaKQKyX.h>
+// tests\integration\generated\conditionals/anonymous_foo_struct_1_HxUplAeU.h
 #endif
 
 
 #if 1
 poof(
-  func (foo_struct_1 TFooStruct)
+  func (foo_struct_1 TFooStruct) @omit_include
   {
     TFooStruct.map_members(Member)
     {
@@ -74,13 +74,13 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_w3dGd6mh.h>
+// tests\integration\generated\conditionals/anonymous_foo_struct_1_LVid4PGg.h
 #endif
 
 
 #if 1
 poof(
-  func (foo_struct_1 TFooStruct)
+  func (foo_struct_1 TFooStruct) @omit_include
   {
     TFooStruct.map_members(Member)
     {
@@ -94,13 +94,13 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_TObfsxb6.h>
+// tests\integration\generated\conditionals/anonymous_foo_struct_1_CPfSoIS7.h
 #endif
 
 
 #if 1
 poof(
-  func (foo_struct_1 TFooStruct)
+  func (foo_struct_1 TFooStruct) @omit_include
   {
     TFooStruct.map_members(Member)
     {
@@ -114,14 +114,14 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_YvJnQLUi.h>
+// tests\integration\generated\conditionals/anonymous_foo_struct_1_QAGBtJOS.h
 #endif
 
 
 
 #if 1
 poof(
-  func (foo_struct_1 TFooStruct)
+  func (foo_struct_1 TFooStruct) @omit_include
   {
     TFooStruct.map_members(Member)
     {
@@ -132,16 +132,13 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_KLiRNdrO.h>
-
-
-
+// tests\integration\generated\conditionals/anonymous_foo_struct_1_BaBAMF6m.h
 #endif
 
 
 #if 1
 poof(
-  func (foo_struct_1 TFooStruct)
+  func (foo_struct_1 TFooStruct) @omit_include
   {
     TFooStruct.map_members(Member)
     {
@@ -152,11 +149,11 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_gB856lL7.h>
+// tests\integration\generated\conditionals/anonymous_foo_struct_1_6M8tx4gp.h
 #endif
 
 poof(
-  func (foo_struct_1 TFooStruct)
+  func (foo_struct_1 TFooStruct) @omit_include
   {
     TFooStruct.map_members(Member)
     {
@@ -167,10 +164,10 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_rHXPMI2N.h>
+// tests\integration\generated\conditionals/anonymous_foo_struct_1_xuh38nWl.h
 
 poof(
-  func (foo_struct_1 TFooStruct)
+  func (foo_struct_1 TFooStruct) @omit_include
   {
     TFooStruct.map_members(Member)
     {
@@ -184,4 +181,24 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/conditionals/anonymous_foo_struct_1_ACfUY3gL.h>
+// tests\integration\generated\conditionals/anonymous_foo_struct_1_dlHRwaDJ.h
+
+
+poof(
+  func (tag_struct TFooStruct) @omit_include
+  {
+    TFooStruct.map_members(Member)
+    {
+      Member.has_tag(foo)?
+      {
+        (Member.type) (Member.name) has foo tag
+      }
+
+      Member.has_tag(bar)?
+      {
+        (Member.type) (Member.name) has bar tag (value=(Member.tag_value(bar)))
+      }
+    }
+  }
+)
+// tests\integration\generated\conditionals/anonymous_tag_struct_oX7F12Cw.h
