@@ -4571,7 +4571,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
 }
 
 link_internal void
-ParseEnumBody(parse_context *Ctx, parser *Parser, enum_decl *Enum, memory_arena *Memory)
+ParseEnumBody(parse_context *Ctx, parser *Parser, enum_decl *Enum)
 {
   RequireToken(Parser, CTokenType_OpenBrace);
 
@@ -4620,7 +4620,7 @@ ParseEnum(parse_context *Ctx, type_spec *TypeSpec)
     .Name = EnumName
   };
 
-  ParseEnumBody(Ctx, Parser, &Enum, Ctx->Memory);
+  ParseEnumBody(Ctx, Parser, &Enum);
 
   return Enum;
 }
@@ -4676,30 +4676,60 @@ ParseAndPushTypedef(parse_context *Ctx)
 
   c_token *AliasT = {};
   counted_string Alias = {};
-  b32 IsFunction = Type.Indirection.IsFunction;
 
-  if (IsFunction)
+  if (Type.Indirection.IsFunction)
   {
     Alias = Type.DatatypeToken->Value;
   }
   else
   {
-    AliasT = RequireTokenPointer(Parser, CTokenType_Identifier);
-    Alias = AliasT->Value;
-
-    if (PeekToken(Parser).Type == CTokenType_OpenParen)
+    if (PeekToken(Parser).Type == CTokenType_OpenBrace)
     {
-      // TODO(Jesse): This is pretty half-baked and probably should be represented
-      // differently.  I just hacked it in here to get typedef'd funcs to parse.
-      IsFunction = True;
-      Type.Indirection.IsFunction = True;
-      EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
+      if (Type.Qualifier & TypeQual_Struct)
+      {
+        compound_decl S = ParseStructBody(Ctx, 0);
+        // @dup_typedefd_anon_thingy_name_token
+        comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
+        S.Type = Decl.NameT;
+        Push(&Ctx->Datatypes.Structs, S);
+      }
+      else if (Type.Qualifier & TypeQual_Enum)
+      {
+        enum_decl Enum = {};
+        ParseEnumBody(Ctx, Parser, &Enum);
+        // @dup_typedefd_anon_thingy_name_token
+        comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
+        Enum.Name = Decl.NameT->Value;
+        Push(&Ctx->Datatypes.Enums, Enum);
+      }
+      else
+      {
+        InvalidCodePath();
+      }
+
+      TryEatAttributes(Parser);
+
+      MaybeEatAdditionalCommaSeperatedNames(Ctx);
     }
+    else
+    {
+      AliasT = RequireTokenPointer(Parser, CTokenType_Identifier);
+      Alias = AliasT->Value;
+
+      if (PeekToken(Parser).Type == CTokenType_OpenParen)
+      {
+        // TODO(Jesse): This is pretty half-baked and probably should be represented
+        // differently.  I just hacked it in here to get typedef'd funcs to parse.
+        Type.Indirection.IsFunction = True;
+        EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
+      }
+    }
+
   }
 
   MaybeEatAdditionalCommaSeperatedNames(Ctx);
 
-  TryEatAttributes(Parser) == False;
+  TryEatAttributes(Parser);
 
   if ( OptionalToken(Parser, CTokenType_OpenBracket) )
   {
@@ -4758,6 +4788,7 @@ ParseTypedef(parse_context *Ctx)
   if ( Peek->Type == CTokenType_Struct || Peek->Type == CTokenType_Union )
   {
     RequireToken(Parser, Peek);
+
     if (PeekToken(Parser).Type == CTokenType_OpenBrace)
     {
       compound_decl S = ParseStructBody(Ctx, 0);
@@ -4767,6 +4798,12 @@ ParseTypedef(parse_context *Ctx)
       TryEatAttributes(Parser);
 
       MaybeEatAdditionalCommaSeperatedNames(Ctx);
+
+      while (OptionalToken(Parser, CTokenType_Comma))
+      {
+        comma_separated_decl Alias = ParseCommaSeperatedDecl(Ctx);
+      }
+
       RequireToken(Parser, CTokenType_Semicolon);
 
       Push(&Ctx->Datatypes.Structs, S);
@@ -4796,31 +4833,7 @@ ParseTypedef(parse_context *Ctx)
   }
   else if (Peek->Type == CTokenType_Enum)
   {
-    RequireToken(Parser, *Peek);
-
-    enum_decl Enum = {};
-
-    {
-      c_token Name = PeekToken(Parser);
-      if (Name.Type == CTokenType_Identifier)
-      {
-        RequireToken(Parser, Name);
-        Enum.Name = Name.Value;
-      }
-    }
-
-    ParseEnumBody(Ctx, Parser, &Enum, Ctx->Memory);
-
-    {
-      c_token Name = PeekToken(Parser);
-      if (Name.Type == CTokenType_Identifier)
-      {
-        RequireToken(Parser, Name);
-        Enum.Name = Name.Value;
-      }
-      MaybeEatAdditionalCommaSeperatedNames(Ctx);
-    }
-
+    ParseAndPushTypedef(Ctx);
   }
   else
   {
