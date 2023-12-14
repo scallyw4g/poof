@@ -3,7 +3,7 @@
 . make.sh
 
 
-# BuildAllBinariesRunAllTests
+BuildAllBinariesRunAllTests
 
 # FetchBonsaiDebug
 

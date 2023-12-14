@@ -9,9 +9,6 @@ union (anonymous) (value unsupported for compound declaration types)
 
 foo_struct_1 foo_struct_1
 
-
-
-
 -- filtered members end --
 
 

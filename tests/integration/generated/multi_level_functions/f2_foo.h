@@ -9,4 +9,3 @@ int  foo;
 // f1 map
 float  bar;
 
-

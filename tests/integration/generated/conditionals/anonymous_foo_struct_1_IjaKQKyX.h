@@ -76,4 +76,3 @@ func_type_name AnotherFunc not defined
 
 u32 NamedThing defined
 
-

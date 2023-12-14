@@ -76,4 +76,3 @@ func_type_name AnotherFunc is a pointer
 
 u32 NamedThing not a pointer
 
-

@@ -76,4 +76,3 @@ func_type_name AnotherFunc not enum
 
 u32 NamedThing not enum
 
-

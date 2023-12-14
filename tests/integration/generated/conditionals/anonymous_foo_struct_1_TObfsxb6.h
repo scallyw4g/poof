@@ -76,4 +76,3 @@ func_type_name AnotherFunc not primitive
 
 u32 NamedThing is primitive
 
-

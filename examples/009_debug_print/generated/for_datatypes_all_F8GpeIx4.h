@@ -5,7 +5,6 @@ void DebugPrint_nested_struct(struct nested_struct *Struct)
   DebugPrint_str("int  NestedInt = ");
   DebugPrint_int ( Struct->NestedInt );
   DebugPrint_str(";");
-
   DebugPrint_str("}");
 }
 void DebugPrint_foo_struct(struct foo_struct *Struct)
@@ -15,7 +14,6 @@ void DebugPrint_foo_struct(struct foo_struct *Struct)
   DebugPrint_str("nested_struct FooNested = ");
   DebugPrint_nested_struct( Struct->FooNested );
   DebugPrint_str(";");
-
   DebugPrint_str("}");
 }
 void DebugPrint_bar_struct(struct bar_struct *Struct)
@@ -25,7 +23,6 @@ void DebugPrint_bar_struct(struct bar_struct *Struct)
   DebugPrint_str("int  BarInt = ");
   DebugPrint_int ( Struct->BarInt );
   DebugPrint_str(";");
-
   DebugPrint_str("}");
 }
 void DebugPrint_baz_struct(struct baz_struct *Struct)
@@ -35,7 +32,6 @@ void DebugPrint_baz_struct(struct baz_struct *Struct)
   DebugPrint_str("int  BazInt = ");
   DebugPrint_int ( Struct->BazInt );
   DebugPrint_str(";");
-
   DebugPrint_str("}");
 }
 void DebugPrint_my_discriminated_union(struct my_discriminated_union *Struct)
@@ -67,7 +63,6 @@ void DebugPrint_my_discriminated_union(struct my_discriminated_union *Struct)
 
     default: { /* Invalid type passed to DebugPrint .. handling the error might be nice */ } break;
   }
-
   DebugPrint_str("}");
 }
 

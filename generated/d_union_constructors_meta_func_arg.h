@@ -38,5 +38,3 @@ MetaFuncArg( poof_symbol A, counted_string Match   )
   return Result;
 }
 
-
-

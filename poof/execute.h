@@ -66,15 +66,21 @@ HandleWhitespaceAndAppend( string_builder *OutputBuilder, counted_string Output,
     {
       if (IsAllWhitespace(LastStr))
       {
+        // TODO(Jesse): WTF?  Don't we skip appending stuff that's all whitespace.. ???
+        // InvalidCodePath fires here..
         LastStr->Count = 0;
       }
 
-      if (LastNBSPChar(&Output) == '\n')
+      while (LastNBSPChar(&Output) == '\n')
       {
         TrimTrailingNBSP(&Output);
         if (TrimOutputTrailingNewline)
         {
           TrimTrailingNewline(&Output);
+        }
+        else
+        {
+          break;
         }
       }
 

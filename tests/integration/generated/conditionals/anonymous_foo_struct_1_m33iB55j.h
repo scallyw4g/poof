@@ -76,4 +76,3 @@ func_type_name AnotherFunc not struct
 
 u32 NamedThing not struct
 
-
