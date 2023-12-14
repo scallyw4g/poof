@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-# set -o nounset
-# set -o pipefail
-# set -o errexit
-
+# NOTE(Jesse): These should be removed eventually.. but I'm leaving them here
+# for the time-being since it should be harmless
+#
 # NOTE(Jesse): The following are switches for twiddling during development.
 # Calling functions by name on the command line shouldn't be affected by these.
 
@@ -13,8 +12,8 @@
 
 # FetchBonsaiDebug=0
 
-BuildPoof=1
-RunPoof=1
+# BuildPoof=1
+# RunPoof=1
 
 # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
 # POOF_DEBUGGER="gdb --args"
@@ -29,7 +28,7 @@ RunPoof=1
 
 # BuildAndRunAllExamples=1
 
-RunIntegrationTests=1
+# RunIntegrationTests=1
 # INTEGRATION_TEST_INDEX=1
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug -c0"
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
@@ -195,6 +194,21 @@ function RunPoof {
   echo -e "$Delimeter"
   echo -e ""
 
+}
+
+function RunInstalledPoof {
+  old_poof_executable=$POOF_EXECUTABLE
+  POOF_EXECUTABLE=poof
+  old_poof_debugger=$POOF_DEBUGGER
+  POOF_DEBUGGER=
+  old_poof_log_level=$POOF_LOG_LEVEL
+  # POOF_LOG_LEVEL="--log-level LogLevel_Error"
+
+  RunPoof
+
+  POOF_LOG_LEVEL=$old_poof_log_level
+  POOF_DEBUGGER=$old_poof_debugger
+  POOF_EXECUTABLE=$old_poof_executable
 }
 
 function BuildPoof {
@@ -539,6 +553,8 @@ echo -e ""
 
 
 
+
+
 : "${OPTIMIZATION_LEVEL:="-O0"}"
 : "${BONSAI_INTERNAL:=1}"
 
@@ -560,65 +576,6 @@ if [ $# -eq 1 ]; then
 
 else
 
-  if [[ $RunPreemptivePoof == 1 ]]; then
-    old_poof_executable=$POOF_EXECUTABLE
-    POOF_EXECUTABLE=poof
-    old_poof_debugger=$POOF_DEBUGGER
-    POOF_DEBUGGER=
-    old_poof_log_level=$POOF_LOG_LEVEL
-    # POOF_LOG_LEVEL="--log-level LogLevel_Error"
-
-    RunPoof
-
-    POOF_LOG_LEVEL=$old_poof_log_level
-    POOF_DEBUGGER=$old_poof_debugger
-    POOF_EXECUTABLE=$old_poof_executable
-  fi
-
-  if [[ $FetchBonsaiDebug == 1 ]]; then
-    FetchBonsaiDebug
-  fi
-
-  if [[ $BuildPoof == 1 ]]; then
-    BuildPoof
-  fi
-
-  if [[ $RollupEmcc == 1 ]]; then
-    RollupEmcc
-  fi
-
-  if [[ $BuildPoofEmcc == 1 ]]; then
-    BuildPoofEmcc
-  fi
-
-  if [[ $RunPoof == 1 ]]; then
-    RunPoof
-  fi
-
-  if [[ $BuildParserTests == 1 ]]; then
-    BuildParserTests
-  fi
-
-  if [[ $BuildAndRunAllExamples == 1 ]]; then
-    BuildAndRunAllExamples
-  fi
-
-
-
-  if [[ $RunParserTests == 1 ]]; then
-    RunParserTests
-  fi
-
-  if [[ $RunIntegrationTests == 1 ]]; then
-    RunIntegrationTests
-  fi
-
-  if [[ $RunExtendedIntegrationTests == 1 ]]; then
-    RunExtendedIntegrationTests
-  fi
-
-  if [[ $BuildAllBinariesRunAllTests == 1 ]]; then
-    BuildAllBinariesRunAllTests
-  fi
+  BuildAllBinariesRunAllTests
 
 fi
