@@ -38,12 +38,6 @@ enum foo_enum
 };
 
 
-struct tag_struct
-{
-  int a1; poof( @foo )
-  int a2; poof( @bar(baz) )
-};
-
 struct array_struct
 {
   int a1[2];

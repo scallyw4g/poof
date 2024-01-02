@@ -4567,6 +4567,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
     poof_tag Tag = {};
     while (TryParsePoofTagForStructMember(Parser, &Tag))
     {
+      Info("Got Tag %S(%S) on %S (%S)", Tag.Name, Tag.Value, ToString(StoredMember->Type), GetNameForDecl(StoredMember));
       Push(&StoredMember->Tags, &Tag);
     }
   }
@@ -6363,6 +6364,8 @@ GetNameForDecl(declaration* Decl)
 
   switch (Decl->Type)
   {
+    InvalidCase(type_declaration_noop);
+
     case type_function_decl:
     {
       Result = Decl->function_decl.NameT->Value;
@@ -6385,9 +6388,6 @@ GetNameForDecl(declaration* Decl)
     {
       Result = Decl->enum_decl.Name;
     } break;
-
-    // TODO(Jesse): Throw actual error messages here?
-    InvalidDefaultCase;
   }
 
   return Result;
@@ -7393,6 +7393,7 @@ TryParsePoofTagForStructMember(parser *Parser, poof_tag *Tag)
     // TODO(Jesse): Probably don't assert for this case..
     Ensure(TryParsePoofTag(Parser, Tag));
     RequireTokenPointer(Parser, CTokenType_CloseParen); // Closes poof( )
+
     Result = True;
   }
 

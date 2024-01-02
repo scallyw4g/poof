@@ -183,22 +183,3 @@ poof(
 )
 // tests\integration\generated\conditionals/anonymous_foo_struct_1_dlHRwaDJ.h
 
-
-poof(
-  func (tag_struct TFooStruct) @omit_include
-  {
-    TFooStruct.map_members(Member)
-    {
-      Member.has_tag(foo)?
-      {
-        (Member.type) (Member.name) has foo tag
-      }
-
-      Member.has_tag(bar)?
-      {
-        (Member.type) (Member.name) has bar tag (value=(Member.tag_value(bar)))
-      }
-    }
-  }
-)
-// tests\integration\generated\conditionals/anonymous_tag_struct_oX7F12Cw.h

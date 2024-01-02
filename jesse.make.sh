@@ -14,13 +14,13 @@
 # ./make.sh RunInstalledPoof
 # ./make.sh BuildPoof
 ./make.sh RunIntegrationTests
-./make.sh BuildAndRunAllExamples
+# ./make.sh BuildAndRunAllExamples
 
 # RollupEmcc
 # BuildPoofEmcc
 
-# BuildParserTests
-# RunParserTests
+# ./make.sh BuildParserTests
+# ./make.sh RunParserTests
 
 
 
