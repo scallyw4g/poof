@@ -114,6 +114,8 @@ link_internal counted_string CallFunction(parse_context *Ctx, c_token *FunctionT
 
 
 
+link_internal b32 TryParsePoofTagForStructMember(parser *Parser, poof_tag *Tag);
+link_internal b32 TryParsePoofTag(parser *Parser, poof_tag *Tag);
 
 
 
@@ -4237,6 +4239,8 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
       case CTokenType_Semicolon:
       case CTokenType_CloseBrace:
       {
+        /* RequireToken(Parser, T->Type); */
+
         // Done parsing struct member, or finished with the struct
       } break;
 
@@ -4403,15 +4407,10 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
   b32 Continue = True;
   while (Continue)
   {
-    if (MaybeEatStaticAssert(Parser))
-    {
-      continue;
-    }
+    declaration *StoredMember = {};
 
-    if (MaybeEatVisibilityQualifier(Parser))
-    {
-      continue;
-    }
+    if (MaybeEatStaticAssert(Parser)) { continue; }
+    if (MaybeEatVisibilityQualifier(Parser)) { continue; }
 
     declaration Member = ParseStructMember(Ctx, Result.Type);
 
@@ -4424,12 +4423,12 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
         {
           Member.function_decl.Body = GetBodyTextForNextScope(Parser, Ctx->Memory);
         }
-        Push(&Result.Members, Member);
+        StoredMember = Push(&Result.Members, Member);
       } break;
 
       case type_variable_decl:
       {
-        Push(&Result.Members, Member);
+        StoredMember = Push(&Result.Members, Member);
       } break;
 
       case type_compound_decl:
@@ -4442,13 +4441,14 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
         // {
         //   int foo;
         // } bar, *baz;
+        //
         if (IsAnonymous(&Member.compound_decl))
         {
           /* Info("Pushed anonymous compound decl in (%S)", StructNameT->Value); */
           AnonymousDecl = Insert(Datatype(&Member), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
         }
 
-        Push(&Result.Members, Member);
+        StoredMember = Push(&Result.Members, Member);
       } break;
 
       /* { */
@@ -4504,7 +4504,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
                 Var->StaticBufferSize = Decl.StaticBufferSize;
                 Var->Value = Decl.Value;
 
-                Push(&Result.Members, Member);
+                StoredMember = Push(&Result.Members, Member);
               } break;
 
               case type_compound_decl:
@@ -4535,7 +4535,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
                 }
                 TmpMember.variable_decl.Type.BaseType    = AnonymousDecl;
 
-                Push(&Result.Members, TmpMember);
+                StoredMember = Push(&Result.Members, TmpMember);
               } break;
 
               case type_enum_decl:
@@ -4557,13 +4557,18 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
             OptionalToken(Parser, CTokenType_Comma);
           }
         }
+
       } break;
 
       default: { Continue = False; } break;
     }
 
 
-
+    poof_tag Tag = {};
+    while (TryParsePoofTagForStructMember(Parser, &Tag))
+    {
+      Push(&StoredMember->Tags, &Tag);
+    }
   }
 
   RequireToken(Parser, CTokenType_CloseBrace);
@@ -5954,7 +5959,14 @@ FlushOutputToDisk( parse_context *Ctx,
 
     if (OmitInclude)
     {
-      if (T->Type != CTokenType_CommentSingleLine)
+      if (T)
+      {
+        if (T->Type != CTokenType_CommentSingleLine)
+        {
+          CodeToInsert = Concat(CSz("// "), OutputPath, Memory);
+        }
+      }
+      else
       {
         CodeToInsert = Concat(CSz("// "), OutputPath, Memory);
       }
@@ -7047,6 +7059,46 @@ TypeSpecIsPointer(type_spec *Type)
   return Result;
 }
 
+link_internal poof_tag
+GetTagFromDatatype(parse_context *Ctx, cs TagName, datatype *Data, parser *Scope = 0, c_token *MetaOperatorT = 0)
+{
+  poof_tag Result = {};
+  switch (Data->Type)
+  {
+    case type_datatype_noop: { if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); } } break;
+
+    case type_enum_member:
+    case type_primitive_def:
+    case type_type_def:
+    {
+      if (Scope) { PoofNotImplementedError(Scope, CSz("has_tag is not yet implemented here."), MetaOperatorT); }
+    } break;
+
+    case type_declaration:
+    {
+      declaration *Decl = SafeAccess(declaration, Data);
+
+      IterateOver(&Decl->Tags, Tag, TagIndex)
+      {
+        if (AreEqual(Tag->Name, TagName))
+        {
+          Result = *Tag;
+          break;
+        }
+      }
+    } break;
+  }
+
+  return Result;
+}
+
+link_internal b32
+DatatypeHasTag(parse_context *Ctx, cs TagName, datatype *Data, parser *Scope = 0, c_token *MetaOperatorT = 0)
+{
+  b32 Result = GetTagFromDatatype(Ctx, TagName, Data, Scope, MetaOperatorT).Name.Count > 0;
+  return Result;
+}
+
 link_internal b32
 DatatypeIsPointer(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token *MetaOperatorT = 0)
 {
@@ -7305,6 +7357,73 @@ ResolveToBaseType(parse_context *Ctx, datatype *Data)
 #endif
 }
 
+link_internal b32
+TryParsePoofTag(parser *Parser, poof_tag *Tag)
+{
+  b32 Result = False;
+
+  if (OptionalToken(Parser, CTokenType_At))
+  {
+    c_token TagToken = RequireToken(Parser, CTokenType_Identifier);
+    Tag->Name = TagToken.Value;
+
+    if (PeekToken(Parser).Type == CTokenType_OpenParen)
+    {
+      Tag->Value = EatBetween_Str(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
+    }
+
+    Result = True;
+  }
+
+  return Result;
+}
+
+link_internal b32
+TryParsePoofTagForStructMember(parser *Parser, poof_tag *Tag)
+{
+  b32 Result = False;
+
+  c_token *T = PeekTokenPointer(Parser);
+
+  if (T->Type == CTokenType_Poof)
+  {
+    RequireToken(Parser, T);
+
+    RequireTokenPointer(Parser, CTokenType_OpenParen);
+    // TODO(Jesse): Probably don't assert for this case..
+    Ensure(TryParsePoofTag(Parser, Tag));
+    RequireTokenPointer(Parser, CTokenType_CloseParen); // Closes poof( )
+    Result = True;
+  }
+
+  return Result;
+}
+
+link_internal b32
+ParseOmitIncludeTag(parser *Parser)
+{
+  b32 OmitInclude = {};
+  if (PeekToken(Parser).Type == CTokenType_At)
+  {
+    poof_tag Tag = {};
+    while (TryParsePoofTag(Parser, &Tag))
+    {
+      if (AreEqual(Tag.Name, CSz("omit_include")))
+      {
+        OmitInclude = True;
+      }
+      else
+      {
+        // TODO(Jesse): Throw an error.. unsupported tag on meta_func
+        Assert(False);
+      }
+    }
+
+  }
+  return OmitInclude;
+}
+
+
 #include <poof/execute.h>
 link_internal b32
 IsMetaprogrammingOutput(counted_string Filename, counted_string OutputDirectory)
@@ -7527,6 +7646,7 @@ ParseMapMetaFunctionInstance(parser* Parser, cs FuncName, memory_arena *Memory)
 
   return Func;
 }
+
 link_internal meta_func
 ParseMetaFunctionDef(parser* Parser, counted_string FuncName, memory_arena *Memory)
 {
@@ -7537,28 +7657,7 @@ ParseMetaFunctionDef(parser* Parser, counted_string FuncName, memory_arena *Memo
   while (ParseMetaFuncDefArg(Parser, &ArgStream));
   RequireToken(Parser, CTokenType_CloseParen);
 
-  b32 OmitInclude = {};
-  if (OptionalToken(Parser, CTokenType_At))
-  {
-    c_token *FuncDirectiveT = RequireTokenPointer(Parser, CTokenType_Identifier);
-
-    cs DirectiveString = FuncDirectiveT->Value;
-    meta_func_directive FuncDirective = MetaFuncDirective(DirectiveString);
-
-    switch(FuncDirective)
-    {
-      case meta_func_directive_noop:
-      {
-        PoofTypeError(Parser, ParseErrorCode_PoofTypeError, CSz("Invalid meta_func_directive"), FuncDirectiveT);
-      } break;
-
-      case omit_include:
-      {
-        OmitInclude = True;
-      } break;
-    }
-  }
-
+  b32 OmitInclude = ParseOmitIncludeTag(Parser);
 
   parser Body = GetBodyTextForNextScope(Parser, Memory);
 
@@ -7880,9 +7979,22 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
         }
         else
         {
-          c_token *DirectiveT = RequireTokenPointer(Parser, CTokenType_Identifier);
-          metaprogramming_directive Directive = MetaprogrammingDirective(DirectiveT->Value);
-          ExecuteMetaprogrammingDirective(Ctx, Directive, DirectiveT, &Builder);
+          poof_tag Tag = {};
+          
+          // Skip Tags, we've already parsed them and attached them to their datastructures
+          while (PeekToken(Parser).Type == CTokenType_At)
+          {
+            while (TryParsePoofTag(Parser, &Tag));
+            RequireToken(Parser, CTokenType_CloseParen);
+          }
+
+          // TODO(jesse): This is weird af.
+          if (Tag.Name.Start == 0)
+          {
+            c_token *DirectiveT = RequireTokenPointer(Parser, CTokenType_Identifier);
+            metaprogramming_directive Directive = MetaprogrammingDirective(DirectiveT->Value);
+            ExecuteMetaprogrammingDirective(Ctx, Directive, DirectiveT, &Builder);
+          }
         }
 
       } break;
@@ -8133,7 +8245,6 @@ ScanForMutationsAndOutput(parser *Parser, counted_string OutputPath, memory_aren
   {
     RewriteOriginalFile(Parser, OutputPath, Parser->Tokens->Filename, Memory);
   }
-
 }
 
 link_external const char *
@@ -8204,7 +8315,6 @@ DoPoofForWeb(char *zInput, umm InputLen)
 global_variable r64 Global_LastTime = 0;
 r64 GetDt()
 {
-
   r64 ThisTime = GetHighPrecisionClock();
   r64 Result = ThisTime - Global_LastTime;
   Global_LastTime = ThisTime;

@@ -77,6 +77,9 @@ enum meta_arg_operator
   is_type,
   is_named,
   contains_type,
+
+  has_tag,
+  tag_value,
 };
 
 poof( generate_value_table(meta_arg_operator) )
@@ -333,6 +336,16 @@ AreEqual(enum_decl D1, enum_decl D2)
 poof(stream_and_cursor(enum_decl))
 #include <generated/stream_and_cursor_enum_def.h>
 
+struct poof_tag
+{
+  cs Name;// poof(user_tag(foo))
+  cs Value;
+};
+
+poof(block_array(poof_tag, {2}))
+#include <generated/block_array_poof_tag_688856405.h>
+
+
 poof(
   d_union declaration
   {
@@ -340,6 +353,9 @@ poof(
     function_decl
     compound_decl
     variable_decl
+  },
+  {
+    poof_tag_block_array Tags;
   }
 )
 #include <generated/d_union_declaration.h>
@@ -997,3 +1013,5 @@ AllocateParseContext(memory_arena *Memory)
   Ctx.Datatypes.DatatypeHashtable = Allocate_datatype_hashtable(512, Memory);
   return Ctx;
 }
+
+

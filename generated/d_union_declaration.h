@@ -10,6 +10,7 @@ enum declaration_type
 struct declaration
 {
   enum declaration_type Type;
+  poof_tag_block_array Tags;
 
   union
   {

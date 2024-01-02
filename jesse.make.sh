@@ -7,14 +7,14 @@
 
 # FetchBonsaiDebug
 
-# ./make.sh RunInstalledPoof
+./make.sh RunInstalledPoof
 ./make.sh BuildPoof
-./make.sh RunPoof
+# ./make.sh RunPoof
 
 # ./make.sh RunInstalledPoof
 # ./make.sh BuildPoof
-# ./make.sh RunIntegrationTests
-# ./make.sh BuildAndRunAllExamples
+./make.sh RunIntegrationTests
+./make.sh BuildAndRunAllExamples
 
 # RollupEmcc
 # BuildPoofEmcc

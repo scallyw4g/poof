@@ -1,20 +1,4 @@
 
-poof(
-  func foobaz(type) @omit_include
-  {
-    foobaZ!
-  }
-)
-
-struct thing
-{
-  int foo;
-  int baz;
-};
-
-poof(foobaz(thing))
-// generated/fdadfsafoobaz_thing.h
-
 link_internal c_token
 NormalizeWhitespaceTokens(c_token *T, c_token* PrevT, c_token *NextT, umm *Depth)
 {
@@ -761,6 +745,31 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                     NotImplemented;
                   } break;
 
+                  case tag_value:
+                  {
+                    RequireToken(Scope, CTokenType_OpenParen);
+                    cs TagName = RequireToken(Scope, CTokenType_Identifier).Value;
+                    RequireToken(Scope, CTokenType_CloseParen);
+
+                    poof_tag Tag = GetTagFromDatatype(Ctx, TagName, ReplaceData, Scope, MetaOperatorToken);
+
+                    if (Tag.Name.Count)
+                    {
+                      HandleWhitespaceAndAppend(&OutputBuilder, Tag.Value);
+                    }
+                  } break;
+
+                  case has_tag:
+                  {
+                    RequireToken(Scope, CTokenType_OpenParen);
+                    cs TagName = RequireToken(Scope, CTokenType_Identifier).Value;
+                    RequireToken(Scope, CTokenType_CloseParen);
+                    RequireToken(Scope, CTokenType_Question);
+
+                    b32 DoTrueBranch = DatatypeHasTag(Ctx, TagName, ReplaceData, Scope, MetaOperatorToken);
+                    DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
+                  } break;
+
                   case is_pointer:
                   {
                     RequireToken(Scope, CTokenType_Question);
@@ -1400,9 +1409,11 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         counted_string ArgName = RequireToken(Parser, CTokenType_Identifier).Value;
         RequireToken(Parser, CTokenType_CloseParen);
 
-        parser Body = GetBodyTextForNextScope(Parser, Memory);
+        b32 OmitInclude = ParseOmitIncludeTag(Parser);
 
-        meta_func Func = MetaFunc(CSz("anonymous"), {}, Body, True);
+        parser Body = GetBodyTextForNextScope(Parser, Memory);
+        meta_func Func = MetaFunc(CSz("anonymous"), {}, Body, OmitInclude);
+        /* meta_func Func = ParseMetaFunctionDef(Parser, CSz("anonymous"), Memory); */
 
         datatype ArgDatatype = GetDatatypeByName(&Ctx->Datatypes, ArgType);
 
@@ -1425,7 +1436,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           else
           {
             counted_string OutfileName = GenerateOutfileNameFor( Func.Name, ArgType, Memory, GetRandomString(8, umm(Hash(&Code)), Memory));
-            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, {} /* todoinfo */, Memory, True);
+            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, {} /* todoinfo */, Memory, True, Func.OmitInclude);
             Append(Builder, Tuple(ActualOutputFile, Code));
           }
         }
