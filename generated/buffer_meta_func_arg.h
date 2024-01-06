@@ -5,7 +5,7 @@ struct meta_func_arg_buffer
 };
 
 link_internal meta_func_arg_buffer
-MetaFuncArgBuffer(umm ElementCount, memory_arena* Memory)
+MetaFuncArgBuffer( umm ElementCount, memory_arena* Memory)
 {
   meta_func_arg_buffer Result = {};
 
@@ -64,4 +64,5 @@ Get(meta_func_arg_buffer *Buf, umm Index)
   meta_func_arg *Result = GetPtr(Buf, Index);
   return Result;
 }
+
 

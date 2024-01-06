@@ -16,7 +16,7 @@ poof(
     }
   }
 )
-// tests\integration\generated\conditionals/anonymous_foo_struct_1_8guZPTf0.h
+// tests/integration/generated/conditionals/anonymous_foo_struct_1_8guZPTf0.h
 #endif
 
 #if 1
@@ -35,7 +35,7 @@ poof(
     }
   }
 )
-// tests\integration\generated\conditionals/anonymous_foo_struct_1_h7hirkAZ.h
+// tests/integration/generated/conditionals/anonymous_foo_struct_1_h7hirkAZ.h
 #endif
 
 #if 1
@@ -74,7 +74,7 @@ poof(
     }
   }
 )
-// tests\integration\generated\conditionals/anonymous_foo_struct_1_LVid4PGg.h
+// tests/integration/generated/conditionals/anonymous_foo_struct_1_LVid4PGg.h
 #endif
 
 
@@ -94,7 +94,7 @@ poof(
     }
   }
 )
-// tests\integration\generated\conditionals/anonymous_foo_struct_1_CPfSoIS7.h
+// tests/integration/generated/conditionals/anonymous_foo_struct_1_CPfSoIS7.h
 #endif
 
 

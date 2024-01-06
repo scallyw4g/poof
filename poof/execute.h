@@ -922,7 +922,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                             enum_decl *E = {};
                             if (VDecl->Type.DatatypeToken)
                             {
-                              E = GetEnumDeclByName(&Datatypes->Enums, VDecl->Type.DatatypeToken->Value);
+                              E = GetEnumDeclByName(Datatypes, VDecl->Type.DatatypeToken->Value);
                             }
                             DoTrueBranch = (E != 0);
                           } break;
@@ -1483,6 +1483,9 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
     case for_datatypes:
     {
+#if 1
+      NotImplemented;
+#else
       TIMED_NAMED_BLOCK("for_datatypes");
       RequireToken(Parser, CTokenType_OpenParen);
       RequireToken(Parser, CToken(CSz("all")));
@@ -1548,6 +1551,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, {} /* Todoinfo */, Memory);
         Append(Builder, Tuple(ActualOutputFile, Code));
       }
+#endif
     } break;
 
     case d_union:

@@ -108,6 +108,15 @@ LastIndex(enum_decl_cursor *Cursor)
   return Result;
 }
 
+link_internal enum_decl*
+LastElement(enum_decl_cursor *Cursor)
+{
+  enum_decl *Result = {};
+  s32 I = LastIndex(Cursor);
+  if (I > -1) { Result = Cursor->Start + I; }
+  return Result;
+}
+
 link_internal b32
 Remove(enum_decl_cursor *Cursor, enum_decl Query)
 {

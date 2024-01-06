@@ -108,6 +108,15 @@ LastIndex(compound_decl_cursor *Cursor)
   return Result;
 }
 
+link_internal compound_decl*
+LastElement(compound_decl_cursor *Cursor)
+{
+  compound_decl *Result = {};
+  s32 I = LastIndex(Cursor);
+  if (I > -1) { Result = Cursor->Start + I; }
+  return Result;
+}
+
 link_internal b32
 Remove(compound_decl_cursor *Cursor, compound_decl Query)
 {

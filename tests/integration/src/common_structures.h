@@ -62,7 +62,7 @@ struct bar_struct
 
 struct counted_string {
   int count;
-  const char* data;
+  const char *data;
 };
 
 int foofunc(void)

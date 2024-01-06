@@ -15,7 +15,7 @@ struct poof_tag_block_array_index
 
 struct poof_tag_block_array
 {
-  poof_tag_block First;
+  poof_tag_block *First;
   poof_tag_block *Current;
   memory_arena *Memory;
 };
@@ -61,8 +61,8 @@ link_internal poof_tag_block_array_index
 ZerothIndex(poof_tag_block_array *Arr)
 {
   poof_tag_block_array_index Result = {};
-  Result.Block = &Arr->First;
-  Assert(Result.Block->Index == 0);
+  Result.Block = Arr->First;
+  /* Assert(Result.Block->Index == 0); */
   return Result;
 }
 
@@ -73,6 +73,21 @@ TotalElements(poof_tag_block_array *Arr)
   if (Arr->Current)
   {
     Result = (Arr->Current->Index * 8) + Arr->Current->At;
+  }
+  return Result;
+}
+
+link_internal poof_tag_block_array_index
+LastIndex(poof_tag_block_array *Arr)
+{
+  poof_tag_block_array_index Result = {};
+  if (Arr->Current)
+  {
+    Result.Block = Arr->Current;
+    Result.BlockIndex = Arr->Current->Index;
+    Result.ElementIndex = Arr->Current->At;
+    Assert(Result.ElementIndex);
+    Result.ElementIndex--;
   }
   return Result;
 }
@@ -113,7 +128,7 @@ GetPtr(poof_tag_block_array *Arr, umm Index)
   umm ElementIndex = Index % 8;
 
   umm AtBlock = 0;
-  poof_tag_block *Block = &Arr->First;
+  poof_tag_block *Block = Arr->First;
   while (AtBlock++ < BlockIndex)
   {
     Block = Block->Next;
@@ -138,21 +153,63 @@ Allocate_poof_tag_block(memory_arena *Memory)
   return Result;
 }
 
+link_internal cs
+CS(poof_tag_block_array_index Index)
+{
+  return FSz("(%u)(%u)", Index.BlockIndex, Index.ElementIndex);
+}
+
+link_internal void
+RemoveUnordered(poof_tag_block_array *Array, poof_tag_block_array_index Index)
+{
+  poof_tag_block_array_index LastI = LastIndex(Array);
+
+  poof_tag *Element = GetPtr(Array, Index);
+  poof_tag *LastElement = GetPtr(Array, LastI);
+
+  *Element = *LastElement;
+
+  Assert(Array->Current->At);
+  Array->Current->At -= 1;
+
+  if (Array->Current->At == 0)
+  {
+    // Walk the chain till we get to the second-last one
+    poof_tag_block *Current = Array->First;
+    poof_tag_block *LastB = LastI.Block;
+
+    while (Current->Next && Current->Next != LastB)
+    {
+      Current = Current->Next;
+    }
+
+    Assert(Current->Next == LastB || Current->Next == 0);
+    Array->Current = Current;
+  }
+}
+
 link_internal poof_tag *
 Push(poof_tag_block_array *Array, poof_tag *Element)
 {
   if (Array->Memory == 0) { Array->Memory = AllocateArena(); }
 
-  if (Array->Current == 0) { Array->First = *Allocate_poof_tag_block(Array->Memory); Array->Current = &Array->First; }
+  if (Array->First == 0) { Array->First = Allocate_poof_tag_block(Array->Memory); Array->Current = Array->First; }
 
   if (Array->Current->At == 8)
   {
-    poof_tag_block *Next = Allocate_poof_tag_block(Array->Memory);
-    Next->Index = Array->Current->Index + 1;
+    if (Array->Current->Next)
+    {
+      Array->Current = Array->Current->Next;
+      Assert(Array->Current->At == 0);
+    }
+    else
+    {
+      poof_tag_block *Next = Allocate_poof_tag_block(Array->Memory);
+      Next->Index = Array->Current->Index + 1;
 
-    Array->Current->Next = Next;
-    Array->Current = Next;
-    /* Array->At = 0; */
+      Array->Current->Next = Next;
+      Array->Current = Next;
+    }
   }
 
   poof_tag *Result = Array->Current->Elements + Array->Current->At;

@@ -11,6 +11,11 @@
 #include <bonsai_stdlib/bonsai_stdlib.h>
 #include <bonsai_stdlib/bonsai_stdlib.cpp>
 
+#include <bonsai_stdlib/src/debug_print.h>
+
+struct type_spec;
+link_internal void DebugPrint(type_spec *TypeSpec, u32 Depth = 0);
+
 #include <poof/poof.h>
 #include <poof/print_ast_node.h>
 
@@ -19,21 +24,21 @@ global_variable memory_arena Global_PermMemory = {};
 
 
 
-#if DEBUG_PRINT
-#include <bonsai_stdlib/headers/debug_print.h>
+/* #if DEBUG_PRINT */
+/* #include <bonsai_stdlib/headers/debug_print.h> */
 
-#else
-_Pragma("clang diagnostic push")
-_Pragma("clang diagnostic ignored \"-Wunused-macros\"")
+/* #else */
+/* _Pragma("clang diagnostic push") */
+/* _Pragma("clang diagnostic ignored \"-Wunused-macros\"") */
 
-#define DebugPrint(...)                                   \
-  _Pragma("clang diagnostic push")                        \
-  _Pragma("clang diagnostic ignored \"-Wunused-value\"")  \
-  (__VA_ARGS__)                                           \
-  _Pragma("clang diagnostic pop")
+/* #define DebugPrint(...)                                   \ */
+/*   _Pragma("clang diagnostic push")                        \ */
+/*   _Pragma("clang diagnostic ignored \"-Wunused-value\"")  \ */
+/*   (__VA_ARGS__)                                           \ */
+/*   _Pragma("clang diagnostic pop") */
 
-_Pragma("clang diagnostic pop") // unused-macros
-#endif
+/* _Pragma("clang diagnostic pop") // unused-macros */
+/* #endif */
 
 
 
@@ -87,8 +92,15 @@ link_internal counted_string PrintTypeSpec(type_spec *TypeSpec, memory_arena *Me
 
 link_internal counted_string GetTypeNameFor(parse_context *Ctx, declaration* Decl, memory_arena *Memory);
 link_internal counted_string GetNameForDecl(declaration* Decl);
+link_internal counted_string GetNameForDatatype(datatype *Data, memory_arena *Memory);
 link_internal counted_string GetTypeTypeForDatatype(datatype *Data, memory_arena *);
 link_internal counted_string GetTypeNameFor(parse_context*, datatype *Data, typedef_resolution_behavior TDResBehavior, memory_arena *);
+
+link_internal datatype ResolveToBaseType(program_datatypes *, type_spec );
+link_internal datatype ResolveToBaseType(program_datatypes *, datatype *);
+link_internal datatype ResolveToBaseType(program_datatypes *, type_def *);
+
+
 link_internal datatype ResolveToBaseType(parse_context *Ctx, type_spec );
 link_internal datatype ResolveToBaseType(parse_context *Ctx, datatype *);
 link_internal datatype ResolveToBaseType(parse_context *Ctx, type_def *);
@@ -114,8 +126,8 @@ link_internal counted_string CallFunction(parse_context *Ctx, c_token *FunctionT
 
 
 
-link_internal b32 TryParsePoofTagForStructMember(parser *Parser, poof_tag *Tag);
-link_internal b32 TryParsePoofTag(parser *Parser, poof_tag *Tag);
+link_internal b32 TryParsePoofKeywordAndTagList(parser *, poof_tag_block_array *, declaration *Decl = 0);
+link_internal b32 TryParsePoofTag(parser *, poof_tag *);
 
 
 
@@ -1919,10 +1931,55 @@ GetDatatypeByTypeSpec(program_datatypes *Datatypes, type_spec *Type)
 }
 #endif
 
+
+
+link_internal umm
+Hash(datatype *D)
+{
+  cs Name = GetNameForDatatype(D, GetTranArena());
+  umm Result = Hash(&Name);
+  return Result;
+}
+
+maybe_datatype
+GetDatatypeByName( datatype_hashtable *Table, cs QueryName )
+{
+  maybe_datatype Result = {};
+
+  auto *Bucket = GetHashBucket(umm(Hash(&QueryName)), Table);
+  while (Bucket)
+  {
+    auto E = &Bucket->Element;
+    cs EName = GetNameForDatatype(E, GetTranArena());
+
+    if (AreEqual(EName, QueryName))
+    {
+      Result.Tag = Maybe_Yes;
+      Result.Value = *E;
+      break;
+    }
+    else
+    {
+      Bucket = Bucket->Next;
+    }
+  }
+
+  return Result;
+}
+
+#if 1
+link_internal datatype
+GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
+{
+  datatype Result = GetDatatypeByName(&Datatypes->DatatypeHashtable, Name).Value;
+  return Result;
+}
+#else
 link_internal datatype
 GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
 {
   TIMED_FUNCTION();
+
 
   // TODO(Jesse id: 295, tags: speed): This could be optimized significantly by shuffling the logic around, not to mention using hashtables.
   compound_decl *S = GetStructByType(&Datatypes->Structs, Name);
@@ -1967,11 +2024,68 @@ GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
 
   return Result;
 }
+#endif
 
 link_internal datatype
 GetDatatypeByName(parse_context *Ctx, counted_string Name)
 {
   datatype Result = GetDatatypeByName(&Ctx->Datatypes, Name);
+  return Result;
+}
+
+
+link_internal enum_decl *
+TryCastToEnumDecl(datatype *Datatype)
+{
+  enum_decl *Result = {};
+  NotImplemented;
+  return Result;
+}
+
+link_internal enum_decl *
+GetEnumDeclByName( program_datatypes *Data, counted_string Name )
+{
+  enum_decl *Result = {};
+
+  datatype Datatype = GetDatatypeByName(Data, Name);
+
+  switch (Datatype.Type)
+  {
+    InvalidCase(type_datatype_noop);
+
+    case type_declaration:
+    {
+      declaration *Decl = SafeCast(declaration, &Datatype);
+      switch (Decl->Type)
+      {
+        InvalidCase(type_declaration_noop);
+        case type_enum_decl:
+        {
+          Result = SafeCast(enum_decl, Decl);
+        } break;
+
+        case type_function_decl:
+        case type_compound_decl:
+        case type_variable_decl:
+        {
+        } break;
+      }
+    } break;
+
+    case type_enum_member:
+    case type_primitive_def:
+    {
+    } break;
+
+    case type_type_def:
+    {
+      datatype Resolved = ResolveToBaseType(Data, &Datatype);
+      // This is going to return a pointer to the stack 'Resolved' .. gotta not do that ..
+      NotImplemented;
+      Result = TryCastToEnumDecl(&Resolved);
+    } break;
+  }
+
   return Result;
 }
 
@@ -1988,7 +2102,7 @@ ParseDiscriminatedUnion(parse_context *Ctx, parser* Parser, program_datatypes* D
   {
     dUnion.CustomEnumType = EnumTypeT->Value;
 
-    enum_decl* EnumDef = GetEnumDeclByName(&Datatypes->Enums, dUnion.CustomEnumType);
+    enum_decl* EnumDef = GetEnumDeclByName(Datatypes, dUnion.CustomEnumType);
     if (EnumDef)
     {
       ITERATE_OVER(&EnumDef->Members)
@@ -4033,6 +4147,7 @@ MaybeParseFunctionBody(parser *Parser, memory_arena *Memory)
 link_internal void
 ParseStructMemberOperatorFn(parse_context *Ctx, declaration *Result, c_token *StructNameT)
 {
+  NotImplemented;
 }
 
 link_internal void
@@ -4563,13 +4678,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
       default: { Continue = False; } break;
     }
 
-
-    poof_tag Tag = {};
-    while (TryParsePoofTagForStructMember(Parser, &Tag))
-    {
-      Info("Got Tag %S(%S) on %S (%S)", Tag.Name, Tag.Value, ToString(StoredMember->Type), GetNameForDecl(StoredMember));
-      Push(&StoredMember->Tags, &Tag);
-    }
+    TryParsePoofKeywordAndTagList(Parser, &StoredMember->Tags);
   }
 
   RequireToken(Parser, CTokenType_CloseBrace);
@@ -4698,7 +4807,7 @@ ParseAndPushTypedef(parse_context *Ctx)
         // @dup_typedefd_anon_thingy_name_token
         comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
         S.Type = Decl.NameT;
-        Push(&Ctx->Datatypes.Structs, S);
+        Insert(Datatype(&S), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
       }
       else if (Type.Qualifier & TypeQual_Enum)
       {
@@ -4707,7 +4816,8 @@ ParseAndPushTypedef(parse_context *Ctx)
         // @dup_typedefd_anon_thingy_name_token
         comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
         Enum.Name = Decl.NameT->Value;
-        Push(&Ctx->Datatypes.Enums, Enum);
+
+        Insert(Datatype(&Enum), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
       }
       else
       {
@@ -4717,6 +4827,8 @@ ParseAndPushTypedef(parse_context *Ctx)
       TryEatAttributes(Parser);
 
       MaybeEatAdditionalCommaSeperatedNames(Ctx);
+
+      return;
     }
     else
     {
@@ -4752,9 +4864,10 @@ ParseAndPushTypedef(parse_context *Ctx)
 
   RequireToken(Parser, CTokenType_Semicolon);
 
+  Assert(Alias.Count);
   type_def Typedef = {
-    .Type = Type,
-    .Alias = Alias,
+    Alias,
+    Type,
   };
 
   if (Type.Indirection.IsFunction || Type.Indirection.IsFunctionPtr)
@@ -4775,11 +4888,21 @@ ParseAndPushTypedef(parse_context *Ctx)
     Assert(Func.NameT);
 
     Info("Pushing function decl (%S)", Func.NameT ? Func.NameT->Value : CSz("anonymous"));
-    Push(&Ctx->Datatypes.Functions, Func);
+    Insert(Datatype(&Func), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
   }
   else
   {
-    Push(&Ctx->Datatypes.Typedefs, Typedef);
+    Info("Pushing typedef decl (%S) -> (%S)", PrintTypeSpec(&Typedef.Type, GetTranArena()), Typedef.Alias);
+    Insert(Datatype(&Typedef), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+
+#if BONSAI_INTERNAL
+    {
+      /* datatype *D = GetDatatypeByName(&Ctx->Datatypes.DatatypeHashtable, Typedef.Alias); */
+      /* Assert(D->Type == type_type_def); */
+      /* Assert(D->type_deb */
+    }
+#endif
+    /* Push(&Ctx->Datatypes.Typedefs, Typedef); */
   }
 }
 
@@ -4813,7 +4936,8 @@ ParseTypedef(parse_context *Ctx)
 
       RequireToken(Parser, CTokenType_Semicolon);
 
-      Push(&Ctx->Datatypes.Structs, S);
+      Insert(Datatype(&S), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+      /* Push(&Ctx->Datatypes.Structs, S); */
     }
     else if ( PeekToken(Parser, 0).Type == CTokenType_Identifier &&
               PeekToken(Parser, 1).Type == CTokenType_OpenBrace )
@@ -4831,7 +4955,8 @@ ParseTypedef(parse_context *Ctx)
       MaybeEatAdditionalCommaSeperatedNames(Ctx);
 
       RequireToken(Parser, CTokenType_Semicolon);
-      Push(&Ctx->Datatypes.Structs, S);
+      Insert(Datatype(&S), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+      /* Push(&Ctx->Datatypes.Structs, S); */
     }
     else
     {
@@ -5546,7 +5671,8 @@ ParseFunctionCall(parse_context *Ctx, counted_string FunctionName)
   ast_node_function_call *Node = AllocateAndCastTo(ast_node_function_call, &Result, Ctx->Memory);
 
   Node->Name = FunctionName;
-  Node->Prototype = GetByName(Node->Name, &Ctx->Datatypes.Functions);
+  NotImplemented;
+  /* Node->Prototype = GetByName(Node->Name, &Ctx->Datatypes.Functions); */
 
   RequireToken(Parser, CTokenType_OpenParen);
 
@@ -5582,6 +5708,8 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec)
   {
     NotImplemented;
   }
+
+  TryParsePoofKeywordAndTagList(Parser, &Result.Tags, &Result);
 
   // We know anything with a name is either a variable or function
   if (c_token *NameT = OptionalToken(Parser, CTokenType_Identifier))
@@ -5785,13 +5913,14 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
         {
           case type_enum_decl:
           {
-            Push(&Ctx->Datatypes.Enums, Decl.enum_decl);
+            /* Push(&Ctx->Datatypes, Decl.enum_decl); */
           } break;
 
           case type_function_decl:
           {
             /* Info("Pushing function decl (%S)", Function.Type ? Function.Type->Value : CSz("anonymous")); */
-            Push(&Ctx->Datatypes.Functions, Decl.function_decl); // Free function
+            /* Insert(Datatype(&Decl), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory); */
+            /* Push(&Ctx->Datatypes.Functions, Decl.function_decl); // Free function */
           } break;
 
 
@@ -5803,7 +5932,8 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
                   StructOrUnion.IsUnion ? CSz("union") : CSz("struct"),
                   StructOrUnion.Type ? StructOrUnion.Type->Value : CSz("(anonymous)") );
 
-            Push(&Ctx->Datatypes.Structs, StructOrUnion);
+            /* Insert(Datatype(&StructOrUnion), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory); */
+            /* Push(&Ctx->Datatypes.Structs, StructOrUnion); */
 
             if (OptionalToken(Parser, CTokenType_Semicolon))
             {
@@ -6581,6 +6711,13 @@ PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
   return Result;
 }
 
+link_internal void
+DebugPrint(type_spec *TypeSpec, u32 Depth)
+{
+  DebugPrint(PrintTypeSpec(TypeSpec, GetTranArena()), Depth);
+  DebugPrint("\n");
+}
+
 link_internal counted_string
 GetValueForDatatype(datatype *Data, memory_arena *Memory)
 {
@@ -6600,7 +6737,7 @@ GetValueForDatatype(datatype *Data, memory_arena *Memory)
 
     case type_enum_member:
     {
-      enum_member *EM = SafeAccessPtr(enum_member, Data);
+      enum_member *EM = SafeAccess(enum_member, Data);
       Result = PrintAstNode(EM->Expr, Memory);
     } break;
 
@@ -6660,7 +6797,7 @@ GetNameForDatatype(datatype *Data, memory_arena *Memory)
 
     case type_enum_member:
     {
-      Result = Data->enum_member->Name;
+      Result = Data->enum_member.Name;
     } break;
 
     case type_primitive_def:
@@ -6670,7 +6807,7 @@ GetNameForDatatype(datatype *Data, memory_arena *Memory)
 
     case type_type_def:
     {
-      Result = Data->type_def->Alias;
+      Result = Data->type_def.Alias;
     } break;
 
     case type_datatype_noop:
@@ -6724,7 +6861,7 @@ GetTypeNameFor(parse_context *Ctx, datatype *Data, typedef_resolution_behavior T
 
     case type_type_def:
     {
-      type_def *TD = SafeAccessPtr(type_def, Data);
+      type_def *TD = SafeAccess(type_def, Data);
       if (TDResBehavior == TypedefResoultion_ResolveTypedefs)
       {
         Result = PrintTypeSpec(&TD->Type, Memory);
@@ -6746,7 +6883,7 @@ GetTypeNameFor(parse_context *Ctx, datatype *Data, typedef_resolution_behavior T
       // This is actually wrong.. shouldn't we print the _name_ of the enum the
       // member belongs to?
       // NotImplemented;
-      Result = Data->enum_member->Name;
+      Result = Data->enum_member.Name;
     } break;
 
     case type_declaration:
@@ -6886,7 +7023,7 @@ DatatypeIsFunction(parse_context *Ctx, parser *Scope, datatype *Data, c_token *M
       // NOTE(Jesse): Pretty sure this path is roughly the following, but I didn't test it.
       NotImplemented;
 
-      type_def *TDef = SafeAccessPtr(type_def, Data);
+      type_def *TDef = SafeAccess(type_def, Data);
       datatype DT = ResolveToBaseType(Ctx, TDef->Type);
       Result = DatatypeIsFunction(Ctx, Scope, &DT, MetaOperatorT);
     } break;
@@ -6949,7 +7086,7 @@ DatatypeIsFunctionDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_toke
       // NOTE(Jesse): Pretty sure this path is roughly the following, but I didn't test it.
       NotImplemented;
 
-      type_def *TDef = SafeAccessPtr(type_def, Data);
+      type_def *TDef = SafeAccess(type_def, Data);
       datatype DT = ResolveToBaseType(Ctx, TDef->Type);
       Result = DatatypeIsFunctionDecl(Ctx, Scope, &DT, MetaOperatorT);
     } break;
@@ -7008,7 +7145,7 @@ DatatypeIsCompoundDecl(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_
       /* // NOTE(Jesse): Pretty sure this path is roughly the following, but I didn't test it. */
       /* NotImplemented; */
 
-      type_def *TDef = SafeAccessPtr(type_def, Data);
+      type_def *TDef = SafeAccess(type_def, Data);
       datatype DT = ResolveToBaseType(Ctx, TDef);
       Result = DatatypeIsCompoundDecl(Ctx, &DT, Scope, MetaOperatorT);
     } break;
@@ -7205,14 +7342,16 @@ GetMembersFor(parse_context *Ctx, datatype *Data)
 
 // This resolves typedefs and tells us if we've got a primitive type, complex type, or undefined type
 //
+// This is the primal function
+//
 link_internal datatype
-ResolveToBaseType(parse_context *Ctx, type_def *TD)
+ResolveToBaseType(program_datatypes *Datatypes, type_def *TD)
 {
   datatype Result = {};
 
   if (TD->Type.DatatypeToken)
   {
-    datatype Resolved = GetDatatypeByName(Ctx, TD->Type.DatatypeToken->Value);
+    datatype Resolved = GetDatatypeByName(Datatypes, TD->Type.DatatypeToken->Value);
     if (Resolved.Type == type_datatype_noop)
     {
       // either undefined or a primitive.  what do we do?
@@ -7220,8 +7359,8 @@ ResolveToBaseType(parse_context *Ctx, type_def *TD)
     }
     else if (Resolved.Type == type_type_def)
     {
-      type_def *ResolvedTD = SafeAccessPtr(type_def, &Resolved);
-      Result = ResolveToBaseType(Ctx, ResolvedTD);
+      type_def *ResolvedTD = SafeAccess(type_def, &Resolved);
+      Result = ResolveToBaseType(Datatypes, ResolvedTD);
     }
     else
     {
@@ -7237,40 +7376,7 @@ ResolveToBaseType(parse_context *Ctx, type_def *TD)
 }
 
 link_internal datatype
-ResolveToBaseType(parse_context *Ctx, type_spec TypeSpec)
-{
-  datatype Result = {};
-
-  if ( TypeSpec.BaseType )
-  {
-    Assert(TypeSpec.BaseType->Type == type_declaration);
-    Result = *TypeSpec.BaseType;
-  }
-  else if ( TypeSpec.DatatypeToken &&
-            TypeSpec.DatatypeToken->Type == CTokenType_Identifier )
-  {
-    Result = GetDatatypeByName(Ctx, TypeSpec.DatatypeToken->Value);
-    if (Result.Type == type_type_def)
-    {
-      type_def *ResolvedTD = SafeAccessPtr(type_def, &Result);
-      Result = ResolveToBaseType(Ctx, ResolvedTD);
-    }
-  }
-  else if ( TypeSpec.Indirection.IsFunction ||
-            TypeSpec.Indirection.IsFunctionPtr )
-  {
-    Result = Datatype(TypeSpec);
-  }
-  else
-  {
-    Result = Datatype(TypeSpec);
-  }
-
-  return Result;
-}
-
-link_internal datatype
-ResolveToBaseType(parse_context *Ctx, datatype *Data)
+ResolveToBaseType(program_datatypes *DataHash, datatype *Data)
 {
   datatype Result = {};
   switch (Data->Type)
@@ -7279,8 +7385,8 @@ ResolveToBaseType(parse_context *Ctx, datatype *Data)
 
     case type_type_def:
     {
-      type_def *TDef = SafeAccessPtr(type_def, Data);
-      Result = ResolveToBaseType(Ctx, TDef->Type);
+      type_def *TDef = SafeAccess(type_def, Data);
+      Result = ResolveToBaseType(DataHash, TDef->Type);
     } break;
 
     case type_enum_member:
@@ -7303,7 +7409,7 @@ ResolveToBaseType(parse_context *Ctx, datatype *Data)
         case type_variable_decl:
         {
           auto VDecl = SafeAccess(variable_decl, Decl);
-          Result = ResolveToBaseType(Ctx, VDecl->Type);
+          Result = ResolveToBaseType(DataHash, VDecl->Type);
         } break;
 
         case type_compound_decl:
@@ -7324,37 +7430,61 @@ ResolveToBaseType(parse_context *Ctx, datatype *Data)
   }
 
   return Result;
+}
 
 
+link_internal datatype
+ResolveToBaseType(program_datatypes *DataHash, type_spec TypeSpec)
+{
+  datatype Result = {};
 
-
-
-
-
-#if 0
-  // @meta_match
-
-  poof(
-    match (Data->Type)
+  if ( TypeSpec.BaseType )
+  {
+    Assert(TypeSpec.BaseType->Type == type_declaration);
+    Result = *TypeSpec.BaseType;
+  }
+  else if ( TypeSpec.DatatypeToken &&
+            TypeSpec.DatatypeToken->Type == CTokenType_Identifier )
+  {
+    Result = GetDatatypeByName(DataHash, TypeSpec.DatatypeToken->Value);
+    if (Result.Type == type_type_def)
     {
-      declaration: D
-      {
-      }
-
-      primitive_def: P
-      {
-      }
-
-      enum_member: E
-      {
-      }
-
-      type_def: T
-      {
-      }
+      type_def *ResolvedTD = SafeAccess(type_def, &Result);
+      Result = ResolveToBaseType(DataHash, ResolvedTD);
     }
-  )
-#endif
+  }
+  else if ( TypeSpec.Indirection.IsFunction ||
+            TypeSpec.Indirection.IsFunctionPtr )
+  {
+    Result = Datatype(TypeSpec);
+  }
+  else
+  {
+    Result = Datatype(TypeSpec);
+  }
+
+  return Result;
+}
+
+link_internal datatype
+ResolveToBaseType(parse_context *Ctx, type_spec TypeSpec)
+{
+  datatype Result = ResolveToBaseType(&Ctx->Datatypes, TypeSpec);
+  return Result;
+}
+
+link_internal datatype
+ResolveToBaseType(parse_context *Ctx, datatype *Datatype)
+{
+  datatype Result = ResolveToBaseType(&Ctx->Datatypes, Datatype);
+  return Result;
+}
+
+link_internal datatype
+ResolveToBaseType(parse_context *Ctx, type_def *Typedef)
+{
+  datatype Result = ResolveToBaseType(&Ctx->Datatypes, Typedef);
+  return Result;
 }
 
 link_internal b32
@@ -7379,25 +7509,34 @@ TryParsePoofTag(parser *Parser, poof_tag *Tag)
 }
 
 link_internal b32
-TryParsePoofTagForStructMember(parser *Parser, poof_tag *Tag)
+TryParsePoofKeywordAndTagList(parser *Parser, poof_tag_block_array *Tags, declaration *Decl)
 {
-  b32 Result = False;
-
   c_token *T = PeekTokenPointer(Parser);
 
+  b32 Got = False;
   if (T->Type == CTokenType_Poof)
   {
     RequireToken(Parser, T);
 
     RequireTokenPointer(Parser, CTokenType_OpenParen);
-    // TODO(Jesse): Probably don't assert for this case..
-    Ensure(TryParsePoofTag(Parser, Tag));
+    poof_tag Tag = {};
+    while(TryParsePoofTag(Parser, &Tag))
+    {
+      /* if (Decl) */
+      {
+        Info("Got Tag %S(%S)", Tag.Name, Tag.Value);
+        /* Info("Got Tag %S(%S) on %S (%S)", Tag.Name, Tag.Value, ToString(Decl->Type), GetNameForDecl(Decl)); */
+      }
+      Push(Tags, &Tag);
+      Got = True;
+    }
     RequireTokenPointer(Parser, CTokenType_CloseParen); // Closes poof( )
 
-    Result = True;
+    // If we didn't get a tag but got a poof keyword something's wrong
+    Assert(Got);
   }
 
-  return Result;
+  return Got;
 }
 
 link_internal b32
@@ -7433,6 +7572,7 @@ IsMetaprogrammingOutput(counted_string Filename, counted_string OutputDirectory)
   return Result;
 }
 
+#if 0
 link_internal counted_string_stream
 ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_string_stream_stream* NameLists, memory_arena* Memory)
 {
@@ -7442,9 +7582,9 @@ ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_s
     c_token *NameT = RequireTokenPointer(Parser, CTokenType_Identifier);
     counted_string DatatypeName = NameT->Value;
 
-    compound_decl* Struct              = GetStructByType(&Datatypes->Structs, DatatypeName);
-    enum_decl* Enum                    = GetEnumDeclByName(&Datatypes->Enums, DatatypeName);
-    tagged_counted_string_stream* List = StreamContains(NameLists, DatatypeName);
+    compound_decl *Struct              = GetStructByType(&Datatypes->Structs, DatatypeName);
+    enum_decl     *Enum                = GetEnumDeclByName(&Datatypes->Enums, DatatypeName);
+    tagged_counted_string_stream *List = StreamContains(NameLists, DatatypeName);
 
     if (Struct || Enum)
     {
@@ -7469,6 +7609,7 @@ ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_s
 
   return Result;
 }
+#endif
 
 // NOTE(Jesse): This parses the argument list for a function call instance
 link_internal b32
@@ -8179,20 +8320,20 @@ WalkAst(ast_node* Ast)
 
 #ifndef EXCLUDE_PREPROCESSOR_MAIN
 
-link_internal void
-PrintHashtable(parser_hashtable *Table)
-{
-  for (u32 BucketIndex = 0; BucketIndex < Table->Size; ++BucketIndex)
-  {
-    auto Bucket = Table->Elements[BucketIndex];
-    while (Bucket)
-    {
-      DebugPrint(Bucket->Element);
-      /* DebugLine("bucket(%u) --------------------------------------------------------------------------------------------------------------------------", BucketIndex); */
-      Bucket = Bucket->Next;
-    }
-  }
-}
+/* link_internal void */
+/* PrintHashtable(parser_hashtable *Table) */
+/* { */
+/*   for (u32 BucketIndex = 0; BucketIndex < Table->Size; ++BucketIndex) */
+/*   { */
+/*     auto Bucket = Table->Elements[BucketIndex]; */
+/*     while (Bucket) */
+/*     { */
+/*       DebugLine("bucket(%u) --------------------------------------------------------------------------------------------------------------------------", BucketIndex); */
+/*       DebugPrint(&Bucket->Element, 0); */
+/*       Bucket = Bucket->Next; */
+/*     } */
+/*   } */
+/* } */
 
 link_internal void
 PrintHashtable(datatype_hashtable *Table)
@@ -8200,10 +8341,10 @@ PrintHashtable(datatype_hashtable *Table)
   for (u32 BucketIndex = 0; BucketIndex < Table->Size; ++BucketIndex)
   {
     auto Bucket = Table->Elements[BucketIndex];
+    if (Bucket) { DebugLine("bucket(%u) --------------------------------------------------------------------------------------------------------------------------", BucketIndex); }
     while (Bucket)
     {
-      DebugPrint(Bucket->Element);
-      /* DebugLine("bucket(%u) --------------------------------------------------------------------------------------------------------------------------", BucketIndex); */
+      DebugPrint(&Bucket->Element, 0);
       Bucket = Bucket->Next;
     }
   }
@@ -8406,6 +8547,7 @@ main(s32 ArgCount_, const char** ArgStrings)
       ParseDatatypes(&Ctx, Parser);
 
       /* PrintHashtable(&Ctx.ParserHashtable); */
+      PrintHashtable(&Ctx.Datatypes.DatatypeHashtable);
 
       FullRewind(Ctx.CurrentParser);
 

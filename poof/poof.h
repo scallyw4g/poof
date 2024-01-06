@@ -360,6 +360,7 @@ poof(
 )
 #include <generated/d_union_declaration.h>
 
+
 link_internal b32 
 AreEqual(declaration D1, declaration D2)
 {
@@ -394,7 +395,15 @@ poof(generate_string_table(datatype_type))
 #include <generated/generate_string_table_datatype_type.h>
 
 struct enum_member;
-struct type_def;
+
+struct type_def
+{
+  counted_string Alias;
+  type_spec Type;
+};
+poof(generate_stream(type_def))
+#include <generated/generate_stream_type_def.h>
+
 
 struct datatype
 {
@@ -404,17 +413,42 @@ struct datatype
   {
     declaration    declaration;
     primitive_def  primitive_def;
-    enum_member   *enum_member;
-    type_def      *type_def;
+    enum_member    enum_member;
+    type_def       type_def;
   };
 };
 
-link_internal umm
-Hash(datatype *D)
-{
-  umm Result = {};
-  return Result;
-}
+poof(maybe(datatype))
+#include <generated/maybe_datatype.h>
+
+typedef datatype* datatype_ptr;
+poof(maybe(datatype_ptr))
+#include <generated/maybe_datatype_ptr.h>
+
+/* poof(dunion_debug_print(declaration)) */
+/* #include <generated/dunion_debug_print_declaration.h> */
+
+/* poof(debug_print(enum_decl)) */
+/* #include <generated/debug_print_enum_decl.h> */
+/* poof(debug_print(function_decl)) */
+/* #include <generated/debug_print_function_decl.h> */
+/* poof(debug_print(compound_decl)) */
+/* #include <generated/debug_print_compound_decl.h> */
+/* poof(debug_print(variable_decl)) */
+/* #include <generated/debug_print_variable_decl.h> */
+
+/* poof(debug_print(primitive_def)) */
+/* #include <generated/debug_print_primitive_def.h> */
+/* poof(debug_print(enum_member)) */
+/* #include <generated/debug_print_enum_member.h> */
+/* poof(debug_print(type_def)) */
+/* #include <generated/debug_print_type_def.h> */
+
+poof(dunion_debug_print(datatype))
+#include <generated/dunion_debug_print_datatype.h>
+
+link_internal umm Hash(datatype *D);
+
 poof(hashtable(datatype))
 #include <generated/hashtable_datatype.h>
 
@@ -427,24 +461,15 @@ struct d_union_member
 poof(generate_stream(d_union_member))
 #include <generated/generate_stream_d_union_member.h>
 
-struct type_def
-{
-  counted_string Alias;
-  type_spec Type;
-};
-poof(generate_stream(type_def))
-#include <generated/generate_stream_type_def.h>
-
 link_internal datatype
 Datatype()
 {
-  datatype Result = {
-  };
+  datatype Result = {};
   return Result;
 }
 
 link_internal datatype
-Datatype(declaration* M)
+Datatype(declaration *M)
 {
   datatype Result = {
     .Type = type_declaration,
@@ -454,11 +479,11 @@ Datatype(declaration* M)
 }
 
 link_internal datatype
-Datatype(enum_member* E)
+Datatype(enum_member *E)
 {
   datatype Result = {
     .Type = type_enum_member,
-    .enum_member = E,
+    .enum_member = *E,
   };
   return Result;
 }
@@ -482,7 +507,7 @@ Declaration(function_decl *F)
 }
 
 link_internal datatype
-Datatype(function_decl* F)
+Datatype(function_decl *F)
 {
   datatype Result = {};
   Result.Type = type_declaration;
@@ -491,7 +516,7 @@ Datatype(function_decl* F)
 }
 
 link_internal datatype
-Datatype(compound_decl* S)
+Datatype(compound_decl *S)
 {
   datatype Result = {};
   Result.Type = type_declaration;
@@ -504,7 +529,7 @@ Datatype(type_def* E)
 {
   datatype Result = {
     .Type = type_type_def,
-    .type_def = E,
+    .type_def = *E,
   };
   return Result;
 }
@@ -902,15 +927,8 @@ struct arguments
 struct program_datatypes
 {
   datatype_hashtable       DatatypeHashtable;
-
   macro_def_hashtable      Macros;
-
   counted_string_hashtable FilesParsed;
-
-  compound_decl_stream     Structs;
-  enum_decl_stream         Enums;
-  function_decl_stream     Functions;
-  type_def_stream          Typedefs;
 };
 
 struct for_enum_constraints

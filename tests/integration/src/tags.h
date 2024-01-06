@@ -1,5 +1,6 @@
-#include <tests/integration/src/common_structures.h>
+/* #include <tests/integration/src/common_structures.h> */
 
+#if 1
 struct tag_struct
 {
   int a1; poof( @foo )
@@ -14,9 +15,9 @@ struct nested_tag_struct
 
 
 poof(
-  func (tag_struct TFooStruct) @omit_include
+  func (tag_struct TStruct) @omit_include
   {
-    TFooStruct.map_members(Member)
+    TStruct.map_members(Member)
     {
       Member.has_tag(foo)?
       {
@@ -30,15 +31,15 @@ poof(
     }
   }
 )
-// tests\integration\generated\conditionals/anonymous_tag_struct_oX7F12Cw.h
+// tests/integration/generated/conditionals/anonymous_tag_struct_oX7F12Cw.h
 
 
 
 
 poof(
-  func (nested_tag_struct TFooStruct) @omit_include
+  func (nested_tag_struct TStruct) @omit_include
   {
-    TFooStruct.map_members(OuterMember)
+    TStruct.map_members(OuterMember)
     {
       OuterMember.has_tag(bar)?
       {
@@ -61,3 +62,30 @@ poof(
   }
 )
 // tests/integration/generated/tags/anonymous_nested_tag_struct_oX7F12Cw.h
+
+#endif
+
+
+
+struct tagged_struct poof( @foo @bar(baz) )
+{
+  int a1;
+};
+
+poof(
+  func (tagged_struct TStruct) @omit_include
+  {
+    TStruct.has_tag(foo)?
+    {
+      (TStruct.name) has tag foo
+    }
+
+    TStruct.has_tag(bar)?
+    {
+      (TStruct.name) has tag bar (value=(TStruct.tag_value(bar)))
+    }
+  }
+)
+// tests/integration/generated/tags/anonymous_tagged_struct_yZhxgWx1.h
+
+

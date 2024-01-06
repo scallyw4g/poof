@@ -14,7 +14,7 @@ typedef s1 s2;
 typedef s2 s3;
 
 poof(
-  func f1(t)
+  func f1(t) @omit_include
   {
     t.map (tmem)
     {
@@ -35,19 +35,19 @@ typedef struct {
 
 
 poof(f1(s0))
-#include <tests/integration/generated/typedef_resolution/f1_s0.h>
+// tests/integration/generated/typedef_resolution/f1_s0.h
 
 poof(f1(s1))
-#include <tests/integration/generated/typedef_resolution/f1_s1.h>
+// tests/integration/generated/typedef_resolution/f1_s1.h
 
 poof(f1(s2))
-#include <tests/integration/generated/typedef_resolution/f1_s2.h>
+// tests/integration/generated/typedef_resolution/f1_s2.h
 
 poof(f1(s3))
-#include <tests/integration/generated/typedef_resolution/f1_s3.h>
+// tests/integration/generated/typedef_resolution/f1_s3.h
 
 poof(f1(s4))
-#include <tests/integration/generated/typedef_resolution/f1_s4.h>
+// tests/integration/generated/typedef_resolution/f1_s4.h
 
 /* poof(f1(s5)) */
 
@@ -77,14 +77,14 @@ typedef enum {
 
 
 poof(f1(e0))
-#include <tests/integration/generated/typedef_resolution/f1_e0.h>
+// tests/integration/generated/typedef_resolution/f1_e0.h
 
 /* poof(f1(e1)) */
 
 /* poof(f1(e2)) */
 
 poof(f1(e3))
-#include <tests/integration/generated/typedef_resolution/f1_e3.h>
+// tests/integration/generated/typedef_resolution/f1_e3.h
 
 /* poof(f1(e1)) */
 /* #include <tests/integration/generated/typedef_resolution/f1_e1.h> */
