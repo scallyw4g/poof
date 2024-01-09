@@ -31,7 +31,7 @@ poof(
     }
   }
 )
-// tests/integration/generated/conditionals/anonymous_tag_struct_oX7F12Cw.h
+// tests/integration/generated/tags/anonymous_tag_struct_oX7F12Cw.h
 
 
 

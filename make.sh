@@ -286,7 +286,7 @@ function RunIntegrationTests()
 
       mkdir -p $test_output_dir
 
-      echo "$INTEGRATION_TEST_DEBUGGER bin/poof $INTEGRATION_TEST_LOG_LEVEL $filename -o $test_output_dir"
+      echo -e "$Indent $INTEGRATION_TEST_DEBUGGER bin/poof $INTEGRATION_TEST_LOG_LEVEL $filename -o $test_output_dir"
 
       $INTEGRATION_TEST_DEBUGGER bin/poof \
         $INTEGRATION_TEST_LOG_LEVEL       \
@@ -294,7 +294,11 @@ function RunIntegrationTests()
         -o $test_output_dir
 
       if [[ $? == 0 ]]; then
-        DIFF_CHANGED=$(git diff --ignore-all-space --ignore-blank-lines $test_output_dir | wc -l)
+        DIFF_CMD="git diff --ignore-all-space --ignore-blank-lines ${test_output_dir} | wc -l"
+
+        echo -e "$Indent $DIFF_CMD == ($DIFF_CHANGED)"
+
+        DIFF_CHANGED=$(eval $DIFF_CMD)
         if [[ $DIFF_CHANGED == 0 ]]; then
           echo -e "$Success $filename"
         else
@@ -304,6 +308,8 @@ function RunIntegrationTests()
         echo -e "$Failed $filename"
       fi
     fi
+
+    echo ""
 
     ((test_index++))
   done
