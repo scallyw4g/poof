@@ -1,4 +1,3 @@
-
 link_internal ui_toggle_linked_list_node *
 Allocate_ui_toggle_linked_list_node(memory_arena *Memory)
 {
@@ -59,5 +58,14 @@ Insert(ui_toggle Element, ui_toggle_hashtable *Table, memory_arena *Memory)
   Bucket->Element = Element;
   Insert(Bucket, Table);
   return &Bucket->Element;
+}
+
+//
+// Iterator impl.
+//
+link_inline umm
+ZerothIndex(ui_toggle_hashtable *Hashtable)
+{
+  return 0;
 }
 

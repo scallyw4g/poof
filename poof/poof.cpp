@@ -88,6 +88,9 @@ link_internal declaration FinalizeDeclaration(parse_context *Ctx, parser *Parser
 // C type manipulation & resolution
 //
 
+link_internal datatype * GetDatatypeByName(datatype_hashtable *, cs);
+link_internal datatype * GetDatatypeByName(program_datatypes *, cs);
+
 link_internal counted_string PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory);
 
 link_internal counted_string GetTypeNameFor(parse_context *Ctx, declaration* Decl, memory_arena *Memory);
@@ -96,14 +99,14 @@ link_internal counted_string GetNameForDatatype(datatype *Data, memory_arena *Me
 link_internal counted_string GetTypeTypeForDatatype(datatype *Data, memory_arena *);
 link_internal counted_string GetTypeNameFor(parse_context*, datatype *Data, typedef_resolution_behavior TDResBehavior, memory_arena *);
 
-link_internal datatype ResolveToBaseType(program_datatypes *, type_spec );
-link_internal datatype ResolveToBaseType(program_datatypes *, datatype *);
-link_internal datatype ResolveToBaseType(program_datatypes *, type_def *);
+link_internal datatype* ResolveToBaseType(program_datatypes *, type_spec );
+link_internal datatype* ResolveToBaseType(program_datatypes *, datatype *);
+link_internal datatype* ResolveToBaseType(program_datatypes *, type_def *);
 
 
-link_internal datatype ResolveToBaseType(parse_context *Ctx, type_spec );
-link_internal datatype ResolveToBaseType(parse_context *Ctx, datatype *);
-link_internal datatype ResolveToBaseType(parse_context *Ctx, type_def *);
+link_internal datatype* ResolveToBaseType(parse_context *Ctx, type_spec );
+link_internal datatype* ResolveToBaseType(parse_context *Ctx, datatype *);
+link_internal datatype* ResolveToBaseType(parse_context *Ctx, type_def *);
 
 
 //
@@ -1941,20 +1944,13 @@ Hash(datatype *D)
   return Result;
 }
 
-// NOTE(Jesse): This cannot (unfortunately) return a pointer because it has to
-// return the same thing as ResolveToBaseType, which must return an instance.
-//
-// This is because if you pass a type_spec to ResolveToBaseType, and it's not
-// in the datatype hashtable, it constructs an instance of Datatype and returns that.
-//
-// To 'fix' this we could insert those type-specs into the datatypes hashtable
-// and reutrn the pointer, but IDK how much I like that.  It might be a perf
-// win, but pretty tough to say without benchmarking.
-//
-maybe_datatype
+global_variable datatype
+NullDatatype = {};
+
+link_internal datatype *
 GetDatatypeByName( datatype_hashtable *Table, cs QueryName )
 {
-  maybe_datatype Result = {};
+  datatype *Result = {};
 
   auto *Bucket = GetHashBucket(umm(Hash(&QueryName)), Table);
   while (Bucket)
@@ -1964,8 +1960,7 @@ GetDatatypeByName( datatype_hashtable *Table, cs QueryName )
 
     if (AreEqual(EName, QueryName))
     {
-      Result.Tag = Maybe_Yes;
-      Result.Value = *E;
+      Result = E;
       break;
     }
     else
@@ -1974,75 +1969,266 @@ GetDatatypeByName( datatype_hashtable *Table, cs QueryName )
     }
   }
 
+  if (Result == 0) { Result = &NullDatatype; }
   return Result;
 }
 
-#if 1
-link_internal datatype
+link_internal datatype *
 GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
 {
-  datatype Result = GetDatatypeByName(&Datatypes->DatatypeHashtable, Name).Value;
+  datatype *Result = GetDatatypeByName(&Datatypes->DatatypeHashtable, Name);
   return Result;
 }
-#else
-link_internal datatype
-GetDatatypeByName(program_datatypes* Datatypes, counted_string Name)
+
+// NOTE(Jesse): This function isn't quite an exact duplicate, but it's close
+// enough that we could probably merge all three with a templating thing
+// @duplicate_DatatypeIs_Decl
+link_internal b32
+DatatypeIsVariableDecl(datatype *Data)
 {
-  TIMED_FUNCTION();
-
-
-  // TODO(Jesse id: 295, tags: speed): This could be optimized significantly by shuffling the logic around, not to mention using hashtables.
-  compound_decl *S = GetStructByType(&Datatypes->Structs, Name);
-  enum_decl     *E = GetEnumDeclByName(&Datatypes->Enums, Name);
-  type_def      *T = GetTypeDefByAlias(&Datatypes->Typedefs, Name);
-  function_decl *F = GetFunctionByName(&Datatypes->Functions, Name);
-
-  datatype Result = {};
-
-  if (S)
+  b32 Result = False;
+  switch (Data->Type)
   {
-    if (T || E || F)
+    case type_datatype_noop:
     {
-      BUG("Multiple datatypes for %S detected!", Name);
-    }
-    Result = Datatype(S);
-  }
-  else if (E)
-  {
-    if (T || S || F)
-    {
-      BUG("Multiple datatypes for %S detected!", Name);
-    }
-    Result = Datatype(E);
-  }
-  else if (F)
-  {
-    if (S || E || T)
-    {
-      BUG("Multiple datatypes for %S detected!", Name);
-    }
-    Result = Datatype(F);
-  }
-  else if (T)
-  {
-    if (E || S || F)
-    {
-      BUG("Multiple datatypes for %S detected!", Name);
-    }
-    Result = Datatype(T);
-  }
+      // TODO(Jesse): ?
+      Assert(false);
+      /* InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); */
+    } break;
 
+    case type_primitive_def:
+    case type_enum_member:
+    {
+    } break;
+
+    case type_type_def:
+    {
+      // NOTE(Jesse): This could be .. a variable .. questionmark?
+      NotImplemented;
+    } break;
+
+    case type_declaration:
+    {
+      declaration *Decl = SafeAccess(declaration, Data);
+      switch (Decl->Type)
+      {
+        case type_declaration_noop:
+        case type_compound_decl:
+        case type_enum_decl:
+        {
+        } break;
+
+        case type_function_decl:
+        {
+          // NOTE(Jesse): This could be .. a variable .. questionmark?
+          NotImplemented;
+        } break;
+
+        case type_variable_decl:
+        {
+          Result = True;
+        } break;
+      }
+    }
+  }
   return Result;
 }
-#endif
 
-link_internal datatype
-GetDatatypeByName(parse_context *Ctx, counted_string Name)
+link_internal b32
+DatatypeIsFunction(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
 {
-  datatype Result = GetDatatypeByName(&Ctx->Datatypes, Name);
+  b32 Result = {};
+  switch (Data->Type)
+  {
+    case type_datatype_noop:
+    case type_enum_member:
+    case type_primitive_def:
+    {
+    } break;
+
+    case type_type_def:
+    {
+      // NOTE(Jesse): Pretty sure this path is roughly the following, but I didn't test it.
+      NotImplemented;
+
+      type_def *TDef = SafeAccess(type_def, Data);
+      datatype *DT = ResolveToBaseType(Ctx, TDef->Type);
+      Result = DatatypeIsFunction(Ctx, Scope, DT, MetaOperatorT);
+    } break;
+
+    case type_declaration:
+    {
+      declaration *Decl = SafeAccess(declaration, Data);
+
+      switch(Decl->Type)
+      {
+        case type_declaration_noop:
+        {
+          // TODO(Jesse): ?
+          InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT);
+        } break;
+
+        case type_function_decl:
+        {
+          Result = True;
+        } break;
+
+        case type_enum_decl:
+        case type_compound_decl:
+        {
+        } break;
+
+        case type_variable_decl:
+        {
+          variable_decl *VDecl = SafeAccess(variable_decl, Decl);
+          Result = (VDecl->Type.Indirection.IsFunction || VDecl->Type.Indirection.IsFunctionPtr);
+          /* datatype DT = ResolveToBaseType(Ctx, VDecl->Type); */
+          /* Result = DatatypeIsFunction(Ctx, Scope, &DT, MetaOperatorT); */
+        } break;
+      }
+
+    } break;
+  }
+
   return Result;
 }
 
+// This is an _almost_ exact duplicate of DatatypeIsCompoundDecl.  The only difference
+// is which switch statement we set the result in.  How do we fix?
+//
+// @duplicate_DatatypeIs_Decl
+link_internal function_decl *
+DatatypeIsFunctionDecl(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token *MetaOperatorT = 0)
+{
+  function_decl *Result = {};
+  switch (Data->Type)
+  {
+    case type_datatype_noop:
+    case type_enum_member:
+    case type_primitive_def:
+    {
+    } break;
+
+    case type_type_def:
+    {
+      // NOTE(Jesse): Pretty sure this path is roughly the following, but I didn't test it.
+      NotImplemented;
+
+      type_def *TDef = SafeAccess(type_def, Data);
+      datatype *DT = ResolveToBaseType(Ctx, TDef->Type);
+      Result = DatatypeIsFunctionDecl(Ctx, DT, Scope, MetaOperatorT);
+    } break;
+
+    case type_declaration:
+    {
+      declaration *Decl = SafeAccess(declaration, Data);
+
+      switch(Decl->Type)
+      {
+        case type_declaration_noop:
+        {
+          // TODO(Jesse): ?
+          InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT);
+        } break;
+
+        case type_function_decl:
+        {
+          Result = SafeAccess(function_decl, Decl);
+        } break;
+
+        case type_enum_decl:
+        case type_compound_decl:
+        {
+        } break;
+
+        case type_variable_decl:
+        {
+          variable_decl *VDecl = SafeAccess(variable_decl, Decl);
+          datatype *DT = ResolveToBaseType(Ctx, VDecl->Type);
+          Result = DatatypeIsFunctionDecl(Ctx, DT, Scope, MetaOperatorT);
+        } break;
+      }
+
+    } break;
+  }
+
+  return Result;
+}
+
+// @duplicate_DatatypeIs_Decl
+link_internal compound_decl *
+DatatypeIsCompoundDecl(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token *MetaOperatorT = 0)
+{
+  compound_decl *Result = {};
+  switch (Data->Type)
+  {
+    case type_datatype_noop:
+    case type_enum_member:
+    case type_primitive_def:
+    {
+    } break;
+
+    case type_type_def:
+    {
+      /* // NOTE(Jesse): Pretty sure this path is roughly the following, but I didn't test it. */
+      /* NotImplemented; */
+
+      type_def *TDef = SafeAccess(type_def, Data);
+      datatype *DT = ResolveToBaseType(Ctx, TDef);
+      Result = DatatypeIsCompoundDecl(Ctx, DT, Scope, MetaOperatorT);
+    } break;
+
+    case type_declaration:
+    {
+      declaration *Decl = SafeAccess(declaration, Data);
+
+      switch(Decl->Type)
+      {
+        case type_declaration_noop:
+        {
+          // TODO(Jesse): ?
+          if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); }
+        } break;
+
+        case type_enum_decl:
+        case type_function_decl:
+        {
+        } break;
+
+        case type_compound_decl:
+        {
+          Result = SafeAccess(compound_decl, Decl);
+
+        } break;
+
+        case type_variable_decl:
+        {
+          variable_decl *VDecl = SafeAccess(variable_decl, Decl);
+          datatype *DT = ResolveToBaseType(Ctx, VDecl->Type);
+          /* Assert(DatatypeIsVariableDecl(&DT) == False); */
+          Result = DatatypeIsCompoundDecl(Ctx, DT, Scope, MetaOperatorT);
+        } break;
+      }
+
+    } break;
+  }
+
+  return Result;
+}
+
+link_internal function_decl *
+TryCastToFunctionDecl(parse_context *Ctx, datatype *Datatype)
+{
+  function_decl *Result = DatatypeIsFunctionDecl(Ctx, Datatype);
+  return Result;
+}
+
+link_internal compound_decl *
+TryCastToCompoundDecl(parse_context *Ctx, datatype *Datatype)
+{
+  compound_decl *Result = DatatypeIsCompoundDecl(Ctx, Datatype);
+  return Result;
+}
 
 link_internal enum_decl *
 TryCastToEnumDecl(datatype *Datatype)
@@ -2088,39 +2274,40 @@ GetEnumDeclByName( program_datatypes *Data, counted_string Name )
 {
   enum_decl Result = {};
 
-  datatype Datatype = GetDatatypeByName(Data, Name);
+  datatype *Datatype = GetDatatypeByName(Data, Name);
 
-  switch (Datatype.Type)
+  switch (Datatype->Type)
   {
-    case type_declaration:
-    {
-      declaration *Decl = SafeCast(declaration, &Datatype);
-      switch (Decl->Type)
-      {
-        InvalidCase(type_declaration_noop);
-        case type_enum_decl:
-        {
-          Result = *SafeCast(enum_decl, Decl);
-        } break;
-
-        case type_function_decl:
-        case type_compound_decl:
-        case type_variable_decl:
-        {
-        } break;
-      }
-    } break;
-
     case type_datatype_noop:
     case type_enum_member:
     case type_primitive_def:
     {
     } break;
 
+    case type_declaration:
+    {
+      declaration *Decl = SafeCast(declaration, Datatype);
+      switch (Decl->Type)
+      {
+        InvalidCase(type_declaration_noop);
+
+        case type_function_decl:
+        case type_compound_decl:
+        case type_variable_decl:
+        {
+        } break;
+
+        case type_enum_decl:
+        {
+          Result = *SafeCast(enum_decl, Decl);
+        } break;
+      }
+    } break;
+
     case type_type_def:
     {
-      datatype Resolved = ResolveToBaseType(Data, &Datatype);
-      enum_decl *Enum = TryCastToEnumDecl(&Resolved);
+      datatype *Resolved = ResolveToBaseType(Data, Datatype);
+      enum_decl *Enum = TryCastToEnumDecl(Resolved);
       if (Enum) Result = *Enum;
     } break;
   }
@@ -2760,7 +2947,7 @@ ParseIndirectionInfo(parser *Parser, type_spec *TypeSpec)
 link_internal b32
 IsTypeIdentifier(counted_string TypeName, program_datatypes *Datatypes)
 {
-  b32 Result = GetDatatypeByName(Datatypes, TypeName).Type != type_datatype_noop;
+  b32 Result = GetDatatypeByName(Datatypes, TypeName)->Type != type_datatype_noop;
   return Result;
 }
 
@@ -5314,7 +5501,8 @@ ParseTypeSpecifierNode(parse_context *Ctx, ast_node_expression *Result, datatype
     c_token *DatatypeToken = Node->TypeSpec.DatatypeToken;
     if (DatatypeToken && DatatypeToken->Type == CTokenType_Identifier)
     {
-      Node->Datatype = GetDatatypeByName(&Ctx->Datatypes, Node->TypeSpec.DatatypeToken->Value);
+      // TODO(Jesse): Save a pointer here probably..
+      Node->Datatype = *GetDatatypeByName(&Ctx->Datatypes, Node->TypeSpec.DatatypeToken->Value);
       if (Node->Datatype.Type == type_datatype_noop)
       {
         // Type-checking failed.
@@ -5340,7 +5528,7 @@ ParseTypeSpecifierNode(parse_context *Ctx, ast_node_expression *Result, datatype
       // This case should go away once we can check what local varaibles are defined for the scope we're parsing
       case type_ast_node_access:
       {
-        BUG("during ParseTypeSpecifierNode");
+        BUG("Skipped symbol resolution in ParseTypeSpecifierNode. @not_pushing_variable_decls ");
       } break;
 
       InvalidDefaultWhileParsing(Ctx->CurrentParser, CSz("Invalid syntax following type-specifier."));
@@ -5404,15 +5592,15 @@ ParseSymbol(parse_context *Ctx, ast_node_expression* Result, b32 SymbolIsNeverTy
   }
   else
   {
-    datatype TestDatatype = GetDatatypeByName(&Ctx->Datatypes, T.Value);
-    if ( SymbolIsNeverTypeSpecifier || TestDatatype.Type == type_datatype_noop )
+    datatype *TestDatatype = GetDatatypeByName(&Ctx->Datatypes, T.Value);
+    if ( SymbolIsNeverTypeSpecifier || TestDatatype->Type == type_datatype_noop )
     {
       ast_node_symbol *Node = AllocateAndCastTo(ast_node_symbol, &Result->Value, Ctx->Memory);
       Node->Token = RequireToken(Parser, CTokenType_Identifier);
     }
     else
     {
-      ParseTypeSpecifierNode(Ctx, Result, &TestDatatype);
+      ParseTypeSpecifierNode(Ctx, Result, TestDatatype);
     }
   }
 
@@ -5702,7 +5890,7 @@ ReduceToTypeSpec(ast_node* InputNode, ast_node_variable_def_stream *Locals)
 #endif
 
 link_internal ast_node*
-ParseFunctionCall(parse_context *Ctx, counted_string FunctionName)
+ParseFunctionCall(parse_context *Ctx, cs FunctionName)
 {
   parser *Parser = Ctx->CurrentParser;
 
@@ -5710,8 +5898,17 @@ ParseFunctionCall(parse_context *Ctx, counted_string FunctionName)
   ast_node_function_call *Node = AllocateAndCastTo(ast_node_function_call, &Result, Ctx->Memory);
 
   Node->Name = FunctionName;
-  NotImplemented;
-  /* Node->Prototype = GetByName(Node->Name, &Ctx->Datatypes.Functions); */
+
+  datatype *D = GetDatatypeByName(&Ctx->Datatypes, Node->Name);
+  Node->Prototype = TryCastToFunctionDecl(Ctx, D);
+
+  // TODO(Jesse): Emit error here?
+  if (Node->Prototype == 0)
+  {
+    // For now, because we don't have a sizeof token, we have to settle for a warning
+    // @add_sizeof_keyword
+    Warn("Couldn't find definition for function (%S)", FunctionName);
+  }
 
   RequireToken(Parser, CTokenType_OpenParen);
 
@@ -5943,78 +6140,103 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
       case CTokenType_Identifier:
       {
         declaration Decl = ParseDeclaration(Ctx);
-
         datatype DeclDT = Datatype(&Decl);
 
-        datatype *DTPointer = Insert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
-
-        switch (Decl.Type)
+        if (Decl.Type)
         {
-          case type_enum_decl:
+          // TODO(Jesse)(not_pushing_variable_decls): Enable this, and disable the other ones at @not_pushing_variable_decls
+          //
+          // Enabling this uncovers a bug in type-checking, also noted with @not_pushing_variable_decls
+          //
+          // There might also be another/other bugs because after that happened
+          // I was hitting invalid case in that same switch statement.
+          //
+          /* datatype *DTPointer = Insert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory); */
+
+          switch (Decl.Type)
           {
-            /* Push(&Ctx->Datatypes, Decl.enum_decl); */
-          } break;
+            InvalidCase(type_declaration_noop); // We just checked if this was set.
 
-          case type_function_decl:
-          {
-            /* Info("Pushing function decl (%S)", Function.Type ? Function.Type->Value : CSz("anonymous")); */
-            /* Insert(Datatype(&Decl), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory); */
-            /* Push(&Ctx->Datatypes.Functions, Decl.function_decl); // Free function */
-          } break;
-
-
-          case type_compound_decl:
-          {
-            compound_decl StructOrUnion = Decl.compound_decl;
-
-            Info( "Pushing %S decl (%S)",
-                  StructOrUnion.IsUnion ? CSz("union") : CSz("struct"),
-                  StructOrUnion.Type ? StructOrUnion.Type->Value : CSz("(anonymous)") );
-
-            /* Insert(Datatype(&StructOrUnion), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory); */
-            /* Push(&Ctx->Datatypes.Structs, StructOrUnion); */
-
-            if (OptionalToken(Parser, CTokenType_Semicolon))
+            case type_enum_decl:
             {
-            }
-            else
+              // @not_pushing_variable_decls
+              Insert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+              /* Push(&Ctx->Datatypes, Decl.enum_decl); */
+            } break;
+
+            case type_function_decl:
             {
-              comma_separated_decl Var = ParseCommaSeperatedDecl(Ctx);
+              // @not_pushing_variable_decls
+              Insert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+
+              function_decl Function = Decl.function_decl;
+              Info("Pushing function decl (%S)", Function.NameT ? Function.NameT->Value : CSz("anonymous"));
+              /* Insert(Datatype(&Decl), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory); */
+              /* Push(&Ctx->Datatypes.Functions, Decl.function_decl); // Free function */
+            } break;
+
+
+            case type_compound_decl:
+            {
+              // @not_pushing_variable_decls
+              Insert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+
+              compound_decl StructOrUnion = Decl.compound_decl;
+
+              Info( "Pushing %S decl (%S)",
+                    StructOrUnion.IsUnion ? CSz("union") : CSz("struct"),
+                    StructOrUnion.Type ? StructOrUnion.Type->Value : CSz("(anonymous)") );
+
+              /* if (StringsMatch(StructOrUnion.Type->Value, CSz("terminal_colors"))) */
+              /* { */
+              /*   RuntimeBreak(); */
+              /* } */
+
+              /* Insert(Datatype(&StructOrUnion), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory); */
+              /* Push(&Ctx->Datatypes.Structs, StructOrUnion); */
+
+              if (OptionalToken(Parser, CTokenType_Semicolon))
+              {
+              }
+              else
+              {
+                comma_separated_decl Var = ParseCommaSeperatedDecl(Ctx);
+                MaybeEatAdditionalCommaSeperatedNames(Ctx);
+                RequireToken(Parser, CTokenType_Semicolon);
+              }
+            } break;
+
+            case type_variable_decl:
+            {
+              // NOTE(Jesse): If we ever start tracking globally defined variables
+              // this'll matter, but for the moment it doesn't
+              variable_decl *VD = SafeAccess(variable_decl, &Decl);
+              /* VD->Type.Datatype = DTPointer; */
+
+              /* DebugPrint(Decl); */
+              /* datatype BaseType = ResolveToBaseType(Ctx, &DeclDT); */
+              /* DebugPrint("---------------------\n"); */
+              /* DebugPrint(&DeclDT); */
+              /* DebugPrint(" :: basetype :: \n"); */
+              /* DebugPrint(&BaseType); */
+              /* DebugPrint("---------------------\n"); */
+
               MaybeEatAdditionalCommaSeperatedNames(Ctx);
-              RequireToken(Parser, CTokenType_Semicolon);
-            }
-          } break;
 
-          case type_variable_decl:
-          {
-            // NOTE(Jesse): If we ever start tracking globally defined variables
-            // this'll matter, but for the moment it doesn't
-            variable_decl *VD = SafeAccess(variable_decl, &Decl);
-            /* VD->Type.Datatype = DTPointer; */
+              if (OptionalToken(Parser, CTokenType_Semicolon) == False)
+              {
+                ParseError_ExpectedSemicolonEqualsCommaOrOpenBrace(Parser, PeekTokenPointer(Parser));
+              }
+            } break;
 
-            /* DebugPrint(Decl); */
-            /* datatype BaseType = ResolveToBaseType(Ctx, &DeclDT); */
-            /* DebugPrint("---------------------\n"); */
-            /* DebugPrint(&DeclDT); */
-            /* DebugPrint(" :: basetype :: \n"); */
-            /* DebugPrint(&BaseType); */
-            /* DebugPrint("---------------------\n"); */
-
-            MaybeEatAdditionalCommaSeperatedNames(Ctx);
-
-            if (OptionalToken(Parser, CTokenType_Semicolon) == False)
-            {
-              ParseError_ExpectedSemicolonEqualsCommaOrOpenBrace(Parser, PeekTokenPointer(Parser));
-            }
-          } break;
-
-          case type_declaration_noop:
-          {
-            // This hits when we parse something like `struct foo;`
-            //
-            // We never do anything with pre-declarations like that, so the
-            // parser just completely ignores them.
-          } break;
+          }
+        }
+        else
+        {
+          // This hits when we parse something like `struct foo;`
+          //
+          // We never do anything with pre-declarations like that, so the
+          // parser just completely ignores them.
         }
 
       } break;
@@ -6935,60 +7157,6 @@ GetTypeNameFor(parse_context *Ctx, datatype *Data, typedef_resolution_behavior T
   return Result;
 }
 
-// NOTE(Jesse): This function isn't quite an exact duplicate, but it's close
-// enough that we could probably merge all three with a templating thing
-// @duplicate_DatatypeIs_Decl
-link_internal b32
-DatatypeIsVariableDecl(datatype *Data)
-{
-  b32 Result = False;
-  switch (Data->Type)
-  {
-    case type_datatype_noop:
-    {
-      // TODO(Jesse): ?
-      Assert(false);
-      /* InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); */
-    } break;
-
-    case type_primitive_def:
-    case type_enum_member:
-    {
-    } break;
-
-    case type_type_def:
-    {
-      // NOTE(Jesse): This could be .. a variable .. questionmark?
-      NotImplemented;
-    } break;
-
-    case type_declaration:
-    {
-      declaration *Decl = SafeAccess(declaration, Data);
-      switch (Decl->Type)
-      {
-        case type_declaration_noop:
-        case type_compound_decl:
-        case type_enum_decl:
-        {
-        } break;
-
-        case type_function_decl:
-        {
-          // NOTE(Jesse): This could be .. a variable .. questionmark?
-          NotImplemented;
-        } break;
-
-        case type_variable_decl:
-        {
-          Result = True;
-        } break;
-      }
-    }
-  }
-  return Result;
-}
-
 link_internal ast_node*
 DatatypeStaticBufferSize(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
 {
@@ -7042,188 +7210,6 @@ link_internal b32
 DatatypeIsArray(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
 {
   b32 Result = (DatatypeStaticBufferSize(Ctx, Scope, Data, MetaOperatorT) != 0);
-  return Result;
-}
-
-link_internal b32
-DatatypeIsFunction(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
-{
-  b32 Result = {};
-  switch (Data->Type)
-  {
-    case type_datatype_noop:
-    case type_enum_member:
-    case type_primitive_def:
-    {
-    } break;
-
-    case type_type_def:
-    {
-      // NOTE(Jesse): Pretty sure this path is roughly the following, but I didn't test it.
-      NotImplemented;
-
-      type_def *TDef = SafeAccess(type_def, Data);
-      datatype DT = ResolveToBaseType(Ctx, TDef->Type);
-      Result = DatatypeIsFunction(Ctx, Scope, &DT, MetaOperatorT);
-    } break;
-
-    case type_declaration:
-    {
-      declaration *Decl = SafeAccess(declaration, Data);
-
-      switch(Decl->Type)
-      {
-        case type_declaration_noop:
-        {
-          // TODO(Jesse): ?
-          InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT);
-        } break;
-
-        case type_function_decl:
-        {
-          Result = True;
-        } break;
-
-        case type_enum_decl:
-        case type_compound_decl:
-        {
-        } break;
-
-        case type_variable_decl:
-        {
-          variable_decl *VDecl = SafeAccess(variable_decl, Decl);
-          Result = (VDecl->Type.Indirection.IsFunction || VDecl->Type.Indirection.IsFunctionPtr);
-          /* datatype DT = ResolveToBaseType(Ctx, VDecl->Type); */
-          /* Result = DatatypeIsFunction(Ctx, Scope, &DT, MetaOperatorT); */
-        } break;
-      }
-
-    } break;
-  }
-
-  return Result;
-}
-
-// This is an _almost_ exact duplicate of DatatypeIsCompoundDecl.  The only difference
-// is which switch statement we set the result in.  How do we fix?
-//
-// @duplicate_DatatypeIs_Decl
-link_internal function_decl *
-DatatypeIsFunctionDecl(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
-{
-  function_decl *Result = {};
-  switch (Data->Type)
-  {
-    case type_datatype_noop:
-    case type_enum_member:
-    case type_primitive_def:
-    {
-    } break;
-
-    case type_type_def:
-    {
-      // NOTE(Jesse): Pretty sure this path is roughly the following, but I didn't test it.
-      NotImplemented;
-
-      type_def *TDef = SafeAccess(type_def, Data);
-      datatype DT = ResolveToBaseType(Ctx, TDef->Type);
-      Result = DatatypeIsFunctionDecl(Ctx, Scope, &DT, MetaOperatorT);
-    } break;
-
-    case type_declaration:
-    {
-      declaration *Decl = SafeAccess(declaration, Data);
-
-      switch(Decl->Type)
-      {
-        case type_declaration_noop:
-        {
-          // TODO(Jesse): ?
-          InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT);
-        } break;
-
-        case type_function_decl:
-        {
-          Result = SafeAccess(function_decl, Decl);
-        } break;
-
-        case type_enum_decl:
-        case type_compound_decl:
-        {
-        } break;
-
-        case type_variable_decl:
-        {
-          variable_decl *VDecl = SafeAccess(variable_decl, Decl);
-          datatype DT = ResolveToBaseType(Ctx, VDecl->Type);
-          Result = DatatypeIsFunctionDecl(Ctx, Scope, &DT, MetaOperatorT);
-        } break;
-      }
-
-    } break;
-  }
-
-  return Result;
-}
-
-// @duplicate_DatatypeIs_Decl
-link_internal compound_decl *
-DatatypeIsCompoundDecl(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token *MetaOperatorT = 0)
-{
-  compound_decl *Result = {};
-  switch (Data->Type)
-  {
-    case type_datatype_noop:
-    case type_enum_member:
-    case type_primitive_def:
-    {
-    } break;
-
-    case type_type_def:
-    {
-      /* // NOTE(Jesse): Pretty sure this path is roughly the following, but I didn't test it. */
-      /* NotImplemented; */
-
-      type_def *TDef = SafeAccess(type_def, Data);
-      datatype DT = ResolveToBaseType(Ctx, TDef);
-      Result = DatatypeIsCompoundDecl(Ctx, &DT, Scope, MetaOperatorT);
-    } break;
-
-    case type_declaration:
-    {
-      declaration *Decl = SafeAccess(declaration, Data);
-
-      switch(Decl->Type)
-      {
-        case type_declaration_noop:
-        {
-          // TODO(Jesse): ?
-          if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); }
-        } break;
-
-        case type_enum_decl:
-        case type_function_decl:
-        {
-        } break;
-
-        case type_compound_decl:
-        {
-          Result = SafeAccess(compound_decl, Decl);
-
-        } break;
-
-        case type_variable_decl:
-        {
-          variable_decl *VDecl = SafeAccess(variable_decl, Decl);
-          datatype DT = ResolveToBaseType(Ctx, VDecl->Type);
-          /* Assert(DatatypeIsVariableDecl(&DT) == False); */
-          Result = DatatypeIsCompoundDecl(Ctx, &DT, Scope, MetaOperatorT);
-        } break;
-      }
-
-    } break;
-  }
-
   return Result;
 }
 
@@ -7314,7 +7300,7 @@ DatatypeIsPointer(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token
         case type_variable_decl:
         {
           variable_decl *VDecl = SafeAccess(variable_decl, Decl);
-          datatype Resolved = ResolveToBaseType(Ctx, VDecl->Type);
+          /* datatype *Resolved = ResolveToBaseType(Ctx, VDecl->Type); */
           /* Result = TypeSpecIsPointer(&VDecl->Type); */
           Result = TypeSpecIsPointer(&VDecl->Type);
         } break;
@@ -7341,9 +7327,9 @@ GetMembersFor(parse_context *Ctx, declaration *Decl)
     case type_variable_decl:
     {
       variable_decl *VDecl = SafeAccess(variable_decl, Decl);
-      datatype DT = ResolveToBaseType(Ctx, VDecl->Type);
-      /* Assert(DatatypeIsVariableDecl(&DT) == False); */
-      auto Compound = DatatypeIsCompoundDecl(Ctx, &DT);
+      datatype *DT = ResolveToBaseType(Ctx, VDecl->Type);
+      /* Assert(DatatypeIsVariableDecl(DT) == False); */
+      auto Compound = DatatypeIsCompoundDecl(Ctx, DT);
       if (Compound) { Result = &Compound->Members; }
     } break;
 
@@ -7383,22 +7369,22 @@ GetMembersFor(parse_context *Ctx, datatype *Data)
 //
 // This is the primal function
 //
-link_internal datatype
+link_internal datatype *
 ResolveToBaseType(program_datatypes *Datatypes, type_def *TD)
 {
-  datatype Result = {};
+  datatype *Result = {};
 
   if (TD->Type.DatatypeToken)
   {
-    datatype Resolved = GetDatatypeByName(Datatypes, TD->Type.DatatypeToken->Value);
-    if (Resolved.Type == type_datatype_noop)
+    datatype *Resolved = GetDatatypeByName(Datatypes, TD->Type.DatatypeToken->Value);
+    if (Resolved->Type == type_datatype_noop)
     {
       // either undefined or a primitive.  what do we do?
       //
     }
-    else if (Resolved.Type == type_type_def)
+    else if (Resolved->Type == type_type_def)
     {
-      type_def *ResolvedTD = SafeAccess(type_def, &Resolved);
+      type_def *ResolvedTD = SafeAccess(type_def, Resolved);
       Result = ResolveToBaseType(Datatypes, ResolvedTD);
     }
     else
@@ -7408,16 +7394,28 @@ ResolveToBaseType(program_datatypes *Datatypes, type_def *TD)
   }
   else
   {
+
+#if 0
+    // This is defaulting to a function or primitive type.. although I feel
+    // like it should never be a function here ..?
     Result = Datatype(TD->Type);
+    NotImplemented;
+#else
+    Leak("Leaking datatype allocation");
+    Result = Allocate(datatype, GetTranArena(), 1);
+    *Result = Datatype(TD->Type);
+#endif
   }
+
+  if (Result == 0) { Result = &NullDatatype; }
 
   return Result;
 }
 
-link_internal datatype
+link_internal datatype *
 ResolveToBaseType(program_datatypes *DataHash, datatype *Data)
 {
-  datatype Result = {};
+  datatype *Result = {};
   switch (Data->Type)
   {
     case type_datatype_noop: { InvalidCodePath(); } break;
@@ -7429,13 +7427,9 @@ ResolveToBaseType(program_datatypes *DataHash, datatype *Data)
     } break;
 
     case type_enum_member:
-    {
-      NotImplemented;
-    } break;
-
     case type_primitive_def:
     {
-      Result = *Data;
+      Result = Data;
     } break;
 
     case type_declaration:
@@ -7452,15 +7446,10 @@ ResolveToBaseType(program_datatypes *DataHash, datatype *Data)
         } break;
 
         case type_compound_decl:
-        {
-          compound_decl *CDecl = SafeAccess(compound_decl, Decl);
-          Result = *Data;
-        } break;
-
         case type_function_decl:
         case type_enum_decl:
         {
-          Result = *Data;
+          Result = Data;
         } break;
 
       }
@@ -7468,61 +7457,74 @@ ResolveToBaseType(program_datatypes *DataHash, datatype *Data)
     } break;
   }
 
+  if (Result == 0) { Result = &NullDatatype; }
   return Result;
 }
 
 
-link_internal datatype
+link_internal datatype*
 ResolveToBaseType(program_datatypes *DataHash, type_spec TypeSpec)
 {
-  datatype Result = {};
+  datatype *Result = {};
 
   if ( TypeSpec.BaseType )
   {
     Assert(TypeSpec.BaseType->Type == type_declaration);
-    Result = *TypeSpec.BaseType;
+    Result = TypeSpec.BaseType;
   }
   else if ( TypeSpec.DatatypeToken &&
             TypeSpec.DatatypeToken->Type == CTokenType_Identifier )
   {
     Result = GetDatatypeByName(DataHash, TypeSpec.DatatypeToken->Value);
-    if (Result.Type == type_type_def)
+    if (Result->Type == type_type_def)
     {
-      type_def *ResolvedTD = SafeAccess(type_def, &Result);
+      type_def *ResolvedTD = SafeAccess(type_def, Result);
       Result = ResolveToBaseType(DataHash, ResolvedTD);
     }
   }
   else if ( TypeSpec.Indirection.IsFunction ||
             TypeSpec.Indirection.IsFunctionPtr )
   {
-    Result = Datatype(TypeSpec);
+    /* NotImplemented; */
+    /* Result = Datatype(TypeSpec); */
+    Leak("Leaking datatype allocation");
+    Result = Allocate(datatype, GetTranArena(), 1);
+    *Result = Datatype(TypeSpec);
   }
   else
   {
-    Result = Datatype(TypeSpec);
+    /* NotImplemented; */
+    /* Result = Datatype(TypeSpec); */
+    Leak("Leaking datatype allocation");
+    Result = Allocate(datatype, GetTranArena(), 1);
+    *Result = Datatype(TypeSpec);
   }
 
+  if (Result == 0) { Result = &NullDatatype; }
   return Result;
 }
 
-link_internal datatype
+link_internal datatype*
 ResolveToBaseType(parse_context *Ctx, type_spec TypeSpec)
 {
-  datatype Result = ResolveToBaseType(&Ctx->Datatypes, TypeSpec);
+  datatype *Result = ResolveToBaseType(&Ctx->Datatypes, TypeSpec);
+  Assert(Result);
   return Result;
 }
 
-link_internal datatype
+link_internal datatype*
 ResolveToBaseType(parse_context *Ctx, datatype *Datatype)
 {
-  datatype Result = ResolveToBaseType(&Ctx->Datatypes, Datatype);
+  datatype *Result = ResolveToBaseType(&Ctx->Datatypes, Datatype);
+  Assert(Result);
   return Result;
 }
 
-link_internal datatype
+link_internal datatype*
 ResolveToBaseType(parse_context *Ctx, type_def *Typedef)
 {
-  datatype Result = ResolveToBaseType(&Ctx->Datatypes, Typedef);
+  datatype *Result = ResolveToBaseType(&Ctx->Datatypes, Typedef);
+  Assert(Result);
   return Result;
 }
 
@@ -7667,11 +7669,11 @@ ParseAndTypecheckArgument(parse_context *Ctx, parser *Parser, meta_func_arg *Par
         c_token *Token = PopTokenPointer(Parser);
         if (Token->Type == CTokenType_Identifier)
         {
-          datatype Datatype = GetDatatypeByName(Ctx, Token->Value);
-          if (Datatype.Type)
+          datatype *Datatype = GetDatatypeByName(&Ctx->Datatypes, Token->Value);
+          if (Datatype->Type)
           {
             ParsedArg->Type = type_datatype;
-            ParsedArg->datatype = Datatype;
+            ParsedArg->datatype = *Datatype;
           }
           else if (meta_func_arg *ScopedArg = GetByMatch(CurrentScope, Token->Value))
           {
@@ -8586,7 +8588,7 @@ main(s32 ArgCount_, const char** ArgStrings)
       ParseDatatypes(&Ctx, Parser);
 
       /* PrintHashtable(&Ctx.ParserHashtable); */
-      PrintHashtable(&Ctx.Datatypes.DatatypeHashtable);
+      /* PrintHashtable(&Ctx.Datatypes.DatatypeHashtable); */
 
       FullRewind(Ctx.CurrentParser);
 

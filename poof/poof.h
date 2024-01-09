@@ -130,8 +130,6 @@ enum va_args_flags
   va_args_flags_expand_with_commas = (1 << 0),
 };
 
-global_variable c_token NullToken = {};
-
 struct declaration_stream_chunk;
 
 /* TODO(Jesse id: 191, tags: metaprogramming): This can be generated, but it
@@ -560,6 +558,7 @@ Declaration(type_spec *T)
   return Result;
 }
 
+#if 1
 link_internal datatype
 Datatype(type_spec S)
 {
@@ -578,6 +577,7 @@ Datatype(type_spec S)
 
   return Result;
 }
+#endif
 
 
 struct poof_index
@@ -602,7 +602,7 @@ poof(gen_constructor(poof_symbol))
 poof(
   d_union meta_func_arg
   {
-    datatype
+    datatype // TODO(Jesse): Change to pointer
     poof_index
     poof_symbol
   },

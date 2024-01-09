@@ -1,4 +1,3 @@
-
 link_internal xml_tag_linked_list_node *
 Allocate_xml_tag_linked_list_node(memory_arena *Memory)
 {
@@ -59,5 +58,14 @@ Insert(xml_tag Element, xml_tag_hashtable *Table, memory_arena *Memory)
   Bucket->Element = Element;
   Insert(Bucket, Table);
   return &Bucket->Element;
+}
+
+//
+// Iterator impl.
+//
+link_inline umm
+ZerothIndex(xml_tag_hashtable *Hashtable)
+{
+  return 0;
 }
 

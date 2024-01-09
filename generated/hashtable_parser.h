@@ -10,7 +10,6 @@ struct parser_hashtable
   parser_linked_list_node **Elements;
   /* OWNED_BY_THREAD_MEMBER() */
 };
-
 link_internal parser_linked_list_node *
 Allocate_parser_linked_list_node(memory_arena *Memory)
 {
@@ -71,5 +70,14 @@ Insert(parser Element, parser_hashtable *Table, memory_arena *Memory)
   Bucket->Element = Element;
   Insert(Bucket, Table);
   return &Bucket->Element;
+}
+
+//
+// Iterator impl.
+//
+link_inline umm
+ZerothIndex(parser_hashtable *Hashtable)
+{
+  return 0;
 }
  

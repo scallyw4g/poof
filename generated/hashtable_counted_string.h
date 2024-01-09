@@ -10,7 +10,6 @@ struct counted_string_hashtable
   counted_string_linked_list_node **Elements;
   /* OWNED_BY_THREAD_MEMBER() */
 };
-
 link_internal counted_string_linked_list_node *
 Allocate_counted_string_linked_list_node(memory_arena *Memory)
 {
@@ -71,5 +70,14 @@ Insert(counted_string Element, counted_string_hashtable *Table, memory_arena *Me
   Bucket->Element = Element;
   Insert(Bucket, Table);
   return &Bucket->Element;
+}
+
+//
+// Iterator impl.
+//
+link_inline umm
+ZerothIndex(counted_string_hashtable *Hashtable)
+{
+  return 0;
 }
  

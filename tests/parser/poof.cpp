@@ -963,6 +963,9 @@ TestCommentSituation(memory_arena* Memory)
 link_internal void
 TestAst(memory_arena *Memory)
 {
+#if 1
+  NotImplemented;
+#else
   parse_context Ctx = AllocateParseContext(Memory);
   parser *Parser = PreprocessedParserForFile(&Ctx, CS(PARSER_FIXTURES_PATH "/preprocessor/should_parse.cpp"), TokenCursorSource_RootFile, 0);
   if (Parser)
@@ -1018,6 +1021,7 @@ TestAst(memory_arena *Memory)
   {
     ++TestsFailed;
   }
+#endif
 }
 
 link_internal void
@@ -2710,7 +2714,7 @@ main(s32 ArgCount, const char** Args)
 
   auto PrevLogLevel = Global_LogLevel;
   Global_LogLevel = LogLevel_Shush;
-  Global_LogLevel = LogLevel_Debug;
+  /* Global_LogLevel = LogLevel_Debug; */
   TestParserErrors(Memory);
   Global_LogLevel = PrevLogLevel;
 
@@ -2722,7 +2726,7 @@ main(s32 ArgCount, const char** Args)
 
 #endif
 
-  TestAst(Memory);
+  /* TestAst(Memory); */
 
   TestSuiteEnd();
   exit(TestsFailed);

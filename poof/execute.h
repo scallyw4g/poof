@@ -463,15 +463,15 @@ Map( parse_context *Ctx,
 
             case map_values:
             {
-              datatype Base = ResolveToBaseType(Ctx, VDecl->Type);
+              datatype *Base = ResolveToBaseType(Ctx, VDecl->Type);
 
-              switch (Base.Type)
+              switch (Base->Type)
               {
                 InvalidCase(type_datatype_noop);
 
                 case type_declaration:
                 {
-                  declaration *BaseDecl = SafeAccess(declaration, &Base);
+                  declaration *BaseDecl = SafeAccess(declaration, Base);
                   if (BaseDecl->Type == type_enum_decl)
                   {
                     auto EnumDecl = SafeAccess(enum_decl, BaseDecl);
@@ -534,8 +534,8 @@ Map( parse_context *Ctx,
 
     case type_type_def:
     {
-      auto T = ResolveToBaseType(Ctx, ReplaceData);
-      Map(Ctx, Operator, MetaOperatorToken, ParentScope, MapScope, &T, MatchValue, Sep, ReplacePatterns, OutputBuilder, Memory, Depth);
+      datatype *T = ResolveToBaseType(Ctx, ReplaceData);
+      Map(Ctx, Operator, MetaOperatorToken, ParentScope, MapScope, T, MatchValue, Sep, ReplacePatterns, OutputBuilder, Memory, Depth);
     } break;
   }
 }
@@ -680,8 +680,9 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                     u32 MaxIndex = 0; // TODO(Jesse): Should we just axe the upper bound?  I don't think it's useful for anything..
                     while (c_token *MapToken = PopTokenPointer(SymbolParser))
                     {
-                      datatype D = GetDatatypeByName(Ctx, MapToken->Value);
-                      SetLast(&NewArgs, ReplacementPattern(A0.Match, D));
+                      datatype *D = GetDatatypeByName(&Ctx->Datatypes, MapToken->Value);
+                      SetLast(&NewArgs, ReplacementPattern(A0.Match, *D));
+
                       if (A1) { SetReverse(1, &NewArgs, ReplacementPattern(A1->Match, PoofIndex(Index, MaxIndex))); }
 
                       Rewind(MapFunc.Body.Tokens);
@@ -799,8 +800,8 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                       case type_enum_member:
                       case type_primitive_def:
                       {
-                        datatype ResolvedT = ResolveToBaseType(Ctx, ReplaceData);
-                        DoTrueBranch = (ResolvedT.Type != type_datatype_noop);
+                        datatype *ResolvedT = ResolveToBaseType(Ctx, ReplaceData);
+                        DoTrueBranch = (ResolvedT->Type != type_datatype_noop);
                       } break;
                     }
 
@@ -811,10 +812,10 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                   {
                     RequireToken(Scope, CTokenType_Question);
 
-                    datatype Dt = ResolveToBaseType(Ctx, ReplaceData);
-                    b32 DoTrueBranch = (Dt.Type == type_primitive_def);
+                    datatype *Dt = ResolveToBaseType(Ctx, ReplaceData);
+                    b32 DoTrueBranch = (Dt->Type == type_primitive_def);
 
-                    counted_string DTName = GetNameForDatatype(&Dt, GetTranArena());
+                    counted_string DTName = GetNameForDatatype(Dt, GetTranArena());
 
                     // @counted_string_primitive_hack
                     if (StringsMatch(DTName, CSz("counted_string")))
@@ -944,7 +945,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                   {
                     RequireToken(Scope, CTokenType_Question);
                     b32 IsFunc = DatatypeIsFunction(Ctx, Scope, ReplaceData, MetaOperatorToken);
-                    function_decl *D = DatatypeIsFunctionDecl(Ctx, Scope, ReplaceData, MetaOperatorToken);
+                    function_decl *D = DatatypeIsFunctionDecl(Ctx, ReplaceData, Scope, MetaOperatorToken);
 
 
 #if 0
@@ -1028,8 +1029,8 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                             // We could be asking about a primitive type
                             if (Var->Type.DatatypeToken)
                             {
-                              auto DT = GetDatatypeByName(Ctx, Var->Type.DatatypeToken->Value);
-                              Members = GetMembersFor(Ctx, &DT);
+                              datatype *DT = GetDatatypeByName(&Ctx->Datatypes, Var->Type.DatatypeToken->Value);
+                              Members = GetMembersFor(Ctx, DT);
 
                             }
                           }
@@ -1404,9 +1405,8 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         c_token *ArgTypeT = RequireTokenPointer(Parser, CTokenType_Identifier);
 
         counted_string ArgType = ArgTypeT->Value;
-        datatype D = GetDatatypeByName(Ctx, ArgType);
-
         counted_string ArgName = RequireToken(Parser, CTokenType_Identifier).Value;
+
         RequireToken(Parser, CTokenType_CloseParen);
 
         b32 OmitInclude = ParseOmitIncludeTag(Parser);
@@ -1415,12 +1415,12 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         meta_func Func = MetaFunc(CSz("anonymous"), {}, Body, OmitInclude);
         /* meta_func Func = ParseMetaFunctionDef(Parser, CSz("anonymous"), Memory); */
 
-        datatype ArgDatatype = GetDatatypeByName(&Ctx->Datatypes, ArgType);
+        datatype *ArgDatatype = GetDatatypeByName(&Ctx->Datatypes, ArgType);
 
-        if (ArgDatatype.Type)
+        if (ArgDatatype->Type)
         {
           auto Args = MetaFuncArgBuffer(1, Memory);
-          Args.Start[0] = ReplacementPattern(ArgName, ArgDatatype);
+          Args.Start[0] = ReplacementPattern(ArgName, *ArgDatatype);
           umm Depth = 0;
           counted_string Code = Execute(&Func, &Args, Ctx, Memory, &Depth);
           RequireToken(Parser, CTokenType_CloseParen);
@@ -1484,7 +1484,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
     case for_datatypes:
     {
 #if 1
-      NotImplemented;
+      BUG("for_datatypes not implemented!!");
 #else
       TIMED_NAMED_BLOCK("for_datatypes");
       RequireToken(Parser, CTokenType_OpenParen);
@@ -1514,35 +1514,34 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
         string_builder OutputBuilder = {};
 
-        for ( compound_decl_iterator Iter = Iterator(&Datatypes->Structs);
-              IsValid(&Iter);
-              Advance(&Iter) )
+        IterateOver(Datatypes->DatatypeHashtable, Datatype, DatatypeIndex)
         {
-          compound_decl* Struct = &Iter.At->Element;
-
-          if (!StreamContains(&Excludes, Struct->Type->Value))
+          if (compount_decl *Struct = TryCastToCompoundDecl(Datatype))
           {
-            Assert(StructFunc.Args.Count == 1);
-            StructFunc.Args.Start[0] = ReplacementPattern(StructFunc.Args.Start[0].Match, Datatype(Struct));
+            if (!StreamContains(&Excludes, Struct->Type->Value))
+            {
+              Assert(StructFunc.Args.Count == 1);
+              StructFunc.Args.Start[0] = ReplacementPattern(StructFunc.Args.Start[0].Match, Datatype(Struct));
 
-            umm Depth = 0;
-            counted_string Code = Execute(&StructFunc, Ctx, Memory, &Depth);
-            Append(&OutputBuilder, Code);
+              umm Depth = 0;
+              counted_string Code = Execute(&StructFunc, Ctx, Memory, &Depth);
+              Append(&OutputBuilder, Code);
+            }
           }
         }
 
-        for ( auto Iter = Iterator(&Datatypes->Enums);
-              IsValid(&Iter);
-              Advance(&Iter) )
+        IterateOver(Datatypes->DatatypeHashtable, Datatype, DatatypeIndex)
         {
-          enum_decl* Enum = &Iter.At->Element;
-          if (!StreamContains(&Excludes, Enum->Name))
+          if (enum_decl *Enum = TryCastToEnumDecl(Datatype))
           {
-            Assert(EnumFunc.Args.Count == 1);
-            EnumFunc.Args.Start[0] = ReplacementPattern(EnumFunc.Args.Start[0].Match, Datatype(Enum));
-            umm Depth = 0;
-            counted_string Code = Execute(&EnumFunc, Ctx, Memory, &Depth);
-            Append(&OutputBuilder, Code);
+            if (!StreamContains(&Excludes, Enum->Name))
+            {
+              Assert(EnumFunc.Args.Count == 1);
+              EnumFunc.Args.Start[0] = ReplacementPattern(EnumFunc.Args.Start[0].Match, Datatype(Enum));
+              umm Depth = 0;
+              counted_string Code = Execute(&EnumFunc, Ctx, Memory, &Depth);
+              Append(&OutputBuilder, Code);
+            }
           }
         }
 

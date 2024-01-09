@@ -10,7 +10,6 @@ struct macro_def_hashtable
   macro_def_linked_list_node **Elements;
   /* OWNED_BY_THREAD_MEMBER() */
 };
-
 link_internal macro_def_linked_list_node *
 Allocate_macro_def_linked_list_node(memory_arena *Memory)
 {
@@ -71,5 +70,14 @@ Insert(macro_def Element, macro_def_hashtable *Table, memory_arena *Memory)
   Bucket->Element = Element;
   Insert(Bucket, Table);
   return &Bucket->Element;
+}
+
+//
+// Iterator impl.
+//
+link_inline umm
+ZerothIndex(macro_def_hashtable *Hashtable)
+{
+  return 0;
 }
  
