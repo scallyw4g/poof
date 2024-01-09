@@ -919,12 +919,12 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                           case type_variable_decl:
                           {
                             variable_decl *VDecl = SafeAccess(variable_decl, Decl);
-                            enum_decl *E = {};
+                            enum_decl E = {};
                             if (VDecl->Type.DatatypeToken)
                             {
                               E = GetEnumDeclByName(Datatypes, VDecl->Type.DatatypeToken->Value);
                             }
-                            DoTrueBranch = (E != 0);
+                            DoTrueBranch = (E.Name.Start != 0);
                           } break;
                         }
                       } break;

@@ -1941,6 +1941,16 @@ Hash(datatype *D)
   return Result;
 }
 
+// NOTE(Jesse): This cannot (unfortunately) return a pointer because it has to
+// return the same thing as ResolveToBaseType, which must return an instance.
+//
+// This is because if you pass a type_spec to ResolveToBaseType, and it's not
+// in the datatype hashtable, it constructs an instance of Datatype and returns that.
+//
+// To 'fix' this we could insert those type-specs into the datatypes hashtable
+// and reutrn the pointer, but IDK how much I like that.  It might be a perf
+// win, but pretty tough to say without benchmarking.
+//
 maybe_datatype
 GetDatatypeByName( datatype_hashtable *Table, cs QueryName )
 {
@@ -2038,21 +2048,50 @@ link_internal enum_decl *
 TryCastToEnumDecl(datatype *Datatype)
 {
   enum_decl *Result = {};
-  NotImplemented;
+
+  tswitch (Datatype)
+  {
+    case type_datatype_noop:
+    case type_enum_member:
+    case type_primitive_def:
+    case type_type_def:
+    {
+    } break;
+
+    tmatch(declaration, Datatype, Decl);
+    {
+
+      tswitch(Decl)
+      {
+        case type_declaration_noop:
+        case type_function_decl:
+        case type_compound_decl:
+        case type_variable_decl:
+        {
+        } break;
+
+        tmatch(enum_decl, Decl, Enum);
+        {
+          Result = Enum;
+        }
+      }
+
+    }
+
+  }
+
   return Result;
 }
 
-link_internal enum_decl *
+link_internal enum_decl
 GetEnumDeclByName( program_datatypes *Data, counted_string Name )
 {
-  enum_decl *Result = {};
+  enum_decl Result = {};
 
   datatype Datatype = GetDatatypeByName(Data, Name);
 
   switch (Datatype.Type)
   {
-    InvalidCase(type_datatype_noop);
-
     case type_declaration:
     {
       declaration *Decl = SafeCast(declaration, &Datatype);
@@ -2061,7 +2100,7 @@ GetEnumDeclByName( program_datatypes *Data, counted_string Name )
         InvalidCase(type_declaration_noop);
         case type_enum_decl:
         {
-          Result = SafeCast(enum_decl, Decl);
+          Result = *SafeCast(enum_decl, Decl);
         } break;
 
         case type_function_decl:
@@ -2072,6 +2111,7 @@ GetEnumDeclByName( program_datatypes *Data, counted_string Name )
       }
     } break;
 
+    case type_datatype_noop:
     case type_enum_member:
     case type_primitive_def:
     {
@@ -2080,9 +2120,8 @@ GetEnumDeclByName( program_datatypes *Data, counted_string Name )
     case type_type_def:
     {
       datatype Resolved = ResolveToBaseType(Data, &Datatype);
-      // This is going to return a pointer to the stack 'Resolved' .. gotta not do that ..
-      NotImplemented;
-      Result = TryCastToEnumDecl(&Resolved);
+      enum_decl *Enum = TryCastToEnumDecl(&Resolved);
+      if (Enum) Result = *Enum;
     } break;
   }
 
@@ -2102,10 +2141,10 @@ ParseDiscriminatedUnion(parse_context *Ctx, parser* Parser, program_datatypes* D
   {
     dUnion.CustomEnumType = EnumTypeT->Value;
 
-    enum_decl* EnumDef = GetEnumDeclByName(Datatypes, dUnion.CustomEnumType);
-    if (EnumDef)
+    enum_decl EnumDef = GetEnumDeclByName(Datatypes, dUnion.CustomEnumType);
+    if (EnumDef.Name)
     {
-      ITERATE_OVER(&EnumDef->Members)
+      ITERATE_OVER(&EnumDef.Members)
       {
         enum_member* Field = GET_ELEMENT(Iter);
         counted_string MemberName = Concat(Concat(dUnion.Name, CS("_"), Memory), Field->Name, Memory);
