@@ -8,6 +8,7 @@ MetaArgOperator(counted_string S)
   if (StringsMatch(S, CSz("type"))) { return type; }
   if (StringsMatch(S, CSz("value"))) { return value; }
   if (StringsMatch(S, CSz("array"))) { return array; }
+  if (StringsMatch(S, CSz("hash"))) { return hash; }
   if (StringsMatch(S, CSz("map_array"))) { return map_array; }
   if (StringsMatch(S, CSz("map_values"))) { return map_values; }
   if (StringsMatch(S, CSz("map_members"))) { return map_members; }

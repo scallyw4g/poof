@@ -614,10 +614,13 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
           case are_equal:
           {
             RequireToken(Scope, CTokenType_OpenParen);
+              /* datatype *D0 = ResolveExpression(Scope); */
               c_token *T0 = RequireTokenPointer(Scope, CTokenType_Identifier);
                             RequireTokenPointer(Scope, CTokenType_Comma);
+              /* datatype *D1 = ResolveExpression(Scope); */
               c_token *T1 = RequireTokenPointer(Scope, CTokenType_Identifier);
             RequireToken(Scope, CTokenType_CloseParen);
+            RequireToken(Scope, CTokenType_Question);
 
             Assert(T0 && T1);
 
@@ -658,15 +661,6 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                 // TODO(Jesse)(error_messages): internal compiler error?
                 InternalCompilerError(Scope, CSz("Got a ReplaceType of type_meta_func_arg_noop!"), MetaOperatorToken);
               } break;
-
-              /* case poof_error: */
-              /* { */
-              /*   parser Body = GetBodyTextForNextScope(Scope, Memory); */
-              /*   PoofUserlandError( Scope, */
-              /*                      FormatCountedString(GetTranArena(), CSz("!"), MetaOperatorToken->Value), */
-              /*                      MetaOperatorToken); */
-              /* } break; */
-
 
               case type_poof_index:
               {
@@ -1128,6 +1122,13 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                       }
                     }
 
+                  } break;
+
+                  case hash:
+                  {
+                    u64 HashValue = Hash(ReplaceData);
+                    Info("(%S) %x", GetNameForDatatype(ReplaceData, GetTranArena()), HashValue);
+                    Append(&OutputBuilder, ToHex(HashValue));
                   } break;
 
                   case member:

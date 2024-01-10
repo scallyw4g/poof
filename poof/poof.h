@@ -51,7 +51,8 @@ enum meta_arg_operator
   name,
   type,
   value,
-  array, // not implemented
+  array,
+  hash,  // hash of the datatype
 
   // iterative
   map_array,

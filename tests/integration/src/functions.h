@@ -22,12 +22,14 @@ poof(foobaz(thing))
 poof(
   func func2(type) @omit_include
   {
-    @are_equal(type, cs)
+    @are_equal(type, cs)?
     {
       // type == type
+      type.hash == @cs.hash
     }
     {
       // type != type
+      type.hash != cs.hash
     }
   }
 )
