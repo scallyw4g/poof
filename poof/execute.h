@@ -1517,16 +1517,22 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         {
           IterateOver(&Datatypes->DatatypeHashtable, DT, DatatypeIndex)
           {
-            if (compound_decl *Struct = TryCastToCompoundDecl(Ctx, DT))
+            if (DT)
             {
-              if (!StreamContains(&Excludes, Struct->Type->Value))
+              if (compound_decl *Struct = TryCastToCompoundDecl(Ctx, DT))
               {
-                Assert(StructFunc.Args.Count == 1);
-                StructFunc.Args.Start[0] = ReplacementPattern(StructFunc.Args.Start[0].Match, Datatype(Struct));
+                if (Struct->IsUnion == False)
+                {
+                  if (!StreamContains(&Excludes, Struct->Type->Value))
+                  {
+                    Assert(StructFunc.Args.Count == 1);
+                    StructFunc.Args.Start[0] = ReplacementPattern(StructFunc.Args.Start[0].Match, Datatype(Struct));
 
-                umm Depth = 0;
-                counted_string Code = Execute(&StructFunc, Ctx, Memory, &Depth);
-                Append(&OutputBuilder, Code);
+                    umm Depth = 0;
+                    counted_string Code = Execute(&StructFunc, Ctx, Memory, &Depth);
+                    Append(&OutputBuilder, Code);
+                  }
+                }
               }
             }
           }
@@ -1535,15 +1541,18 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         {
           IterateOver(&Datatypes->DatatypeHashtable, DT, DatatypeIndex)
           {
-            if (enum_decl *Enum = TryCastToEnumDecl(Ctx, DT))
+            if (DT)
             {
-              if (!StreamContains(&Excludes, Enum->Name))
+              if (enum_decl *Enum = TryCastToEnumDecl(Ctx, DT))
               {
-                Assert(EnumFunc.Args.Count == 1);
-                EnumFunc.Args.Start[0] = ReplacementPattern(EnumFunc.Args.Start[0].Match, Datatype(Enum));
-                umm Depth = 0;
-                counted_string Code = Execute(&EnumFunc, Ctx, Memory, &Depth);
-                Append(&OutputBuilder, Code);
+                if (!StreamContains(&Excludes, Enum->Name))
+                {
+                  Assert(EnumFunc.Args.Count == 1);
+                  EnumFunc.Args.Start[0] = ReplacementPattern(EnumFunc.Args.Start[0].Match, Datatype(Enum));
+                  umm Depth = 0;
+                  counted_string Code = Execute(&EnumFunc, Ctx, Memory, &Depth);
+                  Append(&OutputBuilder, Code);
+                }
               }
             }
           }
