@@ -6,6 +6,7 @@ ToString(poof_global_keyword Type)
   {
     case poof_global_keyword_noop: { Result = CSz("poof_global_keyword_noop"); } break;
     case poof_error: { Result = CSz("poof_error"); } break;
+    case are_equal: { Result = CSz("are_equal"); } break;
   }
   return Result;
 }
@@ -17,6 +18,7 @@ PoofGlobalKeyword(counted_string S)
 
   if (StringsMatch(S, CSz("poof_global_keyword_noop"))) { return poof_global_keyword_noop; }
   if (StringsMatch(S, CSz("poof_error"))) { return poof_error; }
+  if (StringsMatch(S, CSz("are_equal"))) { return are_equal; }
 
   return Result;
 }

@@ -170,6 +170,13 @@ PoofTypeError(parser* Parser, parse_error_code ErrorCode, counted_string ErrorMe
 }
 
 link_internal void
+PoofTagError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
+{
+  OutputContextMessage(Parser, ParseErrorCode_InvalidTag, CSz("Poof Tag Error"), ErrorMessage, ErrorToken);
+}
+
+
+link_internal void
 InternalCompilerError(parser* Parser, counted_string ErrorMessage, c_token* ErrorToken)
 {
   OutputContextMessage(Parser, ParseErrorCode_InternalCompilerError, CSz("XX INTERNAL COMPILER ERROR XX"), ErrorMessage, ErrorToken);
@@ -1943,6 +1950,15 @@ Hash(datatype *D)
   umm Result = Hash(&Name);
   return Result;
 }
+
+// TODO(Jesse): Do a more strict compare here?
+link_internal b32
+AreEqual(datatype *D0, datatype *D1)
+{
+  b32 Result = Hash(D0) == Hash(D1);
+  return Result;
+}
+
 
 global_variable datatype
 NullDatatype = {};
@@ -6141,10 +6157,10 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
       case CTokenType_Identifier:
       {
         declaration Decl = ParseDeclaration(Ctx);
-        datatype DeclDT = Datatype(&Decl);
 
         if (Decl.Type)
         {
+          datatype DeclDT = Datatype(&Decl);
           // TODO(Jesse)(not_pushing_variable_decls): Enable this, and disable the other ones at @not_pushing_variable_decls
           //
           // Enabling this uncovers a bug in type-checking, also noted with @not_pushing_variable_decls
@@ -7556,7 +7572,7 @@ TryParsePoofKeywordAndTagList(parser *Parser, poof_tag_block_array *Tags, declar
   c_token *T = PeekTokenPointer(Parser);
 
   b32 Got = False;
-  if (T->Type == CTokenType_Poof)
+  if (T && T->Type == CTokenType_Poof)
   {
     RequireToken(Parser, T);
 
@@ -7587,6 +7603,8 @@ ParseOmitIncludeTag(parser *Parser)
   b32 OmitInclude = {};
   if (PeekToken(Parser).Type == CTokenType_At)
   {
+    c_token *ErrorT = PeekTokenPointer(Parser);
+
     poof_tag Tag = {};
     while (TryParsePoofTag(Parser, &Tag))
     {
@@ -7596,8 +7614,7 @@ ParseOmitIncludeTag(parser *Parser)
       }
       else
       {
-        // TODO(Jesse): Throw an error.. unsupported tag on meta_func
-        Assert(False);
+        PoofTagError(Parser, FSz("Unsupported tag value on poof func (%S)", Tag.Name), ErrorT);
       }
     }
 
@@ -7605,6 +7622,29 @@ ParseOmitIncludeTag(parser *Parser)
   return OmitInclude;
 }
 
+
+link_internal datatype *
+ResolveNameToDatatype(parse_context *Ctx, parser *Scope, c_token *Token, meta_func_arg_buffer *Args, cs NameToResolve)
+{
+  datatype *Result = {};
+  if (meta_func_arg* A0 = GetByMatch(Args, NameToResolve))
+  {
+    if (A0->Type == type_datatype)
+    {
+      Result = &A0->datatype;
+    }
+    else
+    {
+      PoofTypeError(Scope, ParseErrorCode_InvalidArgumentType, FSz("Attempted to resolve (%S) to non-datatype member (%S)", NameToResolve, ToString(A0->Type)), Token);
+    }
+  }
+  else
+  {
+    Result = GetDatatypeByName(&Ctx->Datatypes, NameToResolve);
+  }
+
+  return Result;
+}
 
 #include <poof/execute.h>
 link_internal b32

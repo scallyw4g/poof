@@ -10,6 +10,7 @@ enum poof_global_keyword
   poof_global_keyword_noop,
 
   poof_error,
+  are_equal,
 };
 poof( string_and_value_tables(poof_global_keyword) )
 #include <string_and_value_tables_poof_global_keyword.h>

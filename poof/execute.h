@@ -549,6 +549,8 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
 
   /* counted_string Result = Execute(&Func->Body, Args, Ctx, Memory, Depth); */
   parser *Scope = &Func->Body;
+
+  // TODO(Jesse): Remove in favor of Args.
   meta_func_arg_buffer *ReplacePatterns = Args;
 
   program_datatypes* Datatypes = &Ctx->Datatypes;
@@ -581,11 +583,18 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
         }
       } break;
 
+      case CTokenType_At:
+      {
+        BodyToken = RequireTokenRawPointer(Scope, CTokenType_Identifier);
+      } [[fallthrough]];
+
       case CTokenType_Identifier:
       case CTokenType_OpenParen:
       {
         b32 ImpetusWasIdentifier = BodyToken->Type == CTokenType_Identifier;
         b32 ImpetusWasOpenParen  = BodyToken->Type == CTokenType_OpenParen;
+
+        b32 DidPoofOp = False;
 
         poof_global_keyword Keyword = PoofGlobalKeyword(BodyToken->Value);
         switch (Keyword)
@@ -601,9 +610,26 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
             if (ErrorText.Count == 0) { ErrorText = ToString(&Body, Memory); }
             PoofUserlandError(Scope, ErrorText, BodyToken);
           } break;
+
+          case are_equal:
+          {
+            RequireToken(Scope, CTokenType_OpenParen);
+              c_token *T0 = RequireTokenPointer(Scope, CTokenType_Identifier);
+                            RequireTokenPointer(Scope, CTokenType_Comma);
+              c_token *T1 = RequireTokenPointer(Scope, CTokenType_Identifier);
+            RequireToken(Scope, CTokenType_CloseParen);
+
+            Assert(T0 && T1);
+
+            datatype *D0 = ResolveNameToDatatype(Ctx, Scope, T0, Args, T0->Value);
+            datatype *D1 = ResolveNameToDatatype(Ctx, Scope, T1, Args, T1->Value);
+
+            b32 DoTrueBranch = AreEqual(D0, D1);
+            DoTrueFalse( Ctx, Scope, ReplacePatterns, DoTrueBranch, &OutputBuilder, Memory, Depth);
+            DidPoofOp = True;
+          } break;
         }
 
-        b32 DidPoofOp = False;
         for (u32 ArgIndex = 0; ArgIndex < ReplacePatterns->Count; ++ArgIndex)
         {
           meta_func_arg *Replace = ReplacePatterns->Start + ArgIndex;
