@@ -115,7 +115,7 @@ link_internal datatype* ResolveToBaseType(parse_context *Ctx, type_def *);
 
 // TODO(Jesse): Maybe formalize this; make distinct from calling `.map` on a
 // symbol (which is untyped) and guarantee the types are defined ..?
-link_internal counted_string_stream ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_string_stream_stream* NameLists, memory_arena* Memory);
+link_internal counted_string_stream ParseDatatypeList(parse_context *Ctx, parser* Parser, program_datatypes* Datatypes, tagged_counted_string_stream_stream* NameLists, memory_arena* Memory);
 
 link_internal b32       ParseAndTypeCheckArgs(parse_context *Ctx, parser *Parser, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, meta_func_arg_buffer *ArgsInScope, memory_arena *Memory);
 link_internal meta_func ParseMetaFunctionDef(parser* Parser, counted_string FuncName, memory_arena *Memory);
@@ -2231,7 +2231,7 @@ TryCastToCompoundDecl(parse_context *Ctx, datatype *Datatype)
 }
 
 link_internal enum_decl *
-TryCastToEnumDecl(datatype *Datatype)
+TryCastToEnumDecl(parse_context *Ctx, datatype *Datatype)
 {
   enum_decl *Result = {};
 
@@ -2270,8 +2270,9 @@ TryCastToEnumDecl(datatype *Datatype)
 }
 
 link_internal enum_decl
-GetEnumDeclByName( program_datatypes *Data, counted_string Name )
+GetEnumDeclByName( parse_context *Ctx, counted_string Name )
 {
+  program_datatypes *Data = &Ctx->Datatypes;
   enum_decl Result = {};
 
   datatype *Datatype = GetDatatypeByName(Data, Name);
@@ -2307,7 +2308,7 @@ GetEnumDeclByName( program_datatypes *Data, counted_string Name )
     case type_type_def:
     {
       datatype *Resolved = ResolveToBaseType(Data, Datatype);
-      enum_decl *Enum = TryCastToEnumDecl(Resolved);
+      enum_decl *Enum = TryCastToEnumDecl(Ctx, Resolved);
       if (Enum) Result = *Enum;
     } break;
   }
@@ -2328,7 +2329,7 @@ ParseDiscriminatedUnion(parse_context *Ctx, parser* Parser, program_datatypes* D
   {
     dUnion.CustomEnumType = EnumTypeT->Value;
 
-    enum_decl EnumDef = GetEnumDeclByName(Datatypes, dUnion.CustomEnumType);
+    enum_decl EnumDef = GetEnumDeclByName(Ctx, dUnion.CustomEnumType);
     if (EnumDef.Name)
     {
       ITERATE_OVER(&EnumDef.Members)
@@ -7613,9 +7614,9 @@ IsMetaprogrammingOutput(counted_string Filename, counted_string OutputDirectory)
   return Result;
 }
 
-#if 0
+#if 1
 link_internal counted_string_stream
-ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_string_stream_stream* NameLists, memory_arena* Memory)
+ParseDatatypeList(parse_context *Ctx, parser* Parser, program_datatypes* Datatypes, tagged_counted_string_stream_stream* NameLists, memory_arena* Memory)
 {
   counted_string_stream Result = {};
   while (PeekToken(Parser).Type == CTokenType_Identifier)
@@ -7623,8 +7624,10 @@ ParseDatatypeList(parser* Parser, program_datatypes* Datatypes, tagged_counted_s
     c_token *NameT = RequireTokenPointer(Parser, CTokenType_Identifier);
     counted_string DatatypeName = NameT->Value;
 
-    compound_decl *Struct              = GetStructByType(&Datatypes->Structs, DatatypeName);
-    enum_decl     *Enum                = GetEnumDeclByName(&Datatypes->Enums, DatatypeName);
+    datatype *DT = GetDatatypeByName(Datatypes, DatatypeName);
+
+    compound_decl *Struct              = TryCastToCompoundDecl(Ctx, DT);
+    enum_decl     *Enum                = TryCastToEnumDecl(Ctx, DT);
     tagged_counted_string_stream *List = StreamContains(NameLists, DatatypeName);
 
     if (Struct || Enum)

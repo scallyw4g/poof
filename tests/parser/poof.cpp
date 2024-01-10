@@ -2720,7 +2720,7 @@ main(s32 ArgCount, const char** Args)
 
   PrevLogLevel = Global_LogLevel;
   Global_LogLevel = LogLevel_Shush;
-  Global_LogLevel = LogLevel_Debug;
+  /* Global_LogLevel = LogLevel_Debug; */
   TestPoofErrors(Memory);
   Global_LogLevel = PrevLogLevel;
 

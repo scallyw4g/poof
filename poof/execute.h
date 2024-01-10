@@ -923,7 +923,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                             enum_decl E = {};
                             if (VDecl->Type.DatatypeToken)
                             {
-                              E = GetEnumDeclByName(Datatypes, VDecl->Type.DatatypeToken->Value);
+                              E = GetEnumDeclByName(Ctx, VDecl->Type.DatatypeToken->Value);
                             }
                             DoTrueBranch = (E.Name.Start != 0);
                           } break;
@@ -1483,7 +1483,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
     case for_datatypes:
     {
-#if 1
+#if 0
       BUG("for_datatypes not implemented!!");
 #else
       TIMED_NAMED_BLOCK("for_datatypes");
@@ -1496,7 +1496,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
       {
         RequireToken(Parser, CToken(CSz("exclude")));
         RequireToken(Parser, CTokenType_OpenParen);
-        Excludes = ParseDatatypeList(Parser, Datatypes, &Ctx->NamedLists, Memory);
+        Excludes = ParseDatatypeList(Ctx, Parser, Datatypes, &Ctx->NamedLists, Memory);
         RequireToken(Parser, CTokenType_CloseParen);
       }
 
@@ -1514,33 +1514,37 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
         string_builder OutputBuilder = {};
 
-        IterateOver(Datatypes->DatatypeHashtable, Datatype, DatatypeIndex)
         {
-          if (compount_decl *Struct = TryCastToCompoundDecl(Datatype))
+          IterateOver(&Datatypes->DatatypeHashtable, DT, DatatypeIndex)
           {
-            if (!StreamContains(&Excludes, Struct->Type->Value))
+            if (compound_decl *Struct = TryCastToCompoundDecl(Ctx, DT))
             {
-              Assert(StructFunc.Args.Count == 1);
-              StructFunc.Args.Start[0] = ReplacementPattern(StructFunc.Args.Start[0].Match, Datatype(Struct));
+              if (!StreamContains(&Excludes, Struct->Type->Value))
+              {
+                Assert(StructFunc.Args.Count == 1);
+                StructFunc.Args.Start[0] = ReplacementPattern(StructFunc.Args.Start[0].Match, Datatype(Struct));
 
-              umm Depth = 0;
-              counted_string Code = Execute(&StructFunc, Ctx, Memory, &Depth);
-              Append(&OutputBuilder, Code);
+                umm Depth = 0;
+                counted_string Code = Execute(&StructFunc, Ctx, Memory, &Depth);
+                Append(&OutputBuilder, Code);
+              }
             }
           }
         }
 
-        IterateOver(Datatypes->DatatypeHashtable, Datatype, DatatypeIndex)
         {
-          if (enum_decl *Enum = TryCastToEnumDecl(Datatype))
+          IterateOver(&Datatypes->DatatypeHashtable, DT, DatatypeIndex)
           {
-            if (!StreamContains(&Excludes, Enum->Name))
+            if (enum_decl *Enum = TryCastToEnumDecl(Ctx, DT))
             {
-              Assert(EnumFunc.Args.Count == 1);
-              EnumFunc.Args.Start[0] = ReplacementPattern(EnumFunc.Args.Start[0].Match, Datatype(Enum));
-              umm Depth = 0;
-              counted_string Code = Execute(&EnumFunc, Ctx, Memory, &Depth);
-              Append(&OutputBuilder, Code);
+              if (!StreamContains(&Excludes, Enum->Name))
+              {
+                Assert(EnumFunc.Args.Count == 1);
+                EnumFunc.Args.Start[0] = ReplacementPattern(EnumFunc.Args.Start[0].Match, Datatype(Enum));
+                umm Depth = 0;
+                counted_string Code = Execute(&EnumFunc, Ctx, Memory, &Depth);
+                Append(&OutputBuilder, Code);
+              }
             }
           }
         }
