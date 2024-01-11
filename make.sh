@@ -36,7 +36,7 @@
 # RunExtendedIntegrationTests=1
 
 # OPTIMIZATION_LEVEL="-O2"
-# BONSAI_INTERNAL=O
+# BONSAI_INTERNAL="-D BONSAI_INTERNAL=0"
 
 
 
@@ -56,8 +56,10 @@ ROOT="."
 SRC="$ROOT/poof"
 BIN="$ROOT/bin"
 BIN_TEST="$BIN/tests"
+INCLUDE="include"
 META_OUT="generated"
 EXTENDED_INTEGRATION_TESTS_SRC="$ROOT/tests/integration_extended"
+
 
 function RollupEmcc
 {
@@ -107,7 +109,7 @@ function BuildPoofEmcc
       -sSTACK_OVERFLOW_CHECK=1               \
       -fsanitize=undefined                   \
                                              \
-      -D "BONSAI_INTERNAL=$BONSAI_INTERNAL"  \
+      $BONSAI_INTERNAL                       \
       $PLATFORM_INCLUDE_DIRS                 \
       -I "$ROOT"                             \
       -I "$ROOT/include"                     \
@@ -229,7 +231,7 @@ function BuildPoof {
     $PLATFORM_CXX_OPTIONS                 \
     $PLATFORM_LINKER_OPTIONS              \
     $PLATFORM_DEFINES                     \
-    -D "BONSAI_INTERNAL=$BONSAI_INTERNAL" \
+    $BONSAI_INTERNAL                      \
     $PLATFORM_INCLUDE_DIRS                \
     -I "$ROOT"                            \
     -I "$ROOT/include"                    \
@@ -335,7 +337,7 @@ function BuildParserTests
       $PLATFORM_LINKER_OPTIONS              \
       $PLATFORM_DEFINES                     \
       $PLATFORM_INCLUDE_DIRS                \
-      -D "BONSAI_INTERNAL=$BONSAI_INTERNAL" \
+      $BONSAI_INTERNAL                      \
       -I "."                                \
       -I "$ROOT/include"                    \
       -I "$ROOT/poof"                       \
@@ -564,7 +566,7 @@ echo -e ""
 
 
 : "${OPTIMIZATION_LEVEL:="-O0"}"
-: "${BONSAI_INTERNAL:=1}"
+: "${BONSAI_INTERNAL:="-D BONSAI_INTERNAL=1"}"
 
 # If someone supplied a command line argument, call the function, otherwise
 # respect the 'runflags'

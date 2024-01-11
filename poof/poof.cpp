@@ -2,14 +2,17 @@
   #define PLATFORM_WINDOW_IMPLEMENTATIONS 1
   #define PLATFORM_GL_IMPLEMENTATIONS 1
 
-  #define BONSAI_DEBUG_LIB_LOADER_API 0
-  #define BONSAI_DEBUG_SYSTEM_API 0
+  #define BONSAI_DEBUG_SYSTEM_LOADER_API 1
+  #define BONSAI_DEBUG_SYSTEM_API 1
 
   #define DEBUG_PRINT 0
 #endif
 
+#define STDLIB_SHADER_PATH "include/bonsai_stdlib/shaders/"
+
 #include <bonsai_stdlib/bonsai_stdlib.h>
 #include <bonsai_stdlib/bonsai_stdlib.cpp>
+
 
 #include <bonsai_stdlib/src/debug_print.h>
 
@@ -228,6 +231,8 @@ ParseMacroArgument(parser* Parser, c_token_buffer *Result)
 link_internal void
 CopyRemainingIntoCursor(c_token_cursor *Src, c_token_cursor *Dest)
 {
+  TIMED_FUNCTION();
+
   u32 SrcElements = (u32)Remaining(Src);
   u32 DestElements = (u32)Remaining(Dest);
 
@@ -255,6 +260,8 @@ CopyRemainingIntoCursor(c_token_cursor *Src, c_token_cursor *Dest)
 link_internal void
 CopyCursorIntoCursor(c_token_cursor *Src, c_token_cursor *Dest, u32 Skip = 0)
 {
+  TIMED_FUNCTION();
+
   u32 SrcCount = (u32)Count(Src);
   u32 DestRem = (u32)Remaining(Dest);
   if ( SrcCount <= DestRem )
@@ -333,14 +340,16 @@ ExpandMacro( parse_context *Ctx,
              parser *Parser,
              macro_def *Macro,
              memory_arena *PermMemory,
-             memory_arena *TempMemory,
+             memory_arena *TempMemory_,
              b32 ScanArgsForAdditionalMacros,
              b32 WasCalledFromExpandMacroConstantExpression
            )
 {
   TIMED_FUNCTION();
 
-  temp_memory_handle MemHandle = BeginTemporaryMemory(TempMemory);
+  memory_arena *TempMemory = AllocateArena(Megabytes(5));
+
+  /* temp_memory_handle MemHandle = BeginTemporaryMemory(TempMemory); */
 
   parser *FirstPass = AllocateParserPtr(
                         CSz("IF YOU SEE THIS IT'S A BUG"),
@@ -848,6 +857,7 @@ ExpandMacro( parse_context *Ctx,
 
 #if 1
   {
+    TIMED_BLOCK("Finalize");
     parser *Temp = AllocateParserPtr( Result->Tokens->Filename,
                                       0,
                                       (u32)AtElements(Result->Tokens),
@@ -867,24 +877,29 @@ ExpandMacro( parse_context *Ctx,
 
     CopyCursorIntoCursor(Result->Tokens, Temp->Tokens);
     Result = Temp;
-  }
 #else
     TruncateToCurrentElements(Result->Tokens);
 #endif
 
-  Rewind(Result->Tokens);
+    Rewind(Result->Tokens);
 
-  /* LogDirect("\n\n -- %S\n", Macro->Name); */
-  /* DumpChain(FirstPass); */
-  /* DumpChain(Result); */
-  /* LogDirect("\n"); */
+    /* LogDirect("\n\n -- %S\n", Macro->Name); */
+    /* DumpChain(FirstPass); */
+    /* DumpChain(Result); */
+    /* LogDirect("\n"); */
 
-  Result->ErrorCode = FirstPass->ErrorCode;
-  Parser->ErrorCode = FirstPass->ErrorCode;
+    Result->ErrorCode = FirstPass->ErrorCode;
+    Parser->ErrorCode = FirstPass->ErrorCode;
 
-  Macro->IsExpanding = False;
+    Macro->IsExpanding = False;
 
-  EndTemporaryMemory(&MemHandle);
+    /* TIMED_BLOCK("END TEMP MEM"); */
+      /* EndTemporaryMemory(&MemHandle); */
+    /* END_BLOCK(); */
+
+    VaporizeArena(TempMemory);
+    END_BLOCK();
+  }
 
   return Result;
 }
@@ -2480,8 +2495,8 @@ ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_aren
 #endif
 
   for ( u32 ArgIndex = 1;
-        ArgIndex < ArgCount;
-        ++ArgIndex)
+            ArgIndex < ArgCount;
+          ++ArgIndex)
   {
     counted_string Arg = CS(ArgStrings[ArgIndex]);
 
@@ -8538,34 +8553,44 @@ DoPoofForWeb(char *zInput, umm InputLen)
   return Result;
 }
 
-global_variable r64 Global_LastTime = 0;
-r64 GetDt()
-{
-  r64 ThisTime = GetHighPrecisionClock();
-  r64 Result = ThisTime - Global_LastTime;
-  Global_LastTime = ThisTime;
-  return Result;
-}
-
 s32
 main(s32 ArgCount_, const char** ArgStrings)
 {
-  Global_LastTime = GetHighPrecisionClock();
-
   u32 ArgCount = (u32)ArgCount_;
   SetupStdout(ArgCount, ArgStrings);
-
 
   memory_arena Memory_ = {};
   memory_arena* Memory = &Memory_;
   Memory->NextBlockSize = Megabytes(256);
 
+  application_api AppApi = {};
+  bonsai_stdlib Stdlib = {};
+  bonsai_init_flags InitFlags = {};
+
   AllocateAndInitThreadStates(Memory);
 
   parse_context Ctx = AllocateParseContext(Memory);
-
-
   Ctx.Args = ParseArgs(ArgStrings, ArgCount, &Ctx, Memory);
+
+#if BONSAI_DEBUG_SYSTEM_API
+  if (Ctx.Args.DoDebugWindow)
+  {
+    InitFlags = bonsai_init_flags(InitFlags|BonsaiInit_OpenWindow|BonsaiInit_InitDebugSystem);
+
+    /* GetDebugState()->OpenAndInitializeDebugWindow(); */
+    /* GetDebugState()->FrameBegin(True, True); */
+
+  }
+#endif
+  /* Info("%d", InitFlags); */
+
+  Ensure( InitializeBonsaiStdlib( InitFlags, &AppApi, &Stdlib, Memory) );
+
+  /* DEBUG_REGISTER_ARENA(Memory); */
+  /* DEBUG_REGISTER_ARENA(&Global_PermMemory); */
+
+  /* AllocateAndInitThreadStates(Memory); */
+
 
   if (Ctx.Args.HelpTextPrinted)
   {
@@ -8575,25 +8600,6 @@ main(s32 ArgCount_, const char** ArgStrings)
   TryCreateDirectory(TMP_DIR_ROOT);
   TryCreateDirectory(Ctx.Args.Outpath);
 
-#if BONSAI_DEBUG_SYSTEM_API
-  if (Ctx.Args.DoDebugWindow)
-  {
-    if (InitializeBonsaiDebug(BonsaiDebug_DefaultLibPath))
-    {
-      GetDebugState()->OpenAndInitializeDebugWindow();
-      GetDebugState()->FrameBegin(True, True);
-
-      MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt());
-      DEBUG_REGISTER_ARENA(Memory);
-      DEBUG_REGISTER_ARENA(&Global_PermMemory);
-    }
-    else
-    {
-      Error("Booting debug system");
-      return CLI_FAILURE_EXIT_CODE;
-    }
-  }
-#endif
 
   b32 Success = False;
   if (ArgCount > 1)
@@ -8618,7 +8624,9 @@ main(s32 ArgCount_, const char** ArgStrings)
 
     parser *Parser = PreprocessedParserForFile(&Ctx, ParserFilename, TokenCursorSource_RootFile, 0);
 
-    MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt());
+#if BONSAI_DEBUG_SYSTEM_API
+    if (Ctx.Args.DoDebugWindow) { MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt()); }
+#endif
 
     if (Parser->ErrorCode == ParseErrorCode_None)
     {
@@ -8635,7 +8643,9 @@ main(s32 ArgCount_, const char** ArgStrings)
 
       FullRewind(Ctx.CurrentParser);
 
-      MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt());
+#if BONSAI_DEBUG_SYSTEM_API
+    if (Ctx.Args.DoDebugWindow) { MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt()); }
+#endif
 
       GoGoGadgetMetaprogramming(&Ctx, &TodoInfo);
 
@@ -8701,37 +8711,68 @@ main(s32 ArgCount_, const char** ArgStrings)
 
 #if BONSAI_DEBUG_SYSTEM_API
   // BootstrapDebugSystem is behind a flag, or it could have failed.
-  if (debug_state *DebugState = GetDebugState())
+  if (Ctx.Args.DoDebugWindow && GetDebugState())
   {
+    debug_state *DebugState = GetDebugState();
     DebugState->UIType = DebugUIType_CallGraph;
     /* DebugState->DisplayDebugMenu = True; */
-    /* DebugState->DebugDoScopeProfiling = False; */
+    DebugState->DebugDoScopeProfiling = False;
 
     MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt());
-    MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(1);
-    MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(1);
-    MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(1);
-    MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(1);
 
-    while (DebugState->ProcessInputAndRedrawWindow())
+    heap_allocator Heap = InitHeap(Gigabytes(1), False);
+    renderer_2d Ui = {};
+
+    v2 MouseP, MouseDP, ScreenDim;
+
+    InitRenderer2D(&Ui, &Heap, Memory, &Stdlib.Plat.MouseP, &Stdlib.Plat.MouseDP, &Stdlib.Plat.ScreenDim, &Stdlib.Plat.Input);
+
+    r32 Dt = 1.f;
+
+    // Do a frame to just toggle the UI on.  Pretty dumb.. but whatever.
+    /* DEBUG_FRAME_BEGIN(&Ui, Dt, True, False); */
+    /* DEBUG_FRAME_END(Dt); */
+    UiFrameEnd(&Ui);
+
+    UNPACK_STDLIB(&Stdlib);
+
+    while (Os->ContinueRunning)
     {
-      /* ClearClickedFlags(&Plat.Input); */
+      // TODO(Jesse): Make a stdlib function that wraps all this stuff up
+      // @stdlib_frame_preamble
+      ResetInputForFrameStart(&Plat->Input, 0);
 
-      /* v2 LastMouseP = Plat.MouseP; */
-      /* while ( ProcessOsMessages(&Os, &Plat) ); */
-      /* Plat.MouseDP = LastMouseP - Plat.MouseP; */
+      // @stdlib_frame_preamble
+      v2 LastMouseP = Plat->MouseP;
+      ProcessOsMessages(&Stdlib.Os, &Stdlib.Plat);
+      Plat->MouseDP = LastMouseP - Plat->MouseP;
+      Plat->ScreenDim = V2(Plat->WindowWidth, Plat->WindowHeight);
 
-      /* Assert(Plat.WindowWidth && Plat.WindowHeight); */
+      // @stdlib_frame_preamble?
+      Ui.Input = &Plat->Input;
+      Ui.MouseP = &Plat->MouseP;
+      Ui.MouseDP = &Plat->MouseDP;
+      Ui.ScreenDim = &Plat->ScreenDim;
 
-      /* BindHotkeysToInput(&Hotkeys, &Plat.Input); */
 
-      /* DebugState->OpenDebugWindowAndLetUsDoStuff(); */
-      /* BonsaiSwapBuffers(&Os); */
+      UiFrameBegin(&Ui);
 
-      /* DebugState->ClearFramebuffers(); */
+      if (Stdlib.Plat.Input.Escape.Clicked) { break; }
 
-      /* GL.BindFramebuffer(GL_FRAMEBUFFER, 0); */
-      /* GL.Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); */
+      b32 Toggle2 = False, Toggle = False;
+      if (Stdlib.Plat.Input.F1.Clicked) { Toggle = True; }
+      if (Stdlib.Plat.Input.F2.Clicked) { Toggle2 = True; }
+
+      DEBUG_FRAME_BEGIN(&Ui, Dt, Toggle, Toggle2);
+      DEBUG_FRAME_END(Dt);
+
+      UiFrameEnd(&Ui);
+
+      BonsaiSwapBuffers(&Stdlib.Os);
+
+      GL.BindFramebuffer(GL_FRAMEBUFFER, 0);
+      GL.ClearColor(0.2f, 0.2f, 0.2f, 1.f);
+      GL.Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       /* Ensure(RewindArena(GetTranArena())); */
     }
