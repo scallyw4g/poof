@@ -7573,6 +7573,7 @@ TryParsePoofTag(parser *Parser, poof_tag *Tag)
     if (PeekToken(Parser).Type == CTokenType_OpenParen)
     {
       Tag->Value = EatBetween_Str(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
+      Tag->Value = StripBookends(Tag->Value, '(', ')');
     }
 
     Result = True;
