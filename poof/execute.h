@@ -569,7 +569,12 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
         parser *StringParse = ParserForAnsiStream(Ctx, AnsiStream(TempStr), TokenCursorSource_MetaprogrammingExpansion, Ctx->Memory);
 
         umm IgnoreDepth = 0;
+
+        b32 DoNotNormalizeWhitespace = Ctx->Args.DoNotNormalizeWhitespace;
+
+        Ctx->Args.DoNotNormalizeWhitespace = True;
         counted_string Code = Execute(StringParse, ReplacePatterns, Ctx, Memory, &IgnoreDepth);
+        Ctx->Args.DoNotNormalizeWhitespace = DoNotNormalizeWhitespace;
 
         if (StringParse->ErrorCode)
         {
@@ -751,12 +756,19 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                 {
                   case meta_arg_operator_noop:
                   {
-                    /* if (MetaOperatorToken) */
+                    if (MetaOperatorToken)
                     {
                       PoofTypeError( Scope,
                                      ParseErrorCode_InvalidOperator,
                                      FormatCountedString(GetTranArena(), CSz("(%S) is not a valid poof operator"), MetaOperatorToken->Value),
                                      MetaOperatorToken);
+                    }
+                    else
+                    {
+                      PoofTypeError( Scope,
+                                     ParseErrorCode_InvalidOperator,
+                                     CSz("poof datatype variable must be followed by a poof operator"),
+                                     BodyToken);
                     }
                   } break;
 
