@@ -6843,7 +6843,7 @@ ApplyTransformations(meta_transform_op Transformations, counted_string Input, me
     if ( Transformations & strip_all_prefix )
     {
       UnsetBitfield(meta_transform_op, Transformations, strip_all_prefix );
-      Result = StripPrefix(Result, Memory, u32_MAX);
+      Result = StripPrefixesUntilDoubleUnderscore(Result, Memory);
     }
   }
 
