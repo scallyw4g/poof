@@ -4,8 +4,10 @@ ToString(meta_func_directive Type)
   counted_string Result = {};
   switch (Type)
   {
-    case meta_func_directive_noop: { Result = CSz("meta_func_directive_noop"); } break;
-    case omit_include: { Result = CSz("omit_include"); } break;
+    case meta_func_directive_noop: { Result = CSz("noop"); } break;
+    case omit_include: { Result = CSz("include"); } break;
+
+    
   }
   return Result;
 }

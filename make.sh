@@ -289,9 +289,10 @@ function RunIntegrationTests()
       mkdir -p $test_output_dir
 
       echo -e "$Info TestIndex($test_index)"
-      echo -e "$Indent $INTEGRATION_TEST_DEBUGGER bin/poof $INTEGRATION_TEST_LOG_LEVEL $filename -o $test_output_dir"
+      echo -e "$Indent $INTEGRATION_TEST_DEBUGGER bin/poof $POOF_COLOR_FLAG $INTEGRATION_TEST_LOG_LEVEL $filename -o $test_output_dir"
 
       $INTEGRATION_TEST_DEBUGGER bin/poof \
+        $POOF_COLOR_FLAG \
         $INTEGRATION_TEST_LOG_LEVEL       \
         $filename                         \
         -o $test_output_dir

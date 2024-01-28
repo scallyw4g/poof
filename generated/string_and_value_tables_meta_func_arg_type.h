@@ -4,10 +4,12 @@ ToString(meta_func_arg_type Type)
   counted_string Result = {};
   switch (Type)
   {
-    case type_meta_func_arg_noop: { Result = CSz("type_meta_func_arg_noop"); } break;
-    case type_datatype: { Result = CSz("type_datatype"); } break;
-    case type_poof_index: { Result = CSz("type_poof_index"); } break;
-    case type_poof_symbol: { Result = CSz("type_poof_symbol"); } break;
+    case type_meta_func_arg_noop: { Result = CSz("noop"); } break;
+    case type_datatype: { Result = CSz("datatype"); } break;
+    case type_poof_index: { Result = CSz("index"); } break;
+    case type_poof_symbol: { Result = CSz("symbol"); } break;
+
+    
   }
   return Result;
 }

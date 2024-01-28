@@ -10,6 +10,8 @@ struct foo_bar_baz_cust
     struct foo_bar_baz_cust_tag_bar foo_bar_baz_cust_tag_bar;
     struct foo foo;
     struct bar bar;
+    struct baz baz;
+    struct enum_only enum_only;
   };
 };
 

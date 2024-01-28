@@ -4,11 +4,13 @@ ToString(function_type Type)
   counted_string Result = {};
   switch (Type)
   {
-    case function_type_noop: { Result = CSz("function_type_noop"); } break;
-    case function_type_constructor: { Result = CSz("function_type_constructor"); } break;
-    case function_type_destructor: { Result = CSz("function_type_destructor"); } break;
-    case function_type_operator: { Result = CSz("function_type_operator"); } break;
-    case function_type_normal: { Result = CSz("function_type_normal"); } break;
+    case function_type_noop: { Result = CSz("noop"); } break;
+    case function_type_constructor: { Result = CSz("constructor"); } break;
+    case function_type_destructor: { Result = CSz("destructor"); } break;
+    case function_type_operator: { Result = CSz("operator"); } break;
+    case function_type_normal: { Result = CSz("normal"); } break;
+
+    
   }
   return Result;
 }

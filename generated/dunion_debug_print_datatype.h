@@ -31,7 +31,7 @@ link_internal void DebugPrint( declaration *RuntimeStruct, u32 Depth = 0)
   }
   else
   {
-    DebugPrint("= (null)\n", Depth);
+    DebugPrint(" = (null)\n", Depth);
   }
 
 }
@@ -61,7 +61,7 @@ link_internal void DebugPrint( primitive_def *RuntimeStruct, u32 Depth = 0)
   }
   else
   {
-    DebugPrint("= (null)\n", Depth);
+    DebugPrint(" = (null)\n", Depth);
   }
 
 }
@@ -98,7 +98,7 @@ link_internal void DebugPrint( enum_member *RuntimeStruct, u32 Depth = 0)
   }
   else
   {
-    DebugPrint("= (null)\n", Depth);
+    DebugPrint(" = (null)\n", Depth);
   }
 
 }
@@ -135,7 +135,7 @@ link_internal void DebugPrint( type_def *RuntimeStruct, u32 Depth = 0)
   }
   else
   {
-    DebugPrint("= (null)\n", Depth);
+    DebugPrint(" = (null)\n", Depth);
   }
 
 }
