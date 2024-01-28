@@ -21,13 +21,13 @@ poof( string_and_value_tables(poof_global_keyword) )
 enum metaprogramming_directive
 {
   meta_directive_noop,
-  enum_only,
-  d_union,
-  named_list,
-  for_datatypes,
+  metaprogramming_directive__enum_only,
+  metaprogramming_directive__d_union,
+  metaprogramming_directive__named_list,
+  metaprogramming_directive__for_datatypes,
 
-  func,
-  polymorphic_func,
+  metaprogramming_directive__func,
+  metaprogramming_directive__polymorphic_func,
 };
 poof( string_and_value_tables(metaprogramming_directive) )
 #include <generated/string_and_value_tables_metaprogramming_directive.h>
