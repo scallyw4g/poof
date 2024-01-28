@@ -2393,7 +2393,7 @@ ParseDiscriminatedUnion(parse_context *Ctx, parser* Parser, program_datatypes* D
         RequireToken(Parser, Interior);
 
         d_union_flags Flags = {};
-        if ( OptionalToken(Parser, CToken(ToString(metaprogramming_directive__enum_only))) )
+        if ( OptionalToken(Parser, CToken(ToString(enum_only))) )
         {
           Flags = d_union_flag_enum_only;
         }
