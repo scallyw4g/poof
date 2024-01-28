@@ -1521,14 +1521,14 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
       }
     } break;
 
-    case polymorphic_func:
+    case metaprogramming_directive__polymorphic_func:
     {
       TIMED_NAMED_BLOCK("polymorphic_func");
       /* function_decl F = ParseFunctionDef(Parser, Memory); */
       /* DebugPrint(F); */
     } break;
 
-    case func:
+    case metaprogramming_directive__func:
     {
       if (OptionalToken(Parser, CTokenType_OpenParen)) // Anonymous function
       {
@@ -1587,7 +1587,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
     } break;
 
-    case named_list:
+    case metaprogramming_directive__named_list:
     {
       TIMED_NAMED_BLOCK("named_list");
       RequireToken(Parser, CTokenType_OpenParen);
@@ -1611,7 +1611,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
     } break;
 
-    case for_datatypes:
+    case metaprogramming_directive__for_datatypes:
     {
 #if 0
       BUG("for_datatypes not implemented!!");
@@ -1634,10 +1634,10 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
       // in the excludes constraint
       if (Parser->ErrorCode == ParseErrorCode_None)
       {
-        RequireToken(Parser, CToken(ToString(func)));
+        RequireToken(Parser, CToken(ToString(metaprogramming_directive__func)));
         meta_func StructFunc = ParseMetaFunctionDef(Parser, CSz("for_datatypes_struct_callback"), Memory);
 
-        RequireToken(Parser, CToken(ToString(func)));
+        RequireToken(Parser, CToken(ToString(metaprogramming_directive__func)));
         meta_func EnumFunc = ParseMetaFunctionDef(Parser, CSz("for_datatypes_enum_callback"), Memory);
 
         RequireToken(Parser, CTokenType_CloseParen);
@@ -1696,7 +1696,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 #endif
     } break;
 
-    case d_union:
+    case metaprogramming_directive__d_union:
     {
       TIMED_NAMED_BLOCK("d_union");
       c_token *DatatypeT = RequireTokenPointer(Parser, CTokenType_Identifier);
@@ -1731,7 +1731,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
     } break;
 
-    case enum_only:
+    case metaprogramming_directive__enum_only:
     {
       InvalidCodePath();
     }

@@ -2393,7 +2393,7 @@ ParseDiscriminatedUnion(parse_context *Ctx, parser* Parser, program_datatypes* D
         RequireToken(Parser, Interior);
 
         d_union_flags Flags = {};
-        if ( OptionalToken(Parser, CToken(ToString(enum_only))) )
+        if ( OptionalToken(Parser, CToken(ToString(metaprogramming_directive__enum_only))) )
         {
           Flags = d_union_flag_enum_only;
         }
@@ -6837,13 +6837,13 @@ ApplyTransformations(meta_transform_op Transformations, counted_string Input, me
     if ( Transformations & strip_single_prefix )
     {
       UnsetBitfield(meta_transform_op, Transformations, strip_single_prefix );
-      Result = StripPrefix(Result, Memory, 0);
+      Result = StripPrefix(Result, 0);
     }
 
     if ( Transformations & strip_all_prefix )
     {
       UnsetBitfield(meta_transform_op, Transformations, strip_all_prefix );
-      Result = StripPrefixesUntilDoubleUnderscore(Result, Memory);
+      Result = StripPrefixesUntilDoubleUnderscore(Result);
     }
   }
 
