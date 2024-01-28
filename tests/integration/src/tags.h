@@ -89,3 +89,25 @@ poof(
 // tests/integration/generated/tags/anonymous_tagged_struct_yZhxgWx1.h
 
 
+
+enum foo_enum poof(@foo)
+{
+  enum_value_0,
+  enum_value_1,
+  enum_value_2,
+};
+
+
+poof(
+  func (foo_enum e)
+  {
+    e.has_tag(foo)?
+    {
+      e.name has tag foo!
+    }
+  }
+)
+#include <tests/integration/generated/tags/anonymous_foo_enum_qaxVrgpo.h>
+
+
+

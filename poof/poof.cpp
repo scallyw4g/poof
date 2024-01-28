@@ -7769,7 +7769,9 @@ ParseAndTypecheckArgument(parse_context *Ctx, parser *Parser, meta_func_arg *Par
         {
           case CTokenType_IntLiteral:
           {
-            NotImplemented;
+            ParsedArg->Match = ArgDef->Match;
+            ParsedArg->Type = type_poof_index;
+            ParsedArg->poof_index = PoofIndex(u32(Token->as_u64), 0);
           } break;
 
           case CTokenType_Identifier:
@@ -8120,31 +8122,26 @@ ParseAndTypeCheckArgs(parse_context *Ctx, parser *Parser, c_token *FunctionT, me
     }
     else
     {
-      TypeCheckPassed = False;
       // NOTE(Jesse): Need this because the errors emitted from
-      // ParseAndTypecheckArgument don't contain the whole parse
-      // context, just the arguments.  Also, we have to propagate
-      // the error code to the main parser.
+      // ParseAndTypecheckArgument don't contain the whole parse context, just
+      // the arguments.  Also, we have to propagate the error code to the main
+      // parser.
       ParseError( Parser,
                   ArgParser.ErrorCode,
                   FormatCountedString( GetTranArena(),
                                        CSz("Could not parse args for (%S)."),
                                        FunctionT->Value ),
                   FunctionT );
-      break;
+
+      TypeCheckPassed = False;
+      return TypeCheckPassed;
     }
   }
 
-  if (TokensRemain(&ArgParser))
+  if (c_token *T = PeekTokenPointer(&ArgParser))
   {
-    // TODO(Jesse): This check might be buggy, whitespace could trigger it.. ?
-    // TODO(Jesse): Real error message; too many arguments.
-    ParseInfoMessage( &ArgParser,
-                      FormatCountedString(GetTranArena(),
-                                          CSz("Shiiiiit dawg"), 0 ),
-                      FunctionT);
-
     TypeCheckPassed = False;
+    ParseInfoMessage( &ArgParser, CSz("Function had too many arugments"), FunctionT);
   }
 
   return TypeCheckPassed;
@@ -8222,7 +8219,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
         else
         {
           poof_tag Tag = {};
-          
+
           // Skip Tags, we've already parsed them and attached them to their datastructures
           while (PeekToken(Parser).Type == CTokenType_At)
           {

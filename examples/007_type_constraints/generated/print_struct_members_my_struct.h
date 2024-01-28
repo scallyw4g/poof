@@ -1,4 +1,4 @@
-printf("-- Union Members \n");
+printf(" -- Union Members \n");
 printf("foo_struct foo_struct\n");
 printf("bar_struct bar_struct\n");
 printf("baz_struct baz_struct\n");

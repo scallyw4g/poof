@@ -540,6 +540,11 @@ Map( parse_context *Ctx,
   }
 }
 
+link_internal void
+SetMapFuncArgs(parse_context *Ctx, meta_func_arg_buffer *Local, c_token *A0Arg, poof_index A1Arg)
+{
+}
+
 // TODO(Jesse): Instead of the error living on the parser, it should live in the result from this fn
 link_internal counted_string
 Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_arena* Memory, umm *Depth)
@@ -669,9 +674,85 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
 
               case type_poof_index:
               {
-                auto RepIndex = SafeCast(poof_index, Replace);
-                counted_string S = FormatCountedString(Memory, CSz("%u"), RepIndex->Index);
-                Append(&OutputBuilder, S);
+                poof_index *RepIndex = SafeCast(poof_index, Replace);
+
+                switch (Operator)
+                {
+                  case meta_arg_operator_noop:
+                  {
+                    counted_string S = FormatCountedString(Memory, CSz("%u"), RepIndex->Index);
+                    Append(&OutputBuilder, S);
+                  } break;
+
+                  case map:
+                  case map_values:
+                  {
+                    cs Sep = MaybeParseSepOperator(Scope);
+
+                    meta_func MapFunc = ParseMapMetaFunctionInstance(Scope, CSz("(builtin.map.index)"), Memory);
+                    meta_func_arg_buffer NewArgs = ExtendBuffer(Args, MapFunc.Args.Count, Memory);
+
+                    // TODO(Jesse): Throw an error?
+                    Assert(MapFunc.Args.Count == 1);
+
+
+                    for(u32 Index = 0; Index <= RepIndex->Index; ++Index)
+                    {
+                      SetLast(&NewArgs, ReplacementPattern(MapFunc.Args.Start->Match, PoofIndex(Index, 0)));
+
+                      Rewind(MapFunc.Body.Tokens);
+                      counted_string Code = Execute(&MapFunc, &NewArgs, Ctx, Memory, Depth);
+
+                      if (MapFunc.Body.ErrorCode)
+                      {
+                        Scope->ErrorCode = MapFunc.Body.ErrorCode;
+                        break;
+                      }
+                      else
+                      {
+                        // TODO(Jesse): Pretty sure there should be a better way of handling this now that
+                        // all the map paths have collapsed..
+                        if (Index < RepIndex->Index)
+                        {
+                          HandleWhitespaceAndAppend(&OutputBuilder, Code, Sep);
+                        }
+                        else
+                        {
+                          HandleWhitespaceAndAppend(&OutputBuilder, Code, {}, True);
+                        }
+                      }
+                    }
+                  } break;
+
+                  case name:
+                  case type:
+                  case value:
+                  case array:
+                  case hash:
+                  case map_array:
+                  case map_members:
+                  case sep:
+                  case member:
+                  case is_enum:
+                  case is_struct:
+                  case is_union:
+                  case is_pointer:
+                  case is_defined:
+                  case is_compound:
+                  case is_primitive:
+                  case is_function:
+                  case is_array:
+                  case is_type:
+                  case is_named:
+                  case contains_type:
+                  case has_tag:
+                  case tag_value:
+                  {
+                    // TODO(Jesse): Error message
+                    InvalidCodePath();
+                  } break;
+
+                }
               } break;
 
               case type_poof_symbol:
@@ -688,30 +769,38 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                   case map_values:
                   case map_members:
                   {
-                    parser *SymbolParser = ParserForAnsiStream(Ctx, AnsiStream(Symbol->Value), TokenCursorSource_MetaprogrammingExpansion, Ctx->Memory);
                     cs Sep = MaybeParseSepOperator(Scope);
 
                     meta_func MapFunc = ParseMapMetaFunctionInstance(Scope, CSz("(builtin.map.symbol)"), Memory);
                     Assert(MapFunc.Args.Count == 1 || MapFunc.Args.Count == 2);
 
-                    meta_func_arg_buffer NewArgs = MergeBuffers(ReplacePatterns, &MapFunc.Args, Memory);
+                    meta_func_arg_buffer NewArgs = ExtendBuffer(Args, MapFunc.Args.Count, Memory);
 
-                    meta_func_arg A0 = MapFunc.Args.Start[0];
-                    meta_func_arg *A1 = {};
-
-                    if (MapFunc.Args.Count == 2) { A1 = MapFunc.Args.Start + 1; }
-
-                    u32 Index = 0;
-                    u32 MaxIndex = 0; // TODO(Jesse): Should we just axe the upper bound?  I don't think it's useful for anything..
+                    poof_index Index = {};
+                    parser *SymbolParser = ParserForAnsiStream(Ctx, AnsiStream(Symbol->Value), TokenCursorSource_MetaprogrammingExpansion, Ctx->Memory);
                     while (c_token *MapToken = PopTokenPointer(SymbolParser))
                     {
-                      datatype *D = GetDatatypeByName(&Ctx->Datatypes, MapToken->Value);
-                      SetLast(&NewArgs, ReplacementPattern(A0.Match, *D));
+                      {
+                        meta_func_arg *A0 = MapFunc.Args.Start;
+                        datatype *D = GetDatatypeByName(&Ctx->Datatypes, MapToken->Value);
+                        if (D->Type)
+                        {
+                          SetLast(&NewArgs, ReplacementPattern(A0->Match, *D));
+                        }
+                        else
+                        {
+                          SetLast(&NewArgs, ReplacementPattern(A0->Match, PoofSymbol(MapToken->Value)));
+                        }
+                      }
 
-                      if (A1) { SetReverse(1, &NewArgs, ReplacementPattern(A1->Match, PoofIndex(Index, MaxIndex))); }
+                      {
+                        meta_func_arg *A1 = {};
+                        if (MapFunc.Args.Count == 2) { A1 = MapFunc.Args.Start + 1; }
+                        if (A1) { SetReverse(1, &NewArgs, ReplacementPattern(A1->Match, Index)); }
+                      }
 
                       Rewind(MapFunc.Body.Tokens);
-                      counted_string Code = Execute(&MapFunc.Body, &NewArgs, Ctx, Memory, Depth);
+                      counted_string Code = Execute(&MapFunc, &NewArgs, Ctx, Memory, Depth);
 
                       if (MapFunc.Body.ErrorCode)
                       {
@@ -732,7 +821,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                         }
                       }
 
-                      ++Index;
+                      ++Index.Index;
                     }
 
                   } break;
