@@ -748,8 +748,10 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                   case has_tag:
                   case tag_value:
                   {
-                    // TODO(Jesse): Error message
-                    InvalidCodePath();
+                    PoofTypeError( Scope,
+                                   ParseErrorCode_InvalidOperator,
+                                   FSz("Operator (%S) is not valid on an index.", MetaOperatorToken->Value),
+                                   MetaOperatorToken);
                   } break;
 
                 }
