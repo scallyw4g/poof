@@ -1,3 +1,5 @@
+// ./poof/poof.h:32:0
+
 link_internal counted_string
 ToString(metaprogramming_directive Type)
 {
@@ -22,12 +24,12 @@ MetaprogrammingDirective(counted_string S)
 {
   metaprogramming_directive Result = {};
 
-  if (StringsMatch(S, CSz("meta_directive_noop"))) {                         return meta_directive_noop; }
-  if (StringsMatch(S, CSz("enum_only"))) {        return enum_only; }
-  if (StringsMatch(S, CSz("d_union"))) {          return d_union; }
-  if (StringsMatch(S, CSz("named_list"))) {       return named_list; }
-  if (StringsMatch(S, CSz("for_datatypes"))) {    return for_datatypes; }
-  if (StringsMatch(S, CSz("func"))) {             return func; }
+  if (StringsMatch(S, CSz("meta_directive_noop"))) { return meta_directive_noop; }
+  if (StringsMatch(S, CSz("enum_only"))) { return enum_only; }
+  if (StringsMatch(S, CSz("d_union"))) { return d_union; }
+  if (StringsMatch(S, CSz("named_list"))) { return named_list; }
+  if (StringsMatch(S, CSz("for_datatypes"))) { return for_datatypes; }
+  if (StringsMatch(S, CSz("func"))) { return func; }
   if (StringsMatch(S, CSz("polymorphic_func"))) { return polymorphic_func; }
 
   return Result;

@@ -1,3 +1,5 @@
+// ./include/bonsai_stdlib/src/primitive_containers.h:2:0
+
 struct u32_block
 {
   u32 Index;

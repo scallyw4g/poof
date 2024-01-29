@@ -1,3 +1,5 @@
+// ./include/bonsai_stdlib/src/vector.h:206:0
+
 link_internal void
 DeepCopy(v3 *Src, v3 *Dest)
 {

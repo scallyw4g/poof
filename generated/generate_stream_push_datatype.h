@@ -1,3 +1,5 @@
+// ./poof/poof.h:968:0
+
 link_internal declaration *
 Push(declaration_stream* Stream, declaration Element)
 {

@@ -1,3 +1,5 @@
+// ./poof/poof.h:965:0
+
 struct declaration_iterator
 {
   declaration_stream* Stream;

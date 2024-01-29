@@ -1,3 +1,5 @@
+// ./poof/poof.h:760:0
+
 link_internal meta_func
 MetaFunc( counted_string Name , meta_func_arg_buffer Args , parser Body , b32 OmitInclude  )
 {

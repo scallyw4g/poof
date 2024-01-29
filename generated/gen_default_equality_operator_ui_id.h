@@ -1,3 +1,5 @@
+// ./include/bonsai_stdlib/src/ui/interactable.h:21:0
+
 link_internal b32
 operator==( ui_id E1, ui_id E2 )
 {

@@ -1,3 +1,5 @@
+// ./poof/poof.h:15:0
+
 link_internal counted_string
 ToString(poof_global_keyword Type)
 {

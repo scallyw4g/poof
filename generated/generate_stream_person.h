@@ -1,3 +1,5 @@
+// ./poof/poof.h:786:0
+
 struct person_stream_chunk
 {
   person Element;

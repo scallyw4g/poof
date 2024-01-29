@@ -1,3 +1,5 @@
+// ./poof/poof.h:99:0
+
 link_internal meta_transform_op
 MetaTransformOp(counted_string S)
 {

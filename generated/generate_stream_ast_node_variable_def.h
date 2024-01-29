@@ -1,3 +1,5 @@
+// ./poof/poof.h:828:0
+
 struct ast_node_variable_def_stream_chunk
 {
   ast_node_variable_def Element;

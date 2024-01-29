@@ -1,3 +1,5 @@
+// ./include/bonsai_stdlib/src/c_token.h:256:0
+
 link_internal counted_string
 ToString(token_cursor_source Type)
 {

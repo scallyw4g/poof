@@ -1,3 +1,5 @@
+// ./poof/poof.h:778:0
+
 struct tag_stream_chunk
 {
   tag Element;

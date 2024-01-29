@@ -1,3 +1,5 @@
+// ./include/bonsai_stdlib/src/texture.cpp:5:0
+
 
 link_internal texture_ptr_block*
 Allocate_texture_ptr_block(memory_arena *Memory)

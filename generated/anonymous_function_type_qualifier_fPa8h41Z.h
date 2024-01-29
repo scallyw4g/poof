@@ -1,3 +1,5 @@
+// poof/poof.cpp:6994:0
+
 if (TypeSpec->Qualifier & TypeQual_None)
 {
   Append(&Builder, CSz("none "));

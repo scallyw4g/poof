@@ -1,3 +1,5 @@
+// ./poof/poof.h:232:0
+
 link_internal counted_string
 ToString(type_qualifier Type)
 {

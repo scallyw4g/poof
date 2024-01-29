@@ -1501,7 +1501,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           if (Code.Start)
           {
             counted_string OutfileName = GenerateOutfileNameFor(Ctx, Func, &ArgInstances, Memory);
-            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:0:%u", DirectiveT->Filename, DirectiveT->LineNumber ), {} /*TodoInfo*/, Memory, False, Func->OmitInclude);
+            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /*TodoInfo*/, Memory, False, Func->OmitInclude);
 
             auto FilenameAndCode = Tuple(ActualOutputFile, Code);
             Append(Builder, FilenameAndCode);
@@ -1572,7 +1572,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           else
           {
             counted_string OutfileName = GenerateOutfileNameFor( Func.Name, ArgType, Memory, GetRandomString(8, umm(Hash(&Code)), Memory));
-            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:0:%u", DirectiveT->Filename, DirectiveT->LineNumber ), {} /* todoinfo */, Memory, True, Func.OmitInclude);
+            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /* todoinfo */, Memory, True, Func.OmitInclude);
             Append(Builder, Tuple(ActualOutputFile, Code));
           }
         }
@@ -1696,7 +1696,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
         counted_string Code = Finalize(&OutputBuilder, Memory);
         counted_string OutfileName = GenerateOutfileNameFor(ToString(Directive), CSz("debug_print"), Memory);
-        counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:0:%u", DirectiveT->Filename, DirectiveT->LineNumber ), {} /* Todoinfo */, Memory);
+        counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /* Todoinfo */, Memory);
         Append(Builder, Tuple(ActualOutputFile, Code));
       }
 #endif
@@ -1727,7 +1727,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         while(OptionalToken(Parser, CTokenType_Semicolon));
 
         counted_string OutfileName = GenerateOutfileNameFor(ToString(Directive), DatatypeT->Value, Memory);
-        counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:0:%u", DirectiveT->Filename, DirectiveT->LineNumber ), {} /* todoinfo */, Memory);
+        counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /* todoinfo */, Memory);
         Append(Builder, Tuple(ActualOutputFile, Code));
       }
       else

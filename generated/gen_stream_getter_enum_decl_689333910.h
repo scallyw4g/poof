@@ -1,3 +1,5 @@
+// poof/poof.cpp:1872:0
+
 link_internal enum_decl*
 GetEnumDeclByName( enum_decl_stream* Stream, counted_string  Name )
 {

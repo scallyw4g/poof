@@ -1,3 +1,5 @@
+// ./poof/poof.h:605:0
+
 enum meta_func_arg_type
 {
   type_meta_func_arg_noop,

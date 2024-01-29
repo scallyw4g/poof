@@ -1,3 +1,5 @@
+// ./poof/poof.h:879:0
+
 enum ast_node_type
 {
   type_ast_node_noop,

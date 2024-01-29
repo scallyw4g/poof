@@ -1,3 +1,5 @@
+// ./include/bonsai_stdlib/src/xml.cpp:1:0
+
 link_internal xml_tag_linked_list_node *
 Allocate_xml_tag_linked_list_node(memory_arena *Memory)
 {

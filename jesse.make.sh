@@ -8,9 +8,9 @@
 
 # FetchBonsaiDebug
 
-# ./make.sh RunInstalledPoof
-# ./make.sh BuildPoof
-# ./make.sh RunPoof
+./make.sh RunInstalledPoof
+./make.sh BuildPoof
+./make.sh RunPoof
 
 # export OPTIMIZATION_LEVEL="-O2"
 

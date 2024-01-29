@@ -1,3 +1,5 @@
+// ./poof/poof.h:735:0
+
 struct macro_def_stream_chunk
 {
   macro_def Element;

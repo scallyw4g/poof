@@ -1,3 +1,5 @@
+// ./poof/poof.h:757:0
+
 struct meta_func_stream_chunk
 {
   meta_func Element;

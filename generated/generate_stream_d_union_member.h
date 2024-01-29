@@ -1,3 +1,5 @@
+// ./poof/poof.h:461:0
+
 struct d_union_member_stream_chunk
 {
   d_union_member Element;

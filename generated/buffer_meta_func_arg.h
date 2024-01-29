@@ -1,3 +1,5 @@
+// ./poof/poof.h:626:0
+
 struct meta_func_arg_buffer
 {
   meta_func_arg *Start;

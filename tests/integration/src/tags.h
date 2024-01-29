@@ -99,15 +99,15 @@ enum foo_enum poof(@foo)
 
 
 poof(
-  func (foo_enum e)
+  func (foo_enum e) @omit_include
   {
     e.has_tag(foo)?
     {
-      e.name has tag foo!
+      e.name has tag foo! poof(@this_should_have_an_at_sign)
     }
   }
 )
-#include <tests/integration/generated/tags/anonymous_foo_enum_qaxVrgpo.h>
+// tests/integration/generated/tags/anonymous_foo_enum_qaxVrgpo.h
 
 
 

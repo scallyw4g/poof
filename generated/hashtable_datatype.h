@@ -1,3 +1,5 @@
+// ./poof/poof.h:452:0
+
 struct datatype_linked_list_node
 {
   datatype Element;

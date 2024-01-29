@@ -1,3 +1,5 @@
+// ./poof/poof.h:320:0
+
 struct enum_member_stream_chunk
 {
   enum_member Element;

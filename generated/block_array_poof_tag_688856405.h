@@ -1,3 +1,5 @@
+// ./poof/poof.h:345:0
+
 struct poof_tag_block
 {
   u32 Index;

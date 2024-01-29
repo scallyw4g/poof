@@ -1,3 +1,5 @@
+// ./include/bonsai_stdlib/src/primitive_containers.cpp:2:0
+
 
 link_internal u32_block*
 Allocate_u32_block(memory_arena *Memory)

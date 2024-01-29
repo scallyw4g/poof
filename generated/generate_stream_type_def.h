@@ -1,3 +1,5 @@
+// ./poof/poof.h:404:0
+
 struct type_def_stream_chunk
 {
   type_def Element;

@@ -1,3 +1,5 @@
+// ./poof/poof.h:371:0
+
 link_internal counted_string
 ToString(declaration_type Type)
 {

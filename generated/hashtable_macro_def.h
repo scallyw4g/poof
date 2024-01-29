@@ -1,3 +1,5 @@
+// ./poof/poof.h:746:0
+
 struct macro_def_linked_list_node
 {
   macro_def Element;

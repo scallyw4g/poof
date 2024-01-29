@@ -1,3 +1,5 @@
+// ./poof/poof.h:336:0
+
 struct enum_decl_cursor
 {
   enum_decl *Start;
