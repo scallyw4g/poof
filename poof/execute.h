@@ -566,6 +566,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
   string_builder OutputBuilder = {};
   while ( c_token *BodyToken = PopTokenRawPointer(Scope) )
   {
+    b32 ImpetusWasAt = False;
     switch (BodyToken->Type)
     {
       case CTokenType_StringLiteral:
@@ -595,6 +596,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
 
       case CTokenType_At:
       {
+        ImpetusWasAt = True;
         BodyToken = RequireTokenRawPointer(Scope, CTokenType_Identifier);
       } [[fallthrough]];
 
@@ -696,7 +698,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
                     Assert(MapFunc.Args.Count == 1);
 
 
-                    for(u32 Index = 0; Index <= RepIndex->Index; ++Index)
+                    for(u32 Index = 0; Index < RepIndex->Index; ++Index)
                     {
                       SetLast(&NewArgs, ReplacementPattern(MapFunc.Args.Start->Match, PoofIndex(Index, 0)));
 
@@ -1435,7 +1437,11 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
           // NOTE(Jesse): Have to call this here to track depth properly
           c_token ToPush = {};
           if (Ctx->Args.DoNotNormalizeWhitespace) { ToPush = *BodyToken; }
-          else                               { ToPush = NormalizeWhitespaceTokens(BodyToken, PeekTokenRawPointer(Scope, -2), PeekTokenRawPointer(Scope), Depth); }
+          else                                    { ToPush = NormalizeWhitespaceTokens(BodyToken, PeekTokenRawPointer(Scope, -2), PeekTokenRawPointer(Scope), Depth); }
+          if (ImpetusWasAt)
+          {
+            Append(&OutputBuilder, CSz("@"));
+          }
           Append(&OutputBuilder, ToPush.Value);
         }
 
@@ -1495,7 +1501,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           if (Code.Start)
           {
             counted_string OutfileName = GenerateOutfileNameFor(Ctx, Func, &ArgInstances, Memory);
-            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, {} /*TodoInfo*/, Memory, False, Func->OmitInclude);
+            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:0:%u", DirectiveT->Filename, DirectiveT->LineNumber ), {} /*TodoInfo*/, Memory, False, Func->OmitInclude);
 
             auto FilenameAndCode = Tuple(ActualOutputFile, Code);
             Append(Builder, FilenameAndCode);
@@ -1566,7 +1572,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           else
           {
             counted_string OutfileName = GenerateOutfileNameFor( Func.Name, ArgType, Memory, GetRandomString(8, umm(Hash(&Code)), Memory));
-            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, {} /* todoinfo */, Memory, True, Func.OmitInclude);
+            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:0:%u", DirectiveT->Filename, DirectiveT->LineNumber ), {} /* todoinfo */, Memory, True, Func.OmitInclude);
             Append(Builder, Tuple(ActualOutputFile, Code));
           }
         }
@@ -1690,7 +1696,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
         counted_string Code = Finalize(&OutputBuilder, Memory);
         counted_string OutfileName = GenerateOutfileNameFor(ToString(Directive), CSz("debug_print"), Memory);
-        counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, {} /* Todoinfo */, Memory);
+        counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:0:%u", DirectiveT->Filename, DirectiveT->LineNumber ), {} /* Todoinfo */, Memory);
         Append(Builder, Tuple(ActualOutputFile, Code));
       }
 #endif
@@ -1721,7 +1727,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         while(OptionalToken(Parser, CTokenType_Semicolon));
 
         counted_string OutfileName = GenerateOutfileNameFor(ToString(Directive), DatatypeT->Value, Memory);
-        counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, {} /* todoinfo */, Memory);
+        counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:0:%u", DirectiveT->Filename, DirectiveT->LineNumber ), {} /* todoinfo */, Memory);
         Append(Builder, Tuple(ActualOutputFile, Code));
       }
       else

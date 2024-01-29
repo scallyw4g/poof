@@ -2742,7 +2742,11 @@ RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Fi
 }
 
 link_internal b32
-Output(counted_string Code, counted_string OutputFilename, memory_arena* Memory, output_mode Mode = Output_NoOverwrite)
+Output( cs SourceFilenameAndLineNumber,
+        cs Code,
+        cs OutputFilename,
+        memory_arena *Memory,
+        output_mode Mode = Output_NoOverwrite )
 {
   TIMED_FUNCTION();
   Mode = Output_Unsafe;
@@ -2751,7 +2755,10 @@ Output(counted_string Code, counted_string OutputFilename, memory_arena* Memory,
   native_file TempFile = GetTempFile(&TempFileEntropy, Memory);
   if (TempFile.Handle)
   {
-    b32 FileWritesSucceeded  = WriteToFile(&TempFile, Code);
+    b32 FileWritesSucceeded  = WriteToFile(&TempFile, CSz("// "));
+        FileWritesSucceeded &= WriteToFile(&TempFile, SourceFilenameAndLineNumber);
+        FileWritesSucceeded &= WriteToFile(&TempFile, CS("\n\n"));
+        FileWritesSucceeded &= WriteToFile(&TempFile, Code);
         FileWritesSucceeded &= WriteToFile(&TempFile, CS("\n"));
         FileWritesSucceeded &= CloseFile(&TempFile);
 
@@ -6323,8 +6330,9 @@ AllocateTokenizedFiles(u32 Count, memory_arena* Memory)
 
 link_internal counted_string
 FlushOutputToDisk( parse_context *Ctx,
-                   counted_string OutputForThisParser,
-                   counted_string NewFilename,
+                   cs OutputForThisParser,
+                   cs NewFilename,
+                   cs SourceFileAndLineNumber,
                    todo_list_info* TodoInfo,
                    memory_arena* Memory,
                    b32 IsInlineCode = False,
@@ -6409,7 +6417,7 @@ FlushOutputToDisk( parse_context *Ctx,
   }
 
 
-  Output(OutputForThisParser, OutputPath, Memory);
+  Output(SourceFileAndLineNumber, OutputForThisParser, OutputPath, Memory);
   parser *OutputParse = ParserForAnsiStream(Ctx, AnsiStream(OutputForThisParser, OutputPath), TokenCursorSource_MetaprogrammingExpansion, Ctx->Memory);
 
 
