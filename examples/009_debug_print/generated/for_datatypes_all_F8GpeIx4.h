@@ -1,3 +1,5 @@
+// main.c:108:0
+
 void DebugPrint_baz_struct(struct baz_struct *Struct)
 {
   DebugPrint_str("{ ");

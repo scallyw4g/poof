@@ -1,3 +1,5 @@
+// main.c:91:0
+
 void DebugPrint_baz_struct(struct baz_struct *Struct);
 void DebugPrint_bar_struct(struct bar_struct *Struct);
 void DebugPrint_nested_struct(struct nested_struct *Struct);

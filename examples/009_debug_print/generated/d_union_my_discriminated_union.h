@@ -1,3 +1,5 @@
+// main.c:54:0
+
 enum my_discriminated_union_type
 {
   type_my_discriminated_union_noop,

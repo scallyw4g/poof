@@ -1,3 +1,5 @@
+// main.c:55:0
+
 printf(" -- Union Members \n");
 printf("foo_struct foo_struct\n");
 printf("bar_struct bar_struct\n");
