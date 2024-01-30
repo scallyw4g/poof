@@ -6924,6 +6924,36 @@ ParseTransformations(parser* Scope)
 }
 
 link_internal meta_func_arg
+MetaFuncArg(parse_context *Ctx, poof_tag Tag, cs Match)
+{
+  Assert(Tag.Value);
+
+  meta_func_arg Result = {};
+  Result.Match = Match;
+
+  if (IsNumeric(Tag.Value))
+  {
+    Result.Type = type_poof_index;
+    Result.poof_index = PoofIndex(ToU32(Tag.Value), 0);
+  }
+
+  datatype *D = GetDatatypeByName(&Ctx->Datatypes, Tag.Value);
+  if (D->Type)
+  {
+    Result.Type = type_datatype;
+    Result.datatype = *D;
+  }
+
+  if (Result.Type == type_meta_func_arg_noop)
+  {
+    Result.Type = type_poof_symbol;
+    Result.poof_symbol.Value = Tag.Value;
+  }
+
+  return Result;
+}
+
+link_internal meta_func_arg
 ReplacementPattern(counted_string Match, meta_func_arg *Arg)
 {
   meta_func_arg Result = *Arg;
@@ -7441,7 +7471,7 @@ ResolveToBaseType(program_datatypes *Datatypes, type_def *TD)
     Result = Datatype(TD->Type);
     NotImplemented;
 #else
-    Leak("Leaking datatype allocation");
+    Leak("Leaking datatype allocation during ResolveToBaseType");
     Result = Allocate(datatype, GetTranArena(), 1);
     *Result = Datatype(TD->Type);
 #endif

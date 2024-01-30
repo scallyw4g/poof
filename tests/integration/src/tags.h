@@ -111,3 +111,20 @@ poof(
 
 
 
+struct has_numeric_tag poof(@numeric_tag(3))
+{
+  int foo;
+};
+
+poof(
+  func (has_numeric_tag type) @omit_include
+  {
+    type.tag_value(numeric_tag).map(index)
+    {
+      index
+    }
+  }
+)
+// tests/integration/generated/tags/anonymous_has_numeric_tag_W4DIb6aG.h
+
+

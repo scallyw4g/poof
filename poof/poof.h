@@ -629,6 +629,9 @@ poof(buffer(meta_func_arg))
 poof(generate_stream_compact(meta_func_arg))
 #include <generated/generate_stream_compact_meta_func_arg.h>
 
+link_internal meta_func_arg
+MetaFuncArg(parse_context *Ctx, poof_tag Tag);
+
 // TODO(Jesse)(metaprogramming): Generate this!  There's a bunch of this kind
 // of code that could be generated.  I think some functions I wrote by hand are
 // called "GetByName" or something.

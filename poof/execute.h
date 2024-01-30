@@ -761,16 +761,16 @@ ResolveMetaOperator(parse_context *Ctx, meta_func_arg_buffer *Args, meta_func_ar
 
           poof_tag Tag = GetTagFromDatatype(Ctx, TagName, ReplaceData, Scope, MetaOperatorToken);
 
-#if 0
+#if 1
           if (OptionalTokenRaw(Scope, CTokenType_Dot))
           {
             c_token *ChainedOpT = RequireTokenPointer(Scope, CTokenType_Identifier);
             Assert(ChainedOpT);
 
             meta_arg_operator ChainedOp = MetaArgOperator( ChainedOpT->Value );
-            switch (ChainedOpT)
-            {
-            }
+
+            meta_func_arg NewArg = MetaFuncArg(Ctx, Tag, CSz(""));
+            ResolveMetaOperator(Ctx, Args, &NewArg, Scope, ChainedOp, BodyToken, ChainedOpT, Memory, Depth, OutputBuilder);
           }
           else
           {

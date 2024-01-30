@@ -1,4 +1,4 @@
-// ./poof/poof.h:879:0
+// ./poof/poof.h:882:0
 
 enum ast_node_type
 {

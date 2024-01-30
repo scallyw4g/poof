@@ -1,4 +1,4 @@
-// ./poof/poof.h:828:0
+// ./poof/poof.h:831:0
 
 struct ast_node_variable_def_stream_chunk
 {
