@@ -1,4 +1,4 @@
-// ./poof/poof.h:968:0
+// ./poof/poof.h:974:0
 
 struct declaration_iterator
 {

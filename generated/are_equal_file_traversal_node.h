@@ -10,7 +10,7 @@ AreEqual(file_traversal_node *Thing1, file_traversal_node *Thing2)
 
   Result &= AreEqual(Thing1->Name, Thing2->Name);
 
-
   return Result;
 }
+
 

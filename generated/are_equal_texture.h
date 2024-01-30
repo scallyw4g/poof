@@ -16,7 +16,7 @@ AreEqual(texture *Thing1, texture *Thing2)
 
   Result &= AreEqual(Thing1->DebugName, Thing2->DebugName);
 
-
   return Result;
 }
+
 

@@ -19,7 +19,8 @@ struct poof_tag_block_array
 {
   poof_tag_block *First;
   poof_tag_block *Current;
-  memory_arena *Memory;
+  memory_arena *Memory; poof(@no_serialize)
+  
 };
 
 link_internal poof_tag_block_array_index

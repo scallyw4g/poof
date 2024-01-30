@@ -19,7 +19,8 @@ struct bitmap_block_array
 {
   bitmap_block *First;
   bitmap_block *Current;
-  memory_arena *Memory;
+  memory_arena *Memory; poof(@no_serialize)
+  
 };
 
 link_internal bitmap_block_array_index

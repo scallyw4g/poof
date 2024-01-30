@@ -1,4 +1,4 @@
-// ./poof/poof.h:903:0
+// ./poof/poof.h:909:0
 
 link_internal counted_string
 ToString(ast_node_type Type)

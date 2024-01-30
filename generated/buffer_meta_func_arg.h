@@ -1,9 +1,9 @@
-// ./poof/poof.h:626:0
+// ./poof/poof.h:629:0
 
 struct meta_func_arg_buffer
 {
-  meta_func_arg *Start;
   umm Count;
+  meta_func_arg *Start; poof(@array_length(Element->Count))
 };
 
 link_internal meta_func_arg_buffer

@@ -1,4 +1,4 @@
-// ./include/bonsai_stdlib/src/ansi_stream.h:29:0
+// ./include/bonsai_stdlib/src/ansi_stream.h:32:0
 
 link_internal counted_string
 ToString(text_encoding Type)

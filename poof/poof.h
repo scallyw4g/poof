@@ -449,6 +449,9 @@ poof(dunion_debug_print(datatype))
 
 link_internal umm Hash(datatype *D);
 
+poof(are_equal(datatype))
+#include <generated/are_equal_datatype.h>
+
 poof(hashtable(datatype))
 #include <generated/hashtable_datatype.h>
 
@@ -745,6 +748,9 @@ Hash(macro_def *M)
   // TODO(Jesse): Hash arguments and incorporate Type & Variadic ..?
   return Result;
 }
+
+poof(are_equal(macro_def))
+#include <generated/are_equal_macro_def.h>
 
 poof(hashtable(macro_def))
 #include <generated/hashtable_macro_def.h>

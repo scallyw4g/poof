@@ -1966,15 +1966,6 @@ Hash(datatype *D)
   return Result;
 }
 
-// TODO(Jesse): Do a more strict compare here?
-link_internal b32
-AreEqual(datatype *D0, datatype *D1)
-{
-  b32 Result = Hash(D0) == Hash(D1);
-  return Result;
-}
-
-
 global_variable datatype
 NullDatatype = {};
 

@@ -1,4 +1,4 @@
-// ./poof/poof.h:749:0
+// ./poof/poof.h:755:0
 
 struct macro_def_linked_list_node
 {
@@ -72,6 +72,29 @@ Insert(macro_def Element, macro_def_hashtable *Table, memory_arena *Memory)
   Bucket->Element = Element;
   Insert(Bucket, Table);
   return &Bucket->Element;
+}
+
+link_internal macro_def*
+Upsert(macro_def Element, macro_def_hashtable *Table, memory_arena *Memory)
+{
+  umm HashValue = Hash(&Element) % Table->Size;
+  macro_def_linked_list_node **Bucket = Table->Elements + HashValue;
+  while (*Bucket)
+  {
+    if (AreEqual(&Bucket[0]->Element, &Element)) { break; }
+    Bucket = &(*Bucket)->Next;
+  }
+
+  if (*Bucket)
+  {
+    Bucket[0]->Element = Element;
+  }
+  else
+  {
+    Insert(Element, Table, Memory);
+  }
+
+  return &Bucket[0]->Element;
 }
 
 //

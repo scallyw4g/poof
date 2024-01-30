@@ -1,4 +1,4 @@
-// ./poof/poof.h:617:0
+// ./poof/poof.h:620:0
 
 link_internal counted_string
 ToString(meta_func_arg_type Type)
