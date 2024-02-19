@@ -453,7 +453,10 @@ ExpandMacro( parse_context *Ctx,
             ParseMacroArgument(InstanceArgs, Arg);
           }
         }
-        Assert(TokensRemain(InstanceArgs) == 0);
+        if (TokensRemain(InstanceArgs) != 0)
+        {
+          ParseError(Parser, CSz("Invalid number of arguments to macro"), Start);
+        }
       }
 
     } break;
@@ -2655,6 +2658,8 @@ PrintToStdout(CSz(
 
   return Result;
 }
+
+global_variable random_series TempFileEntropy = {};
 
 link_internal b32
 RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Filename, memory_arena* Memory)

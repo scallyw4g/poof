@@ -221,7 +221,7 @@ function BuildPoof {
 
   ColorizeTitle "Building Poof"
   source_file="$SRC/poof.cpp"
-  SetFullOutputName "$source_file" bin
+  SetOutputBinaryPathBasename "$source_file" bin
   echo -e "$Building $source_file"
 
   clang++                                 \
@@ -236,11 +236,10 @@ function BuildPoof {
     -I "$ROOT"                            \
     -I "$ROOT/include"                    \
     -I "$ROOT/poof"                       \
-    -o "$full_output_name"
+    -o "$output_basename""$PLATFORM_EXE_EXTENSION"
 
   if [ $? -eq 0 ]; then
     echo -e "$Success $source_file -> $full_output_name"
-
     echo -e ""
     echo -e "$Delimeter"
     echo -e ""
@@ -327,7 +326,7 @@ function BuildParserTests
 {
   ColorizeTitle "Building Tests"
     source_file=tests/parser/poof.cpp
-    SetFullOutputName "$source_file" bin/tests
+    SetOutputBinaryPathBasename "$source_file" bin/tests
     echo -e "$Building $source_file"
 
     clang++                                 \
@@ -342,7 +341,7 @@ function BuildParserTests
       -I "."                                \
       -I "$ROOT/include"                    \
       -I "$ROOT/poof"                       \
-      -o "$full_output_name"
+    -o "$output_basename""$PLATFORM_EXE_EXTENSION"
 
   if [ $? -eq 0 ]; then
     echo -e "$Success $source_file -> $full_output_name"
