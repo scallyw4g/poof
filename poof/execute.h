@@ -314,7 +314,7 @@ MapCompoundDeclMembers(parse_context *Ctx, parser *ParentScope, parser *MapScope
   else
   {
     // TODO(Jesse): Pretty sure this is InternalCompilerError
-    NotImplemented;
+    InternalCompilerError(ParentScope , FSz("Tried to map compound decl that had no members.  Datatype (%S)", GetNameForDatatype(CompoundDatatype, GetTranArena())), PeekTokenPointer(ParentScope));
   }
 }
 
@@ -1513,7 +1513,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
   {
     case meta_directive_noop:
     {
-      meta_func* Func = StreamContains(FunctionDefs, DirectiveT->Value);
+      meta_func *Func = StreamContains(FunctionDefs, DirectiveT->Value);
       if (Func)
       {
         meta_func_arg_buffer ArgInstances = {};
@@ -1524,7 +1524,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           if (Code.Start)
           {
             counted_string OutfileName = GenerateOutfileNameFor(Ctx, Func, &ArgInstances, Memory);
-            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /*TodoInfo*/, Memory, False, Func->OmitInclude);
+            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /*TodoInfo*/, Memory, False, Func->OmitInclude, Func->CodeFragment);
 
             auto FilenameAndCode = Tuple(ActualOutputFile, Code);
             Append(Builder, FilenameAndCode);
@@ -1568,10 +1568,10 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
         RequireToken(Parser, CTokenType_CloseParen);
 
-        b32 OmitInclude = ParseOmitIncludeTag(Parser);
+        meta_func Func = MetaFunc(CSz("anonymous"), {});
+        ParseMetaFuncTags(Parser, &Func);
 
-        parser Body = GetBodyTextForNextScope(Parser, Memory);
-        meta_func Func = MetaFunc(CSz("anonymous"), {}, Body, OmitInclude);
+        Func.Body = GetBodyTextForNextScope(Parser, Memory);
         /* meta_func Func = ParseMetaFunctionDef(Parser, CSz("anonymous"), Memory); */
 
         datatype *ArgDatatype = GetDatatypeByName(&Ctx->Datatypes, ArgType);
@@ -1595,7 +1595,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           else
           {
             counted_string OutfileName = GenerateOutfileNameFor( Func.Name, ArgType, Memory, GetRandomString(8, umm(Hash(&Code)), Memory));
-            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /* todoinfo */, Memory, True, Func.OmitInclude);
+            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /* todoinfo */, Memory, True, Func.OmitInclude, Func.CodeFragment);
             Append(Builder, Tuple(ActualOutputFile, Code));
           }
         }

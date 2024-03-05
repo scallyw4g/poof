@@ -758,16 +758,27 @@ poof(hashtable(macro_def))
 
 struct meta_func
 {
-  counted_string Name;
+  cs Name;
   meta_func_arg_buffer Args;
   parser Body;
   b32 OmitInclude;
+  b32 CodeFragment;
 };
 poof(generate_stream(meta_func))
 #include <generated/generate_stream_meta_func.h>
 
 poof(gen_constructor(meta_func))
 #include <generated/gen_constructor_meta_func.h>
+
+link_internal meta_func
+MetaFunc(cs Name, meta_func_arg_buffer Args)
+{
+  meta_func Reuslt = {
+    .Name = Name,
+    .Args = Args,
+  };
+  return Reuslt;
+}
 
 
 struct todo

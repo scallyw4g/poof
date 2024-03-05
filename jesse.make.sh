@@ -2,14 +2,12 @@
 
 # export POOF_LOG_LEVEL=LogLevel_Debug
 
-# ./make.sh BuildAllBinariesRunAllTests
-
-# BuildAllBinariesRunAllTests
+./make.sh BuildAllBinariesRunAllTests
 
 # FetchBonsaiDebug
 
-./make.sh RunInstalledPoof
-./make.sh BuildPoof
+# ./make.sh RunInstalledPoof
+# ./make.sh BuildPoof
 # ./make.sh RunPoof
 
 # export OPTIMIZATION_LEVEL="-O2"

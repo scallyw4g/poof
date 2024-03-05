@@ -6332,7 +6332,8 @@ FlushOutputToDisk( parse_context *Ctx,
                    todo_list_info* TodoInfo,
                    memory_arena* Memory,
                    b32 IsInlineCode = False,
-                   b32 OmitInclude = False)
+                   b32 OmitInclude = False,
+                   b32 CodeFragment = False)
 {
   TIMED_FUNCTION();
   parser *Parser = Ctx->CurrentParser;
@@ -6416,7 +6417,7 @@ FlushOutputToDisk( parse_context *Ctx,
   Output(SourceFileAndLineNumber, OutputForThisParser, OutputPath, Memory);
   parser *OutputParse = ParserForAnsiStream(Ctx, AnsiStream(OutputForThisParser, OutputPath), TokenCursorSource_MetaprogrammingExpansion, Ctx->Memory);
 
-
+#if 1
   if (IsInlineCode)
   {
     // TODO(Jesse, id: 226, tags: metaprogramming, output): Should we handle this differently?l
@@ -6425,6 +6426,10 @@ FlushOutputToDisk( parse_context *Ctx,
   else if (OmitInclude)
   {
     Info("Skipping parsing code for function marked `omit_include` (%S)", OutputPath);
+  }
+  else if (CodeFragment)
+  {
+    Info("Skipping parsing code for function marked `code_fragment` (%S)", OutputPath);
   }
   else
   {
@@ -6436,6 +6441,7 @@ FlushOutputToDisk( parse_context *Ctx,
     ParseDatatypes(Ctx, OutputParse);
     Ctx->CurrentParser = OldParser;
   }
+#endif
 
   /* PushParser(Ctx->CurrentParser, OutputParse, parser_push_type_include); */
   /* GoGoGadgetMetaprogramming(Ctx, TodoInfo); */
@@ -7648,7 +7654,7 @@ TryParsePoofKeywordAndTagList(parser *Parser, poof_tag_block_array *Tags, declar
 }
 
 link_internal b32
-ParseOmitIncludeTag(parser *Parser)
+ParseMetaFuncTags(parser *Parser, meta_func *Func)
 {
   b32 OmitInclude = {};
   if (PeekToken(Parser).Type == CTokenType_At)
@@ -7658,9 +7664,14 @@ ParseOmitIncludeTag(parser *Parser)
     poof_tag Tag = {};
     while (TryParsePoofTag(Parser, &Tag))
     {
+
       if (AreEqual(Tag.Name, CSz("omit_include")))
       {
-        OmitInclude = True;
+        Func->OmitInclude = True;
+      }
+      else if (AreEqual(Tag.Name, CSz("code_fragment")))
+      {
+        Func->CodeFragment = True;
       }
       else
       {
@@ -7926,7 +7937,7 @@ ParseMapMetaFunctionInstance(parser* Parser, cs FuncName, memory_arena *Memory)
 }
 
 link_internal meta_func
-ParseMetaFunctionDef(parser* Parser, counted_string FuncName, memory_arena *Memory)
+ParseMetaFunctionDef(parser* Parser, cs FuncName, memory_arena *Memory)
 {
   TIMED_FUNCTION();
 
@@ -7935,11 +7946,12 @@ ParseMetaFunctionDef(parser* Parser, counted_string FuncName, memory_arena *Memo
   while (ParseMetaFuncDefArg(Parser, &ArgStream));
   RequireToken(Parser, CTokenType_CloseParen);
 
-  b32 OmitInclude = ParseOmitIncludeTag(Parser);
+  meta_func Func = MetaFunc(FuncName, Compact(&ArgStream, Memory));
 
-  parser Body = GetBodyTextForNextScope(Parser, Memory);
+  ParseMetaFuncTags(Parser, &Func);
 
-  meta_func Func = MetaFunc(FuncName, Compact(&ArgStream, Memory), Body, OmitInclude);
+  Func.Body = GetBodyTextForNextScope(Parser, Memory);
+
 
   return Func;
 }
