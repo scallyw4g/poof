@@ -6353,8 +6353,10 @@ FlushOutputToDisk( parse_context *Ctx,
 
   EatUntilIncluding(Parser, CTokenType_Newline);
 
-  EatNBSP(Parser);
+  /* EatNBSP(Parser); */
 
+  /* parser PrevParserState = *Parser; */
+  /* c_token_cursor PrevTokens = *Parser->Tokens; */
   c_token *LastTokenBeforeNewline = PeekTokenPointer(Parser, -1);
 
   c_token *T = PeekTokenRawPointer(Parser);
