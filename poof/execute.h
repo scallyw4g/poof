@@ -1097,8 +1097,16 @@ ResolveMetaOperator(parse_context *Ctx, meta_func_arg_buffer *Args, meta_func_ar
 
         case value:
         {
-          counted_string Value = GetValueForDatatype(ReplaceData, Memory);
-          Append(OutputBuilder, Value);
+          cs Value = GetValueForDatatype(ReplaceData, Memory);
+          if (OptionalToken(Scope, CTokenType_Question))
+          {
+            b32 DoTrueBranch = Value.Count > 0;
+            DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+          }
+          else
+          {
+            Append(OutputBuilder, Value);
+          }
         } break;
 
         case type:
@@ -1302,9 +1310,11 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
     b32 ImpetusWasAt = False;
     switch (BodyToken->Type)
     {
+      case CTokenType_CharLiteral:
       case CTokenType_StringLiteral:
       {
-        counted_string TempStr = StripQuotes(BodyToken->Value);
+        cs TempStr = StripQuotes(BodyToken->Value);
+
         parser *StringParse = ParserForAnsiStream(Ctx, AnsiStream(TempStr), TokenCursorSource_MetaprogrammingExpansion, Ctx->Memory);
 
         umm IgnoreDepth = 0;
@@ -1321,9 +1331,10 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
         }
         else
         {
-          Append(&OutputBuilder, CSz("\""));
+          const char *Bookend = BodyToken->Type == CTokenType_CharLiteral ? "'" : "\"";
+          Append(&OutputBuilder, CS(Bookend, 1));
           Append(&OutputBuilder, EscapeDoubleQuotes(Code, OutputBuilder.Memory));
-          Append(&OutputBuilder, CSz("\""));
+          Append(&OutputBuilder, CS(Bookend, 1));
         }
       } break;
 

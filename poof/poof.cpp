@@ -7677,7 +7677,7 @@ ParseMetaFuncTags(parser *Parser, meta_func *Func)
       }
       else
       {
-        PoofTagError(Parser, FSz("Unsupported tag value on poof func (%S)", Tag.Name), ErrorT);
+        PoofTagError(Parser, FSz("Unsupported tag value on poof func (%S).  Wanted (@omit_include) or (@code_fragment), got (%S)", Func->Name, Tag.Name), ErrorT);
       }
     }
 

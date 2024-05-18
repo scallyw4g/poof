@@ -226,6 +226,7 @@ name
 type
 value
 array
+hash
 
 // iterative
 map_members
@@ -243,6 +244,7 @@ member
 is_enum
 is_struct
 is_union
+is_pointer
 is_defined
 is_compound
 is_primitive
@@ -250,7 +252,13 @@ is_function
 is_array
 is_type
 is_named
+
 contains_type
+
+has_tag
+tag_value
+
+has_value
 ```
 
 ### Literal Operators
@@ -325,6 +333,31 @@ The .value operator for the_answer outputs: 42.f
 Replaces the type argument with the array size of the type.  This is currently
 not implemented, and will remain so until I discover a use-case. I expect I
 will discover one eventually, so I'm putting it on the Alpha roadmap.
+
+:fire: tag_value
+
+Replaces the value of the given poof tag, if any.
+
+
+```
+struct example_struct
+{
+  int foo; poof(@foo_tag)
+  int bar; poof(@bar_tag(bar))
+  int baz; poof(@baz_tag(42.0))
+};
+```
+The .tag_value operator for foo outputs:
+
+The .tag_value operator for bar outputs: bar
+
+The .tag_value operator for baz outputs: 42.0
+
+
+:fire: hash
+
+Returns a hash of the type.
+
 
 ### Iterative Operators
 
@@ -426,8 +459,6 @@ foo && bar
 
 The member operator accesses a member by index, or by name.
 
-NOTE: Access by name is currently not implemented.
-
 ```
 struct my_struct { int foo; float bar; };
 
@@ -480,8 +511,7 @@ symbol that does not ever appear in C code.  I decided that would be ugly, and
 to have the branches be implicitly one-after-the-other.  This is somewhat
 subject to change in the future; there are problems with this approach as well.
 
-
-:fire: is_enum
+:fire: is_enum?
 
 ```
 struct my_struct { int foo; float bar; };
@@ -499,7 +529,7 @@ is not an enum
 
 ```
 
-:fire: is_struct
+:fire: is_struct?
 
 ```
 struct my_struct { int foo; float bar; };
@@ -517,46 +547,68 @@ is a struct!
 
 ```
 
-:fire: is_union
+:fire: is_union?
 
 Checks if the given type a union.
 
-:fire: is_defined
+:fire: is_pointer?
+
+Checks if the given type is a pointer.
+
+:fire: is_defined?
 
 Checks if the given type is defined.  Extremely useful in rare cases.
 
-:fire: is_compound
+:fire: is_compound?
 
 Checks if the given type is either a struct or union.
 
-:fire: is_primitive
+:fire: is_primitive?
 
 Checks if the given type is primitive.  Primitive types are the following (including valid combinations, and pointers to these types):
 
 `int, float, long, double, char, unsigned, void`
 
-:fire: is_function
+:fire: is_function?
 
 Checks if the given type is a function.
 
-:fire: is_array
+:fire: is_array?
 
 Checks if the given type has an array length.
 
-:fire: is_type
+:fire: is_type?
 
 Checks if the given type is equal to the type name specified.
 
-:fire: is_named
+:fire: is_named?
 
 Checks if the member has a specific name.
 
-:fire: contains_type
+:fire: contains_type?
 
 Checks if a compound type (struct or union) contains a given type.  This is a
 sugar operator; it could be implemented by users with a loop and conditional,
 but the sugar'd version is very concise by comparison.
 
+:fire: name?
+
+Returns false for anonymous struct/unions, true otherwise.
+
+:fire: value?
+
+Returns true for types with default values, false otherwise.
+
+:fire: has_tag?
+
+Checks is the member has poof tags
+
+:fire: are_equal?
+
+Checks the two types for equality.
+
+This is experimental; 'equality' is not particularly well defined. I claim it
+should work as expected for most cases, including through typedefs.
 
 ## Extended examples
 
