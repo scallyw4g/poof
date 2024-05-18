@@ -1,9 +1,3 @@
-# Pre-alpha note
-
-A small subset of the functionality described here is currently not
-implemented.  I have use cases in mind for nearly everything in this document,
-barring a single feature.
-
 # Introduction
 
 The `poof` metaprogramming environment consists of two phases.  First, a
@@ -226,6 +220,7 @@ name
 type
 value
 array
+tag_value
 hash
 
 // iterative
@@ -241,24 +236,21 @@ sep
 member
 
 // predicates
-is_enum
-is_struct
-is_union
-is_pointer
-is_defined
-is_compound
-is_primitive
-is_function
-is_array
-is_type
-is_named
-
-contains_type
-
-has_tag
-tag_value
-
-has_value
+is_enum?
+is_struct?
+is_union?
+is_pointer?
+is_defined?
+is_compound?
+is_primitive?
+is_function?
+is_array?
+is_type?
+is_named?
+contains_type?
+has_tag?
+name?
+value?
 ```
 
 ### Literal Operators
@@ -431,6 +423,8 @@ explored later in more advanced examples.
 
 Iterator that is agnostic of the input type.  Any of the input types above will
 work.  If the input type cannot be iterated, `poof` will emit an error.
+
+### Utility Operators
 
 :fire: sep
 
