@@ -809,10 +809,12 @@ ResolveMetaOperator(parse_context *Ctx, meta_func_arg_buffer *Args, meta_func_ar
           }
           else
           {
-            PoofTypeError( Scope,
-                           ParseErrorCode_InvalidOperator,
-                           CSz("poof datatype variable must be followed by a poof operator"),
-                           BodyToken);
+            cs DatatypeString = ToString(Ctx, Scope, ReplaceData, MetaOperatorToken, Memory);
+            HandleWhitespaceAndAppend(OutputBuilder, DatatypeString);
+            /* PoofTypeError( Scope, */
+            /*                ParseErrorCode_InvalidOperator, */
+            /*                CSz("poof datatype variable must be followed by a poof operator"), */
+            /*                BodyToken); */
           }
         } break;
 

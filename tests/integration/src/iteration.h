@@ -113,14 +113,14 @@ poof(index_map_test(foo_struct_1, 3))
 // tests/integration/generated/iteration/index_map_test_foo_struct_1_3.h
 
 
-int test_func(int bar, float baz, foo_struct_1 fuzz)
+int test_func(int *bar, float **baz, foo_struct_1 &fuzz)
 
 poof(
   func func_arg_map_test(func_t) @omit_include
   {
     func_t.map(arg)
     {
-      arg.type arg.name
+      arg
     }
   }
 )

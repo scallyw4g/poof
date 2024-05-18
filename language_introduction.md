@@ -355,7 +355,8 @@ The .tag_value operator for baz outputs: 42.0
 
 :fire: hash
 
-Returns a hash of the type.
+Returns a hash of the type.  At the moment, this is a string hash of the type
+name.  Experimental, may change in the future.
 
 
 ### literal transform operators

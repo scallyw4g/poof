@@ -101,6 +101,7 @@ link_internal counted_string GetNameForDecl(declaration* Decl);
 link_internal counted_string GetNameForDatatype(datatype *Data, memory_arena *Memory);
 link_internal counted_string GetTypeTypeForDatatype(datatype *Data, memory_arena *);
 link_internal counted_string GetTypeNameFor(parse_context*, datatype *Data, typedef_resolution_behavior TDResBehavior, memory_arena *);
+link_internal type_indirection_info * GetIndirectionInfoForDatatype(datatype*);
 
 link_internal datatype* ResolveToBaseType(program_datatypes *, type_spec );
 link_internal datatype* ResolveToBaseType(program_datatypes *, datatype *);
@@ -7161,6 +7162,55 @@ GetNameForDatatype(datatype *Data, memory_arena *Memory)
   return Result;
 }
 
+link_internal type_indirection_info *
+GetIndirectionInfoForDatatype(datatype *Data)
+{
+  type_indirection_info *Result = {};
+  switch (Data->Type)
+  {
+    // I guess ..?
+    InvalidCase(type_datatype_noop);
+
+    case type_declaration:
+    {
+      declaration *Decl = SafeAccess(declaration, Data);
+      switch (Decl->Type)
+      {
+        InvalidCase(type_declaration_noop);
+
+        case type_function_decl:
+        case type_compound_decl:
+        case type_enum_decl:
+        {
+        } break;
+
+        case type_variable_decl:
+        {
+          Result = &Decl->variable_decl.Type.Indirection;
+        } break;
+      }
+    } break;
+
+    case type_enum_member:
+    {
+    } break;
+
+    case type_primitive_def:
+    {
+      Result = &Data->primitive_def.TypeSpec.Indirection;
+    } break;
+
+    case type_type_def:
+    {
+      // TODO(Jesse): Resolve typedef
+      NotImplemented;
+    } break;
+
+  }
+
+  return Result;
+}
+
 link_internal counted_string
 GetTypeTypeForDatatype(datatype *Data, memory_arena *Memory)
 {
@@ -7283,6 +7333,54 @@ DatatypeStaticBufferSize(parse_context *Ctx, parser *Scope, datatype *Data, c_to
     } break;
   }
 
+  return Result;
+}
+
+link_internal cs
+ToString(type_indirection_info *Indirection, memory_arena *Memory)
+{
+  u32 CharsNeeded = Indirection->IndirectionLevel;
+  cs Result = CountedString(CharsNeeded, Memory);
+
+  if (Indirection->ReferenceLevel)
+  {
+    // NOTE(Jesse): I'm just not going to deal with interleaving the references
+    // and pointers correctly for now, because I never use references.
+    Warn("Not printing references; unsupported.");
+  }
+
+  RangeIterator_t(u32, CharIndex, CharsNeeded)
+  {
+    Cast(char*, &Result.Start[CharIndex])[0] = '*';
+  }
+
+  return Result;
+}
+
+link_internal cs
+PrintIndirection(datatype *Data, memory_arena *Memory)
+{
+  cs Result = {};
+  type_indirection_info *Indirection = GetIndirectionInfoForDatatype(Data);
+  if (Indirection) { Result = ToString(Indirection, Memory); }
+  return Result;
+}
+
+
+
+link_internal cs
+ToString( parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT, memory_arena *Memory)
+{
+  string_builder Builder = {};
+  cs TypeName = GetTypeNameFor(Ctx, Data, TypedefResoultion_ResolveTypedefs, Memory);
+  cs TypeName2 = GetNameForDatatype(Data, Memory);
+  cs TypeType = GetTypeTypeForDatatype(Data, Memory);
+  cs StaticBufferSize = PrintAstNode(DatatypeStaticBufferSize(Ctx, Scope, Data, MetaOperatorT), Memory);
+
+  cs Indirection = PrintIndirection(Data, Memory);
+
+
+  cs Result = Concat(TypeName, CSz(" "), Indirection, TypeName2, Memory);
   return Result;
 }
 
@@ -7481,7 +7579,7 @@ ResolveToBaseType(program_datatypes *Datatypes, type_def *TD)
     Result = Datatype(TD->Type);
     NotImplemented;
 #else
-    Leak("Leaking datatype allocation during ResolveToBaseType");
+    /* Leak("Leaking datatype allocation during ResolveToBaseType"); */
     Result = Allocate(datatype, GetTranArena(), 1);
     *Result = Datatype(TD->Type);
 #endif
@@ -7567,7 +7665,7 @@ ResolveToBaseType(program_datatypes *DataHash, type_spec TypeSpec)
   {
     /* NotImplemented; */
     /* Result = Datatype(TypeSpec); */
-    Leak("Leaking datatype allocation");
+    /* Leak("Leaking datatype allocation"); */
     Result = Allocate(datatype, GetTranArena(), 1);
     *Result = Datatype(TypeSpec);
   }
@@ -7575,7 +7673,7 @@ ResolveToBaseType(program_datatypes *DataHash, type_spec TypeSpec)
   {
     /* NotImplemented; */
     /* Result = Datatype(TypeSpec); */
-    Leak("Leaking datatype allocation");
+    /* Leak("Leaking datatype allocation"); */
     Result = Allocate(datatype, GetTranArena(), 1);
     *Result = Datatype(TypeSpec);
   }
