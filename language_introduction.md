@@ -223,6 +223,13 @@ array
 tag_value
 hash
 
+// literal transform operators
+to_capital_case
+to_snake_case
+to_lowercase
+strip_single_prefix
+strip_all_prefix
+
 // iterative
 map_members
 map_values
@@ -349,6 +356,29 @@ The .tag_value operator for baz outputs: 42.0
 :fire: hash
 
 Returns a hash of the type.
+
+
+### literal transform operators
+
+:fire: to_capital_case
+
+Transforms the literal to CapitalCase
+
+:fire: to_snake_case
+
+Transforms the literal to snake_case
+
+:fire: to_lowercase
+
+Transforms the literal to lowercase
+
+:fire: strip_single_prefix
+
+Strips a single underscore-delimeted word from the front of the literal
+
+:fire: strip_all_prefix
+
+Strips all underscore-delimeted words from the front of the literal (leaving one word)
 
 
 ### Iterative Operators

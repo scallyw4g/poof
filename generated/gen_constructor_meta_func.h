@@ -1,4 +1,4 @@
-// ./poof/poof.h:770:0
+// ./poof/poof.h:771:0
 
 link_internal meta_func
 MetaFunc( cs  Name , meta_func_arg_buffer  Args , parser  Body , b32  OmitInclude , b32  CodeFragment  )

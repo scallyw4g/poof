@@ -6840,6 +6840,12 @@ ApplyTransformations(meta_transform_op Transformations, counted_string Input, me
       Result = ToCapitalCase(Result, Memory);
     }
 
+    if ( Transformations & to_snake_case )
+    {
+      UnsetBitfield(meta_transform_op, Transformations, to_snake_case );
+      Result = ToSnakeCase(Input, Memory);
+    }
+
     if ( Transformations & to_lowercase )
     {
       UnsetBitfield(meta_transform_op, Transformations, to_lowercase );
