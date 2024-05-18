@@ -31,10 +31,11 @@ See [https://scallyw4g.github.io/poof](https://scallyw4g.github.io/poof)
 
 # Project Status
 
-At the time of this writing, `poof` relies on itself to generate ~8k LoC
-(much more if you count debug printing code) and makes use of every documented
-feature.  [Bonsai](https://github.com/scallyw4g/bonsai) relies on `poof` to
-generate a similar amount of code.
+At the time of this writing, `poof` relies on itself to generate >15k LoC and
+makes use of every documented feature.
+
+[Bonsai](https://github.com/scallyw4g/bonsai) relies on `poof` to generate >40k
+LoC.
 
 ## Roadmap to 0.2.0
 
