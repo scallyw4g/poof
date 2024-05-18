@@ -1,4 +1,4 @@
-// ./poof/poof.h:766:0
+// ./poof/poof.h:767:0
 
 struct macro_def_linked_list_node
 {

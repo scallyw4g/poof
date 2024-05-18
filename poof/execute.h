@@ -681,6 +681,7 @@ ResolveMetaOperator(parse_context *Ctx, meta_func_arg_buffer *Args, meta_func_ar
         case value:
         case array:
         case hash:
+        case indirection:
         case map_array:
         case map_members:
         case map_args:
@@ -868,6 +869,20 @@ ResolveMetaOperator(parse_context *Ctx, meta_func_arg_buffer *Args, meta_func_ar
 
           b32 DoTrueBranch = DatatypeHasTag(Ctx, TagName, ReplaceData, Scope, MetaOperatorToken);
           DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+        } break;
+
+        case indirection:
+        {
+          if (OptionalToken(Scope, CTokenType_Question))
+          {
+            b32 DoTrueBranch = DatatypeIsPointer(Ctx, ReplaceData, Scope, MetaOperatorToken) == True;
+            DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+          }
+          else
+          {
+            cs Indirection = PrintIndirection(ReplaceData, Memory);
+            HandleWhitespaceAndAppend(OutputBuilder, Indirection);
+          }
         } break;
 
         case is_pointer:

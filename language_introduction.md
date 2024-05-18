@@ -222,6 +222,7 @@ value
 array
 tag_value
 hash
+indirection
 
 // literal transform operators
 to_capital_case
@@ -357,6 +358,16 @@ The .tag_value operator for baz outputs: 42.0
 
 Returns a hash of the type.  At the moment, this is a string hash of the type
 name.  Experimental, may change in the future.
+
+:fire: indirection
+
+Prints the indirection level (pointer-ness)
+
+```
+int ***foo;
+
+foo.indirection would print `***`
+```
 
 
 ### literal transform operators
@@ -647,6 +658,10 @@ Returns false for anonymous struct/unions, true otherwise.
 :fire: value?
 
 Returns true for types with default values, false otherwise.
+
+:fire: indirection?
+
+Returns true if the type is indirected (synonym for is_pointer?).
 
 :fire: has_tag?
 

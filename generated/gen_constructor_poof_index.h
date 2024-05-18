@@ -1,4 +1,4 @@
-// ./poof/poof.h:605:0
+// ./poof/poof.h:606:0
 
 link_internal poof_index
 PoofIndex( u32  Index , u32  MaxIndex  )

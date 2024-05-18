@@ -53,6 +53,7 @@ enum meta_arg_operator
   value,
   array,
   hash,  // hash of the datatype
+  indirection,
 
   // iterative
   map_array,
