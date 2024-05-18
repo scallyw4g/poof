@@ -1,4 +1,4 @@
-// ./poof/poof.h:405:0
+// ./poof/poof.h:406:0
 
 struct type_def_stream_chunk
 {

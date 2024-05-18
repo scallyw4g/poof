@@ -449,6 +449,30 @@ Iterator that visits each index of an array, in the order they are defined.
 This iterator is difficult to produce a contrived example for, but will be
 explored later in more advanced examples.
 
+:fire: map_args
+
+Iterator that visits each argument of a function.
+
+```
+
+int foo_func (int bar, float baz) { return 0; }
+
+poof(
+  func (foo_func F)
+  {
+    F.map_args (arg)
+    {
+      arg.name arg.value
+    }
+  }
+)
+
+// This function will output:
+
+int bar
+float baz
+```
+
 :fire: map
 
 Iterator that is agnostic of the input type.  Any of the input types above will

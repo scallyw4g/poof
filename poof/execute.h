@@ -140,23 +140,71 @@ struct maybe_counted_string
 
 
 link_internal maybe_counted_string
-MapEnumValues(parse_context *Ctx, enum_decl *Enum, meta_func *EnumFunc, cs *EnumValueMatch, cs *Sep, memory_arena *Memory, umm *Depth)
+MapFunctionDeclArgs(parse_context *Ctx, function_decl *FuncDecl, meta_func *MetaF, cs *EnumValueMatch, cs *Sep, memory_arena *Memory, umm *Depth)
 {
   maybe_counted_string Result = {};
   string_builder OutputBuilder = {};
 
-  meta_func_arg_buffer NewArgs = ExtendBuffer(&EnumFunc->Args, 1, Memory);
+  meta_func_arg_buffer NewArgs = ExtendBuffer(&MetaF->Args, 1, Memory);
+  ITERATE_OVER(&FuncDecl->Args)
+  {
+    Rewind(MetaF->Body.Tokens);
+
+    variable_decl *Arg = GET_ELEMENT(Iter);
+    auto D = Declaration(Arg);
+    SetLast(&NewArgs, ReplacementPattern(*EnumValueMatch, Datatype(&D)));
+
+    cs Output = Execute(MetaF, &NewArgs, Ctx, Memory, Depth);
+    if (MetaF->Body.ErrorCode)
+    {
+      Result.Error = MetaF->Body.ErrorCode;
+      break;
+    }
+    else
+    {
+      // TODO(Jesse): Pretty sure there should be a better way of handling this now that
+      // all the map paths have collapsed..
+      if (Iter.At->Next)
+      {
+        HandleWhitespaceAndAppend(&OutputBuilder, Output, *Sep);
+      }
+      else
+      {
+        HandleWhitespaceAndAppend(&OutputBuilder, Output, {}, True);
+      }
+    }
+  }
+
+
+  if (Result.Error == 0)
+  {
+    Result.E = Finalize(&OutputBuilder, Memory);
+  }
+  else
+  {
+    Discard(&OutputBuilder);
+  }
+
+  return Result;
+}
+link_internal maybe_counted_string
+MapEnumValues(parse_context *Ctx, enum_decl *Enum, meta_func *MetaF, cs *EnumValueMatch, cs *Sep, memory_arena *Memory, umm *Depth)
+{
+  maybe_counted_string Result = {};
+  string_builder OutputBuilder = {};
+
+  meta_func_arg_buffer NewArgs = ExtendBuffer(&MetaF->Args, 1, Memory);
   ITERATE_OVER(&Enum->Members)
   {
-    Rewind(EnumFunc->Body.Tokens);
+    Rewind(MetaF->Body.Tokens);
 
     enum_member* EnumMember = GET_ELEMENT(Iter);
     SetLast(&NewArgs, ReplacementPattern(*EnumValueMatch, Datatype(EnumMember)));
 
-    counted_string EnumFieldOutput = Execute(EnumFunc, &NewArgs, Ctx, Memory, Depth);
-    if (EnumFunc->Body.ErrorCode)
+    counted_string EnumFieldOutput = Execute(MetaF, &NewArgs, Ctx, Memory, Depth);
+    if (MetaF->Body.ErrorCode)
     {
-      Result.Error = EnumFunc->Body.ErrorCode;
+      Result.Error = MetaF->Body.ErrorCode;
       break;
     }
     else
@@ -357,9 +405,29 @@ Map( parse_context *Ctx,
 
         case type_function_decl:
         {
-          // TODO(Jesse): Does mapping over a function mean anything?
-          // TODO(Jesse)(error_messages): If it doesn't, emit a sensible error.
-          NotImplemented;
+          if (Operator == map || Operator == map_args)
+          {
+            auto FuncDecl = SafeAccess(function_decl, Decl);
+            meta_func MetaF = MetaFunc(CSz("map_function_decl_args"), *Args, *MapScope, False, False);
+
+            maybe_counted_string MapResult = MapFunctionDeclArgs(Ctx, FuncDecl, &MetaF, MatchValue, Sep, Memory, Depth);
+            if (MapResult.Error)
+            {
+            }
+            else
+            {
+              HandleWhitespaceAndAppend(OutputBuilder, MapResult.E);
+            }
+          }
+          else
+          {
+            PoofTypeError( ParentScope,
+                           ParseErrorCode_InvalidArgument,
+                           FormatCountedString( GetTranArena(),
+                                                CSz("Incorrectly called (%S) on a function decl."),
+                                                MetaOperatorToken->Value),
+                           MetaOperatorToken);
+          }
         } break;
 
         case type_enum_decl:
@@ -367,9 +435,9 @@ Map( parse_context *Ctx,
           if (Operator == map || Operator == map_values)
           {
             auto EnumDecl = SafeAccess(enum_decl, Decl);
-            meta_func EnumFunc = MetaFunc(CSz("map_enum_values"), *Args, *MapScope, False, False);
+            meta_func MetaF = MetaFunc(CSz("map_enum_values"), *Args, *MapScope, False, False);
 
-            maybe_counted_string MapResult = MapEnumValues(Ctx, EnumDecl, &EnumFunc, MatchValue, Sep, Memory, Depth);
+            maybe_counted_string MapResult = MapEnumValues(Ctx, EnumDecl, &MetaF, MatchValue, Sep, Memory, Depth);
             if (MapResult.Error)
             {
             }
@@ -475,8 +543,8 @@ Map( parse_context *Ctx,
                   if (BaseDecl->Type == type_enum_decl)
                   {
                     auto EnumDecl = SafeAccess(enum_decl, BaseDecl);
-                    meta_func EnumFunc = MetaFunc(CSz("map_enum_values"), *Args, *MapScope, False, False);
-                    maybe_counted_string MapResult = MapEnumValues(Ctx, EnumDecl, &EnumFunc, MatchValue, Sep, Memory, Depth);
+                    meta_func MetaF = MetaFunc(CSz("map_enum_values"), *Args, *MapScope, False, False);
+                    maybe_counted_string MapResult = MapEnumValues(Ctx, EnumDecl, &MetaF, MatchValue, Sep, Memory, Depth);
                     if (MapResult.Error)
                     {
                     }
@@ -615,6 +683,7 @@ ResolveMetaOperator(parse_context *Ctx, meta_func_arg_buffer *Args, meta_func_ar
         case hash:
         case map_array:
         case map_members:
+        case map_args:
         case sep:
         case member:
         case is_enum:
@@ -1272,6 +1341,7 @@ ResolveMetaOperator(parse_context *Ctx, meta_func_arg_buffer *Args, meta_func_ar
         case map_array:
         case map_values:
         case map_members:
+        case map_args:
         {
           RequireToken(Scope, CTokenType_OpenParen);
           c_token *MatchPattern  = RequireTokenPointer(Scope, CTokenType_Identifier);

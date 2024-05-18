@@ -58,6 +58,7 @@ enum meta_arg_operator
   map_array,
   map_values,
   map_members,
+  map_args,
   map,
 
   // utility
@@ -498,6 +499,15 @@ Declaration(compound_decl *S)
   declaration Result = {};
   Result.Type = type_compound_decl;
   Result.compound_decl = *S;
+  return Result;
+}
+
+link_internal declaration
+Declaration(variable_decl *S)
+{
+  declaration Result = {};
+  Result.Type = type_variable_decl;
+  Result.variable_decl = *S;
   return Result;
 }
 
