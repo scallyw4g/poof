@@ -1,4 +1,4 @@
-// ./include/bonsai_stdlib/src/bitmap.cpp:179:0
+// ./include/bonsai_stdlib/src/bitmap.cpp:182:0
 
 struct bitmap_block
 {
@@ -22,6 +22,8 @@ struct bitmap_block_array
   memory_arena *Memory; poof(@no_serialize)
   
 };
+
+typedef bitmap_block_array bitmap_paged_list;
 
 link_internal bitmap_block_array_index
 operator++(bitmap_block_array_index &I0)

@@ -1,4 +1,4 @@
-// ./include/bonsai_stdlib/src/counted_string.cpp:45:0
+// ./include/bonsai_stdlib/src/counted_string.cpp:47:0
 
 struct tuple_cs_cs_buffer_builder
 {

@@ -213,7 +213,7 @@ MaybeParseSepOperator(parser *Scope)
 link_internal counted_string
 Execute(parser *Scope, meta_func_arg_buffer *Args, parse_context *Ctx, memory_arena *Memory, umm *Depth)
 {
-   meta_func F = MetaFunc(CSz("(anonymous)"), *Args, *Scope, False);
+   meta_func F = MetaFunc(CSz("(anonymous)"), *Args, *Scope, False, False);
    cs Result = Execute(&F, Ctx, Memory, Depth);
    if (F.Body.ErrorCode)
    {
@@ -367,7 +367,7 @@ Map( parse_context *Ctx,
           if (Operator == map || Operator == map_values)
           {
             auto EnumDecl = SafeAccess(enum_decl, Decl);
-            meta_func EnumFunc = MetaFunc(CSz("map_enum_values"), *Args, *MapScope, False);
+            meta_func EnumFunc = MetaFunc(CSz("map_enum_values"), *Args, *MapScope, False, False);
 
             maybe_counted_string MapResult = MapEnumValues(Ctx, EnumDecl, &EnumFunc, MatchValue, Sep, Memory, Depth);
             if (MapResult.Error)
@@ -475,7 +475,7 @@ Map( parse_context *Ctx,
                   if (BaseDecl->Type == type_enum_decl)
                   {
                     auto EnumDecl = SafeAccess(enum_decl, BaseDecl);
-                    meta_func EnumFunc = MetaFunc(CSz("map_enum_values"), *Args, *MapScope, False);
+                    meta_func EnumFunc = MetaFunc(CSz("map_enum_values"), *Args, *MapScope, False, False);
                     maybe_counted_string MapResult = MapEnumValues(Ctx, EnumDecl, &EnumFunc, MatchValue, Sep, Memory, Depth);
                     if (MapResult.Error)
                     {

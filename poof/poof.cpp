@@ -2355,7 +2355,7 @@ ParseDiscriminatedUnion(parse_context *Ctx, parser* Parser, program_datatypes* D
     dUnion.CustomEnumType = EnumTypeT->Value;
 
     enum_decl EnumDef = GetEnumDeclByName(Ctx, dUnion.CustomEnumType);
-    if (EnumDef.Name)
+    if (EnumDef.Name.Count)
     {
       ITERATE_OVER(&EnumDef.Members)
       {
@@ -6930,7 +6930,7 @@ ParseTransformations(parser* Scope)
 link_internal meta_func_arg
 MetaFuncArg(parse_context *Ctx, poof_tag Tag, cs Match)
 {
-  Assert(Tag.Value);
+  Assert(Tag.Value.Count);
 
   meta_func_arg Result = {};
   Result.Match = Match;
@@ -8792,7 +8792,6 @@ main(s32 ArgCount_, const char** ArgStrings)
       v2 LastMouseP = Plat->MouseP;
       ProcessOsMessages(&Stdlib.Os, &Stdlib.Plat);
       Plat->MouseDP = LastMouseP - Plat->MouseP;
-      Plat->ScreenDim = V2(Plat->WindowWidth, Plat->WindowHeight);
 
       // @stdlib_frame_preamble?
       Ui.Input = &Plat->Input;

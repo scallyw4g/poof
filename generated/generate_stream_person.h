@@ -1,4 +1,4 @@
-// ./poof/poof.h:795:0
+// ./poof/poof.h:806:0
 
 struct person_stream_chunk
 {

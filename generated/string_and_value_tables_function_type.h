@@ -1,6 +1,24 @@
 // ./poof/poof.h:290:0
 
 link_internal counted_string
+ToStringPrefixless(function_type Type)
+{
+  counted_string Result = {};
+  switch (Type)
+  {
+    case function_type_noop: { Result = CSz("noop"); } break;
+    case function_type_constructor: { Result = CSz("constructor"); } break;
+    case function_type_destructor: { Result = CSz("destructor"); } break;
+    case function_type_operator: { Result = CSz("operator"); } break;
+    case function_type_normal: { Result = CSz("normal"); } break;
+
+    
+  }
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  return Result;
+}
+
+link_internal counted_string
 ToString(function_type Type)
 {
   counted_string Result = {};
@@ -14,6 +32,7 @@ ToString(function_type Type)
 
     
   }
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
   return Result;
 }
 

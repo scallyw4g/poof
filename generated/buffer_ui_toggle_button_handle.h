@@ -1,4 +1,4 @@
-// ./include/bonsai_stdlib/src/ui/ui.cpp:7:0
+// ./include/bonsai_stdlib/src/ui/ui.cpp:4:0
 
 struct ui_toggle_button_handle_buffer
 {
@@ -21,6 +21,13 @@ UiToggleButtonHandleBuffer( umm ElementCount, memory_arena* Memory)
     Warn("Attempted to allocate ui_toggle_button_handle_buffer of 0 length.");
   }
 
+  return Result;
+}
+
+link_inline umm
+LastIndex(ui_toggle_button_handle_buffer *Buf)
+{
+  umm Result = Buf->Count > 0? Buf->Count-1 : 0;
   return Result;
 }
 

@@ -1,6 +1,26 @@
 // ./poof/poof.h:32:0
 
 link_internal counted_string
+ToStringPrefixless(metaprogramming_directive Type)
+{
+  counted_string Result = {};
+  switch (Type)
+  {
+    case meta_directive_noop: { Result = CSz("noop"); } break;
+    case enum_only: { Result = CSz("only"); } break;
+    case d_union: { Result = CSz("union"); } break;
+    case named_list: { Result = CSz("list"); } break;
+    case for_datatypes: { Result = CSz("datatypes"); } break;
+    case func: { Result = CSz("func"); } break;
+    case polymorphic_func: { Result = CSz("func"); } break;
+
+    
+  }
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  return Result;
+}
+
+link_internal counted_string
 ToString(metaprogramming_directive Type)
 {
   counted_string Result = {};
@@ -16,6 +36,7 @@ ToString(metaprogramming_directive Type)
 
     
   }
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
   return Result;
 }
 

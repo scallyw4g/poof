@@ -1,6 +1,21 @@
 // ./poof/poof.h:41:0
 
 link_internal counted_string
+ToStringPrefixless(meta_func_directive Type)
+{
+  counted_string Result = {};
+  switch (Type)
+  {
+    case meta_func_directive_noop: { Result = CSz("noop"); } break;
+    case omit_include: { Result = CSz("include"); } break;
+
+    
+  }
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  return Result;
+}
+
+link_internal counted_string
 ToString(meta_func_directive Type)
 {
   counted_string Result = {};
@@ -11,6 +26,7 @@ ToString(meta_func_directive Type)
 
     
   }
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
   return Result;
 }
 

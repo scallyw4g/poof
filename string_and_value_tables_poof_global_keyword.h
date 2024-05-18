@@ -1,6 +1,22 @@
 // ./poof/poof.h:15:0
 
 link_internal counted_string
+ToStringPrefixless(poof_global_keyword Type)
+{
+  counted_string Result = {};
+  switch (Type)
+  {
+    case poof_global_keyword_noop: { Result = CSz("noop"); } break;
+    case poof_error: { Result = CSz("error"); } break;
+    case are_equal: { Result = CSz("equal"); } break;
+
+    
+  }
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  return Result;
+}
+
+link_internal counted_string
 ToString(poof_global_keyword Type)
 {
   counted_string Result = {};
@@ -12,6 +28,7 @@ ToString(poof_global_keyword Type)
 
     
   }
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
   return Result;
 }
 

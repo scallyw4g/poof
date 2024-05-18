@@ -23,6 +23,8 @@ struct poof_tag_block_array
   
 };
 
+typedef poof_tag_block_array poof_tag_paged_list;
+
 link_internal poof_tag_block_array_index
 operator++(poof_tag_block_array_index &I0)
 {

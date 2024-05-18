@@ -2,6 +2,7 @@
 
 # export POOF_LOG_LEVEL=LogLevel_Debug
 
+./make.sh RunInstalledPoof
 ./make.sh BuildAllBinariesRunAllTests
 
 # FetchBonsaiDebug

@@ -1,6 +1,47 @@
 // ./poof/poof.h:232:0
 
 link_internal counted_string
+ToStringPrefixless(type_qualifier Type)
+{
+  counted_string Result = {};
+  switch (Type)
+  {
+    case TypeQual_None: { Result = CSz("None"); } break;
+    case TypeQual_Void: { Result = CSz("Void"); } break;
+    case TypeQual_Auto: { Result = CSz("Auto"); } break;
+    case TypeQual_Class: { Result = CSz("Class"); } break;
+    case TypeQual_Struct: { Result = CSz("Struct"); } break;
+    case TypeQual_Union: { Result = CSz("Union"); } break;
+    case TypeQual_Enum: { Result = CSz("Enum"); } break;
+    case TypeQual_Bool: { Result = CSz("Bool"); } break;
+    case TypeQual_Inline: { Result = CSz("Inline"); } break;
+    case TypeQual_ThreadLocal: { Result = CSz("ThreadLocal"); } break;
+    case TypeQual_Static: { Result = CSz("Static"); } break;
+    case TypeQual_Extern: { Result = CSz("Extern"); } break;
+    case TypeQual_Const: { Result = CSz("Const"); } break;
+    case TypeQual_Volatile: { Result = CSz("Volatile"); } break;
+    case TypeQual_Signed: { Result = CSz("Signed"); } break;
+    case TypeQual_Unsigned: { Result = CSz("Unsigned"); } break;
+    case TypeQual_Char: { Result = CSz("Char"); } break;
+    case TypeQual_Long: { Result = CSz("Long"); } break;
+    case TypeQual_Long_Long: { Result = CSz("Long"); } break;
+    case TypeQual_Int: { Result = CSz("Int"); } break;
+    case TypeQual_Double: { Result = CSz("Double"); } break;
+    case TypeQual_Short: { Result = CSz("Short"); } break;
+    case TypeQual_Float: { Result = CSz("Float"); } break;
+    case TypeQual_Constexpr: { Result = CSz("Constexpr"); } break;
+    case TypeQual_Explicit: { Result = CSz("Explicit"); } break;
+    case TypeQual_Operator: { Result = CSz("Operator"); } break;
+    case TypeQual_Virtual: { Result = CSz("Virtual"); } break;
+    case TypeQual_Noreturn: { Result = CSz("Noreturn"); } break;
+
+    
+  }
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  return Result;
+}
+
+link_internal counted_string
 ToString(type_qualifier Type)
 {
   counted_string Result = {};
@@ -37,6 +78,7 @@ ToString(type_qualifier Type)
 
     
   }
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
   return Result;
 }
 

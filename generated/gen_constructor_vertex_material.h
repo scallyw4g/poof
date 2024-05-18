@@ -1,10 +1,10 @@
-// ./include/bonsai_stdlib/src/mesh.h:10:0
+// ./include/bonsai_stdlib/src/mesh.h:35:0
 
 link_internal vertex_material
-VertexMaterial( v3 Color , f32 Transparency , f32 Emission  )
+VertexMaterial( u16  ColorIndex , u8  Transparency , u8  Emission  )
 {
   vertex_material Reuslt = {
-    .Color = Color,
+    .ColorIndex = ColorIndex,
     .Transparency = Transparency,
     .Emission = Emission
   };

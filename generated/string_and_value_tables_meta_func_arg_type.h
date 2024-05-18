@@ -1,6 +1,23 @@
 // ./poof/poof.h:620:0
 
 link_internal counted_string
+ToStringPrefixless(meta_func_arg_type Type)
+{
+  counted_string Result = {};
+  switch (Type)
+  {
+    case type_meta_func_arg_noop: { Result = CSz("noop"); } break;
+    case type_datatype: { Result = CSz("datatype"); } break;
+    case type_poof_index: { Result = CSz("index"); } break;
+    case type_poof_symbol: { Result = CSz("symbol"); } break;
+
+    
+  }
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  return Result;
+}
+
+link_internal counted_string
 ToString(meta_func_arg_type Type)
 {
   counted_string Result = {};
@@ -13,6 +30,7 @@ ToString(meta_func_arg_type Type)
 
     
   }
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
   return Result;
 }
 
