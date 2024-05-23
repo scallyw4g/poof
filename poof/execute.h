@@ -701,6 +701,7 @@ ResolveMetaOperator(parse_context *Ctx, meta_func_arg_buffer *Args, meta_func_ar
         case contains_type:
         case has_tag:
         case tag_value:
+        case tags:
         {
           PoofTypeError( Scope,
                          ParseErrorCode_InvalidOperator,
@@ -823,6 +824,28 @@ ResolveMetaOperator(parse_context *Ctx, meta_func_arg_buffer *Args, meta_func_ar
         {
           // TODO(Jesse): Emit error message here.
           NotImplemented;
+        } break;
+
+        case tags:
+        {
+          /* RequireToken(Scope, CTokenType_OpenParen); */
+          /* cs TagName = RequireToken(Scope, CTokenType_Identifier).Value; */
+          /* RequireToken(Scope, CTokenType_CloseParen); */
+
+          poof_tag_block_array *Tags = GetTagsFromDatatype(Ctx, ReplaceData, Scope, MetaOperatorToken);
+
+          IterateOver(Tags, Tag, TagIndex)
+          {
+            Assert(Tag->Name.Count);
+            Append(OutputBuilder, Tag->Name);
+            if (Tag->Value.Count)
+            {
+              Append(OutputBuilder, CSz("("));
+              Append(OutputBuilder, Tag->Value);
+              Append(OutputBuilder, CSz(")"));
+            }
+            Append(OutputBuilder, CSz(" "));
+          }
         } break;
 
         case tag_value:
@@ -1740,9 +1763,6 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
     case for_datatypes:
     {
-#if 0
-      BUG("for_datatypes not implemented!!");
-#else
       TIMED_NAMED_BLOCK("for_datatypes");
       RequireToken(Parser, CTokenType_OpenParen);
       RequireToken(Parser, CToken(CSz("all")));
@@ -1757,10 +1777,15 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         RequireToken(Parser, CTokenType_CloseParen);
       }
 
+
       // ParseDatatypeList can fail if you pass in an undefined dataype
       // in the excludes constraint
       if (Parser->ErrorCode == ParseErrorCode_None)
       {
+        // NOTE(Jesse): This is just here to parse the func tags out.
+        meta_func ForAllDummyFunc = {};
+        ParseMetaFuncTags(Parser, &ForAllDummyFunc);
+
         RequireToken(Parser, CToken(ToString(func)));
         meta_func StructFunc = ParseMetaFunctionDef(Parser, CSz("for_datatypes_struct_callback"), Memory);
 
@@ -1778,12 +1803,12 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
             {
               if (compound_decl *Struct = TryCastToCompoundDecl(Ctx, DT))
               {
-                if (Struct->IsUnion == False)
+                if (Struct->Type && Struct->IsUnion == False)
                 {
                   if (!StreamContains(&Excludes, Struct->Type->Value))
                   {
                     Assert(StructFunc.Args.Count == 1);
-                    StructFunc.Args.Start[0] = ReplacementPattern(StructFunc.Args.Start[0].Match, Datatype(Struct));
+                    StructFunc.Args.Start[0] = ReplacementPattern(StructFunc.Args.Start[0].Match, *DT);
 
                     umm Depth = 0;
                     counted_string Code = Execute(&StructFunc, Ctx, Memory, &Depth);
@@ -1805,7 +1830,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
                 if (!StreamContains(&Excludes, Enum->Name))
                 {
                   Assert(EnumFunc.Args.Count == 1);
-                  EnumFunc.Args.Start[0] = ReplacementPattern(EnumFunc.Args.Start[0].Match, Datatype(Enum));
+                  EnumFunc.Args.Start[0] = ReplacementPattern(EnumFunc.Args.Start[0].Match, *DT);
                   umm Depth = 0;
                   counted_string Code = Execute(&EnumFunc, Ctx, Memory, &Depth);
                   Append(&OutputBuilder, Code);
@@ -1815,12 +1840,11 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           }
         }
 
-        counted_string Code = Finalize(&OutputBuilder, Memory);
-        counted_string OutfileName = GenerateOutfileNameFor(ToString(Directive), CSz("debug_print"), Memory);
-        counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /* Todoinfo */, Memory);
+        cs Code = Finalize(&OutputBuilder, Memory);
+        cs OutfileName = GenerateOutfileNameFor(ToString(Directive), GetRandomString(8, umm(Hash(&Code)), Memory), Memory);
+        cs ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /* Todoinfo */, Memory, False, ForAllDummyFunc.OmitInclude, ForAllDummyFunc.CodeFragment );
         Append(Builder, Tuple(ActualOutputFile, Code));
       }
-#endif
     } break;
 
     case d_union:

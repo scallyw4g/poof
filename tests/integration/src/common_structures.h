@@ -54,6 +54,7 @@ struct nested_struct
   doubly_nested_struct DoublyNested;
 };
 
+struct bar_struct;
 struct bar_struct
 {
   int fda;
@@ -69,20 +70,16 @@ int foofunc(void)
 {
 }
 
-enum foo_enum
-{
-  foo_enum_val0,
-  foo_enum_val1,
-  foo_enum_val2,
-};
-
-
 typedef int (*foofuncptr)(void);
 typedef int (foofunc0)(void);
 typedef int foofunc1(void);
 typedef foo_enum foofunc2(int);
 
-struct foo_struct_0
+struct foo_struct_0 poof(@tag)
+{
+};
+
+struct foo_struct_0 poof(@tag_with_value(69))
 {
 };
 

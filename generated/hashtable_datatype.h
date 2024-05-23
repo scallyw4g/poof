@@ -1,4 +1,4 @@
-// ./poof/poof.h:458:0
+// ./poof/poof.h:459:0
 
 struct datatype_linked_list_node
 {
@@ -12,6 +12,8 @@ struct datatype_hashtable
   datatype_linked_list_node **Elements;
   /* OWNED_BY_THREAD_MEMBER() */
 };
+link_internal b32 AreEqual(datatype_linked_list_node *Node1, datatype_linked_list_node *Node2 );
+
 link_internal datatype_linked_list_node *
 Allocate_datatype_linked_list_node(memory_arena *Memory)
 {
@@ -58,7 +60,11 @@ Insert(datatype_linked_list_node *Node, datatype_hashtable *Table)
   Assert(Table->Size);
   umm HashValue = Hash(&Node->Element) % Table->Size;
   datatype_linked_list_node **Bucket = Table->Elements + HashValue;
-  while (*Bucket) Bucket = &(*Bucket)->Next;
+  while (*Bucket)
+  {
+    /* Assert(!AreEqual(*Bucket, Node)); */
+    Bucket = &(*Bucket)->Next;
+  }
   *Bucket = Node;
   return &Bucket[0]->Element;
 }

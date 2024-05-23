@@ -1,4 +1,4 @@
-// ./poof/poof.h:172:0
+// ./poof/poof.h:173:0
 
 struct compound_decl_cursor
 {

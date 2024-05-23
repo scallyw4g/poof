@@ -54,6 +54,7 @@ enum meta_arg_operator
   array,
   hash,  // hash of the datatype
   indirection,
+  tags,
 
   // iterative
   map_array,
@@ -408,11 +409,11 @@ poof(generate_stream(type_def))
 #include <generated/generate_stream_type_def.h>
 
 
-struct datatype
+struct datatype poof(@d_union)
 {
   datatype_type Type;
 
-  union
+  union poof(@d_union_target)
   {
     declaration    declaration;
     primitive_def  primitive_def;

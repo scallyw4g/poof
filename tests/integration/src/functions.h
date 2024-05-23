@@ -1,6 +1,5 @@
 
-#define poof(...)
-
+#include <tests/integration/src/common_structures.h>
 
 poof(
   func foobaz(type) @omit_include
@@ -36,3 +35,4 @@ poof(
 
 poof(func2(thing))
 // tests/integration/generated/functions/func2_thing.h
+

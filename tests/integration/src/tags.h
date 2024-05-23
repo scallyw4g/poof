@@ -128,3 +128,19 @@ poof(
 // tests/integration/generated/tags/anonymous_has_numeric_tag_W4DIb6aG.h
 
 
+
+poof(
+  for_datatypes(all) @omit_include
+
+  func (struct_t)
+  {
+    struct_t struct_t.tags
+  }
+
+  func (enum_t)
+  {
+    enum_t enum_t.tags
+  }
+)
+// tests/integration/generated/functions/for_datatypes_fbtiAaJR.h
+

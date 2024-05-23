@@ -1,4 +1,4 @@
-// ./include/bonsai_stdlib/src/counted_string.h:844:0
+// ./include/bonsai_stdlib/src/counted_string.h:854:0
 
 link_internal b32
 ParseInteger(cs String, u32 *Out)

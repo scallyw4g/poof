@@ -223,6 +223,7 @@ array
 tag_value
 hash
 indirection
+tags
 
 // literal transform operators
 to_capital_case
@@ -235,6 +236,7 @@ strip_all_prefix
 map_members
 map_values
 map_array
+map_args
 map
 
 // utility
@@ -369,6 +371,10 @@ int ***foo;
 foo.indirection would print `***`
 ```
 
+:fire: tags
+
+Emits all tags and values on the type.
+
 
 ### literal transform operators
 
@@ -463,7 +469,7 @@ explored later in more advanced examples.
 
 :fire: map_args
 
-Iterator that visits each argument of a function.
+Iterator that visits each argument of a function, in the order they appear in the prototype.
 
 ```
 
@@ -673,6 +679,32 @@ Checks the two types for equality.
 
 This is experimental; 'equality' is not particularly well defined. I claim it
 should work as expected for most cases, including through typedefs.
+
+## Builtins
+
+:fire: for_datatypes
+
+Run provided callbacks for each datatype poof has parsed.  Does not fire for
+functions, but there will be a third callback added in the future
+
+```
+poof( for_datatypes(
+    all,
+    (struct_t)
+    {
+      // This gets run for all structs and unions
+    }
+    (enum_t)
+    {
+      // This gets run for all enums
+    }
+))
+```
+
+:fire: poof_error
+
+Emit a compile-time error from user-defined poof code
+
 
 ## Extended examples
 

@@ -6215,7 +6215,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
             case type_compound_decl:
             {
               // @not_pushing_variable_decls
-              Insert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+              datatype *Inserted = Insert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
 
               compound_decl StructOrUnion = Decl.compound_decl;
 
@@ -7399,10 +7399,10 @@ TypeSpecIsPointer(type_spec *Type)
   return Result;
 }
 
-link_internal poof_tag
-GetTagFromDatatype(parse_context *Ctx, cs TagName, datatype *Data, parser *Scope = 0, c_token *MetaOperatorT = 0)
+link_internal poof_tag_block_array *
+GetTagsFromDatatype(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token *MetaOperatorT = 0)
 {
-  poof_tag Result = {};
+  poof_tag_block_array *Result = {};
   switch (Data->Type)
   {
     case type_datatype_noop: { if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); } } break;
@@ -7411,22 +7411,34 @@ GetTagFromDatatype(parse_context *Ctx, cs TagName, datatype *Data, parser *Scope
     case type_primitive_def:
     case type_type_def:
     {
-      if (Scope) { PoofNotImplementedError(Scope, CSz("has_tag is not yet implemented here."), MetaOperatorT); }
+      if (Scope) { PoofNotImplementedError(Scope, CSz("GetTagsFromDatatype is not yet implemented here."), MetaOperatorT); }
     } break;
 
     case type_declaration:
     {
       declaration *Decl = SafeAccess(declaration, Data);
-
-      IterateOver(&Decl->Tags, Tag, TagIndex)
-      {
-        if (AreEqual(Tag->Name, TagName))
-        {
-          Result = *Tag;
-          break;
-        }
-      }
+      Result = &Decl->Tags;
     } break;
+  }
+
+  return Result;
+}
+
+link_internal poof_tag
+GetTagFromDatatype(parse_context *Ctx, cs TagName, datatype *Data, parser *Scope = 0, c_token *MetaOperatorT = 0)
+{
+  poof_tag Result = {};
+  
+  if (poof_tag_block_array *Tags = GetTagsFromDatatype(Ctx, Data, Scope, MetaOperatorT))
+  {
+    IterateOver(Tags, Tag, TagIndex)
+    {
+      if (AreEqual(Tag->Name, TagName))
+      {
+        Result = *Tag;
+        break;
+      }
+    }
   }
 
   return Result;
