@@ -84,18 +84,18 @@ function BuildPoofEmcc
     emcc                                     \
       poof/poof.cpp                          \
       $OPTIMIZATION_LEVEL                    \
+      -msimd128                              \
       $CXX_OPTIONS                           \
       $PLATFORM_CXX_OPTIONS                  \
-      $PLATFORM_LINKER_OPTIONS               \
                                              \
       -O0                                    \
       -g                                     \
                                              \
-      -msimd128                              \
       -sALLOW_MEMORY_GROWTH                  \
       -sEXPORTED_FUNCTIONS=_DoPoofForWeb     \
       -sEXPORTED_RUNTIME_METHODS=ccall,cwrap \
       -D "__SSE__"                           \
+      -D "__AVX__"                           \
       -D "BONSAI_EMCC"                       \
       -Wno-disabled-macro-expansion          \
       -Wno-reserved-identifier               \

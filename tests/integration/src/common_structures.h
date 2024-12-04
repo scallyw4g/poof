@@ -158,3 +158,26 @@ struct foo_struct_1
   u32 NamedThing;
 };
 
+
+
+poof(
+  func poof_noop(ignored) @code_fragment
+  {  }
+)
+
+// NOTE(Jesse): This just tests we can do a poof inside an enum
+enum poof_enum
+{
+  enum_value_0,
+  poof(poof_noop(foo_struct_0))
+#include <tests/integration/generated/accessors/poof_noop_foo_struct_0.h>
+};
+
+// NOTE(Jesse): This just tests we can do a poof inside a struct
+struct poof_struct
+{
+  int foo;
+  poof(poof_noop(foo_struct_0))
+#include <tests/integration/generated/accessors/poof_noop_foo_struct_0.h>
+  float bar;
+};

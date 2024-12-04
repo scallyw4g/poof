@@ -20,7 +20,7 @@ struct u8_cursor_block_array
   u8_cursor_block *First;
   u8_cursor_block *Current;
   memory_arena *Memory; poof(@no_serialize)
-  u64 BlockSize;
+  umm BlockSize;
 };
 
 typedef u8_cursor_block_array u8_cursor_paged_list;
@@ -110,6 +110,14 @@ AtElements(u8_cursor_block_array *Arr)
   return Result;
 }
 
+link_internal umm
+Count(u8_cursor_block_array *Arr)
+{
+  auto Index = AtElements(Arr);
+  umm Result = GetIndex(&Index);
+  return Result;
+}
+
 link_internal u8_cursor *
 GetPtr(u8_cursor_block_array *Arr, u8_cursor_block_array_index Index)
 {
@@ -140,6 +148,19 @@ GetPtr(u8_cursor_block_array *Arr, umm Index)
   }
 
   u8_cursor *Result = Block->Elements+ElementIndex;
+  return Result;
+}
+
+link_internal u8_cursor *
+TryGetPtr(u8_cursor_block_array *Arr, umm Index)
+{
+  umm BlockIndex = Index / 8;
+  umm ElementIndex = Index % 8;
+
+  auto AtE = AtElements(Arr);
+  umm Total = GetIndex(&AtE);
+  u8_cursor *Result = {};
+  if (Index < Total) { Result = GetPtr(Arr, Index); }
   return Result;
 }
 

@@ -1,12 +1,15 @@
 // ./poof/poof.h:607:0
 
 link_internal poof_index
-PoofIndex( u32  Index , u32  MaxIndex  )
+PoofIndex( u32   Index , u32   MaxIndex  )
 {
   poof_index Reuslt = {
-    .Index = Index,
+    .Index = Index
+,
     .MaxIndex = MaxIndex
   };
+
+  
   return Reuslt;
 }
 

@@ -1,7 +1,8 @@
-// ./include/bonsai_stdlib/src/ui/ui.h:192:0
+// ./include/bonsai_stdlib/src/ui/ui.h:218:0
 
 struct ui_toggle_linked_list_node
 {
+  b32 Tombstoned;
   ui_toggle Element;
   ui_toggle_linked_list_node *Next;
 };

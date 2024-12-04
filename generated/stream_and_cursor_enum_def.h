@@ -15,12 +15,10 @@ link_internal enum_decl_cursor
 EnumDeclCursor(umm ElementCount, memory_arena* Memory)
 {
   enum_decl *Start = (enum_decl*)PushStruct(Memory, sizeof(enum_decl)*ElementCount, 1, 0);
-  enum_decl_cursor Result = {
-    .Start = Start,
-    .End = Start+ElementCount,
-    .At = Start,
-    /* OWNED_BY_THREAD_MEMBER_INIT() */
-  };
+  enum_decl_cursor Result = {};
+  Result.Start = Start;
+  Result.End = Start+ElementCount;
+  Result.At = Start;
   return Result;
 }
 

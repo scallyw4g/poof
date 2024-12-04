@@ -2,6 +2,7 @@
 
 struct datatype_linked_list_node
 {
+  b32 Tombstoned;
   datatype Element;
   datatype_linked_list_node *Next;
 };
@@ -52,6 +53,19 @@ GetFirstAtBucket(umm HashValue, datatype_hashtable *Table)
   return Result;
 }
 
+link_internal datatype_linked_list_node**
+GetMatchingBucket(datatype Element, datatype_hashtable *Table, memory_arena *Memory)
+{
+  umm HashValue = Hash(&Element) % Table->Size;
+  datatype_linked_list_node **Bucket = Table->Elements + HashValue;
+  while (*Bucket)
+  {
+    if (AreEqual(&Bucket[0]->Element, &Element)) { break; }
+    Bucket = &(*Bucket)->Next;
+  }
+  return Bucket;
+}
+
 link_internal datatype *
 Insert(datatype_linked_list_node *Node, datatype_hashtable *Table)
 {
@@ -91,7 +105,7 @@ Upsert(datatype Element, datatype_hashtable *Table, memory_arena *Memory)
     Bucket = &(*Bucket)->Next;
   }
 
-  if (*Bucket)
+  if (*Bucket && Bucket[0]->Tombstoned == False)
   {
     Bucket[0]->Element = Element;
   }
@@ -102,6 +116,7 @@ Upsert(datatype Element, datatype_hashtable *Table, memory_arena *Memory)
 
   return &Bucket[0]->Element;
 }
+
 
 //
 // Iterator impl.

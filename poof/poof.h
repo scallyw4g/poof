@@ -789,6 +789,7 @@ MetaFunc(cs Name, meta_func_arg_buffer Args)
   meta_func Reuslt = {
     .Name = Name,
     .Args = Args,
+    {}, {}, {}
   };
   return Reuslt;
 }

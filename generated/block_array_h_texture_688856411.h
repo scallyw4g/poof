@@ -1,4 +1,4 @@
-// ./include/bonsai_stdlib/src/texture.h:35:0
+// ./include/bonsai_stdlib/src/texture.h:47:0
 
 struct texture_ptr_block
 {
@@ -110,6 +110,14 @@ AtElements(texture_ptr_block_array *Arr)
   return Result;
 }
 
+link_internal umm
+Count(texture_ptr_block_array *Arr)
+{
+  auto Index = AtElements(Arr);
+  umm Result = GetIndex(&Index);
+  return Result;
+}
+
 link_internal texture_ptr *
 GetPtr(texture_ptr_block_array *Arr, texture_ptr_block_array_index Index)
 {
@@ -140,6 +148,19 @@ GetPtr(texture_ptr_block_array *Arr, umm Index)
   }
 
   texture_ptr *Result = Block->Elements+ElementIndex;
+  return Result;
+}
+
+link_internal texture_ptr *
+TryGetPtr(texture_ptr_block_array *Arr, umm Index)
+{
+  umm BlockIndex = Index / 8;
+  umm ElementIndex = Index % 8;
+
+  auto AtE = AtElements(Arr);
+  umm Total = GetIndex(&AtE);
+  texture_ptr *Result = {};
+  if (Index < Total) { Result = GetPtr(Arr, Index); }
   return Result;
 }
 

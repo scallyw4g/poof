@@ -110,6 +110,14 @@ AtElements(u32_block_array *Arr)
   return Result;
 }
 
+link_internal umm
+Count(u32_block_array *Arr)
+{
+  auto Index = AtElements(Arr);
+  umm Result = GetIndex(&Index);
+  return Result;
+}
+
 link_internal u32 *
 GetPtr(u32_block_array *Arr, u32_block_array_index Index)
 {
@@ -140,6 +148,19 @@ GetPtr(u32_block_array *Arr, umm Index)
   }
 
   u32 *Result = Block->Elements+ElementIndex;
+  return Result;
+}
+
+link_internal u32 *
+TryGetPtr(u32_block_array *Arr, umm Index)
+{
+  umm BlockIndex = Index / 8;
+  umm ElementIndex = Index % 8;
+
+  auto AtE = AtElements(Arr);
+  umm Total = GetIndex(&AtE);
+  u32 *Result = {};
+  if (Index < Total) { Result = GetPtr(Arr, Index); }
   return Result;
 }
 

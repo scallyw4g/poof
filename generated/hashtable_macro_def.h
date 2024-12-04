@@ -2,6 +2,7 @@
 
 struct macro_def_linked_list_node
 {
+  b32 Tombstoned;
   macro_def Element;
   macro_def_linked_list_node *Next;
 };
@@ -52,6 +53,19 @@ GetFirstAtBucket(umm HashValue, macro_def_hashtable *Table)
   return Result;
 }
 
+link_internal macro_def_linked_list_node**
+GetMatchingBucket(macro_def Element, macro_def_hashtable *Table, memory_arena *Memory)
+{
+  umm HashValue = Hash(&Element) % Table->Size;
+  macro_def_linked_list_node **Bucket = Table->Elements + HashValue;
+  while (*Bucket)
+  {
+    if (AreEqual(&Bucket[0]->Element, &Element)) { break; }
+    Bucket = &(*Bucket)->Next;
+  }
+  return Bucket;
+}
+
 link_internal macro_def *
 Insert(macro_def_linked_list_node *Node, macro_def_hashtable *Table)
 {
@@ -91,7 +105,7 @@ Upsert(macro_def Element, macro_def_hashtable *Table, memory_arena *Memory)
     Bucket = &(*Bucket)->Next;
   }
 
-  if (*Bucket)
+  if (*Bucket && Bucket[0]->Tombstoned == False)
   {
     Bucket[0]->Element = Element;
   }
@@ -102,6 +116,7 @@ Upsert(macro_def Element, macro_def_hashtable *Table, memory_arena *Memory)
 
   return &Bucket[0]->Element;
 }
+
 
 //
 // Iterator impl.

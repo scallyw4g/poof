@@ -2,13 +2,13 @@
 
 # export POOF_LOG_LEVEL=LogLevel_Debug
 
-./make.sh RunInstalledPoof
+# ./make.sh RunInstalledPoof
 # ./make.sh BuildAllBinariesRunAllTests
 
 # FetchBonsaiDebug
 
-# ./make.sh RunInstalledPoof
-./make.sh BuildPoof
+./make.sh RunInstalledPoof
+# ./make.sh BuildPoof
 # ./make.sh RunPoof
 
 # export OPTIMIZATION_LEVEL="-O2"
@@ -20,15 +20,15 @@
 
 # INTEGRATION_TEST_INDEX=5 \
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug" \
-./make.sh RunIntegrationTests
+# ./make.sh RunIntegrationTests
 
 # ./make.sh BuildDebugSystem
 
 # ./make.sh RunIntegrationTests
 # ./make.sh BuildAndRunAllExamples
 
-# RollupEmcc
-# BuildPoofEmcc
+./make.sh BuildPoofEmcc
+./make.sh RollupEmcc
 
 # ./make.sh BuildParserTests
 # ./make.sh RunParserTests

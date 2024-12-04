@@ -110,6 +110,14 @@ AtElements(file_traversal_node_block_array *Arr)
   return Result;
 }
 
+link_internal umm
+Count(file_traversal_node_block_array *Arr)
+{
+  auto Index = AtElements(Arr);
+  umm Result = GetIndex(&Index);
+  return Result;
+}
+
 link_internal file_traversal_node *
 GetPtr(file_traversal_node_block_array *Arr, file_traversal_node_block_array_index Index)
 {
@@ -140,6 +148,19 @@ GetPtr(file_traversal_node_block_array *Arr, umm Index)
   }
 
   file_traversal_node *Result = Block->Elements+ElementIndex;
+  return Result;
+}
+
+link_internal file_traversal_node *
+TryGetPtr(file_traversal_node_block_array *Arr, umm Index)
+{
+  umm BlockIndex = Index / 8;
+  umm ElementIndex = Index % 8;
+
+  auto AtE = AtElements(Arr);
+  umm Total = GetIndex(&AtE);
+  file_traversal_node *Result = {};
+  if (Index < Total) { Result = GetPtr(Arr, Index); }
   return Result;
 }
 
@@ -179,17 +200,32 @@ RemoveUnordered(file_traversal_node_block_array *Array, file_traversal_node_bloc
 
   if (Array->Current->At == 0)
   {
-    // Walk the chain till we get to the second-last one
-    file_traversal_node_block *Current = Array->First;
-    file_traversal_node_block *LastB = LastI.Block;
+    // TODO(Jesse): There's obviously a way better way to do this ..
+    auto AtE = AtElements(Array);
+    s32 Count = s32(GetIndex(&AtE));
 
-    while (Current->Next && Current->Next != LastB)
+    if (Count == 0)
     {
-      Current = Current->Next;
+      // Nothing to be done, we've popping the last thing off the array
+      Assert(Index.Block == Array->First);
+      Assert(Index.Block == Array->Current);
+      Assert(Index.BlockIndex == 0);
+      Assert(Index.ElementIndex == 0);
     }
+    else
+    {
+      // Walk the chain till we get to the second-last one
+      file_traversal_node_block *Current = Array->First;
+      file_traversal_node_block *LastB = LastI.Block;
 
-    Assert(Current->Next == LastB || Current->Next == 0);
-    Array->Current = Current;
+      while (Current->Next && Current->Next != LastB)
+      {
+        Current = Current->Next;
+      }
+
+      Assert(Current->Next == LastB || Current->Next == 0);
+      Array->Current = Current;
+    }
   }
 }
 

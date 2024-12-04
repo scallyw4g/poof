@@ -75,7 +75,7 @@ link_internal c_token *   EraseAllRemainingIfBlocks(parser *Parser);
 // C Parser
 //
 
-link_internal compound_decl ParseStructBody(parse_context *, c_token *);
+link_internal compound_decl ParseStructBody(parse_context *, c_token *, poof_tag_block_array *);
 link_internal declaration   ParseStructMember(parse_context *Ctx, c_token *StructNameT);
 
 link_internal ast_node_expression* ParseExpression(parse_context *Ctx);
@@ -399,7 +399,7 @@ ExpandMacro( parse_context *Ctx,
       {
         // TODO(Jesse)(safety, immediate): This is super janky.  We can only snap a pointer to this and access it while it's on the stack..
         c_token_cursor Tokens = CTokenCursor(Start, Start, CSz(DEFAULT_FILE_IDENTIFIER), TokenCursorSource_IntermediateRepresentaton, {0,0} );
-        parser InstanceArgs_ = { .Tokens = &Tokens };
+        parser InstanceArgs_ = { {}, {}, .Tokens = &Tokens };
         parser *InstanceArgs = &InstanceArgs_;
 
         EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
@@ -1966,7 +1966,7 @@ link_internal umm
 Hash(datatype *D)
 {
   cs Name = GetNameForDatatype(D, GetTranArena());
-  umm Result = Hash(&Name);
+  umm Result = umm(Hash(&Name));
   return Result;
 }
 
@@ -2417,7 +2417,7 @@ ParseDiscriminatedUnion(parse_context *Ctx, parser* Parser, program_datatypes* D
 
   if (OptionalToken(Parser, CTokenType_Comma))
   {
-    dUnion.CommonMembers = ParseStructBody(Ctx, NameT);
+    dUnion.CommonMembers = ParseStructBody(Ctx, NameT, 0);
   }
 
   return dUnion;
@@ -2468,6 +2468,7 @@ ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_aren
     .Outpath      = CSz("."),
     .Files        = AllocateBuffer<counted_string_cursor, counted_string>((u32)ArgCount, Memory),
     .IncludePaths = AllocateBuffer<counted_string_cursor, counted_string>((u32)ArgCount, Memory),
+    False, False, False
   };
 
 #if 0
@@ -2829,6 +2830,7 @@ StructDef(c_token *StructNameT) // , counted_string Sourcefile)
 {
   compound_decl Result = {
     .Type = StructNameT,
+    {}, {}
     /* .DefinedInFile = Sourcefile */
   };
 
@@ -3562,11 +3564,11 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
 
   RequireToken(Parser, CTokenType_OpenParen);
 
-  function_decl Result = {
-    .Type = Type,
-    .ReturnType = *ReturnType,
-    .NameT = FuncNameT,
-  };
+  function_decl Result = {};
+
+  Result.Type = Type;
+  Result.ReturnType = *ReturnType;
+  Result.NameT = FuncNameT;
 
   // Function definition args
   b32 DoneParsingArguments = PeekToken(Parser) == CToken(CTokenType_CloseParen);
@@ -4773,7 +4775,7 @@ IsAnonymous(compound_decl *Decl)
 }
 
 link_internal compound_decl
-ParseStructBody(parse_context *Ctx, c_token *StructNameT)
+ParseStructBody(parse_context *Ctx, c_token *StructNameT, poof_tag_block_array *Tags)
 {
   TIMED_FUNCTION();
   parser *Parser = Ctx->CurrentParser;
@@ -4788,6 +4790,12 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT)
 
     if (MaybeEatStaticAssert(Parser)) { continue; }
     if (MaybeEatVisibilityQualifier(Parser)) { continue; }
+
+    /* poof_tag_block_array StructTags; */
+    if (Tags)
+    {
+      TryParsePoofKeywordAndTagList(Parser, Tags, 0);
+    }
 
     declaration Member = ParseStructMember(Ctx, Result.Type);
 
@@ -4956,27 +4964,39 @@ ParseEnumBody(parse_context *Ctx, parser *Parser, enum_decl *Enum)
   b32 Done = False;
   while (!Done && TokensRemain(Parser))
   {
-    enum_member Field = {};
-    Field.Name = RequireToken(Parser, CTokenType_Identifier).Value;
-
-    if (OptionalToken(Parser, CTokenType_Equals))
+    if (OptionalToken(Parser, CTokenType_Poof))
     {
-      Field.Expr = ParseExpression(Ctx);
+      EatBetween(Parser, c_token_type('('), c_token_type(')'));
     }
 
-    Push(&Enum->Members, Field);
-
-    if(OptionalToken(Parser, CTokenType_Comma))
+    if (c_token *NameT = OptionalToken(Parser, CTokenType_Identifier))
     {
-      if (OptionalToken(Parser, CTokenType_CloseBrace))
+      enum_member Field = {};
+      Field.Name = NameT->Value;
+
+      if (OptionalToken(Parser, CTokenType_Equals))
       {
+        Field.Expr = ParseExpression(Ctx);
+      }
+
+      Push(&Enum->Members, Field);
+
+      if(OptionalToken(Parser, CTokenType_Comma))
+      {
+        if (OptionalToken(Parser, CTokenType_CloseBrace))
+        {
+          Done = True;
+        }
+      }
+      else
+      {
+        RequireToken(Parser, CTokenType_CloseBrace);
         Done = True;
       }
     }
     else
     {
-      RequireToken(Parser, CTokenType_CloseBrace);
-      Done = True;
+      break;
     }
   }
 
@@ -4994,9 +5014,8 @@ ParseEnum(parse_context *Ctx, type_spec *TypeSpec)
   c_token *EnumNameT = TypeSpec->DatatypeToken;
   counted_string EnumName = EnumNameT ? EnumNameT->Value : CSz("(anonymous)");
 
-  enum_decl Enum = {
-    .Name = EnumName
-  };
+  enum_decl Enum = {};
+  Enum.Name = EnumName;
 
   ParseEnumBody(Ctx, Parser, &Enum);
 
@@ -5065,7 +5084,7 @@ ParseAndPushTypedef(parse_context *Ctx)
     {
       if (Type.Qualifier & TypeQual_Struct)
       {
-        compound_decl S = ParseStructBody(Ctx, 0);
+        compound_decl S = ParseStructBody(Ctx, 0, 0);
         // @dup_typedefd_anon_thingy_name_token
         comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
         S.Type = Decl.NameT;
@@ -5183,7 +5202,7 @@ ParseTypedef(parse_context *Ctx)
 
     if (PeekToken(Parser).Type == CTokenType_OpenBrace)
     {
-      compound_decl S = ParseStructBody(Ctx, 0);
+      compound_decl S = ParseStructBody(Ctx, 0, 0);
 
       comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
       S.Type = Decl.NameT;
@@ -5205,7 +5224,7 @@ ParseTypedef(parse_context *Ctx)
               PeekToken(Parser, 1).Type == CTokenType_OpenBrace )
     {
       comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
-      compound_decl S = ParseStructBody(Ctx, Decl.NameT);
+      compound_decl S = ParseStructBody(Ctx, Decl.NameT, 0);
 
       /* while (OptionalToken(Parser, CTokenType_Comma)) */
       /* { */
@@ -6018,6 +6037,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec)
     if ( PeekToken(Parser).Type == CTokenType_OpenBrace ||
          PeekToken(Parser).Type == CTokenType_Colon      )
     {
+
       // TODO(Jesse): Is this actually valid for structs, or should structs and
       // unions take the same path?
       if (OptionalToken(Parser, CTokenType_Colon))
@@ -6026,7 +6046,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec)
       }
 
       Result.Type = type_compound_decl;
-      Result.compound_decl = ParseStructBody(Ctx, TypeSpec->DatatypeToken);
+      Result.compound_decl = ParseStructBody(Ctx, TypeSpec->DatatypeToken, &Result.Tags);
     }
     else
     {
@@ -6039,7 +6059,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec)
   else if (TypeSpec->Qualifier & TypeQual_Union) // union { ... }
   {
     Result.Type = type_compound_decl;
-    Result.compound_decl = ParseStructBody(Ctx, TypeSpec->DatatypeToken);
+    Result.compound_decl = ParseStructBody(Ctx, TypeSpec->DatatypeToken, &Result.Tags);
     Result.compound_decl.IsUnion = True;
   }
   else if (TypeSpec->Qualifier & TypeQual_Enum) // enum { ... }
@@ -6596,7 +6616,9 @@ GetExistingOrCreate(tag_stream* Stream, counted_string Tag, memory_arena* Memory
   tag* Result = StreamContains(Stream, Tag);
   if (!Result)
   {
-    tag NewTag = { .Tag = Tag };
+    tag NewTag = {};
+    NewTag.Tag = Tag ;
+
     Push(Stream, NewTag);
     Result = StreamContains(Stream, Tag);
   }
@@ -6609,7 +6631,9 @@ GetExistingOrCreate(person_stream* People, counted_string PersonName, memory_are
   person* Person = StreamContains(People, PersonName);
   if (!Person)
   {
-    person NewPerson = { .Name = PersonName };
+    person NewPerson = {};
+    NewPerson.Name = PersonName;
+
     Push(People, NewPerson);
     Person = StreamContains(People, PersonName);
   }
@@ -6947,12 +6971,14 @@ MetaFuncArg(parse_context *Ctx, poof_tag Tag, cs Match)
     Result.Type = type_poof_index;
     Result.poof_index = PoofIndex(ToU32(Tag.Value), 0);
   }
-
-  datatype *D = GetDatatypeByName(&Ctx->Datatypes, Tag.Value);
-  if (D->Type)
+  else
   {
-    Result.Type = type_datatype;
-    Result.datatype = *D;
+    datatype *D = GetDatatypeByName(&Ctx->Datatypes, Tag.Value);
+    if (D->Type)
+    {
+      Result.Type = type_datatype;
+      Result.datatype = *D;
+    }
   }
 
   if (Result.Type == type_meta_func_arg_noop)
@@ -7407,9 +7433,13 @@ GetTagsFromDatatype(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_tok
   {
     case type_datatype_noop: { if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); } } break;
 
-    case type_enum_member:
+
     case type_primitive_def:
     case type_type_def:
+    {
+    } break;
+
+    case type_enum_member:
     {
       if (Scope) { PoofNotImplementedError(Scope, CSz("GetTagsFromDatatype is not yet implemented here."), MetaOperatorT); }
     } break;
@@ -7750,22 +7780,30 @@ TryParsePoofKeywordAndTagList(parser *Parser, poof_tag_block_array *Tags, declar
   {
     RequireToken(Parser, T);
 
-    RequireTokenPointer(Parser, CTokenType_OpenParen);
-    poof_tag Tag = {};
-    while(TryParsePoofTag(Parser, &Tag))
+    if (PeekToken(Parser, 1).Type == '@')
     {
-      /* if (Decl) */
+      RequireTokenPointer(Parser, CTokenType_OpenParen);
+      poof_tag Tag = {};
+      while(TryParsePoofTag(Parser, &Tag))
       {
-        Info("Got Tag %S(%S)", Tag.Name, Tag.Value);
-        /* Info("Got Tag %S(%S) on %S (%S)", Tag.Name, Tag.Value, ToString(Decl->Type), GetNameForDecl(Decl)); */
+        /* if (Decl) */
+        {
+          Info("Got Tag %S(%S)", Tag.Name, Tag.Value);
+          /* Info("Got Tag %S(%S) on %S (%S)", Tag.Name, Tag.Value, ToString(Decl->Type), GetNameForDecl(Decl)); */
+        }
+        Push(Tags, &Tag);
+        Got = True;
       }
-      Push(Tags, &Tag);
-      Got = True;
-    }
-    RequireTokenPointer(Parser, CTokenType_CloseParen); // Closes poof( )
+      RequireTokenPointer(Parser, CTokenType_CloseParen); // Closes poof( )
 
-    // If we didn't get a tag but got a poof keyword something's wrong
-    Assert(Got);
+      // If we didn't get a tag but got a poof keyword something's wrong
+      Assert(Got);
+    }
+    else
+    {
+      // Did not get an @ tag; this must be a function call, eat it.
+      EatBetween(Parser, c_token_type('('), c_token_type(')'));
+    }
   }
 
   return Got;
@@ -7990,9 +8028,8 @@ ParseMetaFuncDefArg(parser *Parser, meta_func_arg_stream *Stream)
     Match = FirstT->Value;
   }
 
-  meta_func_arg Arg = {
-    .Match = Match
-  };
+  meta_func_arg Arg = {};
+  Arg.Match = Match;
 
   if (Type.Start)
   {
@@ -8049,6 +8086,7 @@ ParseMapMetaFunctionInstance(parser* Parser, cs FuncName, memory_arena *Memory)
     .Name = FuncName,
     .Args = Args,
     .Body = Body,
+    False, False
   };
 
   return Func;
@@ -8662,7 +8700,7 @@ DoPoofForWeb(char *zInput, umm InputLen)
   memory_arena tmpMemory = {};
   memory_arena *Memory = &tmpMemory;
 
-  AllocateAndInitThreadStates(Memory);
+  /* AllocateAndInitThreadStates(Memory); */
 
   parse_context CtxObj = AllocateParseContext(Memory);
   parse_context *Ctx = &CtxObj;
@@ -8729,7 +8767,7 @@ main(s32 ArgCount_, const char** ArgStrings)
   bonsai_stdlib Stdlib = {};
   bonsai_init_flags InitFlags = {};
 
-  AllocateAndInitThreadStates(Memory);
+  /* AllocateAndInitThreadStates(Memory); */
 
   parse_context Ctx = AllocateParseContext(Memory);
   Ctx.Args = ParseArgs(ArgStrings, ArgCount, &Ctx, Memory);
