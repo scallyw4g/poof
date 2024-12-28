@@ -1,4 +1,4 @@
-// ./poof/poof.h:349:0
+// ./poof/poof.h:352:0
 
 struct poof_tag_block
 {

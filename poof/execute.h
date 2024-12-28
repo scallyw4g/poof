@@ -1673,7 +1673,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
     case polymorphic_func:
     {
-      TIMED_NAMED_BLOCK("polymorphic_func");
+      TIMED_NAMED_BLOCK(polymorphic_func);
       /* function_decl F = ParseFunctionDef(Parser, Memory); */
       /* DebugPrint(F); */
     } break;
@@ -1739,7 +1739,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
     case named_list:
     {
-      TIMED_NAMED_BLOCK("named_list");
+      TIMED_NAMED_BLOCK(named_list);
       RequireToken(Parser, CTokenType_OpenParen);
 
       tagged_counted_string_stream NameList = {};
@@ -1763,7 +1763,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
     case for_datatypes:
     {
-      TIMED_NAMED_BLOCK("for_datatypes");
+      TIMED_NAMED_BLOCK(for_datatypes);
       RequireToken(Parser, CTokenType_OpenParen);
       RequireToken(Parser, CToken(CSz("all")));
       RequireToken(Parser, CTokenType_CloseParen);
@@ -1849,7 +1849,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
     case d_union:
     {
-      TIMED_NAMED_BLOCK("d_union");
+      TIMED_NAMED_BLOCK(d_union);
       c_token *DatatypeT = RequireTokenPointer(Parser, CTokenType_Identifier);
       d_union_decl dUnion = ParseDiscriminatedUnion(Ctx, Parser, Datatypes, DatatypeT, Memory);
       if (Parser->ErrorCode == ParseErrorCode_None)

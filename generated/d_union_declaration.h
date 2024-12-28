@@ -1,4 +1,4 @@
-// ./poof/poof.h:354:0
+// ./poof/poof.h:357:0
 
 enum declaration_type
 {

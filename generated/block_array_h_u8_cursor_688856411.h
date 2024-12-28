@@ -20,7 +20,7 @@ struct u8_cursor_block_array
   u8_cursor_block *First;
   u8_cursor_block *Current;
   memory_arena *Memory; poof(@no_serialize)
-  umm BlockSize;
+  u64 BlockSize;
 };
 
 typedef u8_cursor_block_array u8_cursor_paged_list;
