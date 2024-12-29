@@ -2602,7 +2602,7 @@ PrintToStdout(CSz(
 
         CTokenCursor(&Macro->Body, 1, Memory, CSz("<CLI>"), TokenCursorSource_CommandLineOption, {0,0});
 
-        Macro->Body.Start[0] = CToken(1u);
+        Macro->Body.Start[0] = CToken(1u, CSz("1"));
 
         Insert(MacroNode, &Ctx->Datatypes.Macros);
       }

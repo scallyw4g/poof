@@ -53,6 +53,7 @@ fi
 # NOTE(Jesse): Can't do this cause it fucks with the paths poof outputs
 # ROOT="$(pwd)"
 ROOT="."
+ABS_ROOT="$(pwd)"
 SRC="$ROOT/poof"
 BIN="$ROOT/bin"
 BIN_TEST="$BIN/tests"
@@ -393,13 +394,13 @@ function RunExtendedIntegrationTests
 
   test_name=uacme
   RunSingleExtendedIntegrationTest \
-    "$BIN/poof                     \
+    "$ABS_ROOT/bin/poof            \
       -D USE_OPENSSL               \
       ./uacme.c"
 
   test_name=redis
   RunSingleExtendedIntegrationTest \
-    "$BIN/poof                     \
+    "$ABS_ROOT/bin/poof            \
     --log-level LogLevel_Shush     \
     -D BYTE_ORDER                  \
     -D LITTLE_ENDIAN               \
@@ -416,7 +417,7 @@ function RunExtendedIntegrationTests
 
   test_name=sqlite
   RunSingleExtendedIntegrationTest \
-    "$BIN/poof                     \
+    "$ABS_ROOT/bin/poof            \
     -D __clang__                   \
     -D __i386                      \
     -D __x86_64__                  \
@@ -427,12 +428,12 @@ function RunExtendedIntegrationTests
 
   test_name=handmade_hero
   RunSingleExtendedIntegrationTest \
-    "$BIN/poof                     \
+    "$ABS_ROOT/bin/poof            \
       code/handmade.cpp"
 
   test_name=bonsai
   RunSingleExtendedIntegrationTest \
-    "$BIN/poof                     \
+    "$ABS_ROOT/bin/poof            \
       -I src/                      \
       -I src/poof                  \
       -I include/                  \
@@ -442,13 +443,13 @@ function RunExtendedIntegrationTests
 
   test_name=hcc
   RunSingleExtendedIntegrationTest \
-    "$BIN/poof                     \
+    "$ABS_ROOT/bin/poof            \
       -I src/                      \
       src/hcc.c"
 
   test_name=gf
   RunSingleExtendedIntegrationTest \
-    "$BIN/poof                     \
+    "$ABS_ROOT/bin/poof            \
       -I .                         \
       gf2.cpp"
 
@@ -530,7 +531,7 @@ function FetchBonsaiDebug
 function BuildAllBinaries
 {
   BuildPoof
-  BuildPoofEmcc
+  # BuildPoofEmcc
   BuildParserTests
 }
 

@@ -7,8 +7,8 @@
 
 # FetchBonsaiDebug
 
-./make.sh RunInstalledPoof
-./make.sh BuildPoof
+# ./make.sh RunInstalledPoof
+# ./make.sh BuildPoof
 # ./make.sh RunPoof
 
 # export OPTIMIZATION_LEVEL="-O2"
@@ -20,7 +20,7 @@
 
 # INTEGRATION_TEST_INDEX=4 \
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug" \
-./make.sh RunIntegrationTests
+# ./make.sh RunIntegrationTests
 
 # ./make.sh BuildDebugSystem
 
@@ -36,5 +36,5 @@
 
 
 
-# RunExtendedIntegrationTests
+./make.sh RunExtendedIntegrationTests
 

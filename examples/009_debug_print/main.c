@@ -91,11 +91,11 @@ poof(
   for_datatypes(all)
     func (TStruct)
     {
-      void DebugPrint_(TStruct.type)(struct TStruct.type *Struct);
+      void DebugPrint_(TStruct.name)(struct TStruct.name *Struct);
     }
     func (TEnum)
     {
-      void DebugPrint_(TEnum.type)(enum TEnum.type Enum);
+      void DebugPrint_(TEnum.name)(enum TEnum.name Enum);
     }
 )
 #include <generated/for_datatypes_all_Hm28xSLw.h>
@@ -109,7 +109,7 @@ poof(
 
     func (TStruct)
     {
-      void DebugPrint_(TStruct.type)(struct TStruct.type *Struct)
+      void DebugPrint_(TStruct.name)(struct TStruct.name *Struct)
       {
         DebugPrint_str("{ ");
 
@@ -125,7 +125,7 @@ poof(
                  case type_(TUnionMember.name):
                  {
                    DebugPrint_str("\n    TUnionMember.name = ");
-                   DebugPrint_(TUnionMember.type)(&Struct->(TUnionMember.name) );
+                   DebugPrint_(TUnionMember.name)(&Struct->(TUnionMember.name) );
                  } break;
               }
 
@@ -150,7 +150,7 @@ poof(
       //
       // In 'real' code this might be a thunk to ToString(enum) that's already generated.
       //
-      void DebugPrint_(TEnum.type)( enum TEnum.name EnumValue)
+      void DebugPrint_(TEnum.name)( enum TEnum.name EnumValue)
       {
         switch (EnumValue)
         {
