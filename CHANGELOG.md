@@ -1,3 +1,5 @@
+v0.1.1
+
 v0.1.0
 
 * Added @var
@@ -26,10 +28,14 @@ v0.1.0
   ```
   struct foo { ... };
 
+  enum bar { ... };
+
   func my_func(input_var)
   {
     input_var
   }
 
   my_func(foo) /// now expands to `struct foo`, instead of `foo foo`
+
+  my_func(bar) /// now expands to `enum bar`, instead of `bar bar`
   ```
