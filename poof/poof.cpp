@@ -6811,7 +6811,7 @@ GetTypeNameFor(parse_context *Ctx, declaration* Decl, memory_arena *Memory)
 
     case type_enum_decl:
     {
-      Result = Decl->enum_decl.Name;
+      Result = CSz("enum");
     } break;
   }
 
