@@ -1,6 +1,16 @@
-v0.1.1
+# v0.1.1
 
-v0.1.0
+* Fixed several situations where transformations would fail
+  ```
+  func my_func(input_var)
+  {
+      @var local_var (input_var.name)_static_string
+
+      local_var.to_capital_case // now works
+  }
+  ```
+
+# v0.1.0
 
 * Added @var
 

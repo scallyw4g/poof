@@ -130,3 +130,18 @@ poof(func_arg_map_test(test_func))
 
 
 
+poof(
+  func var_func(arg) @omit_include
+  {
+    @var new_string_name counted_string
+
+    new_string_name.map(member)
+    {
+      member
+    }
+
+  }
+)
+
+poof(var_func(foo_struct_1))
+// tests/integration/generated/iteration/var_func_struct_156032401.h

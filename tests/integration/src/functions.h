@@ -14,6 +14,12 @@ struct thing
   int baz;
 };
 
+struct thing_two
+{
+  int foo2;
+  int baz2;
+};
+
 poof(foobaz(thing))
 // tests/integration/generated/functions/foobaz_.h
 
@@ -59,3 +65,19 @@ poof(
 
 poof(poof_comment_func(thing))
 // tests/integration/generated/functions/poof_comment_func_thing.h
+
+
+poof(
+  func transforms_func(arg) @omit_include
+  {
+    @var new_arg (arg.name)_static_string
+
+    new_arg.to_capital_case
+    new_arg.to_capital_case.to_lowercase
+
+    @var new_arg_2 thing_two
+  }
+)
+
+poof(transforms_func(thing))
+// tests/integration/generated/functions/transforms_func_struct_525555696.h

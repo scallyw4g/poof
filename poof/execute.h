@@ -620,8 +620,7 @@ ResolveMetaOperator(parse_context *Ctx, meta_func_arg_buffer *Args, meta_func_ar
   {
     case type_meta_func_arg_noop:
     {
-      // TODO(Jesse)(error_messages): internal compiler error?
-      InternalCompilerError(Scope, CSz("Got a ReplaceType of type_meta_func_arg_noop!"), MetaOperatorToken);
+      InternalCompilerError(Scope, CSz("Got an invalid ReplaceType of type_meta_func_arg_noop in ResolveMetaOperator!"), MetaOperatorToken);
     } break;
 
     case type_poof_index:
@@ -1221,12 +1220,7 @@ ResolveMetaOperator(parse_context *Ctx, meta_func_arg_buffer *Args, meta_func_ar
         case type:
         {
           counted_string TypeName = GetTypeNameFor(Ctx, ReplaceData, TypedefResoultion_ResolveTypedefs, Memory);
-          meta_transform_op Transformations = ParseTransformations(Scope);
-          if (Scope->ErrorCode == ParseErrorCode_None)
-          {
-            counted_string TransformedName = ApplyTransformations(Transformations, TypeName, Memory);
-            Append(OutputBuilder, TransformedName);
-          }
+          Append(OutputBuilder, TypeName);
         } break;
 
         case name:
@@ -1239,12 +1233,7 @@ ResolveMetaOperator(parse_context *Ctx, meta_func_arg_buffer *Args, meta_func_ar
           }
           else
           {
-            meta_transform_op Transformations = ParseTransformations(Scope);
-            if (Scope->ErrorCode == ParseErrorCode_None)
-            {
-              counted_string TransformedName = ApplyTransformations(Transformations, Name, Memory);
-              Append(OutputBuilder, TransformedName);
-            }
+            Append(OutputBuilder, Name);
           }
 
         } break;
@@ -1477,25 +1466,19 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
 
               parser ExpansionContext = EatUntilExcluding_Parser(Scope, CTokenType_Newline, GetTranArena());
 
-              Rewind(ExpansionContext.Tokens);
-              while (c_token *T = PopTokenPointer(&ExpansionContext))
-              {
-                Info(" __ %S", T->Value);
-              }
-              Rewind(ExpansionContext.Tokens);
-
               meta_func ExpansionFunc = MetaFunc(CSz(""), *Args, ExpansionContext, True, True);
               cs Expanded = Execute(&ExpansionFunc, Args, Ctx, Memory, Depth);
 
-
-              /* cs Expanded = CSz("___________"); */
-              Info("______ %S", &Expanded);
-              Info("______ %S", &Expanded);
-              Info("______ %S", &Expanded);
-              Info("______ %S", &Expanded);
-
               meta_func_arg_buffer NewArgs = ExtendBuffer(Args, 1, Memory);
-              SetLast(&NewArgs, ReplacementPattern(NewName, PoofSymbol(Expanded)));
+              datatype *D = ResolveNameToDatatype(Ctx, Scope, ExpansionFunc.Body.Tokens->Start, Args, Expanded);
+              if (D->Type)
+              {
+                SetLast(&NewArgs, ReplacementPattern(NewName, *D));
+              }
+              else
+              {
+                SetLast(&NewArgs, ReplacementPattern(NewName, PoofSymbol(Expanded)));
+              }
 
               *Args = NewArgs;
 
@@ -1562,16 +1545,62 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
             if (NextMatch) { BodyToken = NextMatch; }
 
             DidPoofOp = True;
-            meta_arg_operator Operator = meta_arg_operator_noop;
 
-            c_token *MetaOperatorToken = {};
+            meta_arg_operator Operator = {};
+            c_token *NextToken = {};
             if (OptionalTokenRaw(Scope, CTokenType_Dot))
             {
-              MetaOperatorToken = RequireTokenPointer(Scope, CTokenType_Identifier);
-              Operator = MetaArgOperator( MetaOperatorToken->Value );
+              NextToken = RequireTokenPointer(Scope, CTokenType_Identifier);
+              Operator = MetaArgOperator(NextToken->Value);
             }
 
-            ResolveMetaOperator(Ctx, Args, Replace, Scope, Operator, BodyToken, MetaOperatorToken, Memory, Depth, &OutputBuilder);
+            string_builder OperatorBuilder = {};
+            ResolveMetaOperator(Ctx, Args, Replace, Scope, Operator, BodyToken, NextToken, Memory, Depth, &OperatorBuilder);
+            cs OperatorOutput = Finalize(&OperatorBuilder, Memory);
+
+            //
+            // Apply textual transformations
+            //
+            if (NextToken && Operator == meta_arg_operator_noop)
+            {
+              cs Transformed = CopyString(OperatorOutput, Memory);
+
+              b32 Done = False;
+              while (Done == False)
+              {
+                meta_transform_op NextOp = MetaTransformOp(NextToken->Value);
+                if (NextOp)
+                {
+                  Transformed = ApplyTransformations(NextOp, Transformed, Memory);
+                }
+                else
+                {
+                  PoofTypeError( Scope,
+                                 ParseErrorCode_InvalidMetaTransformOp,
+                                 FormatCountedString( GetTranArena(),
+                                                      CSz("Invalid transform op encountered (%S)"),
+                                                      NextToken->Value),
+                                 NextToken);
+                }
+
+                if (OptionalTokenRaw(Scope, CTokenType_Dot))
+                {
+                  NextToken = RequireTokenRawPointer(Scope, CTokenType_Identifier);
+                }
+                else
+                {
+                  Done = True;
+                }
+              }
+
+              Append(&OutputBuilder, Transformed);
+            }
+            else
+            {
+              Append(&OutputBuilder, OperatorOutput);
+            }
+
+
           }
         }
 
