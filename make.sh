@@ -166,9 +166,9 @@ function BootstrapWeb
 function RunPoof {
   ColorizeTitle "Poofing!"
 
-  if [ -d $META_OUT ]; then
-    rm -Rf $META_OUT
-  fi
+  # if [ -d $META_OUT ]; then
+  #   rm -Rf $META_OUT
+  # fi
 
   : "${POOF_EXECUTABLE:=./bin/poof}"
 

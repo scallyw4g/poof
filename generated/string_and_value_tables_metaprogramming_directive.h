@@ -13,7 +13,6 @@ ToStringPrefixless(metaprogramming_directive Type)
     case for_datatypes: { Result = CSz("datatypes"); } break;
     case func: { Result = CSz("func"); } break;
     case polymorphic_func: { Result = CSz("func"); } break;
-    case var: { Result = CSz("var"); } break;
 
     
   }
@@ -34,7 +33,6 @@ ToString(metaprogramming_directive Type)
     case for_datatypes: { Result = CSz("for_datatypes"); } break;
     case func: { Result = CSz("func"); } break;
     case polymorphic_func: { Result = CSz("polymorphic_func"); } break;
-    case var: { Result = CSz("var"); } break;
 
     
   }
@@ -54,7 +52,6 @@ MetaprogrammingDirective(counted_string S)
   if (StringsMatch(S, CSz("for_datatypes"))) { return for_datatypes; }
   if (StringsMatch(S, CSz("func"))) { return func; }
   if (StringsMatch(S, CSz("polymorphic_func"))) { return polymorphic_func; }
-  if (StringsMatch(S, CSz("var"))) { return var; }
 
   return Result;
 }

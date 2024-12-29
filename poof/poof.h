@@ -11,6 +11,8 @@ enum poof_global_keyword
 
   poof_error,
   are_equal,
+
+  var,
 };
 poof( string_and_value_tables(poof_global_keyword) )
 #include <string_and_value_tables_poof_global_keyword.h>
@@ -21,6 +23,7 @@ poof( string_and_value_tables(poof_global_keyword) )
 enum metaprogramming_directive
 {
   meta_directive_noop,
+
   enum_only,
   d_union,
   named_list,

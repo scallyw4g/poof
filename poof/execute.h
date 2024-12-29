@@ -1401,7 +1401,7 @@ ResolveMetaOperator(parse_context *Ctx, meta_func_arg_buffer *Args, meta_func_ar
 
 // TODO(Jesse): Instead of the error living on the parser, it should live in the result from this fn
 link_internal counted_string
-Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_arena* Memory, umm *Depth)
+Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_arena *Memory, umm *Depth)
 {
   TIMED_FUNCTION();
   Assert(Func->Body.Tokens->At == Func->Body.Tokens->Start);
@@ -1469,6 +1469,51 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
           {
           } break;
 
+          case var:
+          {
+            if (ImpetusWasAt)
+            {
+              cs NewName = RequireToken(Scope, CTokenType_Identifier).Value;
+
+              parser ExpansionContext = EatUntilExcluding_Parser(Scope, CTokenType_Newline, GetTranArena());
+
+              Rewind(ExpansionContext.Tokens);
+              while (c_token *T = PopTokenPointer(&ExpansionContext))
+              {
+                Info(" __ %S", T->Value);
+              }
+              Rewind(ExpansionContext.Tokens);
+
+              meta_func ExpansionFunc = MetaFunc(CSz(""), *Args, ExpansionContext, True, True);
+              cs Expanded = Execute(&ExpansionFunc, Args, Ctx, Memory, Depth);
+
+
+              /* cs Expanded = CSz("___________"); */
+              Info("______ %S", &Expanded);
+              Info("______ %S", &Expanded);
+              Info("______ %S", &Expanded);
+              Info("______ %S", &Expanded);
+
+              meta_func_arg_buffer NewArgs = ExtendBuffer(Args, 1, Memory);
+              SetLast(&NewArgs, ReplacementPattern(NewName, PoofSymbol(Expanded)));
+
+              *Args = NewArgs;
+
+              DidPoofOp = True;
+            }
+            else
+            {
+              // TODO(Jesse): Should this just be a warning?  Cause `var` could
+              // presumably occur in regular code ..
+              PoofTypeError( Scope,
+                             ParseErrorCode_SyntaxError,
+                             FormatCountedString( GetTranArena(),
+                                                  CSz("@var keyword missing preceeding @ symbol"),
+                                                  BodyToken->Value),
+                             BodyToken);
+            }
+          } break;
+
           case poof_error:
           {
             parser Body = GetBodyTextForNextScope(Scope, Memory);
@@ -1501,15 +1546,21 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
 
         for (u32 ArgIndex = 0; ArgIndex < Args->Count; ++ArgIndex)
         {
+          if (DidPoofOp) break;
+
           meta_func_arg *Replace = Args->Start + ArgIndex;
 
           // NOTE(Jesse): Have to parse top-level operations here and check if
           // we're trying to throw an error.
 
+          c_token *NextMatch = OptionalTokenRaw(Scope, CToken(Replace->Match));
+
           if ( (ImpetusWasIdentifier && StringsMatch(Replace->Match, BodyToken->Value)) ||
-               (ImpetusWasOpenParen  && OptionalTokenRaw(Scope, CToken(Replace->Match)))
+               (ImpetusWasOpenParen  && NextMatch)
              )
           {
+            if (NextMatch) { BodyToken = NextMatch; }
+
             DidPoofOp = True;
             meta_arg_operator Operator = meta_arg_operator_noop;
 
@@ -1522,8 +1573,6 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
 
             ResolveMetaOperator(Ctx, Args, Replace, Scope, Operator, BodyToken, MetaOperatorToken, Memory, Depth, &OutputBuilder);
           }
-
-          if (DidPoofOp) break;
         }
 
         meta_func *NestedFunc = {};
@@ -1563,7 +1612,7 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
             PoofTypeError( Scope,
                            ParseErrorCode_InvalidFunction,
                            FormatCountedString( GetTranArena(),
-                                                CSz("Could not call poof func (%S): recursive functions are illegal."),
+                                                CSz("Could not call poof func (%S); recursive functions are illegal."),
                                                 NestedFuncT->Value),
                            NestedFuncT);
           }
@@ -1591,11 +1640,20 @@ Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_
 
       } break;
 
+      case CTokenType_CommentSingleLine:
+      {
+        // Eat comments that start with three slashes
+        if (StartsWith(BodyToken->Value, CSz("///")))
+        {
+          continue;
+        }
+      } [[fallthrough]];
+
       default:
       {
         c_token ToPush = {};
         if (Ctx->Args.DoNotNormalizeWhitespace) { ToPush = *BodyToken; }
-        else                               { ToPush = NormalizeWhitespaceTokens(BodyToken, PeekTokenRawPointer(Scope, -2), PeekTokenRawPointer(Scope), Depth); }
+        else                                    { ToPush = NormalizeWhitespaceTokens(BodyToken, PeekTokenRawPointer(Scope, -2), PeekTokenRawPointer(Scope), Depth); }
         Append(&OutputBuilder, ToPush.Value);
       } break;
 

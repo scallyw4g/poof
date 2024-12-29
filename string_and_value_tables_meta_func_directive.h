@@ -1,4 +1,4 @@
-// ./poof/poof.h:41:0
+// ./poof/poof.h:44:0
 
 link_internal counted_string
 ToStringPrefixless(meta_func_directive Type)

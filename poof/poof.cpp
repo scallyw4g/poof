@@ -96,11 +96,12 @@ link_internal datatype * GetDatatypeByName(program_datatypes *, cs);
 
 link_internal counted_string PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory);
 
-link_internal counted_string GetTypeNameFor(parse_context *Ctx, declaration* Decl, memory_arena *Memory);
+link_internal counted_string GetTypeNameFor(parse_context*, declaration*, memory_arena *);
+link_internal counted_string GetTypeNameFor(parse_context*,    datatype*, typedef_resolution_behavior, memory_arena *);
+
 link_internal counted_string GetNameForDecl(declaration* Decl);
 link_internal counted_string GetNameForDatatype(datatype *Data, memory_arena *Memory);
 link_internal counted_string GetTypeTypeForDatatype(datatype *Data, memory_arena *);
-link_internal counted_string GetTypeNameFor(parse_context*, datatype *Data, typedef_resolution_behavior TDResBehavior, memory_arena *);
 link_internal type_indirection_info * GetIndirectionInfoForDatatype(datatype*);
 
 link_internal datatype* ResolveToBaseType(program_datatypes *, type_spec );
@@ -6770,11 +6771,11 @@ link_internal counted_string
 GetTypeNameFor(compound_decl *CDecl)
 {
   counted_string Result = {};
-  if (CDecl->Type)
-  {
-    Result = CDecl->Type->Value;
-  }
-  else
+  /* if (CDecl->Type) */
+  /* { */
+  /*   Result = CDecl->Type->Value; */
+  /* } */
+  /* else */
   {
     Result = CDecl->IsUnion ? CSz("union") :
                               CSz("struct");
@@ -7398,15 +7399,16 @@ link_internal cs
 ToString( parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT, memory_arena *Memory)
 {
   string_builder Builder = {};
-  cs TypeName = GetTypeNameFor(Ctx, Data, TypedefResoultion_ResolveTypedefs, Memory);
-  cs TypeName2 = GetNameForDatatype(Data, Memory);
-  cs TypeType = GetTypeTypeForDatatype(Data, Memory);
-  cs StaticBufferSize = PrintAstNode(DatatypeStaticBufferSize(Ctx, Scope, Data, MetaOperatorT), Memory);
+  cs TypeType = GetTypeNameFor(Ctx, Data, TypedefResoultion_ResolveTypedefs, Memory);
+  cs TypeName = GetNameForDatatype(Data, Memory);
+
+  /* cs TypeType = GetTypeTypeForDatatype(Data, Memory); */
+  /* cs StaticBufferSize = PrintAstNode(DatatypeStaticBufferSize(Ctx, Scope, Data, MetaOperatorT), Memory); */
 
   cs Indirection = PrintIndirection(Data, Memory);
 
 
-  cs Result = Concat(TypeName, CSz(" "), Indirection, TypeName2, Memory);
+  cs Result = Concat(TypeType, CSz(" "), Indirection, TypeName, Memory);
   return Result;
 }
 
@@ -8373,7 +8375,7 @@ CallFunction(parse_context *Ctx, c_token *FunctionT, meta_func *Func, meta_func_
     PoofError(Ctx->CurrentParser,
               ParseErrorCode_StackOverflow,
               FormatCountedString( GetTranArena(),
-                                   CSz("Stack Overflow when trying to execute (%S)! Poof has a stack frame limit of (%u) frames."),
+                                   CSz("Stack overflow when trying to execute (%S). Poof has a stack frame limit of (%u) frames."),
                                    Func->Name,
                                    Ctx->CallStackDepth-1),
               FunctionT);
