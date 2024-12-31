@@ -6858,40 +6858,35 @@ link_internal counted_string
 ApplyTransformations(meta_transform_op Transformations, counted_string Input, memory_arena* Memory)
 {
   counted_string Result = Input;
+  switch (Transformations)
   {
-    // TODO(Jesse)(metaprogramming): Duh
-    if ( Transformations & to_capital_case )
+    case to_capital_case:
     {
-      UnsetBitfield(meta_transform_op, Transformations, to_capital_case );
       Result = ToCapitalCase(Result, Memory);
-    }
-
-    if ( Transformations & to_snake_case )
+    } break;
+    case to_snake_case:
     {
-      UnsetBitfield(meta_transform_op, Transformations, to_snake_case );
       Result = ToSnakeCase(Input, Memory);
-    }
-
-    if ( Transformations & to_lowercase )
+    } break;
+    case to_lowercase:
     {
-      UnsetBitfield(meta_transform_op, Transformations, to_lowercase );
       Result = ToLowerCase(Result, Memory);
-    }
-
-    if ( Transformations & strip_single_prefix )
+    } break;
+    case to_uppercase:
     {
-      UnsetBitfield(meta_transform_op, Transformations, strip_single_prefix );
+      Result = ToUpperCase(Result, Memory);
+    } break;
+    case strip_single_prefix:
+    {
       Result = StripPrefix(Result, 0);
-    }
-
-    if ( Transformations & strip_all_prefix )
+    } break;
+    case strip_all_prefix:
     {
-      UnsetBitfield(meta_transform_op, Transformations, strip_all_prefix );
       Result = StripPrefixesUntilDoubleUnderscore(Result);
-    }
-  }
+    } break;
 
-  Assert(Transformations == meta_transform_op_noop);
+    InvalidDefaultCase;
+  }
 
   return Result;
 }

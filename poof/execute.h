@@ -1388,6 +1388,48 @@ ResolveMetaOperator(parse_context *Ctx, meta_func_arg_buffer *Args, meta_func_ar
   }
 }
 
+link_internal b32
+TryParseMetaArgOperator(parser *Scope, meta_arg_operator *Operator, c_token **OperatorToken = 0)
+{
+  b32 Result = False;
+
+  if (PeekTokenRaw(Scope).Type == CTokenType_Dot)
+  {
+    c_token *PeekT = PeekTokenRawPointer(Scope, 1);
+    *Operator = MetaArgOperator(PeekT->Value);
+    if (*Operator)
+    { 
+      RequireToken(Scope, CTokenType_Dot);
+      RequireToken(Scope, PeekT);
+      if (OperatorToken) *OperatorToken = PeekT;
+      Result = True;
+    }
+  }
+
+  return Result;
+}
+
+link_internal b32
+TryParseMetaTransformOp(parser *Scope, meta_transform_op *Operator, c_token **OperatorToken = 0)
+{
+  b32 Result = False;
+
+  if (PeekTokenRaw(Scope).Type == CTokenType_Dot)
+  {
+    c_token *PeekT = PeekTokenRawPointer(Scope, 1);
+    *Operator = MetaTransformOp(PeekT->Value);
+    if (*Operator)
+    { 
+      RequireToken(Scope, CTokenType_Dot);
+      RequireToken(Scope, PeekT);
+      if (OperatorToken) *OperatorToken = PeekT;
+      Result = True;
+    }
+  }
+
+  return Result;
+}
+
 // TODO(Jesse): Instead of the error living on the parser, it should live in the result from this fn
 link_internal counted_string
 Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_arena *Memory, umm *Depth)
@@ -1546,58 +1588,29 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
 
             DidPoofOp = True;
 
-            meta_arg_operator Operator = {};
-            c_token *NextToken = {};
-            if (OptionalTokenRaw(Scope, CTokenType_Dot))
-            {
-              NextToken = RequireTokenPointer(Scope, CTokenType_Identifier);
-              Operator = MetaArgOperator(NextToken->Value);
-            }
+            c_token           *OperatorToken = {};
+            meta_arg_operator  Operator = {};
+
+            TryParseMetaArgOperator(Scope, &Operator, &OperatorToken);
 
             string_builder OperatorBuilder = {};
-            ResolveMetaOperator(Ctx, Args, Replace, Scope, Operator, BodyToken, NextToken, Memory, Depth, &OperatorBuilder);
+            ResolveMetaOperator(Ctx, Args, Replace, Scope, Operator, BodyToken, OperatorToken, Memory, Depth, &OperatorBuilder);
             cs OperatorOutput = Finalize(&OperatorBuilder, Memory);
 
             //
             // Apply textual transformations
             //
-            if (NextToken && Operator == meta_arg_operator_noop)
             {
               cs Transformed = CopyString(OperatorOutput, Memory);
 
               b32 Done = False;
-              while (Done == False)
+              meta_transform_op TransformOp = {};
+              while (TryParseMetaTransformOp(Scope, &TransformOp))
               {
-                meta_transform_op NextOp = MetaTransformOp(NextToken->Value);
-                if (NextOp)
-                {
-                  Transformed = ApplyTransformations(NextOp, Transformed, Memory);
-                }
-                else
-                {
-                  PoofTypeError( Scope,
-                                 ParseErrorCode_InvalidMetaTransformOp,
-                                 FormatCountedString( GetTranArena(),
-                                                      CSz("Invalid transform op encountered (%S)"),
-                                                      NextToken->Value),
-                                 NextToken);
-                }
-
-                if (OptionalTokenRaw(Scope, CTokenType_Dot))
-                {
-                  NextToken = RequireTokenRawPointer(Scope, CTokenType_Identifier);
-                }
-                else
-                {
-                  Done = True;
-                }
+                Transformed = ApplyTransformations(TransformOp, Transformed, Memory);
               }
 
               Append(&OutputBuilder, Transformed);
-            }
-            else
-            {
-              Append(&OutputBuilder, OperatorOutput);
             }
 
 

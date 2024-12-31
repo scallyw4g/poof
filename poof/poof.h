@@ -97,14 +97,15 @@ enum meta_transform_op
 {
   meta_transform_op_noop,
 
-  to_capital_case     = (1 << 0),
-  to_snake_case       = (1 << 1),
-  to_lowercase        = (1 << 2),
-  strip_single_prefix = (1 << 3),
-  strip_all_prefix    = (1 << 4), // TODO(Jesse): Change name to strip_all_prefixes
+  to_capital_case     ,
+  to_snake_case       ,
+  to_lowercase        ,
+  to_uppercase        ,
+  strip_single_prefix ,
+  strip_all_prefix    , // TODO(Jesse): Change name to strip_all_prefixes
 };
 poof(generate_value_table(meta_transform_op))
-#include <generated/generate_value_table_meta_transform_op.h>
+#include <generated/generate_value_table_enum.h>
 
 
 

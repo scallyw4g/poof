@@ -7,7 +7,7 @@
 
 # FetchBonsaiDebug
 
-# ./make.sh RunInstalledPoof
+./make.sh RunInstalledPoof
 ./make.sh BuildPoof
 # ./make.sh RunPoof
 

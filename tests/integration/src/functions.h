@@ -70,12 +70,31 @@ poof(poof_comment_func(thing))
 poof(
   func transforms_func(arg) @omit_include
   {
-    @var new_arg (arg.name)_static_string
+    @var new_arg (arg.name)_whatever
 
     new_arg.to_capital_case
     new_arg.to_capital_case.to_lowercase
 
+    new_arg.to_snake_case
+    new_arg.to_uppercase
+    new_arg.strip_single_prefix
+    new_arg.strip_all_prefix
+
     @var new_arg_2 thing_two
+
+    arg.hash
+    arg.hash.to_lowercase
+
+    // foo
+    arg.member(0, (m) {m.name})
+    arg.member(0, (m) {m.name.to_capital_case})
+    arg.member(0, (m) {m.name.to_lowercase})
+    arg.member(0, (m) {m.name.to_uppercase})
+
+    // foo2
+    new_arg_2.member(0, (m) {m.name})
+    new_arg_2.member(0, (m) {m.name.to_uppercase})
+    new_arg_2.member(0, (m) {m.name.to_uppercase.to_lowercase}).to_uppercase
   }
 )
 

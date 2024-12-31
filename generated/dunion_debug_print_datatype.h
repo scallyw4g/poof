@@ -1,4 +1,4 @@
-// ./poof/poof.h:454:0
+// ./poof/poof.h:455:0
 
 /* dunion_debug_print_prototype(DUnion) */
 
@@ -173,7 +173,7 @@ DebugPrint( datatype *Struct, u32 Depth)
         DebugPrint(&Struct->type_def, Depth+4);
       } break;
 
-      default : { DebugPrint("default while printing (datatype) (datatype) ", Depth+4); DebugLine("Type(%d)", Struct->Type); } break;
+      default : { DebugPrint("default while printing (struct) (datatype) ", Depth+4); DebugLine("Type(%d)", Struct->Type); } break;
     }
   }
   else

@@ -1,4 +1,4 @@
-// ./poof/poof.h:937:0
+// ./poof/poof.h:938:0
 
 link_internal counted_string
 ToStringPrefixless(ast_node_type Type)

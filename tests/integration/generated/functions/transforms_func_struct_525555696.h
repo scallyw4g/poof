@@ -1,9 +1,28 @@
-// tests/integration/src/functions.h:82:0
+// tests/integration/src/functions.h:101:0
 
 
 
-ThingStaticString
-thingstaticstring
+ThingWhatever
+thingwhatever
+
+thing_whatever
+THING_WHATEVER
+whatever
+whatever
 
 
+
+2758FB0
+2758fb0
+
+// foo
+foo
+Foo
+foo
+FOO
+
+// foo2
+foo2
+FOO2
+FOO2
 
