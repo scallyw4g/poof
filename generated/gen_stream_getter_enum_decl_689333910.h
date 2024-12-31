@@ -1,7 +1,7 @@
 // poof/poof.cpp:1877:0
 
 link_internal enum_decl*
-GetEnumDeclByName( enum_decl_stream* Stream, counted_string  Name )
+GetEnumDeclByName( enum_decl_stream* Stream,  counted_string  Name )
 {
   enum_decl *Result = 0;
   ITERATE_OVER(Stream)

@@ -613,6 +613,31 @@ SetMapFuncArgs(parse_context *Ctx, meta_func_arg_buffer *Local, c_token *A0Arg, 
 {
 }
 
+link_internal cs
+DefaultRepresentationForDatatype( parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT, memory_arena *Memory)
+{
+  string_builder Builder = {};
+
+  b32 IsCDecl = Data->Type == type_declaration && Data->declaration.Type == type_compound_decl;
+
+    /* DatatypeIsCompoundDecl(Ctx, Data) != 0; */
+
+  cs TypeType = GetTypeNameFor(Ctx, Data, TypedefResoultion_ResolveTypedefs, Memory);
+  cs TypeName = GetNameForDatatype(Data, Memory);
+
+  /* cs TypeType = GetTypeTypeForDatatype(Data, Memory); */
+  /* cs StaticBufferSize = PrintAstNode(DatatypeStaticBufferSize(Ctx, Scope, Data, MetaOperatorT), Memory); */
+
+  cs Indirection = PrintIndirection(Data, Memory);
+
+  // Don't print `struct` or `union` keyword in default representation of the datatype
+  cs Result = IsCDecl ?
+    Concat(                    Indirection, TypeName, Memory) :
+    Concat(TypeType, CSz(" "), Indirection, TypeName, Memory) ;
+
+  return Result;
+}
+
 link_internal void // void?
 ResolveMetaOperator(parse_context *Ctx, meta_func_arg_buffer *Args, meta_func_arg *Replace, parser *Scope, meta_arg_operator Operator, c_token *BodyToken, c_token *MetaOperatorToken, memory_arena *Memory, umm *Depth, string_builder *OutputBuilder)
 {
@@ -810,7 +835,7 @@ ResolveMetaOperator(parse_context *Ctx, meta_func_arg_buffer *Args, meta_func_ar
           }
           else
           {
-            cs DatatypeString = ToString(Ctx, Scope, ReplaceData, MetaOperatorToken, Memory);
+            cs DatatypeString = DefaultRepresentationForDatatype(Ctx, Scope, ReplaceData, MetaOperatorToken, Memory);
             HandleWhitespaceAndAppend(OutputBuilder, DatatypeString);
             /* PoofTypeError( Scope, */
             /*                ParseErrorCode_InvalidOperator, */

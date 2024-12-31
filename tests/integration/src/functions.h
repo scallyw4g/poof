@@ -100,3 +100,20 @@ poof(
 
 poof(transforms_func(thing))
 // tests/integration/generated/functions/transforms_func_struct_525555696.h
+
+
+poof(
+  func gen_struct_func(arg)  @omit_include
+  {
+    struct new_(arg)
+    {
+    };
+
+    @var var_thing new_thing
+
+    var_thing
+  }
+)
+
+poof(gen_struct_func(thing))
+// tests/integration/generated/functions/gen_struct_func_struct_473003373.h

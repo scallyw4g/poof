@@ -1,7 +1,7 @@
 // poof/poof.cpp:1872:0
 
 link_internal type_def*
-GetTypeDefByAlias( type_def_stream* Stream, counted_string  Alias )
+GetTypeDefByAlias( type_def_stream* Stream,  counted_string  Alias )
 {
   type_def *Result = 0;
   ITERATE_OVER(Stream)

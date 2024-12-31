@@ -6,7 +6,7 @@ ToStringPrefixless(ast_node_type Type)
   counted_string Result = {};
   switch (Type)
   {
-    case type_ast_node_noop: { Result = CSz("noop"); } break;
+        case type_ast_node_noop: { Result = CSz("noop"); } break;
     case type_ast_node_statement: { Result = CSz("statement"); } break;
     case type_ast_node_access: { Result = CSz("access"); } break;
     case type_ast_node_literal: { Result = CSz("literal"); } break;
@@ -32,7 +32,7 @@ ToString(ast_node_type Type)
   counted_string Result = {};
   switch (Type)
   {
-    case type_ast_node_noop: { Result = CSz("type_ast_node_noop"); } break;
+        case type_ast_node_noop: { Result = CSz("type_ast_node_noop"); } break;
     case type_ast_node_statement: { Result = CSz("type_ast_node_statement"); } break;
     case type_ast_node_access: { Result = CSz("type_ast_node_access"); } break;
     case type_ast_node_literal: { Result = CSz("type_ast_node_literal"); } break;
@@ -57,7 +57,7 @@ AstNodeType(counted_string S)
 {
   ast_node_type Result = {};
 
-  if (StringsMatch(S, CSz("type_ast_node_noop"))) { return type_ast_node_noop; }
+    if (StringsMatch(S, CSz("type_ast_node_noop"))) { return type_ast_node_noop; }
   if (StringsMatch(S, CSz("type_ast_node_statement"))) { return type_ast_node_statement; }
   if (StringsMatch(S, CSz("type_ast_node_access"))) { return type_ast_node_access; }
   if (StringsMatch(S, CSz("type_ast_node_literal"))) { return type_ast_node_literal; }

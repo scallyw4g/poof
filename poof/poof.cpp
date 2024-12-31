@@ -7394,6 +7394,7 @@ link_internal cs
 ToString( parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT, memory_arena *Memory)
 {
   string_builder Builder = {};
+
   cs TypeType = GetTypeNameFor(Ctx, Data, TypedefResoultion_ResolveTypedefs, Memory);
   cs TypeName = GetNameForDatatype(Data, Memory);
 
@@ -7401,7 +7402,6 @@ ToString( parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperat
   /* cs StaticBufferSize = PrintAstNode(DatatypeStaticBufferSize(Ctx, Scope, Data, MetaOperatorT), Memory); */
 
   cs Indirection = PrintIndirection(Data, Memory);
-
 
   cs Result = Concat(TypeType, CSz(" "), Indirection, TypeName, Memory);
   return Result;

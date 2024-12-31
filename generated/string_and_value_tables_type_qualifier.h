@@ -6,7 +6,7 @@ ToStringPrefixless(type_qualifier Type)
   counted_string Result = {};
   switch (Type)
   {
-    case TypeQual_None: { Result = CSz("None"); } break;
+        case TypeQual_None: { Result = CSz("None"); } break;
     case TypeQual_Void: { Result = CSz("Void"); } break;
     case TypeQual_Auto: { Result = CSz("Auto"); } break;
     case TypeQual_Class: { Result = CSz("Class"); } break;
@@ -47,7 +47,7 @@ ToString(type_qualifier Type)
   counted_string Result = {};
   switch (Type)
   {
-    case TypeQual_None: { Result = CSz("TypeQual_None"); } break;
+        case TypeQual_None: { Result = CSz("TypeQual_None"); } break;
     case TypeQual_Void: { Result = CSz("TypeQual_Void"); } break;
     case TypeQual_Auto: { Result = CSz("TypeQual_Auto"); } break;
     case TypeQual_Class: { Result = CSz("TypeQual_Class"); } break;
@@ -87,7 +87,7 @@ TypeQualifier(counted_string S)
 {
   type_qualifier Result = {};
 
-  if (StringsMatch(S, CSz("TypeQual_None"))) { return TypeQual_None; }
+    if (StringsMatch(S, CSz("TypeQual_None"))) { return TypeQual_None; }
   if (StringsMatch(S, CSz("TypeQual_Void"))) { return TypeQual_Void; }
   if (StringsMatch(S, CSz("TypeQual_Auto"))) { return TypeQual_Auto; }
   if (StringsMatch(S, CSz("TypeQual_Class"))) { return TypeQual_Class; }
