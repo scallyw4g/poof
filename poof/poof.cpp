@@ -379,6 +379,8 @@ ExpandMacro( parse_context *Ctx,
   // keyword style macros if they're left empty
   //
   c_token_buffer_stream VarArgs = {};
+  VarArgs.Memory = &Global_PermMemory;
+
   c_token_buffer_buffer ArgInstanceValues = {};
 
   TIMED_BLOCK("Parse Instance Args");
@@ -449,6 +451,10 @@ ExpandMacro( parse_context *Ctx,
         {
           while (TokensRemain(InstanceArgs))
           {
+            if (VarArgs.Memory == 0)
+            {
+            }
+                
             c_token_buffer *Arg = Push(&VarArgs, {});
             ParseMacroArgument(InstanceArgs, Arg);
           }
@@ -2349,6 +2355,7 @@ ParseDiscriminatedUnion(parse_context *Ctx, parser* Parser, program_datatypes* D
   d_union_decl dUnion = {};
 
   dUnion.Name = NameT->Value;
+  dUnion.Members.Memory = Memory;
 
   if (c_token *EnumTypeT = OptionalToken(Parser, CTokenType_Identifier))
   {
@@ -3569,6 +3576,7 @@ ParseFunctionParameterList(parse_context *Ctx, type_spec *ReturnType, c_token *F
   Result.Type = Type;
   Result.ReturnType = *ReturnType;
   Result.NameT = FuncNameT;
+  Result.Args.Memory = &Global_PermMemory;
 
   // Function definition args
   b32 DoneParsingArguments = PeekToken(Parser) == CToken(CTokenType_CloseParen);
@@ -5016,6 +5024,7 @@ ParseEnum(parse_context *Ctx, type_spec *TypeSpec)
 
   enum_decl Enum = {};
   Enum.Name = EnumName;
+  Enum.Members.Memory = &Global_PermMemory;
 
   ParseEnumBody(Ctx, Parser, &Enum);
 
@@ -5961,6 +5970,7 @@ ParseFunctionCall(parse_context *Ctx, cs FunctionName)
   ast_node_function_call *Node = AllocateAndCastTo(ast_node_function_call, &Result, Ctx->Memory);
 
   Node->Name = FunctionName;
+  Node->Args.Memory = &Global_PermMemory;
 
   datatype *D = GetDatatypeByName(&Ctx->Datatypes, Node->Name);
   Node->Prototype = TryCastToFunctionDecl(Ctx, D);
@@ -6739,7 +6749,7 @@ ToString(parse_context *Ctx, meta_func_arg *Arg, memory_arena *Memory)
 link_internal counted_string
 GenerateOutfileNameFor(parse_context *Ctx, meta_func *Func, meta_func_arg_buffer *Args, memory_arena* Memory, counted_string Modifier = {})
 {
-  string_builder OutfileBuilder = {};
+  string_builder OutfileBuilder = StringBuilder(AllocateArena());
   Append(&OutfileBuilder, Func->Name);
   Append(&OutfileBuilder, CSz("_"));
   for (u32 ArgIndex = 0; ArgIndex < Args->Count; ++ArgIndex)
@@ -6927,12 +6937,12 @@ AppendAndEscapeInteriorOfDoubleQuotedString(string_builder* Builder, counted_str
     S.Count -= 2;
     ++S.Start;
     Append(Builder, CSz("\""));
-    Append(Builder, EscapeDoubleQuotes(S, Builder->Memory));
+    Append(Builder, EscapeDoubleQuotes(S, Builder->Chunks.Memory));
     Append(Builder, CSz("\""));
   }
   else
   {
-    Append(Builder, EscapeDoubleQuotes(S, Builder->Memory));
+    Append(Builder, EscapeDoubleQuotes(S, Builder->Chunks.Memory));
   }
 }
 
@@ -7777,6 +7787,11 @@ TryParsePoofTag(parser *Parser, poof_tag *Tag)
 link_internal b32
 TryParsePoofKeywordAndTagList(parser *Parser, poof_tag_block_array *Tags, declaration *Decl)
 {
+  if (Tags->Memory == 0)
+  {
+    Tags->Memory = &Global_PermMemory;
+  }
+
   c_token *T = PeekTokenPointer(Parser);
 
   b32 Got = False;
@@ -8103,6 +8118,8 @@ ParseMetaFunctionDef(parser* Parser, cs FuncName, memory_arena *Memory)
 
   RequireToken(Parser, CTokenType_OpenParen);
   meta_func_arg_stream ArgStream = {};
+  ArgStream.Memory = AllocateArena();
+
   while (ParseMetaFuncDefArg(Parser, &ArgStream));
   RequireToken(Parser, CTokenType_CloseParen);
 
@@ -8392,6 +8409,7 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
   TIMED_FUNCTION();
 
   tuple_cs_cs_buffer_builder Builder = {};
+  Builder.Chunks.Memory = &Global_PermMemory;
 
   program_datatypes *Datatypes   = &Ctx->Datatypes;
   meta_func_stream *FunctionDefs = &Ctx->MetaFunctions;
@@ -8785,6 +8803,8 @@ main(s32 ArgCount_, const char** ArgStrings)
 
   parse_context Ctx = AllocateParseContext(Memory);
   Ctx.Args = ParseArgs(ArgStrings, ArgCount, &Ctx, Memory);
+
+  Ctx.MetaFunctions.Memory = &Global_PermMemory;
 
 #if BONSAI_DEBUG_SYSTEM_API
   if (Ctx.Args.DoDebugWindow)

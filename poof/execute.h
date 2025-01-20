@@ -100,7 +100,7 @@ HandleWhitespaceAndAppend( string_builder *OutputBuilder, counted_string Output,
         {
           if (LastChar(Sep) != '\n')
           {
-            Sep = Concat(Sep, CSz("\n"), OutputBuilder->Memory);
+            Sep = Concat(Sep, CSz("\n"), OutputBuilder->Chunks.Memory);
           }
         }
       }
@@ -297,6 +297,7 @@ DoTrueFalse( parse_context *Ctx,
     if (ParserToUse->ErrorCode)
     {
       Scope->ErrorCode = ParserToUse->ErrorCode;
+      Discard(OutputBuilder);
     }
     else
     {
@@ -1479,6 +1480,7 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
   Assert(Scope->Tokens->At == Scope->Tokens->Start);
 
   string_builder OutputBuilder = {};
+
   while ( c_token *BodyToken = PopTokenRawPointer(Scope) )
   {
     b32 ImpetusWasAt = False;
@@ -1507,7 +1509,7 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
         {
           const char *Bookend = BodyToken->Type == CTokenType_CharLiteral ? "'" : "\"";
           Append(&OutputBuilder, CS(Bookend, 1));
-          Append(&OutputBuilder, EscapeDoubleQuotes(Code, OutputBuilder.Memory));
+          Append(&OutputBuilder, EscapeDoubleQuotes(Code, OutputBuilder.Chunks.Memory));
           Append(&OutputBuilder, CS(Bookend, 1));
         }
       } break;
@@ -1626,7 +1628,7 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
 
             TryParseMetaArgOperator(Scope, &Operator, &OperatorToken);
 
-            string_builder OperatorBuilder = {};
+            string_builder OperatorBuilder = StringBuilder(AllocateArena());
             ResolveMetaOperator(Ctx, Args, Replace, Scope, Operator, BodyToken, OperatorToken, Memory, Depth, &OperatorBuilder);
             cs OperatorOutput = Finalize(&OperatorBuilder, Memory);
 
