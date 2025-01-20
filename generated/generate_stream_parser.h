@@ -14,6 +14,14 @@ struct parser_stream
   umm ChunkCount;
 };
 
+link_internal parser_stream
+ParserStream(memory_arena *Memory)
+{
+  parser_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(parser_stream *Stream)
 {

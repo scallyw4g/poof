@@ -14,6 +14,14 @@ struct todo_stream
   umm ChunkCount;
 };
 
+link_internal todo_stream
+TodoStream(memory_arena *Memory)
+{
+  todo_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(todo_stream *Stream)
 {

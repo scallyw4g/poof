@@ -14,6 +14,14 @@ struct tagged_counted_string_stream_stream
   umm ChunkCount;
 };
 
+link_internal tagged_counted_string_stream_stream
+TaggedCountedStringStreamStream(memory_arena *Memory)
+{
+  tagged_counted_string_stream_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(tagged_counted_string_stream_stream *Stream)
 {

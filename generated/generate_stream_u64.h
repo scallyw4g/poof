@@ -14,6 +14,14 @@ struct u64_stream
   umm ChunkCount;
 };
 
+link_internal u64_stream
+U64Stream(memory_arena *Memory)
+{
+  u64_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(u64_stream *Stream)
 {

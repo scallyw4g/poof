@@ -1628,7 +1628,7 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
 
             TryParseMetaArgOperator(Scope, &Operator, &OperatorToken);
 
-            string_builder OperatorBuilder = StringBuilder(AllocateArena());
+            string_builder OperatorBuilder = StringBuilder(AllocateArena(Megabytes(1), True, False));
             ResolveMetaOperator(Ctx, Args, Replace, Scope, Operator, BodyToken, OperatorToken, Memory, Depth, &OperatorBuilder);
             cs OperatorOutput = Finalize(&OperatorBuilder, Memory);
 

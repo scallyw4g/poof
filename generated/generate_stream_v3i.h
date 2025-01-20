@@ -14,6 +14,14 @@ struct v3i_stream
   umm ChunkCount;
 };
 
+link_internal v3i_stream
+V3iStream(memory_arena *Memory)
+{
+  v3i_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(v3i_stream *Stream)
 {

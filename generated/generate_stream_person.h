@@ -14,6 +14,14 @@ struct person_stream
   umm ChunkCount;
 };
 
+link_internal person_stream
+PersonStream(memory_arena *Memory)
+{
+  person_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(person_stream *Stream)
 {

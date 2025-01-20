@@ -14,6 +14,14 @@ struct ast_node_stream
   umm ChunkCount;
 };
 
+link_internal ast_node_stream
+AstNodeStream(memory_arena *Memory)
+{
+  ast_node_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(ast_node_stream *Stream)
 {

@@ -14,6 +14,14 @@ struct enum_member_stream
   umm ChunkCount;
 };
 
+link_internal enum_member_stream
+EnumMemberStream(memory_arena *Memory)
+{
+  enum_member_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(enum_member_stream *Stream)
 {

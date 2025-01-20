@@ -192,6 +192,14 @@ struct counted_string_stream
   umm ChunkCount;
 };
 
+link_internal counted_string_stream
+CountedStringStream(memory_arena *Memory)
+{
+  counted_string_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(counted_string_stream *Stream)
 {

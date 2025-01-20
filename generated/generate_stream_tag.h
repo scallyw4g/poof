@@ -14,6 +14,14 @@ struct tag_stream
   umm ChunkCount;
 };
 
+link_internal tag_stream
+TagStream(memory_arena *Memory)
+{
+  tag_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(tag_stream *Stream)
 {

@@ -14,6 +14,14 @@ struct c_token_buffer_stream
   umm ChunkCount;
 };
 
+link_internal c_token_buffer_stream
+CTokenBufferStream(memory_arena *Memory)
+{
+  c_token_buffer_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(c_token_buffer_stream *Stream)
 {

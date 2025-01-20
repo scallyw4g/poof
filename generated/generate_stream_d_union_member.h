@@ -14,6 +14,14 @@ struct d_union_member_stream
   umm ChunkCount;
 };
 
+link_internal d_union_member_stream
+DUnionMemberStream(memory_arena *Memory)
+{
+  d_union_member_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(d_union_member_stream *Stream)
 {

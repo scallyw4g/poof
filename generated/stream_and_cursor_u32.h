@@ -192,6 +192,14 @@ struct u32_stream
   umm ChunkCount;
 };
 
+link_internal u32_stream
+U32Stream(memory_arena *Memory)
+{
+  u32_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(u32_stream *Stream)
 {

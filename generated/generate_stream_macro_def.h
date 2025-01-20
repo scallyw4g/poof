@@ -14,6 +14,14 @@ struct macro_def_stream
   umm ChunkCount;
 };
 
+link_internal macro_def_stream
+MacroDefStream(memory_arena *Memory)
+{
+  macro_def_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(macro_def_stream *Stream)
 {

@@ -192,6 +192,14 @@ struct compound_decl_stream
   umm ChunkCount;
 };
 
+link_internal compound_decl_stream
+CompoundDeclStream(memory_arena *Memory)
+{
+  compound_decl_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(compound_decl_stream *Stream)
 {

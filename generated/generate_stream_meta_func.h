@@ -14,6 +14,14 @@ struct meta_func_stream
   umm ChunkCount;
 };
 
+link_internal meta_func_stream
+MetaFuncStream(memory_arena *Memory)
+{
+  meta_func_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(meta_func_stream *Stream)
 {

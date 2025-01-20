@@ -154,7 +154,7 @@ struct declaration_stream_chunk;
 
 struct declaration_stream
 {
-  memory_arena *Memory = AllocateArena();
+  memory_arena *Memory = AllocateArena(0, 0, 0);
   declaration_stream_chunk *FirstChunk;
   declaration_stream_chunk *LastChunk;
   umm ChunkCount;

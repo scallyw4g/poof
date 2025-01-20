@@ -14,6 +14,14 @@ struct tuple_cs_cs_stream
   umm ChunkCount;
 };
 
+link_internal tuple_cs_cs_stream
+TupleCsCsStream(memory_arena *Memory)
+{
+  tuple_cs_cs_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(tuple_cs_cs_stream *Stream)
 {

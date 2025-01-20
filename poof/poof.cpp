@@ -340,15 +340,25 @@ ExpandMacro( parse_context *Ctx,
              parser *Parser,
              macro_def *Macro,
              memory_arena *PermMemory,
+
+             // NOTE(Jesse)(expand_macro_temp_mem): Doing Begin/End temp memory here is actually quite
+             // slow compared to doing a new arena (yikes!).  This is because
+             // we clear the memory on the main thread at the time that we do
+             // the end temp memory, whereas Windows puts dirty pages on a
+             // queue to be cleared on another thread.  Not totally sure how
+             // to fix this and preserve the constraint that the memory we get
+             // from Allocate is always cleared..
              memory_arena *TempMemory_,
+
              b32 ScanArgsForAdditionalMacros,
              b32 WasCalledFromExpandMacroConstantExpression
            )
 {
   TIMED_FUNCTION();
 
-  memory_arena *TempMemory = AllocateArena(Megabytes(5));
+  memory_arena *TempMemory = AllocateArena(Megabytes(5), False, False);
 
+  // @expand_macro_temp_mem
   /* temp_memory_handle MemHandle = BeginTemporaryMemory(TempMemory); */
 
   parser *FirstPass = AllocateParserPtr(
@@ -902,8 +912,9 @@ ExpandMacro( parse_context *Ctx,
 
     Macro->IsExpanding = False;
 
-    /* TIMED_BLOCK("END TEMP MEM"); */
-      /* EndTemporaryMemory(&MemHandle); */
+    // @expand_macro_temp_mem
+    /* TIMED_NAMED_BLOCK(END_TEMP_MEM); */
+    /*   EndTemporaryMemory(&MemHandle); */
     /* END_BLOCK(); */
 
     VaporizeArena(TempMemory);

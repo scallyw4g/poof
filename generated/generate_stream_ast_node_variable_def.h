@@ -14,6 +14,14 @@ struct ast_node_variable_def_stream
   umm ChunkCount;
 };
 
+link_internal ast_node_variable_def_stream
+AstNodeVariableDefStream(memory_arena *Memory)
+{
+  ast_node_variable_def_stream Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
 link_internal void
 Deallocate(ast_node_variable_def_stream *Stream)
 {
