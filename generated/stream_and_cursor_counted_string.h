@@ -240,10 +240,7 @@ IsLastElement(counted_string_iterator* Iter)
 link_internal counted_string *
 Push(counted_string_stream* Stream, counted_string Element)
 {
-  if (Stream->Memory == 0)
-  {
-    Stream->Memory = AllocateArena();
-  }
+  Assert(Stream->Memory);
 
   /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
   counted_string_stream_chunk* NextChunk = (counted_string_stream_chunk*)PushStruct(Stream->Memory, sizeof(counted_string_stream_chunk), 1, 0);

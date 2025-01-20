@@ -62,10 +62,7 @@ IsLastElement(meta_func_iterator* Iter)
 link_internal meta_func *
 Push(meta_func_stream* Stream, meta_func Element)
 {
-  if (Stream->Memory == 0)
-  {
-    Stream->Memory = AllocateArena();
-  }
+  Assert(Stream->Memory);
 
   /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
   meta_func_stream_chunk* NextChunk = (meta_func_stream_chunk*)PushStruct(Stream->Memory, sizeof(meta_func_stream_chunk), 1, 0);

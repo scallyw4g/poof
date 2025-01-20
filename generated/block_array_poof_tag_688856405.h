@@ -232,7 +232,7 @@ RemoveUnordered(poof_tag_block_array *Array, poof_tag_block_array_index Index)
 link_internal poof_tag *
 Push(poof_tag_block_array *Array, poof_tag *Element)
 {
-  if (Array->Memory == 0) { Array->Memory = AllocateArena(); }
+  Assert(Array->Memory);
 
   if (Array->First == 0) { Array->First = Allocate_poof_tag_block(Array->Memory); Array->Current = Array->First; }
 

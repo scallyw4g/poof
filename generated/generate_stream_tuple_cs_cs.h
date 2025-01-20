@@ -62,10 +62,7 @@ IsLastElement(tuple_cs_cs_iterator* Iter)
 link_internal tuple_cs_cs *
 Push(tuple_cs_cs_stream* Stream, tuple_cs_cs Element)
 {
-  if (Stream->Memory == 0)
-  {
-    Stream->Memory = AllocateArena();
-  }
+  Assert(Stream->Memory);
 
   /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
   tuple_cs_cs_stream_chunk* NextChunk = (tuple_cs_cs_stream_chunk*)PushStruct(Stream->Memory, sizeof(tuple_cs_cs_stream_chunk), 1, 0);

@@ -240,10 +240,7 @@ IsLastElement(compound_decl_iterator* Iter)
 link_internal compound_decl *
 Push(compound_decl_stream* Stream, compound_decl Element)
 {
-  if (Stream->Memory == 0)
-  {
-    Stream->Memory = AllocateArena();
-  }
+  Assert(Stream->Memory);
 
   /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
   compound_decl_stream_chunk* NextChunk = (compound_decl_stream_chunk*)PushStruct(Stream->Memory, sizeof(compound_decl_stream_chunk), 1, 0);

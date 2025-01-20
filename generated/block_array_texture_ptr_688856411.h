@@ -62,7 +62,7 @@ RemoveUnordered(texture_ptr_block_array *Array, texture_ptr_block_array_index In
 link_internal texture_ptr *
 Push(texture_ptr_block_array *Array, texture_ptr *Element)
 {
-  if (Array->Memory == 0) { Array->Memory = AllocateArena(); }
+  Assert(Array->Memory);
 
   if (Array->First == 0) { Array->First = Allocate_texture_ptr_block(Array->Memory); Array->Current = Array->First; }
 

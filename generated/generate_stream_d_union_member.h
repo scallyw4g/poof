@@ -62,10 +62,7 @@ IsLastElement(d_union_member_iterator* Iter)
 link_internal d_union_member *
 Push(d_union_member_stream* Stream, d_union_member Element)
 {
-  if (Stream->Memory == 0)
-  {
-    Stream->Memory = AllocateArena();
-  }
+  Assert(Stream->Memory);
 
   /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
   d_union_member_stream_chunk* NextChunk = (d_union_member_stream_chunk*)PushStruct(Stream->Memory, sizeof(d_union_member_stream_chunk), 1, 0);

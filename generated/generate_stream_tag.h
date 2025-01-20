@@ -62,10 +62,7 @@ IsLastElement(tag_iterator* Iter)
 link_internal tag *
 Push(tag_stream* Stream, tag Element)
 {
-  if (Stream->Memory == 0)
-  {
-    Stream->Memory = AllocateArena();
-  }
+  Assert(Stream->Memory);
 
   /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
   tag_stream_chunk* NextChunk = (tag_stream_chunk*)PushStruct(Stream->Memory, sizeof(tag_stream_chunk), 1, 0);

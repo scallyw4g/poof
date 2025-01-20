@@ -62,10 +62,7 @@ IsLastElement(enum_member_iterator* Iter)
 link_internal enum_member *
 Push(enum_member_stream* Stream, enum_member Element)
 {
-  if (Stream->Memory == 0)
-  {
-    Stream->Memory = AllocateArena();
-  }
+  Assert(Stream->Memory);
 
   /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
   enum_member_stream_chunk* NextChunk = (enum_member_stream_chunk*)PushStruct(Stream->Memory, sizeof(enum_member_stream_chunk), 1, 0);

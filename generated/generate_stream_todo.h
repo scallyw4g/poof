@@ -62,10 +62,7 @@ IsLastElement(todo_iterator* Iter)
 link_internal todo *
 Push(todo_stream* Stream, todo Element)
 {
-  if (Stream->Memory == 0)
-  {
-    Stream->Memory = AllocateArena();
-  }
+  Assert(Stream->Memory);
 
   /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
   todo_stream_chunk* NextChunk = (todo_stream_chunk*)PushStruct(Stream->Memory, sizeof(todo_stream_chunk), 1, 0);

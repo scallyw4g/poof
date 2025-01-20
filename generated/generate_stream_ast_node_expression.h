@@ -62,10 +62,7 @@ IsLastElement(ast_node_expression_iterator* Iter)
 link_internal ast_node_expression *
 Push(ast_node_expression_stream* Stream, ast_node_expression Element)
 {
-  if (Stream->Memory == 0)
-  {
-    Stream->Memory = AllocateArena();
-  }
+  Assert(Stream->Memory);
 
   /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
   ast_node_expression_stream_chunk* NextChunk = (ast_node_expression_stream_chunk*)PushStruct(Stream->Memory, sizeof(ast_node_expression_stream_chunk), 1, 0);

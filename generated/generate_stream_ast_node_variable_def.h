@@ -62,10 +62,7 @@ IsLastElement(ast_node_variable_def_iterator* Iter)
 link_internal ast_node_variable_def *
 Push(ast_node_variable_def_stream* Stream, ast_node_variable_def Element)
 {
-  if (Stream->Memory == 0)
-  {
-    Stream->Memory = AllocateArena();
-  }
+  Assert(Stream->Memory);
 
   /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
   ast_node_variable_def_stream_chunk* NextChunk = (ast_node_variable_def_stream_chunk*)PushStruct(Stream->Memory, sizeof(ast_node_variable_def_stream_chunk), 1, 0);

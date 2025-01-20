@@ -62,10 +62,7 @@ IsLastElement(type_def_iterator* Iter)
 link_internal type_def *
 Push(type_def_stream* Stream, type_def Element)
 {
-  if (Stream->Memory == 0)
-  {
-    Stream->Memory = AllocateArena();
-  }
+  Assert(Stream->Memory);
 
   /* (Type.name)_stream_chunk* NextChunk = AllocateProtection((Type.name)_stream_chunk*), Stream->Memory, 1, False) */
   type_def_stream_chunk* NextChunk = (type_def_stream_chunk*)PushStruct(Stream->Memory, sizeof(type_def_stream_chunk), 1, 0);
