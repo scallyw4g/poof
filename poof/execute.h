@@ -1455,12 +1455,20 @@ TryParseMetaTransformOp(parser *Scope, meta_transform_op *Operator, c_token **Op
   return Result;
 }
 
+static int debugcounter;
+
 // TODO(Jesse): Instead of the error living on the parser, it should live in the result from this fn
 link_internal counted_string
 Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_arena *Memory, umm *Depth)
 {
   TIMED_FUNCTION();
   Assert(Func->Body.Tokens->At == Func->Body.Tokens->Start);
+
+  ++debugcounter; Info("%d", debugcounter);
+
+  if (debugcounter)
+  {
+  }
 
   /* counted_string Result = Execute(&Func->Body, Args, Ctx, Memory, Depth); */
   parser *Scope = &Func->Body;

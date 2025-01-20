@@ -23,8 +23,6 @@ link_internal void DebugPrint(type_spec *TypeSpec, u32 Depth = 0);
 #include <poof/print_ast_node.h>
 
 
-global_variable memory_arena Global_PermMemory = {};
-
 
 
 /* #if DEBUG_PRINT */
@@ -3145,6 +3143,7 @@ StringFromTokenSpan(parser *Parser, c_token *StartToken, c_token *EndToken, memo
 {
   Assert(IsValidForCursor(Parser->Tokens, StartToken));
   Assert(IsValidForCursor(Parser->Tokens, EndToken));
+  NotImplemented;
 
   counted_string Result = {};
   return Result;
@@ -5672,8 +5671,8 @@ ParseExpression(parse_context *Ctx, ast_node_expression* Result)
   do
   {
     ParsePushedParser = False;
-    const c_token T = PeekToken(Parser);
-    switch (T.Type)
+    c_token *T = PeekTokenPointer(Parser);
+    switch (T->Type)
     {
       case CTokenType_Poof:
       {
@@ -5686,14 +5685,14 @@ ParseExpression(parse_context *Ctx, ast_node_expression* Result)
       case CTokenType_FloatLiteral:
       {
         ast_node_literal *Node = AllocateAndCastTo(ast_node_literal, &Result->Value, Ctx->Memory);
-        Node->Token = RequireToken(Parser, T.Type);
+        Node->Token = RequireToken(Parser, T->Type);
       } break;
 
       case CTokenType_Struct:
       case CTokenType_Enum:
       case CTokenType_Union:
       {
-        RequireToken(Parser, T.Type);
+        RequireToken(Parser, T->Type);
       } [[fallthrough]];
 
       case CTokenType_Identifier:
@@ -5705,7 +5704,7 @@ ParseExpression(parse_context *Ctx, ast_node_expression* Result)
       case CTokenType_Dot:
       {
         ast_node_access *Node = AllocateAndCastTo(ast_node_access, &Result->Value, Ctx->Memory);
-        Node->AccessType = RequireToken(Parser, T.Type);
+        Node->AccessType = RequireToken(Parser, T->Type);
 
         Node->Symbol = AllocateProtection(ast_node_expression, Ctx->Memory, 1, False);
         ParsePushedParser = ParseSymbol(Ctx, Node->Symbol);
@@ -5732,16 +5731,24 @@ ParseExpression(parse_context *Ctx, ast_node_expression* Result)
 
       case CTokenType_OpenParen:
       {
-        RequireToken(Parser, T.Type);
+        RequireToken(Parser, T->Type);
         ast_node_parenthesized *Node = AllocateAndCastTo(ast_node_parenthesized, &Result->Value, Ctx->Memory);
         Node->Expr = ParseExpression(Ctx);
         RequireToken(Parser, CTokenType_CloseParen);
 
-        if (Node->Expr->Value->Type == type_ast_node_type_specifier)
+        if (Node->Expr->Value)
         {
-          Node->IsCast = True;
-          Node->CastValue = ParseExpression(Ctx);
+          if (Node->Expr->Value->Type == type_ast_node_type_specifier)
+          {
+            Node->IsCast = True;
+            Node->CastValue = ParseExpression(Ctx);
+          }
         }
+        else
+        {
+          PoofSyntaxError(Parser, CSz("Parens must enclose a valid expression!"), T);
+        }
+
 
       } break;
 
@@ -5779,16 +5786,16 @@ ParseExpression(parse_context *Ctx, ast_node_expression* Result)
       {
         Assert(!Result->Value);
         ast_node_operator* Node = AllocateAndCastTo(ast_node_operator, &Result->Value, Ctx->Memory);
-        Node->Token = RequireToken(Parser, T.Type);
+        Node->Token = RequireToken(Parser, T->Type);
         Node->Operand = ParseExpression(Ctx);
-        if (T.Type == CTokenType_OpenBracket)
+        if (T->Type == CTokenType_OpenBracket)
           { RequireToken(Parser, CTokenType_CloseBracket); }
       } break;
 
       case CTokenType_Question:
       {
         ast_node_operator* Node = AllocateAndCastTo(ast_node_operator, &Result->Value, Ctx->Memory);
-        Node->Token = RequireToken(Parser, T.Type);
+        Node->Token = RequireToken(Parser, T->Type);
         Node->Operand = ParseExpression(Ctx);
         RequireToken(Parser, CTokenType_Colon);
         ParseExpression(Ctx); // TODO(Jesse id: 260): Currently ignoring the second half of a ternary .. we should probably not do this
@@ -5799,7 +5806,7 @@ ParseExpression(parse_context *Ctx, ast_node_expression* Result)
       {
         Assert(!Result->Value);
         ast_node_literal *Node = AllocateAndCastTo(ast_node_literal, &Result->Value, Ctx->Memory);
-        Node->Token = RequireToken(Parser, T.Type);
+        Node->Token = RequireToken(Parser, T->Type);
 
         while ( PeekToken(Parser).Type == CTokenType_StringLiteral ||
                 PeekToken(Parser).Type == CTokenType_Identifier )
@@ -8750,6 +8757,14 @@ DoPoofForWeb(char *zInput, umm InputLen)
   return Result;
 }
 
+global_variable bonsai_stdlib *Global_Stdlib;
+
+link_weak bonsai_stdlib*
+GetStdlib()
+{
+  return Global_Stdlib;
+}
+
 s32
 main(s32 ArgCount_, const char** ArgStrings)
 {
@@ -8763,6 +8778,8 @@ main(s32 ArgCount_, const char** ArgStrings)
   application_api AppApi = {};
   bonsai_stdlib Stdlib = {};
   bonsai_init_flags InitFlags = {};
+
+  Global_Stdlib = &Stdlib;
 
   /* AllocateAndInitThreadStates(Memory); */
 
@@ -8920,6 +8937,8 @@ main(s32 ArgCount_, const char** ArgStrings)
     heap_allocator Heap = InitHeap(Gigabytes(1), False);
     renderer_2d Ui = {};
 
+    SetRenderer(&Ui);
+
     v2 MouseP, MouseDP, ScreenDim;
 
     InitRenderer2D(&Ui, &Heap, Memory, &Stdlib.Plat.MouseP, &Stdlib.Plat.MouseDP, &Stdlib.Plat.ScreenDim, &Stdlib.Plat.Input);
@@ -8935,6 +8954,7 @@ main(s32 ArgCount_, const char** ArgStrings)
 
     while (Os->ContinueRunning)
     {
+
       // TODO(Jesse): Make a stdlib function that wraps all this stuff up
       // @stdlib_frame_preamble
       ResetInputForFrameStart(&Plat->Input, 0);
@@ -8959,8 +8979,22 @@ main(s32 ArgCount_, const char** ArgStrings)
       if (Stdlib.Plat.Input.F1.Clicked) { Toggle = True; }
       if (Stdlib.Plat.Input.F2.Clicked) { Toggle2 = True; }
 
+
+      DebugState->DisplayDebugMenu = True;
       DEBUG_FRAME_BEGIN(&Ui, Dt, Toggle, Toggle2);
+
+      PushTableStart(&Ui);
+      PushTableEnd(&Ui);
+
       DEBUG_FRAME_END(Dt);
+      {
+        layout DefaultLayout = {};
+        render_state RenderState = {};
+        RenderState.Layout = &DefaultLayout;
+
+        SetWindowZDepths(Ui.CommandBuffer);
+        FlushCommandBuffer(&Ui, &RenderState, Ui.CommandBuffer, &DefaultLayout);
+      }
 
       UiFrameEnd(&Ui);
 
