@@ -111,17 +111,6 @@ HandleWhitespaceAndAppend( string_builder *OutputBuilder, counted_string Output,
   }
 }
 
-poof(
-  func maybe(ValueType, ErrorType)
-  {
-    struct maybe_(ValueType.name.to_lowercase)
-    {
-      ValueType.name E;
-      ErrorType.name Error;
-    };
-  }
-)
-
 #if 0
 // TODO(Jesse)(abstract): How would we articulate this if we wanted to have
 // multiple different maybe boxes for counted string?  I guess we'd have to
@@ -1593,14 +1582,32 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
             RequireToken(Scope, CTokenType_CloseParen);
             RequireToken(Scope, CTokenType_Question);
 
-            Assert(T0 && T1);
+            if (Scope->ErrorCode)
+            {
+              break;
+            }
 
-            datatype *D0 = ResolveNameToDatatype(Ctx, Scope, T0, Args, T0->Value);
-            datatype *D1 = ResolveNameToDatatype(Ctx, Scope, T1, Args, T1->Value);
+            if(T0)
+            {
+              if(T1)
+              {
+                datatype *D0 = ResolveNameToDatatype(Ctx, Scope, T0, Args, T0->Value);
+                datatype *D1 = ResolveNameToDatatype(Ctx, Scope, T1, Args, T1->Value);
 
-            b32 DoTrueBranch = AreEqual(D0, D1);
-            DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, &OutputBuilder, Memory, Depth);
-            DidPoofOp = True;
+                b32 DoTrueBranch = AreEqual(D0, D1);
+                DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, &OutputBuilder, Memory, Depth);
+                DidPoofOp = True;
+              }
+              else
+              {
+                PoofError(Scope, ParseErrorCode_Unknown, FSz("Couldn't resolve datatype (%S)", T1->Value), 0);
+              }
+            }
+            else
+            {
+              PoofError(Scope, ParseErrorCode_Unknown, FSz("Couldn't resolve datatype (%S)", T0->Value), 0);
+            }
+
           } break;
         }
 
@@ -1865,9 +1872,18 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
       }
       else
       {
-        counted_string FuncName = RequireToken(Parser, CTokenType_Identifier).Value;
+        c_token *FuncT = RequireTokenPointer(Parser, CTokenType_Identifier);
+        counted_string FuncName = FuncT->Value;
         meta_func Func = ParseMetaFunctionDef(Parser, FuncName, Memory);
-        Push(FunctionDefs, Func);
+
+        if (StreamContains( FunctionDefs, FuncName ) == 0)
+        {
+          Push(FunctionDefs, Func);
+        }
+        else
+        {
+          PoofError(Parser, ParseErrorCode_InvalidFunction, CSz("Function already defined"), FuncT);
+        }
       }
 
     } break;
