@@ -10,6 +10,12 @@
   }
   ```
 
+* Improved error reporting in builtin `are_equal`
+
+* Disallow overloading function names
+
+* Internal changes significantly improving number of small arena allocations
+
 # v0.1.0
 
 * Added @var
