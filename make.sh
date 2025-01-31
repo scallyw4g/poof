@@ -183,7 +183,7 @@ function RunPoof {
     -D POOF_PREPROCESSOR          \
     -D BONSAI_PREPROCESSOR        \
     -D BONSAI_DEBUG_SYSTEM        \
-    -d \
+    -d                            \
     $PLATFORM_DEFINES             \
     -I "."                        \
     -I "$ROOT/include"            \

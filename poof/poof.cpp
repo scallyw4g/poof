@@ -7523,9 +7523,8 @@ DatatypeIsPointer(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token
 
     case type_type_def:
     {
-      InvalidCodePath();
-      /* type_def *TDef = SafeAccessPtr(type_def, Data); */
-      /* Result = TypeSpecIsPointer(&TDef->Type); */
+      type_def *TDef = &SafeAccessPtr(type_def, Data);
+      Result = TypeSpecIsPointer(&TDef->Type);
     } break;
 
     case type_declaration:
@@ -8423,7 +8422,6 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
   Builder.Chunks.Memory = &Global_PermMemory;
 
   program_datatypes *Datatypes   = &Ctx->Datatypes;
-  meta_func_stream *FunctionDefs = &Ctx->MetaFunctions;
   memory_arena *Memory           = Ctx->Memory;
 
   parser *Parser = Ctx->CurrentParser;
@@ -9006,12 +9004,15 @@ main(s32 ArgCount_, const char** ArgStrings)
 
       if (Stdlib.Plat.Input.Escape.Clicked) { break; }
 
-      b32 Toggle2 = False, Toggle = False;
-      if (Stdlib.Plat.Input.F1.Clicked) { Toggle = True; }
-      if (Stdlib.Plat.Input.F2.Clicked) { Toggle2 = True; }
+      Info("Hi");
 
+      b32 Toggle = False, Toggle2 = False;
+      if (Stdlib.Plat.Input.F1.Clicked) { Info("hi"); Toggle = True; }
+      if (Stdlib.Plat.Input.F2.Clicked) { Info("hi2"); Toggle2 = True; }
 
-      DebugState->DisplayDebugMenu = True;
+      Info("%d", Stdlib.Plat.Input.F1.Clicked);
+
+      /* DebugState->DisplayDebugMenu = True; */
       DEBUG_FRAME_BEGIN(&Ui, Dt, Toggle, Toggle2);
 
       PushTableStart(&Ui);
