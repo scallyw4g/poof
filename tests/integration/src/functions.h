@@ -43,7 +43,7 @@ poof(
 )
 
 poof(
-  func func2(type) @omit_include
+  func overload_test_func(type) @omit_include
   {
     // should prroduce the hash of the counted_string (cs) type
     @are_equal(type, cs)?
@@ -61,7 +61,7 @@ poof(
   }
 )
 
-poof(func2(thing))
+poof(overload_test_func(thing))
 // tests/integration/generated/functions/func2_thing.h
 
 

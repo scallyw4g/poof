@@ -1524,7 +1524,9 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
           {
             case poof_global_keyword_noop:
             {
-              ParseError( Scope, ParseErrorCode_InvalidKeyword, FSz("(%S) is not a valid poof keyword", BodyToken->Value), BodyToken);
+              // Can't emit an error here becuase poof(@tag) is a thing, and we don't
+              // differentiate between parsing in a function context and a general context..
+              /* ParseError( Scope, ParseErrorCode_InvalidKeyword, FSz("(%S) is not a valid poof keyword", BodyToken->Value), BodyToken); */
             } break;
 
             case var:

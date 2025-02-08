@@ -1,3 +1,11 @@
+# v0.1.2
+
+* Enforce global keywords are prefixed by an @
+  This is necessary such that we can overload global keyword names with
+  function names Mostly not necessary at the moment, but I had an are_equal
+  function which collided with the are_equal keyword.  Might add more keywords
+  in the future that makes this more of a feature.
+
 # v0.1.1
 
 * Fixed several situations where transformations would fail

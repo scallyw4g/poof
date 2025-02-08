@@ -331,7 +331,7 @@ poof(generate_stream(enum_member))
 struct enum_decl
 {
   counted_string Name;
-  enum_member_stream Members;
+  enum_member_stream Members = {&Global_PermMemory, 0, 0, 0};
 };
 
 link_internal b32 

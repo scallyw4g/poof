@@ -5105,6 +5105,7 @@ ParseAndPushTypedef(parse_context *Ctx)
       if (Type.Qualifier & TypeQual_Struct)
       {
         compound_decl S = ParseStructBody(Ctx, 0, 0);
+        S.Members.Memory = &Global_PermMemory;
         // @dup_typedefd_anon_thingy_name_token
         comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
         S.Type = Decl.NameT;
@@ -7966,7 +7967,7 @@ ParseAndTypecheckArgument(parse_context *Ctx, parser *Parser, meta_func_arg *Par
           }
           else if (meta_func_arg *ScopedArg = GetByMatch(CurrentScope, Token->Value))
           {
-            Assert(ScopedArg->Type == type_datatype);
+            Assert(ScopedArg->Type == type_datatype || ScopedArg->Type == type_poof_symbol);
             *ParsedArg = *ScopedArg;
             ParsedArg->Match = ArgDef->Match;
           }
