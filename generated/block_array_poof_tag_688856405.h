@@ -1,5 +1,9 @@
 // ./poof/poof.h:353:0
 
+
+
+
+
 struct poof_tag_block
 {
   u32 Index;
@@ -23,10 +27,34 @@ struct poof_tag_block_array
   
 };
 
+link_internal b32
+AreEqual(poof_tag_block_array_index *Thing1, poof_tag_block_array_index *Thing2)
+{
+  if (Thing1 && Thing2)
+  {
+        b32 Result = MemoryIsEqual((u8*)Thing1, (u8*)Thing2, sizeof( poof_tag_block_array_index ) );
+
+    return Result;
+  }
+  else
+  {
+    return (Thing1 == Thing2);
+  }
+}
+
+link_internal b32
+AreEqual(poof_tag_block_array_index Thing1, poof_tag_block_array_index Thing2)
+{
+    b32 Result = MemoryIsEqual((u8*)&Thing1, (u8*)&Thing2, sizeof( poof_tag_block_array_index ) );
+
+  return Result;
+}
+
+
 typedef poof_tag_block_array poof_tag_paged_list;
 
 link_internal poof_tag_block_array_index
-operator++(poof_tag_block_array_index &I0)
+operator++( poof_tag_block_array_index &I0 )
 {
   if (I0.Block)
   {
@@ -49,30 +77,29 @@ operator++(poof_tag_block_array_index &I0)
 }
 
 link_internal b32
-operator<(poof_tag_block_array_index I0, poof_tag_block_array_index I1)
+operator<( poof_tag_block_array_index I0, poof_tag_block_array_index I1 )
 {
   b32 Result = I0.BlockIndex < I1.BlockIndex || (I0.BlockIndex == I1.BlockIndex & I0.ElementIndex < I1.ElementIndex);
   return Result;
 }
 
 link_inline umm
-GetIndex(poof_tag_block_array_index *Index)
+GetIndex( poof_tag_block_array_index *Index)
 {
   umm Result = Index->ElementIndex + (Index->BlockIndex*8);
   return Result;
 }
 
 link_internal poof_tag_block_array_index
-ZerothIndex(poof_tag_block_array *Arr)
+ZerothIndex( poof_tag_block_array *Arr)
 {
   poof_tag_block_array_index Result = {};
   Result.Block = Arr->First;
-  /* Assert(Result.Block->Index == 0); */
   return Result;
 }
 
 link_internal umm
-TotalElements(poof_tag_block_array *Arr)
+TotalElements( poof_tag_block_array *Arr)
 {
   umm Result = 0;
   if (Arr->Current)
@@ -83,7 +110,7 @@ TotalElements(poof_tag_block_array *Arr)
 }
 
 link_internal poof_tag_block_array_index
-LastIndex(poof_tag_block_array *Arr)
+LastIndex( poof_tag_block_array *Arr)
 {
   poof_tag_block_array_index Result = {};
   if (Arr->Current)
@@ -98,7 +125,7 @@ LastIndex(poof_tag_block_array *Arr)
 }
 
 link_internal poof_tag_block_array_index
-AtElements(poof_tag_block_array *Arr)
+AtElements( poof_tag_block_array *Arr)
 {
   poof_tag_block_array_index Result = {};
   if (Arr->Current)
@@ -111,7 +138,7 @@ AtElements(poof_tag_block_array *Arr)
 }
 
 link_internal umm
-Count(poof_tag_block_array *Arr)
+Count( poof_tag_block_array *Arr)
 {
   auto Index = AtElements(Arr);
   umm Result = GetIndex(&Index);
@@ -119,18 +146,33 @@ Count(poof_tag_block_array *Arr)
 }
 
 link_internal poof_tag *
+Set( poof_tag_block_array *Arr,
+  poof_tag *Element,
+  poof_tag_block_array_index Index )
+{
+  poof_tag *Result = {};
+  if (Index.Block)
+  {
+    Result = &Index.Block->Elements[Index.ElementIndex];
+    *Result = *Element;
+  }
+
+  return Result;
+}
+
+link_internal poof_tag *
 GetPtr(poof_tag_block_array *Arr, poof_tag_block_array_index Index)
 {
   poof_tag *Result = {};
-  if (Index.Block) { Result = Index.Block->Elements + Index.ElementIndex; }
+  if (Index.Block) { Result = (Index.Block->Elements + Index.ElementIndex); }
   return Result;
 }
 
 link_internal poof_tag *
 GetPtr(poof_tag_block *Block, umm Index)
 {
-  poof_tag *Result = 0;
-  if (Index < Block->At) { Result = Block->Elements + Index; }
+  poof_tag *Result = {};
+  if (Index < Block->At) { Result = (Block->Elements + Index); }
   return Result;
 }
 
@@ -147,7 +189,7 @@ GetPtr(poof_tag_block_array *Arr, umm Index)
     Block = Block->Next;
   }
 
-  poof_tag *Result = Block->Elements+ElementIndex;
+  poof_tag *Result = (Block->Elements+ElementIndex);
   return Result;
 }
 
@@ -171,29 +213,40 @@ AtElements(poof_tag_block *Block)
 }
 
 
-link_internal poof_tag_block*
+
+
+
+link_internal poof_tag_block_array
+PoofTagBlockArray(memory_arena *Memory)
+{
+  poof_tag_block_array Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
+
+link_internal poof_tag_block *
 Allocate_poof_tag_block(memory_arena *Memory)
 {
-  poof_tag_block *Result = Allocate(poof_tag_block, Memory, 1);
-  Result->Elements = Allocate(poof_tag, Memory, 8);
+  poof_tag_block *Result = Allocate( poof_tag_block, Memory, 1);
+  Result->Elements = Allocate( poof_tag, Memory, 8);
   return Result;
 }
 
 link_internal cs
-CS(poof_tag_block_array_index Index)
+CS( poof_tag_block_array_index Index )
 {
   return FSz("(%u)(%u)", Index.BlockIndex, Index.ElementIndex);
 }
 
 link_internal void
-RemoveUnordered(poof_tag_block_array *Array, poof_tag_block_array_index Index)
+RemoveUnordered( poof_tag_block_array *Array, poof_tag_block_array_index Index)
 {
   poof_tag_block_array_index LastI = LastIndex(Array);
 
   poof_tag *Element = GetPtr(Array, Index);
   poof_tag *LastElement = GetPtr(Array, LastI);
 
-  *Element = *LastElement;
+  Set(Array, LastElement, Index);
 
   Assert(Array->Current->At);
   Array->Current->At -= 1;
@@ -229,8 +282,32 @@ RemoveUnordered(poof_tag_block_array *Array, poof_tag_block_array_index Index)
   }
 }
 
+link_internal poof_tag_block_array_index
+Find( poof_tag_block_array *Array, poof_tag *Query)
+{
+  poof_tag_block_array_index Result = INVALID_BLOCK_ARRAY_INDEX;
+  IterateOver(Array, E, Index)
+  {
+    if ( E == Query)
+    {
+      Result = Index;
+      break;
+    }
+  }
+  return Result;
+}
+
+link_internal b32
+IsValid(poof_tag_block_array_index *Index)
+{
+  poof_tag_block_array_index Test = INVALID_BLOCK_ARRAY_INDEX;
+  b32 Result = AreEqual(Index, &Test);
+  /* b32 Result = False; */
+  return Result;
+}
+
 link_internal poof_tag *
-Push(poof_tag_block_array *Array, poof_tag *Element)
+Push( poof_tag_block_array *Array, poof_tag *Element)
 {
   Assert(Array->Memory);
 

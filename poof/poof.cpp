@@ -3395,6 +3395,7 @@ IsPrimitiveType(type_spec *Type)
 link_internal type_spec
 ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
 {
+  TIMED_FUNCTION();
   type_spec Result = {};
   parser *Parser = Ctx->CurrentParser;
 
@@ -5211,6 +5212,8 @@ ParseAndPushTypedef(parse_context *Ctx)
 link_internal void
 ParseTypedef(parse_context *Ctx)
 {
+  TIMED_FUNCTION();
+
   parser *Parser = Ctx->CurrentParser;
 
   RequireToken(Parser, CTokenType_Typedef);
@@ -6021,6 +6024,7 @@ ParseFunctionCall(parse_context *Ctx, cs FunctionName)
 link_internal declaration
 FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec)
 {
+  TIMED_FUNCTION();
   declaration Result = {};
 
   b32 IsConstructor = ParsingConstructor(Parser, TypeSpec);
@@ -6137,6 +6141,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec)
 link_internal declaration
 ParseDeclaration(parse_context *Ctx)
 {
+  TIMED_FUNCTION();
   parser *Parser = Ctx->CurrentParser;
 
   type_spec TypeSpec = ParseTypeSpecifier(Ctx);
@@ -6225,6 +6230,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
       case CTokenType_Signed:
       case CTokenType_Identifier:
       {
+        TIMED_NAMED_BLOCK(TopLevelDeclParse);
         declaration Decl = ParseDeclaration(Ctx);
 
         if (Decl.Type)
@@ -8971,6 +8977,7 @@ main(s32 ArgCount_, const char** ArgStrings)
 
     v2 MouseP, MouseDP, ScreenDim;
 
+    PlatformMakeRenderContextCurrent(&Stdlib.Os);
     InitRenderer2D(&Ui, &Heap, Memory, &Stdlib.Plat.MouseP, &Stdlib.Plat.MouseDP, &Stdlib.Plat.ScreenDim, &Stdlib.Plat.Input);
 
     r32 Dt = 1.f;
