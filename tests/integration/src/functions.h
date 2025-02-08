@@ -25,8 +25,27 @@ poof(foobaz(thing))
 
 
 poof(
+  func nested_func(type) @omit_include
+  {
+    foobaz(type)
+  }
+)
+
+poof(nested_func(thing))
+// tests/integration/generated/functions/nested_func_struct.h
+
+// just testing the overload works
+poof(
+  func are_equal(type)
+  {
+    type
+  }
+)
+
+poof(
   func func2(type) @omit_include
   {
+    // should prroduce the hash of the counted_string (cs) type
     @are_equal(type, cs)?
     {
       // type == type
@@ -36,6 +55,9 @@ poof(
       // type != type
       type.hash != cs.hash
     }
+
+    // should produce the value of whatever type is
+    are_equal(type)
   }
 )
 

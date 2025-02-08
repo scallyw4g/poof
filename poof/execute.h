@@ -1517,16 +1517,17 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
 
         b32 DidPoofOp = False;
 
-        poof_global_keyword Keyword = PoofGlobalKeyword(BodyToken->Value);
-        switch (Keyword)
+        if (ImpetusWasAt)
         {
-          case poof_global_keyword_noop:
+          poof_global_keyword Keyword = PoofGlobalKeyword(BodyToken->Value);
+          switch (Keyword)
           {
-          } break;
+            case poof_global_keyword_noop:
+            {
+              ParseError( Scope, ParseErrorCode_InvalidKeyword, FSz("(%S) is not a valid poof keyword", BodyToken->Value), BodyToken);
+            } break;
 
-          case var:
-          {
-            if (ImpetusWasAt)
+            case var:
             {
               cs NewName = RequireToken(Scope, CTokenType_Identifier).Value;
 
@@ -1549,156 +1550,150 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
               *Args = NewArgs;
 
               DidPoofOp = True;
-            }
-            else
+            } break;
+
+            case poof_error:
             {
-              // TODO(Jesse): Should this just be a warning?  Cause `var` could
-              // presumably occur in regular code ..
-              PoofTypeError( Scope,
-                             ParseErrorCode_SyntaxError,
-                             FormatCountedString( GetTranArena(),
-                                                  CSz("@var keyword missing preceeding @ symbol"),
-                                                  BodyToken->Value),
-                             BodyToken);
-            }
-          } break;
+              parser Body = GetBodyTextForNextScope(Scope, Memory);
+              cs ErrorText = Execute(&Body, Args, Ctx, Memory, Depth);
+              if (ErrorText.Count == 0) { ErrorText = ToString(&Body, Memory); }
+              PoofUserlandError(Scope, ErrorText, BodyToken);
+            } break;
 
-          case poof_error:
-          {
-            parser Body = GetBodyTextForNextScope(Scope, Memory);
-            cs ErrorText = Execute(&Body, Args, Ctx, Memory, Depth);
-            if (ErrorText.Count == 0) { ErrorText = ToString(&Body, Memory); }
-            PoofUserlandError(Scope, ErrorText, BodyToken);
-          } break;
-
-          case are_equal:
-          {
-            RequireToken(Scope, CTokenType_OpenParen);
-              /* datatype *D0 = ResolveExpression(Scope); */
-              c_token *T0 = RequireTokenPointer(Scope, CTokenType_Identifier);
-                            RequireTokenPointer(Scope, CTokenType_Comma);
-              /* datatype *D1 = ResolveExpression(Scope); */
-              c_token *T1 = RequireTokenPointer(Scope, CTokenType_Identifier);
-            RequireToken(Scope, CTokenType_CloseParen);
-            RequireToken(Scope, CTokenType_Question);
-
-            if (Scope->ErrorCode)
+            case are_equal:
             {
-              break;
-            }
+              RequireToken(Scope, CTokenType_OpenParen);
+                c_token *T0 = RequireTokenPointer(Scope, CTokenType_Identifier);
+                              RequireTokenPointer(Scope, CTokenType_Comma);
+                c_token *T1 = RequireTokenPointer(Scope, CTokenType_Identifier);
+              RequireToken(Scope, CTokenType_CloseParen);
+              RequireToken(Scope, CTokenType_Question);
 
-            if(T0)
-            {
-              if(T1)
+              if (Scope->ErrorCode)
               {
-                datatype *D0 = ResolveNameToDatatype(Ctx, Scope, T0, Args, T0->Value);
-                datatype *D1 = ResolveNameToDatatype(Ctx, Scope, T1, Args, T1->Value);
+                break;
+              }
 
-                b32 DoTrueBranch = AreEqual(D0, D1);
-                DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, &OutputBuilder, Memory, Depth);
-                DidPoofOp = True;
+              if(T0)
+              {
+                if(T1)
+                {
+                  datatype *D0 = ResolveNameToDatatype(Ctx, Scope, T0, Args, T0->Value);
+                  datatype *D1 = ResolveNameToDatatype(Ctx, Scope, T1, Args, T1->Value);
+
+                  b32 DoTrueBranch = AreEqual(D0, D1);
+                  DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, &OutputBuilder, Memory, Depth);
+                  DidPoofOp = True;
+                }
+                else
+                {
+                  PoofError(Scope, ParseErrorCode_Unknown, FSz("Couldn't resolve datatype (%S)", T1->Value), 0);
+                }
               }
               else
               {
-                PoofError(Scope, ParseErrorCode_Unknown, FSz("Couldn't resolve datatype (%S)", T1->Value), 0);
+                PoofError(Scope, ParseErrorCode_Unknown, FSz("Couldn't resolve datatype (%S)", T0->Value), 0);
+              }
+            } break;
+          }
+
+        }
+        else
+        {
+          for (u32 ArgIndex = 0; ArgIndex < Args->Count; ++ArgIndex)
+          {
+            if (DidPoofOp) break;
+
+            meta_func_arg *Replace = Args->Start + ArgIndex;
+
+            // NOTE(Jesse): Have to parse top-level operations here and check if
+            // we're trying to throw an error.
+
+            c_token *NextMatch = OptionalTokenRaw(Scope, CToken(Replace->Match));
+
+            if ( (ImpetusWasIdentifier && StringsMatch(Replace->Match, BodyToken->Value)) ||
+                 (ImpetusWasOpenParen  && NextMatch)
+               )
+            {
+              if (NextMatch) { BodyToken = NextMatch; }
+
+              DidPoofOp = True;
+
+              c_token           *OperatorToken = {};
+              meta_arg_operator  Operator = {};
+
+              TryParseMetaArgOperator(Scope, &Operator, &OperatorToken);
+
+              string_builder OperatorBuilder = StringBuilder(AllocateArena(Megabytes(1), True, False));
+              ResolveMetaOperator(Ctx, Args, Replace, Scope, Operator, BodyToken, OperatorToken, Memory, Depth, &OperatorBuilder);
+              cs OperatorOutput = Finalize(&OperatorBuilder, Memory);
+
+              //
+              // Apply textual transformations
+              //
+              {
+                cs Transformed = CopyString(OperatorOutput, Memory);
+
+                b32 Done = False;
+                meta_transform_op TransformOp = {};
+                while (TryParseMetaTransformOp(Scope, &TransformOp))
+                {
+                  Transformed = ApplyTransformations(TransformOp, Transformed, Memory);
+                }
+
+                Append(&OutputBuilder, Transformed);
+              }
+
+
+            }
+          }
+
+          meta_func *NestedFunc = {};
+          c_token *NestedFuncT = {};
+
+          if (ImpetusWasOpenParen)
+          {
+            NestedFunc = StreamContains( FunctionDefs, PeekToken(Scope).Value );
+            if (NestedFunc) { NestedFuncT = RequireTokenPointer(Scope, CTokenType_Identifier); }
+          }
+          else
+          {
+            Assert(ImpetusWasIdentifier);
+            NestedFunc = StreamContains( FunctionDefs, BodyToken->Value );
+            NestedFuncT = BodyToken;
+          }
+
+          if (NestedFunc)
+          {
+            if (NestedFunc != Func)
+            {
+              Assert(NestedFuncT);
+              DidPoofOp = True;
+
+              meta_func_arg_buffer ArgInstances = {};
+              if (ParseAndTypeCheckArgs(Ctx, Scope, NestedFuncT, NestedFunc, &ArgInstances, Args, Memory))
+              {
+                auto Code = CallFunction(Ctx, NestedFuncT, NestedFunc, &ArgInstances, Memory, Depth);
+                if (Code.Start)
+                {
+                  HandleWhitespaceAndAppend(&OutputBuilder, Code);
+                }
               }
             }
             else
             {
-              PoofError(Scope, ParseErrorCode_Unknown, FSz("Couldn't resolve datatype (%S)", T0->Value), 0);
-            }
-
-          } break;
-        }
-
-        for (u32 ArgIndex = 0; ArgIndex < Args->Count; ++ArgIndex)
-        {
-          if (DidPoofOp) break;
-
-          meta_func_arg *Replace = Args->Start + ArgIndex;
-
-          // NOTE(Jesse): Have to parse top-level operations here and check if
-          // we're trying to throw an error.
-
-          c_token *NextMatch = OptionalTokenRaw(Scope, CToken(Replace->Match));
-
-          if ( (ImpetusWasIdentifier && StringsMatch(Replace->Match, BodyToken->Value)) ||
-               (ImpetusWasOpenParen  && NextMatch)
-             )
-          {
-            if (NextMatch) { BodyToken = NextMatch; }
-
-            DidPoofOp = True;
-
-            c_token           *OperatorToken = {};
-            meta_arg_operator  Operator = {};
-
-            TryParseMetaArgOperator(Scope, &Operator, &OperatorToken);
-
-            string_builder OperatorBuilder = StringBuilder(AllocateArena(Megabytes(1), True, False));
-            ResolveMetaOperator(Ctx, Args, Replace, Scope, Operator, BodyToken, OperatorToken, Memory, Depth, &OperatorBuilder);
-            cs OperatorOutput = Finalize(&OperatorBuilder, Memory);
-
-            //
-            // Apply textual transformations
-            //
-            {
-              cs Transformed = CopyString(OperatorOutput, Memory);
-
-              b32 Done = False;
-              meta_transform_op TransformOp = {};
-              while (TryParseMetaTransformOp(Scope, &TransformOp))
-              {
-                Transformed = ApplyTransformations(TransformOp, Transformed, Memory);
-              }
-
-              Append(&OutputBuilder, Transformed);
-            }
-
-
-          }
-        }
-
-        meta_func *NestedFunc = {};
-        c_token *NestedFuncT = {};
-
-        if (ImpetusWasOpenParen)
-        {
-          NestedFunc = StreamContains( FunctionDefs, PeekToken(Scope).Value );
-          if (NestedFunc) { NestedFuncT = RequireTokenPointer(Scope, CTokenType_Identifier); }
-        }
-        else
-        {
-          Assert(ImpetusWasIdentifier);
-          NestedFunc = StreamContains( FunctionDefs, BodyToken->Value );
-          NestedFuncT = BodyToken;
-        }
-
-        if (NestedFunc)
-        {
-          if (NestedFunc != Func)
-          {
-            Assert(NestedFuncT);
-            DidPoofOp = True;
-
-            meta_func_arg_buffer ArgInstances = {};
-            if (ParseAndTypeCheckArgs(Ctx, Scope, NestedFuncT, NestedFunc, &ArgInstances, Args, Memory))
-            {
-              auto Code = CallFunction(Ctx, NestedFuncT, NestedFunc, &ArgInstances, Memory, Depth);
-              if (Code.Start)
-              {
-                HandleWhitespaceAndAppend(&OutputBuilder, Code);
-              }
+              PoofTypeError( Scope,
+                             ParseErrorCode_InvalidFunction,
+                             FormatCountedString( GetTranArena(),
+                                                  CSz("Could not call poof func (%S); recursive functions are illegal."),
+                                                  NestedFuncT->Value),
+                             NestedFuncT);
             }
           }
           else
           {
-            PoofTypeError( Scope,
-                           ParseErrorCode_InvalidFunction,
-                           FormatCountedString( GetTranArena(),
-                                                CSz("Could not call poof func (%S); recursive functions are illegal."),
-                                                NestedFuncT->Value),
-                           NestedFuncT);
+            // TODO(Jesse): Should we (sometimes?) emit a warning/error here because we
+            // hit a poof operator
           }
         }
 
