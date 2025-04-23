@@ -22,7 +22,7 @@ metaprogramming with C++ templates.  The canonical example is printing an enum
 value as a string.  What _should_ be an extremly simple operation turns into an
 almost comical dance of macros and templates.  If you don't to use macros it's
 even more hilarious.  In `poof`, printing any enum value as it's
-human-readable string is one concise line of poof, and going back the other way
+human-readable string is one concise line, and going back the other way
 from-string-to-int is also a 1-liner.
 
 # Getting started
