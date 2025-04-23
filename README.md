@@ -35,7 +35,7 @@ At the time of this writing, `poof` relies on itself to generate >15k LoC and
 makes use of every documented feature.
 
 [Bonsai](https://github.com/scallyw4g/bonsai) relies on `poof` to generate >40k
-LoC.
+LoC, which is mostly a great deal of code for the runtime engine data inspector.  
 
 ## Roadmap to 0.2.0
 
