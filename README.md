@@ -15,13 +15,13 @@ examples and an interactive playground if you want quickly give poof a try.
 # About
 
 `poof` is a metaprogramming environment that aims to augment the C programming
-language with modern (and sometimes experimental) metaprogramming techniques.
+language with modern, and sometimes experimental, metaprogramming techniques.
 
 `poof` was born out of frustration with the lack of ergonomics when
 metaprogramming with C++ templates.  The canonical example is printing an enum
 value as a string.  What _should_ be an extremly simple operation turns into an
-almost comical dance of macros and templates.  If you don't to use macros,
-well, it gets even more hilarious.  In `poof`, printing any enum value as it's
+almost comical dance of macros and templates.  If you don't to use macros it's
+even more hilarious.  In `poof`, printing any enum value as it's
 human-readable string is one concise line of poof, and going back the other way
 from-string-to-int is also a 1-liner.
 
