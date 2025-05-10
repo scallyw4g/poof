@@ -183,7 +183,6 @@ function RunPoof {
     -D POOF_PREPROCESSOR          \
     -D BONSAI_PREPROCESSOR        \
     -D BONSAI_DEBUG_SYSTEM        \
-    -d                            \
     $PLATFORM_DEFINES             \
     -I "."                        \
     -I "$ROOT/include"            \
@@ -509,7 +508,7 @@ function BuildAndRunAllExamples
 {
   ColorizeTitle "Building and Running examples"
   pushd examples > /dev/null
-  ./make_all_examples.sh > /dev/null
+  ./make_all_examples.sh # > /dev/null
 
   if [ $? -eq 0 ]; then
     echo -e "$Success Examples built and ran"

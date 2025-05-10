@@ -629,7 +629,16 @@ DefaultRepresentationForDatatype( parse_context *Ctx, parser *Scope, datatype *D
 }
 
 link_internal void // void?
-ResolveMetaOperator(parse_context *Ctx, meta_func_arg_buffer *Args, meta_func_arg *Replace, parser *Scope, meta_arg_operator Operator, c_token *BodyToken, c_token *MetaOperatorToken, memory_arena *Memory, umm *Depth, string_builder *OutputBuilder)
+ResolveMetaOperator(        parse_context *Ctx,
+                     meta_func_arg_buffer *Args,
+                            meta_func_arg *Replace,
+                                   parser *Scope,
+                        meta_arg_operator  Operator,
+                                  c_token *BodyToken,
+                                  c_token *MetaOperatorToken,
+                             memory_arena *Memory,
+                                      umm *Depth,
+                           string_builder *OutputBuilder )
 {
   switch (Replace->Type)
   {
@@ -1411,12 +1420,16 @@ TryParseMetaArgOperator(parser *Scope, meta_arg_operator *Operator, c_token **Op
   if (PeekTokenRaw(Scope).Type == CTokenType_Dot)
   {
     c_token *PeekT = PeekTokenRawPointer(Scope, 1);
+    if (PeekT->Type == CTokenType_Identifier)
+    {
+      if (OperatorToken) *OperatorToken = PeekT;
+    }
+
     *Operator = MetaArgOperator(PeekT->Value);
     if (*Operator)
-    { 
+    {
       RequireToken(Scope, CTokenType_Dot);
       RequireToken(Scope, PeekT);
-      if (OperatorToken) *OperatorToken = PeekT;
       Result = True;
     }
   }
@@ -1432,12 +1445,17 @@ TryParseMetaTransformOp(parser *Scope, meta_transform_op *Operator, c_token **Op
   if (PeekTokenRaw(Scope).Type == CTokenType_Dot)
   {
     c_token *PeekT = PeekTokenRawPointer(Scope, 1);
+
+    if (PeekT->Type == CTokenType_Identifier)
+    {
+      if (OperatorToken) *OperatorToken = PeekT;
+    }
+
     *Operator = MetaTransformOp(PeekT->Value);
     if (*Operator)
-    { 
+    {
       RequireToken(Scope, CTokenType_Dot);
       RequireToken(Scope, PeekT);
-      if (OperatorToken) *OperatorToken = PeekT;
       Result = True;
     }
   }
@@ -1519,6 +1537,8 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
 
         if (ImpetusWasAt)
         {
+          // NOTE(Jesse): We only process global keywords that are 'activated' by an '@' symbol.
+          // Otherwise, they get processed like regular tokens in the else block.
           poof_global_keyword Keyword = PoofGlobalKeyword(BodyToken->Value);
           switch (Keyword)
           {
@@ -1608,9 +1628,6 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
 
             meta_func_arg *Replace = Args->Start + ArgIndex;
 
-            // NOTE(Jesse): Have to parse top-level operations here and check if
-            // we're trying to throw an error.
-
             c_token *NextMatch = OptionalTokenRaw(Scope, CToken(Replace->Match));
 
             if ( (ImpetusWasIdentifier && StringsMatch(Replace->Match, BodyToken->Value)) ||
@@ -1637,10 +1654,20 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
                 cs Transformed = CopyString(OperatorOutput, Memory);
 
                 b32 Done = False;
+                c_token *TransformT = {};
                 meta_transform_op TransformOp = {};
-                while (TryParseMetaTransformOp(Scope, &TransformOp))
+                while (TryParseMetaTransformOp(Scope, &TransformOp, &TransformT))
                 {
                   Transformed = ApplyTransformations(TransformOp, Transformed, Memory);
+                }
+
+                // NOTE(Jesse): Got a token but failed to parse it, which is an error
+                if (TransformT && !TransformOp)
+                {
+                  PoofTypeError(Scope,
+                                ParseErrorCode_InvalidMetaTransformOp,
+                                CSz("Unknown transformer encountered"),
+                                TransformT);
                 }
 
                 Append(&OutputBuilder, Transformed);
@@ -1892,6 +1919,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
       tagged_counted_string_stream NameList = {};
       NameList.Tag = RequireToken(Parser, CTokenType_Identifier).Value;
+      NameList.Stream = CountedStringStream(Memory);
 
       RequireToken(Parser, CTokenType_CloseParen);
 
@@ -1916,7 +1944,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
       RequireToken(Parser, CToken(CSz("all")));
       RequireToken(Parser, CTokenType_CloseParen);
 
-      counted_string_stream Excludes = {};
+      counted_string_stream Excludes = CountedStringStream(Memory);
       if (OptionalToken(Parser, CTokenType_Dot))
       {
         RequireToken(Parser, CToken(CSz("exclude")));

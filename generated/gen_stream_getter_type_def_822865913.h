@@ -1,4 +1,4 @@
-// poof/poof.cpp:1887:0
+// poof/poof.cpp:1886:0
 
 link_internal type_def*
 GetTypeDefByAlias( type_def_stream* Stream,  counted_string  Alias )

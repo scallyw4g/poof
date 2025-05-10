@@ -154,7 +154,7 @@ struct declaration_stream_chunk;
 
 struct declaration_stream
 {
-  memory_arena *Memory = AllocateArena(0, 0, 0);
+  memory_arena *Memory = &Global_PermMemory;
   declaration_stream_chunk *FirstChunk;
   declaration_stream_chunk *LastChunk;
   umm ChunkCount;
@@ -1069,6 +1069,10 @@ AllocateParseContext(memory_arena *Memory)
 
   Ctx.Datatypes.Macros = Allocate_macro_def_hashtable(4096, Memory);
   Ctx.Datatypes.DatatypeHashtable = Allocate_datatype_hashtable(2048, Memory);
+
+  Ctx.NamedLists = TaggedCountedStringStreamStream(Memory);
+  Ctx.MetaFunctions = MetaFuncStream(Memory);
+
   return Ctx;
 }
 

@@ -1,4 +1,4 @@
-// ./poof/poof.h:402:0
+// ./poof/poof.h:404:0
 
 link_internal counted_string
 ToStringPrefixless(datatype_type Type)

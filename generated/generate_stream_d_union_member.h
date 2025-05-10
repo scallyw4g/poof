@@ -1,4 +1,4 @@
-// ./poof/poof.h:472:0
+// ./poof/poof.h:474:0
 
 struct d_union_member_stream_chunk
 {

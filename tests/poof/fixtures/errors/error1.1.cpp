@@ -6,7 +6,7 @@ struct foo
 poof(
   func (foo F)
   {
-    F.garbage
+    F.type.garbage
   }
 )
 

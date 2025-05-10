@@ -388,8 +388,7 @@ ExpandMacro( parse_context *Ctx,
   // function to expand.  The expansion loop works for both function and
   // keyword style macros if they're left empty
   //
-  c_token_buffer_stream VarArgs = {};
-  VarArgs.Memory = &Global_PermMemory;
+  c_token_buffer_stream VarArgs = CTokenBufferStream(&Global_PermMemory);
 
   c_token_buffer_buffer ArgInstanceValues = {};
 
@@ -4676,10 +4675,11 @@ ConcatTokensUntilNewline(parser* Parser, memory_arena* Memory)
   return Result;
 }
 
+#if 0
 link_internal declaration_stream
 MembersOfType(compound_decl* Struct, counted_string MemberType, memory_arena *Memory)
 {
-  declaration_stream Result = {};
+  declaration_stream Result = {Memory, 0, 0, 0};
   if (MemberType.Start)
   {
     ITERATE_OVER(&Struct->Members)
@@ -4706,6 +4706,7 @@ MembersOfType(compound_decl* Struct, counted_string MemberType, memory_arena *Me
 
   return Result;
 }
+#endif
 
 link_internal comma_separated_decl
 ParseCommaSeperatedDecl(parse_context *Ctx)
@@ -4968,7 +4969,10 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT, poof_tag_block_array *
       default: { Continue = False; } break;
     }
 
-    TryParsePoofKeywordAndTagList(Parser, &StoredMember->Tags);
+    if (Tags)
+    {
+      TryParsePoofKeywordAndTagList(Parser, Tags);
+    }
   }
 
   RequireToken(Parser, CTokenType_CloseBrace);
@@ -6685,6 +6689,7 @@ Todo(counted_string Id, counted_string Value, b32 FoundInCodebase)
   return Result;
 }
 
+#if 0
 link_internal person_stream
 ParseAllTodosFromFile(counted_string Filename, memory_arena* Memory)
 {
@@ -6730,6 +6735,7 @@ ParseAllTodosFromFile(counted_string Filename, memory_arena* Memory)
 
   return People;
 }
+#endif
 
 link_internal counted_string
 GetResolvedTypeNameForDatatype(parse_context *Ctx, datatype *Data, memory_arena *Memory);
@@ -7053,6 +7059,7 @@ ReplacementPattern(counted_string Match, datatype Data)
   return Result;
 }
 
+#if 0
 link_internal meta_func_arg_stream
 CopyStream(meta_func_arg_stream* Stream, memory_arena* Memory)
 {
@@ -7064,6 +7071,7 @@ CopyStream(meta_func_arg_stream* Stream, memory_arena* Memory)
   }
   return Result;
 }
+#endif
 
 link_internal counted_string
 PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
@@ -7474,6 +7482,7 @@ GetTagsFromDatatype(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_tok
     case type_enum_member:
     {
       if (Scope) { PoofNotImplementedError(Scope, CSz("GetTagsFromDatatype is not yet implemented here."), MetaOperatorT); }
+      enum_member *Enum = SafeAccess(enum_member, Data);
     } break;
 
     case type_declaration:
@@ -7911,7 +7920,7 @@ IsMetaprogrammingOutput(counted_string Filename, counted_string OutputDirectory)
 link_internal counted_string_stream
 ParseDatatypeList(parse_context *Ctx, parser* Parser, program_datatypes* Datatypes, tagged_counted_string_stream_stream* NameLists, memory_arena* Memory)
 {
-  counted_string_stream Result = {};
+  counted_string_stream Result = CountedStringStream(Memory);
   while (PeekToken(Parser).Type == CTokenType_Identifier)
   {
     c_token *NameT = RequireTokenPointer(Parser, CTokenType_Identifier);
@@ -8134,8 +8143,7 @@ ParseMetaFunctionDef(parser* Parser, cs FuncName, memory_arena *Memory)
   TIMED_FUNCTION();
 
   RequireToken(Parser, CTokenType_OpenParen);
-  meta_func_arg_stream ArgStream = {};
-  ArgStream.Memory = AllocateArena();
+  meta_func_arg_stream ArgStream = MetaFuncArgStream(AllocateArena());
 
   while (ParseMetaFuncDefArg(Parser, &ArgStream));
   RequireToken(Parser, CTokenType_CloseParen);

@@ -2011,11 +2011,45 @@ TestPoofErrors(memory_arena *Memory)
     TestThat(Parser->WarnCode == ParseWarnCode_None);
 
     FullRewind(Parser);
-    GoGoGadgetMetaprogramming(&Ctx, 0);
+    auto Output = GoGoGadgetMetaprogramming(&Ctx, 0);
+
+    TestThat(Parser->ErrorCode == ParseErrorCode_InvalidOperator);
+    TestThat(Parser->WarnCode == ParseWarnCode_None);
+  }
+  {
+    parse_context Ctx = AllocateParseContext(Memory);
+    counted_string ParserFilename = CSz(POOF_FIXTURES_PATH "/errors/error1.1.cpp");
+    parser *Parser = PreprocessedParserForFile(&Ctx, ParserFilename, TokenCursorSource_RootFile, 0);
+    Ctx.CurrentParser = Parser;
+    ParseDatatypes(&Ctx, Parser);
+
+    TestThat(Parser->ErrorCode == ParseErrorCode_None);
+    TestThat(Parser->WarnCode == ParseWarnCode_None);
+
+    FullRewind(Parser);
+    auto Output = GoGoGadgetMetaprogramming(&Ctx, 0);
 
     TestThat(Parser->ErrorCode == ParseErrorCode_InvalidMetaTransformOp);
     TestThat(Parser->WarnCode == ParseWarnCode_None);
   }
+  {
+    parse_context Ctx = AllocateParseContext(Memory);
+    counted_string ParserFilename = CSz(POOF_FIXTURES_PATH "/errors/error1.2.cpp");
+    parser *Parser = PreprocessedParserForFile(&Ctx, ParserFilename, TokenCursorSource_RootFile, 0);
+    Ctx.CurrentParser = Parser;
+    ParseDatatypes(&Ctx, Parser);
+
+    TestThat(Parser->ErrorCode == ParseErrorCode_None);
+    TestThat(Parser->WarnCode == ParseWarnCode_None);
+
+    FullRewind(Parser);
+    auto Output = GoGoGadgetMetaprogramming(&Ctx, 0);
+
+    TestThat(Parser->ErrorCode == ParseErrorCode_InvalidMetaTransformOp);
+    TestThat(Parser->WarnCode == ParseWarnCode_None);
+  }
+
+
 
   {
     parse_context Ctx = AllocateParseContext(Memory);

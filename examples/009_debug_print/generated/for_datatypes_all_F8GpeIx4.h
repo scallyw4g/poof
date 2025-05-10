@@ -4,50 +4,58 @@ void DebugPrint_baz_struct(struct baz_struct *Struct)
 {
   DebugPrint_str("{ ");
 
-  DebugPrint_str("int  BazInt = ");
+      DebugPrint_str("int  BazInt = ");
   DebugPrint_int ( Struct->BazInt );
   DebugPrint_str(";");
+
+
   DebugPrint_str(" }");
 }
 void DebugPrint_bar_struct(struct bar_struct *Struct)
 {
   DebugPrint_str("{ ");
 
-  DebugPrint_str("int  BarInt = ");
+      DebugPrint_str("int  BarInt = ");
   DebugPrint_int ( Struct->BarInt );
   DebugPrint_str(";");
+
+
   DebugPrint_str(" }");
 }
 void DebugPrint_nested_struct(struct nested_struct *Struct)
 {
   DebugPrint_str("{ ");
 
-  DebugPrint_str("int  NestedInt = ");
+      DebugPrint_str("int  NestedInt = ");
   DebugPrint_int ( Struct->NestedInt );
   DebugPrint_str(";");
+
+
   DebugPrint_str(" }");
 }
 void DebugPrint_foo_struct(struct foo_struct *Struct)
 {
   DebugPrint_str("{ ");
 
-  DebugPrint_str("nested_struct FooNested = ");
+      DebugPrint_str("nested_struct FooNested = ");
   DebugPrint_nested_struct( Struct->FooNested );
   DebugPrint_str(";");
+
+
   DebugPrint_str(" }");
 }
 void DebugPrint_my_discriminated_union(struct my_discriminated_union *Struct)
 {
   DebugPrint_str("{ ");
 
-  DebugPrint_str("my_discriminated_union_type Type = ");
+      DebugPrint_str("my_discriminated_union_type Type = ");
   DebugPrint_my_discriminated_union_type( Struct->Type );
   DebugPrint_str(";");
 
-  // Print d_union members.  See comment at @manually_generate_d_union_switch
+    // Print d_union members.  See comment at @manually_generate_d_union_switch
   switch (Struct->Type)
   {
-    case type_foo_struct:
+        case type_foo_struct:
     {
       DebugPrint_str("\n    foo_struct = ");
       DebugPrint_foo_struct(&Struct->foo_struct );
@@ -76,7 +84,7 @@ void DebugPrint_my_discriminated_union_type( enum my_discriminated_union_type En
 {
   switch (EnumValue)
   {
-    case type_my_discriminated_union_noop:
+        case type_my_discriminated_union_noop:
     {
       DebugPrint_str("type_my_discriminated_union_noop");
     } break;
