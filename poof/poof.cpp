@@ -132,7 +132,7 @@ link_internal counted_string CallFunction(parse_context *Ctx, c_token *FunctionT
 
 
 
-link_internal b32 TryParsePoofKeywordAndTagList(parser *, poof_tag_block_array *, declaration *Decl = 0);
+link_internal b32 TryParsePoofKeywordAndTagList(parser *, poof_tag_block_array *);
 link_internal b32 TryParsePoofTag(parser *, poof_tag *);
 
 
@@ -4815,7 +4815,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT, poof_tag_block_array *
     /* poof_tag_block_array StructTags; */
     if (Tags)
     {
-      TryParsePoofKeywordAndTagList(Parser, Tags, 0);
+      TryParsePoofKeywordAndTagList(Parser, Tags);
     }
 
     declaration Member = ParseStructMember(Ctx, Result.Type);
@@ -5002,6 +5002,8 @@ ParseEnumBody(parse_context *Ctx, parser *Parser, enum_decl *Enum)
       {
         Field.Expr = ParseExpression(Ctx);
       }
+
+      TryParsePoofKeywordAndTagList(Parser, &Field.Tags);
 
       Push(&Enum->Members, Field);
 
@@ -6038,7 +6040,7 @@ FinalizeDeclaration(parse_context *Ctx, parser *Parser, type_spec *TypeSpec)
     NotImplemented;
   }
 
-  TryParsePoofKeywordAndTagList(Parser, &Result.Tags, &Result);
+  TryParsePoofKeywordAndTagList(Parser, &Result.Tags);
 
   // We know anything with a name is either a variable or function
   if (c_token *NameT = OptionalToken(Parser, CTokenType_Identifier))
@@ -7481,8 +7483,8 @@ GetTagsFromDatatype(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_tok
 
     case type_enum_member:
     {
-      if (Scope) { PoofNotImplementedError(Scope, CSz("GetTagsFromDatatype is not yet implemented here."), MetaOperatorT); }
       enum_member *Enum = SafeAccess(enum_member, Data);
+      Result = &Enum->Tags;
     } break;
 
     case type_declaration:
@@ -7811,7 +7813,7 @@ TryParsePoofTag(parser *Parser, poof_tag *Tag)
 }
 
 link_internal b32
-TryParsePoofKeywordAndTagList(parser *Parser, poof_tag_block_array *Tags, declaration *Decl)
+TryParsePoofKeywordAndTagList(parser *Parser, poof_tag_block_array *Tags)
 {
   if (Tags->Memory == 0)
   {
@@ -7831,11 +7833,7 @@ TryParsePoofKeywordAndTagList(parser *Parser, poof_tag_block_array *Tags, declar
       poof_tag Tag = {};
       while(TryParsePoofTag(Parser, &Tag))
       {
-        /* if (Decl) */
-        {
-          Info("Got Tag %S(%S)", Tag.Name, Tag.Value);
-          /* Info("Got Tag %S(%S) on %S (%S)", Tag.Name, Tag.Value, ToString(Decl->Type), GetNameForDecl(Decl)); */
-        }
+        Info("Got Tag %S(%S)", Tag.Name, Tag.Value);
         Push(Tags, &Tag);
         Got = True;
       }

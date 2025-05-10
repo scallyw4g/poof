@@ -319,11 +319,23 @@ struct function_decl
 poof(generate_stream(function_decl))
 #include <generated/generate_stream_function_decl.h>
 
+struct poof_tag
+{
+  cs Name;// poof(user_tag(foo))
+  cs Value;
+};
+
+poof(block_array(poof_tag, {2}))
+#include <generated/block_array_poof_tag_688856405.h>
+
+
+
 struct ast_node_expression;
 struct enum_member
 {
   counted_string Name;
   ast_node_expression *Expr;
+  poof_tag_block_array Tags;
 };
 poof(generate_stream(enum_member))
 #include <generated/generate_stream_enum_member.h>
@@ -343,16 +355,6 @@ AreEqual(enum_decl D1, enum_decl D2)
 
 poof(stream_and_cursor(enum_decl))
 #include <generated/stream_and_cursor_enum_def.h>
-
-struct poof_tag
-{
-  cs Name;// poof(user_tag(foo))
-  cs Value;
-};
-
-poof(block_array(poof_tag, {2}))
-#include <generated/block_array_poof_tag_688856405.h>
-
 
 poof(
   d_union declaration

@@ -92,7 +92,7 @@ poof(
 
 enum foo_enum poof(@foo)
 {
-  enum_value_0,
+  enum_value_0 poof(@foo_tag(0)),
   enum_value_1,
   enum_value_2,
 };
@@ -105,9 +105,14 @@ poof(
     {
       e.name has tag foo! poof(@this_should_have_an_at_sign)
     }
+
+    e.map_values(ev)
+    {
+      ev.has_tag(foo_tag)? { ev.name ev.tag_value(foo_tag) }
+    }
   }
 )
-// tests/integration/generated/tags/anonymous_foo_enum_qaxVrgpo.h
+// tests/integration/generated/tags/anonymous_foo_enum_5rPlBIF8.h
 
 
 

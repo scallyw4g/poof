@@ -1,12 +1,11 @@
-bin/
 tmp/
-tags
-Session.vim
+/bin/
+/tags
+/Session.vim
 
-breakpoints
+/examples/*/main
+/examples/tmp
 
-examples/*/main
+/tests/integration_extended
 
-tests/integration_extended
-
-docs/node_modules
+/docs/node_modules
