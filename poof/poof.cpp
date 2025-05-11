@@ -4969,10 +4969,8 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT, poof_tag_block_array *
       default: { Continue = False; } break;
     }
 
-    if (Tags)
-    {
-      TryParsePoofKeywordAndTagList(Parser, Tags);
-    }
+    // Parse tags for the member
+    TryParsePoofKeywordAndTagList(Parser, &StoredMember->Tags);
   }
 
   RequireToken(Parser, CTokenType_CloseBrace);

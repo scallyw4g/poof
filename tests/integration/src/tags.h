@@ -4,13 +4,7 @@
 struct tag_struct
 {
   int a1; poof( @foo )
-  int a2; poof( @bar(baz) )
-};
-
-struct nested_tag_struct
-{
-  tag_struct b1; poof( @bar(b1) )
-  tag_struct b2[42]; poof( @bar(b2) )
+  int a2; poof( @bar(a2) )
 };
 
 
@@ -35,27 +29,38 @@ poof(
 
 
 
+struct nested_tag_struct
+{
+  tag_struct b1; poof( @bar(b1) )
+  tag_struct b2[42]; poof( @bar(b2) )
+};
 
 poof(
   func (nested_tag_struct TStruct) @omit_include
   {
     TStruct.map_members(OuterMember)
     {
+      // has_tag bar (outer members)
       OuterMember.has_tag(bar)?
       {
-        (OuterMember.type) (OuterMember.name) has bar tag (value=(OuterMember.tag_value(bar)))
+        ((OuterMember)) has bar tag (value=(OuterMember.tag_value(bar)))
       }
 
+      // has_tag foo (inner members)
       OuterMember.map_members(Member)
       {
         Member.has_tag(foo)?
         {
-          (Member.type) (Member.name) has foo tag
+          ((OuterMember))  >  ((Member)) has foo tag
         }
+      }
 
+      // has_tag bar (inner members)
+      OuterMember.map_members(Member)
+      {
         Member.has_tag(bar)?
         {
-          (Member.type) (Member.name) has bar tag (value=(Member.tag_value(bar)))
+          ((OuterMember))  >  ((Member)) has bar tag (value=(Member.tag_value(bar)))
         }
       }
     }
@@ -139,12 +144,12 @@ poof(
 
   func (struct_t)
   {
-    struct_t struct_t.tags
+    struct ((struct_t)) struct_t.tags
   }
 
   func (enum_t)
   {
-    enum_t enum_t.tags
+    enum ((enum_t)) enum_t.tags
   }
 )
 // tests/integration/generated/tags/for_datatypes_gGnNeVTa.h
