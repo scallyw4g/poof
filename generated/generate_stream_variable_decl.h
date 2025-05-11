@@ -1,4 +1,4 @@
-// ./poof/poof.h:289:0
+// ./poof/poof.h:287:0
 
 struct variable_decl_stream_chunk
 {

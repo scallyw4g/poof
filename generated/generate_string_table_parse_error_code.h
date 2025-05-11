@@ -1,4 +1,4 @@
-// ./include/bonsai_stdlib/src/c_parser.h:66:0
+// ./include/bonsai_stdlib/src/c_parser.h:62:0
 
 link_internal counted_string
 ToStringPrefixless(parse_error_code Type)

@@ -1,4 +1,4 @@
-// ./poof/poof.h:346:0
+// ./poof/poof.h:356:0
 
 struct enum_decl_cursor
 {

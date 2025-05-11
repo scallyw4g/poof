@@ -825,7 +825,22 @@ ResolveMetaOperator(        parse_context *Ctx,
       {
         case meta_arg_operator_noop:
         {
+          b32 InvalidOperatorError = False;
+
           if (MetaOperatorToken)
+          {
+            if (MetaTransformOp(MetaOperatorToken->Value))
+            {
+              // If the operator token is a transform op we handle it later, but
+              // if it's not then it must be an invalid operator
+            }
+            else
+            {
+              InvalidOperatorError = True;
+            }
+          }
+
+          if (InvalidOperatorError)
           {
             PoofTypeError( Scope,
                            ParseErrorCode_InvalidOperator,
@@ -836,10 +851,6 @@ ResolveMetaOperator(        parse_context *Ctx,
           {
             cs DatatypeString = DefaultRepresentationForDatatype(Ctx, Scope, ReplaceData, MetaOperatorToken, Memory);
             HandleWhitespaceAndAppend(OutputBuilder, DatatypeString);
-            /* PoofTypeError( Scope, */
-            /*                ParseErrorCode_InvalidOperator, */
-            /*                CSz("poof datatype variable must be followed by a poof operator"), */
-            /*                BodyToken); */
           }
         } break;
 

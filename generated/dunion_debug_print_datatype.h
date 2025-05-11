@@ -97,6 +97,12 @@ link_internal void DebugPrint( enum_member *RuntimeStruct, u32 Depth = 0)
                 DebugPrint("ast_node_expression Expr {\n", Depth+2);
     DebugPrint(&RuntimeStruct->Expr, Depth+4);
     DebugPrint("}\n", Depth+2);
+
+
+
+                DebugPrint("poof_tag_block_array Tags {\n", Depth+2);
+    DebugPrint(&RuntimeStruct->Tags, Depth+4);
+    DebugPrint("}\n", Depth+2);
     /* if (Depth == 0) */
     {
       DebugPrint("}\n", Depth);
