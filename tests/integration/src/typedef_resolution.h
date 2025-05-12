@@ -25,7 +25,7 @@ poof(
 
 typedef struct {
   int foo;
-} s4;
+} s4, *s5;
 
 
 /* typedef struct s5 { */
@@ -88,3 +88,34 @@ poof(f1(e3))
 
 /* poof(f1(e1)) */
 /* #include <tests/integration/generated/typedef_resolution/f1_e1.h> */
+
+poof(
+  func f2(t) @omit_include { t }
+)
+
+poof(f2(s0))
+// tests/integration/generated/typedef_resolution/f2_s0.h
+
+poof(f2(s1))
+// tests/integration/generated/typedef_resolution/f2_s1.h
+
+poof(f2(s2))
+// tests/integration/generated/typedef_resolution/f2_s2.h
+
+poof(f2(s3))
+// tests/integration/generated/typedef_resolution/f2_s3.h
+
+poof(f2(s4))
+// tests/integration/generated/typedef_resolution/f2_s4.h
+
+/* poof(f2(s5)) */
+
+
+
+
+
+poof(f2(e0))
+// tests/integration/generated/typedef_resolution/f2_enum.h
+
+poof(f2(e3))
+// tests/integration/generated/typedef_resolution/f2_enum.h

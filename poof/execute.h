@@ -618,7 +618,7 @@ DefaultRepresentationForDatatype( parse_context *Ctx, parser *Scope, datatype *D
   /* cs TypeType = GetTypeTypeForDatatype(Data, Memory); */
   /* cs StaticBufferSize = PrintAstNode(DatatypeStaticBufferSize(Ctx, Scope, Data, MetaOperatorT), Memory); */
 
-  cs Indirection = PrintIndirection(Data, Memory);
+  cs Indirection = PrintIndirection(&Ctx->Datatypes, Data, Memory);
 
   // Don't print `struct` or `union` keyword in default representation of the datatype
   cs Result = IsCDecl ?
@@ -937,7 +937,7 @@ ResolveMetaOperator(        parse_context *Ctx,
           }
           else
           {
-            cs Indirection = PrintIndirection(ReplaceData, Memory);
+            cs Indirection = PrintIndirection(&Ctx->Datatypes, ReplaceData, Memory);
             HandleWhitespaceAndAppend(OutputBuilder, Indirection);
           }
         } break;

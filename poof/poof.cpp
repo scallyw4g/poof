@@ -100,7 +100,7 @@ link_internal counted_string GetTypeNameFor(parse_context*,    datatype*, typede
 link_internal counted_string GetNameForDecl(declaration* Decl);
 link_internal counted_string GetNameForDatatype(datatype *Data, memory_arena *Memory);
 link_internal counted_string GetTypeTypeForDatatype(datatype *Data, memory_arena *);
-link_internal type_indirection_info * GetIndirectionInfoForDatatype(datatype*);
+link_internal type_indirection_info * GetIndirectionInfoForDatatype(program_datatypes*, datatype*);
 
 link_internal datatype* ResolveToBaseType(program_datatypes *, type_spec );
 link_internal datatype* ResolveToBaseType(program_datatypes *, datatype *);
@@ -6750,7 +6750,8 @@ ToString(parse_context *Ctx, meta_func_arg *Arg, memory_arena *Memory)
 
     case type_datatype:
     {
-      Result = GetTypeNameFor(Ctx, &Arg->datatype, TypedefResoultion_DoNotResolveTypedefs, Memory);
+      /* Result = GetTypeNameFor(Ctx, &Arg->datatype, TypedefResoultion_DoNotResolveTypedefs, Memory); */
+      Result = GetNameForDatatype(&Arg->datatype, Memory);
     } break;
 
     case type_poof_index:
@@ -6771,7 +6772,7 @@ ToString(parse_context *Ctx, meta_func_arg *Arg, memory_arena *Memory)
 }
 
 link_internal counted_string
-GenerateOutfileNameFor(parse_context *Ctx, meta_func *Func, meta_func_arg_buffer *Args, memory_arena* Memory, counted_string Modifier = {})
+GenerateOutfileNameFor(parse_context *Ctx, meta_func *Func, meta_func_arg_buffer *Args, memory_arena *Memory, cs Modifier = {})
 {
   string_builder OutfileBuilder = StringBuilder(AllocateArena());
   Append(&OutfileBuilder, Func->Name);
@@ -7215,6 +7216,7 @@ GetNameForDatatype(datatype *Data, memory_arena *Memory)
     case type_type_def:
     {
       Result = Data->type_def.Alias;
+      Info("------------------------------------------------ %S", Result);
     } break;
 
     case type_datatype_noop:
@@ -7228,7 +7230,7 @@ GetNameForDatatype(datatype *Data, memory_arena *Memory)
 }
 
 link_internal type_indirection_info *
-GetIndirectionInfoForDatatype(datatype *Data)
+GetIndirectionInfoForDatatype(program_datatypes *Datatypes, datatype *Data)
 {
   type_indirection_info *Result = {};
   switch (Data->Type)
@@ -7267,8 +7269,8 @@ GetIndirectionInfoForDatatype(datatype *Data)
 
     case type_type_def:
     {
-      // TODO(Jesse): Resolve typedef
-      NotImplemented;
+      auto Resolved = ResolveToBaseType(Datatypes, Data);
+      Result = GetIndirectionInfoForDatatype(Datatypes, Resolved);
     } break;
 
   }
@@ -7423,10 +7425,10 @@ ToString(type_indirection_info *Indirection, memory_arena *Memory)
 }
 
 link_internal cs
-PrintIndirection(datatype *Data, memory_arena *Memory)
+PrintIndirection(program_datatypes *Datatypes, datatype *Data, memory_arena *Memory)
 {
   cs Result = {};
-  type_indirection_info *Indirection = GetIndirectionInfoForDatatype(Data);
+  type_indirection_info *Indirection = GetIndirectionInfoForDatatype(Datatypes, Data);
   if (Indirection) { Result = ToString(Indirection, Memory); }
   return Result;
 }
@@ -7444,7 +7446,7 @@ ToString( parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperat
   /* cs TypeType = GetTypeTypeForDatatype(Data, Memory); */
   /* cs StaticBufferSize = PrintAstNode(DatatypeStaticBufferSize(Ctx, Scope, Data, MetaOperatorT), Memory); */
 
-  cs Indirection = PrintIndirection(Data, Memory);
+  cs Indirection = PrintIndirection(&Ctx->Datatypes, Data, Memory);
 
   cs Result = Concat(TypeType, CSz(" "), Indirection, TypeName, Memory);
   return Result;
