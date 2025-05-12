@@ -4,14 +4,6 @@
 
 
 
-link_internal u8_cursor_block_array
-U8CursorBlockArray(memory_arena *Memory)
-{
-  u8_cursor_block_array Result = {};
-  Result.Memory = Memory;
-  return Result;
-}
-
 link_internal u8_cursor_block *
 Allocate_u8_cursor_block(memory_arena *Memory)
 {
@@ -24,6 +16,23 @@ link_internal cs
 CS( u8_cursor_block_array_index Index )
 {
   return FSz("(%u)(%u)", Index.BlockIndex, Index.ElementIndex);
+}
+
+link_internal u8_cursor *
+Set( u8_cursor_block_array *Arr,
+  u8_cursor *Element,
+  u8_cursor_block_array_index Index )
+{
+  u8_cursor *Result = {};
+  if (Index.Block)
+  {
+    u8_cursor *Slot = &Index.Block->Elements[Index.ElementIndex];
+    *Slot = *Element;
+
+    Result = Slot;
+  }
+
+  return Result;
 }
 
 link_internal void
@@ -89,8 +98,7 @@ link_internal b32
 IsValid(u8_cursor_block_array_index *Index)
 {
   u8_cursor_block_array_index Test = INVALID_BLOCK_ARRAY_INDEX;
-  b32 Result = AreEqual(Index, &Test);
-  /* b32 Result = False; */
+  b32 Result = (AreEqual(Index, &Test) == False);
   return Result;
 }
 
@@ -122,6 +130,14 @@ Push( u8_cursor_block_array *Array, u8_cursor *Element)
 
   Array->Current->Elements[Array->Current->At++] = *Element;
 
+  return Result;
+}
+
+link_internal u8_cursor *
+Push( u8_cursor_block_array *Array )
+{
+  u8_cursor Element = {};
+  auto Result = Push(Array, &Element);
   return Result;
 }
 

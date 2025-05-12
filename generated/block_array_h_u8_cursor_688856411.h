@@ -4,7 +4,6 @@
 
 
 
-
 struct u8_cursor_block
 {
   u32 Index;
@@ -27,6 +26,14 @@ struct u8_cursor_block_array
   memory_arena *Memory; poof(@no_serialize)
   u64 BlockSize;
 };
+
+link_internal u8_cursor_block_array
+U8CursorBlockArray(memory_arena *Memory)
+{
+  u8_cursor_block_array Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
 
 link_internal b32
 AreEqual(u8_cursor_block_array_index *Thing1, u8_cursor_block_array_index *Thing2)
@@ -143,21 +150,6 @@ Count( u8_cursor_block_array *Arr)
 {
   auto Index = AtElements(Arr);
   umm Result = GetIndex(&Index);
-  return Result;
-}
-
-link_internal u8_cursor *
-Set( u8_cursor_block_array *Arr,
-  u8_cursor *Element,
-  u8_cursor_block_array_index Index )
-{
-  u8_cursor *Result = {};
-  if (Index.Block)
-  {
-    Result = &Index.Block->Elements[Index.ElementIndex];
-    *Result = *Element;
-  }
-
   return Result;
 }
 

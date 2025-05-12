@@ -7,20 +7,12 @@ struct meta_func_arg_buffer
 };
 
 link_internal meta_func_arg_buffer
-MetaFuncArgBuffer( umm ElementCount, memory_arena* Memory)
+MetaFuncArgBuffer( umm ElementCount, memory_arena* Memory);
+
+link_internal meta_func_arg_buffer
+MetaFuncArgBuffer( meta_func_arg *Start, umm ElementCount)
 {
-  meta_func_arg_buffer Result = {};
-
-  if (ElementCount)
-  {
-    Result.Start = Allocate( meta_func_arg, Memory, ElementCount );
-    Result.Count = ElementCount;
-  }
-  else
-  {
-    Warn("Attempted to allocate meta_func_arg_buffer of 0 length.");
-  }
-
+  meta_func_arg_buffer Result = {ElementCount, Start};
   return Result;
 }
 
@@ -71,6 +63,24 @@ link_inline meta_func_arg *
 Get(meta_func_arg_buffer *Buf, umm Index)
 {
   meta_func_arg *Result = GetPtr(Buf, Index);
+  return Result;
+}
+
+link_internal meta_func_arg_buffer
+MetaFuncArgBuffer( umm ElementCount, memory_arena* Memory)
+{
+  meta_func_arg_buffer Result = {};
+
+  if (ElementCount)
+  {
+    Result.Start = Allocate( meta_func_arg, Memory, ElementCount );
+    Result.Count = ElementCount;
+  }
+  else
+  {
+    Warn("Attempted to allocate meta_func_arg_buffer of 0 length.");
+  }
+
   return Result;
 }
 

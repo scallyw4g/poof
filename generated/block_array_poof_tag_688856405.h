@@ -4,7 +4,6 @@
 
 
 
-
 struct poof_tag_block
 {
   u32 Index;
@@ -27,6 +26,14 @@ struct poof_tag_block_array
   memory_arena *Memory; poof(@no_serialize)
   
 };
+
+link_internal poof_tag_block_array
+PoofTagBlockArray(memory_arena *Memory)
+{
+  poof_tag_block_array Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
 
 link_internal b32
 AreEqual(poof_tag_block_array_index *Thing1, poof_tag_block_array_index *Thing2)
@@ -147,21 +154,6 @@ Count( poof_tag_block_array *Arr)
 }
 
 link_internal poof_tag *
-Set( poof_tag_block_array *Arr,
-  poof_tag *Element,
-  poof_tag_block_array_index Index )
-{
-  poof_tag *Result = {};
-  if (Index.Block)
-  {
-    Result = &Index.Block->Elements[Index.ElementIndex];
-    *Result = *Element;
-  }
-
-  return Result;
-}
-
-link_internal poof_tag *
 GetPtr(poof_tag_block_array *Arr, poof_tag_block_array_index Index)
 {
   poof_tag *Result = {};
@@ -217,14 +209,6 @@ AtElements(poof_tag_block *Block)
 
 
 
-link_internal poof_tag_block_array
-PoofTagBlockArray(memory_arena *Memory)
-{
-  poof_tag_block_array Result = {};
-  Result.Memory = Memory;
-  return Result;
-}
-
 link_internal poof_tag_block *
 Allocate_poof_tag_block(memory_arena *Memory)
 {
@@ -237,6 +221,23 @@ link_internal cs
 CS( poof_tag_block_array_index Index )
 {
   return FSz("(%u)(%u)", Index.BlockIndex, Index.ElementIndex);
+}
+
+link_internal poof_tag *
+Set( poof_tag_block_array *Arr,
+  poof_tag *Element,
+  poof_tag_block_array_index Index )
+{
+  poof_tag *Result = {};
+  if (Index.Block)
+  {
+    poof_tag *Slot = &Index.Block->Elements[Index.ElementIndex];
+    *Slot = *Element;
+
+    Result = Slot;
+  }
+
+  return Result;
 }
 
 link_internal void
@@ -302,8 +303,7 @@ link_internal b32
 IsValid(poof_tag_block_array_index *Index)
 {
   poof_tag_block_array_index Test = INVALID_BLOCK_ARRAY_INDEX;
-  b32 Result = AreEqual(Index, &Test);
-  /* b32 Result = False; */
+  b32 Result = (AreEqual(Index, &Test) == False);
   return Result;
 }
 
@@ -335,6 +335,14 @@ Push( poof_tag_block_array *Array, poof_tag *Element)
 
   Array->Current->Elements[Array->Current->At++] = *Element;
 
+  return Result;
+}
+
+link_internal poof_tag *
+Push( poof_tag_block_array *Array )
+{
+  poof_tag Element = {};
+  auto Result = Push(Array, &Element);
   return Result;
 }
 

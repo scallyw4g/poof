@@ -4,7 +4,6 @@
 
 
 
-
 struct u32_block
 {
   u32 Index;
@@ -27,6 +26,14 @@ struct u32_block_array
   memory_arena *Memory; poof(@no_serialize)
   
 };
+
+link_internal u32_block_array
+U32BlockArray(memory_arena *Memory)
+{
+  u32_block_array Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
 
 link_internal b32
 AreEqual(u32_block_array_index *Thing1, u32_block_array_index *Thing2)
@@ -143,21 +150,6 @@ Count( u32_block_array *Arr)
 {
   auto Index = AtElements(Arr);
   umm Result = GetIndex(&Index);
-  return Result;
-}
-
-link_internal u32 *
-Set( u32_block_array *Arr,
-  u32 *Element,
-  u32_block_array_index Index )
-{
-  u32 *Result = {};
-  if (Index.Block)
-  {
-    Result = &Index.Block->Elements[Index.ElementIndex];
-    *Result = *Element;
-  }
-
   return Result;
 }
 

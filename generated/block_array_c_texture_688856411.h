@@ -4,14 +4,6 @@
 
 
 
-link_internal texture_block_array
-TextureBlockArray(memory_arena *Memory)
-{
-  texture_block_array Result = {};
-  Result.Memory = Memory;
-  return Result;
-}
-
 link_internal texture_block *
 Allocate_texture_block(memory_arena *Memory)
 {
@@ -24,6 +16,23 @@ link_internal cs
 CS( texture_block_array_index Index )
 {
   return FSz("(%u)(%u)", Index.BlockIndex, Index.ElementIndex);
+}
+
+link_internal texture *
+Set( texture_block_array *Arr,
+  texture *Element,
+  texture_block_array_index Index )
+{
+  texture *Result = {};
+  if (Index.Block)
+  {
+    texture *Slot = &Index.Block->Elements[Index.ElementIndex];
+    *Slot = *Element;
+
+    Result = Slot;
+  }
+
+  return Result;
 }
 
 link_internal void
@@ -89,8 +98,7 @@ link_internal b32
 IsValid(texture_block_array_index *Index)
 {
   texture_block_array_index Test = INVALID_BLOCK_ARRAY_INDEX;
-  b32 Result = AreEqual(Index, &Test);
-  /* b32 Result = False; */
+  b32 Result = (AreEqual(Index, &Test) == False);
   return Result;
 }
 
@@ -122,6 +130,14 @@ Push( texture_block_array *Array, texture *Element)
 
   Array->Current->Elements[Array->Current->At++] = *Element;
 
+  return Result;
+}
+
+link_internal texture *
+Push( texture_block_array *Array )
+{
+  texture Element = {};
+  auto Result = Push(Array, &Element);
   return Result;
 }
 

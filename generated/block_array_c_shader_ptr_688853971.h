@@ -1,16 +1,8 @@
-// ./include/bonsai_stdlib/src/shader.cpp:2:0
+// ./include/bonsai_stdlib/src/shader.cpp:4:0
 
 
 
 
-
-link_internal shader_ptr_block_array
-ShaderPtrBlockArray(memory_arena *Memory)
-{
-  shader_ptr_block_array Result = {};
-  Result.Memory = Memory;
-  return Result;
-}
 
 link_internal shader_ptr_block *
 Allocate_shader_ptr_block(memory_arena *Memory)
@@ -24,6 +16,23 @@ link_internal cs
 CS( shader_ptr_block_array_index Index )
 {
   return FSz("(%u)(%u)", Index.BlockIndex, Index.ElementIndex);
+}
+
+link_internal shader_ptr 
+Set( shader_ptr_block_array *Arr,
+  shader_ptr Element,
+  shader_ptr_block_array_index Index )
+{
+  shader_ptr Result = {};
+  if (Index.Block)
+  {
+    shader_ptr *Slot = &Index.Block->Elements[Index.ElementIndex];
+    *Slot = Element;
+
+    Result = *Slot;
+  }
+
+  return Result;
 }
 
 link_internal void
@@ -89,8 +98,7 @@ link_internal b32
 IsValid(shader_ptr_block_array_index *Index)
 {
   shader_ptr_block_array_index Test = INVALID_BLOCK_ARRAY_INDEX;
-  b32 Result = AreEqual(Index, &Test);
-  /* b32 Result = False; */
+  b32 Result = (AreEqual(Index, &Test) == False);
   return Result;
 }
 
@@ -122,6 +130,14 @@ Push( shader_ptr_block_array *Array, shader_ptr *Element)
 
   Array->Current->Elements[Array->Current->At++] = *Element;
 
+  return Result;
+}
+
+link_internal shader_ptr *
+Push( shader_ptr_block_array *Array )
+{
+  shader_ptr Element = {};
+  auto Result = Push(Array, &Element);
   return Result;
 }
 

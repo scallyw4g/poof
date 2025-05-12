@@ -4,7 +4,6 @@
 
 
 
-
 struct texture_block
 {
   u32 Index;
@@ -27,6 +26,14 @@ struct texture_block_array
   memory_arena *Memory; poof(@no_serialize)
   
 };
+
+link_internal texture_block_array
+TextureBlockArray(memory_arena *Memory)
+{
+  texture_block_array Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
 
 link_internal b32
 AreEqual(texture_block_array_index *Thing1, texture_block_array_index *Thing2)
@@ -143,21 +150,6 @@ Count( texture_block_array *Arr)
 {
   auto Index = AtElements(Arr);
   umm Result = GetIndex(&Index);
-  return Result;
-}
-
-link_internal texture *
-Set( texture_block_array *Arr,
-  texture *Element,
-  texture_block_array_index Index )
-{
-  texture *Result = {};
-  if (Index.Block)
-  {
-    Result = &Index.Block->Elements[Index.ElementIndex];
-    *Result = *Element;
-  }
-
   return Result;
 }
 

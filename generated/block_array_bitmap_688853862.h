@@ -4,7 +4,6 @@
 
 
 
-
 struct bitmap_block
 {
   u32 Index;
@@ -27,6 +26,14 @@ struct bitmap_block_array
   memory_arena *Memory; poof(@no_serialize)
   
 };
+
+link_internal bitmap_block_array
+BitmapBlockArray(memory_arena *Memory)
+{
+  bitmap_block_array Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
 
 link_internal b32
 AreEqual(bitmap_block_array_index *Thing1, bitmap_block_array_index *Thing2)
@@ -147,21 +154,6 @@ Count( bitmap_block_array *Arr)
 }
 
 link_internal bitmap *
-Set( bitmap_block_array *Arr,
-  bitmap *Element,
-  bitmap_block_array_index Index )
-{
-  bitmap *Result = {};
-  if (Index.Block)
-  {
-    Result = &Index.Block->Elements[Index.ElementIndex];
-    *Result = *Element;
-  }
-
-  return Result;
-}
-
-link_internal bitmap *
 GetPtr(bitmap_block_array *Arr, bitmap_block_array_index Index)
 {
   bitmap *Result = {};
@@ -217,14 +209,6 @@ AtElements(bitmap_block *Block)
 
 
 
-link_internal bitmap_block_array
-BitmapBlockArray(memory_arena *Memory)
-{
-  bitmap_block_array Result = {};
-  Result.Memory = Memory;
-  return Result;
-}
-
 link_internal bitmap_block *
 Allocate_bitmap_block(memory_arena *Memory)
 {
@@ -237,6 +221,23 @@ link_internal cs
 CS( bitmap_block_array_index Index )
 {
   return FSz("(%u)(%u)", Index.BlockIndex, Index.ElementIndex);
+}
+
+link_internal bitmap *
+Set( bitmap_block_array *Arr,
+  bitmap *Element,
+  bitmap_block_array_index Index )
+{
+  bitmap *Result = {};
+  if (Index.Block)
+  {
+    bitmap *Slot = &Index.Block->Elements[Index.ElementIndex];
+    *Slot = *Element;
+
+    Result = Slot;
+  }
+
+  return Result;
 }
 
 link_internal void
@@ -302,8 +303,7 @@ link_internal b32
 IsValid(bitmap_block_array_index *Index)
 {
   bitmap_block_array_index Test = INVALID_BLOCK_ARRAY_INDEX;
-  b32 Result = AreEqual(Index, &Test);
-  /* b32 Result = False; */
+  b32 Result = (AreEqual(Index, &Test) == False);
   return Result;
 }
 
@@ -335,6 +335,14 @@ Push( bitmap_block_array *Array, bitmap *Element)
 
   Array->Current->Elements[Array->Current->At++] = *Element;
 
+  return Result;
+}
+
+link_internal bitmap *
+Push( bitmap_block_array *Array )
+{
+  bitmap Element = {};
+  auto Result = Push(Array, &Element);
   return Result;
 }
 

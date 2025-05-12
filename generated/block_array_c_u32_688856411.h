@@ -4,14 +4,6 @@
 
 
 
-link_internal u32_block_array
-U32BlockArray(memory_arena *Memory)
-{
-  u32_block_array Result = {};
-  Result.Memory = Memory;
-  return Result;
-}
-
 link_internal u32_block *
 Allocate_u32_block(memory_arena *Memory)
 {
@@ -24,6 +16,23 @@ link_internal cs
 CS( u32_block_array_index Index )
 {
   return FSz("(%u)(%u)", Index.BlockIndex, Index.ElementIndex);
+}
+
+link_internal u32 *
+Set( u32_block_array *Arr,
+  u32 *Element,
+  u32_block_array_index Index )
+{
+  u32 *Result = {};
+  if (Index.Block)
+  {
+    u32 *Slot = &Index.Block->Elements[Index.ElementIndex];
+    *Slot = *Element;
+
+    Result = Slot;
+  }
+
+  return Result;
 }
 
 link_internal void
@@ -89,8 +98,7 @@ link_internal b32
 IsValid(u32_block_array_index *Index)
 {
   u32_block_array_index Test = INVALID_BLOCK_ARRAY_INDEX;
-  b32 Result = AreEqual(Index, &Test);
-  /* b32 Result = False; */
+  b32 Result = (AreEqual(Index, &Test) == False);
   return Result;
 }
 
@@ -122,6 +130,14 @@ Push( u32_block_array *Array, u32 *Element)
 
   Array->Current->Elements[Array->Current->At++] = *Element;
 
+  return Result;
+}
+
+link_internal u32 *
+Push( u32_block_array *Array )
+{
+  u32 Element = {};
+  auto Result = Push(Array, &Element);
   return Result;
 }
 

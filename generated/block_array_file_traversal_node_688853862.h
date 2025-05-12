@@ -4,7 +4,6 @@
 
 
 
-
 struct file_traversal_node_block
 {
   u32 Index;
@@ -27,6 +26,14 @@ struct file_traversal_node_block_array
   memory_arena *Memory; poof(@no_serialize)
   
 };
+
+link_internal file_traversal_node_block_array
+FileTraversalNodeBlockArray(memory_arena *Memory)
+{
+  file_traversal_node_block_array Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
 
 link_internal b32
 AreEqual(file_traversal_node_block_array_index *Thing1, file_traversal_node_block_array_index *Thing2)
@@ -147,21 +154,6 @@ Count( file_traversal_node_block_array *Arr)
 }
 
 link_internal file_traversal_node *
-Set( file_traversal_node_block_array *Arr,
-  file_traversal_node *Element,
-  file_traversal_node_block_array_index Index )
-{
-  file_traversal_node *Result = {};
-  if (Index.Block)
-  {
-    Result = &Index.Block->Elements[Index.ElementIndex];
-    *Result = *Element;
-  }
-
-  return Result;
-}
-
-link_internal file_traversal_node *
 GetPtr(file_traversal_node_block_array *Arr, file_traversal_node_block_array_index Index)
 {
   file_traversal_node *Result = {};
@@ -217,14 +209,6 @@ AtElements(file_traversal_node_block *Block)
 
 
 
-link_internal file_traversal_node_block_array
-FileTraversalNodeBlockArray(memory_arena *Memory)
-{
-  file_traversal_node_block_array Result = {};
-  Result.Memory = Memory;
-  return Result;
-}
-
 link_internal file_traversal_node_block *
 Allocate_file_traversal_node_block(memory_arena *Memory)
 {
@@ -237,6 +221,23 @@ link_internal cs
 CS( file_traversal_node_block_array_index Index )
 {
   return FSz("(%u)(%u)", Index.BlockIndex, Index.ElementIndex);
+}
+
+link_internal file_traversal_node *
+Set( file_traversal_node_block_array *Arr,
+  file_traversal_node *Element,
+  file_traversal_node_block_array_index Index )
+{
+  file_traversal_node *Result = {};
+  if (Index.Block)
+  {
+    file_traversal_node *Slot = &Index.Block->Elements[Index.ElementIndex];
+    *Slot = *Element;
+
+    Result = Slot;
+  }
+
+  return Result;
 }
 
 link_internal void
@@ -302,8 +303,7 @@ link_internal b32
 IsValid(file_traversal_node_block_array_index *Index)
 {
   file_traversal_node_block_array_index Test = INVALID_BLOCK_ARRAY_INDEX;
-  b32 Result = AreEqual(Index, &Test);
-  /* b32 Result = False; */
+  b32 Result = (AreEqual(Index, &Test) == False);
   return Result;
 }
 
@@ -335,6 +335,14 @@ Push( file_traversal_node_block_array *Array, file_traversal_node *Element)
 
   Array->Current->Elements[Array->Current->At++] = *Element;
 
+  return Result;
+}
+
+link_internal file_traversal_node *
+Push( file_traversal_node_block_array *Array )
+{
+  file_traversal_node Element = {};
+  auto Result = Push(Array, &Element);
   return Result;
 }
 

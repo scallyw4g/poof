@@ -1,5 +1,4 @@
-// ./include/bonsai_stdlib/src/shader.h:130:0
-
+// ./include/bonsai_stdlib/src/shader.h:133:0
 
 
 
@@ -27,6 +26,14 @@ struct shader_ptr_block_array
   memory_arena *Memory; poof(@no_serialize)
   
 };
+
+link_internal shader_ptr_block_array
+ShaderPtrBlockArray(memory_arena *Memory)
+{
+  shader_ptr_block_array Result = {};
+  Result.Memory = Memory;
+  return Result;
+}
 
 link_internal b32
 AreEqual(shader_ptr_block_array_index *Thing1, shader_ptr_block_array_index *Thing2)
@@ -143,21 +150,6 @@ Count( shader_ptr_block_array *Arr)
 {
   auto Index = AtElements(Arr);
   umm Result = GetIndex(&Index);
-  return Result;
-}
-
-link_internal shader_ptr 
-Set( shader_ptr_block_array *Arr,
-  shader_ptr Element,
-  shader_ptr_block_array_index Index )
-{
-  shader_ptr Result = {};
-  if (Index.Block)
-  {
-    Result = Index.Block->Elements[Index.ElementIndex];
-    Result = Element;
-  }
-
   return Result;
 }
 
