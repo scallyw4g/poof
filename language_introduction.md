@@ -688,17 +688,16 @@ Run provided callbacks for each datatype poof has parsed.  Does not fire for
 functions, but there will be a third callback added in the future
 
 ```
-poof( for_datatypes(
-    all,
-    (struct_t)
+poof( for_datatypes(all)
+    func (struct_t)
     {
       // This gets run for all structs and unions
     }
-    (enum_t)
+    func (enum_t)
     {
       // This gets run for all enums
     }
-))
+)
 ```
 
 :fire: poof_error
