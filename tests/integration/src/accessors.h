@@ -45,7 +45,7 @@ poof(
     name  ((F.name))
 
     /// Unclear what this should be
-    /* value ((F.value)) */
+    /// value ((F.value))
 
     // Args {
     F.map (arg)
