@@ -8,7 +8,7 @@ int  a1
 2
 
 
-a1 2
-a2 42
-a3 420
+int  a1 2
+u64 a2 42
+void  a3 420
 

@@ -26,9 +26,33 @@ poof(
 
     B.map (member)
     {
-      member.name member.array
+      member.type member.name member.array
     }
   }
 )
 #include <tests/integration/generated/accessors/anonymous_array_struct_R1CjBJgY.h>
 
+
+poof(
+  func (foofunc F)
+  {
+    F.is_function? { is_func } { not_func }
+
+    /// return type
+    type  ((F.type))
+
+    /// function name
+    name  ((F.name))
+
+    /// Unclear what this should be
+    /* value ((F.value)) */
+
+    // Args {
+    F.map (arg)
+    {
+      F.arg
+    }
+    // }
+  }
+)
+#include <tests/integration/generated/accessors/anonymous_foofunc_6akI3os3.h>

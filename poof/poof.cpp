@@ -93,6 +93,7 @@ link_internal datatype * GetDatatypeByName(datatype_hashtable *, cs);
 link_internal datatype * GetDatatypeByName(program_datatypes *, cs);
 
 link_internal counted_string PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory);
+link_internal counted_string ToString(type_spec *TypeSpec, memory_arena *Memory);
 
 link_internal counted_string GetTypeNameFor(parse_context*, declaration*, memory_arena *);
 link_internal counted_string GetTypeNameFor(parse_context*,    datatype*, typedef_resolution_behavior, memory_arena *);
@@ -6842,7 +6843,9 @@ GetTypeNameFor(parse_context *Ctx, declaration* Decl, memory_arena *Memory)
 
     case type_function_decl:
     {
-      Result = Decl->function_decl.NameT->Value;
+
+      Result = ToString(&Decl->function_decl.ReturnType, Memory);
+      /* Result = Decl->function_decl.NameT->Value; */
     } break;
 
     case type_compound_decl:
@@ -7116,6 +7119,13 @@ PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
 
   Assert(Result.Count);
 
+  return Result;
+}
+
+link_internal cs
+ToString(type_spec *T, memory_arena *Memory)
+{
+  cs Result = PrintTypeSpec(T, Memory);
   return Result;
 }
 
