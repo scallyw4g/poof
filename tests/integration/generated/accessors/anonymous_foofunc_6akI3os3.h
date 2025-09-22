@@ -3,13 +3,17 @@
 is_func 
 
 
-type  (int )
+
+return void 
+
+
+value (void )
 
 
 name  (foofunc)
 
 
-/* value ((F.value)) */
+
 
 // Args {
 

@@ -38,14 +38,18 @@ poof(
   {
     F.is_function? { is_func } { not_func }
 
+    /// true if return type is not void
+
+    F.value? { has return type } { return void }
+
     /// return type
-    type  ((F.type))
+    value ((F.value))
 
     /// function name
     name  ((F.name))
 
     /// Unclear what this should be
-    /// value ((F.value))
+    /// type  ((F.type))
 
     // Args {
     F.map (arg)

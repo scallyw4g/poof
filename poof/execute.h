@@ -1244,6 +1244,16 @@ ResolveMetaOperator(        parse_context *Ctx,
           if (OptionalToken(Scope, CTokenType_Question))
           {
             b32 DoTrueBranch = Value.Count > 0;
+
+            // Have to check if return type is `void` for fuction types
+            if (function_decl *F = TryCastToFunctionDecl(Ctx, ReplaceData))
+            {
+              if (F->ReturnType.Qualifier & TypeQual_Void)
+              {
+                DoTrueBranch = False;
+              }
+            }
+
             DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
           }
           else

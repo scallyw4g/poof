@@ -2079,7 +2079,7 @@ DatatypeIsVariableDecl(datatype *Data)
 link_internal b32
 DatatypeIsFunction(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
 {
-  b32 Result = {};
+  b32 Result = False;
   switch (Data->Type)
   {
     case type_datatype_noop:
@@ -6843,9 +6843,9 @@ GetTypeNameFor(parse_context *Ctx, declaration* Decl, memory_arena *Memory)
 
     case type_function_decl:
     {
-
-      Result = ToString(&Decl->function_decl.ReturnType, Memory);
-      /* Result = Decl->function_decl.NameT->Value; */
+      // Very questionable what we do for this ..?
+      NotImplemented;
+      Result = CSz("(function)");
     } break;
 
     case type_compound_decl:
@@ -7184,9 +7184,7 @@ GetValueForDatatype(datatype *Data, memory_arena *Memory)
 
         case type_function_decl:
         {
-          // Very questionable what we do for this ..?
-          NotImplemented;
-          Result = CSz("(function)");
+          Result = ToString(&Member->function_decl.ReturnType, Memory);
         } break;
 
         case type_variable_decl:
