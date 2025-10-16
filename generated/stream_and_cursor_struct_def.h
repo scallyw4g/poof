@@ -6,7 +6,6 @@ struct compound_decl_cursor
   // TODO(Jesse)(immediate): For the love of fucksakes change these to indices
   compound_decl *At;
   compound_decl *End;
-  /* OWNED_BY_THREAD_MEMBER(); */
 };
 
 
@@ -15,10 +14,11 @@ link_internal compound_decl_cursor
 CompoundDeclCursor(umm ElementCount, memory_arena* Memory)
 {
   compound_decl *Start = (compound_decl*)PushStruct(Memory, sizeof(compound_decl)*ElementCount, 1, 0);
-  compound_decl_cursor Result = {};
-  Result.Start = Start;
-  Result.End = Start+ElementCount;
-  Result.At = Start;
+  compound_decl_cursor Result = {
+    .Start = Start,
+    .End = Start+ElementCount,
+    .At = Start,
+  };
   return Result;
 }
 
@@ -30,6 +30,12 @@ GetPtr(compound_decl_cursor *Cursor, umm ElementIndex)
   compound_decl *Result = {};
   if (ElementIndex < AtElements(Cursor)) { Result = Cursor->Start+ElementIndex; }
   return Result;
+}
+
+link_internal compound_decl*
+TryGetPtr(compound_decl_cursor *Cursor, umm ElementIndex)
+{
+  return GetPtr(Cursor, ElementIndex);
 }
 
 link_internal compound_decl*

@@ -1,4 +1,4 @@
-// ./include/bonsai_stdlib/src/ui/ui.cpp:4:0
+// ./include/bonsai_stdlib/src/ui/ui.cpp:16:0
 
 struct ui_toggle_button_handle_buffer
 {
@@ -57,6 +57,12 @@ GetPtr(ui_toggle_button_handle_buffer *Buf, umm Index)
   ui_toggle_button_handle *Result = 0;
   if (Index < Buf->Count) { Result = Buf->Start + Index; }
   return Result;
+}
+
+link_inline ui_toggle_button_handle *
+TryGetPtr(ui_toggle_button_handle_buffer *Buf, umm Index)
+{
+  return GetPtr(Buf, Index);
 }
 
 link_inline ui_toggle_button_handle *

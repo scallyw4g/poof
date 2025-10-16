@@ -1,4 +1,4 @@
-// ./include/bonsai_stdlib/src/vector.h:223:0
+// ./include/bonsai_stdlib/src/vector.h:238:0
 
 link_internal void
 DeepCopy(v4 *Src, v4 *Dest)
@@ -30,6 +30,26 @@ inline b32
 operator!=( v4 P1, v4 P2 )
 {
   b32 Result = !(P1 == P2);
+  return Result;
+}
+
+inline r32
+Sum( v4 P1 )
+{
+  r32 Result = (  P1.E[0]  + P1.E[1]  + P1.E[2]  + P1.E[3]  );
+  return Result;
+}
+
+
+
+inline r32
+MaxChannel( v4 P1 )
+{
+  r32 Result = P1.E[0];
+    Result = Cast(r32, Max(Result, P1.E[0]));
+  Result = Cast(r32, Max(Result, P1.E[1]));
+  Result = Cast(r32, Max(Result, P1.E[2]));
+  Result = Cast(r32, Max(Result, P1.E[3]));;
   return Result;
 }
 

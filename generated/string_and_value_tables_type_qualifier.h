@@ -7,6 +7,7 @@ ToStringPrefixless(type_qualifier Type)
   switch (Type)
   {
         case TypeQual_None: { Result = CSz("None"); } break;
+    case TypeQual_Static: { Result = CSz("Static"); } break;
     case TypeQual_Void: { Result = CSz("Void"); } break;
     case TypeQual_Auto: { Result = CSz("Auto"); } break;
     case TypeQual_Class: { Result = CSz("Class"); } break;
@@ -16,7 +17,6 @@ ToStringPrefixless(type_qualifier Type)
     case TypeQual_Bool: { Result = CSz("Bool"); } break;
     case TypeQual_Inline: { Result = CSz("Inline"); } break;
     case TypeQual_ThreadLocal: { Result = CSz("ThreadLocal"); } break;
-    case TypeQual_Static: { Result = CSz("Static"); } break;
     case TypeQual_Extern: { Result = CSz("Extern"); } break;
     case TypeQual_Const: { Result = CSz("Const"); } break;
     case TypeQual_Volatile: { Result = CSz("Volatile"); } break;
@@ -48,6 +48,7 @@ ToString(type_qualifier Type)
   switch (Type)
   {
         case TypeQual_None: { Result = CSz("TypeQual_None"); } break;
+    case TypeQual_Static: { Result = CSz("TypeQual_Static"); } break;
     case TypeQual_Void: { Result = CSz("TypeQual_Void"); } break;
     case TypeQual_Auto: { Result = CSz("TypeQual_Auto"); } break;
     case TypeQual_Class: { Result = CSz("TypeQual_Class"); } break;
@@ -57,7 +58,6 @@ ToString(type_qualifier Type)
     case TypeQual_Bool: { Result = CSz("TypeQual_Bool"); } break;
     case TypeQual_Inline: { Result = CSz("TypeQual_Inline"); } break;
     case TypeQual_ThreadLocal: { Result = CSz("TypeQual_ThreadLocal"); } break;
-    case TypeQual_Static: { Result = CSz("TypeQual_Static"); } break;
     case TypeQual_Extern: { Result = CSz("TypeQual_Extern"); } break;
     case TypeQual_Const: { Result = CSz("TypeQual_Const"); } break;
     case TypeQual_Volatile: { Result = CSz("TypeQual_Volatile"); } break;
@@ -88,6 +88,7 @@ TypeQualifier(counted_string S)
   type_qualifier Result = {};
 
     if (StringsMatch(S, CSz("TypeQual_None"))) { return TypeQual_None; }
+  if (StringsMatch(S, CSz("TypeQual_Static"))) { return TypeQual_Static; }
   if (StringsMatch(S, CSz("TypeQual_Void"))) { return TypeQual_Void; }
   if (StringsMatch(S, CSz("TypeQual_Auto"))) { return TypeQual_Auto; }
   if (StringsMatch(S, CSz("TypeQual_Class"))) { return TypeQual_Class; }
@@ -97,7 +98,6 @@ TypeQualifier(counted_string S)
   if (StringsMatch(S, CSz("TypeQual_Bool"))) { return TypeQual_Bool; }
   if (StringsMatch(S, CSz("TypeQual_Inline"))) { return TypeQual_Inline; }
   if (StringsMatch(S, CSz("TypeQual_ThreadLocal"))) { return TypeQual_ThreadLocal; }
-  if (StringsMatch(S, CSz("TypeQual_Static"))) { return TypeQual_Static; }
   if (StringsMatch(S, CSz("TypeQual_Extern"))) { return TypeQual_Extern; }
   if (StringsMatch(S, CSz("TypeQual_Const"))) { return TypeQual_Const; }
   if (StringsMatch(S, CSz("TypeQual_Volatile"))) { return TypeQual_Volatile; }

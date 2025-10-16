@@ -1,18 +1,18 @@
-// ./include/bonsai_stdlib/src/ui/ui.cpp:22:0
+// ./include/bonsai_stdlib/src/primitive_containers.cpp:8:0
 
-ui_toggle_linked_list_node*
-GetBucketById( ui_toggle_hashtable *Table, ui_id Query )
+u32_linked_list_node*
+GetBucketByValue( u32_hashtable *Table, u32 Query )
 {
   /* ENSURE_OWNED_BY_THREAD(Table); */
 
-  ui_toggle_linked_list_node* Result = {};
+  u32_linked_list_node* Result = {};
 
   auto *Bucket = GetHashBucket(umm(Hash(&Query)), Table);
   while (Bucket)
   {
     auto E = &Bucket->Element;
 
-        if (Bucket->Tombstoned == False && AreEqual(E->Id, Query))
+        if (Bucket->Tombstoned == False && AreEqual(*E, Query))
 
     {
       Result = Bucket;
@@ -27,14 +27,14 @@ GetBucketById( ui_toggle_hashtable *Table, ui_id Query )
   return Result;
 }
 
-maybe_ui_toggle
-GetById( ui_toggle_hashtable *Table, ui_id Query )
+maybe_u32
+GetByValue( u32_hashtable *Table, u32 Query )
 {
   /* ENSURE_OWNED_BY_THREAD(Table); */
 
-  maybe_ui_toggle Result = {};
+  maybe_u32 Result = {};
 
-  ui_toggle_linked_list_node *Bucket = GetBucketById(Table, Query);
+  u32_linked_list_node *Bucket = GetBucketByValue(Table, Query);
   if (Bucket)
   {
     Result.Tag = Maybe_Yes;
@@ -46,10 +46,10 @@ GetById( ui_toggle_hashtable *Table, ui_id Query )
 
 
 link_internal b32
-Tombstone(ui_id Key, ui_toggle_hashtable *Table, memory_arena *Memory)
+Tombstone(u32 Key, u32_hashtable *Table, memory_arena *Memory)
 {
   b32 Result = False;
-  ui_toggle_linked_list_node *Bucket = GetBucketById(Table, Key);
+  u32_linked_list_node *Bucket = GetBucketByValue(Table, Key);
   if (Bucket)
   {
     Assert(Bucket->Tombstoned == False);
@@ -60,7 +60,7 @@ Tombstone(ui_id Key, ui_toggle_hashtable *Table, memory_arena *Memory)
 }
 
 link_internal b32
-Drop( ui_toggle_hashtable *Table, ui_id Key )
+Drop( u32_hashtable *Table, u32 Key )
 {
   return Tombstone(Key, Table, 0);
 }

@@ -2,7 +2,7 @@
 
 # export POOF_LOG_LEVEL=LogLevel_Debug
 
-# ./make.sh RunInstalledPoof
+./make.sh RunInstalledPoof
 # ./make.sh BuildAllBinariesRunAllTests
 
 # FetchBonsaiDebug
@@ -18,7 +18,7 @@
 
 # ./make.sh RunInstalledPoof
 # OPTIMIZATION_LEVEL="-O2" \
-# ./make.sh BuildPoof
+# ./make.sh BuildPoofin/poof --colors-off  tests/integration/src/accessors.h -o tests/integration/generated/accessors
 # [ $? -ne 0 ] && echo "Build Failed, exiting." && exit 1
 
 # INTEGRATION_TEST_INDEX=7 \

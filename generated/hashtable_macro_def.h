@@ -178,4 +178,11 @@ GetPtr(macro_def_hashtable *Hashtable, macro_def_hashtable_iterator Iterator)
   }
   return Result;
 }
+
+link_inline macro_def *
+TryGetPtr(macro_def_hashtable *Hashtable, macro_def_hashtable_iterator Iterator)
+{
+  return GetPtr(Hashtable, Iterator);
+}
+
  

@@ -1,4 +1,4 @@
-// ./include/bonsai_stdlib/src/shader.h:114:0
+// ./include/bonsai_stdlib/src/shader.h:133:0
 
 struct shader_uniform_buffer
 {
@@ -57,6 +57,12 @@ GetPtr(shader_uniform_buffer *Buf, u32 Index)
   shader_uniform *Result = 0;
   if (Index < Buf->Count) { Result = Buf->Start + Index; }
   return Result;
+}
+
+link_inline shader_uniform *
+TryGetPtr(shader_uniform_buffer *Buf, u32 Index)
+{
+  return GetPtr(Buf, Index);
 }
 
 link_inline shader_uniform *

@@ -4,18 +4,10 @@
 
 
 
-link_internal texture_block *
-Allocate_texture_block(memory_arena *Memory)
-{
-  texture_block *Result = Allocate( texture_block, Memory, 1);
-  Result->Elements = Allocate( texture, Memory, 8);
-  return Result;
-}
-
 link_internal cs
 CS( texture_block_array_index Index )
 {
-  return FSz("(%u)(%u)", Index.BlockIndex, Index.ElementIndex);
+  return FSz("(%u)", Index.Index);
 }
 
 link_internal texture *
@@ -23,58 +15,77 @@ Set( texture_block_array *Arr,
   texture *Element,
   texture_block_array_index Index )
 {
-  texture *Result = {};
-  if (Index.Block)
-  {
-    texture *Slot = &Index.Block->Elements[Index.ElementIndex];
-    *Slot = *Element;
+  Assert(Arr->BlockPtrs);
+  Assert(Index.Index < Capacity(Arr).Index);
+  texture_block *Block = GetBlock(Arr, Index);
+  umm ElementIndex = Index.Index % 8;
+  auto Slot = Block->Elements+ElementIndex;
+  *Slot = *Element;
+  return Slot;
+}
 
-    Result = Slot;
+link_internal void
+NewBlock( texture_block_array *Arr )
+{
+  texture_block  *NewBlock     = Allocate( texture_block , Arr->Memory,                 1);
+  texture_block **NewBlockPtrs = Allocate( texture_block*, Arr->Memory, Arr->BlockCount+1);
+
+  RangeIterator_t(u32, BlockI, Arr->BlockCount)
+  {
+    NewBlockPtrs[BlockI] = Arr->BlockPtrs[BlockI];
   }
 
-  return Result;
+  NewBlockPtrs[Arr->BlockCount] = NewBlock;
+
+  
+  
+  Arr->BlockPtrs = NewBlockPtrs;
+  Arr->BlockCount += 1;
 }
 
 link_internal void
 RemoveUnordered( texture_block_array *Array, texture_block_array_index Index)
 {
-  texture_block_array_index LastI = LastIndex(Array);
+  auto LastI = LastIndex(Array);
+  Assert(Index.Index <= LastI.Index);
 
-  texture *Element = GetPtr(Array, Index);
-  texture *LastElement = GetPtr(Array, LastI);
-
+  auto LastElement = GetPtr(Array, LastI);
   Set(Array, LastElement, Index);
+  Array->ElementCount -= 1;
+}
 
-  Assert(Array->Current->At);
-  Array->Current->At -= 1;
+link_internal void
+RemoveOrdered( texture_block_array *Array, texture_block_array_index IndexToRemove)
+{
+  Assert(IndexToRemove.Index < Array->ElementCount);
 
-  if (Array->Current->At == 0)
+  texture *Prev = {};
+
+  texture_block_array_index Max = AtElements(Array);
+  RangeIteratorRange_t(umm, Index, Max.Index, IndexToRemove.Index)
   {
-    // TODO(Jesse): There's obviously a way better way to do this ..
-    auto AtE = AtElements(Array);
-    s32 Count = s32(GetIndex(&AtE));
+    texture *E = GetPtr(Array, Index);
 
-    if (Count == 0)
+    if (Prev)
     {
-      // Nothing to be done, we've popping the last thing off the array
-      Assert(Index.Block == Array->First);
-      Assert(Index.Block == Array->Current);
-      Assert(Index.BlockIndex == 0);
-      Assert(Index.ElementIndex == 0);
+      *Prev = *E;
     }
-    else
+
+    Prev = E;
+  }
+
+  Array->ElementCount -= 1;
+}
+
+link_internal void
+RemoveOrdered( texture_block_array *Array, texture *Element )
+{
+  IterateOver(Array, E, I)
+  {
+    if (E == Element)
     {
-      // Walk the chain till we get to the second-last one
-      texture_block *Current = Array->First;
-      texture_block *LastB = LastI.Block;
-
-      while (Current->Next && Current->Next != LastB)
-      {
-        Current = Current->Next;
-      }
-
-      Assert(Current->Next == LastB || Current->Next == 0);
-      Array->Current = Current;
+      RemoveOrdered(Array, I);
+      break;
     }
   }
 }
@@ -82,10 +93,10 @@ RemoveUnordered( texture_block_array *Array, texture_block_array_index Index)
 link_internal texture_block_array_index
 Find( texture_block_array *Array, texture *Query)
 {
-  texture_block_array_index Result = INVALID_BLOCK_ARRAY_INDEX;
+  texture_block_array_index Result = {INVALID_BLOCK_ARRAY_INDEX};
   IterateOver(Array, E, Index)
   {
-    if ( E == Query)
+    if ( E == Query )
     {
       Result = Index;
       break;
@@ -94,10 +105,12 @@ Find( texture_block_array *Array, texture *Query)
   return Result;
 }
 
+
+
 link_internal b32
 IsValid(texture_block_array_index *Index)
 {
-  texture_block_array_index Test = INVALID_BLOCK_ARRAY_INDEX;
+  texture_block_array_index Test = {INVALID_BLOCK_ARRAY_INDEX};
   b32 Result = (AreEqual(Index, &Test) == False);
   return Result;
 }
@@ -107,28 +120,14 @@ Push( texture_block_array *Array, texture *Element)
 {
   Assert(Array->Memory);
 
-  if (Array->First == 0) { Array->First = Allocate_texture_block(Array->Memory); Array->Current = Array->First; }
-
-  if (Array->Current->At == 8)
+  if (AtElements(Array) == Capacity(Array))
   {
-    if (Array->Current->Next)
-    {
-      Array->Current = Array->Current->Next;
-      Assert(Array->Current->At == 0);
-    }
-    else
-    {
-      texture_block *Next = Allocate_texture_block(Array->Memory);
-      Next->Index = Array->Current->Index + 1;
-
-      Array->Current->Next = Next;
-      Array->Current = Next;
-    }
+    NewBlock(Array);
   }
 
-  texture *Result = Array->Current->Elements + Array->Current->At;
+  texture *Result = Set(Array, Element, AtElements(Array));
 
-  Array->Current->Elements[Array->Current->At++] = *Element;
+  Array->ElementCount += 1;
 
   return Result;
 }
@@ -140,4 +139,26 @@ Push( texture_block_array *Array )
   auto Result = Push(Array, &Element);
   return Result;
 }
+
+link_internal void
+Shift( texture_block_array *Array, texture *Element )
+{
+  Assert(Array->Memory);
+  texture *Prev = {};
+
+  // Alocate a new thingy
+  Push(Array);
+
+  auto End = AtElements(Array);
+  RangeIteratorReverse(Index, s32(End.Index))
+  {
+    auto E = GetPtr(Array, umm(Index));
+    if (Prev) { *Prev = *E; }
+    Prev = E;
+  }
+
+  *Prev = *Element;
+}
+
+
 

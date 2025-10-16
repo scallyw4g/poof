@@ -2478,6 +2478,20 @@ PopArgString(const char** ArgStrings, u32 ArgStringCount, u32* ArgIndex)
   return Result;
 }
 
+// TODO(Jesse): Barf
+template <typename stream_t, typename element_t>inline stream_t
+AllocateBuffer(u32 Count, memory_arena* Memory)
+{
+  element_t* Start = Allocate(element_t, Memory, Count);
+  stream_t Result = {
+    .Start = Start,
+    .At = Start,
+    .End = Start + Count,
+  };
+
+  return Result;
+}
+
 link_internal arguments
 ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_arena* Memory)
 {
@@ -8805,14 +8819,6 @@ DoPoofForWeb(char *zInput, umm InputLen)
   return Result;
 }
 
-global_variable bonsai_stdlib *Global_Stdlib;
-
-link_weak bonsai_stdlib*
-GetStdlib()
-{
-  return Global_Stdlib;
-}
-
 s32
 main(s32 ArgCount_, const char** ArgStrings)
 {
@@ -9054,9 +9060,11 @@ main(s32 ArgCount_, const char** ArgStrings)
 
       BonsaiSwapBuffers(&Stdlib.Os);
 
-      GL.BindFramebuffer(GL_FRAMEBUFFER, 0);
-      GL.ClearColor(0.2f, 0.2f, 0.2f, 1.f);
-      GL.Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      auto GL = GetGL();
+
+      GL->BindFramebuffer(GL_FRAMEBUFFER, 0);
+      GL->ClearColor(0.2f, 0.2f, 0.2f, 1.f);
+      GL->Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       /* Ensure(RewindArena(GetTranArena())); */
     }

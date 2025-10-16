@@ -1,8 +1,12 @@
-// poof/poof.cpp:7101:0
+// poof/poof.cpp:7118:0
 
 if (TypeSpec->Qualifier & TypeQual_None)
 {
   Append(&Builder, CSz("none "));
+}
+if (TypeSpec->Qualifier & TypeQual_Static)
+{
+  Append(&Builder, CSz("static "));
 }
 if (TypeSpec->Qualifier & TypeQual_Void)
 {
@@ -39,10 +43,6 @@ if (TypeSpec->Qualifier & TypeQual_Inline)
 if (TypeSpec->Qualifier & TypeQual_ThreadLocal)
 {
   Append(&Builder, CSz("threadlocal "));
-}
-if (TypeSpec->Qualifier & TypeQual_Static)
-{
-  Append(&Builder, CSz("static "));
 }
 if (TypeSpec->Qualifier & TypeQual_Extern)
 {

@@ -1,4 +1,4 @@
-// ./include/bonsai_stdlib/src/file.cpp:3:0
+// ./include/bonsai_stdlib/src/file.cpp:5:0
 
 struct file_traversal_node_buffer
 {
@@ -57,6 +57,12 @@ GetPtr(file_traversal_node_buffer *Buf, umm Index)
   file_traversal_node *Result = 0;
   if (Index < Buf->Count) { Result = Buf->Start + Index; }
   return Result;
+}
+
+link_inline file_traversal_node *
+TryGetPtr(file_traversal_node_buffer *Buf, umm Index)
+{
+  return GetPtr(Buf, Index);
 }
 
 link_inline file_traversal_node *

@@ -6,7 +6,6 @@ struct enum_decl_cursor
   // TODO(Jesse)(immediate): For the love of fucksakes change these to indices
   enum_decl *At;
   enum_decl *End;
-  /* OWNED_BY_THREAD_MEMBER(); */
 };
 
 
@@ -15,10 +14,11 @@ link_internal enum_decl_cursor
 EnumDeclCursor(umm ElementCount, memory_arena* Memory)
 {
   enum_decl *Start = (enum_decl*)PushStruct(Memory, sizeof(enum_decl)*ElementCount, 1, 0);
-  enum_decl_cursor Result = {};
-  Result.Start = Start;
-  Result.End = Start+ElementCount;
-  Result.At = Start;
+  enum_decl_cursor Result = {
+    .Start = Start,
+    .End = Start+ElementCount,
+    .At = Start,
+  };
   return Result;
 }
 
@@ -30,6 +30,12 @@ GetPtr(enum_decl_cursor *Cursor, umm ElementIndex)
   enum_decl *Result = {};
   if (ElementIndex < AtElements(Cursor)) { Result = Cursor->Start+ElementIndex; }
   return Result;
+}
+
+link_internal enum_decl*
+TryGetPtr(enum_decl_cursor *Cursor, umm ElementIndex)
+{
+  return GetPtr(Cursor, ElementIndex);
 }
 
 link_internal enum_decl*

@@ -178,4 +178,11 @@ GetPtr(datatype_hashtable *Hashtable, datatype_hashtable_iterator Iterator)
   }
   return Result;
 }
+
+link_inline datatype *
+TryGetPtr(datatype_hashtable *Hashtable, datatype_hashtable_iterator Iterator)
+{
+  return GetPtr(Hashtable, Iterator);
+}
+
  

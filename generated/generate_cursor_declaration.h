@@ -6,7 +6,6 @@ struct declaration_cursor
   // TODO(Jesse)(immediate): For the love of fucksakes change these to indices
   declaration *At;
   declaration *End;
-  /* OWNED_BY_THREAD_MEMBER(); */
 };
 
 
@@ -15,10 +14,11 @@ link_internal declaration_cursor
 DeclarationCursor(umm ElementCount, memory_arena* Memory)
 {
   declaration *Start = (declaration*)PushStruct(Memory, sizeof(declaration)*ElementCount, 1, 0);
-  declaration_cursor Result = {};
-  Result.Start = Start;
-  Result.End = Start+ElementCount;
-  Result.At = Start;
+  declaration_cursor Result = {
+    .Start = Start,
+    .End = Start+ElementCount,
+    .At = Start,
+  };
   return Result;
 }
 
@@ -30,6 +30,12 @@ GetPtr(declaration_cursor *Cursor, umm ElementIndex)
   declaration *Result = {};
   if (ElementIndex < AtElements(Cursor)) { Result = Cursor->Start+ElementIndex; }
   return Result;
+}
+
+link_internal declaration*
+TryGetPtr(declaration_cursor *Cursor, umm ElementIndex)
+{
+  return GetPtr(Cursor, ElementIndex);
 }
 
 link_internal declaration*

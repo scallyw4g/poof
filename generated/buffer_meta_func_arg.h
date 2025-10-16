@@ -60,6 +60,12 @@ GetPtr(meta_func_arg_buffer *Buf, umm Index)
 }
 
 link_inline meta_func_arg *
+TryGetPtr(meta_func_arg_buffer *Buf, umm Index)
+{
+  return GetPtr(Buf, Index);
+}
+
+link_inline meta_func_arg *
 Get(meta_func_arg_buffer *Buf, umm Index)
 {
   meta_func_arg *Result = GetPtr(Buf, Index);

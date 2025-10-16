@@ -4,10 +4,10 @@ is_func
 
 
 
-return void 
+has return type 
 
 
-value (void )
+value (int )
 
 
 name  (foofunc)

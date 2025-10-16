@@ -1,4 +1,4 @@
-// ./include/bonsai_stdlib/src/ui/ui.cpp:17:0
+// ./include/bonsai_stdlib/src/ui/ui.cpp:29:0
 
 link_internal b32 AreEqual(window_layout_linked_list_node *Node1, window_layout_linked_list_node *Node2 );
 
@@ -165,4 +165,11 @@ GetPtr(window_layout_hashtable *Hashtable, window_layout_hashtable_iterator Iter
   }
   return Result;
 }
+
+link_inline window_layout *
+TryGetPtr(window_layout_hashtable *Hashtable, window_layout_hashtable_iterator Iterator)
+{
+  return GetPtr(Hashtable, Iterator);
+}
+
 
