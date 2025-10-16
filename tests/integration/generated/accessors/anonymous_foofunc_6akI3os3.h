@@ -1,4 +1,4 @@
-// tests/integration/src/accessors.h:37:0
+// tests/integration/src/accessors.h:38:0
 
 is_func 
 
@@ -16,6 +16,8 @@ name  (foofunc)
 
 
 // Args {
-
+int  foo
+void  *bar
+thing **baz
 // }
 

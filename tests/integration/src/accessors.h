@@ -17,9 +17,10 @@ poof(
     B.member(0, (M) {
       M.is_array? { isarray } { notarray }
       M.map_array (Index) {
-        foo
+        Index foo
       }
-      M.type M.name
+      M.type
+      M.name
       M.value
       M.array
     })
@@ -54,7 +55,7 @@ poof(
     // Args {
     F.map (arg)
     {
-      F.arg
+      arg
     }
     // }
   }

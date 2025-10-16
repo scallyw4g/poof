@@ -66,7 +66,7 @@ struct counted_string {
   const char *data;
 };
 
-int foofunc(void)
+int foofunc(int foo, void *bar, thing **baz)
 {
 }
 

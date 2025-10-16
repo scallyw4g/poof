@@ -1989,6 +1989,14 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         RequireToken(Parser, CToken(ToString(func)));
         meta_func EnumFunc = ParseMetaFunctionDef(Parser, CSz("for_datatypes_enum_callback"), Memory);
 
+        meta_func FuncFunc = {};
+        if ( OptionalToken(Parser, CToken(ToString(func))) )
+        {
+          FuncFunc = ParseMetaFunctionDef(Parser, CSz("for_datatypes_func_callback"), Memory);
+        }
+
+
+
         RequireToken(Parser, CTokenType_CloseParen);
 
         string_builder OutputBuilder = {};
@@ -2030,6 +2038,26 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
                   EnumFunc.Args.Start[0] = ReplacementPattern(EnumFunc.Args.Start[0].Match, *DT);
                   umm Depth = 0;
                   counted_string Code = Execute(&EnumFunc, Ctx, Memory, &Depth);
+                  Append(&OutputBuilder, Code);
+                }
+              }
+            }
+          }
+        }
+
+        {
+          IterateOver(&Datatypes->DatatypeHashtable, DT, DatatypeIndex)
+          {
+            if (DT)
+            {
+              if (function_decl *FuncDecl = TryCastToFunctionDecl(Ctx, DT))
+              {
+                if (!StreamContains(&Excludes, FuncDecl->NameT->Value))
+                {
+                  Assert(EnumFunc.Args.Count == 1);
+                  EnumFunc.Args.Start[0] = ReplacementPattern(EnumFunc.Args.Start[0].Match, *DT);
+                  umm Depth = 0;
+                  counted_string Code = Execute(&FuncFunc, Ctx, Memory, &Depth);
                   Append(&OutputBuilder, Code);
                 }
               }

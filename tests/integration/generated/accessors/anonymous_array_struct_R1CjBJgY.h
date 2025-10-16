@@ -1,9 +1,10 @@
 // tests/integration/src/accessors.h:15:0
 
 isarray 
-foo
-foo
-int  a1
+0 foo
+1 foo
+int 
+a1
 
 2
 
