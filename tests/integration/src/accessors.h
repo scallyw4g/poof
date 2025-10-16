@@ -35,7 +35,7 @@ poof(
 
 
 poof(
-  func (foofunc F)
+  func function_test(F) @code_fragment
   {
     F.is_function? { is_func } { not_func }
 
@@ -60,4 +60,12 @@ poof(
     // }
   }
 )
+
+poof(function_test(foofunc))
 #include <tests/integration/generated/accessors/anonymous_foofunc_6akI3os3.h>
+
+poof(function_test(foofunc0))
+#include <tests/integration/generated/accessors/function_test_foofunc0.h>
+
+poof(function_test(typedefd_foofunc))
+#include <tests/integration/generated/accessors/function_test_typedefd_foofunc.h>

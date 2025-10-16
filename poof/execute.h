@@ -1240,7 +1240,7 @@ ResolveMetaOperator(        parse_context *Ctx,
 
         case value:
         {
-          cs Value = GetValueForDatatype(ReplaceData, Memory);
+          cs Value = GetValueForDatatype(&Ctx->Datatypes, ReplaceData, Memory);
           if (OptionalToken(Scope, CTokenType_Question))
           {
             b32 DoTrueBranch = Value.Count > 0;
@@ -2045,6 +2045,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           }
         }
 
+        if (FuncFunc.Name.Start) // Parsed successfully
         {
           IterateOver(&Datatypes->DatatypeHashtable, DT, DatatypeIndex)
           {
@@ -2054,8 +2055,8 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
               {
                 if (!StreamContains(&Excludes, FuncDecl->NameT->Value))
                 {
-                  Assert(EnumFunc.Args.Count == 1);
-                  EnumFunc.Args.Start[0] = ReplacementPattern(EnumFunc.Args.Start[0].Match, *DT);
+                  Assert(FuncFunc.Args.Count == 1);
+                  FuncFunc.Args.Start[0] = ReplacementPattern(FuncFunc.Args.Start[0].Match, *DT);
                   umm Depth = 0;
                   counted_string Code = Execute(&FuncFunc, Ctx, Memory, &Depth);
                   Append(&OutputBuilder, Code);

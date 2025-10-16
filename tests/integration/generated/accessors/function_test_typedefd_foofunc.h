@@ -1,4 +1,4 @@
-// tests/integration/src/accessors.h:64:0
+// tests/integration/src/accessors.h:70:0
 
 is_func 
 
@@ -10,7 +10,7 @@ has return type
 value (int )
 
 
-name  (foofunc)
+name  (typedefd_foofunc)
 
 
 

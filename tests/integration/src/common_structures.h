@@ -70,10 +70,13 @@ int foofunc(int foo, void *bar, thing **baz)
 {
 }
 
+typedef foofunc typedefd_foofunc;
+
 typedef int (*foofuncptr)(void);
 typedef int (foofunc0)(void);
 typedef int foofunc1(void);
 typedef foo_enum foofunc2(int);
+
 
 struct foo_struct_0 poof(@tag)
 {

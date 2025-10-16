@@ -2090,9 +2090,6 @@ DatatypeIsFunction(parse_context *Ctx, parser *Scope, datatype *Data, c_token *M
 
     case type_type_def:
     {
-      // NOTE(Jesse): Pretty sure this path is roughly the following, but I didn't test it.
-      NotImplemented;
-
       type_def *TDef = SafeAccess(type_def, Data);
       datatype *DT = ResolveToBaseType(Ctx, TDef->Type);
       Result = DatatypeIsFunction(Ctx, Scope, DT, MetaOperatorT);
@@ -2153,9 +2150,6 @@ DatatypeIsFunctionDecl(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_
 
     case type_type_def:
     {
-      // NOTE(Jesse): Pretty sure this path is roughly the following, but I didn't test it.
-      NotImplemented;
-
       type_def *TDef = SafeAccess(type_def, Data);
       datatype *DT = ResolveToBaseType(Ctx, TDef->Type);
       Result = DatatypeIsFunctionDecl(Ctx, DT, Scope, MetaOperatorT);
@@ -7151,7 +7145,7 @@ DebugPrint(type_spec *TypeSpec, u32 Depth)
 }
 
 link_internal counted_string
-GetValueForDatatype(datatype *Data, memory_arena *Memory)
+GetValueForDatatype(program_datatypes *Datatypes, datatype *Data, memory_arena *Memory)
 {
   counted_string Result = {};
   switch (Data->Type)
@@ -7162,9 +7156,14 @@ GetValueForDatatype(datatype *Data, memory_arena *Memory)
     } break;
 
     case type_primitive_def:
-    case type_type_def:
     {
       NotImplemented;
+    } break;
+
+    case type_type_def:
+    {
+      auto Resolved = ResolveToBaseType(Datatypes, Data);
+      Result = GetValueForDatatype(Datatypes, Resolved, Memory);
     } break;
 
     case type_enum_member:
