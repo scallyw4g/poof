@@ -8483,6 +8483,11 @@ GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo)
         {
           RequireToken(Parser, CTokenType_CloseParen);
         }
+        else if (OptionalToken(Parser, CTokenType_CloseParen))
+        {
+          // We're closing an empty `poof()` statement.
+          // TODO(Jesse): Should we emit a warning here?
+        }
         else
         {
           poof_tag Tag = {};

@@ -18,7 +18,7 @@
 
 # ./make.sh RunInstalledPoof
 # OPTIMIZATION_LEVEL="-O2" \
-# ./make.sh BuildPoofin/poof --colors-off  tests/integration/src/accessors.h -o tests/integration/generated/accessors
+# ./make.sh BuildPoof
 # [ $? -ne 0 ] && echo "Build Failed, exiting." && exit 1
 
 # INTEGRATION_TEST_INDEX=7 \
@@ -27,7 +27,7 @@
 
 # ./make.sh BuildDebugSystem
 
-./make.sh RunIntegrationTests
+# ./make.sh RunIntegrationTests
 # ./make.sh BuildAndRunAllExamples
 
 # ./make.sh BuildPoofEmcc
