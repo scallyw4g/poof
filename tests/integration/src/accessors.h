@@ -1,18 +1,18 @@
 #include <tests/integration/src/common_structures.h>
 
 poof(
-  func (bar_struct B)
+  func (bar_struct B) @omit_include
   {
     B.member(0, (M) {
       M.type M.name
     })
   }
 )
-#include <tests/integration/generated/accessors/anonymous_bar_struct_XqHSO27n.h>
+// tests/integration/generated/accessors/anonymous_bar_struct_XqHSO27n.h
 
 
 poof(
-  func (array_struct B)
+  func (array_struct B) @omit_include
   {
     B.member(0, (M) {
       M.is_array? { isarray } { notarray }
@@ -31,11 +31,11 @@ poof(
     }
   }
 )
-#include <tests/integration/generated/accessors/anonymous_array_struct_R1CjBJgY.h>
+// tests/integration/generated/accessors/anonymous_array_struct_R1CjBJgY.h
 
 
 poof(
-  func function_test(F) @code_fragment
+  func function_test(F) @omit_include
   {
     F.is_function? { is_func } { not_func }
 
@@ -62,13 +62,13 @@ poof(
 )
 
 poof(function_test(foofunc))
-#include <tests/integration/generated/accessors/anonymous_foofunc_6akI3os3.h>
+// tests/integration/generated/accessors/anonymous_foofunc_6akI3os3.h
 
 poof(function_test(foofunc0))
-#include <tests/integration/generated/accessors/function_test_foofunc0.h>
+// tests/integration/generated/accessors/function_test_foofunc0.h
 
 poof(function_test(typedefd_foofunc))
-#include <tests/integration/generated/accessors/function_test_typedefd_foofunc.h>
+// tests/integration/generated/accessors/function_test_typedefd_foofunc.h
 
 
 poof(
@@ -91,11 +91,12 @@ poof(
         type  ((M.type))
 
         // Args {
-        /* M.map (arg) */
-        /* { */
-        /*   arg */
-        /* } */
+        M.map_args (arg)
+        {
+          arg
+        }
         // }
+
       }
     }
   }

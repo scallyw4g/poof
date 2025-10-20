@@ -3479,6 +3479,12 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
       if (c_token *TypeName = OptionalToken(Parser, CTokenType_Identifier))
       {
         Result.DatatypeToken = TypeName;
+
+        datatype *Dt = GetDatatypeByName(&Ctx->Datatypes, TypeName->Value);
+        if (Dt)
+        {
+          Result.Indirection.IsFunction = DatatypeIsFunction(Ctx, 0, Dt, 0);
+        }
       }
     }
   }
@@ -7204,7 +7210,6 @@ GetValueForDatatype(program_datatypes *Datatypes, datatype *Data, memory_arena *
       Result = PrintAstNode(EM->Expr, Memory);
     } break;
 
-
     case type_declaration:
     {
       declaration *Member = SafeAccess(declaration, Data);
@@ -7235,7 +7240,16 @@ GetValueForDatatype(program_datatypes *Datatypes, datatype *Data, memory_arena *
         case type_variable_decl:
         {
           variable_decl *Var = SafeAccess(variable_decl, Member);
-          Result = PrintAstNode(Var->Value, Memory);
+
+          if (Var->Type.Indirection.IsFunction || Var->Type.Indirection.IsFunctionPtr)
+          {
+            Result = PrintTypeSpec(&Var->Type, Memory);
+          }
+          else
+          {
+            Result = PrintAstNode(Var->Value, Memory);
+          }
+
         } break;
       }
 
