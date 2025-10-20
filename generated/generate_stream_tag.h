@@ -1,4 +1,4 @@
-// ./poof/poof.h:818:0
+// ./poof/poof.h:825:0
 
 struct tag_stream_chunk
 {

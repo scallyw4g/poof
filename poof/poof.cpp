@@ -1889,7 +1889,7 @@ poof( gen_stream_getter(type_def, {Alias}) )
 
 
 
-poof( gen_stream_getter(enum_decl, {Name}) )
+poof( gen_stream_getter(enum_decl, {NameT}) )
 #include <generated/gen_stream_getter_enum_decl_689333910.h>
 
 
@@ -2367,12 +2367,14 @@ ParseDiscriminatedUnion(parse_context *Ctx, parser* Parser, program_datatypes* D
     dUnion.CustomEnumType = EnumTypeT->Value;
 
     enum_decl EnumDef = GetEnumDeclByName(Ctx, dUnion.CustomEnumType);
-    if (EnumDef.Name.Count)
+    if (EnumDef.NameT)
     {
+      Assert(EnumDef.NameT->Value.Count);
+
       ITERATE_OVER(&EnumDef.Members)
       {
-        enum_member* Field = GET_ELEMENT(Iter);
-        counted_string MemberName = Concat(Concat(dUnion.Name, CS("_"), Memory), Field->Name, Memory);
+        enum_member *Field = GET_ELEMENT(Iter);
+        counted_string MemberName = Concat(Concat(dUnion.Name, CS("_"), Memory), Field->NameT->Value, Memory);
         PushMember(&dUnion, CToken(MemberName), d_union_flag_none, Memory);
       }
     }
@@ -3400,6 +3402,19 @@ IsPrimitiveType(type_spec *Type)
   return Result;
 }
 
+#if 1
+global_variable c_token Global_DefaultNameToken =
+{
+  CTokenType_Identifier,
+  CTFlags_None,
+  {CSz("(anonymous)")},
+  {CSz("(anonymous)")},
+  0,
+  False,
+  {{}},
+};
+#endif
+
 link_internal type_spec
 ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
 {
@@ -3458,14 +3473,12 @@ ParseTypeSpecifier(parse_context *Ctx, c_token *StructNameT = 0)
       ParsingConstructor |= True;
     }
 
+    // This means we're parsing either a variable of function delc.  I think.
     if (ParsingConstructor == False)
     {
       if (c_token *TypeName = OptionalToken(Parser, CTokenType_Identifier))
       {
         Result.DatatypeToken = TypeName;
-        // TODO(Jesse, id: 296, tags: immediate): When we properly traverse include graphs, this assert should not fail.
-        // Result.Datatype = GetDatatypeByName(&Ctx->Datatypes, TypeName->Value);
-        // Assert(Result.Datatype.Type != type_datatype_noop);
       }
     }
   }
@@ -3508,7 +3521,7 @@ FinalizeVariableDecl(parse_context *Ctx, type_spec *TypeSpec, c_token *Identifie
 
   if (IdentifierToken)
   {
-    Result.Name = IdentifierToken->Value;
+    Result.NameT = IdentifierToken;
 
     TryEatAttributes(Parser); // Possibly garbage.  At least some of the code that calls this eats these already
 
@@ -4585,7 +4598,6 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
         ParseStructMemberDestructorFn(Ctx, &Result, StructNameT);
       } break;
 
-      // NOTE(Jesse): We don't handle inline enum declarations atm
       case CTokenType_Enum:
       {
         RequireToken(Parser, T->Type);
@@ -4626,8 +4638,7 @@ ParseStructMember(parse_context *Ctx, c_token *StructNameT)
       {
         type_spec TypeSpec = ParseTypeSpecifier(Ctx, StructNameT);
 
-        b32 IsConstructor = ParsingConstructor(Parser, &TypeSpec);
-        if (IsConstructor)
+        if (ParsingConstructor(Parser, &TypeSpec))
         {
           c_token *FuncNameT = RequireTokenPointer(Parser, CTokenType_Identifier);
           ParseStructMemberConstructorFn(Ctx, &TypeSpec, &Result, FuncNameT);
@@ -4859,7 +4870,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT, poof_tag_block_array *
         //
         if (IsAnonymous(&Member.compound_decl))
         {
-          /* Info("Pushed anonymous compound decl in (%S)", StructNameT->Value); */
+          Info("Pushed anonymous compound decl in (%S)", StructNameT->Value);
           AnonymousDecl = Insert(Datatype(&Member), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
         }
 
@@ -4914,7 +4925,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT, poof_tag_block_array *
               {
                 auto Var = SafeAccessObjPtr(variable_decl, Member);
 
-                Var->Name = Decl.NameT->Value;
+                Var->NameT            = Decl.NameT;
                 Var->Type.Indirection = Decl.Indirection;
                 Var->StaticBufferSize = Decl.StaticBufferSize;
                 Var->Value = Decl.Value;
@@ -4936,7 +4947,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT, poof_tag_block_array *
                 // @snap_pointer_to_struct_member_struct_decl
                 // TmpMember.variable_decl.TypeSpec.Datatype = Datatype(StructDecl);
 
-                TmpMember.variable_decl.Name             = Decl.NameT->Value;
+                TmpMember.variable_decl.NameT            = Decl.NameT;
                 TmpMember.variable_decl.Type.Indirection = Decl.Indirection;
                 TmpMember.variable_decl.StaticBufferSize = Decl.StaticBufferSize;
                 TmpMember.variable_decl.Value            = Decl.Value;
@@ -4992,6 +5003,9 @@ ParseEnumBody(parse_context *Ctx, parser *Parser, enum_decl *Enum)
 {
   RequireToken(Parser, CTokenType_OpenBrace);
 
+  Assert(Enum->Members.Memory == 0);
+  Enum->Members.Memory = &Global_PermMemory;
+
   b32 Done = False;
   while (!Done && TokensRemain(Parser))
   {
@@ -5003,7 +5017,7 @@ ParseEnumBody(parse_context *Ctx, parser *Parser, enum_decl *Enum)
     if (c_token *NameT = OptionalToken(Parser, CTokenType_Identifier))
     {
       enum_member Field = {};
-      Field.Name = NameT->Value;
+      Field.NameT = NameT;
 
       if (OptionalToken(Parser, CTokenType_Equals))
       {
@@ -5045,11 +5059,10 @@ ParseEnum(parse_context *Ctx, type_spec *TypeSpec)
   program_datatypes *Datatypes = &Ctx->Datatypes;
 
   c_token *EnumNameT = TypeSpec->DatatypeToken;
-  counted_string EnumName = EnumNameT ? EnumNameT->Value : CSz("(anonymous)");
+  /* counted_string EnumName = EnumNameT ? EnumNameT->Value : CSz("(anonymous)"); */
 
   enum_decl Enum = {};
-  Enum.Name = EnumName;
-  Enum.Members.Memory = &Global_PermMemory;
+  Enum.NameT = EnumNameT ? EnumNameT : &Global_DefaultNameToken;
 
   ParseEnumBody(Ctx, Parser, &Enum);
 
@@ -5131,7 +5144,7 @@ ParseAndPushTypedef(parse_context *Ctx)
         ParseEnumBody(Ctx, Parser, &Enum);
         // @dup_typedefd_anon_thingy_name_token
         comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
-        Enum.Name = Decl.NameT->Value;
+        Enum.NameT = Decl.NameT;
 
         Insert(Datatype(&Enum), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
       }
@@ -5319,10 +5332,13 @@ GetByTypeName(counted_string Name, ast_node_variable_def_stream* Stream)
   ITERATE_OVER(Stream)
   {
     ast_node_variable_def* Current = GET_ELEMENT(Iter);
-    if (StringsMatch(Current->Decl.Name, Name))
+    if (Current->Decl.NameT)
     {
-      Result = Current;
-      break;
+      if (StringsMatch(Current->Decl.NameT->Value, Name))
+      {
+        Result = Current;
+        break;
+      }
     }
   }
   return Result;
@@ -6266,6 +6282,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
             {
               // @not_pushing_variable_decls
               Insert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+              Info("Pushing enum decl (%S)", GetNameForDatatype(&DeclDT, Ctx->Memory));
               /* Push(&Ctx->Datatypes, Decl.enum_decl); */
             } break;
 
@@ -6871,10 +6888,10 @@ GetTypeNameFor(parse_context *Ctx, declaration* Decl, memory_arena *Memory)
   return Result;
 }
 
-link_internal counted_string
-GetNameForDecl(declaration* Decl)
+link_internal c_token *
+GetNameTokenForDecl(declaration* Decl)
 {
-  counted_string Result = {};
+  c_token *Result = {};
 
   switch (Decl->Type)
   {
@@ -6882,28 +6899,36 @@ GetNameForDecl(declaration* Decl)
 
     case type_function_decl:
     {
-      Result = Decl->function_decl.NameT->Value;
+      Result = Decl->function_decl.NameT;
     } break;
 
     case type_variable_decl:
     {
-      Result = Decl->variable_decl.Name;
+      Result = Decl->variable_decl.NameT;
     } break;
 
     case type_compound_decl:
     {
-      c_token *NameT = Decl->compound_decl.Type;
-      if (NameT) { Result = NameT->Value; }
-      else { Result = CSz("(anonymous)"); }
-
+      Result = Decl->compound_decl.Type;
     } break;
 
     case type_enum_decl:
     {
-      Result = Decl->enum_decl.Name;
+      Result = Decl->enum_decl.NameT;
     } break;
   }
 
+  return Result;
+}
+
+link_internal cs
+GetNameForDecl(declaration *Decl)
+{
+  cs Result = CSz("(null)");
+  if (c_token *NameT = GetNameTokenForDecl(Decl))
+  {
+    Result = NameT->Value;
+  }
   return Result;
 }
 
@@ -7213,40 +7238,92 @@ GetValueForDatatype(program_datatypes *Datatypes, datatype *Data, memory_arena *
   return Result;
 }
 
-link_internal counted_string
-GetNameForDatatype(datatype *Data, memory_arena *Memory)
+link_internal c_token *
+GetNameTokenForDatatype(datatype *Data)
 {
-  counted_string Result = {};
+  c_token *Result = {};
   switch (Data->Type)
   {
+    case type_datatype_noop:
+    {
+      // NOTE(Jesse): This is a valid case when the datatype is undefined!
+      //
+      // Such as when we've queried for a type occuring in the CRT but didn't
+      // traverse the include graph
+    } break;
+
     case type_declaration:
     {
-      Result = GetNameForDecl(&Data->declaration);
+      Result = GetNameTokenForDecl(&Data->declaration);
     } break;
 
     case type_enum_member:
     {
-      Result = Data->enum_member.Name;
+      Result = Data->enum_member.NameT;
+    } break;
+
+    case type_primitive_def:
+    {
+      Result = Data->primitive_def.TypeSpec.DatatypeToken;
+    } break;
+
+    case type_type_def:
+    {
+      Result = Data->type_def.Type.DatatypeToken;
+    } break;
+  }
+
+  return Result;
+
+}
+
+link_internal cs
+GetNameForDatatype(datatype *Data, memory_arena *Memory)
+{
+  cs Result = CSz("(anonymous)");
+  switch (Data->Type)
+  {
+    // NOTE(Jesse): I decieded that nobody should ever ask for a name of an
+    // undefined datatype.  The caller is responsible for checking that they
+    // got a datatype back from their query!
+    InvalidCase(type_datatype_noop);
+
+    case type_type_def:
+    {
+      Result = Data->type_def.Alias;
+    } break;
+
+    case type_enum_member:
+    case type_declaration:
+    {
+      if (c_token *NameT = GetNameTokenForDatatype(Data))
+      {
+        Result = NameT->Value;
+      }
     } break;
 
     case type_primitive_def:
     {
       Result = PrintTypeSpec(&Data->primitive_def.TypeSpec, Memory);
     } break;
-
-    case type_type_def:
-    {
-      Result = Data->type_def.Alias;
-      Info("------------------------------------------------ %S", Result);
-    } break;
-
-    case type_datatype_noop:
-    {
-      // TODO(Jesse): Is this actually a valid case?
-      Result = CSz("type_datatype_noop");
-    } break;
   }
 
+  return Result;
+}
+
+link_internal cs
+GetFilenameForDatatype(datatype *Data)
+{
+  c_token *NameT = GetNameTokenForDatatype(Data);
+  cs Result = NameT->Filename;
+  return Result;
+}
+
+link_internal u32
+GetLineNumberForDatatype(datatype *Data)
+{
+  c_token *NameT = GetNameTokenForDatatype(Data);
+  u32 Result = NameT->LineNumber;
   return Result;
 }
 
@@ -7362,7 +7439,7 @@ GetTypeNameFor(parse_context *Ctx, datatype *Data, typedef_resolution_behavior T
       // This is actually wrong.. shouldn't we print the _name_ of the enum the
       // member belongs to?
       // NotImplemented;
-      Result = Data->enum_member.Name;
+      Result = Data->enum_member.NameT->Value;
     } break;
 
     case type_declaration:

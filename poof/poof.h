@@ -59,6 +59,9 @@ enum meta_arg_operator
   indirection,
   tags,
 
+  file, // file the type occurs in
+  line, // line the type occurs on
+
   // iterative
   map_array,
   map_values,
@@ -266,11 +269,13 @@ struct type_spec
   // @base_type_hack
   datatype *BaseType;     // ATM only used by variable instances that are defined using an anonymous compound decl
 
-  type_qualifier Qualifier;
+  type_qualifier        Qualifier;
   type_indirection_info Indirection;
 
+  // TODO(Jesse): Can we not just check if TemplateSource is nonzero for this..?
   b32 HasTemplateArguments;
-  counted_string TemplateSource;
+  cs TemplateSource;
+
   linkage_type Linkage;
 };
 
@@ -278,7 +283,7 @@ struct ast_node;
 struct variable_decl
 {
   type_spec Type; // TODO(Jesse): Change name to TypeSpec
-  counted_string Name;
+   c_token *NameT;
   ast_node *StaticBufferSize;
   ast_node *Value;
 
@@ -303,8 +308,9 @@ struct function_decl
 {
   function_type Type;
 
-  type_spec ReturnType;
-  c_token *NameT;
+  type_spec  ReturnType;
+    c_token *NameT;
+
   variable_decl_stream Args;
 
   // TODO(Jesse): Pack these into a u8 flags
@@ -312,8 +318,8 @@ struct function_decl
   b32 ImplIsDefault;
   b32 ImplIsDeleted;
 
-  parser Body;
   ast_node *Ast;
+    parser  Body;
 };
 
 poof(generate_stream(function_decl))
@@ -333,7 +339,8 @@ poof(block_array(poof_tag, {2}))
 struct ast_node_expression;
 struct enum_member
 {
-  counted_string Name;
+  c_token *NameT;
+  /* cs Name; */
   ast_node_expression *Expr;
   poof_tag_block_array Tags;
 };
@@ -342,8 +349,8 @@ poof(generate_stream(enum_member))
 
 struct enum_decl
 {
-  counted_string Name;
-  enum_member_stream Members = {&Global_PermMemory, 0, 0, 0};
+  c_token *NameT;
+  enum_member_stream Members; // = {&Global_PermMemory, 0, 0, 0};
 };
 
 link_internal b32 

@@ -1,13 +1,13 @@
 // poof/poof.cpp:1892:0
 
 link_internal enum_decl*
-GetEnumDeclByName( enum_decl_stream* Stream,  counted_string  Name )
+GetEnumDeclByNameT( enum_decl_stream* Stream,  c_token  NameT )
 {
   enum_decl *Result = 0;
   ITERATE_OVER(Stream)
   {
     enum_decl* T = GET_ELEMENT(Iter);
-    if (AreEqual(T->Name, Name))
+    if (AreEqual(T->NameT, NameT))
     {
       Result = T;
       break;

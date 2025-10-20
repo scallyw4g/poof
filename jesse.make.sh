@@ -27,7 +27,7 @@
 
 # ./make.sh BuildDebugSystem
 
-# ./make.sh RunIntegrationTests
+./make.sh RunIntegrationTests
 # ./make.sh BuildAndRunAllExamples
 
 # ./make.sh BuildPoofEmcc

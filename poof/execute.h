@@ -705,6 +705,8 @@ ResolveMetaOperator(        parse_context *Ctx,
         case array:
         case hash:
         case indirection:
+        case file:
+        case line:
         case map_array:
         case map_members:
         case map_args:
@@ -984,14 +986,17 @@ ResolveMetaOperator(        parse_context *Ctx,
           RequireToken(Scope, CTokenType_Question);
 
           datatype *Dt = ResolveToBaseType(Ctx, ReplaceData);
+
           b32 DoTrueBranch = (Dt->Type == type_primitive_def);
 
-          counted_string DTName = GetNameForDatatype(Dt, GetTranArena());
-
           // @counted_string_primitive_hack
-          if (StringsMatch(DTName, CSz("counted_string")))
+          if (Dt->Type)
           {
-            DoTrueBranch = True;
+            counted_string DTName = GetNameForDatatype(Dt, GetTranArena());
+            if (StringsMatch(DTName, CSz("counted_string")))
+            {
+              DoTrueBranch = True;
+            }
           }
 
           DoTrueFalse(Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
@@ -1096,7 +1101,7 @@ ResolveMetaOperator(        parse_context *Ctx,
                   {
                     E = GetEnumDeclByName(Ctx, VDecl->Type.DatatypeToken->Value);
                   }
-                  DoTrueBranch = (E.Name.Start != 0);
+                  DoTrueBranch = (E.NameT != 0);
                 } break;
               }
             } break;
@@ -1288,6 +1293,18 @@ ResolveMetaOperator(        parse_context *Ctx,
           u64 HashValue = Hash(ReplaceData);
           Info("(%S) %x", GetNameForDatatype(ReplaceData, GetTranArena()), HashValue);
           Append(OutputBuilder, ToHex(HashValue));
+        } break;
+
+        case file:
+        {
+          cs Filename = GetFilenameForDatatype(ReplaceData);
+          Append(OutputBuilder, Filename);
+        } break;
+
+        case line:
+        {
+          cs LineNo = FSz("%d", GetLineNumberForDatatype(ReplaceData));
+          Append(OutputBuilder, LineNo);
         } break;
 
         case member:
@@ -1484,8 +1501,6 @@ TryParseMetaTransformOp(parser *Scope, meta_transform_op *Operator, c_token **Op
   return Result;
 }
 
-static int debugcounter;
-
 // TODO(Jesse): Instead of the error living on the parser, it should live in the result from this fn
 link_internal counted_string
 Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_arena *Memory, umm *Depth)
@@ -1493,7 +1508,8 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
   TIMED_FUNCTION();
   Assert(Func->Body.Tokens->At == Func->Body.Tokens->Start);
 
-  ++debugcounter; Info("%d", debugcounter);
+  static int debugcounter;
+  Info("%d : Func(%S) : Stack(%u) : %S", debugcounter++, Func->Name, *Depth, Func->Body.Tokens->Filename);
 
   if (debugcounter)
   {
@@ -2032,7 +2048,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
             {
               if (enum_decl *Enum = TryCastToEnumDecl(Ctx, DT))
               {
-                if (!StreamContains(&Excludes, Enum->Name))
+                if (!StreamContains(&Excludes, Enum->NameT->Value))
                 {
                   Assert(EnumFunc.Args.Count == 1);
                   EnumFunc.Args.Start[0] = ReplacementPattern(EnumFunc.Args.Start[0].Match, *DT);

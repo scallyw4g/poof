@@ -1,4 +1,4 @@
-// ./poof/poof.h:93:0
+// ./poof/poof.h:96:0
 
 link_internal meta_arg_operator
 MetaArgOperator(counted_string S)
@@ -13,6 +13,8 @@ MetaArgOperator(counted_string S)
   if (StringsMatch(S, CSz("hash"))) { return hash; }
   if (StringsMatch(S, CSz("indirection"))) { return indirection; }
   if (StringsMatch(S, CSz("tags"))) { return tags; }
+  if (StringsMatch(S, CSz("file"))) { return file; }
+  if (StringsMatch(S, CSz("line"))) { return line; }
   if (StringsMatch(S, CSz("map_array"))) { return map_array; }
   if (StringsMatch(S, CSz("map_values"))) { return map_values; }
   if (StringsMatch(S, CSz("map_members"))) { return map_members; }

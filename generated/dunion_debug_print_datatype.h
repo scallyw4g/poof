@@ -1,4 +1,4 @@
-// ./poof/poof.h:457:0
+// ./poof/poof.h:464:0
 
 /* dunion_debug_print_prototype(DUnion) */
 
@@ -87,10 +87,9 @@ link_internal void DebugPrint( enum_member *RuntimeStruct, u32 Depth = 0)
   if (RuntimeStruct)
   {
     DebugPrint("{\n", Depth);
-                        DebugPrint("counted_string Name =", Depth+2);
-    DebugPrint(&RuntimeStruct->Name, 1);
-    DebugPrint(";\n");
-
+                    DebugPrint("c_token NameT {\n", Depth+2);
+    DebugPrint(&RuntimeStruct->NameT, Depth+4);
+    DebugPrint("}\n", Depth+2);
 
 
 
