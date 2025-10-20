@@ -69,3 +69,37 @@ poof(function_test(foofunc0))
 
 poof(function_test(typedefd_foofunc))
 #include <tests/integration/generated/accessors/function_test_typedefd_foofunc.h>
+
+
+poof(
+  func function_test_1(type) @omit_include
+  {
+    type.map(M)
+    {
+      M.is_function?
+      {
+        /// true if return type is not void
+        M.value? { has_return_type } { no_return_type }
+
+        /// return type
+        value ((M.value))
+
+        /// function name
+        name  ((M.name))
+
+        /// Unclear what this should be
+        type  ((M.type))
+
+        // Args {
+        /* M.map (arg) */
+        /* { */
+        /*   arg */
+        /* } */
+        // }
+      }
+    }
+  }
+)
+
+poof(function_test_1(foo_struct_1))
+// tests/integration/generated/accessors/function_test_1_foo_struct_1.h
