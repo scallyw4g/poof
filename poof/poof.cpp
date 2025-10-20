@@ -4870,7 +4870,14 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT, poof_tag_block_array *
         //
         if (IsAnonymous(&Member.compound_decl))
         {
-          Info("Pushed anonymous compound decl in (%S)", StructNameT->Value);
+          if (StructNameT)
+          {
+            Info("Pushed anonymous compound decl in (%S)", StructNameT->Value);
+          }
+          else
+          {
+            Info("Pushed anonymous compound decl in (anonymous)");
+          }
           AnonymousDecl = Insert(Datatype(&Member), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
         }
 
