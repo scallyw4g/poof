@@ -2767,7 +2767,7 @@ RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Fi
 }
 
 link_internal b32
-Output( cs SourceFilenameAndLineNumber,
+Output( cs Header,
         cs Code,
         cs OutputFilename,
         memory_arena *Memory,
@@ -2780,9 +2780,7 @@ Output( cs SourceFilenameAndLineNumber,
   native_file TempFile = GetTempFile(&TempFileEntropy, Memory);
   if (TempFile.Handle)
   {
-    b32 FileWritesSucceeded  = WriteToFile(&TempFile, CSz("// "));
-        FileWritesSucceeded &= WriteToFile(&TempFile, SourceFilenameAndLineNumber);
-        FileWritesSucceeded &= WriteToFile(&TempFile, CS("\n\n"));
+    b32 FileWritesSucceeded  = WriteToFile(&TempFile, Header);
         FileWritesSucceeded &= WriteToFile(&TempFile, Code);
         FileWritesSucceeded &= WriteToFile(&TempFile, CS("\n"));
         FileWritesSucceeded &= CloseFile(&TempFile);
@@ -6426,17 +6424,17 @@ AllocateTokenizedFiles(u32 Count, memory_arena* Memory)
 
 link_internal counted_string
 FlushOutputToDisk( parse_context *Ctx,
+                   cs Header,
                    cs OutputForThisParser,
                    cs NewFilename,
-                   cs SourceFileAndLineNumber,
-                   todo_list_info* TodoInfo,
-                   memory_arena* Memory,
-                   b32 IsInlineCode = False,
-                   b32 OmitInclude = False,
-                   b32 CodeFragment = False)
+                   meta_func_directive MetaDirectives,
+                   memory_arena* Memory)
 {
   TIMED_FUNCTION();
   parser *Parser = Ctx->CurrentParser;
+
+ b32 OmitInclude  = BitfieldIsSet(MetaDirectives, omit_include);
+ b32 CodeFragment = BitfieldIsSet(MetaDirectives, code_fragment);
 
   // NOTE(Jesse): It can be a semicolon too
   // TODO(Jesse): I _think_ the semicolon thing is fixed and this assertion shouldn't fire anymore
@@ -6516,22 +6514,13 @@ FlushOutputToDisk( parse_context *Ctx,
   }
 
 
-  Output(SourceFileAndLineNumber, OutputForThisParser, OutputPath, Memory);
+  Output(Header, OutputForThisParser, OutputPath, Memory);
   parser *OutputParse = ParserForAnsiStream(Ctx, AnsiStream(OutputForThisParser, OutputPath), TokenCursorSource_MetaprogrammingExpansion, Ctx->Memory);
 
 #if 1
-  if (IsInlineCode)
+  if (OmitInclude || CodeFragment)
   {
-    // TODO(Jesse, id: 226, tags: metaprogramming, output): Should we handle this differently?l
-    Info("Not parsing inlined code (%S)", OutputPath);
-  }
-  else if (OmitInclude)
-  {
-    Info("Skipping parsing code for function marked `omit_include` (%S)", OutputPath);
-  }
-  else if (CodeFragment)
-  {
-    Info("Skipping parsing code for function marked `code_fragment` (%S)", OutputPath);
+    Info("Not parsing code for function (%S)", OutputPath);
   }
   else
   {
@@ -7982,18 +7971,12 @@ ParseMetaFuncTags(parser *Parser, meta_func *Func)
     poof_tag Tag = {};
     while (TryParsePoofTag(Parser, &Tag))
     {
+      meta_func_directive Dir = MetaFuncDirective(Tag.Name);
+      SetBitfield(meta_func_directive, Func->Directives, Dir);
 
-      if (AreEqual(Tag.Name, CSz("omit_include")))
+      if (Dir == meta_func_directive_noop)
       {
-        Func->OmitInclude = True;
-      }
-      else if (AreEqual(Tag.Name, CSz("code_fragment")))
-      {
-        Func->CodeFragment = True;
-      }
-      else
-      {
-        PoofTagError(Parser, FSz("Unsupported tag value on poof func (%S).  Wanted (@omit_include) or (@code_fragment), got (%S)", Func->Name, Tag.Name), ErrorT);
+        PoofTagError(Parser, FSz("Unsupported tag value on poof func (%S).  Wanted (@omit_include), (@origin_comment_format) or (@code_fragment), got (%S)", Func->Name, Tag.Name), ErrorT);
       }
     }
 
@@ -8248,7 +8231,7 @@ ParseMapMetaFunctionInstance(parser* Parser, cs FuncName, memory_arena *Memory)
     .Name = FuncName,
     .Args = Args,
     .Body = Body,
-    False, False
+    .Directives = meta_func_directive_noop,
   };
 
   return Func;

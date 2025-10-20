@@ -1,5 +1,4 @@
 // tests/integration/src/tags.h:12:0
-
 int  a1 has foo tag
 
 

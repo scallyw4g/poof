@@ -1,5 +1,4 @@
 // tests/integration/src/accessors.h:15:0
-
 isarray 
 0 foo
 1 foo

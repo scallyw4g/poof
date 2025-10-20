@@ -1,5 +1,4 @@
 // tests/integration/src/accessors.h:70:0
-
 is_func 
 
 

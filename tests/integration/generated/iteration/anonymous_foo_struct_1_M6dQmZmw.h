@@ -1,5 +1,4 @@
-// tests\integration\src\iteration.h:27:0
-
+// tests/integration/src/iteration.h:27:0
 int  first 42
 int  second -1
 int  bar 0

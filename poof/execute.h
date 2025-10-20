@@ -250,7 +250,7 @@ MaybeParseSepOperator(parser *Scope)
 link_internal counted_string
 Execute(parser *Scope, meta_func_arg_buffer *Args, parse_context *Ctx, memory_arena *Memory, umm *Depth)
 {
-   meta_func F = MetaFunc(CSz("(anonymous)"), *Args, *Scope, False, False);
+   meta_func F = MetaFunc(CSz("(anonymous)"), *Args, *Scope, meta_func_directive_noop);
    cs Result = Execute(&F, Ctx, Memory, Depth);
    if (F.Body.ErrorCode)
    {
@@ -398,7 +398,7 @@ Map( parse_context *Ctx,
           if (Operator == map || Operator == map_args)
           {
             auto FuncDecl = SafeAccess(function_decl, Decl);
-            meta_func MetaF = MetaFunc(CSz("map_function_decl_args"), *Args, *MapScope, False, False);
+            meta_func MetaF = MetaFunc(CSz("map_function_decl_args"), *Args, *MapScope, meta_func_directive_noop);
 
             maybe_counted_string MapResult = MapFunctionDeclArgs(Ctx, FuncDecl, &MetaF, MatchValue, Sep, Memory, Depth);
             if (MapResult.Error)
@@ -425,7 +425,7 @@ Map( parse_context *Ctx,
           if (Operator == map || Operator == map_values)
           {
             auto EnumDecl = SafeAccess(enum_decl, Decl);
-            meta_func MetaF = MetaFunc(CSz("map_enum_values"), *Args, *MapScope, False, False);
+            meta_func MetaF = MetaFunc(CSz("map_enum_values"), *Args, *MapScope, meta_func_directive_noop);
 
             maybe_counted_string MapResult = MapEnumValues(Ctx, EnumDecl, &MetaF, MatchValue, Sep, Memory, Depth);
             if (MapResult.Error)
@@ -533,7 +533,7 @@ Map( parse_context *Ctx,
                   if (BaseDecl->Type == type_enum_decl)
                   {
                     auto EnumDecl = SafeAccess(enum_decl, BaseDecl);
-                    meta_func MetaF = MetaFunc(CSz("map_enum_values"), *Args, *MapScope, False, False);
+                    meta_func MetaF = MetaFunc(CSz("map_enum_values"), *Args, *MapScope, meta_func_directive_noop);
                     maybe_counted_string MapResult = MapEnumValues(Ctx, EnumDecl, &MetaF, MatchValue, Sep, Memory, Depth);
                     if (MapResult.Error)
                     {
@@ -1592,7 +1592,7 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
 
               parser ExpansionContext = EatUntilExcluding_Parser(Scope, CTokenType_Newline, GetTranArena());
 
-              meta_func ExpansionFunc = MetaFunc(CSz(""), *Args, ExpansionContext, True, True);
+              meta_func ExpansionFunc = MetaFunc(CSz(""), *Args, ExpansionContext, meta_func_directive_noop);
               cs Expanded = Execute(&ExpansionFunc, Args, Ctx, Memory, Depth);
 
               meta_func_arg_buffer NewArgs = ExtendBuffer(Args, 1, Memory);
@@ -1848,7 +1848,9 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           if (Code.Start)
           {
             counted_string OutfileName = GenerateOutfileNameFor(Ctx, Func, &ArgInstances, Memory);
-            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /*TodoInfo*/, Memory, False, Func->OmitInclude, Func->CodeFragment);
+            cs Header = FSz("// %S:%u:0\n", DirectiveT->Filename, DirectiveT->LineNumber);
+            cs ActualOutputFile = FlushOutputToDisk(Ctx, Header, Code, OutfileName, Func->Directives, Memory);
+            //counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /*TodoInfo*/, Memory, False, Func->OmitInclude, Func->CodeFragment);
 
             auto FilenameAndCode = Tuple(ActualOutputFile, Code);
             Append(Builder, FilenameAndCode);
@@ -1919,7 +1921,10 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           else
           {
             counted_string OutfileName = GenerateOutfileNameFor( Func.Name, ArgType, Memory, GetRandomString(8, umm(Hash(&Code)), Memory));
-            counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /* todoinfo */, Memory, True, Func.OmitInclude, Func.CodeFragment);
+
+            cs Header = FSz("// %S:%u:0\n", DirectiveT->Filename, DirectiveT->LineNumber);
+            cs ActualOutputFile = FlushOutputToDisk(Ctx, Header, Code, OutfileName, Func.Directives, Memory);
+            /* counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /1* todoinfo *1/, Memory, True, Func.OmitInclude, Func.CodeFragment); */
             Append(Builder, Tuple(ActualOutputFile, Code));
           }
         }
@@ -1989,7 +1994,6 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         Excludes = ParseDatatypeList(Ctx, Parser, Datatypes, &Ctx->NamedLists, Memory);
         RequireToken(Parser, CTokenType_CloseParen);
       }
-
 
       // ParseDatatypeList can fail if you pass in an undefined dataype
       // in the excludes constraint
@@ -2084,7 +2088,10 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
         cs Code = Finalize(&OutputBuilder, Memory);
         cs OutfileName = GenerateOutfileNameFor(ToString(Directive), GetRandomString(8, umm(Hash(&Code)), Memory), Memory);
-        cs ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /* Todoinfo */, Memory, False, ForAllDummyFunc.OmitInclude, ForAllDummyFunc.CodeFragment );
+
+        cs Header = FSz("// %S:%u:0\n", DirectiveT->Filename, DirectiveT->LineNumber);
+        cs ActualOutputFile = FlushOutputToDisk(Ctx, Header, Code, OutfileName, ForAllDummyFunc.Directives, Memory);
+        /* cs ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /1* Todoinfo *1/, Memory, False, ForAllDummyFunc.OmitInclude, ForAllDummyFunc.CodeFragment ); */
         Append(Builder, Tuple(ActualOutputFile, Code));
       }
     } break;
@@ -2114,7 +2121,11 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         while(OptionalToken(Parser, CTokenType_Semicolon));
 
         counted_string OutfileName = GenerateOutfileNameFor(ToString(Directive), DatatypeT->Value, Memory);
-        counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /* todoinfo */, Memory);
+
+        cs Header = FSz("// %S:%u:0\n", DirectiveT->Filename, DirectiveT->LineNumber);
+        cs ActualOutputFile = FlushOutputToDisk(Ctx, Header, Code, OutfileName, meta_func_directive_noop, Memory);
+        /* counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /1* todoinfo *1/, Memory); */
+
         Append(Builder, Tuple(ActualOutputFile, Code));
       }
       else

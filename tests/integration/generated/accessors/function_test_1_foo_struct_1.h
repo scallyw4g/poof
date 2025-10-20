@@ -1,6 +1,5 @@
 // tests/integration/src/accessors.h:105:0
 
-
 no_return_type 
 
 

@@ -1,4 +1,4 @@
-// ./poof/poof.h:634:0
+// ./poof/poof.h:636:0
 
 enum meta_func_arg_type
 {

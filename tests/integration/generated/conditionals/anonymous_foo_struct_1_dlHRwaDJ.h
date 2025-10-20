@@ -1,5 +1,4 @@
 // tests/integration/src/conditionals.h:170:0
-
 int  first is a pointer
 
 int  second is a pointer

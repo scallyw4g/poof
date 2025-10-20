@@ -1,5 +1,4 @@
 // tests/integration/src/conditionals.h:43:0
-
 int  first defined
 
 int  second defined

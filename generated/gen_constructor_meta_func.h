@@ -1,7 +1,7 @@
-// ./poof/poof.h:796:0
+// ./poof/poof.h:798:0
 
 link_internal meta_func
-MetaFunc(  cs   Name , meta_func_arg_buffer   Args , parser   Body , b32   OmitInclude , b32   CodeFragment  )
+MetaFunc(  cs   Name , meta_func_arg_buffer   Args , parser   Body , meta_func_directive   Directives  )
 {
   meta_func Reuslt = {
             .Name = Name
@@ -10,9 +10,7 @@ MetaFunc(  cs   Name , meta_func_arg_buffer   Args , parser   Body , b32   OmitI
 ,
         .Body = Body
 ,
-        .OmitInclude = OmitInclude
-,
-        .CodeFragment = CodeFragment
+        .Directives = Directives
   };
 
   

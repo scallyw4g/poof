@@ -1,5 +1,4 @@
 // tests/integration/src/conditionals.h:103:0
-
 int  first not a function
 
 int  second not a function

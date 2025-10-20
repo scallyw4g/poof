@@ -1,5 +1,4 @@
-// tests\integration\src\iteration.h:38:0
-
+// tests/integration/src/iteration.h:38:0
 int  first 42
 int  second -1
 int  bar 0
@@ -28,6 +27,7 @@ undefined_type _und0
 foo_struct_0 _foo0 
 struct (anonymous) (value unsupported for compound declaration types)
 this_is_a_bug _embedded1 
+this_is_a_bug _embedded2 
 union (anonymous) (value unsupported for compound declaration types)
 this_is_a_bug _embedded3 
 counted_string S1 

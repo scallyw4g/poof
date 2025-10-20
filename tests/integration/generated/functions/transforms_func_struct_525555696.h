@@ -1,7 +1,6 @@
 // tests/integration/src/functions.h:123:0
 
 
-
 ThingWhatever
 thingwhatever
 

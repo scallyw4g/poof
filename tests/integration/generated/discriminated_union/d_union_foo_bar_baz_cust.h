@@ -1,5 +1,4 @@
 // tests/integration/src/discriminated_union.h:30:0
-
 struct foo_bar_baz_cust
 {
   enum custom_enum_tag Type;

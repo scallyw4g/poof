@@ -39,7 +39,9 @@ enum meta_func_directive
 {
   meta_func_directive_noop,
 
-  omit_include,
+  omit_include          = (1 << 0),
+  code_fragment         = (1 << 1),
+  origin_comment_format = (1 << 2),
 };
 poof( string_and_value_tables(meta_func_directive) )
 #include <string_and_value_tables_meta_func_directive.h>
@@ -787,8 +789,8 @@ struct meta_func
   cs Name;
   meta_func_arg_buffer Args;
   parser Body;
-  b32 OmitInclude;
-  b32 CodeFragment;
+  
+  meta_func_directive Directives;
 };
 poof(generate_stream(meta_func))
 #include <generated/generate_stream_meta_func.h>
@@ -802,7 +804,8 @@ MetaFunc(cs Name, meta_func_arg_buffer Args)
   meta_func Reuslt = {
     .Name = Name,
     .Args = Args,
-    {}, {}, {}
+    .Body = {},
+    .Directives = {},
   };
   return Reuslt;
 }

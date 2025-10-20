@@ -1,5 +1,4 @@
 // tests/integration/src/conditionals.h:24:0
-
 int  first not struct
 
 int  second not struct
