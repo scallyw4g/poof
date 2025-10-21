@@ -784,13 +784,15 @@ poof(hashtable(macro_def))
 #include <generated/hashtable_macro_def.h>
 
 
+#define DEFAULT_META_FUNC_HEADER_FORMAT_STRING CSz("// %S:%u:0\n\n")
+
 struct meta_func
 {
   cs Name;
   meta_func_arg_buffer Args;
   parser Body;
-  
   meta_func_directive Directives;
+  cs HeaderFormatString = DEFAULT_META_FUNC_HEADER_FORMAT_STRING;
 };
 poof(generate_stream(meta_func))
 #include <generated/generate_stream_meta_func.h>

@@ -1,4 +1,5 @@
 // tests/integration/src/conditionals.h:5:0
+
 int  first not enum
 
 int  second not enum

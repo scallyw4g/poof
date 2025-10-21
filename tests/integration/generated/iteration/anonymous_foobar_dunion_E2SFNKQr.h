@@ -1,4 +1,5 @@
 // tests/integration/src/iteration.h:53:0
+
 -- all members start --
 
 foobar_dunion_type Type 

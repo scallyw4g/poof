@@ -1,4 +1,5 @@
 // tests/integration/src/iteration.h:38:0
+
 int  first 42
 int  second -1
 int  bar 0

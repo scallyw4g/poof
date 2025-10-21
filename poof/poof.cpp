@@ -1304,7 +1304,7 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena
           }
           else
           {
-            Insert(T->Filename, &Ctx->Datatypes.FilesParsed, Memory);
+            Upsert(T->Filename, &Ctx->Datatypes.FilesParsed, Memory);
           }
         }
 
@@ -1588,7 +1588,7 @@ PreprocessedParserForFile(parse_context *Ctx, counted_string Filename, token_cur
 
   if (Result && Result->ErrorCode == ParseErrorCode_None)
   {
-    Insert(*Result, &Ctx->ParserHashtable, Ctx->Memory);
+    Upsert(*Result, &Ctx->ParserHashtable, Ctx->Memory);
     if (RunPreprocessor(Ctx, Result, Parent, Ctx->Memory))
     {
       /* c_token_cursor Tmp = *Result->Tokens; */
@@ -4882,7 +4882,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT, poof_tag_block_array *
           {
             Info("Pushed anonymous compound decl in (anonymous)");
           }
-          AnonymousDecl = Insert(Datatype(&Member), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+          AnonymousDecl = Upsert(Datatype(&Member), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
         }
 
         StoredMember = Push(&Result.Members, Member);
@@ -5147,7 +5147,7 @@ ParseAndPushTypedef(parse_context *Ctx)
         // @dup_typedefd_anon_thingy_name_token
         comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
         S.Type = Decl.NameT;
-        Insert(Datatype(&S), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+        Upsert(Datatype(&S), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
       }
       else if (Type.Qualifier & TypeQual_Enum)
       {
@@ -5157,7 +5157,7 @@ ParseAndPushTypedef(parse_context *Ctx)
         comma_separated_decl Decl = ParseCommaSeperatedDecl(Ctx);
         Enum.NameT = Decl.NameT;
 
-        Insert(Datatype(&Enum), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+        Upsert(Datatype(&Enum), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
       }
       else
       {
@@ -5228,12 +5228,12 @@ ParseAndPushTypedef(parse_context *Ctx)
     Assert(Func.NameT);
 
     Info("Pushing function decl (%S)", Func.NameT ? Func.NameT->Value : CSz("anonymous"));
-    Insert(Datatype(&Func), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+    Upsert(Datatype(&Func), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
   }
   else
   {
     Info("Pushing typedef decl (%S) -> (%S)", PrintTypeSpec(&Typedef.Type, GetTranArena()), Typedef.Alias);
-    Insert(Datatype(&Typedef), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+    Upsert(Datatype(&Typedef), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
 
 #if BONSAI_INTERNAL
     {
@@ -5278,7 +5278,7 @@ ParseTypedef(parse_context *Ctx)
 
       RequireToken(Parser, CTokenType_Semicolon);
 
-      Insert(Datatype(&S), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+      Upsert(Datatype(&S), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
       /* Push(&Ctx->Datatypes.Structs, S); */
     }
     else if ( PeekToken(Parser, 0).Type == CTokenType_Identifier &&
@@ -5297,7 +5297,7 @@ ParseTypedef(parse_context *Ctx)
       MaybeEatAdditionalCommaSeperatedNames(Ctx);
 
       RequireToken(Parser, CTokenType_Semicolon);
-      Insert(Datatype(&S), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+      Upsert(Datatype(&S), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
       /* Push(&Ctx->Datatypes.Structs, S); */
     }
     else
@@ -6283,7 +6283,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
           // There might also be another/other bugs because after that happened
           // I was hitting invalid case in that same switch statement.
           //
-          /* datatype *DTPointer = Insert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory); */
+          /* datatype *DTPointer = Upsert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory); */
 
           switch (Decl.Type)
           {
@@ -6292,7 +6292,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
             case type_enum_decl:
             {
               // @not_pushing_variable_decls
-              Insert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+              Upsert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
               Info("Pushing enum decl (%S)", GetNameForDatatype(&DeclDT, Ctx->Memory));
               /* Push(&Ctx->Datatypes, Decl.enum_decl); */
             } break;
@@ -6300,11 +6300,11 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
             case type_function_decl:
             {
               // @not_pushing_variable_decls
-              Insert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+              Upsert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
 
               function_decl Function = Decl.function_decl;
               Info("Pushing function decl (%S)", Function.NameT ? Function.NameT->Value : CSz("anonymous"));
-              /* Insert(Datatype(&Decl), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory); */
+              /* Upsert(Datatype(&Decl), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory); */
               /* Push(&Ctx->Datatypes.Functions, Decl.function_decl); // Free function */
             } break;
 
@@ -6312,7 +6312,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
             case type_compound_decl:
             {
               // @not_pushing_variable_decls
-              datatype *Inserted = Insert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+              datatype *Inserted = Upsert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
 
               compound_decl StructOrUnion = Decl.compound_decl;
 
@@ -6325,7 +6325,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
               /*   RuntimeBreak(); */
               /* } */
 
-              /* Insert(Datatype(&StructOrUnion), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory); */
+              /* Upsert(Datatype(&StructOrUnion), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory); */
               /* Push(&Ctx->Datatypes.Structs, StructOrUnion); */
 
               if (OptionalToken(Parser, CTokenType_Semicolon))
@@ -7136,7 +7136,7 @@ PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
   {
     string_builder Builder = {};
     poof(
-      func (type_qualifier Enum)
+      func (type_qualifier Enum) @code_fragment
       {
         (Enum.map_values(EnumVal)
         {
@@ -7973,6 +7973,12 @@ ParseMetaFuncTags(parser *Parser, meta_func *Func)
     {
       meta_func_directive Dir = MetaFuncDirective(Tag.Name);
       SetBitfield(meta_func_directive, Func->Directives, Dir);
+
+      if (Dir == origin_comment_format)
+      {
+        Assert(Tag.Value.Start);
+        Func->HeaderFormatString = Tag.Value;
+      }
 
       if (Dir == meta_func_directive_noop)
       {

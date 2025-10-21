@@ -1,4 +1,5 @@
 // tests/integration/src/tags.h:39:0
+
 // has_tag bar (outer members)
 (tag_struct b1) has bar tag (value=b1)
 
