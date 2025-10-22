@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/counted_string.cpp:26:0
 
-
 struct counted_string_linked_list_node
 {
   b32 Tombstoned;

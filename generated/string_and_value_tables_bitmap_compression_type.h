@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/bitmap.cpp:76:0
 
-
 link_internal counted_string
 ToStringPrefixless(bitmap_compression_type Type)
 {

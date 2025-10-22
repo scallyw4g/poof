@@ -1,6 +1,5 @@
 // ./poof/poof.h:127:0
 
-
 link_internal meta_arg_operator
 MetaArgOperator(counted_string S)
 {

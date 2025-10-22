@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/to_string.cpp:62:0
 
-
 link_internal counted_string
 ToStringPrefixless(texture_storage_format Type)
 {

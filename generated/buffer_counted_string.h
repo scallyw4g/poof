@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/counted_string.cpp:18:0
 
-
 struct counted_string_buffer
 {
   umm Count;

@@ -1,6 +1,5 @@
 // ./poof/poof.h:217:0
 
-
 struct compound_decl_cursor
 {
   compound_decl *Start;

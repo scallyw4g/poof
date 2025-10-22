@@ -4,7 +4,6 @@
 
 
 
-
 link_internal cs
 CS( shader_ptr_block_array_index Index )
 {

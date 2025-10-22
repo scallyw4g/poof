@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/ansi_stream.h:3:0
 
-
 struct u8_cursor
 {
   u8 *Start;

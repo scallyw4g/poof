@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/counted_string.cpp:851:0
 
-
 link_internal cs
 ToHex( s64 Value )
 {

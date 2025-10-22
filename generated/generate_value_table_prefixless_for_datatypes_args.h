@@ -1,6 +1,5 @@
 // ./poof/poof.h:49:0
 
-
 link_internal for_datatypes_args
 ForDatatypesArgsPrefixless(counted_string S)
 {

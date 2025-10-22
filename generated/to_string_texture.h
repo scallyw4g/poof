@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/to_string.cpp:65:0
 
-
 link_internal cs
 ToString(texture *Element)
 {

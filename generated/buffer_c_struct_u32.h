@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/shader.cpp:1:0
 
-
 link_internal shader_uniform_buffer
 ShaderUniformBuffer( u32 ElementCount, memory_arena* Memory)
 {

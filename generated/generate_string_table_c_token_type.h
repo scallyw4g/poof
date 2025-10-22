@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/c_token.h:225:0
 
-
 link_internal counted_string
 ToStringPrefixless(c_token_type Type)
 {

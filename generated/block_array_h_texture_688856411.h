@@ -4,7 +4,6 @@
 
 
 
-
 struct texture_ptr_block
 {
   /* u32 Index; */

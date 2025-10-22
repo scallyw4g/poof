@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/xml.cpp:10:0
 
-
 link_internal b32 AreEqual(xml_tag_linked_list_node *Node1, xml_tag_linked_list_node *Node2 );
 link_internal b32 AreEqual(xml_tag *Element1, xml_tag *Element2 );
 

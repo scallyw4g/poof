@@ -1,6 +1,5 @@
 // ./poof/poof.h:329:0
 
-
 struct variable_decl_stream_chunk
 {
   variable_decl Element;

@@ -4,7 +4,6 @@
 
 
 
-
 link_internal cs
 CS( texture_ptr_block_array_index Index )
 {

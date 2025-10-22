@@ -4,7 +4,6 @@
 
 
 
-
 struct u32_block
 {
   /* u32 Index; */

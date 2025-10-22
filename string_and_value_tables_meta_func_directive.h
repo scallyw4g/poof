@@ -1,6 +1,5 @@
 // ./poof/poof.h:75:0
 
-
 link_internal counted_string
 ToStringPrefixless(meta_func_directive Type)
 {

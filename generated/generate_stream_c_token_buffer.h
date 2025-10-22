@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/c_token.cpp:8:0
 
-
 struct c_token_buffer_stream_chunk
 {
   c_token_buffer Element;

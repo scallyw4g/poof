@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/ansi_stream.h:32:0
 
-
 link_internal counted_string
 ToStringPrefixless(text_encoding Type)
 {

@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/c_parser.h:93:0
 
-
 struct parser_cursor
 {
   parser *Start;

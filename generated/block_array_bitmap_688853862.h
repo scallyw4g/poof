@@ -4,7 +4,6 @@
 
 
 
-
 struct bitmap_block
 {
   /* u32 Index; */

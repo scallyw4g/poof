@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/binary_parser.h:1:0
 
-
 struct u64_cursor
 {
   u64 *Start;

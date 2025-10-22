@@ -1,6 +1,5 @@
 // ./poof/poof.h:444:0
 
-
 struct declaration_stream_chunk
 {
   declaration Element;

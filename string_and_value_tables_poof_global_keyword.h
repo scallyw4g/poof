@@ -1,6 +1,5 @@
 // ./poof/poof.h:18:0
 
-
 link_internal counted_string
 ToStringPrefixless(poof_global_keyword Type)
 {

@@ -1,6 +1,5 @@
 // ./poof/poof.h:441:0
 
-
 struct declaration_cursor
 {
   declaration *Start;

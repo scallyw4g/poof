@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/shader.h:172:0
 
-
 struct shader_uniform_buffer
 {
   u32 Count;

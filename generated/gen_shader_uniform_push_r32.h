@@ -1,7 +1,6 @@
 // ./include/bonsai_stdlib/src/shader.cpp:381:0
 
 
-
 b32
 InitShaderUniform(shader *Shader, u32 Index, r32 *Value, const char *Name, u16 Count)
 {

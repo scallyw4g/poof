@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/ui/ui.cpp:25:0
 
-
 maybe_ui_toggle_ptr
 GetPtrById( ui_toggle_hashtable *Table, ui_id Query )
 {

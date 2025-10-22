@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/binary_parser.cpp:15:0
 
-
 /* link_internal void */
 /* DeepCopy( Type.name *Src, Type.name *Dest) */
 /* { */

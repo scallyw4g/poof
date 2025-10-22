@@ -1,5 +1,4 @@
-// ./poof/poof.h:491:0
-
+// ./poof/poof.h:489:0
 
 struct maybe_datatype_ptr
 {

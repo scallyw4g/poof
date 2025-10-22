@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/console_io.h:13:0
 
-
 link_internal counted_string
 ToStringPrefixless(log_level Type)
 {

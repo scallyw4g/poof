@@ -1531,8 +1531,8 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
   /* counted_string Result = Execute(&Func->Body, Args, Ctx, Memory, Depth); */
   parser *Scope = &Func->Body;
 
-  program_datatypes* Datatypes = &Ctx->Datatypes;
-  meta_func_stream* FunctionDefs = &Ctx->MetaFunctions;
+  program_datatypes *Datatypes    = &Ctx->Datatypes;
+   meta_func_stream *FunctionDefs = &Datatypes->MetaFunctions;
 
   Assert(Scope->Tokens->At == Scope->Tokens->Start);
 
@@ -1842,7 +1842,7 @@ link_internal void
 ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Directive, c_token *DirectiveT, tuple_cs_cs_buffer_builder *Builder)
 {
   program_datatypes *Datatypes   = &Ctx->Datatypes;
-  meta_func_stream *FunctionDefs = &Ctx->MetaFunctions;
+  meta_func_stream *FunctionDefs = &Datatypes->MetaFunctions;
   memory_arena *Memory           = Ctx->Memory;
   parser *Parser                 = Ctx->CurrentParser;
 
@@ -2078,9 +2078,9 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
                   case ForDatatypesArg_struct:
                   {
-                    if (compound_decl *Struct = TryCastToCompoundDecl(Ctx, DT))
+                    if (compound_decl *Compound = TryCastToCompoundDecl(Ctx, DT))
                     {
-                      if (Struct->Type && Struct->IsUnion == False)
+                      if (Compound->Type && Compound->IsUnion == False)
                       {
                         // @counted_string_primitive_hack
                         if (StringsMatch(TypeName, CSz("counted_string")) == False)
@@ -2092,7 +2092,15 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
                   } break;
 
                   case ForDatatypesArg_union:
-                    { NotImplemented; } break;
+                  {
+                    if (compound_decl *Compound = TryCastToCompoundDecl(Ctx, DT))
+                    {
+                      if (Compound->Type && Compound->IsUnion == True)
+                      {
+                        DoFunc = True;
+                      }
+                    }
+                  } break;
 
                   case ForDatatypesArg_enum:
                   {

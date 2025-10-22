@@ -9007,7 +9007,7 @@ main(s32 ArgCount_, const char** ArgStrings)
   parse_context Ctx = AllocateParseContext(Memory);
   Ctx.Args = ParseArgs(ArgStrings, ArgCount, &Ctx, Memory);
 
-  Ctx.MetaFunctions.Memory = &Global_PermMemory;
+  Ctx.Datatypes.MetaFunctions.Memory = &Global_PermMemory;
 
 #if BONSAI_DEBUG_SYSTEM_API
   if (Ctx.Args.DoDebugWindow)

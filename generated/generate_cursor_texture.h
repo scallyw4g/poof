@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/texture_cursor.cpp:10:0
 
-
 struct texture_cursor
 {
   texture *Start;

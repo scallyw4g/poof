@@ -461,8 +461,6 @@ enum datatype_type
 poof(generate_string_table(datatype_type))
 #include <generated/generate_string_table_datatype_type.h>
 
-struct enum_member;
-
 struct type_def
 {
   counted_string Alias;
@@ -1027,6 +1025,7 @@ struct program_datatypes
   datatype_hashtable       DatatypeHashtable;
   macro_def_hashtable      Macros;
   counted_string_hashtable FilesParsed;
+  meta_func_stream         MetaFunctions;
 };
 
 struct for_enum_constraints
@@ -1081,7 +1080,6 @@ struct parse_context
 
   program_datatypes      Datatypes;
   counted_string_cursor *IncludePaths;
-  meta_func_stream       MetaFunctions;
   memory_arena          *Memory;
 
   tagged_counted_string_stream_stream NamedLists;
@@ -1128,8 +1126,9 @@ AllocateParseContext(memory_arena *Memory)
   Ctx.Datatypes.Macros = Allocate_macro_def_hashtable(4096, Memory);
   Ctx.Datatypes.DatatypeHashtable = Allocate_datatype_hashtable(2048, Memory);
 
+  Ctx.Datatypes.MetaFunctions = MetaFuncStream(Memory);
+
   Ctx.NamedLists = TaggedCountedStringStreamStream(Memory);
-  Ctx.MetaFunctions = MetaFuncStream(Memory);
 
   return Ctx;
 }

@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/sort.cpp:1:0
 
-
 struct sort_key_buffer
 {
   umm Count;

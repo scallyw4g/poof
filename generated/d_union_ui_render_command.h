@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/ui/ui.h:892:0
 
-
 enum ui_render_command_type
 {
   type_ui_render_command_noop,

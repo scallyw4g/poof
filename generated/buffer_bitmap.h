@@ -1,6 +1,5 @@
 // ./include/bonsai_stdlib/src/bitmap.cpp:37:0
 
-
 struct bitmap_buffer
 {
   umm Count;

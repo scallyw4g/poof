@@ -4,7 +4,6 @@
 
 
 
-
 struct shader_ptr_block
 {
   /* u32 Index; */
