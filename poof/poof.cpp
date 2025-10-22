@@ -9018,8 +9018,9 @@ main(s32 ArgCount_, const char** ArgStrings)
   u32 ArgCount = (u32)ArgCount_;
   SetupStdout(ArgCount, ArgStrings);
 
-  memory_arena Memory_ = {};
-  memory_arena* Memory = &Memory_;
+  memory_arena  Memory_ = {};
+  memory_arena *Memory  = &Memory_;
+
   Memory->NextBlockSize = Megabytes(256);
 
   application_api AppApi = {};
@@ -9027,8 +9028,6 @@ main(s32 ArgCount_, const char** ArgStrings)
   bonsai_init_flags InitFlags = {};
 
   Global_Stdlib = &Stdlib;
-
-  /* AllocateAndInitThreadStates(Memory); */
 
   parse_context Ctx = AllocateParseContext(Memory);
   Ctx.Args = ParseArgs(ArgStrings, ArgCount, &Ctx, Memory);
@@ -9039,13 +9038,8 @@ main(s32 ArgCount_, const char** ArgStrings)
   if (Ctx.Args.DoDebugWindow)
   {
     InitFlags = bonsai_init_flags(InitFlags|BonsaiInit_OpenWindow|BonsaiInit_InitDebugSystem);
-
-    /* GetDebugState()->OpenAndInitializeDebugWindow(); */
-    /* GetDebugState()->FrameBegin(True, True); */
-
   }
 #endif
-  /* Info("%d", InitFlags); */
 
   Ensure( InitializeBonsaiStdlib( InitFlags, &AppApi, &Stdlib, Memory) );
 
