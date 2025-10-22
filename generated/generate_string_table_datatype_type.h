@@ -1,4 +1,4 @@
-// ./poof/poof.h:461:0
+// ./poof/poof.h:508:0
 
 link_internal counted_string
 ToStringPrefixless(datatype_type Type)
@@ -11,6 +11,7 @@ ToStringPrefixless(datatype_type Type)
     case type_enum_member: { Result = CSz("member"); } break;
     case type_type_def: { Result = CSz("def"); } break;
     case type_primitive_def: { Result = CSz("def"); } break;
+    case type_macro_def: { Result = CSz("def"); } break;
 
     
   }
@@ -29,6 +30,7 @@ ToString(datatype_type Type)
     case type_enum_member: { Result = CSz("type_enum_member"); } break;
     case type_type_def: { Result = CSz("type_type_def"); } break;
     case type_primitive_def: { Result = CSz("type_primitive_def"); } break;
+    case type_macro_def: { Result = CSz("type_macro_def"); } break;
 
     
   }

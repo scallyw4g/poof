@@ -450,17 +450,6 @@ struct primitive_def
   type_spec TypeSpec;
 };
 
-enum datatype_type
-{
-  type_datatype_noop,
-  type_declaration,
-  type_enum_member,
-  type_type_def,
-  type_primitive_def,
-};
-poof(generate_string_table(datatype_type))
-#include <generated/generate_string_table_datatype_type.h>
-
 struct type_def
 {
   counted_string Alias;
@@ -468,6 +457,56 @@ struct type_def
 };
 poof(generate_stream(type_def))
 #include <generated/generate_stream_type_def.h>
+
+enum macro_type
+{
+  type_macro_noop,
+
+  type_macro_keyword,
+  type_macro_function,
+};
+
+struct macro_def
+{
+  macro_type Type;
+  c_token *NameT;
+  c_token_cursor Body;
+
+  counted_string_buffer NamedArguments;
+  b32 Variadic;
+  b32 Undefed; // Gets toggled when we hit an undef
+  b32 IsExpanding;
+};
+poof(generate_stream(macro_def))
+#include <generated/generate_stream_macro_def.h>
+
+link_internal u64
+Hash(macro_def *M)
+{
+  u64 Result = Hash(&M->NameT->Value);
+  // TODO(Jesse): Hash arguments and incorporate Type & Variadic ..?
+  return Result;
+}
+
+poof(are_equal(macro_def))
+#include <generated/are_equal_macro_def.h>
+
+poof(hashtable(macro_def))
+#include <generated/hashtable_macro_def.h>
+
+
+enum datatype_type
+{
+  type_datatype_noop,
+  type_declaration,
+  type_enum_member,
+  type_type_def,
+  type_primitive_def,
+  type_macro_def,
+};
+
+poof(generate_string_table(datatype_type))
+#include <generated/generate_string_table_datatype_type.h>
 
 struct datatype poof(@d_union)
 {
@@ -479,6 +518,7 @@ struct datatype poof(@d_union)
     primitive_def  primitive_def;
     enum_member    enum_member;
     type_def       type_def;
+    macro_def      macro_def;
   };
 };
 
@@ -789,43 +829,6 @@ struct d_union_decl
   counted_string CustomEnumType;
 };
 
-enum macro_type
-{
-  type_macro_noop,
-
-  type_macro_keyword,
-  type_macro_function,
-};
-
-struct macro_def
-{
-  macro_type Type;
-  c_token *NameT;
-  c_token_cursor Body;
-
-  counted_string_buffer NamedArguments;
-  b32 Variadic;
-  b32 Undefed; // Gets toggled when we hit an undef
-  b32 IsExpanding;
-};
-poof(generate_stream(macro_def))
-#include <generated/generate_stream_macro_def.h>
-
-link_internal u64
-Hash(macro_def *M)
-{
-  u64 Result = Hash(&M->NameT->Value);
-  // TODO(Jesse): Hash arguments and incorporate Type & Variadic ..?
-  return Result;
-}
-
-poof(are_equal(macro_def))
-#include <generated/are_equal_macro_def.h>
-
-poof(hashtable(macro_def))
-#include <generated/hashtable_macro_def.h>
-
-
 #define DEFAULT_META_FUNC_HEADER_FORMAT_STRING CSz("// %S:%u:0\n")
 
 struct meta_func
@@ -1024,8 +1027,9 @@ struct program_datatypes
 {
   datatype_hashtable       DatatypeHashtable;
   macro_def_hashtable      Macros;
-  counted_string_hashtable FilesParsed;
   meta_func_stream         MetaFunctions;
+
+  counted_string_hashtable FilesParsed;
 };
 
 struct for_enum_constraints

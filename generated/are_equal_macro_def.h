@@ -1,4 +1,4 @@
-// ./poof/poof.h:822:0
+// ./poof/poof.h:491:0
 
 link_internal b32
 AreEqual(macro_def *Thing1, macro_def *Thing2)

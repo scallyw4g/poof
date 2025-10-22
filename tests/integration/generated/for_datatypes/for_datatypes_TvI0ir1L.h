@@ -7,7 +7,7 @@ array()
 hash(34EC700A)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:78)
+location(tests/integration/src/common_structures.h:81)
 
 
 function args
@@ -47,7 +47,7 @@ array()
 hash(1BC148A5)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:76)
+location(tests/integration/src/common_structures.h:79)
 
 
 function args
@@ -87,7 +87,7 @@ array()
 hash(284708AD)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:32)
+location(tests/integration/src/common_structures.h:35)
 
 
 
@@ -112,7 +112,7 @@ array()
 hash(2A4BE8BA)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:89)
+location(tests/integration/src/common_structures.h:92)
 
 
 
@@ -172,7 +172,7 @@ array()
 hash(B47F294)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:73)
+location(tests/integration/src/common_structures.h:76)
 
 
 function args
@@ -196,7 +196,7 @@ array()
 hash(7B0D)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:28)
+location(tests/integration/src/common_structures.h:31)
 
 
 
@@ -214,7 +214,7 @@ array()
 hash(11D37368)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:58)
+location(tests/integration/src/common_structures.h:61)
 
 
 
@@ -237,7 +237,7 @@ array()
 hash(4EAFB6B)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:3)
+location(tests/integration/src/common_structures.h:6)
 
 
 
@@ -255,7 +255,7 @@ array()
 hash(31690B79)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:48)
+location(tests/integration/src/common_structures.h:51)
 
 
 
@@ -277,7 +277,7 @@ array()
 hash(1F378381)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:41)
+location(tests/integration/src/common_structures.h:44)
 
 
 
@@ -301,7 +301,7 @@ array()
 hash(290D1BAB)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:29)
+location(tests/integration/src/common_structures.h:32)
 
 
 
@@ -373,7 +373,7 @@ array()
 hash(475343F)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:22)
+location(tests/integration/src/common_structures.h:25)
 
 
 
@@ -427,7 +427,7 @@ array()
 hash(290D051A)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:19)
+location(tests/integration/src/common_structures.h:22)
 
 
 
@@ -499,7 +499,7 @@ array()
 hash(3AEF4D40)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:52)
+location(tests/integration/src/common_structures.h:55)
 
 
 
@@ -522,7 +522,7 @@ array()
 hash(94CDD91)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:64)
+location(tests/integration/src/common_structures.h:67)
 
 
 
@@ -540,7 +540,7 @@ array()
 hash(29B9FDBA)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:75)
+location(tests/integration/src/common_structures.h:78)
 
 
 function args
@@ -603,7 +603,7 @@ array()
 hash(1D796683)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:21)
+location(tests/integration/src/common_structures.h:24)
 
 
 
@@ -621,7 +621,7 @@ array()
 hash(2D3996C3)
 indirection()
 tags(tag_with_value(69) )
-location(tests/integration/src/common_structures.h:85)
+location(tests/integration/src/common_structures.h:88)
 
 
 
@@ -643,7 +643,7 @@ array()
 hash(3B2926CC)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:172)
+location(tests/integration/src/common_structures.h:175)
 
 
 
@@ -666,7 +666,7 @@ array()
 hash(A897753)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:77)
+location(tests/integration/src/common_structures.h:80)
 
 
 function args
@@ -688,7 +688,7 @@ array()
 hash(13DD1FA3)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:69)
+location(tests/integration/src/common_structures.h:72)
 
 
 function args
@@ -712,7 +712,7 @@ array()
 hash(1B207F9)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:180)
+location(tests/integration/src/common_structures.h:183)
 
 
 

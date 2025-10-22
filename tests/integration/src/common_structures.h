@@ -1,5 +1,8 @@
 #define poof(...)
 
+#define MacroIdentifier
+#define MacroFunc(foo, bar, baz) foo bar baz
+
 typedef __ undefined_type;
 
 // NOTE(Jesse): Copied from bonsai_stdlib/primitives.h

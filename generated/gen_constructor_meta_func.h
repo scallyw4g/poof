@@ -1,4 +1,4 @@
-// ./poof/poof.h:842:0
+// ./poof/poof.h:845:0
 
 link_internal meta_func
 MetaFunc(  cs   Name , meta_func_arg_buffer   Args , parser   Body , meta_func_directive   Directives , cs   HeaderFormatString  )

@@ -1,4 +1,4 @@
-// ./poof/poof.h:511:0
+// ./poof/poof.h:551:0
 
 /* dunion_debug_print_prototype(DUnion) */
 
@@ -156,6 +156,75 @@ link_internal void DebugPrint( type_def RuntimePtr, u32 Depth = 0)
   DebugPrint(&RuntimePtr, Depth);
 }
 
+link_internal void DebugPrint( macro_def *RuntimeStruct, u32 Depth = 0)
+{
+  /* if (Depth == 0) */
+  {
+    DebugPrint("macro_def ", Depth);
+  }
+
+  if (RuntimeStruct)
+  {
+    DebugPrint("{\n", Depth);
+                        DebugPrint("macro_type Type =", Depth+2);
+    DebugPrint(&RuntimeStruct->Type, 1);
+    DebugPrint(";\n");
+
+
+
+
+                DebugPrint("c_token NameT {\n", Depth+2);
+    DebugPrint(&RuntimeStruct->NameT, Depth+4);
+    DebugPrint("}\n", Depth+2);
+
+
+
+                DebugPrint("c_token_cursor Body {\n", Depth+2);
+    DebugPrint(&RuntimeStruct->Body, Depth+4);
+    DebugPrint("}\n", Depth+2);
+
+
+
+                DebugPrint("counted_string_buffer NamedArguments {\n", Depth+2);
+    DebugPrint(&RuntimeStruct->NamedArguments, Depth+4);
+    DebugPrint("}\n", Depth+2);
+
+
+
+                    DebugPrint("b32 Variadic =", Depth+2);
+    DebugPrint(&RuntimeStruct->Variadic, 1);
+    DebugPrint(";\n");
+
+
+
+
+                    DebugPrint("b32 Undefed =", Depth+2);
+    DebugPrint(&RuntimeStruct->Undefed, 1);
+    DebugPrint(";\n");
+
+
+
+
+                    DebugPrint("b32 IsExpanding =", Depth+2);
+    DebugPrint(&RuntimeStruct->IsExpanding, 1);
+    DebugPrint(";\n");
+    /* if (Depth == 0) */
+    {
+      DebugPrint("}\n", Depth);
+    }
+  }
+  else
+  {
+    DebugPrint(" = (null)\n", Depth);
+  }
+
+}
+
+link_internal void DebugPrint( macro_def RuntimePtr, u32 Depth = 0)
+{
+  DebugPrint(&RuntimePtr, Depth);
+}
+
 
 
 link_internal void
@@ -182,6 +251,10 @@ DebugPrint( datatype *Struct, u32 Depth)
       case type_type_def:
       {
         DebugPrint(&Struct->type_def, Depth+4);
+      } break;
+      case type_macro_def:
+      {
+        DebugPrint(&Struct->macro_def, Depth+4);
       } break;
 
 
