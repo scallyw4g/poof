@@ -26,10 +26,10 @@ umm _ummstar
 foo_enum _foo_enum 
 undefined_type _und0 
 foo_struct_0 _foo0 
-struct (anonymous) (value unsupported for compound declaration types)
+struct (anonymous) (value unsupported)
 this_is_a_bug _embedded1 
 this_is_a_bug _embedded2 
-union (anonymous) (value unsupported for compound declaration types)
+union (anonymous) (value unsupported)
 this_is_a_bug _embedded3 
 counted_string S1 
 foofuncptr FooFuncPtr 

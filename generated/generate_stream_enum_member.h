@@ -1,4 +1,4 @@
-// ./poof/poof.h:356:0
+// ./poof/poof.h:383:0
 
 
 struct enum_member_stream_chunk

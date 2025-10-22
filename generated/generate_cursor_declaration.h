@@ -1,4 +1,4 @@
-// ./poof/poof.h:413:0
+// ./poof/poof.h:440:0
 
 
 struct declaration_cursor

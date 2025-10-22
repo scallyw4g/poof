@@ -1,4 +1,4 @@
-// ./poof/poof.h:785:0
+// ./poof/poof.h:812:0
 
 
 struct macro_def_stream_chunk

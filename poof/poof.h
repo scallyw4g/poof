@@ -21,6 +21,34 @@ poof( string_and_value_tables(poof_global_keyword) )
 /* #include <generated/string_and_value_tables_poof_global_keyword.h> */
 
 
+enum for_datatypes_args poof(@bitfield)
+{
+  for_datatypes_args_noop,
+
+  ForDatatypesArg_struct    = (1 << 0),
+  ForDatatypesArg_union     = (1 << 1),
+  ForDatatypesArg_enum      = (1 << 2),
+  ForDatatypesArg_func      = (1 << 3),
+  ForDatatypesArg_macro     = (1 << 4),
+  ForDatatypesArg_poof_func = (1 << 5),
+
+
+  ForDatatypesArg_all = (ForDatatypesArg_struct |
+                         ForDatatypesArg_union  |
+                         ForDatatypesArg_enum   |
+                         ForDatatypesArg_func   |
+                         ForDatatypesArg_macro  |
+                         ForDatatypesArg_poof_func ),
+
+  ForDatatypesArg_Count,
+};
+
+poof(string_and_value_tables(for_datatypes_args))
+#include <generated/string_and_value_tables_for_datatypes_args.h>
+
+poof(generate_value_table_prefixless(for_datatypes_args))
+#include <generated/generate_value_table_prefixless_for_datatypes_args.h>
+
 enum metaprogramming_directive
 {
   meta_directive_noop,

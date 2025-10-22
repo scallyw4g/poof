@@ -1,4 +1,4 @@
-// ./poof/poof.h:646:0
+// ./poof/poof.h:673:0
 
 
 link_internal poof_symbol

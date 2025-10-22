@@ -2266,6 +2266,29 @@ TryCastToCompoundDecl(parse_context *Ctx, datatype *Datatype)
   return Result;
 }
 
+link_internal enum_member *
+TryCastToEnumMember(parse_context *Ctx, datatype *Datatype)
+{
+  enum_member *Result = {};
+
+  tswitch (Datatype)
+  {
+    case type_datatype_noop:
+    case type_primitive_def:
+    case type_type_def:
+    case type_declaration:
+    {
+    } break;
+
+    case type_enum_member:
+    {
+      Result = DynamicCast(enum_member, Datatype);
+    } break;
+  }
+
+  return Result;
+}
+
 link_internal enum_decl *
 TryCastToEnumDecl(parse_context *Ctx, datatype *Datatype)
 {
@@ -6859,8 +6882,6 @@ GetTypeNameFor(parse_context *Ctx, declaration* Decl, memory_arena *Memory)
 
     case type_function_decl:
     {
-      // Very questionable what we do for this ..?
-      NotImplemented;
       Result = CSz("(function)");
     } break;
 
@@ -7231,13 +7252,18 @@ GetValueForDatatype(program_datatypes *Datatypes, datatype *Data, memory_arena *
 
     case type_primitive_def:
     {
-      NotImplemented;
+      Result = CSz("(value unsupported)");
     } break;
 
     case type_type_def:
     {
       auto Resolved = ResolveToBaseType(Datatypes, Data);
-      Result = GetValueForDatatype(Datatypes, Resolved, Memory);
+
+      // NOTE(Jesse): Can fire for undefined datatypes
+      if (Resolved->Type)
+      {
+        Result = GetValueForDatatype(Datatypes, Resolved, Memory);
+      }
     } break;
 
     case type_enum_member:
@@ -7251,21 +7277,19 @@ GetValueForDatatype(program_datatypes *Datatypes, datatype *Data, memory_arena *
       declaration *Member = SafeAccess(declaration, Data);
       switch (Member->Type)
       {
-        case type_enum_decl:
-        {
-          // What should we do here?
-          NotImplemented;
-          Result = CSz("(enum decl)");
-        } break;
-
         case type_declaration_noop:
         {
           InvalidCodePath();
         } break;
 
+        case type_enum_decl:
+        {
+          Result = CSz("(value unsupported)");
+        } break;
+
         case type_compound_decl:
         {
-          Result = CSz("(value unsupported for compound declaration types)");
+          Result = CSz("(value unsupported)");
         } break;
 
         case type_function_decl:
@@ -7372,7 +7396,7 @@ link_internal cs
 GetFilenameForDatatype(datatype *Data)
 {
   c_token *NameT = GetNameTokenForDatatype(Data);
-  cs Result = NameT->Filename;
+  cs Result = NameT ? NameT->Filename : CSz("(unknown)");
   return Result;
 }
 
@@ -7380,7 +7404,7 @@ link_internal u32
 GetLineNumberForDatatype(datatype *Data)
 {
   c_token *NameT = GetNameTokenForDatatype(Data);
-  u32 Result = NameT->LineNumber;
+  u32 Result = NameT ? NameT->LineNumber: u32_MAX;
   return Result;
 }
 
@@ -7425,7 +7449,12 @@ GetIndirectionInfoForDatatype(program_datatypes *Datatypes, datatype *Data)
     case type_type_def:
     {
       auto Resolved = ResolveToBaseType(Datatypes, Data);
-      Result = GetIndirectionInfoForDatatype(Datatypes, Resolved);
+      // TODO(Jesse): This check fails for typedefs that pointed to primitive
+      // types .. presumably we should be able to avoid this check..
+      if (Resolved->Type)
+      {
+        Result = GetIndirectionInfoForDatatype(Datatypes, Resolved);
+      }
     } break;
 
   }

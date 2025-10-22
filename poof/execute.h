@@ -558,7 +558,7 @@ Map( parse_context *Ctx,
                 case type_enum_member:
                 case type_type_def:
                 {
-                  InternalCompilerError(ParentScope, CSz("Got type_def or declaration when resolving base type of a variable_decl during map_values"), MetaOperatorToken);
+                  InternalCompilerError(ParentScope, CSz("Got type_def or enum_member when resolving base type of a variable_decl during map_values"), MetaOperatorToken);
                 } break;
 
                 case type_primitive_def:
@@ -870,17 +870,20 @@ ResolveMetaOperator(        parse_context *Ctx,
 
           poof_tag_block_array *Tags = GetTagsFromDatatype(Ctx, ReplaceData, Scope, MetaOperatorToken);
 
-          IterateOver(Tags, Tag, TagIndex)
+          if (Tags)
           {
-            Assert(Tag->Name.Count);
-            Append(OutputBuilder, Tag->Name);
-            if (Tag->Value.Count)
+            IterateOver(Tags, Tag, TagIndex)
             {
-              Append(OutputBuilder, CSz("("));
-              Append(OutputBuilder, Tag->Value);
-              Append(OutputBuilder, CSz(")"));
+              Assert(Tag->Name.Count);
+              Append(OutputBuilder, Tag->Name);
+              if (Tag->Value.Count)
+              {
+                Append(OutputBuilder, CSz("("));
+                Append(OutputBuilder, Tag->Value);
+                Append(OutputBuilder, CSz(")"));
+              }
+              Append(OutputBuilder, CSz(" "));
             }
-            Append(OutputBuilder, CSz(" "));
           }
         } break;
 
@@ -1061,7 +1064,17 @@ ResolveMetaOperator(        parse_context *Ctx,
 
             case type_type_def:
             {
-              NotImplemented;
+              datatype *Resolved = ResolveToBaseType(Ctx, ReplaceData);
+              if (auto Enum = TryCastToEnumDecl(Ctx, Resolved))
+              {
+                DoTrueBranch = True;
+              }
+
+              if (auto Enum = TryCastToEnumMember(Ctx, Resolved))
+              {
+                DoTrueBranch = True;
+              }
+
             } break;
 
             case type_primitive_def:
@@ -1982,8 +1995,38 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
     case for_datatypes:
     {
       TIMED_NAMED_BLOCK(for_datatypes);
+
+      u32 ForDatatypesArgAt = 0;
+      for_datatypes_args ForDatatypesArgs[ForDatatypesArg_Count] = {};
+
+      for_datatypes_args Typecheck = {};
+
       RequireToken(Parser, CTokenType_OpenParen);
-      RequireToken(Parser, CToken(CSz("all")));
+      c_token *Peek = PeekTokenPointer(Parser);
+        while (Peek)
+        {
+          if (for_datatypes_args Arg = ForDatatypesArgsPrefixless(Peek->Value))
+          {
+            RequireTokenPointer(Parser, Peek);
+
+            Assert(ForDatatypesArgAt < ForDatatypesArg_Count);
+
+            if (Typecheck & Arg)
+            {
+              PoofTypeError(Parser, ParseErrorCode_InvalidArgumentType, FSz("(%S) already specified.  Duplicates are unsupported.", Peek->Value), Peek);
+              break;
+            }
+            SetBitfield(for_datatypes_args, Typecheck, Arg);
+
+            ForDatatypesArgs[ForDatatypesArgAt++] = Arg;
+
+            Peek = PeekTokenPointer(Parser);
+          }
+          else
+          {
+            break;
+          }
+        }
       RequireToken(Parser, CTokenType_CloseParen);
 
       counted_string_stream Excludes = CountedStringStream(Memory);
@@ -1999,92 +2042,101 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
       // in the excludes constraint
       if (Parser->ErrorCode == ParseErrorCode_None)
       {
+
         // NOTE(Jesse): This is just here to parse the func tags out.
         meta_func ForAllDummyFunc = {};
         ParseMetaFuncTags(Parser, &ForAllDummyFunc);
 
-        RequireToken(Parser, CToken(ToString(func)));
-        meta_func StructFunc = ParseMetaFunctionDef(Parser, CSz("for_datatypes_struct_callback"), Memory);
+        meta_func Funcs[ForDatatypesArg_Count] = {};
 
-        RequireToken(Parser, CToken(ToString(func)));
-        meta_func EnumFunc = ParseMetaFunctionDef(Parser, CSz("for_datatypes_enum_callback"), Memory);
-
-        meta_func FuncFunc = {};
-        if ( OptionalToken(Parser, CToken(ToString(func))) )
+        RangeIterator_t(u32, FuncIndex, ForDatatypesArgAt)
         {
-          FuncFunc = ParseMetaFunctionDef(Parser, CSz("for_datatypes_func_callback"), Memory);
+          Assert(FuncIndex < ForDatatypesArg_Count);
+          RequireToken(Parser, CToken(ToString(func)));
+          Funcs[FuncIndex] = ParseMetaFunctionDef(Parser, CSz("for_datatypes_callback"), Memory);
         }
 
-
-
-        RequireToken(Parser, CTokenType_CloseParen);
 
         string_builder OutputBuilder = {};
 
+        IterateOver(&Datatypes->DatatypeHashtable, DT, DatatypeIndex)
         {
-          IterateOver(&Datatypes->DatatypeHashtable, DT, DatatypeIndex)
+          if (DT)
           {
-            if (DT)
+            RangeIterator_t(u32, FuncIndex, ForDatatypesArgAt)
             {
-              if (compound_decl *Struct = TryCastToCompoundDecl(Ctx, DT))
+              cs TypeName = GetNameForDatatype(DT, GetTranArena());
+              if (StreamContains(&Excludes, TypeName) == False)
               {
-                if (Struct->Type && Struct->IsUnion == False)
+                meta_func *ThisFunc =  Funcs + FuncIndex;
+                b32 DoFunc = False;
+
+                switch (ForDatatypesArgs[FuncIndex])
                 {
-                  if (!StreamContains(&Excludes, Struct->Type->Value))
+                  InvalidCase(for_datatypes_args_noop);
+                  InvalidCase(ForDatatypesArg_Count);
+
+                  case ForDatatypesArg_struct:
                   {
-                    Assert(StructFunc.Args.Count == 1);
-                    StructFunc.Args.Start[0] = ReplacementPattern(StructFunc.Args.Start[0].Match, *DT);
+                    if (compound_decl *Struct = TryCastToCompoundDecl(Ctx, DT))
+                    {
+                      if (Struct->Type && Struct->IsUnion == False)
+                      {
+                        // @counted_string_primitive_hack
+                        if (StringsMatch(TypeName, CSz("counted_string")) == False)
+                        {
+                          DoFunc = True;
+                        }
+                      }
+                    }
+                  } break;
 
-                    umm Depth = 0;
-                    counted_string Code = Execute(&StructFunc, Ctx, Memory, &Depth);
-                    Append(&OutputBuilder, Code);
-                  }
+                  case ForDatatypesArg_union:
+                    { NotImplemented; } break;
+
+                  case ForDatatypesArg_enum:
+                  {
+                    if (enum_decl *Enum = TryCastToEnumDecl(Ctx, DT))
+                    {
+                      DoFunc = True;
+                    }
+                  } break;
+
+                  case ForDatatypesArg_func:
+                  {
+                    if (function_decl *FuncDecl = TryCastToFunctionDecl(Ctx, DT))
+                    {
+                      DoFunc = True;
+                    }
+                  } break;
+
+                  case ForDatatypesArg_macro:
+                    { NotImplemented; } break;
+
+                  case ForDatatypesArg_poof_func:
+                    { NotImplemented; } break;
+
+                  case ForDatatypesArg_all:
+                    { DoFunc = True; } break;
                 }
-              }
-            }
-          }
-        }
 
-        {
-          IterateOver(&Datatypes->DatatypeHashtable, DT, DatatypeIndex)
-          {
-            if (DT)
-            {
-              if (enum_decl *Enum = TryCastToEnumDecl(Ctx, DT))
-              {
-                if (!StreamContains(&Excludes, Enum->NameT->Value))
+                if (DoFunc)
                 {
-                  Assert(EnumFunc.Args.Count == 1);
-                  EnumFunc.Args.Start[0] = ReplacementPattern(EnumFunc.Args.Start[0].Match, *DT);
+                  Assert(ThisFunc->Args.Count == 1);
+                  ThisFunc->Args.Start[0] = ReplacementPattern(ThisFunc->Args.Start[0].Match, *DT);
                   umm Depth = 0;
-                  counted_string Code = Execute(&EnumFunc, Ctx, Memory, &Depth);
+                  counted_string Code = Execute(ThisFunc, Ctx, Memory, &Depth);
                   Append(&OutputBuilder, Code);
                 }
               }
             }
           }
+
+
         }
 
-        if (FuncFunc.Name.Start) // Parsed successfully
-        {
-          IterateOver(&Datatypes->DatatypeHashtable, DT, DatatypeIndex)
-          {
-            if (DT)
-            {
-              if (function_decl *FuncDecl = TryCastToFunctionDecl(Ctx, DT))
-              {
-                if (!StreamContains(&Excludes, FuncDecl->NameT->Value))
-                {
-                  Assert(FuncFunc.Args.Count == 1);
-                  FuncFunc.Args.Start[0] = ReplacementPattern(FuncFunc.Args.Start[0].Match, *DT);
-                  umm Depth = 0;
-                  counted_string Code = Execute(&FuncFunc, Ctx, Memory, &Depth);
-                  Append(&OutputBuilder, Code);
-                }
-              }
-            }
-          }
-        }
+        RequireToken(Parser, CTokenType_CloseParen);
+
 
         cs Code = Finalize(&OutputBuilder, Memory);
         cs OutfileName = GenerateOutfileNameFor(ToString(Directive), GetRandomString(8, umm(Hash(&Code)), Memory), Memory);

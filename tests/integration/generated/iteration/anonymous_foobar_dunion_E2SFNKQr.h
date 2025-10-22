@@ -3,7 +3,7 @@
 -- all members start --
 
 foobar_dunion_type Type 
-union (anonymous) (value unsupported for compound declaration types)
+union (anonymous) (value unsupported)
 
 -- all members end --
 
