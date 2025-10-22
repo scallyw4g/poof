@@ -1,4 +1,4 @@
-// ./poof/poof.h:665:0
+// ./poof/poof.h:666:0
 
 
 link_internal poof_index

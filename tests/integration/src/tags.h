@@ -140,7 +140,7 @@ poof(
 
 
 poof(
-  for_datatypes(all) @omit_include
+  for_datatypes(struct enum) @omit_include
 
   func (struct_t)
   {

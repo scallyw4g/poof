@@ -684,11 +684,10 @@ should work as expected for most cases, including through typedefs.
 
 :fire: for_datatypes
 
-Run provided callbacks for each datatype poof has parsed.  Does not fire for
-functions, but there will be a third callback added in the future
+Run provided callbacks for each datatype poof has parsed.
 
 ```
-poof( for_datatypes(all)
+poof( for_datatypes(struct enum)
     func (struct_t)
     {
       // This gets run for all structs and unions

@@ -1,4 +1,4 @@
-// ./poof/poof.h:995:0
+// ./poof/poof.h:996:0
 
 
 link_internal counted_string

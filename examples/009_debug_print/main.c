@@ -63,17 +63,6 @@ poof(
 #include <generated/d_union_my_discriminated_union.h>
 
 
-//
-// TODO(Jesse): Document this more thoroughly
-//
-// for_datatypes() takes a named_list of datatypes to iterate over, or the
-// symbolic constant `all` if you'd like it to iterate over every type in your
-// program.
-//
-// You can exclude types using the .exclude() operator and passing one or multiple named_lists
-//
-
-
 
 //
 // First we declare all the functions we're about to generate
@@ -88,7 +77,7 @@ poof(
 // void DebugPrint_the_enum_type(enum the_enum_type Enum);
 //
 poof(
-  for_datatypes(all)
+  for_datatypes(struct enum)
     func (TStruct)
     {
       void DebugPrint_(TStruct.name)(struct TStruct.name *Struct);
@@ -105,7 +94,7 @@ poof(
 // in our program.
 //
 poof(
-  for_datatypes(all) // TODO(Jesse): Probably wrap the callbacks in {} .. ?  The syntax here looks pretty weird 
+  for_datatypes(struct enum) // TODO(Jesse): Probably wrap the callbacks in {} .. ?  The syntax here looks pretty weird 
 
     func (TStruct)
     {
