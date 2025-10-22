@@ -1,5 +1,6 @@
 // ./include/bonsai_stdlib/src/primitives.h:234:0
 
+
 link_internal b32
 AreEqual( s64 E1, s64 E2 )
 {

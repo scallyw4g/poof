@@ -1,5 +1,6 @@
 // ./include/bonsai_stdlib/src/vector.h:785:0
 
+
 inline v3i
 operator&( v3i P1, v3i P2 )
 {

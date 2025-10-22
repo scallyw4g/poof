@@ -1,4 +1,5 @@
-// ./poof/poof.h:783:0
+// ./poof/poof.h:799:0
+
 
 struct macro_def_linked_list_node
 {
@@ -14,6 +15,7 @@ struct macro_def_hashtable
   /* OWNED_BY_THREAD_MEMBER() */
 };
 link_internal b32 AreEqual(macro_def_linked_list_node *Node1, macro_def_linked_list_node *Node2 );
+link_internal b32 AreEqual(macro_def *Element1, macro_def *Element2 );
 
 link_internal macro_def_linked_list_node *
 Allocate_macro_def_linked_list_node(memory_arena *Memory)
@@ -76,7 +78,7 @@ Insert(macro_def_linked_list_node *Node, macro_def_hashtable *Table)
   macro_def_linked_list_node **Bucket = Table->Elements + HashValue;
   while (*Bucket)
   {
-    /* Assert(!AreEqual(*Bucket, Node)); */
+    /* Assert(!AreEqual(&Bucket[0]->Element, &Node->Element)); */
     Bucket = &(*Bucket)->Next;
   }
   *Bucket = Node;

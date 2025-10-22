@@ -1,4 +1,4 @@
-// tests/integration/src/accessors.h:15:0
+// tests/integration/src/accessors.h:28:0
 
 isarray 
 0 foo

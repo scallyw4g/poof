@@ -1,5 +1,6 @@
 // ./include/bonsai_stdlib/src/counted_string.h:123:0
 
+
 struct counted_string_cursor
 {
   counted_string *Start;

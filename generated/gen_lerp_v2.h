@@ -1,5 +1,6 @@
 // ./include/bonsai_stdlib/src/vector.h:788:0
 
+
 inline v2
 Lerp(r32 t, v2 P1, v2 P2)
 {

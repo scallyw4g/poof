@@ -1640,7 +1640,7 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
                   datatype *D0 = ResolveNameToDatatype(Ctx, Scope, T0, Args, T0->Value);
                   datatype *D1 = ResolveNameToDatatype(Ctx, Scope, T1, Args, T1->Value);
 
-                  b32 DoTrueBranch = AreEqual(D0, D1);
+                  b32 DoTrueBranch = (D0->Type && D1->Type) && AreEqual(D0, D1);
                   DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, &OutputBuilder, Memory, Depth);
                   DidPoofOp = True;
                 }

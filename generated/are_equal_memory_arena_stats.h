@@ -1,5 +1,6 @@
 // ./include/bonsai_debug/debug.h:76:0
 
+
 link_internal b32
 AreEqual(memory_arena_stats *Thing1, memory_arena_stats *Thing2)
 {

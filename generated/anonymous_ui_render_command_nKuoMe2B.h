@@ -1,5 +1,6 @@
 // ./include/bonsai_stdlib/src/ui/ui.cpp:2475:0
 
+
 case type_ui_render_command_window_start:
 {
   Command->ui_render_command_window_start.Layout.At = {};

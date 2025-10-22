@@ -1,4 +1,5 @@
-// ./poof/poof.h:245:0
+// ./poof/poof.h:252:0
+
 
 link_internal counted_string
 ToStringPrefixless(type_qualifier Type)

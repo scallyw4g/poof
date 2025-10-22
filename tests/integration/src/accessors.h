@@ -1,5 +1,18 @@
 #include <tests/integration/src/common_structures.h>
 
+struct foo
+{
+};
+
+struct foo poof(@foo_tag(bar))
+{
+};
+
+
+poof( func (foo F) @omit_include { F.tag_value(foo_tag) } )
+// tests/integration/generated/accessors/anonymous_foo_5DPVctl0.h
+
+
 poof(
   func (bar_struct B) @omit_include
   {

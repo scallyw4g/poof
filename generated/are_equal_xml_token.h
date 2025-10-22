@@ -1,5 +1,6 @@
 // ./include/bonsai_stdlib/src/xml.cpp:1:0
 
+
 link_internal b32
 AreEqual(xml_token *Thing1, xml_token *Thing2)
 {

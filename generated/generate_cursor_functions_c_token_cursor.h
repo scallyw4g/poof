@@ -1,6 +1,7 @@
 // ./include/bonsai_stdlib/src/c_token.h:390:0
 
 
+
 link_internal c_token_cursor
 CTokenCursor(umm ElementCount, memory_arena* Memory)
 {

@@ -1,5 +1,6 @@
 // ./include/bonsai_stdlib/src/c_parser.cpp:1:0
 
+
 struct parser_linked_list_node
 {
   b32 Tombstoned;
@@ -14,6 +15,7 @@ struct parser_hashtable
   /* OWNED_BY_THREAD_MEMBER() */
 };
 link_internal b32 AreEqual(parser_linked_list_node *Node1, parser_linked_list_node *Node2 );
+link_internal b32 AreEqual(parser *Element1, parser *Element2 );
 
 link_internal parser_linked_list_node *
 Allocate_parser_linked_list_node(memory_arena *Memory)
@@ -76,7 +78,7 @@ Insert(parser_linked_list_node *Node, parser_hashtable *Table)
   parser_linked_list_node **Bucket = Table->Elements + HashValue;
   while (*Bucket)
   {
-    /* Assert(!AreEqual(*Bucket, Node)); */
+    /* Assert(!AreEqual(&Bucket[0]->Element, &Node->Element)); */
     Bucket = &(*Bucket)->Next;
   }
   *Bucket = Node;

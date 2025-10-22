@@ -1,5 +1,6 @@
 // ./include/bonsai_stdlib/src/file.cpp:11:0
 
+
 link_internal file_traversal_node_buffer
 Flatten(file_traversal_node_block_array *Array, memory_arena *Memory)
 {

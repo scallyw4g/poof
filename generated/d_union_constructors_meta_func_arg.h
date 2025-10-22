@@ -1,4 +1,5 @@
-// ./poof/poof.h:651:0
+// ./poof/poof.h:667:0
+
 
 
 link_internal meta_func_arg

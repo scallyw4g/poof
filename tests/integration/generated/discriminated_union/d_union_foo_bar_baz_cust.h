@@ -8,8 +8,8 @@ struct foo_bar_baz_cust
 
   union
   {
-    struct foo_bar_baz_cust_tag_foo foo_bar_baz_cust_tag_foo;
-    struct foo_bar_baz_cust_tag_bar foo_bar_baz_cust_tag_bar;
+    struct foo_bar_baz_cust_type_foo foo_bar_baz_cust_type_foo;
+    struct foo_bar_baz_cust_type_bar foo_bar_baz_cust_type_bar;
     struct foo foo;
     struct bar bar;
   };

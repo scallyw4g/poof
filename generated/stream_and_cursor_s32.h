@@ -1,5 +1,6 @@
 // ./include/bonsai_stdlib/src/binary_parser.cpp:36:0
 
+
 struct s32_cursor
 {
   s32 *Start;

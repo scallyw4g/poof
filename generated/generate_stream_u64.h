@@ -1,5 +1,6 @@
 // ./include/bonsai_stdlib/src/binary_parser.cpp:29:0
 
+
 struct u64_stream_chunk
 {
   u64 Element;

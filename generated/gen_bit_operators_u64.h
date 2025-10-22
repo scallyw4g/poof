@@ -1,5 +1,6 @@
 // ./include/bonsai_stdlib/src/bit_tricks.h:70:0
 
+
 link_internal u64
 UnsetLeastSignificantSetBit(u64 *Input)
 {

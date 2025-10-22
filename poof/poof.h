@@ -1,4 +1,5 @@
 
+
 enum d_union_flags
 {
   d_union_flag_none,
@@ -172,11 +173,17 @@ struct compound_decl // structs and unions
   b32 IsUnion;
 };
 
-link_internal b32 
-AreEqual(compound_decl D1, compound_decl D2)
+link_internal b32
+AreEqual(compound_decl *Thing0, compound_decl *Thing1)
 {
   NotImplemented;
   return False;
+}
+
+link_internal b32
+AreEqual(compound_decl Thing0, compound_decl Thing1)
+{
+  return AreEqual(&Thing0, &Thing1);
 }
 
 poof(stream_and_cursor(compound_decl))
@@ -355,11 +362,18 @@ struct enum_decl
   enum_member_stream Members; // = {&Global_PermMemory, 0, 0, 0};
 };
 
-link_internal b32 
-AreEqual(enum_decl D1, enum_decl D2)
+
+link_internal b32
+AreEqual(enum_decl *Thing0, enum_decl *Thing1)
 {
   NotImplemented;
   return False;
+}
+
+link_internal b32
+AreEqual(enum_decl Thing0, enum_decl Thing1)
+{
+  return AreEqual(&Thing0, &Thing1);
 }
 
 poof(stream_and_cursor(enum_decl))
@@ -380,11 +394,17 @@ poof(
 #include <generated/d_union_declaration.h>
 
 
-link_internal b32 
-AreEqual(declaration D1, declaration D2)
+link_internal b32
+AreEqual(declaration *Thing0, declaration *Thing1)
 {
   NotImplemented;
   return False;
+}
+
+link_internal b32
+AreEqual(declaration Thing0, declaration Thing1)
+{
+  return AreEqual(&Thing0, &Thing1);
 }
 
 poof(string_and_value_tables(declaration_type))
@@ -422,7 +442,6 @@ struct type_def
 };
 poof(generate_stream(type_def))
 #include <generated/generate_stream_type_def.h>
-
 
 struct datatype poof(@d_union)
 {
@@ -467,9 +486,6 @@ poof(dunion_debug_print(datatype))
 #include <generated/dunion_debug_print_datatype.h>
 
 link_internal umm Hash(datatype *D);
-
-poof(are_equal(datatype))
-#include <generated/are_equal_datatype.h>
 
 poof(hashtable(datatype))
 #include <generated/hashtable_datatype.h>
@@ -784,7 +800,7 @@ poof(hashtable(macro_def))
 #include <generated/hashtable_macro_def.h>
 
 
-#define DEFAULT_META_FUNC_HEADER_FORMAT_STRING CSz("// %S:%u:0\n\n")
+#define DEFAULT_META_FUNC_HEADER_FORMAT_STRING CSz("// %S:%u:0\n")
 
 struct meta_func
 {

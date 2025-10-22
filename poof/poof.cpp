@@ -1304,7 +1304,7 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena
           }
           else
           {
-            Upsert(T->Filename, &Ctx->Datatypes.FilesParsed, Memory);
+            Insert(T->Filename, &Ctx->Datatypes.FilesParsed, Memory);
           }
         }
 
@@ -1588,7 +1588,7 @@ PreprocessedParserForFile(parse_context *Ctx, counted_string Filename, token_cur
 
   if (Result && Result->ErrorCode == ParseErrorCode_None)
   {
-    Upsert(*Result, &Ctx->ParserHashtable, Ctx->Memory);
+    Insert(*Result, &Ctx->ParserHashtable, Ctx->Memory);
     if (RunPreprocessor(Ctx, Result, Parent, Ctx->Memory))
     {
       /* c_token_cursor Tmp = *Result->Tokens; */
@@ -2781,6 +2781,7 @@ Output( cs Header,
   if (TempFile.Handle)
   {
     b32 FileWritesSucceeded  = WriteToFile(&TempFile, Header);
+        FileWritesSucceeded &= WriteToFile(&TempFile, CS("\n"));
         FileWritesSucceeded &= WriteToFile(&TempFile, Code);
         FileWritesSucceeded &= WriteToFile(&TempFile, CS("\n"));
         FileWritesSucceeded &= CloseFile(&TempFile);
@@ -4882,7 +4883,7 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT, poof_tag_block_array *
           {
             Info("Pushed anonymous compound decl in (anonymous)");
           }
-          AnonymousDecl = Upsert(Datatype(&Member), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+          AnonymousDecl = Insert(Datatype(&Member), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
         }
 
         StoredMember = Push(&Result.Members, Member);
@@ -6341,21 +6342,9 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
 
             case type_variable_decl:
             {
-              // NOTE(Jesse): If we ever start tracking globally defined variables
-              // this'll matter, but for the moment it doesn't
               variable_decl *VD = SafeAccess(variable_decl, &Decl);
-              /* VD->Type.Datatype = DTPointer; */
-
-              /* DebugPrint(Decl); */
-              /* datatype BaseType = ResolveToBaseType(Ctx, &DeclDT); */
-              /* DebugPrint("---------------------\n"); */
-              /* DebugPrint(&DeclDT); */
-              /* DebugPrint(" :: basetype :: \n"); */
-              /* DebugPrint(&BaseType); */
-              /* DebugPrint("---------------------\n"); */
 
               MaybeEatAdditionalCommaSeperatedNames(Ctx);
-
               if (OptionalToken(Parser, CTokenType_Semicolon) == False)
               {
                 ParseError_ExpectedSemicolonEqualsCommaOrOpenBrace(Parser, PeekTokenPointer(Parser));
@@ -7111,6 +7100,64 @@ CopyStream(meta_func_arg_stream* Stream, memory_arena* Memory)
   return Result;
 }
 #endif
+
+link_internal b32
+AreEqual(datatype *Thing0, datatype *Thing1)
+{
+  Assert(Thing0 && Thing1);
+
+#if 1
+
+  memory_arena *Memory = GetTranArena();
+  cs S0 = GetNameForDatatype(Thing0, Memory);
+  cs S1 = GetNameForDatatype(Thing1, Memory);
+  b32 Result = StringsMatch(S0, S1);
+#else
+  b32 Result = False;
+
+  {
+    if (Thing0->Type == Thing1->Type)
+    {
+      tswitch(Thing0)
+      {
+        InvalidCase(type_datatype_noop);
+
+        {tmatch(declaration, Thing0, Unwrapped0)
+         auto Unwrapped1 = DynamicCast(declaration, Thing1);
+         Result = AreEqual(Unwrapped0, Unwrapped1);
+        } break;
+
+        {tmatch(enum_member, Thing0, Unwrapped0)
+         auto Unwrapped1 = DynamicCast(enum_member, Thing1);
+         Result = AreEqual(Unwrapped0, Unwrapped1);
+        } break;
+
+        {tmatch(type_def, Thing0, Unwrapped0)
+         auto Unwrapped1 = DynamicCast(type_def, Thing1);
+         Result = AreEqual(Unwrapped0, Unwrapped1);
+        } break;
+
+        {tmatch(primitive_def, Thing0, Unwrapped0)
+         auto Unwrapped1 = DynamicCast(primitive_def, Thing1);
+         Result = AreEqual(Unwrapped0, Unwrapped1);
+        } break;
+      }
+    }
+
+  }
+#endif
+
+  return Result;
+}
+
+link_internal b32
+AreEqual(datatype Thing0, datatype Thing1)
+{
+  return AreEqual(&Thing0, &Thing1);
+}
+
+
+
 
 link_internal counted_string
 PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)

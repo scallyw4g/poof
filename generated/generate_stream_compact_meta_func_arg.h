@@ -1,4 +1,5 @@
-// ./poof/poof.h:660:0
+// ./poof/poof.h:676:0
+
 
 link_internal meta_func_arg_buffer
 Compact(meta_func_arg_stream *Stream, memory_arena *PermMemory)
