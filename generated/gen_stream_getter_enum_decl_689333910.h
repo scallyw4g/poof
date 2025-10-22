@@ -1,4 +1,4 @@
-// poof/poof.cpp:1892:0
+// poof/poof.cpp:1893:0
 
 link_internal enum_decl*
 GetEnumDeclByNameT( enum_decl_stream* Stream,  c_token  NameT )

@@ -1420,8 +1420,8 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena
 
         if (Ctx)
         {
-          macro_def *Macro = GetByName(&Ctx->Datatypes.Macros, MacroNameT->Value);
-
+          datatype *D = GetDatatypeByName(&Ctx->Datatypes, MacroNameT->Value);
+          macro_def *Macro = DynamicCast(macro_def, D);
           if (Macro)
           {
             if (!Macro->Undefed)
@@ -1457,13 +1457,14 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena
           }
           else
           {
-            macro_def_linked_list_node *MacroNode = AllocateProtection(macro_def_linked_list_node, Ctx->Memory, 1, False);
-            Macro = &MacroNode->Element;
+            macro_def TmpM = { .NameT = MacroNameT };
+            auto TmpD = Datatype(&TmpM);
 
-            Macro->NameT = MacroNameT;
-            Insert(MacroNode, &Ctx->Datatypes.Macros);
+            datatype *MacroD = Insert(TmpD, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
+            Macro = DynamicCast(macro_def, MacroD);
           }
 
+          Assert(Macro);
           MacroNameT->Type = CT_MacroLiteral;
           MacroNameT->Macro.Def = Macro;
 
@@ -2038,6 +2039,7 @@ DatatypeIsVariableDecl(datatype *Data)
       /* InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); */
     } break;
 
+    case type_macro_def:
     case type_primitive_def:
     case type_enum_member:
     {
@@ -2082,6 +2084,7 @@ DatatypeIsFunction(parse_context *Ctx, parser *Scope, datatype *Data, c_token *M
   b32 Result = False;
   switch (Data->Type)
   {
+    case type_macro_def:
     case type_datatype_noop:
     case type_enum_member:
     case type_primitive_def:
@@ -2142,6 +2145,7 @@ DatatypeIsFunctionDecl(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_
   function_decl *Result = {};
   switch (Data->Type)
   {
+    case type_macro_def:
     case type_datatype_noop:
     case type_enum_member:
     case type_primitive_def:
@@ -2198,6 +2202,7 @@ DatatypeIsCompoundDecl(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_
   compound_decl *Result = {};
   switch (Data->Type)
   {
+    case type_macro_def:
     case type_datatype_noop:
     case type_enum_member:
     case type_primitive_def:
@@ -2274,6 +2279,7 @@ TryCastToEnumMember(parse_context *Ctx, datatype *Datatype)
   tswitch (Datatype)
   {
     case type_datatype_noop:
+    case type_macro_def:
     case type_primitive_def:
     case type_type_def:
     case type_declaration:
@@ -2297,6 +2303,7 @@ TryCastToEnumDecl(parse_context *Ctx, datatype *Datatype)
   tswitch (Datatype)
   {
     case type_datatype_noop:
+    case type_macro_def:
     case type_enum_member:
     case type_primitive_def:
     case type_type_def:
@@ -2339,6 +2346,7 @@ GetEnumDeclByName( parse_context *Ctx, counted_string Name )
   switch (Datatype->Type)
   {
     case type_datatype_noop:
+    case type_macro_def:
     case type_enum_member:
     case type_primitive_def:
     {
@@ -2639,21 +2647,19 @@ PrintToStdout(CSz(
           Warn("Custom define values are currently unsupported.  Please use `--define NAME` or `-D NAME` to set NAME=1");
         }
 
-        macro_def_linked_list_node *MacroNode = Allocate_macro_def_linked_list_node(Ctx->Memory);
-        macro_def *Macro = &MacroNode->Element;
-
-        Macro->Type = type_macro_keyword;
+        macro_def Macro = {};
+        Macro.Type = type_macro_keyword;
         c_token *MacroNameT = Allocate(c_token, Memory, 1);
 
-        Macro->NameT = MacroNameT;
-        Macro->NameT->Type = CT_MacroLiteral;
-        Macro->NameT->Value = MacroName;
+        Macro.NameT = MacroNameT;
+        Macro.NameT->Type = CT_MacroLiteral;
+        Macro.NameT->Value = MacroName;
 
-        CTokenCursor(&Macro->Body, 1, Memory, CSz("<CLI>"), TokenCursorSource_CommandLineOption, {0,0});
+        CTokenCursor(&Macro.Body, 1, Memory, CSz("<CLI>"), TokenCursorSource_CommandLineOption, {0,0});
 
-        Macro->Body.Start[0] = CToken(1u, CSz("1"));
+        Macro.Body.Start[0] = CToken(1u, CSz("1"));
 
-        Insert(MacroNode, &Ctx->Datatypes.Macros);
+        Insert(Datatype(&Macro), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
       }
       else
       {
@@ -4425,9 +4431,11 @@ link_internal macro_def *
 GetMacroDef(parse_context *Ctx, counted_string DefineValue)
 {
   /* TIMED_FUNCTION(); */
-  macro_def *Macro = GetByName(&Ctx->Datatypes.Macros, DefineValue);
+  datatype *D = GetDatatypeByName(&Ctx->Datatypes.DatatypeHashtable, DefineValue);
 
   macro_def *Result = 0;
+
+  macro_def *Macro = DynamicCast(macro_def, D);
   if ( Macro &&
       !Macro->Undefed )
   {
@@ -5912,19 +5920,22 @@ ParseExpression(parse_context *Ctx, ast_node_expression* Result)
               NotImplemented;
 
               // TODO(Jesse id: 264): Once we have proper macro expansion, this can be expanded and concatenated to the string as well.
-              macro_def *Macro = GetByName(&Ctx->Datatypes.Macros, NextT.Value);
-              switch(Macro->Type)
+              macro_def *Macro = GetMacroDef(Ctx, NextT.Value);
+              if (Macro)
               {
-                case type_macro_keyword:
+                switch(Macro->Type)
                 {
-                } break;
+                  case type_macro_keyword:
+                  {
+                  } break;
 
-                case type_macro_function:
-                {
-                  EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
-                } break;
+                  case type_macro_function:
+                  {
+                    EatBetween(Parser, CTokenType_OpenParen, CTokenType_CloseParen);
+                  } break;
 
-                case type_macro_noop: { InvalidCodePath(); } break;
+                  case type_macro_noop: { InvalidCodePath(); } break;
+                }
               }
             } break;
 
@@ -7250,6 +7261,7 @@ GetValueForDatatype(program_datatypes *Datatypes, datatype *Data, memory_arena *
       InvalidCodePath();
     } break;
 
+    case type_macro_def:
     case type_primitive_def:
     {
       Result = CSz("(value unsupported)");
@@ -7283,10 +7295,6 @@ GetValueForDatatype(program_datatypes *Datatypes, datatype *Data, memory_arena *
         } break;
 
         case type_enum_decl:
-        {
-          Result = CSz("(value unsupported)");
-        } break;
-
         case type_compound_decl:
         {
           Result = CSz("(value unsupported)");
@@ -7333,6 +7341,11 @@ GetNameTokenForDatatype(datatype *Data)
       // traverse the include graph
     } break;
 
+    case type_macro_def:
+    {
+      Result = Data->macro_def.NameT;
+    } break;
+
     case type_declaration:
     {
       Result = GetNameTokenForDecl(&Data->declaration);
@@ -7374,6 +7387,7 @@ GetNameForDatatype(datatype *Data, memory_arena *Memory)
       Result = Data->type_def.Alias;
     } break;
 
+    case type_macro_def:
     case type_enum_member:
     case type_declaration:
     {
@@ -7437,6 +7451,7 @@ GetIndirectionInfoForDatatype(program_datatypes *Datatypes, datatype *Data)
       }
     } break;
 
+    case type_macro_def:
     case type_enum_member:
     {
     } break;
@@ -7469,6 +7484,7 @@ GetTypeTypeForDatatype(datatype *Data, memory_arena *Memory)
   switch (Data->Type)
   {
     case type_datatype_noop:
+    case type_macro_def:
     case type_enum_member:
     case type_type_def:
     case type_primitive_def:
@@ -7515,6 +7531,11 @@ GetTypeNameFor(parse_context *Ctx, datatype *Data, typedef_resolution_behavior T
       }
     } break;
 
+    case type_macro_def:
+    {
+      Result = CSz("macro");
+    } break;
+
     case type_primitive_def:
     {
       NotImplemented;
@@ -7551,6 +7572,7 @@ DatatypeStaticBufferSize(parse_context *Ctx, parser *Scope, datatype *Data, c_to
     } break;
 
     case type_type_def:
+    case type_macro_def:
     case type_enum_member:
     case type_primitive_def:
     {
@@ -7660,6 +7682,7 @@ GetTagsFromDatatype(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_tok
     case type_datatype_noop: { if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); } } break;
 
 
+    case type_macro_def:
     case type_primitive_def:
     case type_type_def:
     {
@@ -7715,6 +7738,8 @@ DatatypeIsPointer(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token
   switch (Data->Type)
   {
     case type_datatype_noop: { if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); } } break;
+
+    case type_macro_def:
     case type_enum_member: {} break;
 
     case type_primitive_def:
@@ -7872,6 +7897,7 @@ ResolveToBaseType(program_datatypes *DataHash, datatype *Data)
       Result = ResolveToBaseType(DataHash, TDef->Type);
     } break;
 
+    case type_macro_def:
     case type_enum_member:
     case type_primitive_def:
     {

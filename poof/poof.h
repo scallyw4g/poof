@@ -477,8 +477,8 @@ struct macro_def
   b32 Undefed; // Gets toggled when we hit an undef
   b32 IsExpanding;
 };
-poof(generate_stream(macro_def))
-#include <generated/generate_stream_macro_def.h>
+/* poof(generate_stream(macro_def)) */
+/* #include <generated/generate_stream_macro_def.h> */
 
 link_internal u64
 Hash(macro_def *M)
@@ -634,6 +634,16 @@ Datatype(compound_decl *S)
   datatype Result = {};
   Result.Type = type_declaration;
   Result.declaration = Declaration(S);
+  return Result;
+}
+
+link_internal datatype
+Datatype(macro_def *E)
+{
+  datatype Result = {
+    .Type = type_macro_def,
+    .macro_def = *E,
+  };
   return Result;
 }
 
@@ -1026,7 +1036,6 @@ struct arguments
 struct program_datatypes
 {
   datatype_hashtable       DatatypeHashtable;
-  macro_def_hashtable      Macros;
   meta_func_stream         MetaFunctions;
 
   counted_string_hashtable FilesParsed;
@@ -1127,7 +1136,6 @@ AllocateParseContext(memory_arena *Memory)
   Ctx.ParserHashtable = Allocate_parser_hashtable(128, Memory);
   Ctx.Datatypes.FilesParsed = Allocate_counted_string_hashtable(512, Memory);
 
-  Ctx.Datatypes.Macros = Allocate_macro_def_hashtable(4096, Memory);
   Ctx.Datatypes.DatatypeHashtable = Allocate_datatype_hashtable(2048, Memory);
 
   Ctx.Datatypes.MetaFunctions = MetaFuncStream(Memory);

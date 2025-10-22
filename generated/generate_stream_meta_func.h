@@ -1,4 +1,4 @@
-// ./poof/poof.h:842:0
+// ./poof/poof.h:852:0
 
 struct meta_func_stream_chunk
 {

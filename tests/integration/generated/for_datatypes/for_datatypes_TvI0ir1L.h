@@ -165,6 +165,42 @@ struct members
 
 //
 
+name(MacroFunc)
+type(macro)
+value((value unsupported))
+array()
+hash(71ED0EB)
+indirection()
+tags()
+location(tests/integration/src/common_structures.h:4)
+
+
+
+
+
+
+
+
+//
+
+name(MacroIdentifier)
+type(macro)
+value((value unsupported))
+array()
+hash(132EA968)
+indirection()
+tags()
+location(tests/integration/src/common_structures.h:3)
+
+
+
+
+
+
+
+
+//
+
 name(typedefd_foofunc)
 type(foofunc)
 value(int )
@@ -596,6 +632,24 @@ location((unknown):-1)
 
 //
 
+name(upshift_by_31)
+type(macro)
+value((value unsupported))
+array()
+hash(2DA3F63A)
+indirection()
+tags()
+location(tests/integration/src/common_structures.h:34)
+
+
+
+
+
+
+
+
+//
+
 name(radians)
 type(r32)
 value((value unsupported))
@@ -673,6 +727,24 @@ function args
 {
   
 }
+
+
+
+
+
+
+//
+
+name(poof)
+type(macro)
+value((value unsupported))
+array()
+hash(9A798)
+indirection()
+tags()
+location(tests/integration/src/common_structures.h:1)
+
+
 
 
 

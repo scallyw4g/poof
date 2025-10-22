@@ -382,6 +382,11 @@ Map( parse_context *Ctx,
       InternalCompilerError(ParentScope, CSz("Infinite sadness"), MetaOperatorToken);
     } break;
 
+    case type_macro_def:
+    {
+      NotImplemented;
+    } break;
+
     case type_declaration:
     {
       declaration *Decl = SafeAccess(declaration, ReplaceData);
@@ -555,10 +560,11 @@ Map( parse_context *Ctx,
                   }
                 } break;
 
+                case type_macro_def:
                 case type_enum_member:
                 case type_type_def:
                 {
-                  InternalCompilerError(ParentScope, CSz("Got type_def or enum_member when resolving base type of a variable_decl during map_values"), MetaOperatorToken);
+                  InternalCompilerError(ParentScope, FSz("Got (%S) when resolving base type of a variable_decl during map_values", ToString(Base->Type)), MetaOperatorToken);
                 } break;
 
                 case type_primitive_def:
@@ -972,6 +978,7 @@ ResolveMetaOperator(        parse_context *Ctx,
             } break;
 
             case type_type_def:
+            case type_macro_def:
             case type_declaration:
             case type_enum_member:
             case type_primitive_def:
@@ -1077,6 +1084,7 @@ ResolveMetaOperator(        parse_context *Ctx,
 
             } break;
 
+            case type_macro_def:
             case type_primitive_def:
             {
             } break;
