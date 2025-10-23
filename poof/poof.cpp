@@ -2039,6 +2039,7 @@ DatatypeIsVariableDecl(datatype *Data)
       /* InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); */
     } break;
 
+    case type_meta_func:
     case type_macro_def:
     case type_primitive_def:
     case type_enum_member:
@@ -2084,6 +2085,7 @@ DatatypeIsFunction(parse_context *Ctx, parser *Scope, datatype *Data, c_token *M
   b32 Result = False;
   switch (Data->Type)
   {
+    case type_meta_func:
     case type_macro_def:
     case type_datatype_noop:
     case type_enum_member:
@@ -2145,6 +2147,7 @@ DatatypeIsFunctionDecl(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_
   function_decl *Result = {};
   switch (Data->Type)
   {
+    case type_meta_func:
     case type_macro_def:
     case type_datatype_noop:
     case type_enum_member:
@@ -2202,6 +2205,7 @@ DatatypeIsCompoundDecl(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_
   compound_decl *Result = {};
   switch (Data->Type)
   {
+    case type_meta_func:
     case type_macro_def:
     case type_datatype_noop:
     case type_enum_member:
@@ -2278,6 +2282,7 @@ TryCastToEnumMember(parse_context *Ctx, datatype *Datatype)
 
   tswitch (Datatype)
   {
+    case type_meta_func:
     case type_datatype_noop:
     case type_macro_def:
     case type_primitive_def:
@@ -2303,6 +2308,7 @@ TryCastToEnumDecl(parse_context *Ctx, datatype *Datatype)
   tswitch (Datatype)
   {
     case type_datatype_noop:
+    case type_meta_func:
     case type_macro_def:
     case type_enum_member:
     case type_primitive_def:
@@ -2346,6 +2352,7 @@ GetEnumDeclByName( parse_context *Ctx, counted_string Name )
   switch (Datatype->Type)
   {
     case type_datatype_noop:
+    case type_meta_func:
     case type_macro_def:
     case type_enum_member:
     case type_primitive_def:
@@ -6802,7 +6809,7 @@ ToString(parse_context *Ctx, meta_func_arg *Arg, memory_arena *Memory)
     case type_datatype:
     {
       /* Result = GetTypeNameFor(Ctx, &Arg->datatype, TypedefResoultion_DoNotResolveTypedefs, Memory); */
-      Result = GetNameForDatatype(&Arg->datatype, Memory);
+      Result = GetNameForDatatype(Arg->datatype, Memory);
     } break;
 
     case type_poof_index:
@@ -7074,7 +7081,7 @@ MetaFuncArg(parse_context *Ctx, poof_tag Tag, cs Match)
     if (D->Type)
     {
       Result.Type = type_datatype;
-      Result.datatype = *D;
+      Result.datatype = D;
     }
   }
 
@@ -7112,7 +7119,7 @@ ReplacementPattern(counted_string Match, poof_index Index)
 }
 
 link_internal meta_func_arg
-ReplacementPattern(counted_string Match, datatype Data)
+ReplacementPattern(counted_string Match, datatype *Data)
 {
   meta_func_arg Result = MetaFuncArg(Data, Match);
   Result.Match = Match;
@@ -7262,6 +7269,7 @@ GetValueForDatatype(program_datatypes *Datatypes, datatype *Data, memory_arena *
     } break;
 
     case type_macro_def:
+    case type_meta_func:
     case type_primitive_def:
     {
       Result = CSz("(value unsupported)");
@@ -7341,6 +7349,11 @@ GetNameTokenForDatatype(datatype *Data)
       // traverse the include graph
     } break;
 
+    case type_meta_func:
+    {
+      Result = Data->meta_func.SourceToken;
+    } break;
+
     case type_macro_def:
     {
       Result = Data->macro_def.NameT;
@@ -7387,6 +7400,7 @@ GetNameForDatatype(datatype *Data, memory_arena *Memory)
       Result = Data->type_def.Alias;
     } break;
 
+    case type_meta_func:
     case type_macro_def:
     case type_enum_member:
     case type_declaration:
@@ -7452,6 +7466,7 @@ GetIndirectionInfoForDatatype(program_datatypes *Datatypes, datatype *Data)
     } break;
 
     case type_macro_def:
+    case type_meta_func:
     case type_enum_member:
     {
     } break;
@@ -7484,6 +7499,7 @@ GetTypeTypeForDatatype(datatype *Data, memory_arena *Memory)
   switch (Data->Type)
   {
     case type_datatype_noop:
+    case type_meta_func:
     case type_macro_def:
     case type_enum_member:
     case type_type_def:
@@ -7531,6 +7547,11 @@ GetTypeNameFor(parse_context *Ctx, datatype *Data, typedef_resolution_behavior T
       }
     } break;
 
+    case type_meta_func:
+    {
+      Result = CSz("meta_func");
+    } break;
+
     case type_macro_def:
     {
       Result = CSz("macro");
@@ -7572,6 +7593,7 @@ DatatypeStaticBufferSize(parse_context *Ctx, parser *Scope, datatype *Data, c_to
     } break;
 
     case type_type_def:
+    case type_meta_func:
     case type_macro_def:
     case type_enum_member:
     case type_primitive_def:
@@ -7682,6 +7704,11 @@ GetTagsFromDatatype(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_tok
     case type_datatype_noop: { if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); } } break;
 
 
+    case type_meta_func:
+    {
+      NotImplemented;
+    } break;
+
     case type_macro_def:
     case type_primitive_def:
     case type_type_def:
@@ -7739,6 +7766,7 @@ DatatypeIsPointer(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token
   {
     case type_datatype_noop: { if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); } } break;
 
+    case type_meta_func:
     case type_macro_def:
     case type_enum_member: {} break;
 
@@ -7897,6 +7925,7 @@ ResolveToBaseType(program_datatypes *DataHash, datatype *Data)
       Result = ResolveToBaseType(DataHash, TDef->Type);
     } break;
 
+    case type_meta_func:
     case type_macro_def:
     case type_enum_member:
     case type_primitive_def:
@@ -8101,7 +8130,7 @@ ResolveNameToDatatype(parse_context *Ctx, parser *Scope, c_token *Token, meta_fu
   {
     if (A0->Type == type_datatype)
     {
-      Result = &A0->datatype;
+      Result = A0->datatype;
     }
     else
     {
@@ -8186,7 +8215,7 @@ ParseAndTypecheckArgument(parse_context *Ctx, parser *Parser, meta_func_arg *Par
           if (Datatype->Type)
           {
             ParsedArg->Type = type_datatype;
-            ParsedArg->datatype = *Datatype;
+            ParsedArg->datatype = Datatype;
           }
           else if (meta_func_arg *ScopedArg = GetByMatch(CurrentScope, Token->Value))
           {
@@ -8332,8 +8361,11 @@ ParseMapMetaFunctionInstance(parser* Parser, cs FuncName, memory_arena *Memory)
   u32 ArgCount = T2 ? 2 : 1;
   meta_func_arg_buffer Args = MetaFuncArgBuffer(ArgCount, Memory);
 
-  Args.Start[0] = ReplacementPattern(T1.Value, Datatype());
-  if (T2) { SetLast(&Args, ReplacementPattern(T2->Value, PoofIndex(0,0))); }
+  Args.Start[0] = ReplacementPattern(T1.Value, Cast(datatype*, 0));
+  if (T2)
+  {
+    SetLast(&Args, ReplacementPattern(T2->Value, PoofIndex(0,0)));
+  }
 
   meta_func Func = {
     .Name = FuncName,

@@ -196,7 +196,7 @@ struct declaration_stream
 
 struct compound_decl // structs and unions
 {
-  c_token *Type;
+  c_token *Type; // TODO(Jesse): Rename to NameT
   declaration_stream Members;
   b32 IsUnion;
 };
@@ -503,10 +503,155 @@ enum datatype_type
   type_type_def,
   type_primitive_def,
   type_macro_def,
+  type_meta_func,
 };
 
 poof(generate_string_table(datatype_type))
 #include <generated/generate_string_table_datatype_type.h>
+
+
+struct poof_index
+{
+  u32 Index;
+  u32 MaxIndex;
+};
+
+poof(gen_constructor(poof_index))
+#include <generated/gen_constructor_poof_index.h>
+
+
+struct poof_symbol
+{
+  cs Value;
+};
+poof(gen_constructor(poof_symbol))
+#include <generated/gen_constructor_poof_symbol.h>
+
+
+/* poof( */
+/*   d_union meta_func_arg */
+/*   { */
+/*     datatype */
+/*     poof_index */
+/*     poof_symbol */
+/*   }, */
+/*   { */
+/*     counted_string Match; */
+/*   } */
+/* ) */
+/* #include <generated/d_union_meta_func_arg.h> */
+
+enum meta_func_arg_type
+{
+  type_meta_func_arg_noop,
+  type_datatype,
+  type_poof_index,
+  type_poof_symbol,
+};
+
+struct meta_func_arg
+{
+  enum meta_func_arg_type Type;
+  counted_string Match;
+
+  union
+  {
+    struct    datatype *datatype;
+    struct  poof_index  poof_index;
+    struct poof_symbol  poof_symbol;
+  };
+};
+
+
+
+poof(string_and_value_tables(meta_func_arg_type))
+#include <generated/string_and_value_tables_meta_func_arg_type.h>
+
+/* poof(d_union_constructors(meta_func_arg)) */
+/* #include <generated/d_union_constructors_meta_func_arg.h> */
+
+link_internal meta_func_arg
+MetaFuncArg( datatype *A   , counted_string Match   )
+{
+  meta_func_arg Result = {
+    .Type = type_datatype,
+    .datatype = A,
+
+       .Match = Match   ,
+
+  };
+  return Result;
+}
+
+link_internal meta_func_arg
+MetaFuncArg( poof_index A   , counted_string Match   )
+{
+  meta_func_arg Result = {
+    .Type = type_poof_index,
+    .poof_index = A,
+
+       .Match = Match   ,
+
+  };
+  return Result;
+}
+
+link_internal meta_func_arg
+MetaFuncArg( poof_symbol A   , counted_string Match   )
+{
+  meta_func_arg Result = {
+    .Type = type_poof_symbol,
+    .poof_symbol = A,
+
+       .Match = Match   ,
+
+  };
+  return Result;
+}
+
+
+
+
+poof(generate_stream(meta_func_arg))
+#include <generated/generate_stream_meta_func_arg.h>
+
+poof(buffer(meta_func_arg))
+#include <generated/buffer_meta_func_arg.h>
+
+poof(generate_stream_compact(meta_func_arg))
+#include <generated/generate_stream_compact_meta_func_arg.h>
+
+link_internal meta_func_arg
+MetaFuncArg(parse_context *Ctx, poof_tag Tag);
+
+struct meta_func
+{
+  cs Name;
+  c_token *SourceToken;
+  meta_func_arg_buffer Args;
+  parser Body;
+  meta_func_directive Directives;
+  cs HeaderFormatString;
+};
+
+poof(generate_stream(meta_func))
+#include <generated/generate_stream_meta_func.h>
+
+poof(gen_constructor(meta_func))
+#include <generated/gen_constructor_meta_func.h>
+
+link_internal meta_func
+MetaFunc(cs Name, meta_func_arg_buffer Args)
+{
+  meta_func Reuslt = {
+    .Name = Name,
+    .Args = Args,
+    .Body = {},
+    .Directives = {},
+  };
+  return Reuslt;
+}
+
 
 struct datatype poof(@d_union)
 {
@@ -519,6 +664,7 @@ struct datatype poof(@d_union)
     enum_member    enum_member;
     type_def       type_def;
     macro_def      macro_def;
+    meta_func      meta_func;
   };
 };
 
@@ -648,7 +794,17 @@ Datatype(macro_def *E)
 }
 
 link_internal datatype
-Datatype(type_def* E)
+Datatype(meta_func *E)
+{
+  datatype Result = {
+    .Type = type_meta_func,
+    .meta_func = *E,
+  };
+  return Result;
+}
+
+link_internal datatype
+Datatype(type_def *E)
 {
   datatype Result = {
     .Type = type_type_def,
@@ -705,55 +861,6 @@ Datatype(type_spec S)
 #endif
 
 
-struct poof_index
-{
-  u32 Index;
-  u32 MaxIndex;
-};
-
-poof(gen_constructor(poof_index))
-#include <generated/gen_constructor_poof_index.h>
-
-
-struct poof_symbol
-{
-  cs Value;
-};
-poof(gen_constructor(poof_symbol))
-#include <generated/gen_constructor_poof_symbol.h>
-
-
-
-poof(
-  d_union meta_func_arg
-  {
-    datatype // TODO(Jesse): Change to pointer
-    poof_index
-    poof_symbol
-  },
-  {
-    counted_string Match;
-  }
-)
-#include <generated/d_union_meta_func_arg.h>
-
-poof(string_and_value_tables(meta_func_arg_type))
-#include <generated/string_and_value_tables_meta_func_arg_type.h>
-
-poof(d_union_constructors(meta_func_arg))
-#include <generated/d_union_constructors_meta_func_arg.h>
-
-poof(generate_stream(meta_func_arg))
-#include <generated/generate_stream_meta_func_arg.h>
-
-poof(buffer(meta_func_arg))
-#include <generated/buffer_meta_func_arg.h>
-
-poof(generate_stream_compact(meta_func_arg))
-#include <generated/generate_stream_compact_meta_func_arg.h>
-
-link_internal meta_func_arg
-MetaFuncArg(parse_context *Ctx, poof_tag Tag);
 
 // TODO(Jesse)(metaprogramming): Generate this!  There's a bunch of this kind
 // of code that could be generated.  I think some functions I wrote by hand are
@@ -838,34 +945,6 @@ struct d_union_decl
 
   counted_string CustomEnumType;
 };
-
-#define DEFAULT_META_FUNC_HEADER_FORMAT_STRING CSz("// %S:%u:0\n")
-
-struct meta_func
-{
-  cs Name;
-  meta_func_arg_buffer Args;
-  parser Body;
-  meta_func_directive Directives;
-  cs HeaderFormatString = DEFAULT_META_FUNC_HEADER_FORMAT_STRING;
-};
-poof(generate_stream(meta_func))
-#include <generated/generate_stream_meta_func.h>
-
-poof(gen_constructor(meta_func))
-#include <generated/gen_constructor_meta_func.h>
-
-link_internal meta_func
-MetaFunc(cs Name, meta_func_arg_buffer Args)
-{
-  meta_func Reuslt = {
-    .Name = Name,
-    .Args = Args,
-    .Body = {},
-    .Directives = {},
-  };
-  return Reuslt;
-}
 
 
 struct todo

@@ -1,3 +1,4 @@
+#define DEFAULT_META_FUNC_HEADER_FORMAT_STRING CSz("// %S:%u:0\n")
 
 link_internal c_token
 NormalizeWhitespaceTokens(c_token *T, c_token* PrevT, c_token *NextT, umm *Depth)
@@ -140,8 +141,9 @@ MapFunctionDeclArgs(parse_context *Ctx, function_decl *FuncDecl, meta_func *Meta
     Rewind(MetaF->Body.Tokens);
 
     variable_decl *Arg = GET_ELEMENT(Iter);
-    auto D = Declaration(Arg);
-    SetLast(&NewArgs, ReplacementPattern(*EnumValueMatch, Datatype(&D)));
+    auto Decl = Declaration(Arg);
+    auto Data = Datatype(&Decl);
+    SetLast(&NewArgs, ReplacementPattern(*EnumValueMatch, &Data));
 
     cs Output = Execute(MetaF, &NewArgs, Ctx, Memory, Depth);
     if (MetaF->Body.ErrorCode)
@@ -188,7 +190,8 @@ MapEnumValues(parse_context *Ctx, enum_decl *Enum, meta_func *MetaF, cs *EnumVal
     Rewind(MetaF->Body.Tokens);
 
     enum_member* EnumMember = GET_ELEMENT(Iter);
-    SetLast(&NewArgs, ReplacementPattern(*EnumValueMatch, Datatype(EnumMember)));
+    auto Data = Datatype(EnumMember);
+    SetLast(&NewArgs, ReplacementPattern(*EnumValueMatch, &Data));
 
     counted_string EnumFieldOutput = Execute(MetaF, &NewArgs, Ctx, Memory, Depth);
     if (MetaF->Body.ErrorCode)
@@ -250,7 +253,7 @@ MaybeParseSepOperator(parser *Scope)
 link_internal counted_string
 Execute(parser *Scope, meta_func_arg_buffer *Args, parse_context *Ctx, memory_arena *Memory, umm *Depth)
 {
-   meta_func F = MetaFunc(CSz("(anonymous)"), *Args, *Scope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
+   meta_func F = MetaFunc(CSz("(anonymous)"), 0, *Args, *Scope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
    cs Result = Execute(&F, Ctx, Memory, Depth);
    if (F.Body.ErrorCode)
    {
@@ -324,7 +327,8 @@ MapCompoundDeclMembers(parse_context *Ctx, parser *ParentScope, parser *MapScope
           Rewind(MapScope->Tokens);
 
           meta_func_arg_buffer NewArgs = ExtendBuffer(Args, 1, Memory);
-          SetLast(&NewArgs, ReplacementPattern(*MatchValue, Datatype(Member)));
+          auto Data = Datatype(Member);
+          SetLast(&NewArgs, ReplacementPattern(*MatchValue, &Data));
 
           counted_string StructFieldOutput = Execute(MapScope, &NewArgs, Ctx, Memory, Depth);
           if (MapScope->ErrorCode)
@@ -382,6 +386,7 @@ Map( parse_context *Ctx,
       InternalCompilerError(ParentScope, CSz("Infinite sadness"), MetaOperatorToken);
     } break;
 
+    case type_meta_func:
     case type_macro_def:
     {
       NotImplemented;
@@ -403,7 +408,7 @@ Map( parse_context *Ctx,
           if (Operator == map || Operator == map_args)
           {
             auto FuncDecl = SafeAccess(function_decl, Decl);
-            meta_func MetaF = MetaFunc(CSz("map_function_decl_args"), *Args, *MapScope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
+            meta_func MetaF = MetaFunc(CSz("map_function_decl_args"), 0, *Args, *MapScope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
 
             maybe_counted_string MapResult = MapFunctionDeclArgs(Ctx, FuncDecl, &MetaF, MatchValue, Sep, Memory, Depth);
             if (MapResult.Error)
@@ -430,7 +435,7 @@ Map( parse_context *Ctx,
           if (Operator == map || Operator == map_values)
           {
             auto EnumDecl = SafeAccess(enum_decl, Decl);
-            meta_func MetaF = MetaFunc(CSz("map_enum_values"), *Args, *MapScope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
+            meta_func MetaF = MetaFunc(CSz("map_enum_values"), 0, *Args, *MapScope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
 
             maybe_counted_string MapResult = MapEnumValues(Ctx, EnumDecl, &MetaF, MatchValue, Sep, Memory, Depth);
             if (MapResult.Error)
@@ -538,7 +543,7 @@ Map( parse_context *Ctx,
                   if (BaseDecl->Type == type_enum_decl)
                   {
                     auto EnumDecl = SafeAccess(enum_decl, BaseDecl);
-                    meta_func MetaF = MetaFunc(CSz("map_enum_values"), *Args, *MapScope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
+                    meta_func MetaF = MetaFunc(CSz("map_enum_values"), 0, *Args, *MapScope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
                     maybe_counted_string MapResult = MapEnumValues(Ctx, EnumDecl, &MetaF, MatchValue, Sep, Memory, Depth);
                     if (MapResult.Error)
                     {
@@ -561,6 +566,7 @@ Map( parse_context *Ctx,
                 } break;
 
                 case type_macro_def:
+                case type_meta_func:
                 case type_enum_member:
                 case type_type_def:
                 {
@@ -773,7 +779,7 @@ ResolveMetaOperator(        parse_context *Ctx,
               datatype *D = GetDatatypeByName(&Ctx->Datatypes, MapToken->Value);
               if (D->Type)
               {
-                SetLast(&NewArgs, ReplacementPattern(A0->Match, *D));
+                SetLast(&NewArgs, ReplacementPattern(A0->Match, D));
               }
               else
               {
@@ -978,6 +984,7 @@ ResolveMetaOperator(        parse_context *Ctx,
             } break;
 
             case type_type_def:
+            case type_meta_func:
             case type_macro_def:
             case type_declaration:
             case type_enum_member:
@@ -1084,6 +1091,7 @@ ResolveMetaOperator(        parse_context *Ctx,
 
             } break;
 
+            case type_meta_func:
             case type_macro_def:
             case type_primitive_def:
             {
@@ -1290,7 +1298,7 @@ ResolveMetaOperator(        parse_context *Ctx,
 
         case type:
         {
-          counted_string TypeName = GetTypeNameFor(Ctx, ReplaceData, TypedefResoultion_ResolveTypedefs, Memory);
+          cs TypeName = GetTypeNameFor(Ctx, ReplaceData, TypedefResoultion_ResolveTypedefs, Memory);
           Append(OutputBuilder, TypeName);
         } break;
 
@@ -1424,7 +1432,8 @@ ResolveMetaOperator(        parse_context *Ctx,
               /* Push(&NewArgs, ReplacementPattern(MatchPattern, Datatype(&TargetMember->Element))); */
 
               meta_func_arg_buffer NewArgs = ExtendBuffer(Args, 1, Memory);
-              SetLast(&NewArgs, ReplacementPattern(MatchPattern, Datatype(&TargetMember->Element)));
+              auto Data = Datatype(&TargetMember->Element);
+              SetLast(&NewArgs, ReplacementPattern(MatchPattern, &Data));
 
               counted_string StructFieldOutput = Execute(&MemberScope, &NewArgs, Ctx, Memory, Depth);
               if (MemberScope.ErrorCode)
@@ -1613,14 +1622,14 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
 
               parser ExpansionContext = EatUntilExcluding_Parser(Scope, CTokenType_Newline, GetTranArena());
 
-              meta_func ExpansionFunc = MetaFunc(CSz(""), *Args, ExpansionContext, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
+              meta_func ExpansionFunc = MetaFunc(CSz("todo(jesse): name this"), 0, *Args, ExpansionContext, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
               cs Expanded = Execute(&ExpansionFunc, Args, Ctx, Memory, Depth);
 
               meta_func_arg_buffer NewArgs = ExtendBuffer(Args, 1, Memory);
               datatype *D = ResolveNameToDatatype(Ctx, Scope, ExpansionFunc.Body.Tokens->Start, Args, Expanded);
               if (D->Type)
               {
-                SetLast(&NewArgs, ReplacementPattern(NewName, *D));
+                SetLast(&NewArgs, ReplacementPattern(NewName, D));
               }
               else
               {
@@ -1926,7 +1935,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         if (ArgDatatype->Type)
         {
           auto Args = MetaFuncArgBuffer(1, Memory);
-          Args.Start[0] = ReplacementPattern(ArgName, *ArgDatatype);
+          Args.Start[0] = ReplacementPattern(ArgName, ArgDatatype);
           umm Depth = 0;
           counted_string Code = Execute(&Func, &Args, Ctx, Memory, &Depth);
           RequireToken(Parser, CTokenType_CloseParen);
@@ -2139,7 +2148,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
                 if (DoFunc)
                 {
                   Assert(ThisFunc->Args.Count == 1);
-                  ThisFunc->Args.Start[0] = ReplacementPattern(ThisFunc->Args.Start[0].Match, *DT);
+                  ThisFunc->Args.Start[0] = ReplacementPattern(ThisFunc->Args.Start[0].Match, DT);
                   umm Depth = 0;
                   counted_string Code = Execute(ThisFunc, Ctx, Memory, &Depth);
                   Append(&OutputBuilder, Code);
