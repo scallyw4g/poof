@@ -14,11 +14,12 @@ link_internal declaration_cursor
 DeclarationCursor(umm ElementCount, memory_arena* Memory)
 {
   declaration *Start = (declaration*)PushStruct(Memory, sizeof(declaration)*ElementCount, 1, 0);
-  declaration_cursor Result = {
-    .Start = Start,
-    .End = Start+ElementCount,
-    .At = Start,
-  };
+  declaration_cursor Result = {};
+
+  Result.Start = Start;
+  Result.End = Start+ElementCount;
+  Result.At = Start;
+
   return Result;
 }
 

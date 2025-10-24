@@ -1,4 +1,4 @@
-// ./include/bonsai_stdlib/src/counted_string.cpp:18:0
+// ./include/bonsai_stdlib/src/counted_string.cpp:22:0
 
 struct counted_string_buffer
 {

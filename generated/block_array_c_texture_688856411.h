@@ -4,11 +4,11 @@
 
 
 
-link_internal cs
-CS( texture_block_array_index Index )
-{
-  return FSz("(%u)", Index.Index);
-}
+/* link_internal cs */
+/* CS( index_t Index ) */
+/* { */
+/*   return FSz("(%u)", Index.Index); */
+/* } */
 
 link_internal texture *
 Set( texture_block_array *Arr,

@@ -23,11 +23,11 @@
 
 # INTEGRATION_TEST_INDEX=7 \
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug" \
-# ./make.sh RunIntegrationTests
+./make.sh RunIntegrationTests
 
 # ./make.sh BuildDebugSystem
 
-./make.sh RunIntegrationTests
+# ./make.sh RunIntegrationTests
 # ./make.sh BuildAndRunAllExamples
 
 # ./make.sh BuildPoofEmcc

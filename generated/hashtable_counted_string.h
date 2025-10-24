@@ -1,4 +1,4 @@
-// ./include/bonsai_stdlib/src/counted_string.cpp:26:0
+// ./include/bonsai_stdlib/src/counted_string.cpp:30:0
 
 struct counted_string_linked_list_node
 {

@@ -14,11 +14,12 @@ link_internal compound_decl_cursor
 CompoundDeclCursor(umm ElementCount, memory_arena* Memory)
 {
   compound_decl *Start = (compound_decl*)PushStruct(Memory, sizeof(compound_decl)*ElementCount, 1, 0);
-  compound_decl_cursor Result = {
-    .Start = Start,
-    .End = Start+ElementCount,
-    .At = Start,
-  };
+  compound_decl_cursor Result = {};
+
+  Result.Start = Start;
+  Result.End = Start+ElementCount;
+  Result.At = Start;
+
   return Result;
 }
 

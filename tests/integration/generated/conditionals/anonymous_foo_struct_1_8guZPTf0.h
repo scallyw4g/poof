@@ -1,5 +1,4 @@
 // tests/integration/src/conditionals.h:5:0
-
 int  first not enum
 
 int  second not enum
@@ -77,4 +76,6 @@ func_type_name AnotherFunc not enum
 func_type_name AnotherFunc not enum
 
 u32 NamedThing not enum
+
+
 

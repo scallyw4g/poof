@@ -16,7 +16,7 @@ poof(
 )
 
 poof(
-  for_datatypes(all) @code_fragment
+  for_datatypes(all) @code_fragment @omit_include
   func (Type)
   {
     print_type_data(Type)
@@ -58,11 +58,11 @@ poof(
 
   }
 )
-#include <tests/integration/generated/for_datatypes/for_datatypes_TvI0ir1L.h>
+// tests/integration/generated/for_datatypes/for_datatypes_a8HasR36.h
 
 
 poof(
-  for_datatypes(struct enum func) @code_fragment
+  for_datatypes(struct enum func) @code_fragment @omit_include
 
   func (struct_t)
   {
@@ -79,32 +79,32 @@ poof(
     func_t.name func_t.is_function? { pass } { fail }
   }
 )
-#include <tests/integration/generated/for_datatypes/for_datatypes_eF0cqh5M.h>
+// tests/integration/generated/for_datatypes/for_datatypes_LpiQmVs9.h
 
 poof(
-  for_datatypes(struct) @code_fragment
+  for_datatypes(struct) @code_fragment @omit_include
   func (struct_t)
   {
     struct_t.name struct_t.is_struct? { pass } { fail }
   }
 )
-#include <tests/integration/generated/for_datatypes/for_datatypes_SdT7l23L.h>
+// tests/integration/generated/for_datatypes/for_datatypes_SdT7l23L.h
 
 poof(
-  for_datatypes(enum) @code_fragment
+  for_datatypes(enum) @code_fragment @omit_include
   func (enum_t)
   {
     enum_t.name enum_t.is_enum? { pass } { fail }
   }
 )
-#include <tests/integration/generated/for_datatypes/for_datatypes_JGEIc02V.h>
+// tests/integration/generated/for_datatypes/for_datatypes_JGEIc02V.h
 
 poof(
-  for_datatypes(func) @code_fragment
+  for_datatypes(func) @code_fragment @omit_include
   func (func_t)
   {
     func_t.name func_t.is_function? { pass } { fail }
   }
 )
-#include <tests/integration/generated/for_datatypes/for_datatypes_lTJHCJfY.h>
+// tests/integration/generated/for_datatypes/for_datatypes_lTJHCJfY.h
 

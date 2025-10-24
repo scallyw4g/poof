@@ -1,9 +1,36 @@
 // ./include/bonsai_stdlib/src/bitmap.cpp:76:0
 
+link_internal b32
+IsValid(bitmap_compression_type Value)
+{
+  b32 Result = False;
+  switch (Value)
+  {
+        case BitmapCompressionType_RGB:
+    case BitmapCompressionType_RLE8:
+    case BitmapCompressionType_RLE4:
+    case BitmapCompressionType_BITFIELDS:
+    case BitmapCompressionType_JPEG:
+    case BitmapCompressionType_PNG:
+    case BitmapCompressionType_ALPHABITFIELDS:
+    case BitmapCompressionType_CMYK:
+    case BitmapCompressionType_CMYKRLE8:
+    case BitmapCompressionType_CMYKRLE4:
+    {
+      Result = True;
+    }
+  }
+  return Result;
+}
+
+
+
 link_internal counted_string
 ToStringPrefixless(bitmap_compression_type Type)
 {
+  Assert(IsValid(Type));
   counted_string Result = {};
+
   switch (Type)
   {
         case BitmapCompressionType_RGB: { Result = CSz("RGB"); } break;
@@ -19,13 +46,15 @@ ToStringPrefixless(bitmap_compression_type Type)
 
     
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 
 link_internal counted_string
 ToString(bitmap_compression_type Type)
 {
+  Assert(IsValid(Type));
+
   counted_string Result = {};
   switch (Type)
   {
@@ -42,7 +71,7 @@ ToString(bitmap_compression_type Type)
 
     
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 

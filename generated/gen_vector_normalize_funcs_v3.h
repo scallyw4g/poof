@@ -1,4 +1,4 @@
-// ./include/bonsai_stdlib/src/vector.h:817:0
+// ./include/bonsai_stdlib/src/vector.h:814:0
 
 inline v3
 Normalize( v3 Vec, r32 Length)

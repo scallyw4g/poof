@@ -1,5 +1,4 @@
 // tests/integration/src/for_datatypes.h:19:0
-
 name(foofunc2)
 type((function))
 value(foo_enum)
@@ -100,7 +99,26 @@ enum values
   foo_enum_value_1 foo_enum_value_1 = 'a' 
   foo_enum_value_2 foo_enum_value_2 = (1 << 31) 
   foo_enum_value_3 foo_enum_value_3 
+
 }
+
+
+//
+
+name(print_type_data)
+type(meta_func)
+value((value unsupported))
+array()
+hash(163648B1)
+indirection()
+tags()
+location(tests/integration/src/for_datatypes.h:5)
+
+
+
+
+
+
 
 
 //
@@ -158,6 +176,7 @@ struct members
   func_type_name **AnotherFunc
   func_type_name **AnotherFunc
   u32 NamedThing
+
 }
 
 
@@ -201,6 +220,24 @@ location(tests/integration/src/common_structures.h:3)
 
 //
 
+name(poof_noop)
+type(meta_func)
+value((value unsupported))
+array()
+hash(2B1EFA62)
+indirection()
+tags()
+location(tests/integration/src/common_structures.h:170)
+
+
+
+
+
+
+
+
+//
+
 name(typedefd_foofunc)
 type(foofunc)
 value(int )
@@ -216,6 +253,7 @@ function args
     int  foo
   void  *bar
   thing **baz
+
 }
 
 
@@ -323,6 +361,7 @@ struct members
     int  a1
   u64 a2
   void  *a3
+
 }
 
 
@@ -697,7 +736,7 @@ array()
 hash(3B2926CC)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:175)
+location(tests/integration/src/common_structures.h:173)
 
 
 
@@ -768,6 +807,7 @@ function args
     int  foo
   void  *bar
   thing **baz
+
 }
 
 
@@ -784,7 +824,7 @@ array()
 hash(1B207F9)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:183)
+location(tests/integration/src/common_structures.h:181)
 
 
 
@@ -793,6 +833,7 @@ struct members
 {
     int  foo
   float  bar
+
 }
 
 

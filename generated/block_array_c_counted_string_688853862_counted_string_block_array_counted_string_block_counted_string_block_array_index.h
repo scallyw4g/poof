@@ -1,4 +1,4 @@
-// ./include/bonsai_stdlib/src/shader.cpp:4:0
+// ./include/bonsai_stdlib/src/counted_string.cpp:19:0
 
 
 
@@ -10,25 +10,25 @@
 /*   return FSz("(%u)", Index.Index); */
 /* } */
 
-link_internal shader_ptr 
-Set( shader_ptr_block_array *Arr,
-  shader_ptr Element,
-  shader_ptr_block_array_index Index )
+link_internal counted_string *
+Set( counted_string_block_array *Arr,
+  counted_string *Element,
+  counted_string_block_array_index Index )
 {
   Assert(Arr->BlockPtrs);
   Assert(Index.Index < Capacity(Arr).Index);
-  shader_ptr_block *Block = GetBlock(Arr, Index);
-  umm ElementIndex = Index.Index % 64;
+  counted_string_block *Block = GetBlock(Arr, Index);
+  umm ElementIndex = Index.Index % 32;
   auto Slot = Block->Elements+ElementIndex;
-  *Slot = Element;
-  return *Slot;
+  *Slot = *Element;
+  return Slot;
 }
 
 link_internal void
-NewBlock( shader_ptr_block_array *Arr )
+NewBlock( counted_string_block_array *Arr )
 {
-  shader_ptr_block  *NewBlock     = Allocate( shader_ptr_block , Arr->Memory,                 1);
-  shader_ptr_block **NewBlockPtrs = Allocate( shader_ptr_block*, Arr->Memory, Arr->BlockCount+1);
+  counted_string_block  *NewBlock     = Allocate( counted_string_block , Arr->Memory,                 1);
+  counted_string_block **NewBlockPtrs = Allocate( counted_string_block*, Arr->Memory, Arr->BlockCount+1);
 
   RangeIterator_t(u32, BlockI, Arr->BlockCount)
   {
@@ -44,7 +44,7 @@ NewBlock( shader_ptr_block_array *Arr )
 }
 
 link_internal void
-RemoveUnordered( shader_ptr_block_array *Array, shader_ptr_block_array_index Index)
+RemoveUnordered( counted_string_block_array *Array, counted_string_block_array_index Index)
 {
   auto LastI = LastIndex(Array);
   Assert(Index.Index <= LastI.Index);
@@ -55,16 +55,16 @@ RemoveUnordered( shader_ptr_block_array *Array, shader_ptr_block_array_index Ind
 }
 
 link_internal void
-RemoveOrdered( shader_ptr_block_array *Array, shader_ptr_block_array_index IndexToRemove)
+RemoveOrdered( counted_string_block_array *Array, counted_string_block_array_index IndexToRemove)
 {
   Assert(IndexToRemove.Index < Array->ElementCount);
 
-  shader_ptr Prev = {};
+  counted_string *Prev = {};
 
-  shader_ptr_block_array_index Max = AtElements(Array);
+  counted_string_block_array_index Max = AtElements(Array);
   RangeIteratorRange_t(umm, Index, Max.Index, IndexToRemove.Index)
   {
-    shader_ptr E = GetPtr(Array, Index);
+    counted_string *E = GetPtr(Array, Index);
 
     if (Prev)
     {
@@ -78,7 +78,7 @@ RemoveOrdered( shader_ptr_block_array *Array, shader_ptr_block_array_index Index
 }
 
 link_internal void
-RemoveOrdered( shader_ptr_block_array *Array, shader_ptr Element )
+RemoveOrdered( counted_string_block_array *Array, counted_string *Element )
 {
   IterateOver(Array, E, I)
   {
@@ -90,10 +90,10 @@ RemoveOrdered( shader_ptr_block_array *Array, shader_ptr Element )
   }
 }
 
-link_internal shader_ptr_block_array_index
-Find( shader_ptr_block_array *Array, shader_ptr Query)
+link_internal counted_string_block_array_index
+Find( counted_string_block_array *Array, counted_string *Query)
 {
-  shader_ptr_block_array_index Result = {INVALID_BLOCK_ARRAY_INDEX};
+  counted_string_block_array_index Result = {INVALID_BLOCK_ARRAY_INDEX};
   IterateOver(Array, E, Index)
   {
     if ( E == Query )
@@ -108,15 +108,15 @@ Find( shader_ptr_block_array *Array, shader_ptr Query)
 
 
 link_internal b32
-IsValid(shader_ptr_block_array_index *Index)
+IsValid(counted_string_block_array_index *Index)
 {
-  shader_ptr_block_array_index Test = {INVALID_BLOCK_ARRAY_INDEX};
+  counted_string_block_array_index Test = {INVALID_BLOCK_ARRAY_INDEX};
   b32 Result = (AreEqual(Index, &Test) == False);
   return Result;
 }
 
-link_internal shader_ptr 
-Push( shader_ptr_block_array *Array, shader_ptr Element)
+link_internal counted_string *
+Push( counted_string_block_array *Array, counted_string *Element)
 {
   Assert(Array->Memory);
 
@@ -125,26 +125,26 @@ Push( shader_ptr_block_array *Array, shader_ptr Element)
     NewBlock(Array);
   }
 
-  shader_ptr Result = Set(Array, Element, AtElements(Array));
+  counted_string *Result = Set(Array, Element, AtElements(Array));
 
   Array->ElementCount += 1;
 
   return Result;
 }
 
-link_internal shader_ptr 
-Push( shader_ptr_block_array *Array )
+link_internal counted_string *
+Push( counted_string_block_array *Array )
 {
-  shader_ptr Element = {};
-  auto Result = Push(Array, Element);
+  counted_string Element = {};
+  auto Result = Push(Array, &Element);
   return Result;
 }
 
 link_internal void
-Shift( shader_ptr_block_array *Array, shader_ptr Element )
+Shift( counted_string_block_array *Array, counted_string *Element )
 {
   Assert(Array->Memory);
-  shader_ptr Prev = {};
+  counted_string *Prev = {};
 
   // Alocate a new thingy
   Push(Array);

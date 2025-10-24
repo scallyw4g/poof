@@ -1,9 +1,35 @@
 // ./poof/poof.h:46:0
 
+link_internal b32
+IsValid(for_datatypes_args Value)
+{
+  b32 Result = False;
+  switch (Value)
+  {
+        case for_datatypes_args_noop:
+    case ForDatatypesArg_struct:
+    case ForDatatypesArg_union:
+    case ForDatatypesArg_enum:
+    case ForDatatypesArg_func:
+    case ForDatatypesArg_macro:
+    case ForDatatypesArg_poof_func:
+    case ForDatatypesArg_all:
+    case ForDatatypesArg_Count:
+    {
+      Result = True;
+    }
+  }
+  return Result;
+}
+
+
+
 link_internal counted_string
 ToStringPrefixless(for_datatypes_args Type)
 {
+  Assert(IsValid(Type));
   counted_string Result = {};
+
   switch (Type)
   {
         case for_datatypes_args_noop: { Result = CSz("noop"); } break;
@@ -47,13 +73,15 @@ ToStringPrefixless(for_datatypes_args Type)
     } break;
 
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 
 link_internal counted_string
 ToString(for_datatypes_args Type)
 {
+  Assert(IsValid(Type));
+
   counted_string Result = {};
   switch (Type)
   {
@@ -85,7 +113,7 @@ ToString(for_datatypes_args Type)
     } break;
 
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 

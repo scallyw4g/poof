@@ -1,6 +1,6 @@
-// ./poof/poof.h:551:0
+// ./poof/poof.h:715:0
 
-/* dunion_debug_print_prototype(DUnion) */
+/* dunion_debug_print_prototype(tagged_union_t) */
 
 link_internal void DebugPrint( declaration *RuntimeStruct, u32 Depth = 0)
 {
@@ -225,6 +225,68 @@ link_internal void DebugPrint( macro_def RuntimePtr, u32 Depth = 0)
   DebugPrint(&RuntimePtr, Depth);
 }
 
+link_internal void DebugPrint( meta_func *RuntimeStruct, u32 Depth = 0)
+{
+  /* if (Depth == 0) */
+  {
+    DebugPrint("meta_func ", Depth);
+  }
+
+  if (RuntimeStruct)
+  {
+    DebugPrint("{\n", Depth);
+                        DebugPrint("cs Name =", Depth+2);
+    DebugPrint(&RuntimeStruct->Name, 1);
+    DebugPrint(";\n");
+
+
+
+
+                DebugPrint("c_token SourceToken {\n", Depth+2);
+    DebugPrint(&RuntimeStruct->SourceToken, Depth+4);
+    DebugPrint("}\n", Depth+2);
+
+
+
+                DebugPrint("meta_func_arg_buffer Args {\n", Depth+2);
+    DebugPrint(&RuntimeStruct->Args, Depth+4);
+    DebugPrint("}\n", Depth+2);
+
+
+
+                DebugPrint("parser Body {\n", Depth+2);
+    DebugPrint(&RuntimeStruct->Body, Depth+4);
+    DebugPrint("}\n", Depth+2);
+
+
+
+                    DebugPrint("meta_func_directive Directives =", Depth+2);
+    DebugPrint(&RuntimeStruct->Directives, 1);
+    DebugPrint(";\n");
+
+
+
+
+                    DebugPrint("cs HeaderFormatString =", Depth+2);
+    DebugPrint(&RuntimeStruct->HeaderFormatString, 1);
+    DebugPrint(";\n");
+    /* if (Depth == 0) */
+    {
+      DebugPrint("}\n", Depth);
+    }
+  }
+  else
+  {
+    DebugPrint(" = (null)\n", Depth);
+  }
+
+}
+
+link_internal void DebugPrint( meta_func RuntimePtr, u32 Depth = 0)
+{
+  DebugPrint(&RuntimePtr, Depth);
+}
+
 
 
 link_internal void
@@ -234,27 +296,31 @@ DebugPrint( datatype *Struct, u32 Depth)
 
   if (Struct)
   {
-    switch(Struct->Type)
+    unbox(Struct)
     {
-                        case type_declaration:
-      {
-        DebugPrint(&Struct->declaration, Depth+4);
+                        {
+        unboxed_value( declaration, Struct, Unboxed  )
+        DebugPrint(Unboxed, Depth+4);
       } break;
-      case type_primitive_def:
       {
-        DebugPrint(&Struct->primitive_def, Depth+4);
+        unboxed_value( primitive_def, Struct, Unboxed  )
+        DebugPrint(Unboxed, Depth+4);
       } break;
-      case type_enum_member:
       {
-        DebugPrint(&Struct->enum_member, Depth+4);
+        unboxed_value( enum_member, Struct, Unboxed  )
+        DebugPrint(Unboxed, Depth+4);
       } break;
-      case type_type_def:
       {
-        DebugPrint(&Struct->type_def, Depth+4);
+        unboxed_value( type_def, Struct, Unboxed  )
+        DebugPrint(Unboxed, Depth+4);
       } break;
-      case type_macro_def:
       {
-        DebugPrint(&Struct->macro_def, Depth+4);
+        unboxed_value( macro_def, Struct, Unboxed  )
+        DebugPrint(Unboxed, Depth+4);
+      } break;
+      {
+        unboxed_value( meta_func, Struct, Unboxed  )
+        DebugPrint(Unboxed, Depth+4);
       } break;
 
 

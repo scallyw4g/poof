@@ -1,4 +1,4 @@
-// ./poof/poof.h:722:0
+// ./poof/poof.h:527:0
 
 link_internal poof_symbol
 PoofSymbol(  cs   Value  )

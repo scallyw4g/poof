@@ -167,9 +167,7 @@ struct foo_struct_1
 
 
 poof(
-  func poof_noop(ignored) @code_fragment
-  {  }
-)
+  func poof_noop(ignored) @code_fragment {})
 
 // NOTE(Jesse): This just tests we can do a poof inside an enum
 enum poof_enum

@@ -1,5 +1,4 @@
 // tests/integration/src/for_datatypes.h:85:0
-
 foo_struct_1 pass 
 bar_struct pass 
 doubly_nested_struct pass 

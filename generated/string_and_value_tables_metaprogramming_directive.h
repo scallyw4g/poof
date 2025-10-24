@@ -1,9 +1,33 @@
 // ./poof/poof.h:64:0
 
+link_internal b32
+IsValid(metaprogramming_directive Value)
+{
+  b32 Result = False;
+  switch (Value)
+  {
+        case meta_directive_noop:
+    case enum_only:
+    case d_union:
+    case named_list:
+    case for_datatypes:
+    case func:
+    case polymorphic_func:
+    {
+      Result = True;
+    }
+  }
+  return Result;
+}
+
+
+
 link_internal counted_string
 ToStringPrefixless(metaprogramming_directive Type)
 {
+  Assert(IsValid(Type));
   counted_string Result = {};
+
   switch (Type)
   {
         case meta_directive_noop: { Result = CSz("noop"); } break;
@@ -16,13 +40,15 @@ ToStringPrefixless(metaprogramming_directive Type)
 
     
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 
 link_internal counted_string
 ToString(metaprogramming_directive Type)
 {
+  Assert(IsValid(Type));
+
   counted_string Result = {};
   switch (Type)
   {
@@ -36,7 +62,7 @@ ToString(metaprogramming_directive Type)
 
     
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 

@@ -14,11 +14,12 @@ link_internal texture_cursor
 TextureCursor(umm ElementCount, memory_arena* Memory)
 {
   texture *Start = (texture*)PushStruct(Memory, sizeof(texture)*ElementCount, 1, 0);
-  texture_cursor Result = {
-    .Start = Start,
-    .End = Start+ElementCount,
-    .At = Start,
-  };
+  texture_cursor Result = {};
+
+  Result.Start = Start;
+  Result.End = Start+ElementCount;
+  Result.At = Start;
+
   return Result;
 }
 

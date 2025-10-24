@@ -1,5 +1,4 @@
 // tests/integration/src/discriminated_union.h:13:0
-
 enum foo_bar_baz_type
 {
   type_foo_bar_baz_noop,

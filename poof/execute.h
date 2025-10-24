@@ -1,5 +1,3 @@
-#define DEFAULT_META_FUNC_HEADER_FORMAT_STRING CSz("// %S:%u:0\n")
-
 link_internal c_token
 NormalizeWhitespaceTokens(c_token *T, c_token* PrevT, c_token *NextT, umm *Depth)
 {
@@ -46,18 +44,6 @@ NormalizeWhitespaceTokens(c_token *T, c_token* PrevT, c_token *NextT, umm *Depth
   return Result;
 }
 
-link_internal b32
-IsAllWhitespace(cs *Str)
-{
-  b32 Result = True;
-  for (u32 Index = 0; Index < Str->Count; ++Index)
-  {
-    Result &= IsWhitespace((c_token_type)Str->Start[Index]);
-    if (!Result) break;
-  }
-  return Result;
-}
-
 link_internal void
 HandleWhitespaceAndAppend( string_builder *OutputBuilder, counted_string Output, counted_string Sep = {}, b32 TrimOutputTrailingNewline = False)
 {
@@ -67,8 +53,7 @@ HandleWhitespaceAndAppend( string_builder *OutputBuilder, counted_string Output,
   }
   else
   {
-    cs *LastStr = &OutputBuilder->Chunks.LastChunk->Element;
-    if (LastStr)
+    if (cs *LastStr = TryGetPtr(&OutputBuilder->Chunks, LastIndex(&OutputBuilder->Chunks)))
     {
       if (IsAllWhitespace(LastStr))
       {
@@ -129,11 +114,17 @@ struct maybe_counted_string
 #endif
 
 
-link_internal maybe_counted_string
-MapFunctionDeclArgs(parse_context *Ctx, function_decl *FuncDecl, meta_func *MetaF, cs *EnumValueMatch, cs *Sep, memory_arena *Memory, umm *Depth)
+link_internal void
+MapFunctionDeclArgs(parse_context *Ctx,
+    function_decl *FuncDecl,
+    meta_func *MetaF,
+    cs *EnumValueMatch,
+    cs *Sep,
+    string_builder *OutputBuilder,
+    memory_arena *Memory,
+    umm *Depth )
 {
   maybe_counted_string Result = {};
-  string_builder OutputBuilder = {};
 
   meta_func_arg_buffer NewArgs = ExtendBuffer(&MetaF->Args, 1, Memory);
   ITERATE_OVER(&FuncDecl->Args)
@@ -145,7 +136,7 @@ MapFunctionDeclArgs(parse_context *Ctx, function_decl *FuncDecl, meta_func *Meta
     auto Data = Datatype(&Decl);
     SetLast(&NewArgs, ReplacementPattern(*EnumValueMatch, &Data));
 
-    cs Output = Execute(MetaF, &NewArgs, Ctx, Memory, Depth);
+    Execute(Ctx, MetaF, &NewArgs, OutputBuilder, Memory, Depth);
     if (MetaF->Body.ErrorCode)
     {
       Result.Error = MetaF->Body.ErrorCode;
@@ -157,33 +148,22 @@ MapFunctionDeclArgs(parse_context *Ctx, function_decl *FuncDecl, meta_func *Meta
       // all the map paths have collapsed..
       if (Iter.At->Next)
       {
-        HandleWhitespaceAndAppend(&OutputBuilder, Output, *Sep);
-      }
-      else
-      {
-        HandleWhitespaceAndAppend(&OutputBuilder, Output, {}, True);
+        Append(OutputBuilder, *Sep);
       }
     }
   }
-
-
-  if (Result.Error == 0)
-  {
-    Result.E = Finalize(&OutputBuilder, Memory);
-  }
-  else
-  {
-    Discard(&OutputBuilder);
-  }
-
-  return Result;
 }
-link_internal maybe_counted_string
-MapEnumValues(parse_context *Ctx, enum_decl *Enum, meta_func *MetaF, cs *EnumValueMatch, cs *Sep, memory_arena *Memory, umm *Depth)
-{
-  maybe_counted_string Result = {};
-  string_builder OutputBuilder = {};
 
+link_internal parse_error_code
+MapEnumValues(parse_context *Ctx,
+    enum_decl *Enum,
+    meta_func *MetaF,
+    cs *EnumValueMatch,
+    cs *Sep,
+    string_builder *OutputBuilder,
+    memory_arena *Memory,
+    umm *Depth)
+{
   meta_func_arg_buffer NewArgs = ExtendBuffer(&MetaF->Args, 1, Memory);
   ITERATE_OVER(&Enum->Members)
   {
@@ -193,11 +173,9 @@ MapEnumValues(parse_context *Ctx, enum_decl *Enum, meta_func *MetaF, cs *EnumVal
     auto Data = Datatype(EnumMember);
     SetLast(&NewArgs, ReplacementPattern(*EnumValueMatch, &Data));
 
-    counted_string EnumFieldOutput = Execute(MetaF, &NewArgs, Ctx, Memory, Depth);
+    Execute(Ctx, MetaF, &NewArgs, OutputBuilder, Memory, Depth);
     if (MetaF->Body.ErrorCode)
     {
-      Result.Error = MetaF->Body.ErrorCode;
-      break;
     }
     else
     {
@@ -205,25 +183,12 @@ MapEnumValues(parse_context *Ctx, enum_decl *Enum, meta_func *MetaF, cs *EnumVal
       // all the map paths have collapsed..
       if (Iter.At->Next)
       {
-        HandleWhitespaceAndAppend(&OutputBuilder, EnumFieldOutput, *Sep);
-      }
-      else
-      {
-        HandleWhitespaceAndAppend(&OutputBuilder, EnumFieldOutput, {}, True);
+        Append(OutputBuilder, *Sep);
       }
     }
   }
 
-
-  if (Result.Error == 0)
-  {
-    Result.E = Finalize(&OutputBuilder, Memory);
-  }
-  else
-  {
-    Discard(&OutputBuilder);
-  }
-
+  parse_error_code Result = MetaF->Body.ErrorCode;
   return Result;
 }
 
@@ -250,28 +215,33 @@ MaybeParseSepOperator(parser *Scope)
 }
 
 // TODO(Jesse id: 222, tags: immediate, parsing, metaprogramming) : Re-add [[nodiscard]] here
-link_internal counted_string
-Execute(parser *Scope, meta_func_arg_buffer *Args, parse_context *Ctx, memory_arena *Memory, umm *Depth)
+#if 1
+link_internal void
+Execute( parse_context *Ctx,
+                    cs  Name,
+                parser *Scope,
+  meta_func_arg_buffer *Args,
+        string_builder *OutputBuilder,
+          memory_arena *Memory,
+                   umm *Depth)
 {
-   meta_func F = MetaFunc(CSz("(anonymous)"), 0, *Args, *Scope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
-   cs Result = Execute(&F, Ctx, Memory, Depth);
+   meta_func F = MetaFunc(Name, 0, *Args, *Scope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
+   Execute(Ctx, &F, OutputBuilder, Memory, Depth);
    if (F.Body.ErrorCode)
    {
      Scope->ErrorCode = F.Body.ErrorCode;
-     /* Assert(Result.Start == 0); */
-     /* Assert(Result.Count == 0); */
    }
-   return Result;
 }
+#endif
 
 link_internal void
-DoTrueFalse( parse_context *Ctx,
-             parser *Scope,
-             meta_func_arg_buffer *Args,
-             b32 DoTrueBranch,
-             string_builder *OutputBuilder,
-             memory_arena *Memory,
-             umm *Depth)
+PredicateBlock( parse_context *Ctx,
+                       parser *Scope,
+         meta_func_arg_buffer *Args,
+                          b32  DoTrueBranch,
+               string_builder *OutputBuilder,
+                 memory_arena *Memory,
+                          umm *Depth )
 {
   parser TrueScope = GetBodyTextForNextScope(Scope, Memory);
   parser FalseScope = {};
@@ -285,21 +255,26 @@ DoTrueFalse( parse_context *Ctx,
 
   if (ParserToUse->Tokens)
   {
-    counted_string Code = Execute(ParserToUse, Args, Ctx, Memory, Depth);
+    Execute(Ctx, CSz("builtin.predicate"), ParserToUse, Args, OutputBuilder, Memory, Depth);
     if (ParserToUse->ErrorCode)
     {
       Scope->ErrorCode = ParserToUse->ErrorCode;
-      Discard(OutputBuilder);
-    }
-    else
-    {
-      HandleWhitespaceAndAppend(OutputBuilder, Code);
+      Discard(OutputBuilder); // TODO(Jesse): is this really correct?  Seems verrry sus..
     }
   }
 }
 
 link_internal void
-MapCompoundDeclMembers(parse_context *Ctx, parser *ParentScope, parser *MapScope, datatype *CompoundDatatype, cs *MatchValue, cs *Sep, meta_func_arg_buffer *Args, string_builder *OutputBuilder, memory_arena *Memory, umm *Depth)
+MapCompoundDeclMembers(parse_context *Ctx,
+    parser *ParentScope,
+    parser *MapScope,
+    datatype *CompoundDatatype,
+    cs *MatchValue,
+    cs *Sep,
+    meta_func_arg_buffer *Args,
+    string_builder *OutputBuilder,
+    memory_arena *Memory,
+    umm *Depth)
 {
   declaration_stream *Members = GetMembersFor(Ctx, CompoundDatatype);
   if (Members)
@@ -308,12 +283,9 @@ MapCompoundDeclMembers(parse_context *Ctx, parser *ParentScope, parser *MapScope
     {
       declaration* Member = GET_ELEMENT(MemberIter);
 
-      switch (Member->Type)
+      unbox(Member)
       {
-        case type_declaration_noop:
-        {
-          InvalidCodePath();
-        } break;
+        InvalidCase(type_declaration_noop);
 
         case type_enum_decl:
         case type_function_decl:
@@ -330,7 +302,7 @@ MapCompoundDeclMembers(parse_context *Ctx, parser *ParentScope, parser *MapScope
           auto Data = Datatype(Member);
           SetLast(&NewArgs, ReplacementPattern(*MatchValue, &Data));
 
-          counted_string StructFieldOutput = Execute(MapScope, &NewArgs, Ctx, Memory, Depth);
+          Execute(Ctx, CSz("builtin.map.compound_decl"), MapScope, &NewArgs, OutputBuilder, Memory, Depth);
           if (MapScope->ErrorCode)
           {
             ParentScope->ErrorCode = MapScope->ErrorCode;
@@ -341,11 +313,7 @@ MapCompoundDeclMembers(parse_context *Ctx, parser *ParentScope, parser *MapScope
             // all the map paths have collapsed..
             if (MemberIter.At->Next)
             {
-              HandleWhitespaceAndAppend(OutputBuilder, StructFieldOutput, *Sep);
-            }
-            else
-            {
-              HandleWhitespaceAndAppend(OutputBuilder, StructFieldOutput, {}, True);
+              Append(OutputBuilder, *Sep);
             }
           }
         } break;
@@ -379,7 +347,7 @@ Map( parse_context *Ctx,
      memory_arena *Memory,
      umm *Depth )
 {
-  switch (ReplaceData->Type)
+  unbox(ReplaceData)
   {
     case type_datatype_noop:
     {
@@ -392,11 +360,9 @@ Map( parse_context *Ctx,
       NotImplemented;
     } break;
 
-    case type_declaration:
-    {
-      declaration *Decl = SafeAccess(declaration, ReplaceData);
+    { unboxed_value(declaration, ReplaceData, Decl)
 
-      switch(Decl->Type)
+      unbox(Decl)
       {
         case type_declaration_noop:
         {
@@ -410,14 +376,7 @@ Map( parse_context *Ctx,
             auto FuncDecl = SafeAccess(function_decl, Decl);
             meta_func MetaF = MetaFunc(CSz("map_function_decl_args"), 0, *Args, *MapScope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
 
-            maybe_counted_string MapResult = MapFunctionDeclArgs(Ctx, FuncDecl, &MetaF, MatchValue, Sep, Memory, Depth);
-            if (MapResult.Error)
-            {
-            }
-            else
-            {
-              HandleWhitespaceAndAppend(OutputBuilder, MapResult.E);
-            }
+            MapFunctionDeclArgs(Ctx, FuncDecl, &MetaF, MatchValue, Sep, OutputBuilder, Memory, Depth);
           }
           else
           {
@@ -437,14 +396,7 @@ Map( parse_context *Ctx,
             auto EnumDecl = SafeAccess(enum_decl, Decl);
             meta_func MetaF = MetaFunc(CSz("map_enum_values"), 0, *Args, *MapScope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
 
-            maybe_counted_string MapResult = MapEnumValues(Ctx, EnumDecl, &MetaF, MatchValue, Sep, Memory, Depth);
-            if (MapResult.Error)
-            {
-            }
-            else
-            {
-              HandleWhitespaceAndAppend(OutputBuilder, MapResult.E);
-            }
+            MapEnumValues(Ctx, EnumDecl, &MetaF, MatchValue, Sep, OutputBuilder, Memory, Depth);
           }
           else
           {
@@ -508,7 +460,7 @@ Map( parse_context *Ctx,
                 SetLast(&NewArgs, ReplacementPattern(*MatchValue, PoofIndex(SafeTruncateToU32(ArrayIndex), SafeTruncateToU32(ArrayLength))));
 
                 Rewind(MapScope->Tokens);
-                counted_string StructFieldOutput = Execute(MapScope, &NewArgs, Ctx, Memory, Depth);
+                Execute(Ctx, CSz("builtin.map.array"), MapScope, &NewArgs, OutputBuilder, Memory, Depth);
                 if (MapScope->ErrorCode)
                 {
                   ParentScope->ErrorCode = MapScope->ErrorCode;
@@ -519,11 +471,7 @@ Map( parse_context *Ctx,
                   // all the map paths have collapsed..
                   if (ArrayIndex+1 < ArrayLength)
                   {
-                    HandleWhitespaceAndAppend(OutputBuilder, StructFieldOutput, *Sep);
-                  }
-                  else
-                  {
-                    HandleWhitespaceAndAppend(OutputBuilder, StructFieldOutput, {}, True);
+                    Append(OutputBuilder, *Sep);
                   }
                 }
               }
@@ -533,7 +481,7 @@ Map( parse_context *Ctx,
             {
               datatype *Base = ResolveToBaseType(Ctx, VDecl->Type);
 
-              switch (Base->Type)
+              unbox(Base)
               {
                 InvalidCase(type_datatype_noop);
 
@@ -544,15 +492,7 @@ Map( parse_context *Ctx,
                   {
                     auto EnumDecl = SafeAccess(enum_decl, BaseDecl);
                     meta_func MetaF = MetaFunc(CSz("map_enum_values"), 0, *Args, *MapScope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
-                    maybe_counted_string MapResult = MapEnumValues(Ctx, EnumDecl, &MetaF, MatchValue, Sep, Memory, Depth);
-                    if (MapResult.Error)
-                    {
-                    }
-                    else
-                    {
-                      HandleWhitespaceAndAppend(OutputBuilder, MapResult.E);
-                    }
-
+                    MapEnumValues(Ctx, EnumDecl, &MetaF, MatchValue, Sep, OutputBuilder, Memory, Depth);
                   }
                   else
                   {
@@ -618,18 +558,10 @@ SetMapFuncArgs(parse_context *Ctx, meta_func_arg_buffer *Local, c_token *A0Arg, 
 link_internal cs
 DefaultRepresentationForDatatype( parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT, memory_arena *Memory)
 {
-  string_builder Builder = {};
-
   b32 IsCDecl = Data->Type == type_declaration && Data->declaration.Type == type_compound_decl;
 
-    /* DatatypeIsCompoundDecl(Ctx, Data) != 0; */
-
-  cs TypeType = GetTypeNameFor(Ctx, Data, TypedefResoultion_ResolveTypedefs, Memory);
-  cs TypeName = GetNameForDatatype(Data, Memory);
-
-  /* cs TypeType = GetTypeTypeForDatatype(Data, Memory); */
-  /* cs StaticBufferSize = PrintAstNode(DatatypeStaticBufferSize(Ctx, Scope, Data, MetaOperatorT), Memory); */
-
+  cs TypeType    = GetTypeNameFor(Ctx, Data, TypedefResoultion_ResolveTypedefs, Memory);
+  cs TypeName    = GetNameForDatatype(Data, Memory);
   cs Indirection = PrintIndirection(&Ctx->Datatypes, Data, Memory);
 
   // Don't print `struct` or `union` keyword in default representation of the datatype
@@ -640,7 +572,7 @@ DefaultRepresentationForDatatype( parse_context *Ctx, parser *Scope, datatype *D
   return Result;
 }
 
-link_internal void // void?
+link_internal void
 ResolveMetaOperator(        parse_context *Ctx,
                      meta_func_arg_buffer *Args,
                             meta_func_arg *Replace,
@@ -652,7 +584,7 @@ ResolveMetaOperator(        parse_context *Ctx,
                                       umm *Depth,
                            string_builder *OutputBuilder )
 {
-  switch (Replace->Type)
+  unbox(Replace)
   {
     case type_meta_func_arg_noop:
     {
@@ -688,7 +620,7 @@ ResolveMetaOperator(        parse_context *Ctx,
             SetLast(&NewArgs, ReplacementPattern(MapFunc.Args.Start->Match, PoofIndex(Index, 0)));
 
             Rewind(MapFunc.Body.Tokens);
-            counted_string Code = Execute(&MapFunc, &NewArgs, Ctx, Memory, Depth);
+            Execute(Ctx, &MapFunc, &NewArgs, OutputBuilder, Memory, Depth);
 
             if (MapFunc.Body.ErrorCode)
             {
@@ -701,11 +633,7 @@ ResolveMetaOperator(        parse_context *Ctx,
               // all the map paths have collapsed..
               if (Index < RepIndex->Index)
               {
-                HandleWhitespaceAndAppend(OutputBuilder, Code, Sep);
-              }
-              else
-              {
-                HandleWhitespaceAndAppend(OutputBuilder, Code, {}, True);
+                Append(OutputBuilder, Sep);
               }
             }
           }
@@ -794,7 +722,7 @@ ResolveMetaOperator(        parse_context *Ctx,
             }
 
             Rewind(MapFunc.Body.Tokens);
-            counted_string Code = Execute(&MapFunc, &NewArgs, Ctx, Memory, Depth);
+            Execute(Ctx, &MapFunc, &NewArgs, OutputBuilder, Memory, Depth);
 
             if (MapFunc.Body.ErrorCode)
             {
@@ -807,11 +735,7 @@ ResolveMetaOperator(        parse_context *Ctx,
               // all the map paths have collapsed..
               if (PeekTokenPointer(SymbolParser))
               {
-                HandleWhitespaceAndAppend(OutputBuilder, Code, Sep);
-              }
-              else
-              {
-                HandleWhitespaceAndAppend(OutputBuilder, Code, {}, True);
+                Append(OutputBuilder, Sep);
               }
             }
 
@@ -832,8 +756,9 @@ ResolveMetaOperator(        parse_context *Ctx,
 
     case type_datatype:
     {
-      datatype *ReplaceData = SafeCast(datatype, Replace);
-      Assert(ReplaceData->Type);
+      /* datatype *ReplaceData = SafeCast(datatype, Replace); */
+      datatype *ReplaceData = Replace->datatype;
+      Assert(IsValid(ReplaceData->Type));
 
       switch (Operator)
       {
@@ -942,7 +867,7 @@ ResolveMetaOperator(        parse_context *Ctx,
           RequireToken(Scope, CTokenType_Question);
 
           b32 DoTrueBranch = DatatypeHasTag(Ctx, TagName, ReplaceData, Scope, MetaOperatorToken);
-          DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+          PredicateBlock( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
         } break;
 
         case indirection:
@@ -950,7 +875,7 @@ ResolveMetaOperator(        parse_context *Ctx,
           if (OptionalToken(Scope, CTokenType_Question))
           {
             b32 DoTrueBranch = DatatypeIsPointer(Ctx, ReplaceData, Scope, MetaOperatorToken) == True;
-            DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+            PredicateBlock( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
           }
           else
           {
@@ -964,7 +889,7 @@ ResolveMetaOperator(        parse_context *Ctx,
           RequireToken(Scope, CTokenType_Question);
 
           b32 DoTrueBranch = DatatypeIsPointer(Ctx, ReplaceData, Scope, MetaOperatorToken) == True;
-          DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+          PredicateBlock( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
         } break;
 
         case is_defined:
@@ -974,7 +899,7 @@ ResolveMetaOperator(        parse_context *Ctx,
           /* auto S2 = GetTypeNameFor(Ctx, ReplaceData, GetTranArena()); */
 
           b32 DoTrueBranch = False;
-          switch(ReplaceData->Type)
+          unbox(ReplaceData)
           {
             case type_datatype_noop:
             {
@@ -995,7 +920,7 @@ ResolveMetaOperator(        parse_context *Ctx,
             } break;
           }
 
-          DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+          PredicateBlock( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
         } break;
 
         case is_primitive:
@@ -1016,7 +941,7 @@ ResolveMetaOperator(        parse_context *Ctx,
             }
           }
 
-          DoTrueFalse(Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+          PredicateBlock(Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
         } break;
 
         case is_compound:
@@ -1037,7 +962,7 @@ ResolveMetaOperator(        parse_context *Ctx,
             }
           }
 
-          DoTrueFalse(Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+          PredicateBlock(Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
         } break;
 
         case is_struct:
@@ -1062,14 +987,15 @@ ResolveMetaOperator(        parse_context *Ctx,
 
           }
 
-          DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+          PredicateBlock( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
         } break;
 
         case is_enum:
         {
           RequireToken(Scope, CTokenType_Question);
           b32 DoTrueBranch = False;
-          switch (ReplaceData->Type)
+
+          unbox(ReplaceData)
           {
             case type_datatype_noop:
             {
@@ -1105,7 +1031,7 @@ ResolveMetaOperator(        parse_context *Ctx,
             case type_declaration:
             {
               declaration *Decl = SafeAccess(declaration, ReplaceData);
-              switch (Decl->Type)
+              unbox(Decl)
               {
                 case type_declaration_noop:
                 {
@@ -1136,14 +1062,14 @@ ResolveMetaOperator(        parse_context *Ctx,
             } break;
           }
 
-          DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+          PredicateBlock( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
         } break;
 
         case is_array:
         {
           RequireToken(Scope, CTokenType_Question);
           b32 DoTrueBranch = DatatypeIsArray(Ctx, Scope, ReplaceData, MetaOperatorToken);
-          DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+          PredicateBlock( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
         } break;
 
         case is_function:
@@ -1170,7 +1096,7 @@ ResolveMetaOperator(        parse_context *Ctx,
 
 
           b32 DoTrueBranch = (IsFunc || D != 0);
-          DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+          PredicateBlock( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
         } break;
 
         case is_named:
@@ -1199,7 +1125,7 @@ ResolveMetaOperator(        parse_context *Ctx,
           }
 
           b32 TypesMatch = StringsMatch(ThisName, QueryTypeName);
-          DoTrueFalse(Ctx, Scope, Args, TypesMatch, OutputBuilder, Memory, Depth);
+          PredicateBlock(Ctx, Scope, Args, TypesMatch, OutputBuilder, Memory, Depth);
         } break;
 
         case contains_type:
@@ -1259,7 +1185,7 @@ ResolveMetaOperator(        parse_context *Ctx,
                   }
                 }
 
-                DoTrueFalse(Ctx, Scope, Args, Contains, OutputBuilder, Memory, Depth);
+                PredicateBlock(Ctx, Scope, Args, Contains, OutputBuilder, Memory, Depth);
               } break;
             }
           }
@@ -1288,7 +1214,7 @@ ResolveMetaOperator(        parse_context *Ctx,
               }
             }
 
-            DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+            PredicateBlock( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
           }
           else
           {
@@ -1308,7 +1234,7 @@ ResolveMetaOperator(        parse_context *Ctx,
           if (OptionalToken(Scope, CTokenType_Question))
           {
             b32 DoTrueBranch = StringsMatch(Name, CSz("(anonymous)")) == False;
-            DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+            PredicateBlock( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
           }
           else
           {
@@ -1435,14 +1361,10 @@ ResolveMetaOperator(        parse_context *Ctx,
               auto Data = Datatype(&TargetMember->Element);
               SetLast(&NewArgs, ReplacementPattern(MatchPattern, &Data));
 
-              counted_string StructFieldOutput = Execute(&MemberScope, &NewArgs, Ctx, Memory, Depth);
+              Execute(Ctx, CSz("builtin.member"), &MemberScope, &NewArgs, OutputBuilder, Memory, Depth);
               if (MemberScope.ErrorCode)
               {
                 Scope->ErrorCode = MemberScope.ErrorCode;
-              }
-              else
-              {
-                HandleWhitespaceAndAppend(OutputBuilder, StructFieldOutput);
               }
             }
           }
@@ -1532,8 +1454,13 @@ TryParseMetaTransformOp(parser *Scope, meta_transform_op *Operator, c_token **Op
 }
 
 // TODO(Jesse): Instead of the error living on the parser, it should live in the result from this fn
-link_internal counted_string
-Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_arena *Memory, umm *Depth)
+link_internal void
+Execute( parse_context *Ctx,
+             meta_func *Func,
+  meta_func_arg_buffer *Args,
+        string_builder *OutputBuilder,
+          memory_arena *Memory,
+                   umm *Depth )
 {
   TIMED_FUNCTION();
   Assert(Func->Body.Tokens->At == Func->Body.Tokens->Start);
@@ -1549,16 +1476,13 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
   parser *Scope = &Func->Body;
 
   program_datatypes *Datatypes    = &Ctx->Datatypes;
-   meta_func_stream *FunctionDefs = &Datatypes->MetaFunctions;
 
   Assert(Scope->Tokens->At == Scope->Tokens->Start);
-
-  string_builder OutputBuilder = {};
 
   while ( c_token *BodyToken = PopTokenRawPointer(Scope) )
   {
     b32 ImpetusWasAt = False;
-    switch (BodyToken->Type)
+    unbox(BodyToken)
     {
       case CTokenType_CharLiteral:
       case CTokenType_StringLiteral:
@@ -1571,8 +1495,12 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
 
         b32 DoNotNormalizeWhitespace = Ctx->Args.DoNotNormalizeWhitespace;
 
+#if 0
+        NotImplemented;
+#else
+
         Ctx->Args.DoNotNormalizeWhitespace = True;
-        counted_string Code = Execute(StringParse, Args, Ctx, Memory, &IgnoreDepth);
+        cs Code = Execute(Ctx, CSz("builtin.string_parse"), StringParse, Args, Memory, &IgnoreDepth);
         Ctx->Args.DoNotNormalizeWhitespace = DoNotNormalizeWhitespace;
 
         if (StringParse->ErrorCode)
@@ -1582,10 +1510,11 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
         else
         {
           const char *Bookend = BodyToken->Type == CTokenType_CharLiteral ? "'" : "\"";
-          Append(&OutputBuilder, CS(Bookend, 1));
-          Append(&OutputBuilder, EscapeDoubleQuotes(Code, OutputBuilder.Chunks.Memory));
-          Append(&OutputBuilder, CS(Bookend, 1));
+          Append(OutputBuilder, CS(Bookend, 1));
+          Append(OutputBuilder, EscapeDoubleQuotes(Code, OutputBuilder->Chunks.Memory));
+          Append(OutputBuilder, CS(Bookend, 1));
         }
+#endif
       } break;
 
       case CTokenType_At:
@@ -1622,8 +1551,8 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
 
               parser ExpansionContext = EatUntilExcluding_Parser(Scope, CTokenType_Newline, GetTranArena());
 
-              meta_func ExpansionFunc = MetaFunc(CSz("todo(jesse): name this"), 0, *Args, ExpansionContext, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
-              cs Expanded = Execute(&ExpansionFunc, Args, Ctx, Memory, Depth);
+              meta_func ExpansionFunc = MetaFunc(CSz("builtin.var"), 0, *Args, ExpansionContext, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
+              cs Expanded = Execute(Ctx, &ExpansionFunc, Args, Memory, Depth);
 
               meta_func_arg_buffer NewArgs = ExtendBuffer(Args, 1, Memory);
               datatype *D = ResolveNameToDatatype(Ctx, Scope, ExpansionFunc.Body.Tokens->Start, Args, Expanded);
@@ -1644,8 +1573,11 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
             case poof_error:
             {
               parser Body = GetBodyTextForNextScope(Scope, Memory);
-              cs ErrorText = Execute(&Body, Args, Ctx, Memory, Depth);
+              cs ErrorText = Execute(Ctx, CSz("builtin.poof_error"), &Body, Args, Memory, Depth);
+
+              // TODO(Jesse): Does this actually fire at any time?  Seems weird ..
               if (ErrorText.Count == 0) { ErrorText = ToString(&Body, Memory); }
+
               PoofUserlandError(Scope, ErrorText, BodyToken);
             } break;
 
@@ -1671,7 +1603,7 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
                   datatype *D1 = ResolveNameToDatatype(Ctx, Scope, T1, Args, T1->Value);
 
                   b32 DoTrueBranch = (D0->Type && D1->Type) && AreEqual(D0, D1);
-                  DoTrueFalse( Ctx, Scope, Args, DoTrueBranch, &OutputBuilder, Memory, Depth);
+                  PredicateBlock( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
                   DidPoofOp = True;
                 }
                 else
@@ -1689,6 +1621,7 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
         }
         else
         {
+
           for (u32 ArgIndex = 0; ArgIndex < Args->Count; ++ArgIndex)
           {
             if (DidPoofOp) break;
@@ -1710,7 +1643,7 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
 
               TryParseMetaArgOperator(Scope, &Operator, &OperatorToken);
 
-              string_builder OperatorBuilder = StringBuilder(AllocateArena(Megabytes(1), True, False));
+              string_builder OperatorBuilder = StringBuilder();
               ResolveMetaOperator(Ctx, Args, Replace, Scope, Operator, BodyToken, OperatorToken, Memory, Depth, &OperatorBuilder);
               cs OperatorOutput = Finalize(&OperatorBuilder, Memory);
 
@@ -1718,6 +1651,7 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
               // Apply textual transformations
               //
               {
+                // TODO(Jesse): Why do we copy this ..?  Seems unnecessary
                 cs Transformed = CopyString(OperatorOutput, Memory);
 
                 b32 Done = False;
@@ -1737,7 +1671,7 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
                                 TransformT);
                 }
 
-                Append(&OutputBuilder, Transformed);
+                Append(OutputBuilder, Transformed);
               }
 
 
@@ -1749,13 +1683,14 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
 
           if (ImpetusWasOpenParen)
           {
-            NestedFunc = StreamContains( FunctionDefs, PeekToken(Scope).Value );
+
+            NestedFunc = GetMetaFuncByName(Ctx, PeekToken(Scope).Value );
             if (NestedFunc) { NestedFuncT = RequireTokenPointer(Scope, CTokenType_Identifier); }
           }
           else
           {
             Assert(ImpetusWasIdentifier);
-            NestedFunc = StreamContains( FunctionDefs, BodyToken->Value );
+            NestedFunc = GetMetaFuncByName(Ctx, BodyToken->Value );
             NestedFuncT = BodyToken;
           }
 
@@ -1769,10 +1704,15 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
               meta_func_arg_buffer ArgInstances = {};
               if (ParseAndTypeCheckArgs(Ctx, Scope, NestedFuncT, NestedFunc, &ArgInstances, Args, Memory))
               {
-                auto Code = CallFunction(Ctx, NestedFuncT, NestedFunc, &ArgInstances, Memory, Depth);
-                if (Code.Start)
+                string_builder Builder = StringBuilder();
+                if (CallFunction(Ctx, NestedFuncT, NestedFunc, &ArgInstances, &Builder, Memory, Depth))
                 {
-                  HandleWhitespaceAndAppend(&OutputBuilder, Code);
+                  cs Code = Finalize(&Builder, Memory);
+                  HandleWhitespaceAndAppend(OutputBuilder, Code);
+                }
+                else
+                {
+                  Discard(&Builder);
                 }
               }
             }
@@ -1808,9 +1748,9 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
           else                                    { ToPush = NormalizeWhitespaceTokens(BodyToken, PeekTokenRawPointer(Scope, -2), PeekTokenRawPointer(Scope), Depth); }
           if (ImpetusWasAt)
           {
-            Append(&OutputBuilder, CSz("@"));
+            Append(OutputBuilder, CSz("@"));
           }
-          Append(&OutputBuilder, ToPush.Value);
+          Append(OutputBuilder, ToPush.Value);
         }
 
       } break;
@@ -1829,7 +1769,7 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
         c_token ToPush = {};
         if (Ctx->Args.DoNotNormalizeWhitespace) { ToPush = *BodyToken; }
         else                                    { ToPush = NormalizeWhitespaceTokens(BodyToken, PeekTokenRawPointer(Scope, -2), PeekTokenRawPointer(Scope), Depth); }
-        Append(&OutputBuilder, ToPush.Value);
+        Append(OutputBuilder, ToPush.Value);
       } break;
 
     }
@@ -1840,26 +1780,49 @@ Execute(meta_func *Func, meta_func_arg_buffer *Args, parse_context *Ctx, memory_
   /* TrimLeadingWhitespace(&OutputBuilder.Chunks.FirstChunk->Element); */
   /* TrimTrailingWhitespace(&OutputBuilder.Chunks.LastChunk->Element); */
 
-  counted_string Result = Finalize(&OutputBuilder, Memory);
+  /* counted_string Result = Finalize(OutputBuilder, Memory); */
 
   Assert(Func->Body.Tokens->At == Func->Body.Tokens->End);
   Rewind(Func->Body.Tokens);
+}
 
+link_internal cs
+Execute(parse_context* Ctx, meta_func* Func, memory_arena* Memory, umm *Depth)
+{
+  string_builder Builder = StringBuilder();
+  Execute(Ctx, Func, &Func->Args, &Builder, Memory, Depth);
+  cs Result = Finalize(&Builder, Memory);
   return Result;
 }
 
-link_internal counted_string
-Execute(meta_func* Func, parse_context* Ctx, memory_arena* Memory, umm *Depth)
+link_internal cs
+Execute(parse_context* Ctx, cs Name, parser *Parser, meta_func_arg_buffer *Args, memory_arena *Memory, umm *Depth)
 {
-  cs Result = Execute(Func, &Func->Args, Ctx, Memory, Depth);
+  string_builder Builder = StringBuilder();
+  Execute(Ctx, Name, Parser, Args, &Builder, Memory, Depth);
+  cs Result = Finalize(&Builder, Memory);
   return Result;
+}
+
+link_internal cs
+Execute(parse_context* Ctx, meta_func* Func, meta_func_arg_buffer *Args, memory_arena* Memory, umm *Depth)
+{
+  string_builder Builder = StringBuilder();
+  Execute(Ctx, Func, Args, &Builder, Memory, Depth);
+  cs Result = Finalize(&Builder, Memory);
+  return Result;
+}
+
+link_internal void
+Execute(parse_context* Ctx, meta_func* Func, string_builder *OutputBuilder, memory_arena* Memory, umm *Depth)
+{
+  Execute(Ctx, Func, &Func->Args, OutputBuilder, Memory, Depth);
 }
 
 link_internal void
 ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Directive, c_token *DirectiveT, tuple_cs_cs_buffer_builder *Builder)
 {
   program_datatypes *Datatypes   = &Ctx->Datatypes;
-  meta_func_stream *FunctionDefs = &Datatypes->MetaFunctions;
   memory_arena *Memory           = Ctx->Memory;
   parser *Parser                 = Ctx->CurrentParser;
 
@@ -1867,26 +1830,31 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
   {
     case meta_directive_noop:
     {
-      meta_func *Func = StreamContains(FunctionDefs, DirectiveT->Value);
+      meta_func *Func = GetMetaFuncByName(Ctx, DirectiveT->Value );
       if (Func)
       {
         meta_func_arg_buffer ArgInstances = {};
         if (ParseAndTypeCheckArgs(Ctx, Parser, DirectiveT, Func, &ArgInstances, {}, Memory))
         {
           umm Depth = 0;
-          auto Code = CallFunction(Ctx, DirectiveT, Func, &ArgInstances, Memory, &Depth);
-          if (Code.Start)
+          string_builder FuncBuilder = StringBuilder();
+          if (CallFunction(Ctx, DirectiveT, Func, &ArgInstances, &FuncBuilder, Memory, &Depth))
           {
+#if 1
+            FinalizeAndFlush(Ctx, Func, &FuncBuilder, Builder, Memory);
+#else
+            cs Code = Finalize(&FuncBuilder, Memory);
             counted_string OutfileName = GenerateOutfileNameFor(Ctx, Func, &ArgInstances, Memory);
             cs Header = FCS(Func->HeaderFormatString, DirectiveT->Filename, DirectiveT->LineNumber);
-            cs ActualOutputFile = FlushOutputToDisk(Ctx, Header, Code, OutfileName, Func->Directives, Memory);
-            //counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /*TodoInfo*/, Memory, False, Func->OmitInclude, Func->CodeFragment);
+            cs ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, Func->Directives, Memory);
 
             auto FilenameAndCode = Tuple(ActualOutputFile, Code);
             Append(Builder, FilenameAndCode);
+#endif
           }
           else
           {
+            Discard(&FuncBuilder);
             ParseInfoMessage( Parser,
                               FormatCountedString( GetTranArena(),
                                                    CSz("Function execution (%S) failed."),
@@ -1925,9 +1893,11 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         RequireToken(Parser, CTokenType_CloseParen);
 
         meta_func Func = MetaFunc(CSz("anonymous"), {});
+        Func.SourceToken = DirectiveT;
         ParseMetaFuncTags(Parser, &Func);
 
         Func.Body = GetBodyTextForNextScope(Parser, Memory);
+        RequireToken(Parser, CTokenType_CloseParen);
         /* meta_func Func = ParseMetaFunctionDef(Parser, CSz("anonymous"), Memory); */
 
         datatype *ArgDatatype = GetDatatypeByName(&Ctx->Datatypes, ArgType);
@@ -1937,8 +1907,8 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           auto Args = MetaFuncArgBuffer(1, Memory);
           Args.Start[0] = ReplacementPattern(ArgName, ArgDatatype);
           umm Depth = 0;
-          counted_string Code = Execute(&Func, &Args, Ctx, Memory, &Depth);
-          RequireToken(Parser, CTokenType_CloseParen);
+          string_builder FuncBuilder = StringBuilder();
+          Execute(Ctx, &Func, &Args, &FuncBuilder, Memory, &Depth);
 
           if (Func.Body.ErrorCode)
           {
@@ -1950,12 +1920,14 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           }
           else
           {
+#if 1
+            FinalizeAndFlush(Ctx, &Func, &FuncBuilder, Builder, Memory);
+#else
             counted_string OutfileName = GenerateOutfileNameFor( Func.Name, ArgType, Memory, GetRandomString(8, umm(Hash(&Code)), Memory));
-
             cs Header = FCS(Func.HeaderFormatString, DirectiveT->Filename, DirectiveT->LineNumber);
-            cs ActualOutputFile = FlushOutputToDisk(Ctx, Header, Code, OutfileName, Func.Directives, Memory);
-            /* counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /1* todoinfo *1/, Memory, True, Func.OmitInclude, Func.CodeFragment); */
+            cs ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, Func.Directives, Memory);
             Append(Builder, Tuple(ActualOutputFile, Code));
+#endif
           }
         }
         else
@@ -1969,16 +1941,18 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
       else
       {
         c_token *FuncT = RequireTokenPointer(Parser, CTokenType_Identifier);
-        counted_string FuncName = FuncT->Value;
-        meta_func Func = ParseMetaFunctionDef(Parser, FuncName, Memory);
+        meta_func Func = ParseMetaFunctionDef(Parser, FuncT, Memory);
 
-        if (StreamContains( FunctionDefs, FuncName ) == 0)
+        counted_string FuncName = FuncT->Value;
+        datatype *Existing = GetDatatypeByName(&Ctx->Datatypes, FuncName);
+        if ( Existing->Type == type_datatype_noop)
         {
-          Push(FunctionDefs, Func);
+          Info("Inserting meta_func (%S)", FuncName);
+          Insert(Datatype(&Func), &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
         }
         else
         {
-          PoofError(Parser, ParseErrorCode_InvalidFunction, CSz("Function already defined"), FuncT);
+          PoofError(Parser, ParseErrorCode_InvalidFunction, CSz("Symbol collision when defining meta func."), FuncT);
         }
       }
 
@@ -2061,7 +2035,9 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
       {
 
         // NOTE(Jesse): This is just here to parse the func tags out.
-        meta_func ForAllDummyFunc = {};
+        meta_func ForAllDummyFunc = MetaFunc(CSz("(builtin.for_datatypes)"), {});
+        ForAllDummyFunc.SourceToken = DirectiveT;
+
         ParseMetaFuncTags(Parser, &ForAllDummyFunc);
 
         meta_func Funcs[ForDatatypesArg_Count] = {};
@@ -2070,11 +2046,11 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         {
           Assert(FuncIndex < ForDatatypesArg_Count);
           RequireToken(Parser, CToken(ToString(func)));
-          Funcs[FuncIndex] = ParseMetaFunctionDef(Parser, CSz("for_datatypes_callback"), Memory);
+          Funcs[FuncIndex] = ParseMetaFunctionDef(Parser, DirectiveT, Memory);
         }
 
 
-        string_builder OutputBuilder = {};
+        string_builder OutputBuilder = StringBuilder();
 
         IterateOver(&Datatypes->DatatypeHashtable, DT, DatatypeIndex)
         {
@@ -2150,26 +2126,29 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
                   Assert(ThisFunc->Args.Count == 1);
                   ThisFunc->Args.Start[0] = ReplacementPattern(ThisFunc->Args.Start[0].Match, DT);
                   umm Depth = 0;
-                  counted_string Code = Execute(ThisFunc, Ctx, Memory, &Depth);
-                  Append(&OutputBuilder, Code);
+                  Execute(Ctx, ThisFunc, &OutputBuilder, Memory, &Depth);
                 }
               }
             }
           }
-
-
         }
 
         RequireToken(Parser, CTokenType_CloseParen);
 
 
-        cs Code = Finalize(&OutputBuilder, Memory);
+#if 1
+        FinalizeAndFlush(Ctx, &ForAllDummyFunc, &OutputBuilder, Builder, Memory);
+#else
         cs OutfileName = GenerateOutfileNameFor(ToString(Directive), GetRandomString(8, umm(Hash(&Code)), Memory), Memory);
-
         cs Header = FCS(ForAllDummyFunc.HeaderFormatString, DirectiveT->Filename, DirectiveT->LineNumber);
-        cs ActualOutputFile = FlushOutputToDisk(Ctx, Header, Code, OutfileName, ForAllDummyFunc.Directives, Memory);
-        /* cs ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /1* Todoinfo *1/, Memory, False, ForAllDummyFunc.OmitInclude, ForAllDummyFunc.CodeFragment ); */
+        Prepend(&OutputBuilder, Header);
+        Append(&OutputBuilder, CSz("\n"));
+
+        cs Code = Finalize(&OutputBuilder, Memory);
+
+        cs ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, ForAllDummyFunc.Directives, Memory);
         Append(Builder, Tuple(ActualOutputFile, Code));
+#endif
       }
     } break;
 
@@ -2180,7 +2159,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
       d_union_decl dUnion = ParseDiscriminatedUnion(Ctx, Parser, Datatypes, DatatypeT, Memory);
       if (Parser->ErrorCode == ParseErrorCode_None)
       {
-        string_builder CodeBuilder = {};
+        string_builder CodeBuilder = StringBuilder();
         if (!dUnion.CustomEnumType.Count)
         {
           counted_string EnumString = GenerateEnumDef(&dUnion, Memory);
@@ -2192,18 +2171,23 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           Append(&CodeBuilder, StructString);
         }
 
-        counted_string Code = Finalize(&CodeBuilder, Memory);
-
         RequireToken(Parser, CTokenType_CloseParen);
         while(OptionalToken(Parser, CTokenType_Semicolon));
+
+#if 1
+        meta_func DUnionDummyFunc = MetaFunc(CSz("d_union"), {});
+        DUnionDummyFunc.SourceToken = DatatypeT;
+        FinalizeAndFlush(Ctx, &DUnionDummyFunc, &CodeBuilder, Builder, Memory);
+#else
+        counted_string Code = Finalize(&CodeBuilder, Memory);
 
         counted_string OutfileName = GenerateOutfileNameFor(ToString(Directive), DatatypeT->Value, Memory);
 
         cs Header = FCS(DEFAULT_META_FUNC_HEADER_FORMAT_STRING, DirectiveT->Filename, DirectiveT->LineNumber);
-        cs ActualOutputFile = FlushOutputToDisk(Ctx, Header, Code, OutfileName, meta_func_directive_noop, Memory);
-        /* counted_string ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, FSz("%S:%u:0", DirectiveT->Filename, DirectiveT->LineNumber ), {} /1* todoinfo *1/, Memory); */
+        cs ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, meta_func_directive_noop, Memory);
 
         Append(Builder, Tuple(ActualOutputFile, Code));
+#endif
       }
       else
       {

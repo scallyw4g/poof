@@ -1,9 +1,54 @@
 // ./poof/poof.h:280:0
 
+link_internal b32
+IsValid(type_qualifier Value)
+{
+  b32 Result = False;
+  switch (Value)
+  {
+        case TypeQual_None:
+    case TypeQual_Static:
+    case TypeQual_Void:
+    case TypeQual_Auto:
+    case TypeQual_Class:
+    case TypeQual_Struct:
+    case TypeQual_Union:
+    case TypeQual_Enum:
+    case TypeQual_Bool:
+    case TypeQual_Inline:
+    case TypeQual_ThreadLocal:
+    case TypeQual_Extern:
+    case TypeQual_Const:
+    case TypeQual_Volatile:
+    case TypeQual_Signed:
+    case TypeQual_Unsigned:
+    case TypeQual_Char:
+    case TypeQual_Long:
+    case TypeQual_Long_Long:
+    case TypeQual_Int:
+    case TypeQual_Double:
+    case TypeQual_Short:
+    case TypeQual_Float:
+    case TypeQual_Constexpr:
+    case TypeQual_Explicit:
+    case TypeQual_Operator:
+    case TypeQual_Virtual:
+    case TypeQual_Noreturn:
+    {
+      Result = True;
+    }
+  }
+  return Result;
+}
+
+
+
 link_internal counted_string
 ToStringPrefixless(type_qualifier Type)
 {
+  Assert(IsValid(Type));
   counted_string Result = {};
+
   switch (Type)
   {
         case TypeQual_None: { Result = CSz("None"); } break;
@@ -37,13 +82,15 @@ ToStringPrefixless(type_qualifier Type)
 
     
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 
 link_internal counted_string
 ToString(type_qualifier Type)
 {
+  Assert(IsValid(Type));
+
   counted_string Result = {};
   switch (Type)
   {
@@ -78,7 +125,7 @@ ToString(type_qualifier Type)
 
     
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 

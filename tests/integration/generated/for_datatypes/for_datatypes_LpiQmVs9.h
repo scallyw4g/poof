@@ -1,5 +1,4 @@
 // tests/integration/src/for_datatypes.h:65:0
-
 foofunc2 pass 
 foofunc0 pass 
 foo_enum pass 

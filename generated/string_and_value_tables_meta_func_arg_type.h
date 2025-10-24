@@ -1,9 +1,30 @@
-// ./poof/poof.h:740:0
+// ./poof/poof.h:567:0
+
+link_internal b32
+IsValid(meta_func_arg_type Value)
+{
+  b32 Result = False;
+  switch (Value)
+  {
+        case type_meta_func_arg_noop:
+    case type_datatype:
+    case type_poof_index:
+    case type_poof_symbol:
+    {
+      Result = True;
+    }
+  }
+  return Result;
+}
+
+
 
 link_internal counted_string
 ToStringPrefixless(meta_func_arg_type Type)
 {
+  Assert(IsValid(Type));
   counted_string Result = {};
+
   switch (Type)
   {
         case type_meta_func_arg_noop: { Result = CSz("noop"); } break;
@@ -13,13 +34,15 @@ ToStringPrefixless(meta_func_arg_type Type)
 
     
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 
 link_internal counted_string
 ToString(meta_func_arg_type Type)
 {
+  Assert(IsValid(Type));
+
   counted_string Result = {};
   switch (Type)
   {
@@ -30,7 +53,7 @@ ToString(meta_func_arg_type Type)
 
     
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 

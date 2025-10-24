@@ -1,9 +1,31 @@
 // ./poof/poof.h:340:0
 
+link_internal b32
+IsValid(function_type Value)
+{
+  b32 Result = False;
+  switch (Value)
+  {
+        case function_type_noop:
+    case function_type_constructor:
+    case function_type_destructor:
+    case function_type_operator:
+    case function_type_normal:
+    {
+      Result = True;
+    }
+  }
+  return Result;
+}
+
+
+
 link_internal counted_string
 ToStringPrefixless(function_type Type)
 {
+  Assert(IsValid(Type));
   counted_string Result = {};
+
   switch (Type)
   {
         case function_type_noop: { Result = CSz("noop"); } break;
@@ -14,13 +36,15 @@ ToStringPrefixless(function_type Type)
 
     
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 
 link_internal counted_string
 ToString(function_type Type)
 {
+  Assert(IsValid(Type));
+
   counted_string Result = {};
   switch (Type)
   {
@@ -32,7 +56,7 @@ ToString(function_type Type)
 
     
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 

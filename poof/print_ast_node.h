@@ -141,7 +141,7 @@ PrintAstNode(ast_node *Node, string_builder *Builder)
 link_internal counted_string
 PrintAstNode(ast_node_expression *Node, memory_arena *Memory)
 {
-  string_builder Builder = {};
+  string_builder Builder = StringBuilder();
   PrintAstNode(Node, &Builder);
   counted_string Value = Finalize(&Builder, Memory);
   return Value;
@@ -150,7 +150,7 @@ PrintAstNode(ast_node_expression *Node, memory_arena *Memory)
 link_internal counted_string
 PrintAstNode(ast_node *Node, memory_arena *Memory)
 {
-  string_builder Builder = {};
+  string_builder Builder = StringBuilder();
   PrintAstNode(Node, &Builder);
   counted_string Value = Finalize(&Builder, Memory);
   return Value;

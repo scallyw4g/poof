@@ -14,11 +14,12 @@ link_internal counted_string_cursor
 CountedStringCursor(umm ElementCount, memory_arena* Memory)
 {
   counted_string *Start = (counted_string*)PushStruct(Memory, sizeof(counted_string)*ElementCount, 1, 0);
-  counted_string_cursor Result = {
-    .Start = Start,
-    .End = Start+ElementCount,
-    .At = Start,
-  };
+  counted_string_cursor Result = {};
+
+  Result.Start = Start;
+  Result.End = Start+ElementCount;
+  Result.At = Start;
+
   return Result;
 }
 

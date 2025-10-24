@@ -186,11 +186,11 @@ TryGetPtr( poof_tag_block_array *Arr, umm Index)
 
 
 
-link_internal cs
-CS( poof_tag_block_array_index Index )
-{
-  return FSz("(%u)", Index.Index);
-}
+/* link_internal cs */
+/* CS( index_t Index ) */
+/* { */
+/*   return FSz("(%u)", Index.Index); */
+/* } */
 
 link_internal poof_tag *
 Set( poof_tag_block_array *Arr,

@@ -1,9 +1,30 @@
 // ./poof/poof.h:18:0
 
+link_internal b32
+IsValid(poof_global_keyword Value)
+{
+  b32 Result = False;
+  switch (Value)
+  {
+        case poof_global_keyword_noop:
+    case poof_error:
+    case are_equal:
+    case var:
+    {
+      Result = True;
+    }
+  }
+  return Result;
+}
+
+
+
 link_internal counted_string
 ToStringPrefixless(poof_global_keyword Type)
 {
+  Assert(IsValid(Type));
   counted_string Result = {};
+
   switch (Type)
   {
         case poof_global_keyword_noop: { Result = CSz("noop"); } break;
@@ -13,13 +34,15 @@ ToStringPrefixless(poof_global_keyword Type)
 
     
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 
 link_internal counted_string
 ToString(poof_global_keyword Type)
 {
+  Assert(IsValid(Type));
+
   counted_string Result = {};
   switch (Type)
   {
@@ -30,7 +53,7 @@ ToString(poof_global_keyword Type)
 
     
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 

@@ -1,5 +1,4 @@
 // tests/integration/src/iteration.h:27:0
-
 int  first 42
 int  second -1
 int  bar 0
@@ -39,4 +38,5 @@ foofunc2 FooFun2
 func_type_name AnotherFunc func_type_name
 func_type_name AnotherFunc func_type_name
 u32 NamedThing 
+
 

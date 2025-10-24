@@ -1,4 +1,35 @@
-// tests/integration/src/accessors.h:118:0
+// tests/integration/src/accessors.h:88:0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 no_return_type 
@@ -100,6 +131,7 @@ foo_struct_1  (func_type_name)
 // Args {
 
 // }
+
 
 
 

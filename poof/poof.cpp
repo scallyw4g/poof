@@ -122,15 +122,21 @@ link_internal datatype* ResolveToBaseType(parse_context *Ctx, type_def *);
 link_internal counted_string_stream ParseDatatypeList(parse_context *Ctx, parser* Parser, program_datatypes* Datatypes, tagged_counted_string_stream_stream* NameLists, memory_arena* Memory);
 
 link_internal b32       ParseAndTypeCheckArgs(parse_context *Ctx, parser *Parser, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, meta_func_arg_buffer *ArgsInScope, memory_arena *Memory);
-link_internal meta_func ParseMetaFunctionDef(parser* Parser, counted_string FuncName, memory_arena *Memory);
+link_internal meta_func ParseMetaFunctionDef(parser* Parser, c_token *SourceToken, memory_arena *Memory);
 link_internal meta_func ParseMapMetaFunctionInstance(parser *, cs, memory_arena *);
 
-link_internal counted_string Execute(meta_func* Func, parse_context* Ctx, memory_arena* Memory, umm *Depth);
-link_internal counted_string Execute(meta_func* Func, meta_func_arg_buffer *Args, parse_context* Ctx, memory_arena* Memory, umm *Depth);
+link_internal   cs Execute(parse_context* Ctx, cs, parser *, meta_func_arg_buffer *, memory_arena *, umm *);
+link_internal   cs Execute(parse_context* Ctx, meta_func* Func,                                               memory_arena* Memory, umm *Depth);
+link_internal   cs Execute(parse_context* Ctx, meta_func* Func, meta_func_arg_buffer *Args, memory_arena* Memory, umm *Depth);
+
+link_internal void Execute(parse_context* Ctx, meta_func* Func,                             string_builder *, memory_arena* Memory, umm *Depth);
+link_internal void Execute(parse_context* Ctx, meta_func* Func, meta_func_arg_buffer *Args, string_builder *, memory_arena* Memory, umm *Depth);
 link_internal void           DoTrueFalse( parse_context *Ctx, parser *Scope, meta_func_arg_buffer *ReplacePatterns, b32 DoTrueBranch, string_builder *OutputBuilder, memory_arena *Memory, umm *Depth);
 
-link_internal counted_string CallFunction(parse_context *Ctx, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, memory_arena *Memory, umm *Depth);
+link_internal b32 CallFunction(parse_context *Ctx, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, string_builder *Builder, memory_arena *Memory, umm *Depth);
 
+link_internal counted_string GenerateOutfileNameFor(counted_string Name, counted_string DatatypeName, memory_arena* Memory, counted_string Modifier = {});
+link_internal counted_string GenerateOutfileNameFor(parse_context *Ctx, meta_func *Func, meta_func_arg_buffer *Args, memory_arena *Memory, cs Modifier = {});
 
 
 link_internal b32 TryParsePoofKeywordAndTagList(parser *, poof_tag_block_array *);
@@ -1457,7 +1463,8 @@ RunPreprocessor(parse_context *Ctx, parser *Parser, parser *Parent, memory_arena
           }
           else
           {
-            macro_def TmpM = { .NameT = MacroNameT };
+            macro_def TmpM = {};
+            TmpM.NameT = MacroNameT;
             auto TmpD = Datatype(&TmpM);
 
             datatype *MacroD = Insert(TmpD, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory);
@@ -2030,7 +2037,7 @@ link_internal b32
 DatatypeIsVariableDecl(datatype *Data)
 {
   b32 Result = False;
-  switch (Data->Type)
+  unbox(Data)
   {
     case type_datatype_noop:
     {
@@ -2055,7 +2062,7 @@ DatatypeIsVariableDecl(datatype *Data)
     case type_declaration:
     {
       declaration *Decl = SafeAccess(declaration, Data);
-      switch (Decl->Type)
+      unbox(Decl)
       {
         case type_declaration_noop:
         case type_compound_decl:
@@ -2083,7 +2090,7 @@ link_internal b32
 DatatypeIsFunction(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
 {
   b32 Result = False;
-  switch (Data->Type)
+  unbox(Data)
   {
     case type_meta_func:
     case type_macro_def:
@@ -2104,7 +2111,7 @@ DatatypeIsFunction(parse_context *Ctx, parser *Scope, datatype *Data, c_token *M
     {
       declaration *Decl = SafeAccess(declaration, Data);
 
-      switch(Decl->Type)
+      unbox(Decl)
       {
         case type_declaration_noop:
         {
@@ -2145,7 +2152,7 @@ link_internal function_decl *
 DatatypeIsFunctionDecl(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token *MetaOperatorT = 0)
 {
   function_decl *Result = {};
-  switch (Data->Type)
+  unbox(Data)
   {
     case type_meta_func:
     case type_macro_def:
@@ -2166,7 +2173,7 @@ DatatypeIsFunctionDecl(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_
     {
       declaration *Decl = SafeAccess(declaration, Data);
 
-      switch(Decl->Type)
+      unbox(Decl)
       {
         case type_declaration_noop:
         {
@@ -2203,7 +2210,7 @@ link_internal compound_decl *
 DatatypeIsCompoundDecl(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token *MetaOperatorT = 0)
 {
   compound_decl *Result = {};
-  switch (Data->Type)
+  unbox(Data)
   {
     case type_meta_func:
     case type_macro_def:
@@ -2227,7 +2234,7 @@ DatatypeIsCompoundDecl(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_
     {
       declaration *Decl = SafeAccess(declaration, Data);
 
-      switch(Decl->Type)
+      unbox(Decl)
       {
         case type_declaration_noop:
         {
@@ -2280,7 +2287,7 @@ TryCastToEnumMember(parse_context *Ctx, datatype *Datatype)
 {
   enum_member *Result = {};
 
-  tswitch (Datatype)
+  unbox(Datatype)
   {
     case type_meta_func:
     case type_datatype_noop:
@@ -2305,7 +2312,7 @@ TryCastToEnumDecl(parse_context *Ctx, datatype *Datatype)
 {
   enum_decl *Result = {};
 
-  tswitch (Datatype)
+  unbox(Datatype)
   {
     case type_datatype_noop:
     case type_meta_func:
@@ -2319,7 +2326,7 @@ TryCastToEnumDecl(parse_context *Ctx, datatype *Datatype)
     tmatch(declaration, Datatype, Decl);
     {
 
-      tswitch(Decl)
+      unbox(Decl)
       {
         case type_declaration_noop:
         case type_function_decl:
@@ -2341,6 +2348,34 @@ TryCastToEnumDecl(parse_context *Ctx, datatype *Datatype)
   return Result;
 }
 
+link_internal meta_func *
+GetMetaFuncByName( parse_context *Ctx, cs Name )
+{
+  program_datatypes *Data = &Ctx->Datatypes;
+  meta_func *Result = {};
+
+  datatype *Datatype = GetDatatypeByName(Data, Name);
+
+  unbox(Datatype)
+  {
+    case type_datatype_noop:
+    case type_declaration:
+    case type_macro_def:
+    case type_enum_member:
+    case type_primitive_def:
+    case type_type_def:
+    {
+    } break;
+
+    { unboxed_value(meta_func, Datatype, Meta)
+      Result = Meta;
+    } break;
+
+  }
+
+  return Result;
+}
+
 link_internal enum_decl
 GetEnumDeclByName( parse_context *Ctx, counted_string Name )
 {
@@ -2349,7 +2384,7 @@ GetEnumDeclByName( parse_context *Ctx, counted_string Name )
 
   datatype *Datatype = GetDatatypeByName(Data, Name);
 
-  switch (Datatype->Type)
+  unbox(Datatype)
   {
     case type_datatype_noop:
     case type_meta_func:
@@ -2362,7 +2397,7 @@ GetEnumDeclByName( parse_context *Ctx, counted_string Name )
     case type_declaration:
     {
       declaration *Decl = SafeCast(declaration, Datatype);
-      switch (Decl->Type)
+      unbox(Decl)
       {
         InvalidCase(type_declaration_noop);
 
@@ -2803,8 +2838,7 @@ RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Fi
 }
 
 link_internal b32
-Output( cs Header,
-        cs Code,
+Output( cs Code,
         cs OutputFilename,
         memory_arena *Memory,
         output_mode Mode = Output_NoOverwrite )
@@ -2816,11 +2850,8 @@ Output( cs Header,
   native_file TempFile = GetTempFile(&TempFileEntropy, Memory);
   if (TempFile.Handle)
   {
-    b32 FileWritesSucceeded  = WriteToFile(&TempFile, Header);
-        FileWritesSucceeded &= WriteToFile(&TempFile, CS("\n"));
-        FileWritesSucceeded &= WriteToFile(&TempFile, Code);
-        FileWritesSucceeded &= WriteToFile(&TempFile, CS("\n"));
-        FileWritesSucceeded &= CloseFile(&TempFile);
+        b32 FileWritesSucceeded = WriteToFile(&TempFile, Code);
+            FileWritesSucceeded &= CloseFile(&TempFile);
 
     if (FileWritesSucceeded)
     {
@@ -4721,7 +4752,7 @@ ConcatTokensUntil(parser* Parser, c_token_type Close, memory_arena* Memory)
   counted_string Result = {};
 #if 0
   // TODO(Jesse  id: 225, tags: todos, easy): Rewrite with string_from_parser
-  string_builder Builder = {};
+  string_builder Builder = StringBuilder();
   while (Remaining(Parser) && PeekTokenRaw(Parser).Type != Close)
   {
     Append(&Builder, PopTokenRaw(Parser).Value);
@@ -6327,6 +6358,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
           //
           /* datatype *DTPointer = Upsert(DeclDT, &Ctx->Datatypes.DatatypeHashtable, Ctx->Memory); */
 
+          Assert(IsValid(Decl.Type));
           switch (Decl.Type)
           {
             InvalidCase(type_declaration_noop); // We just checked if this was set.
@@ -6452,9 +6484,8 @@ AllocateTokenizedFiles(u32 Count, memory_arena* Memory)
 /* link_internal tuple_cs_cs_buffer */
 /* GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo); */
 
-link_internal counted_string
+link_internal cs
 FlushOutputToDisk( parse_context *Ctx,
-                   cs Header,
                    cs OutputForThisParser,
                    cs NewFilename,
                    meta_func_directive MetaDirectives,
@@ -6544,7 +6575,8 @@ FlushOutputToDisk( parse_context *Ctx,
   }
 
 
-  Output(Header, OutputForThisParser, OutputPath, Memory);
+
+  Output(OutputForThisParser, OutputPath, Memory);
   parser *OutputParse = ParserForAnsiStream(Ctx, AnsiStream(OutputForThisParser, OutputPath), TokenCursorSource_MetaprogrammingExpansion, Ctx->Memory);
 
 #if 1
@@ -6568,6 +6600,59 @@ FlushOutputToDisk( parse_context *Ctx,
   /* GoGoGadgetMetaprogramming(Ctx, TodoInfo); */
 
   return OutputPath;
+}
+
+link_internal b32
+IsAllWhitespace(cs *Str)
+{
+  b32 Result = True;
+  for (u32 Index = 0; Index < Str->Count; ++Index)
+  {
+    Result &= IsWhitespace((c_token_type)Str->Start[Index]);
+    if (!Result) break;
+  }
+  return Result;
+}
+
+link_internal void
+RemoveAllWhitespaceChunks(string_builder *Builder)
+{
+  TIMED_FUNCTION();
+  RangeIterator_t(u32, ElementIndex, Builder->Chunks.ElementCount)
+  {
+    cs *At = GetPtr(&Builder->Chunks, ElementIndex);
+    if (IsAllWhitespace(At)) { At->Count = 0; }
+  }
+}
+
+link_internal void
+FinalizeAndFlush( parse_context *Ctx,
+                      meta_func *Func,
+                 string_builder *Builder,
+     tuple_cs_cs_buffer_builder *OutputTuples,
+                   memory_arena *Memory )
+{
+  TIMED_FUNCTION();
+
+  cs Filename = Func->SourceToken? Func->SourceToken->Filename : CSz("(unknown)");
+  u32 LineNumber = Func->SourceToken? Func->SourceToken->LineNumber : u32_MAX ;
+
+  cs Header = FCS(Func->HeaderFormatString, Filename, LineNumber);
+  Prepend(Builder, Header);
+  Append(Builder, CSz("\n"));
+
+  /* RemoveAllWhitespaceChunks(Builder); */
+
+  cs Code = Finalize(Builder, Memory);
+
+  cs OutfileName = GenerateOutfileNameFor(
+      // ToString(Directive),
+      Func->Name,
+      GetRandomString(8, umm(Hash(&Code)), Memory),
+      Memory);
+
+  cs ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, Func->Directives, Memory);
+  Append(OutputTuples, Tuple(ActualOutputFile, Code));
 }
 
 link_internal meta_func_arg*
@@ -6802,7 +6887,7 @@ link_internal cs
 ToString(parse_context *Ctx, meta_func_arg *Arg, memory_arena *Memory)
 {
   cs Result = {};
-  switch (Arg->Type)
+  unbox(Arg)
   {
     InvalidCase(type_meta_func_arg_noop);
 
@@ -6830,9 +6915,9 @@ ToString(parse_context *Ctx, meta_func_arg *Arg, memory_arena *Memory)
 }
 
 link_internal counted_string
-GenerateOutfileNameFor(parse_context *Ctx, meta_func *Func, meta_func_arg_buffer *Args, memory_arena *Memory, cs Modifier = {})
+GenerateOutfileNameFor(parse_context *Ctx, meta_func *Func, meta_func_arg_buffer *Args, memory_arena *Memory, cs Modifier)
 {
-  string_builder OutfileBuilder = StringBuilder(AllocateArena());
+  string_builder OutfileBuilder = StringBuilder();
   Append(&OutfileBuilder, Func->Name);
   Append(&OutfileBuilder, CSz("_"));
   for (u32 ArgIndex = 0; ArgIndex < Args->Count; ++ArgIndex)
@@ -6850,9 +6935,9 @@ GenerateOutfileNameFor(parse_context *Ctx, meta_func *Func, meta_func_arg_buffer
 }
 
 link_internal counted_string
-GenerateOutfileNameFor(counted_string Name, counted_string DatatypeName, memory_arena* Memory, counted_string Modifier = {})
+GenerateOutfileNameFor(counted_string Name, counted_string DatatypeName, memory_arena* Memory, counted_string Modifier)
 {
-  string_builder OutfileBuilder = {};
+  string_builder OutfileBuilder = StringBuilder();
   Append(&OutfileBuilder, Name);
   Append(&OutfileBuilder, CSz("_"));
   Append(&OutfileBuilder, DatatypeName);
@@ -6888,7 +6973,7 @@ GetTypeNameFor(parse_context *Ctx, declaration* Decl, memory_arena *Memory)
 {
   counted_string Result = {};
 
-  switch (Decl->Type)
+  unbox(Decl)
   {
     case type_declaration_noop: { InvalidCodePath(); } break;
 
@@ -6923,7 +7008,7 @@ GetNameTokenForDecl(declaration* Decl)
 {
   c_token *Result = {};
 
-  switch (Decl->Type)
+  unbox(Decl)
   {
     InvalidCase(type_declaration_noop);
 
@@ -6999,10 +7084,11 @@ ApplyTransformations(meta_transform_op Transformations, counted_string Input, me
   return Result;
 }
 
+// TODO(Jesse): What the actual fuck
 link_internal counted_string
 EscapeDoubleQuotes(counted_string S, memory_arena* Memory)
 {
-  string_builder B = {};
+  string_builder B = StringBuilder();
   for (u32 CharIndex = 0;
       CharIndex < S.Count;
       ++CharIndex)
@@ -7220,7 +7306,7 @@ PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
   }
   else
   {
-    string_builder Builder = {};
+    string_builder Builder = StringBuilder();
     poof(
       func (type_qualifier Enum) @code_fragment
       {
@@ -7261,7 +7347,7 @@ link_internal counted_string
 GetValueForDatatype(program_datatypes *Datatypes, datatype *Data, memory_arena *Memory)
 {
   counted_string Result = {};
-  switch (Data->Type)
+  unbox(Data)
   {
     case type_datatype_noop:
     {
@@ -7295,7 +7381,7 @@ GetValueForDatatype(program_datatypes *Datatypes, datatype *Data, memory_arena *
     case type_declaration:
     {
       declaration *Member = SafeAccess(declaration, Data);
-      switch (Member->Type)
+      unbox(Member)
       {
         case type_declaration_noop:
         {
@@ -7339,7 +7425,7 @@ link_internal c_token *
 GetNameTokenForDatatype(datatype *Data)
 {
   c_token *Result = {};
-  switch (Data->Type)
+  unbox(Data)
   {
     case type_datatype_noop:
     {
@@ -7388,7 +7474,7 @@ link_internal cs
 GetNameForDatatype(datatype *Data, memory_arena *Memory)
 {
   cs Result = CSz("(anonymous)");
-  switch (Data->Type)
+  unbox(Data)
   {
     // NOTE(Jesse): I decieded that nobody should ever ask for a name of an
     // undefined datatype.  The caller is responsible for checking that they
@@ -7401,6 +7487,10 @@ GetNameForDatatype(datatype *Data, memory_arena *Memory)
     } break;
 
     case type_meta_func:
+    {
+      Result = Data->meta_func.Name;
+    } break;
+
     case type_macro_def:
     case type_enum_member:
     case type_declaration:
@@ -7440,7 +7530,7 @@ link_internal type_indirection_info *
 GetIndirectionInfoForDatatype(program_datatypes *Datatypes, datatype *Data)
 {
   type_indirection_info *Result = {};
-  switch (Data->Type)
+  unbox(Data)
   {
     // I guess ..?
     InvalidCase(type_datatype_noop);
@@ -7448,7 +7538,7 @@ GetIndirectionInfoForDatatype(program_datatypes *Datatypes, datatype *Data)
     case type_declaration:
     {
       declaration *Decl = SafeAccess(declaration, Data);
-      switch (Decl->Type)
+      unbox(Decl)
       {
         InvalidCase(type_declaration_noop);
 
@@ -7495,8 +7585,11 @@ GetIndirectionInfoForDatatype(program_datatypes *Datatypes, datatype *Data)
 link_internal counted_string
 GetTypeTypeForDatatype(datatype *Data, memory_arena *Memory)
 {
+  // We never call this function anymore
+  NotImplemented;
+
   counted_string Result = {};
-  switch (Data->Type)
+  unbox(Data)
   {
     case type_datatype_noop:
     case type_meta_func:
@@ -7511,14 +7604,7 @@ GetTypeTypeForDatatype(datatype *Data, memory_arena *Memory)
     case type_declaration:
     {
       declaration *Decl = SafeAccess(declaration, Data);
-      string_builder Builder = {};
-
-      Append(&Builder, ToString(Data->Type));
-      Append(&Builder, CSz(" & "));
-      Append(&Builder, ToString(Decl->Type));
-
-      Result = Finalize(&Builder, Memory);
-
+      Result = Concat(ToString(Data->Type), CSz(" & "), ToString(Decl->Type), Memory);
     } break;
   }
 
@@ -7529,7 +7615,7 @@ link_internal counted_string
 GetTypeNameFor(parse_context *Ctx, datatype *Data, typedef_resolution_behavior TDResBehavior, memory_arena *Memory)
 {
   counted_string Result = {};
-  switch (Data->Type)
+  unbox(Data)
   {
     case type_datatype_noop: { InvalidCodePath(); } break;
 
@@ -7584,7 +7670,7 @@ link_internal ast_node*
 DatatypeStaticBufferSize(parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT)
 {
   ast_node *Result = {};
-  switch (Data->Type)
+  unbox(Data)
   {
     case type_datatype_noop:
     {
@@ -7604,7 +7690,7 @@ DatatypeStaticBufferSize(parse_context *Ctx, parser *Scope, datatype *Data, c_to
     {
       declaration *Decl = SafeAccess(declaration, Data);
 
-      switch(Decl->Type)
+      unbox(Decl)
       {
         case type_declaration_noop:
         {
@@ -7666,8 +7752,6 @@ PrintIndirection(program_datatypes *Datatypes, datatype *Data, memory_arena *Mem
 link_internal cs
 ToString( parse_context *Ctx, parser *Scope, datatype *Data, c_token *MetaOperatorT, memory_arena *Memory)
 {
-  string_builder Builder = {};
-
   cs TypeType = GetTypeNameFor(Ctx, Data, TypedefResoultion_ResolveTypedefs, Memory);
   cs TypeName = GetNameForDatatype(Data, Memory);
 
@@ -7699,16 +7783,12 @@ link_internal poof_tag_block_array *
 GetTagsFromDatatype(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token *MetaOperatorT = 0)
 {
   poof_tag_block_array *Result = {};
-  switch (Data->Type)
+  unbox(Data)
   {
     case type_datatype_noop: { if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); } } break;
 
 
     case type_meta_func:
-    {
-      NotImplemented;
-    } break;
-
     case type_macro_def:
     case type_primitive_def:
     case type_type_def:
@@ -7762,7 +7842,7 @@ link_internal b32
 DatatypeIsPointer(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token *MetaOperatorT = 0)
 {
   b32 Result = False;
-  switch (Data->Type)
+  unbox(Data)
   {
     case type_datatype_noop: { if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); } } break;
 
@@ -7786,7 +7866,7 @@ DatatypeIsPointer(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token
     {
       declaration *Decl = SafeAccess(declaration, Data);
 
-      switch(Decl->Type)
+      unbox(Decl)
       {
         case type_declaration_noop: { if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); } } break;
 
@@ -7815,7 +7895,7 @@ link_internal declaration_stream*
 GetMembersFor(parse_context *Ctx, declaration *Decl)
 {
   declaration_stream *Result = {};
-  switch(Decl->Type)
+  unbox(Decl)
   {
     case type_compound_decl:
     {
@@ -7842,7 +7922,7 @@ link_internal declaration_stream*
 GetMembersFor(parse_context *Ctx, datatype *Data)
 {
   declaration_stream *Result = {};
-  switch (Data->Type)
+  unbox(Data)
   {
     case type_declaration:
     {
@@ -7915,7 +7995,7 @@ link_internal datatype *
 ResolveToBaseType(program_datatypes *DataHash, datatype *Data)
 {
   datatype *Result = {};
-  switch (Data->Type)
+  unbox(Data)
   {
     case type_datatype_noop: { InvalidCodePath(); } break;
 
@@ -7936,7 +8016,7 @@ ResolveToBaseType(program_datatypes *DataHash, datatype *Data)
     case type_declaration:
     {
       declaration *Decl = SafeAccess(declaration, Data);
-      switch (Decl->Type)
+      unbox(Decl)
       {
         case type_declaration_noop: { InvalidCodePath(); } break;
 
@@ -8202,7 +8282,7 @@ ParseAndTypecheckArgument(parse_context *Ctx, parser *Parser, meta_func_arg *Par
   if (Peek)
   {
     ParsedArg->Match = ArgDef->Match;
-    switch (ArgDef->Type)
+    unbox(ArgDef)
     {
       InvalidCase(type_meta_func_arg_noop);
 
@@ -8369,16 +8449,18 @@ ParseMapMetaFunctionInstance(parser* Parser, cs FuncName, memory_arena *Memory)
 
   meta_func Func = {
     .Name = FuncName,
+    .SourceToken = 0,
     .Args = Args,
     .Body = Body,
     .Directives = meta_func_directive_noop,
+    .HeaderFormatString = DEFAULT_META_FUNC_HEADER_FORMAT_STRING,
   };
 
   return Func;
 }
 
 link_internal meta_func
-ParseMetaFunctionDef(parser* Parser, cs FuncName, memory_arena *Memory)
+ParseMetaFunctionDef(parser* Parser, c_token *SourceToken, memory_arena *Memory)
 {
   TIMED_FUNCTION();
 
@@ -8388,7 +8470,7 @@ ParseMetaFunctionDef(parser* Parser, cs FuncName, memory_arena *Memory)
   while (ParseMetaFuncDefArg(Parser, &ArgStream));
   RequireToken(Parser, CTokenType_CloseParen);
 
-  meta_func Func = MetaFunc(FuncName, Compact(&ArgStream, Memory));
+  meta_func Func = MetaFunc(SourceToken, Compact(&ArgStream, Memory));
 
   ParseMetaFuncTags(Parser, &Func);
 
@@ -8469,7 +8551,7 @@ RemoveAllMetaprogrammingOutputRecursive(const char * OutputPath)
 link_internal counted_string
 ParseMultiLineTodoValue(parser* Parser, memory_arena* Memory)
 {
-  string_builder Builder = {};
+  string_builder Builder = StringBuilder();
 
   while (PeekTokenRaw(Parser).Type != CTokenType_CommentMultiLineEnd)
   {
@@ -8635,23 +8717,20 @@ ParseAndTypeCheckArgs(parse_context *Ctx, parser *Parser, c_token *FunctionT, me
   return TypeCheckPassed;
 }
 
-link_internal counted_string
-CallFunction(parse_context *Ctx, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, memory_arena *Memory, umm *Depth)
+link_internal b32
+CallFunction(parse_context *Ctx, c_token *FunctionT, meta_func *Func, meta_func_arg_buffer *ArgInstances, string_builder *Builder, memory_arena *Memory, umm *Depth)
 {
-  cs Result = {};
+  b32 Result = False;
+
   if (Ctx->CallStackDepth < 128)
   {
     ++Ctx->CallStackDepth;
-    Result = Execute(Func, ArgInstances, Ctx, Memory, Depth);
+    Execute(Ctx, Func, ArgInstances, Builder, Memory, Depth);
     --Ctx->CallStackDepth;
 
-    if (Func->Body.ErrorCode)
+    if (Func->Body.ErrorCode == ParseErrorCode_None)
     {
-      Result.Start = 0;
-      Result.Count = 0;
-      /* ParseInfoMessage( Ctx->CurrentParser, */
-      /*                   FormatCountedString(GetTranArena(), */
-      /*                                       CSz("Unable to generate code for (func %S)."), Func->Name), FunctionT); */
+      Result = True;
     }
   }
   else
@@ -9010,7 +9089,7 @@ DoPoofForWeb(char *zInput, umm InputLen)
 
     if (Parser->ErrorCode == ParseErrorCode_None)
     {
-      string_builder Builder = {};
+      string_builder Builder = StringBuilder();
       for (u32 TupleIndex = 0; TupleIndex < OutputBuffer.Count; ++TupleIndex)
       {
         counted_string Filename = OutputBuffer.E[TupleIndex].E0;
@@ -9029,7 +9108,7 @@ DoPoofForWeb(char *zInput, umm InputLen)
     }
     else
     {
-      string_builder Builder = {};
+      string_builder Builder = StringBuilder();
       Append(&Builder, CSz("//\n// ERROR\n//\n\n"));
       ITERATE_OVER(&Global_ErrorStream)
       {
@@ -9063,8 +9142,6 @@ main(s32 ArgCount_, const char** ArgStrings)
 
   parse_context Ctx = AllocateParseContext(Memory);
   Ctx.Args = ParseArgs(ArgStrings, ArgCount, &Ctx, Memory);
-
-  Ctx.Datatypes.MetaFunctions.Memory = &Global_PermMemory;
 
 #if BONSAI_DEBUG_SYSTEM_API
   if (Ctx.Args.DoDebugWindow)

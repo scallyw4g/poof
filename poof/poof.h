@@ -640,14 +640,32 @@ poof(generate_stream(meta_func))
 poof(gen_constructor(meta_func))
 #include <generated/gen_constructor_meta_func.h>
 
+#define DEFAULT_META_FUNC_HEADER_FORMAT_STRING CSz("// %S:%u:0\n")
+
+link_internal meta_func
+MetaFunc(c_token *SourceToken, meta_func_arg_buffer Args)
+{
+  meta_func Reuslt = {
+    .Name = SourceToken->Value,
+    .SourceToken = SourceToken,
+    .Args = Args,
+    .Body = {},
+    .Directives = {},
+    .HeaderFormatString = DEFAULT_META_FUNC_HEADER_FORMAT_STRING,
+  };
+  return Reuslt;
+}
+
 link_internal meta_func
 MetaFunc(cs Name, meta_func_arg_buffer Args)
 {
   meta_func Reuslt = {
     .Name = Name,
+    .SourceToken = 0,
     .Args = Args,
     .Body = {},
     .Directives = {},
+    .HeaderFormatString = DEFAULT_META_FUNC_HEADER_FORMAT_STRING,
   };
   return Reuslt;
 }
@@ -1115,8 +1133,6 @@ struct arguments
 struct program_datatypes
 {
   datatype_hashtable       DatatypeHashtable;
-  meta_func_stream         MetaFunctions;
-
   counted_string_hashtable FilesParsed;
 };
 
@@ -1216,8 +1232,6 @@ AllocateParseContext(memory_arena *Memory)
   Ctx.Datatypes.FilesParsed = Allocate_counted_string_hashtable(512, Memory);
 
   Ctx.Datatypes.DatatypeHashtable = Allocate_datatype_hashtable(2048, Memory);
-
-  Ctx.Datatypes.MetaFunctions = MetaFuncStream(Memory);
 
   Ctx.NamedLists = TaggedCountedStringStreamStream(Memory);
 

@@ -1,9 +1,32 @@
 // ./include/bonsai_stdlib/src/console_io.h:13:0
 
+link_internal b32
+IsValid(log_level Value)
+{
+  b32 Result = False;
+  switch (Value)
+  {
+        case LogLevel_Undefined:
+    case LogLevel_Verbose:
+    case LogLevel_Debug:
+    case LogLevel_Info:
+    case LogLevel_Error:
+    case LogLevel_Shush:
+    {
+      Result = True;
+    }
+  }
+  return Result;
+}
+
+
+
 link_internal counted_string
 ToStringPrefixless(log_level Type)
 {
+  Assert(IsValid(Type));
   counted_string Result = {};
+
   switch (Type)
   {
         case LogLevel_Undefined: { Result = CSz("Undefined"); } break;
@@ -15,13 +38,15 @@ ToStringPrefixless(log_level Type)
 
     
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 
 link_internal counted_string
 ToString(log_level Type)
 {
+  Assert(IsValid(Type));
+
   counted_string Result = {};
   switch (Type)
   {
@@ -34,7 +59,7 @@ ToString(log_level Type)
 
     
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 

@@ -1,9 +1,39 @@
-// ./poof/poof.h:1007:0
+// ./poof/poof.h:1104:0
+
+link_internal b32
+IsValid(ast_node_type Value)
+{
+  b32 Result = False;
+  switch (Value)
+  {
+        case type_ast_node_noop:
+    case type_ast_node_statement:
+    case type_ast_node_access:
+    case type_ast_node_literal:
+    case type_ast_node_expression:
+    case type_ast_node_parenthesized:
+    case type_ast_node_operator:
+    case type_ast_node_function_call:
+    case type_ast_node_return:
+    case type_ast_node_initializer_list:
+    case type_ast_node_symbol:
+    case type_ast_node_variable_def:
+    case type_ast_node_type_specifier:
+    {
+      Result = True;
+    }
+  }
+  return Result;
+}
+
+
 
 link_internal counted_string
 ToStringPrefixless(ast_node_type Type)
 {
+  Assert(IsValid(Type));
   counted_string Result = {};
+
   switch (Type)
   {
         case type_ast_node_noop: { Result = CSz("noop"); } break;
@@ -22,13 +52,15 @@ ToStringPrefixless(ast_node_type Type)
 
     
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 
 link_internal counted_string
 ToString(ast_node_type Type)
 {
+  Assert(IsValid(Type));
+
   counted_string Result = {};
   switch (Type)
   {
@@ -48,7 +80,7 @@ ToString(ast_node_type Type)
 
     
   }
-  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (EnumType.name)", Type); } */
+  /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
 }
 

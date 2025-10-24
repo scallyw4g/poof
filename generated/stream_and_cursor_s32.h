@@ -14,11 +14,12 @@ link_internal s32_cursor
 S32Cursor(umm ElementCount, memory_arena* Memory)
 {
   s32 *Start = (s32*)PushStruct(Memory, sizeof(s32)*ElementCount, 1, 0);
-  s32_cursor Result = {
-    .Start = Start,
-    .End = Start+ElementCount,
-    .At = Start,
-  };
+  s32_cursor Result = {};
+
+  Result.Start = Start;
+  Result.End = Start+ElementCount;
+  Result.At = Start;
+
   return Result;
 }
 

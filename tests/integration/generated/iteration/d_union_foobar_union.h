@@ -1,5 +1,4 @@
 // tests/integration/src/iteration.h:49:0
-
 enum foobar_dunion_type
 {
   type_foobar_dunion_noop,

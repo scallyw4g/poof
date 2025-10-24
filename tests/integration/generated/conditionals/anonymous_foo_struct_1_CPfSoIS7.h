@@ -1,5 +1,4 @@
 // tests/integration/src/conditionals.h:83:0
-
 int  first is primitive
 
 int  second is primitive
@@ -77,4 +76,6 @@ func_type_name AnotherFunc not primitive
 func_type_name AnotherFunc not primitive
 
 u32 NamedThing is primitive
+
+
 

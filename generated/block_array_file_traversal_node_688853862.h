@@ -186,11 +186,11 @@ TryGetPtr( file_traversal_node_block_array *Arr, umm Index)
 
 
 
-link_internal cs
-CS( file_traversal_node_block_array_index Index )
-{
-  return FSz("(%u)", Index.Index);
-}
+/* link_internal cs */
+/* CS( index_t Index ) */
+/* { */
+/*   return FSz("(%u)", Index.Index); */
+/* } */
 
 link_internal file_traversal_node *
 Set( file_traversal_node_block_array *Arr,

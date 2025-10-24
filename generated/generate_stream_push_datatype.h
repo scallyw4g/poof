@@ -1,4 +1,4 @@
-// ./poof/poof.h:1076:0
+// ./poof/poof.h:1171:0
 
 link_internal declaration *
 Push(declaration_stream* Stream, declaration Element)

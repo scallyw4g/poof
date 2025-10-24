@@ -1,4 +1,4 @@
-// ./include/bonsai_stdlib/src/bitmap.cpp:189:0
+// ./include/bonsai_stdlib/src/bitmap.cpp:192:0
 
 
 
@@ -186,11 +186,11 @@ TryGetPtr( bitmap_block_array *Arr, umm Index)
 
 
 
-link_internal cs
-CS( bitmap_block_array_index Index )
-{
-  return FSz("(%u)", Index.Index);
-}
+/* link_internal cs */
+/* CS( index_t Index ) */
+/* { */
+/*   return FSz("(%u)", Index.Index); */
+/* } */
 
 link_internal bitmap *
 Set( bitmap_block_array *Arr,
