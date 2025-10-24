@@ -1,5 +1,4 @@
-// ./include/bonsai_stdlib/src/c_token.h:225:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:1741:0
 link_internal b32
 IsValid(c_token_type Value)
 {
@@ -179,6 +178,7 @@ IsValid(c_token_type Value)
     case CT_InsertedCode:
     case CT_PoofInsertedCode:
     case CT_PoofModifiedToken:
+
     {
       Result = True;
     }
@@ -370,6 +370,7 @@ ToStringPrefixless(c_token_type Type)
     case CT_PoofInsertedCode: { Result = CSz("PoofInsertedCode"); } break;
     case CT_PoofModifiedToken: { Result = CSz("PoofModifiedToken"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -557,6 +558,7 @@ ToString(c_token_type Type)
     case CT_InsertedCode: { Result = CSz("CT_InsertedCode"); } break;
     case CT_PoofInsertedCode: { Result = CSz("CT_PoofInsertedCode"); } break;
     case CT_PoofModifiedToken: { Result = CSz("CT_PoofModifiedToken"); } break;
+
 
     
   }

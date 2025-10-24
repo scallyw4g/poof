@@ -1,5 +1,4 @@
-// ./poof/poof.h:340:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:2046:0
 link_internal b32
 IsValid(function_type Value)
 {
@@ -11,6 +10,7 @@ IsValid(function_type Value)
     case function_type_destructor:
     case function_type_operator:
     case function_type_normal:
+
     {
       Result = True;
     }
@@ -34,6 +34,7 @@ ToStringPrefixless(function_type Type)
     case function_type_operator: { Result = CSz("operator"); } break;
     case function_type_normal: { Result = CSz("normal"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -54,6 +55,7 @@ ToString(function_type Type)
     case function_type_operator: { Result = CSz("function_type_operator"); } break;
     case function_type_normal: { Result = CSz("function_type_normal"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -70,6 +72,7 @@ FunctionType(counted_string S)
   if (StringsMatch(S, CSz("function_type_destructor"))) { return function_type_destructor; }
   if (StringsMatch(S, CSz("function_type_operator"))) { return function_type_operator; }
   if (StringsMatch(S, CSz("function_type_normal"))) { return function_type_normal; }
+
 
   return Result;
 }

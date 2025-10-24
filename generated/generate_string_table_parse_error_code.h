@@ -1,5 +1,4 @@
-// ./include/bonsai_stdlib/src/c_parser.h:62:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:1741:0
 link_internal b32
 IsValid(parse_error_code Value)
 {
@@ -32,6 +31,7 @@ IsValid(parse_error_code Value)
     case ParseErrorCode_InternalCompilerError:
     case ParseErrorCode_StackOverflow:
     case ParseErrorCode_Unknown:
+
     {
       Result = True;
     }
@@ -76,6 +76,7 @@ ToStringPrefixless(parse_error_code Type)
     case ParseErrorCode_StackOverflow: { Result = CSz("StackOverflow"); } break;
     case ParseErrorCode_Unknown: { Result = CSz("Unknown"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -116,6 +117,7 @@ ToString(parse_error_code Type)
     case ParseErrorCode_InternalCompilerError: { Result = CSz("ParseErrorCode_InternalCompilerError"); } break;
     case ParseErrorCode_StackOverflow: { Result = CSz("ParseErrorCode_StackOverflow"); } break;
     case ParseErrorCode_Unknown: { Result = CSz("ParseErrorCode_Unknown"); } break;
+
 
     
   }

@@ -1,5 +1,4 @@
-// ./poof/poof.h:509:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:1741:0
 link_internal b32
 IsValid(datatype_type Value)
 {
@@ -13,6 +12,7 @@ IsValid(datatype_type Value)
     case type_primitive_def:
     case type_macro_def:
     case type_meta_func:
+
     {
       Result = True;
     }
@@ -38,6 +38,7 @@ ToStringPrefixless(datatype_type Type)
     case type_macro_def: { Result = CSz("def"); } break;
     case type_meta_func: { Result = CSz("func"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -59,6 +60,7 @@ ToString(datatype_type Type)
     case type_primitive_def: { Result = CSz("type_primitive_def"); } break;
     case type_macro_def: { Result = CSz("type_macro_def"); } break;
     case type_meta_func: { Result = CSz("type_meta_func"); } break;
+
 
     
   }

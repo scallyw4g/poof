@@ -1,5 +1,4 @@
-// ./poof/poof.h:438:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:2046:0
 link_internal b32
 IsValid(declaration_type Value)
 {
@@ -11,6 +10,7 @@ IsValid(declaration_type Value)
     case type_function_decl:
     case type_compound_decl:
     case type_variable_decl:
+
     {
       Result = True;
     }
@@ -34,6 +34,7 @@ ToStringPrefixless(declaration_type Type)
     case type_compound_decl: { Result = CSz("decl"); } break;
     case type_variable_decl: { Result = CSz("decl"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -54,6 +55,7 @@ ToString(declaration_type Type)
     case type_compound_decl: { Result = CSz("type_compound_decl"); } break;
     case type_variable_decl: { Result = CSz("type_variable_decl"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -70,6 +72,7 @@ DeclarationType(counted_string S)
   if (StringsMatch(S, CSz("type_function_decl"))) { return type_function_decl; }
   if (StringsMatch(S, CSz("type_compound_decl"))) { return type_compound_decl; }
   if (StringsMatch(S, CSz("type_variable_decl"))) { return type_variable_decl; }
+
 
   return Result;
 }

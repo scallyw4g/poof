@@ -1,6 +1,6 @@
-// ./poof/poof.h:715:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:1126:0
 /* dunion_debug_print_prototype(tagged_union_t) */
+
 
 link_internal void DebugPrint( declaration *RuntimeStruct, u32 Depth = 0)
 {
@@ -26,6 +26,9 @@ link_internal void DebugPrint( declaration *RuntimeStruct, u32 Depth = 0)
 
 
             DebugPrint("union (anonymous)\n", Depth+2);
+
+
+
     /* if (Depth == 0) */
     {
       DebugPrint("}\n", Depth);
@@ -102,6 +105,10 @@ link_internal void DebugPrint( enum_member *RuntimeStruct, u32 Depth = 0)
                 DebugPrint("poof_tag_block_array Tags {\n", Depth+2);
     DebugPrint(&RuntimeStruct->Tags, Depth+4);
     DebugPrint("}\n", Depth+2);
+
+
+
+
     /* if (Depth == 0) */
     {
       DebugPrint("}\n", Depth);
@@ -139,6 +146,10 @@ link_internal void DebugPrint( type_def *RuntimeStruct, u32 Depth = 0)
                 DebugPrint("type_spec Type {\n", Depth+2);
     DebugPrint(&RuntimeStruct->Type, Depth+4);
     DebugPrint("}\n", Depth+2);
+
+
+
+
     /* if (Depth == 0) */
     {
       DebugPrint("}\n", Depth);
@@ -208,6 +219,11 @@ link_internal void DebugPrint( macro_def *RuntimeStruct, u32 Depth = 0)
                     DebugPrint("b32 IsExpanding =", Depth+2);
     DebugPrint(&RuntimeStruct->IsExpanding, 1);
     DebugPrint(";\n");
+
+
+
+
+
     /* if (Depth == 0) */
     {
       DebugPrint("}\n", Depth);
@@ -270,6 +286,11 @@ link_internal void DebugPrint( meta_func *RuntimeStruct, u32 Depth = 0)
                     DebugPrint("cs HeaderFormatString =", Depth+2);
     DebugPrint(&RuntimeStruct->HeaderFormatString, 1);
     DebugPrint(";\n");
+
+
+
+
+
     /* if (Depth == 0) */
     {
       DebugPrint("}\n", Depth);
@@ -289,6 +310,8 @@ link_internal void DebugPrint( meta_func RuntimePtr, u32 Depth = 0)
 
 
 
+
+
 link_internal void
 DebugPrint( datatype *Struct, u32 Depth)
 {
@@ -298,7 +321,8 @@ DebugPrint( datatype *Struct, u32 Depth)
   {
     unbox(Struct)
     {
-                        {
+            
+                  {
         unboxed_value( declaration, Struct, Unboxed  )
         DebugPrint(Unboxed, Depth+4);
       } break;
@@ -322,6 +346,7 @@ DebugPrint( datatype *Struct, u32 Depth)
         unboxed_value( meta_func, Struct, Unboxed  )
         DebugPrint(Unboxed, Depth+4);
       } break;
+
 
 
 

@@ -1,5 +1,4 @@
 // ./poof/poof.h:411:0
-
 enum declaration_type
 {
   type_declaration_noop,

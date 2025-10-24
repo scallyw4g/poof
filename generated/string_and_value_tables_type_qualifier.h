@@ -1,5 +1,4 @@
-// ./poof/poof.h:280:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:2046:0
 link_internal b32
 IsValid(type_qualifier Value)
 {
@@ -34,6 +33,7 @@ IsValid(type_qualifier Value)
     case TypeQual_Operator:
     case TypeQual_Virtual:
     case TypeQual_Noreturn:
+
     {
       Result = True;
     }
@@ -80,6 +80,7 @@ ToStringPrefixless(type_qualifier Type)
     case TypeQual_Virtual: { Result = CSz("Virtual"); } break;
     case TypeQual_Noreturn: { Result = CSz("Noreturn"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -123,6 +124,7 @@ ToString(type_qualifier Type)
     case TypeQual_Virtual: { Result = CSz("TypeQual_Virtual"); } break;
     case TypeQual_Noreturn: { Result = CSz("TypeQual_Noreturn"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -162,6 +164,7 @@ TypeQualifier(counted_string S)
   if (StringsMatch(S, CSz("TypeQual_Operator"))) { return TypeQual_Operator; }
   if (StringsMatch(S, CSz("TypeQual_Virtual"))) { return TypeQual_Virtual; }
   if (StringsMatch(S, CSz("TypeQual_Noreturn"))) { return TypeQual_Noreturn; }
+
 
   return Result;
 }

@@ -1,9 +1,11 @@
 #include <tests/integration/src/common_structures.h>
 
+
+
 poof(
   func (foo_enum Type) @omit_include
   {
-    Type.map_values (Value)
+    Type.map_values(Value)
     {
       (Value.name) (Value.value)
     }
@@ -14,7 +16,7 @@ poof(
 poof(
   func (foo_enum Type) @omit_include
   {
-    Type.map (Value)
+    Type.map(Value)
     {
       (Value.name) (Value.value)
     }
@@ -26,7 +28,7 @@ poof(
 poof(
   func (foo_struct_1 Type) @omit_include
   {
-    Type.map_members (Value)
+    Type.map_members(Value)
     {
       (Value.type) (Value.name) (Value.value)
     }
@@ -37,7 +39,7 @@ poof(
 poof(
   func (foo_struct_1 Type) @omit_include
   {
-    Type.map (Value)
+    Type.map(Value)
     {
       (Value.type) (Value.name) (Value.value)
     }
@@ -45,6 +47,17 @@ poof(
 )
 // tests/integration/generated/iteration/anonymous_foo_struct_1_03rZn5Ny.h
 
+
+poof(
+  func (foo_enum Type) @omit_include
+  {
+    Type.map_values(Value).sep( ||| )
+    {
+      Value.has_tag(foo_tag)? { has_foo_tag((Value.name)) }
+    }
+  }
+)
+// tests/integration/generated/iteration/anonymous_qHDx1ZgU.h
 
 poof(d_union foobar_dunion { foo_struct_1 bar_struct } )
 #include <tests/integration/generated/iteration/d_union_foobar_union.h>
@@ -54,10 +67,8 @@ poof(
   {
     -- all members start --
 
-    Foobar.map_members (Member)
-    {
-      (Member.type) (Member.name) (Member.value)
-    }
+    Foobar.map_members(Member)
+    { (Member.type) (Member.name) (Member.value) }
 
     -- all members end --
 
@@ -71,7 +82,7 @@ poof(
         {
           UM.contains_type(nested_struct)?
           {
-            (UM.type) (UM.name)
+            contains(nested_struct) { (UM.type) (UM.name) }
           }
         }
       }

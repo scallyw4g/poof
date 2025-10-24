@@ -1,5 +1,4 @@
-// ./poof/poof.h:18:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:2046:0
 link_internal b32
 IsValid(poof_global_keyword Value)
 {
@@ -10,6 +9,7 @@ IsValid(poof_global_keyword Value)
     case poof_error:
     case are_equal:
     case var:
+
     {
       Result = True;
     }
@@ -32,6 +32,7 @@ ToStringPrefixless(poof_global_keyword Type)
     case are_equal: { Result = CSz("equal"); } break;
     case var: { Result = CSz("var"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -51,6 +52,7 @@ ToString(poof_global_keyword Type)
     case are_equal: { Result = CSz("are_equal"); } break;
     case var: { Result = CSz("var"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -66,6 +68,7 @@ PoofGlobalKeyword(counted_string S)
   if (StringsMatch(S, CSz("poof_error"))) { return poof_error; }
   if (StringsMatch(S, CSz("are_equal"))) { return are_equal; }
   if (StringsMatch(S, CSz("var"))) { return var; }
+
 
   return Result;
 }

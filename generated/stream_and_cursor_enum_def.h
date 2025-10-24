@@ -1,5 +1,4 @@
-// ./poof/poof.h:407:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:2054:0
 struct enum_decl_cursor
 {
   enum_decl *Start;

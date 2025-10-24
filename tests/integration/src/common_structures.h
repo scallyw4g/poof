@@ -35,9 +35,9 @@ typedef u64                     b64;
 enum foo_enum
 {
   foo_enum_value_0 = 1,
-  foo_enum_value_1 = 'a',
-  foo_enum_value_2 = (1 upshift_by_31),
-  foo_enum_value_3
+  foo_enum_value_1 = 'a' poof(@foo_tag),
+  foo_enum_value_2 = (1 upshift_by_31) poof(@foo_tag),
+  foo_enum_value_3,
 };
 
 

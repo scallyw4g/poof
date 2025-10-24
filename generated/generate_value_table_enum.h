@@ -1,5 +1,4 @@
-// ./poof/poof.h:141:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:1835:0
 link_internal meta_transform_op
 MetaTransformOp(counted_string S)
 {
@@ -12,6 +11,7 @@ MetaTransformOp(counted_string S)
   if (StringsMatch(S, CSz("to_uppercase"))) { return to_uppercase; }
   if (StringsMatch(S, CSz("strip_single_prefix"))) { return strip_single_prefix; }
   if (StringsMatch(S, CSz("strip_all_prefix"))) { return strip_all_prefix; }
+
 
   return Result;
 }

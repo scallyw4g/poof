@@ -1,5 +1,4 @@
-// ./poof/poof.h:64:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:2046:0
 link_internal b32
 IsValid(metaprogramming_directive Value)
 {
@@ -13,6 +12,7 @@ IsValid(metaprogramming_directive Value)
     case for_datatypes:
     case func:
     case polymorphic_func:
+
     {
       Result = True;
     }
@@ -38,6 +38,7 @@ ToStringPrefixless(metaprogramming_directive Type)
     case func: { Result = CSz("func"); } break;
     case polymorphic_func: { Result = CSz("func"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -60,6 +61,7 @@ ToString(metaprogramming_directive Type)
     case func: { Result = CSz("func"); } break;
     case polymorphic_func: { Result = CSz("polymorphic_func"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -78,6 +80,7 @@ MetaprogrammingDirective(counted_string S)
   if (StringsMatch(S, CSz("for_datatypes"))) { return for_datatypes; }
   if (StringsMatch(S, CSz("func"))) { return func; }
   if (StringsMatch(S, CSz("polymorphic_func"))) { return polymorphic_func; }
+
 
   return Result;
 }

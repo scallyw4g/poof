@@ -1,5 +1,4 @@
-// ./poof/poof.h:527:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:113:0
 link_internal poof_symbol
 PoofSymbol(  cs   Value  )
 {
@@ -9,7 +8,8 @@ PoofSymbol(  cs   Value  )
 
   };
 
-  
+    
+
   return Reuslt;
 }
 

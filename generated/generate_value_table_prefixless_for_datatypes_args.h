@@ -1,5 +1,4 @@
-// ./poof/poof.h:49:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:1853:0
 link_internal for_datatypes_args
 ForDatatypesArgsPrefixless(counted_string S)
 {
@@ -14,6 +13,7 @@ ForDatatypesArgsPrefixless(counted_string S)
   if (StringsMatch(S, CSz("poof_func"))) { return ForDatatypesArg_poof_func; }
   if (StringsMatch(S, CSz("all"))) { return ForDatatypesArg_all; }
   if (StringsMatch(S, CSz("Count"))) { return ForDatatypesArg_Count; }
+
 
   return Result;
 }

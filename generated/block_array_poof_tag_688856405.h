@@ -1,5 +1,4 @@
-// ./poof/poof.h:371:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:2596:0
 
 
 
@@ -323,23 +322,36 @@ Push( poof_tag_block_array *Array )
 }
 
 link_internal void
-Shift( poof_tag_block_array *Array, poof_tag *Element )
+Insert( poof_tag_block_array *Array, poof_tag_block_array_index Index, poof_tag *Element )
 {
+  Assert(Index.Index <= LastIndex(Array).Index);
   Assert(Array->Memory);
-  poof_tag *Prev = {};
 
   // Alocate a new thingy
-  Push(Array);
+  poof_tag *Prev = Push(Array);
 
-  auto End = AtElements(Array);
-  RangeIteratorReverse(Index, s32(End.Index))
+  auto Last = LastIndex(Array);
+
+  RangeIteratorReverseRange(I, s32(Last.Index), s32(Index.Index))
   {
-    auto E = GetPtr(Array, umm(Index));
-    if (Prev) { *Prev = *E; }
+    auto E = GetPtr(Array, umm(I));
+    *Prev = *E;
     Prev = E;
   }
 
   *Prev = *Element;
+}
+
+link_internal void
+Insert( poof_tag_block_array *Array, u32 Index, poof_tag *Element )
+{
+  Insert(Array, { .Index = Index }, Element);
+}
+
+link_internal void
+Shift( poof_tag_block_array *Array, poof_tag *Element )
+{
+  Insert(Array, { .Index = 0 }, Element);
 }
 
 

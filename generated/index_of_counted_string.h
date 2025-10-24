@@ -1,5 +1,4 @@
-// ./include/bonsai_stdlib/src/counted_string.cpp:27:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:600:0
 link_internal umm
 IndexOf(counted_string_buffer *Buf, counted_string Element)
 {

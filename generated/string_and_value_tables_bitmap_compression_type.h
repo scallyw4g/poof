@@ -1,5 +1,4 @@
-// ./include/bonsai_stdlib/src/bitmap.cpp:76:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:2046:0
 link_internal b32
 IsValid(bitmap_compression_type Value)
 {
@@ -16,6 +15,7 @@ IsValid(bitmap_compression_type Value)
     case BitmapCompressionType_CMYK:
     case BitmapCompressionType_CMYKRLE8:
     case BitmapCompressionType_CMYKRLE4:
+
     {
       Result = True;
     }
@@ -44,6 +44,7 @@ ToStringPrefixless(bitmap_compression_type Type)
     case BitmapCompressionType_CMYKRLE8: { Result = CSz("CMYKRLE8"); } break;
     case BitmapCompressionType_CMYKRLE4: { Result = CSz("CMYKRLE4"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -69,6 +70,7 @@ ToString(bitmap_compression_type Type)
     case BitmapCompressionType_CMYKRLE8: { Result = CSz("BitmapCompressionType_CMYKRLE8"); } break;
     case BitmapCompressionType_CMYKRLE4: { Result = CSz("BitmapCompressionType_CMYKRLE4"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -90,6 +92,7 @@ BitmapCompressionType(counted_string S)
   if (StringsMatch(S, CSz("BitmapCompressionType_CMYK"))) { return BitmapCompressionType_CMYK; }
   if (StringsMatch(S, CSz("BitmapCompressionType_CMYKRLE8"))) { return BitmapCompressionType_CMYKRLE8; }
   if (StringsMatch(S, CSz("BitmapCompressionType_CMYKRLE4"))) { return BitmapCompressionType_CMYKRLE4; }
+
 
   return Result;
 }

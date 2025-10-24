@@ -1,5 +1,4 @@
-// ./include/bonsai_stdlib/src/c_token.h:256:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:1741:0
 link_internal b32
 IsValid(token_cursor_source Value)
 {
@@ -17,6 +16,7 @@ IsValid(token_cursor_source Value)
     case TokenCursorSource_BodyText:
     case TokenCursorSource_IntermediateRepresentaton:
     case TokenCursorSource_Count:
+
     {
       Result = True;
     }
@@ -46,6 +46,7 @@ ToStringPrefixless(token_cursor_source Type)
     case TokenCursorSource_IntermediateRepresentaton: { Result = CSz("IntermediateRepresentaton"); } break;
     case TokenCursorSource_Count: { Result = CSz("Count"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -71,6 +72,7 @@ ToString(token_cursor_source Type)
     case TokenCursorSource_BodyText: { Result = CSz("TokenCursorSource_BodyText"); } break;
     case TokenCursorSource_IntermediateRepresentaton: { Result = CSz("TokenCursorSource_IntermediateRepresentaton"); } break;
     case TokenCursorSource_Count: { Result = CSz("TokenCursorSource_Count"); } break;
+
 
     
   }

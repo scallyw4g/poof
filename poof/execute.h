@@ -45,7 +45,7 @@ NormalizeWhitespaceTokens(c_token *T, c_token* PrevT, c_token *NextT, umm *Depth
 }
 
 link_internal void
-HandleWhitespaceAndAppend( string_builder *OutputBuilder, counted_string Output, counted_string Sep = {}, b32 TrimOutputTrailingNewline = False)
+HandleWhitespaceAndAppend( string_builder *OutputBuilder, counted_string Output)
 {
   if (IsAllWhitespace(&Output))
   {
@@ -62,38 +62,18 @@ HandleWhitespaceAndAppend( string_builder *OutputBuilder, counted_string Output,
         LastStr->Count = 0;
       }
 
-      while (LastNBSPChar(&Output) == '\n')
+      if (LastNBSPChar(&Output) == '\n')
       {
         TrimTrailingNBSP(&Output);
-        if (TrimOutputTrailingNewline)
-        {
-          TrimTrailingNewline(&Output);
-        }
-        else
-        {
-          break;
-        }
       }
 
       if (LastNBSPChar(LastStr) == '\n')
       {
         TrimTrailingNBSP(LastStr);
       }
-
-      if (Sep.Count)
-      {
-        if (TrimTrailingNewline(&Output))
-        {
-          if (LastChar(Sep) != '\n')
-          {
-            Sep = Concat(Sep, CSz("\n"), OutputBuilder->Chunks.Memory);
-          }
-        }
-      }
     }
 
     Append(OutputBuilder, Output);
-    if (Sep.Count) { Append(OutputBuilder, Sep); }
   }
 }
 
@@ -113,6 +93,28 @@ struct maybe_counted_string
 };
 #endif
 
+link_internal void
+InsertSepIfApplicable(cs *Sep, string_builder *Builder, u32 StartingChunkIndex, u32 EndingChunkIndex, b32 *PrevIterWasAllWhitespace)
+{
+  // Check if we got any output for this chunk
+  b32 AllWhitespace = True;
+  u32 ChunkCount = EndingChunkIndex - StartingChunkIndex;
+  RangeIterator_t(u32, I, ChunkCount)
+  {
+    cs *At = GetPtr(&Builder->Chunks, StartingChunkIndex + I);
+    AllWhitespace &= IsAllWhitespace(At);
+  }
+
+  // TODO(Jesse): Pretty sure there should be a better way of handling this now that
+  // all the map paths have collapsed..
+  if (AllWhitespace == False && *PrevIterWasAllWhitespace == False)
+  {
+    Insert(&Builder->Chunks, StartingChunkIndex, Sep);
+  }
+
+  *PrevIterWasAllWhitespace = AllWhitespace;
+}
+
 
 link_internal void
 MapFunctionDeclArgs(parse_context *Ctx,
@@ -124,8 +126,7 @@ MapFunctionDeclArgs(parse_context *Ctx,
     memory_arena *Memory,
     umm *Depth )
 {
-  maybe_counted_string Result = {};
-
+  b32 PrevIterWasAllWhitespace = True;
   meta_func_arg_buffer NewArgs = ExtendBuffer(&MetaF->Args, 1, Memory);
   ITERATE_OVER(&FuncDecl->Args)
   {
@@ -136,20 +137,15 @@ MapFunctionDeclArgs(parse_context *Ctx,
     auto Data = Datatype(&Decl);
     SetLast(&NewArgs, ReplacementPattern(*EnumValueMatch, &Data));
 
+    u32 StartingChunkIndex = OutputBuilder->Chunks.ElementCount;
     Execute(Ctx, MetaF, &NewArgs, OutputBuilder, Memory, Depth);
+    u32 EndingChunkIndex = OutputBuilder->Chunks.ElementCount;
     if (MetaF->Body.ErrorCode)
     {
-      Result.Error = MetaF->Body.ErrorCode;
-      break;
     }
     else
     {
-      // TODO(Jesse): Pretty sure there should be a better way of handling this now that
-      // all the map paths have collapsed..
-      if (Iter.At->Next)
-      {
-        Append(OutputBuilder, *Sep);
-      }
+      InsertSepIfApplicable(Sep, OutputBuilder, StartingChunkIndex, EndingChunkIndex, &PrevIterWasAllWhitespace);
     }
   }
 }
@@ -164,6 +160,7 @@ MapEnumValues(parse_context *Ctx,
     memory_arena *Memory,
     umm *Depth)
 {
+  b32 PrevIterWasAllWhitespace = True;
   meta_func_arg_buffer NewArgs = ExtendBuffer(&MetaF->Args, 1, Memory);
   ITERATE_OVER(&Enum->Members)
   {
@@ -173,18 +170,15 @@ MapEnumValues(parse_context *Ctx,
     auto Data = Datatype(EnumMember);
     SetLast(&NewArgs, ReplacementPattern(*EnumValueMatch, &Data));
 
+    u32 StartingChunkIndex = OutputBuilder->Chunks.ElementCount;
     Execute(Ctx, MetaF, &NewArgs, OutputBuilder, Memory, Depth);
+    u32 EndingChunkIndex = OutputBuilder->Chunks.ElementCount;
     if (MetaF->Body.ErrorCode)
     {
     }
     else
     {
-      // TODO(Jesse): Pretty sure there should be a better way of handling this now that
-      // all the map paths have collapsed..
-      if (Iter.At->Next)
-      {
-        Append(OutputBuilder, *Sep);
-      }
+      InsertSepIfApplicable(Sep, OutputBuilder, StartingChunkIndex, EndingChunkIndex, &PrevIterWasAllWhitespace);
     }
   }
 
@@ -279,6 +273,9 @@ MapCompoundDeclMembers(parse_context *Ctx,
   declaration_stream *Members = GetMembersFor(Ctx, CompoundDatatype);
   if (Members)
   {
+    meta_func_arg_buffer NewArgs = ExtendBuffer(Args, 1, Memory);
+
+    b32 PrevIterWasAllWhitespace = True;
     ITERATE_OVER_AS(Member, Members)
     {
       declaration* Member = GET_ELEMENT(MemberIter);
@@ -298,23 +295,41 @@ MapCompoundDeclMembers(parse_context *Ctx,
         {
           Rewind(MapScope->Tokens);
 
-          meta_func_arg_buffer NewArgs = ExtendBuffer(Args, 1, Memory);
           auto Data = Datatype(Member);
           SetLast(&NewArgs, ReplacementPattern(*MatchValue, &Data));
 
+          u32 StartingChunkIndex = OutputBuilder->Chunks.ElementCount;
           Execute(Ctx, CSz("builtin.map.compound_decl"), MapScope, &NewArgs, OutputBuilder, Memory, Depth);
+          u32 EndingChunkIndex = OutputBuilder->Chunks.ElementCount;
+
           if (MapScope->ErrorCode)
           {
             ParentScope->ErrorCode = MapScope->ErrorCode;
           }
           else
           {
+#if 1
+            InsertSepIfApplicable(Sep, OutputBuilder, StartingChunkIndex, EndingChunkIndex, &PrevIterWasAllWhitespace);
+#else
+
+            // Check if we got any output for this chunk
+            b32 AllWhitespace = True;
+            u32 ChunkCount = EndingChunkIndex - StartingChunkIndex;
+            RangeIterator_t(u32, I, ChunkCount)
+            {
+              cs *At = GetPtr(&OutputBuilder->Chunks, StartingChunkIndex + I);
+              AllWhitespace &= IsAllWhitespace(At);
+            }
+
             // TODO(Jesse): Pretty sure there should be a better way of handling this now that
             // all the map paths have collapsed..
-            if (MemberIter.At->Next)
+            if (AllWhitespace == False && PrevIterWasAllWhitespace == False)
             {
-              Append(OutputBuilder, *Sep);
+              Insert(&OutputBuilder->Chunks, StartingChunkIndex, Sep);
             }
+
+            PrevIterWasAllWhitespace = AllWhitespace;
+#endif
           }
         } break;
       }

@@ -1,5 +1,4 @@
-// ./poof/poof.h:1104:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:2046:0
 link_internal b32
 IsValid(ast_node_type Value)
 {
@@ -19,6 +18,7 @@ IsValid(ast_node_type Value)
     case type_ast_node_symbol:
     case type_ast_node_variable_def:
     case type_ast_node_type_specifier:
+
     {
       Result = True;
     }
@@ -50,6 +50,7 @@ ToStringPrefixless(ast_node_type Type)
     case type_ast_node_variable_def: { Result = CSz("def"); } break;
     case type_ast_node_type_specifier: { Result = CSz("specifier"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -78,6 +79,7 @@ ToString(ast_node_type Type)
     case type_ast_node_variable_def: { Result = CSz("type_ast_node_variable_def"); } break;
     case type_ast_node_type_specifier: { Result = CSz("type_ast_node_type_specifier"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -102,6 +104,7 @@ AstNodeType(counted_string S)
   if (StringsMatch(S, CSz("type_ast_node_symbol"))) { return type_ast_node_symbol; }
   if (StringsMatch(S, CSz("type_ast_node_variable_def"))) { return type_ast_node_variable_def; }
   if (StringsMatch(S, CSz("type_ast_node_type_specifier"))) { return type_ast_node_type_specifier; }
+
 
   return Result;
 }

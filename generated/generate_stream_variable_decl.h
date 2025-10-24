@@ -1,5 +1,4 @@
-// ./poof/poof.h:329:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:2034:0
 struct variable_decl_stream_chunk
 {
   variable_decl Element;

@@ -1,5 +1,4 @@
-// ./include/bonsai_stdlib/src/counted_string.cpp:19:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:2375:0
 
 
 
@@ -141,23 +140,36 @@ Push( counted_string_block_array *Array )
 }
 
 link_internal void
-Shift( counted_string_block_array *Array, counted_string *Element )
+Insert( counted_string_block_array *Array, counted_string_block_array_index Index, counted_string *Element )
 {
+  Assert(Index.Index <= LastIndex(Array).Index);
   Assert(Array->Memory);
-  counted_string *Prev = {};
 
   // Alocate a new thingy
-  Push(Array);
+  counted_string *Prev = Push(Array);
 
-  auto End = AtElements(Array);
-  RangeIteratorReverse(Index, s32(End.Index))
+  auto Last = LastIndex(Array);
+
+  RangeIteratorReverseRange(I, s32(Last.Index), s32(Index.Index))
   {
-    auto E = GetPtr(Array, umm(Index));
-    if (Prev) { *Prev = *E; }
+    auto E = GetPtr(Array, umm(I));
+    *Prev = *E;
     Prev = E;
   }
 
   *Prev = *Element;
+}
+
+link_internal void
+Insert( counted_string_block_array *Array, u32 Index, counted_string *Element )
+{
+  Insert(Array, { .Index = Index }, Element);
+}
+
+link_internal void
+Shift( counted_string_block_array *Array, counted_string *Element )
+{
+  Insert(Array, { .Index = 0 }, Element);
 }
 
 

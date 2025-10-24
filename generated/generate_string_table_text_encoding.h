@@ -1,5 +1,4 @@
-// ./include/bonsai_stdlib/src/ansi_stream.h:32:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:1741:0
 link_internal b32
 IsValid(text_encoding Value)
 {
@@ -18,6 +17,7 @@ IsValid(text_encoding Value)
     case TextEncoding_CSCU:
     case TextEncoding_BOCU:
     case TextEncoding_GB18030:
+
     {
       Result = True;
     }
@@ -48,6 +48,7 @@ ToStringPrefixless(text_encoding Type)
     case TextEncoding_BOCU: { Result = CSz("BOCU"); } break;
     case TextEncoding_GB18030: { Result = CSz("GB18030"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -74,6 +75,7 @@ ToString(text_encoding Type)
     case TextEncoding_CSCU: { Result = CSz("TextEncoding_CSCU"); } break;
     case TextEncoding_BOCU: { Result = CSz("TextEncoding_BOCU"); } break;
     case TextEncoding_GB18030: { Result = CSz("TextEncoding_GB18030"); } break;
+
 
     
   }

@@ -1,5 +1,4 @@
-// ./poof/poof.h:75:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:2046:0
 link_internal b32
 IsValid(meta_func_directive Value)
 {
@@ -10,6 +9,7 @@ IsValid(meta_func_directive Value)
     case omit_include:
     case code_fragment:
     case origin_comment_format:
+
     {
       Result = True;
     }
@@ -32,6 +32,7 @@ ToStringPrefixless(meta_func_directive Type)
     case code_fragment: { Result = CSz("fragment"); } break;
     case origin_comment_format: { Result = CSz("format"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -51,6 +52,7 @@ ToString(meta_func_directive Type)
     case code_fragment: { Result = CSz("code_fragment"); } break;
     case origin_comment_format: { Result = CSz("origin_comment_format"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -66,6 +68,7 @@ MetaFuncDirective(counted_string S)
   if (StringsMatch(S, CSz("omit_include"))) { return omit_include; }
   if (StringsMatch(S, CSz("code_fragment"))) { return code_fragment; }
   if (StringsMatch(S, CSz("origin_comment_format"))) { return origin_comment_format; }
+
 
   return Result;
 }

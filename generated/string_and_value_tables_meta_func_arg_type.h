@@ -1,5 +1,4 @@
-// ./poof/poof.h:567:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:2046:0
 link_internal b32
 IsValid(meta_func_arg_type Value)
 {
@@ -10,6 +9,7 @@ IsValid(meta_func_arg_type Value)
     case type_datatype:
     case type_poof_index:
     case type_poof_symbol:
+
     {
       Result = True;
     }
@@ -32,6 +32,7 @@ ToStringPrefixless(meta_func_arg_type Type)
     case type_poof_index: { Result = CSz("index"); } break;
     case type_poof_symbol: { Result = CSz("symbol"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -51,6 +52,7 @@ ToString(meta_func_arg_type Type)
     case type_poof_index: { Result = CSz("type_poof_index"); } break;
     case type_poof_symbol: { Result = CSz("type_poof_symbol"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -66,6 +68,7 @@ MetaFuncArgType(counted_string S)
   if (StringsMatch(S, CSz("type_datatype"))) { return type_datatype; }
   if (StringsMatch(S, CSz("type_poof_index"))) { return type_poof_index; }
   if (StringsMatch(S, CSz("type_poof_symbol"))) { return type_poof_symbol; }
+
 
   return Result;
 }

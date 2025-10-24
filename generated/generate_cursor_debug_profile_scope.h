@@ -1,5 +1,4 @@
-// ./include/bonsai_debug/src/api.h:107:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:1538:0
 struct debug_profile_scope_cursor
 {
   debug_profile_scope *Start;

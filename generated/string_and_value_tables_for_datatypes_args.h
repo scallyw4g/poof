@@ -1,5 +1,4 @@
-// ./poof/poof.h:46:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:2046:0
 link_internal b32
 IsValid(for_datatypes_args Value)
 {
@@ -15,6 +14,7 @@ IsValid(for_datatypes_args Value)
     case ForDatatypesArg_poof_func:
     case ForDatatypesArg_all:
     case ForDatatypesArg_Count:
+
     {
       Result = True;
     }
@@ -41,6 +41,7 @@ ToStringPrefixless(for_datatypes_args Type)
     case ForDatatypesArg_poof_func: { Result = CSz("func"); } break;
     case ForDatatypesArg_all: { Result = CSz("all"); } break;
     case ForDatatypesArg_Count: { Result = CSz("Count"); } break;
+
 
         // TODO(Jesse): This is pretty barf and we could do it in a single allocation,
     // but the metaprogram might have to be a bit fancier..
@@ -95,6 +96,7 @@ ToString(for_datatypes_args Type)
     case ForDatatypesArg_all: { Result = CSz("ForDatatypesArg_all"); } break;
     case ForDatatypesArg_Count: { Result = CSz("ForDatatypesArg_Count"); } break;
 
+
         // TODO(Jesse): This is pretty barf and we could do it in a single allocation,
     // but the metaprogram might have to be a bit fancier..
     default:
@@ -131,6 +133,7 @@ ForDatatypesArgs(counted_string S)
   if (StringsMatch(S, CSz("ForDatatypesArg_poof_func"))) { return ForDatatypesArg_poof_func; }
   if (StringsMatch(S, CSz("ForDatatypesArg_all"))) { return ForDatatypesArg_all; }
   if (StringsMatch(S, CSz("ForDatatypesArg_Count"))) { return ForDatatypesArg_Count; }
+
 
   return Result;
 }

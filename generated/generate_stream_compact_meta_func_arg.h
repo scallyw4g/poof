@@ -1,5 +1,4 @@
-// ./poof/poof.h:621:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:2004:0
 link_internal meta_func_arg_buffer
 Compact(meta_func_arg_stream *Stream, memory_arena *PermMemory)
 {

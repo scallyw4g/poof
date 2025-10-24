@@ -1,5 +1,4 @@
-// ./include/bonsai_stdlib/src/console_io.h:13:0
-
+// ./include/bonsai_stdlib/src/poof_functions.h:2046:0
 link_internal b32
 IsValid(log_level Value)
 {
@@ -12,6 +11,7 @@ IsValid(log_level Value)
     case LogLevel_Info:
     case LogLevel_Error:
     case LogLevel_Shush:
+
     {
       Result = True;
     }
@@ -36,6 +36,7 @@ ToStringPrefixless(log_level Type)
     case LogLevel_Error: { Result = CSz("Error"); } break;
     case LogLevel_Shush: { Result = CSz("Shush"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -57,6 +58,7 @@ ToString(log_level Type)
     case LogLevel_Error: { Result = CSz("LogLevel_Error"); } break;
     case LogLevel_Shush: { Result = CSz("LogLevel_Shush"); } break;
 
+
     
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
@@ -74,6 +76,7 @@ LogLevel(counted_string S)
   if (StringsMatch(S, CSz("LogLevel_Info"))) { return LogLevel_Info; }
   if (StringsMatch(S, CSz("LogLevel_Error"))) { return LogLevel_Error; }
   if (StringsMatch(S, CSz("LogLevel_Shush"))) { return LogLevel_Shush; }
+
 
   return Result;
 }
