@@ -253,7 +253,6 @@ PredicateBlock( parse_context *Ctx,
     if (ParserToUse->ErrorCode)
     {
       Scope->ErrorCode = ParserToUse->ErrorCode;
-      Discard(OutputBuilder); // TODO(Jesse): is this really correct?  Seems verrry sus..
     }
   }
 }
@@ -369,6 +368,7 @@ Map( parse_context *Ctx,
       InternalCompilerError(ParentScope, CSz("Infinite sadness"), MetaOperatorToken);
     } break;
 
+    case type_poof_tag:
     case type_meta_func:
     case type_macro_def:
     {
@@ -520,6 +520,7 @@ Map( parse_context *Ctx,
                   }
                 } break;
 
+                case type_poof_tag:
                 case type_macro_def:
                 case type_meta_func:
                 case type_enum_member:
@@ -816,25 +817,25 @@ ResolveMetaOperator(        parse_context *Ctx,
 
         case tags:
         {
-          /* RequireToken(Scope, CTokenType_OpenParen); */
-          /* cs TagName = RequireToken(Scope, CTokenType_Identifier).Value; */
-          /* RequireToken(Scope, CTokenType_CloseParen); */
+          RequireToken(Scope, CTokenType_OpenParen);
+          cs Match = RequireToken(Scope, CTokenType_Identifier).Value;
+          RequireToken(Scope, CTokenType_CloseParen);
 
-          poof_tag_block_array *Tags = GetTagsFromDatatype(Ctx, ReplaceData, Scope, MetaOperatorToken);
+          parser NextScope = GetBodyTextForNextScope(Scope, Memory);
 
-          if (Tags)
+          if (poof_tag_block_array *Tags = GetTagsFromDatatype(Ctx, ReplaceData, Scope, MetaOperatorToken))
           {
             IterateOver(Tags, Tag, TagIndex)
             {
-              Assert(Tag->Name.Count);
-              Append(OutputBuilder, Tag->Name);
-              if (Tag->Value.Count)
+              meta_func_arg_buffer NewArgs = ExtendBuffer(Args, 1, Memory);
+              auto D = Datatype(Tag);
+              SetLast(&NewArgs, ReplacementPattern(Match, &D));
+
+              Execute(Ctx, CSz("builtin.tags"), &NextScope, &NewArgs, OutputBuilder, Memory, Depth);
+              if (NextScope.ErrorCode)
               {
-                Append(OutputBuilder, CSz("("));
-                Append(OutputBuilder, Tag->Value);
-                Append(OutputBuilder, CSz(")"));
+                Scope->ErrorCode = NextScope.ErrorCode;
               }
-              Append(OutputBuilder, CSz(" "));
             }
           }
         } break;
@@ -845,33 +846,33 @@ ResolveMetaOperator(        parse_context *Ctx,
           cs TagName = RequireToken(Scope, CTokenType_Identifier).Value;
           RequireToken(Scope, CTokenType_CloseParen);
 
-          poof_tag Tag = GetTagFromDatatype(Ctx, TagName, ReplaceData, Scope, MetaOperatorToken);
-
-#if 1
-          if (OptionalTokenRaw(Scope, CTokenType_Dot))
+          if (OptionalToken(Scope, CTokenType_Question))
           {
-            c_token *ChainedOpT = RequireTokenPointer(Scope, CTokenType_Identifier);
-            Assert(ChainedOpT);
-
-            meta_arg_operator ChainedOp = MetaArgOperator( ChainedOpT->Value );
-
-            meta_func_arg NewArg = MetaFuncArg(Ctx, Tag, CSz(""));
-            ResolveMetaOperator(Ctx, Args, &NewArg, Scope, ChainedOp, BodyToken, ChainedOpT, Memory, Depth, OutputBuilder);
+            b32 DoTrueBranch = GetTagFromDatatype(Ctx, TagName, ReplaceData, Scope, MetaOperatorToken).Value.Count > 0;
+            PredicateBlock( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
           }
           else
           {
-            if (Tag.Name.Count)
+            poof_tag Tag = GetTagFromDatatype(Ctx, TagName, ReplaceData, Scope, MetaOperatorToken);
+            if (OptionalTokenRaw(Scope, CTokenType_Dot))
             {
-              HandleWhitespaceAndAppend(OutputBuilder, Tag.Value);
-            }
-          }
-#else
-          if (Tag.Name.Count)
-          {
-            HandleWhitespaceAndAppend(OutputBuilder, Tag.Value);
-          }
-#endif
+              c_token *ChainedOpT = RequireTokenPointer(Scope, CTokenType_Identifier);
+              Assert(ChainedOpT);
 
+              meta_arg_operator ChainedOp = MetaArgOperator( ChainedOpT->Value );
+
+              meta_func_arg NewArg = MetaFuncArg(Ctx, Tag, CSz(""));
+              ResolveMetaOperator(Ctx, Args, &NewArg, Scope, ChainedOp, BodyToken, ChainedOpT, Memory, Depth, OutputBuilder);
+            }
+            else
+            {
+              if (Tag.Name.Count)
+              {
+                HandleWhitespaceAndAppend(OutputBuilder, Tag.Value);
+              }
+            }
+
+          }
         } break;
 
         case has_tag:
@@ -923,11 +924,16 @@ ResolveMetaOperator(        parse_context *Ctx,
               InternalCompilerError(Scope, CSz("Got datatype_noop for replace datatype?"), MetaOperatorToken);
             } break;
 
-            case type_type_def:
-            case type_meta_func:
-            case type_macro_def:
-            case type_declaration:
             case type_enum_member:
+            case type_macro_def:
+            case type_meta_func:
+            case type_poof_tag:
+            {
+              DoTrueBranch = True;
+            } break;
+
+            case type_type_def:
+            case type_declaration:
             case type_primitive_def:
             {
               datatype *ResolvedT = ResolveToBaseType(Ctx, ReplaceData);
@@ -1032,6 +1038,7 @@ ResolveMetaOperator(        parse_context *Ctx,
 
             } break;
 
+            case type_poof_tag:
             case type_meta_func:
             case type_macro_def:
             case type_primitive_def:
@@ -1245,7 +1252,7 @@ ResolveMetaOperator(        parse_context *Ctx,
 
         case name:
         {
-          counted_string Name = GetNameForDatatype(ReplaceData, Memory);
+          cs Name = GetNameForDatatype(ReplaceData, Memory);
           if (OptionalToken(Scope, CTokenType_Question))
           {
             b32 DoTrueBranch = StringsMatch(Name, CSz("(anonymous)")) == False;

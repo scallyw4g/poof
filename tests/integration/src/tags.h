@@ -4,7 +4,8 @@
 struct tag_struct
 {
   int a1; poof( @foo )
-  int a2; poof( @bar(a2) )
+  int a2; poof( @bar )
+  int a3; poof( @bar(a3) @bar(a4) )
 };
 
 
@@ -13,15 +14,24 @@ poof(
   {
     TStruct.map_members(Member)
     {
+      // foo
       Member.has_tag(foo)?
       {
         (Member.type) (Member.name) has foo tag
       }
 
+      // bar
       Member.has_tag(bar)?
       {
-        (Member.type) (Member.name) has bar tag (value=(Member.tag_value(bar)))
+        (Member.type) (Member.name) has bar tag Member.tag_value(bar)? { (value=(Member.tag_value(bar))) }
       }
+
+      // tags {
+      Member.tags(tag)
+      {
+        Member.name (tag.name)=(tag.value)
+      }
+      // }
     }
   }
 )
@@ -144,12 +154,12 @@ poof(
 
   func (struct_t)
   {
-    struct ((struct_t)) struct_t.tags
+    struct ((struct_t)) struct_t.tags(t) { t.name=t.value }
   }
 
   func (enum_t)
   {
-    enum ((enum_t)) enum_t.tags
+    enum  ((enum_t)) enum_t.tags(t) { t.name=t.value }
   }
 )
 // tests/integration/generated/tags/for_datatypes_gGnNeVTa.h

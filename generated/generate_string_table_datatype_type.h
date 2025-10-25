@@ -12,6 +12,7 @@ IsValid(datatype_type Value)
     case type_primitive_def:
     case type_macro_def:
     case type_meta_func:
+    case type_poof_tag:
 
     {
       Result = True;
@@ -37,6 +38,7 @@ ToStringPrefixless(datatype_type Type)
     case type_primitive_def: { Result = CSz("def"); } break;
     case type_macro_def: { Result = CSz("def"); } break;
     case type_meta_func: { Result = CSz("func"); } break;
+    case type_poof_tag: { Result = CSz("tag"); } break;
 
 
     
@@ -60,6 +62,7 @@ ToString(datatype_type Type)
     case type_primitive_def: { Result = CSz("type_primitive_def"); } break;
     case type_macro_def: { Result = CSz("type_macro_def"); } break;
     case type_meta_func: { Result = CSz("type_meta_func"); } break;
+    case type_poof_tag: { Result = CSz("type_poof_tag"); } break;
 
 
     

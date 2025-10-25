@@ -308,6 +308,48 @@ link_internal void DebugPrint( meta_func RuntimePtr, u32 Depth = 0)
   DebugPrint(&RuntimePtr, Depth);
 }
 
+link_internal void DebugPrint( poof_tag *RuntimeStruct, u32 Depth = 0)
+{
+  /* if (Depth == 0) */
+  {
+    DebugPrint("poof_tag ", Depth);
+  }
+
+  if (RuntimeStruct)
+  {
+    DebugPrint("{\n", Depth);
+                        DebugPrint("cs Name =", Depth+2);
+    DebugPrint(&RuntimeStruct->Name, 1);
+    DebugPrint(";\n");
+
+
+
+
+                    DebugPrint("cs Value =", Depth+2);
+    DebugPrint(&RuntimeStruct->Value, 1);
+    DebugPrint(";\n");
+
+
+
+
+
+    /* if (Depth == 0) */
+    {
+      DebugPrint("}\n", Depth);
+    }
+  }
+  else
+  {
+    DebugPrint(" = (null)\n", Depth);
+  }
+
+}
+
+link_internal void DebugPrint( poof_tag RuntimePtr, u32 Depth = 0)
+{
+  DebugPrint(&RuntimePtr, Depth);
+}
+
 
 
 
@@ -344,6 +386,10 @@ DebugPrint( datatype *Struct, u32 Depth)
       } break;
       {
         unboxed_value( meta_func, Struct, Unboxed  )
+        DebugPrint(Unboxed, Depth+4);
+      } break;
+      {
+        unboxed_value( poof_tag, Struct, Unboxed  )
         DebugPrint(Unboxed, Depth+4);
       } break;
 

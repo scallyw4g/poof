@@ -2046,6 +2046,7 @@ DatatypeIsVariableDecl(datatype *Data)
       /* InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); */
     } break;
 
+    case type_poof_tag:
     case type_meta_func:
     case type_macro_def:
     case type_primitive_def:
@@ -2092,6 +2093,7 @@ DatatypeIsFunction(parse_context *Ctx, parser *Scope, datatype *Data, c_token *M
   b32 Result = False;
   unbox(Data)
   {
+    case type_poof_tag:
     case type_meta_func:
     case type_macro_def:
     case type_datatype_noop:
@@ -2154,6 +2156,7 @@ DatatypeIsFunctionDecl(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_
   function_decl *Result = {};
   unbox(Data)
   {
+    case type_poof_tag:
     case type_meta_func:
     case type_macro_def:
     case type_datatype_noop:
@@ -2212,6 +2215,7 @@ DatatypeIsCompoundDecl(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_
   compound_decl *Result = {};
   unbox(Data)
   {
+    case type_poof_tag:
     case type_meta_func:
     case type_macro_def:
     case type_datatype_noop:
@@ -2250,7 +2254,6 @@ DatatypeIsCompoundDecl(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_
         case type_compound_decl:
         {
           Result = SafeAccess(compound_decl, Decl);
-
         } break;
 
         case type_variable_decl:
@@ -2285,25 +2288,7 @@ TryCastToCompoundDecl(parse_context *Ctx, datatype *Datatype)
 link_internal enum_member *
 TryCastToEnumMember(parse_context *Ctx, datatype *Datatype)
 {
-  enum_member *Result = {};
-
-  unbox(Datatype)
-  {
-    case type_meta_func:
-    case type_datatype_noop:
-    case type_macro_def:
-    case type_primitive_def:
-    case type_type_def:
-    case type_declaration:
-    {
-    } break;
-
-    case type_enum_member:
-    {
-      Result = DynamicCast(enum_member, Datatype);
-    } break;
-  }
-
+  enum_member *Result = DynamicCast(enum_member, Datatype);
   return Result;
 }
 
@@ -2315,6 +2300,7 @@ TryCastToEnumDecl(parse_context *Ctx, datatype *Datatype)
   unbox(Datatype)
   {
     case type_datatype_noop:
+    case type_poof_tag:
     case type_meta_func:
     case type_macro_def:
     case type_enum_member:
@@ -2325,22 +2311,7 @@ TryCastToEnumDecl(parse_context *Ctx, datatype *Datatype)
 
     tmatch(declaration, Datatype, Decl);
     {
-
-      unbox(Decl)
-      {
-        case type_declaration_noop:
-        case type_function_decl:
-        case type_compound_decl:
-        case type_variable_decl:
-        {
-        } break;
-
-        tmatch(enum_decl, Decl, Enum);
-        {
-          Result = Enum;
-        }
-      }
-
+      Result = DynamicCast(enum_decl, Decl);
     }
 
   }
@@ -2359,6 +2330,7 @@ GetMetaFuncByName( parse_context *Ctx, cs Name )
   unbox(Datatype)
   {
     case type_datatype_noop:
+    case type_poof_tag:
     case type_declaration:
     case type_macro_def:
     case type_enum_member:
@@ -2387,6 +2359,7 @@ GetEnumDeclByName( parse_context *Ctx, counted_string Name )
   unbox(Datatype)
   {
     case type_datatype_noop:
+    case type_poof_tag:
     case type_meta_func:
     case type_macro_def:
     case type_enum_member:
@@ -7361,6 +7334,11 @@ GetValueForDatatype(program_datatypes *Datatypes, datatype *Data, memory_arena *
       Result = CSz("(value unsupported)");
     } break;
 
+    {
+      unboxed_value(poof_tag, Data, Tag);
+      Result = Tag->Value;
+    } break;
+
     case type_type_def:
     {
       auto Resolved = ResolveToBaseType(Datatypes, Data);
@@ -7435,6 +7413,10 @@ GetNameTokenForDatatype(datatype *Data)
       // traverse the include graph
     } break;
 
+    case type_poof_tag:
+    {
+    } break;
+
     case type_meta_func:
     {
       Result = Data->meta_func.SourceToken;
@@ -7480,6 +7462,12 @@ GetNameForDatatype(datatype *Data, memory_arena *Memory)
     // undefined datatype.  The caller is responsible for checking that they
     // got a datatype back from their query!
     InvalidCase(type_datatype_noop);
+
+
+    {
+      unboxed_value(poof_tag, Data, Tag);
+      Result = Tag->Name;
+    } break;
 
     case type_type_def:
     {
@@ -7535,6 +7523,14 @@ GetIndirectionInfoForDatatype(program_datatypes *Datatypes, datatype *Data)
     // I guess ..?
     InvalidCase(type_datatype_noop);
 
+    case type_poof_tag:
+    case type_macro_def:
+    case type_meta_func:
+    case type_enum_member:
+    {
+    } break;
+
+
     case type_declaration:
     {
       declaration *Decl = SafeAccess(declaration, Data);
@@ -7553,12 +7549,6 @@ GetIndirectionInfoForDatatype(program_datatypes *Datatypes, datatype *Data)
           Result = &Decl->variable_decl.Type.Indirection;
         } break;
       }
-    } break;
-
-    case type_macro_def:
-    case type_meta_func:
-    case type_enum_member:
-    {
     } break;
 
     case type_primitive_def:
@@ -7592,6 +7582,7 @@ GetTypeTypeForDatatype(datatype *Data, memory_arena *Memory)
   unbox(Data)
   {
     case type_datatype_noop:
+    case type_poof_tag:
     case type_meta_func:
     case type_macro_def:
     case type_enum_member:
@@ -7617,7 +7608,9 @@ GetTypeNameFor(parse_context *Ctx, datatype *Data, typedef_resolution_behavior T
   counted_string Result = {};
   unbox(Data)
   {
+
     case type_datatype_noop: { InvalidCodePath(); } break;
+
 
     case type_type_def:
     {
@@ -7631,6 +7624,11 @@ GetTypeNameFor(parse_context *Ctx, datatype *Data, typedef_resolution_behavior T
         Assert(TDResBehavior == TypedefResoultion_DoNotResolveTypedefs);
         Result = TD->Alias;
       }
+    } break;
+
+    case type_poof_tag: 
+    {
+      Result = CSz("poof_tag");
     } break;
 
     case type_meta_func:
@@ -7679,6 +7677,7 @@ DatatypeStaticBufferSize(parse_context *Ctx, parser *Scope, datatype *Data, c_to
     } break;
 
     case type_type_def:
+    case type_poof_tag:
     case type_meta_func:
     case type_macro_def:
     case type_enum_member:
@@ -7787,7 +7786,7 @@ GetTagsFromDatatype(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_tok
   {
     case type_datatype_noop: { if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); } } break;
 
-
+    case type_poof_tag:
     case type_meta_func:
     case type_macro_def:
     case type_primitive_def:
@@ -7846,6 +7845,7 @@ DatatypeIsPointer(parse_context *Ctx, datatype *Data, parser *Scope = 0, c_token
   {
     case type_datatype_noop: { if (Scope) { InternalCompilerError(Scope, CSz("Infinite sadness"), MetaOperatorT); } } break;
 
+    case type_poof_tag:
     case type_meta_func:
     case type_macro_def:
     case type_enum_member: {} break;
@@ -8005,6 +8005,7 @@ ResolveToBaseType(program_datatypes *DataHash, datatype *Data)
       Result = ResolveToBaseType(DataHash, TDef->Type);
     } break;
 
+    case type_poof_tag:
     case type_meta_func:
     case type_macro_def:
     case type_enum_member:

@@ -713,7 +713,7 @@ value((value unsupported))
 array()
 hash(2D3996C3)
 indirection()
-tags(tag_with_value(69) )
+tags( tag_with_value=69 )
 location(tests/integration/src/common_structures.h:88)
 
 

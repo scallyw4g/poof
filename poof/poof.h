@@ -504,6 +504,7 @@ enum datatype_type
   type_primitive_def,
   type_macro_def,
   type_meta_func,
+  type_poof_tag,
 };
 
 poof(generate_string_table(datatype_type))
@@ -683,6 +684,7 @@ struct datatype poof(@d_union)
     type_def       type_def;
     macro_def      macro_def;
     meta_func      meta_func;
+    poof_tag       poof_tag;
   };
 };
 
@@ -817,6 +819,16 @@ Datatype(meta_func *E)
   datatype Result = {
     .Type = type_meta_func,
     .meta_func = *E,
+  };
+  return Result;
+}
+
+link_internal datatype
+Datatype(poof_tag *E)
+{
+  datatype Result = {
+    .Type = type_poof_tag,
+    .poof_tag = *E,
   };
   return Result;
 }

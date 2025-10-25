@@ -10,7 +10,7 @@ poof(
     array((Type.array))
     hash((Type.hash))
     indirection((Type.indirection))
-    tags((Type.tags))
+    tags((Type.tags(t) { t.name=t.value } ))
     location((Type.file):(Type.line))
   }
 )
