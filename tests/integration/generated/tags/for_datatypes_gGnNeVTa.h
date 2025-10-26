@@ -1,4 +1,4 @@
-// tests/integration/src/tags.h:153:0
+// tests/integration/src/tags.h:168:0
 enum  (enum foo_enum) foo= 
 struct (has_numeric_tag) numeric_tag=3 
 struct (tag_struct) 

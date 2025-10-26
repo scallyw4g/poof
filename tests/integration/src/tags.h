@@ -6,8 +6,23 @@ struct tag_struct
   int a1; poof( @foo )
   int a2; poof( @bar )
   int a3; poof( @bar(a3) @bar(a4) )
+  int a4; poof( @bar(a3, a4, foo) @bar(a5, a6, bar) )
 };
 
+
+poof(
+  func (tag_struct struct_t) @omit_include
+  {
+    struct_t.member(a4, (member) {
+        member.tags(tag)
+        {
+          tag.name = tag.value(0) tag.value(1) tag.value(2)
+        }
+      }
+    )
+  }
+)
+// tests/integration/generated/tags/anonymous_QnhbIncf.h
 
 poof(
   func (tag_struct TStruct) @omit_include

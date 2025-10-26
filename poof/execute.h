@@ -1236,7 +1236,31 @@ ResolveMetaOperator(        parse_context *Ctx,
               }
             }
 
-            PredicateBlock( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+            PredicateBlock(Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+          }
+          else if (OptionalToken(Scope, CTokenType_OpenParen))
+          {
+            if (poof_tag *Tag = DynamicCast(poof_tag, ReplaceData))
+            {
+              u32 TagIndex = u32(RequireToken(Scope, CTokenType_IntLiteral).as_u64);
+              RequireToken(Scope, CTokenType_CloseParen);
+
+              cs_buffer Splits = Split(Tag->Value, ',', Ctx->Memory);
+              if (TagIndex < Splits.Count)
+              {
+                Append(OutputBuilder, Splits.Start[TagIndex]);
+              }
+              else
+              {
+                cs Message = FSz("Requested Tag index (%d) out of bounds.  Tag (%S) contained (%d) split values", TagIndex, Tag->Name, Splits.Count);
+                PoofTagError(Scope, Message, BodyToken);
+              }
+            }
+            else
+            {
+              cs Message = FSz("Indexing into datatype (%S) value is illegal on anything but poof_tags.", ToString(ReplaceData->Type));
+              PoofTypeError(Scope, ParseErrorCode_PoofTypeError, Message, BodyToken);
+            }
           }
           else
           {

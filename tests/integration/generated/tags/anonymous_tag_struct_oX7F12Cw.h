@@ -1,4 +1,4 @@
-// tests/integration/src/tags.h:13:0
+// tests/integration/src/tags.h:28:0
 // foo
 int  a1 has foo tag
 
@@ -31,6 +31,18 @@ int  a3 has bar tag (value=a3)
 // tags {
 a3 bar=a3
 a3 bar=a4
+
+// }
+// foo
+
+
+// bar
+int  a4 has bar tag (value=a3, a4, foo) 
+
+
+// tags {
+a4 bar=a3, a4, foo
+a4 bar=a5, a6, bar
 
 // }
 
