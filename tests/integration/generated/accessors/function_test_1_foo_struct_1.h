@@ -1,3 +1,6 @@
+// callsite
+// tests/integration/src/accessors.h:118:0
+// (function_test_1) def
 // tests/integration/src/accessors.h:88:0
 
 
@@ -132,7 +135,6 @@ foo_struct_1  (func_type_name)
 // Args {
 
 // }
-
 
 
 

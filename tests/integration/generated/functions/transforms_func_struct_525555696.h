@@ -1,3 +1,6 @@
+// callsite
+// tests/integration/src/functions.h:123:0
+// (transforms_func) def
 // tests/integration/src/functions.h:93:0
 
 
@@ -24,4 +27,3 @@ FOO
 foo2
 FOO2
 FOO2
-

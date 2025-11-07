@@ -1,3 +1,6 @@
+// callsite
+// tests/integration/src/conditionals.h:170:0
+// (anonymous) def
 // tests/integration/src/conditionals.h:170:0
 int  first is a pointer
 
@@ -78,6 +81,5 @@ func_type_name AnotherFunc is a pointer
 func_type_name AnotherFunc is a pointer
 
 u32 NamedThing not a pointer
-
 
 

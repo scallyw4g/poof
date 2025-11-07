@@ -1,3 +1,6 @@
+// callsite
+// tests/integration/src/tags.h:49:0
+// (anonymous) def
 // tests/integration/src/tags.h:49:0
 // foo
 int  a1 has foo tag
@@ -45,5 +48,4 @@ a4 bar="a3", a4, foo
 a4 bar='a5', a6, bar
 
 // }
-
 

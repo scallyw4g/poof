@@ -6601,18 +6601,30 @@ RemoveAllWhitespaceChunks(string_builder *Builder)
 link_internal void
 FinalizeAndFlush( parse_context *Ctx,
                       meta_func *Func,
+                      c_token   *InvocationSite,
                  string_builder *Builder,
      tuple_cs_cs_buffer_builder *OutputTuples,
                    memory_arena *Memory )
 {
   TIMED_FUNCTION();
 
-  cs Filename = Func->SourceToken? Func->SourceToken->Filename : CSz("(unknown)");
-  u32 LineNumber = Func->SourceToken? Func->SourceToken->LineNumber : u32_MAX ;
+  // NOTE(Jesse): Reverse order cause they're all prepended
+  {
+    cs Filename = Func->SourceToken? Func->SourceToken->Filename : CSz("(unknown)");
+    u32 LineNumber = Func->SourceToken? Func->SourceToken->LineNumber : u32_MAX ;
+    cs Header = FCS(Func->HeaderFormatString, Filename, LineNumber);
+    Prepend(Builder, Header);
+    Prepend(Builder, FSz("// (%S) def\n", Func->Name ));
+  }
 
-  cs Header = FCS(Func->HeaderFormatString, Filename, LineNumber);
-  Prepend(Builder, Header);
-  Append(Builder, CSz("\n"));
+  {
+    cs Filename = InvocationSite->Filename;
+    u32 LineNumber = InvocationSite->LineNumber;
+    cs Header = FCS(Func->HeaderFormatString, Filename, LineNumber);
+    Prepend(Builder, Header);
+    Prepend(Builder, CSz("// callsite\n"));
+  }
+
 
   /* RemoveAllWhitespaceChunks(Builder); */
 

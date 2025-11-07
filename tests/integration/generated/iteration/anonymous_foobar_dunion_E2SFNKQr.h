@@ -1,3 +1,6 @@
+// callsite
+// tests/integration/src/iteration.h:66:0
+// (anonymous) def
 // tests/integration/src/iteration.h:66:0
 -- all members start --
 
@@ -16,6 +19,5 @@ contains(nested_struct) { foo_struct_1 foo_struct_1 }
 
 
 -- filtered members end --
-
 
 

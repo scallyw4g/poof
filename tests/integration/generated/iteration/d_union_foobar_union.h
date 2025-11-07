@@ -1,3 +1,6 @@
+// callsite
+// tests/integration/src/iteration.h:62:0
+// (d_union) def
 // tests/integration/src/iteration.h:62:0
 enum foobar_dunion_type
 {
@@ -16,5 +19,4 @@ struct foobar_dunion
     struct bar_struct bar_struct;
   };
 };
-
 

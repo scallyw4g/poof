@@ -1,3 +1,6 @@
+// callsite
+// tests/integration/src/accessors.h:122:0
+// (anonymous) def
 // tests/integration/src/accessors.h:122:0
 // {
 this_is_a_bug _embedded3 
@@ -85,4 +88,3 @@ foo_enum_value_3 foo_enum_value_3
 
 
 // }
-
