@@ -1,6 +1,7 @@
 // callsite
 // tests/integration/src/accessors.h:80:0
-// (function_test) def
+
+// def (function_test)
 // tests/integration/src/accessors.h:51:0
 is_func 
 
@@ -20,3 +21,4 @@ name  (foofunc0)
 // Args {
 
 // }
+

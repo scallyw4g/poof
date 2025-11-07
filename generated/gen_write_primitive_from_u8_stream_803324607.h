@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/binary_parser.cpp:664:0
+// (gen_write_primitive_from_u8_stream_little_endian) def
 // ./include/bonsai_stdlib/src/binary_parser.cpp:629:0
 link_internal b32
 Write(u8_stream *Dest, s8 *Src)

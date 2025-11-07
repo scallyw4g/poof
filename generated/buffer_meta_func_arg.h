@@ -1,3 +1,6 @@
+// callsite
+// ./poof/poof.h:619:0
+// (buffer) def
 // ./include/bonsai_stdlib/src/poof_functions.h:1432:0
 struct meta_func_arg_buffer
 {

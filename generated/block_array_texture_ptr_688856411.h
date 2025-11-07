@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/texture.cpp:8:0
+// (block_array_c) def
 // ./include/bonsai_stdlib/src/poof_functions.h:2375:0
 
 

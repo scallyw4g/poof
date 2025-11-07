@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/file.cpp:11:0
+// (flatten_block_array) def
 // ./include/bonsai_stdlib/src/poof_functions.h:2574:0
 link_internal file_traversal_node_buffer
 Flatten(file_traversal_node_block_array *Array, memory_arena *Memory)

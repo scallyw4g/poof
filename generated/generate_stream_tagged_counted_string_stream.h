@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/counted_string.h:131:0
+// (generate_stream) def
 // ./include/bonsai_stdlib/src/poof_functions.h:2034:0
 struct tagged_counted_string_stream_stream_chunk
 {

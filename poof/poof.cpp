@@ -6614,17 +6614,20 @@ FinalizeAndFlush( parse_context *Ctx,
     u32 LineNumber = Func->SourceToken? Func->SourceToken->LineNumber : u32_MAX ;
     cs Header = FCS(Func->HeaderFormatString, Filename, LineNumber);
     Prepend(Builder, Header);
-    Prepend(Builder, FSz("// (%S) def\n", Func->Name ));
+    Prepend(Builder, FSz("// def (%S)\n", Func->Name ));
   }
 
   {
     cs Filename = InvocationSite->Filename;
     u32 LineNumber = InvocationSite->LineNumber;
     cs Header = FCS(Func->HeaderFormatString, Filename, LineNumber);
+    Prepend(Builder, CSz("\n"));
     Prepend(Builder, Header);
     Prepend(Builder, CSz("// callsite\n"));
   }
 
+  // Make sure file ends with a newline
+  Append(Builder, CSz("\n"));
 
   /* RemoveAllWhitespaceChunks(Builder); */
 

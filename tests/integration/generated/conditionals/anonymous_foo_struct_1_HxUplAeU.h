@@ -1,6 +1,7 @@
 // callsite
 // tests/integration/src/conditionals.h:43:0
-// (anonymous) def
+
+// def (anonymous)
 // tests/integration/src/conditionals.h:43:0
 int  first defined
 
@@ -81,5 +82,6 @@ func_type_name AnotherFunc not defined
 func_type_name AnotherFunc not defined
 
 u32 NamedThing defined
+
 
 

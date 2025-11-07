@@ -1,3 +1,6 @@
+// callsite
+// ./poof/poof.h:75:0
+// (string_and_value_tables) def
 // ./include/bonsai_stdlib/src/poof_functions.h:2046:0
 link_internal b32
 IsValid(meta_func_directive Value)

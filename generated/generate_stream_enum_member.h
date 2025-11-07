@@ -1,3 +1,6 @@
+// callsite
+// ./poof/poof.h:384:0
+// (generate_stream) def
 // ./include/bonsai_stdlib/src/poof_functions.h:2034:0
 struct enum_member_stream_chunk
 {

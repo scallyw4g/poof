@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/texture_cursor.cpp:1:0
+// (are_equal) def
 // ./include/bonsai_stdlib/src/poof_functions.h:624:0
 link_internal b32
 AreEqual(texture *Thing1, texture *Thing2)

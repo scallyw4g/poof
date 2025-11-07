@@ -1,3 +1,6 @@
+// callsite
+// ./poof/poof.h:371:0
+// (block_array) def
 // ./include/bonsai_stdlib/src/poof_functions.h:2596:0
 
 

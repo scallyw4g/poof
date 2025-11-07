@@ -1,5 +1,6 @@
 // callsite
 // tests/integration/src/typedef_resolution.h:105:0
-// (f2) def
+
+// def (f2)
 // tests/integration/src/typedef_resolution.h:93:0
 s2 s3 

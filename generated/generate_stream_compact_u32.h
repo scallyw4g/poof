@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/binary_parser.cpp:18:0
+// (generate_stream_compact) def
 // ./include/bonsai_stdlib/src/poof_functions.h:2004:0
 link_internal u32_buffer
 Compact(u32_stream *Stream, memory_arena *PermMemory)

@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/console_io.h:13:0
+// (string_and_value_tables) def
 // ./include/bonsai_stdlib/src/poof_functions.h:2046:0
 link_internal b32
 IsValid(log_level Value)

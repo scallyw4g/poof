@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/vector.cpp:2:0
+// (buffer) def
 // ./include/bonsai_stdlib/src/poof_functions.h:1432:0
 struct v3i_buffer
 {

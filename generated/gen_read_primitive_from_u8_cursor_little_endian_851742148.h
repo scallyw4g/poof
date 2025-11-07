@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/binary_parser.cpp:513:0
+// (gen_read_primitive_from_u8_cursor_little_endian) def
 // ./include/bonsai_stdlib/src/binary_parser.cpp:449:0
 link_internal s8
 Read_s8(u8 *Source)

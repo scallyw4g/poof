@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/ui/ui.cpp:2524:0
+// (anonymous) def
 // ./include/bonsai_stdlib/src/ui/ui.cpp:2524:0
 
 case type_ui_render_command_window_start:

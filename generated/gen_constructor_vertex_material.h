@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/mesh.h:35:0
+// (gen_constructor) def
 // ./include/bonsai_stdlib/src/poof_functions.h:113:0
 link_internal vertex_material
 VertexMaterial(  u16   ColorIndex , u8   Transparency , u8   Emission  )

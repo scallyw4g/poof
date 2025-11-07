@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/ansi_stream.h:3:0
+// (generate_cursor) def
 // ./include/bonsai_stdlib/src/poof_functions.h:1538:0
 struct u8_cursor
 {

@@ -1,3 +1,6 @@
+// callsite
+// ./poof/poof.h:731:0
+// (generate_stream) def
 // ./include/bonsai_stdlib/src/poof_functions.h:2034:0
 struct d_union_member_stream_chunk
 {

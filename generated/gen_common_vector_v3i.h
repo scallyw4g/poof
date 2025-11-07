@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/vector.h:808:0
+// (gen_common_vector) def
 // ./include/bonsai_stdlib/src/poof_functions.h:450:0
 inline s32
 LengthSq( v3i Vec )

@@ -1,6 +1,8 @@
 // callsite
 // tests/integration/src/accessors.h:17:0
-// (anonymous) def
+
+// def (anonymous)
 // tests/integration/src/accessors.h:17:0
 int  fda
+
 

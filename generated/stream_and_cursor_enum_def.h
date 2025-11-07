@@ -1,3 +1,6 @@
+// callsite
+// ./poof/poof.h:407:0
+// (stream_and_cursor) def
 // ./include/bonsai_stdlib/src/poof_functions.h:2054:0
 struct enum_decl_cursor
 {

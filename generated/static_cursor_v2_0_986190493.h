@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/vector.h:1170:0
+// (static_cursor) def
 // ./include/bonsai_stdlib/src/poof_functions.h:1233:0
 
 struct v2_static_cursor_16

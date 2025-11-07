@@ -1,6 +1,7 @@
 // callsite
 // tests/integration/src/accessors.h:83:0
-// (function_test) def
+
+// def (function_test)
 // tests/integration/src/accessors.h:51:0
 is_func 
 
@@ -23,3 +24,4 @@ void  *bar
 thing **baz
 
 // }
+

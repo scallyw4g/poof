@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/c_token.cpp:5:0
+// (buffer) def
 // ./include/bonsai_stdlib/src/poof_functions.h:1432:0
 struct c_token_buffer_buffer
 {

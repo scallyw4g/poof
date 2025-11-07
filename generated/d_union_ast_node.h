@@ -1,3 +1,6 @@
+// callsite
+// ./poof/poof.h:1095:0
+// (d_union) def
 // ./poof/poof.h:1095:0
 enum ast_node_type
 {

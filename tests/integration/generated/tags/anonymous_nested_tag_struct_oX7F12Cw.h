@@ -1,6 +1,7 @@
 // callsite
 // tests/integration/src/tags.h:85:0
-// (anonymous) def
+
+// def (anonymous)
 // tests/integration/src/tags.h:85:0
 // has_tag bar (outer members)
 (tag_struct b1) has bar tag (value=b1)
@@ -42,6 +43,7 @@
 (tag_struct b2)  >  (int  a3) has bar tag (value=a3)
 
 (tag_struct b2)  >  (int  a4) has bar tag (value="a3", a4, foo)
+
 
 
 

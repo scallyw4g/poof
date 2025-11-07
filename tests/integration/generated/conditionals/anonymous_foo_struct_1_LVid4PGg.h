@@ -1,6 +1,7 @@
 // callsite
 // tests/integration/src/conditionals.h:63:0
-// (anonymous) def
+
+// def (anonymous)
 // tests/integration/src/conditionals.h:63:0
 int  first not compound
 
@@ -81,5 +82,6 @@ func_type_name AnotherFunc not compound
 func_type_name AnotherFunc not compound
 
 u32 NamedThing not compound
+
 
 

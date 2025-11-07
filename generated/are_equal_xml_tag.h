@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/xml.cpp:7:0
+// (are_equal) def
 // ./include/bonsai_stdlib/src/poof_functions.h:624:0
 link_internal b32
 AreEqual(xml_tag *Thing1, xml_tag *Thing2)

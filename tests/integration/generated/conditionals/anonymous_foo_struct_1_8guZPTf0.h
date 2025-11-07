@@ -1,6 +1,7 @@
 // callsite
 // tests/integration/src/conditionals.h:5:0
-// (anonymous) def
+
+// def (anonymous)
 // tests/integration/src/conditionals.h:5:0
 int  first not enum
 
@@ -81,5 +82,6 @@ func_type_name AnotherFunc not enum
 func_type_name AnotherFunc not enum
 
 u32 NamedThing not enum
+
 
 

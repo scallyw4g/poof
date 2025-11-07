@@ -1,6 +1,7 @@
 // callsite
 // tests/integration/src/conditionals.h:24:0
-// (anonymous) def
+
+// def (anonymous)
 // tests/integration/src/conditionals.h:24:0
 int  first not struct
 
@@ -81,5 +82,6 @@ func_type_name AnotherFunc not struct
 func_type_name AnotherFunc not struct
 
 u32 NamedThing not struct
+
 
 

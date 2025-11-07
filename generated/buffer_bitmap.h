@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/bitmap.cpp:37:0
+// (buffer) def
 // ./include/bonsai_stdlib/src/poof_functions.h:1432:0
 struct bitmap_buffer
 {

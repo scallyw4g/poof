@@ -1,6 +1,7 @@
 // callsite
 // tests/integration/src/discriminated_union.h:30:0
-// (d_union) def
+
+// def (d_union)
 // tests/integration/src/discriminated_union.h:30:0
 struct foo_bar_baz_cust
 {
@@ -16,4 +17,5 @@ struct foo_bar_baz_cust
     struct bar bar;
   };
 };
+
 

@@ -1,3 +1,6 @@
+// callsite
+// ./poof/poof.h:1183:0
+// (generate_stream_push) def
 // ./include/bonsai_stdlib/src/poof_functions.h:1884:0
 link_internal declaration *
 Push(declaration_stream* Stream, declaration Element)

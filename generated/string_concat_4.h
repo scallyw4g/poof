@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/counted_string.cpp:178:0
+// (string_concat) def
 // ./include/bonsai_stdlib/src/counted_string.cpp:151:0
 link_internal counted_string
 Concat( cs S0, cs S1, cs S2, cs S3,  memory_arena* Memory, umm ExtraChars = 0)

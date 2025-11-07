@@ -1,3 +1,6 @@
+// callsite
+// ./poof/poof.h:622:0
+// (generate_stream_compact) def
 // ./include/bonsai_stdlib/src/poof_functions.h:2004:0
 link_internal meta_func_arg_buffer
 Compact(meta_func_arg_stream *Stream, memory_arena *PermMemory)

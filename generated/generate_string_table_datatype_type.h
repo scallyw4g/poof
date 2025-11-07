@@ -1,3 +1,6 @@
+// callsite
+// ./poof/poof.h:510:0
+// (generate_string_table) def
 // ./include/bonsai_stdlib/src/poof_functions.h:1741:0
 link_internal b32
 IsValid(datatype_type Value)

@@ -1,6 +1,7 @@
 // callsite
 // tests/integration/src/discriminated_union.h:13:0
-// (d_union) def
+
+// def (d_union)
 // tests/integration/src/discriminated_union.h:13:0
 enum foo_bar_baz_type
 {
@@ -20,4 +21,5 @@ struct foo_bar_baz
     struct bar bar;
   };
 };
+
 

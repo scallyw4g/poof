@@ -1,5 +1,6 @@
 // callsite
 // tests/integration/src/accessors.h:12:0
-// (anonymous) def
+
+// def (anonymous)
 // tests/integration/src/accessors.h:12:0
 bar 

@@ -1,3 +1,6 @@
+// callsite
+// poof/poof.cpp:1900:0
+// (gen_stream_getter) def
 // poof/poof.cpp:1874:0
 link_internal enum_decl*
 GetEnumDeclByNameT( enum_decl_stream* Stream,  c_token  NameT )

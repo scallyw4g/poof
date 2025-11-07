@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/primitive_containers.cpp:8:0
+// (hashtable_get) def
 // ./include/bonsai_stdlib/src/poof_functions.h:976:0
 u32_linked_list_node*
 GetBucketByValue( u32_hashtable *Table, u32 Query )

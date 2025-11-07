@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/shader.h:172:0
+// (buffer_h) def
 // ./include/bonsai_stdlib/src/poof_functions.h:1325:0
 struct shader_uniform_buffer
 {

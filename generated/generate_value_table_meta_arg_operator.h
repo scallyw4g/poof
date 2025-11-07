@@ -1,3 +1,6 @@
+// callsite
+// ./poof/poof.h:127:0
+// (generate_value_table) def
 // ./include/bonsai_stdlib/src/poof_functions.h:1835:0
 link_internal meta_arg_operator
 MetaArgOperator(counted_string S)

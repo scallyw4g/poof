@@ -1,6 +1,7 @@
 // callsite
 // tests/integration/src/for_datatypes.h:19:0
-// ((builtin.for_datatypes)) def
+
+// def ((builtin.for_datatypes))
 // tests/integration/src/for_datatypes.h:19:0
 name(foofunc2)
 type((function))
@@ -888,4 +889,5 @@ struct members
 
 
 //
+
 

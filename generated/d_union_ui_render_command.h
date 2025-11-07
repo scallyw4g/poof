@@ -1,3 +1,6 @@
+// callsite
+// ./include/bonsai_stdlib/src/ui/ui.h:892:0
+// (d_union) def
 // ./include/bonsai_stdlib/src/ui/ui.h:892:0
 enum ui_render_command_type
 {
