@@ -6,14 +6,15 @@ struct tag_struct
   int a1; poof( @foo )
   int a2; poof( @bar )
   int a3; poof( @bar(a3) @bar(a4) )
-  int a4; poof( @bar(a3, a4, foo) @bar(a5, a6, bar) )
+  int a4; poof( @bar("a3", a4, foo) @bar('a5', a6, bar) )
 };
 
-
 poof(
-  func (tag_struct struct_t) @omit_include
+  func tag_struct_helper(struct_t)
   {
-    struct_t.member(a4, (member) {
+    struct_t.member(a4,
+      (member)
+      {
         member.tags(tag)
         {
           tag.name = tag.value(0) tag.value(1) tag.value(2)
@@ -22,7 +23,27 @@ poof(
     )
   }
 )
+
+poof(
+  func (tag_struct struct_t) @omit_include
+  {
+    tag_struct_helper(struct_t)
+  }
+)
 // tests/integration/generated/tags/anonymous_QnhbIncf.h
+
+poof(
+  for_datatypes(struct) @omit_include
+  func (struct_t)
+  {
+    struct_t.is_named(tag_struct)?
+    {
+      tag_struct_helper(tag_struct)
+    }
+  }
+)
+// tests/integration/generated/tags/(builtin.for_datatypes)_sdgoB3Hg.h
+
 
 poof(
   func (tag_struct TStruct) @omit_include

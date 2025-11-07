@@ -1514,11 +1514,6 @@ Execute( parse_context *Ctx,
   static int debugcounter;
   Info("%d : Func(%S) : Stack(%u) : %S", debugcounter++, Func->Name, *Depth, Func->Body.Tokens->Filename);
 
-  if (debugcounter)
-  {
-  }
-
-  /* counted_string Result = Execute(&Func->Body, Args, Ctx, Memory, Depth); */
   parser *Scope = &Func->Body;
 
   program_datatypes *Datatypes    = &Ctx->Datatypes;

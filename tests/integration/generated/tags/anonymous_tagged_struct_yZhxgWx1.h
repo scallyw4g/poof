@@ -1,4 +1,4 @@
-// tests/integration/src/tags.h:106:0
+// tests/integration/src/tags.h:127:0
 tagged_struct has tag foo
 
 
