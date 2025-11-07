@@ -148,7 +148,8 @@ struct foo_struct_1
   union
   {
     int _int3;
-  } _embedded3;
+    f32  foo;
+  } _embedded3; poof(@type_tag(foo_enum))
 
   counted_string S1; // Ensures the special-case hacks we put in work.  This is actually compound, but we want it considered primitive.
 

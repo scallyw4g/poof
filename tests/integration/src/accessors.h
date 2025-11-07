@@ -117,3 +117,31 @@ poof(
 
 poof(function_test_1(foo_struct_1))
 // tests/integration/generated/accessors/function_test_1_foo_struct_1.h
+
+poof(
+  func (foo_struct_1 type) @omit_include
+  {
+    type.member(_embedded3, (E) {
+        E.type E.name 
+
+        E.map_members(m)
+        {
+          m.type m.name
+        }
+
+        E.has_tag(type_tag)?
+        {
+          @var enum_t E.tag_value(type_tag)
+
+          enum_t.map(enum_v)
+          {
+            enum_v.type enum_v.name
+          }
+        }
+        {
+          error
+        }
+    })
+  }
+)
+// tests/integration/generated/accessors/anonymous_k5Pe98By.h
