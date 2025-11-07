@@ -148,8 +148,6 @@ poof(
     // {
       type.map(m)
       {
-        /// m.type m.name m.tags(t) { t.name }
-
         m.is_union?
         {
           m.has_tag(type_tag)?

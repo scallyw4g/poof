@@ -8207,7 +8207,10 @@ link_internal datatype *
 ResolveNameToDatatype(parse_context *Ctx, parser *Scope, c_token *Token, meta_func_arg_buffer *Args, cs NameToResolve)
 {
   datatype *Result = {};
-  if (meta_func_arg* A0 = GetByMatch(Args, NameToResolve))
+
+  cs Trimmed = Trim(NameToResolve);
+
+  if (meta_func_arg* A0 = GetByMatch(Args, Trimmed))
   {
     if (A0->Type == type_datatype)
     {
@@ -8215,12 +8218,12 @@ ResolveNameToDatatype(parse_context *Ctx, parser *Scope, c_token *Token, meta_fu
     }
     else
     {
-      PoofTypeError(Scope, ParseErrorCode_InvalidArgumentType, FSz("Attempted to resolve (%S) to non-datatype member (%S)", NameToResolve, ToString(A0->Type)), Token);
+      PoofTypeError(Scope, ParseErrorCode_InvalidArgumentType, FSz("Attempted to resolve (%S) to non-datatype member (%S)", Trimmed, ToString(A0->Type)), Token);
     }
   }
   else
   {
-    Result = GetDatatypeByName(&Ctx->Datatypes, NameToResolve);
+    Result = GetDatatypeByName(&Ctx->Datatypes, Trimmed);
   }
 
   return Result;

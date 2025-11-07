@@ -1523,6 +1523,9 @@ Execute( parse_context *Ctx,
   while ( c_token *BodyToken = PopTokenRawPointer(Scope) )
   {
     b32 ImpetusWasAt = False;
+
+    if (StringsMatch(BodyToken->Value, CSz("debug_break"))) { PLATFORM_RUNTIME_BREAK(); continue; }
+
     unbox(BodyToken)
     {
       case CTokenType_CharLiteral:

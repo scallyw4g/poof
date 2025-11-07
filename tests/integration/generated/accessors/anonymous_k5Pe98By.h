@@ -51,68 +51,6 @@ foo_enum_value_3 foo_enum_value_3
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // has!
 {
   enum foo_enum
@@ -126,8 +64,6 @@ foo_enum_value_3 foo_enum_value_3
 
 
 
-
-
 // has!
 {
   enum bar_enum
@@ -137,22 +73,6 @@ foo_enum_value_3 foo_enum_value_3
   bar_enum_value_3 bar_enum_value_3
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
