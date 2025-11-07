@@ -61,6 +61,8 @@ union (anonymous) not a pointer
 
 this_is_a_bug _embedded3 not a pointer
 
+union (anonymous) not a pointer
+
 counted_string S1 not a pointer
 
 foofuncptr FooFuncPtr not a pointer

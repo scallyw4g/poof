@@ -1,4 +1,5 @@
 // tests/integration/src/accessors.h:122:0
+// {
 this_is_a_bug _embedded3 
 
 int  _int3
@@ -14,4 +15,154 @@ foo_enum_value_3 foo_enum_value_3
 
 
 
+// }
+
+// {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// has!
+{
+  enum foo_enum
+    foo_enum_value_0 foo_enum_value_0
+  foo_enum_value_1 foo_enum_value_1
+  foo_enum_value_2 foo_enum_value_2
+  foo_enum_value_3 foo_enum_value_3
+
+}
+
+
+
+
+
+
+// has!
+{
+  enum bar_enum
+    bar_enum_value_0 bar_enum_value_0
+  bar_enum_value_1 bar_enum_value_1
+  bar_enum_value_2 bar_enum_value_2
+  bar_enum_value_3 bar_enum_value_3
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// }
 

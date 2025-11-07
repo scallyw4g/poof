@@ -61,6 +61,8 @@ union (anonymous) not enum
 
 this_is_a_bug _embedded3 not enum
 
+union (anonymous) not enum
+
 counted_string S1 not enum
 
 foofuncptr FooFuncPtr not enum

@@ -61,6 +61,8 @@ union (anonymous) not primitive
 
 this_is_a_bug _embedded3 not primitive
 
+union (anonymous) not primitive
+
 counted_string S1 is primitive
 
 foofuncptr FooFuncPtr not primitive

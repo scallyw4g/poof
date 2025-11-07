@@ -9,6 +9,7 @@ doubly_nested_struct pass
 array_struct pass 
 nested_struct pass 
 foofuncptr pass 
+bar_enum pass 
 foo_struct_0 pass 
 poof_enum pass 
 foofunc1 pass 

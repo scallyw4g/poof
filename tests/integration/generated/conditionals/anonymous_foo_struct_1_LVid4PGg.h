@@ -61,6 +61,8 @@ union (anonymous) is compound
 
 this_is_a_bug _embedded3 is compound
 
+union (anonymous) is compound
+
 counted_string S1 not compound
 
 foofuncptr FooFuncPtr not compound

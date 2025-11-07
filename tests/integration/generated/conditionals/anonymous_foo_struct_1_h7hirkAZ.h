@@ -61,6 +61,8 @@ union (anonymous) not struct
 
 this_is_a_bug _embedded3 not struct
 
+union (anonymous) not struct
+
 counted_string S1 not struct
 
 foofuncptr FooFuncPtr not struct

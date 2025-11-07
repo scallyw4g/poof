@@ -61,6 +61,8 @@ union (anonymous) defined
 
 this_is_a_bug _embedded3 defined
 
+union (anonymous) defined
+
 counted_string S1 defined
 
 foofuncptr FooFuncPtr defined

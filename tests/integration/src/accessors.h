@@ -121,19 +121,20 @@ poof(function_test_1(foo_struct_1))
 poof(
   func (foo_struct_1 type) @omit_include
   {
-    type.member(_embedded3, (E) {
-        E.type E.name 
+    // {
+    type.member(_embedded3, (m) {
+        m.type m.name 
 
-        E.map_members(m)
+        m.map_members(m2)
         {
-          m.type m.name
+          m2.type m2.name
         }
 
-        E.has_tag(type_tag)?
+        m.has_tag(type_tag)?
         {
-          @var enum_t E.tag_value(type_tag)
+          @var enum_t m.tag_value(type_tag)
 
-          enum_t.map(enum_v)
+          enum_t.map_values(enum_v)
           {
             enum_v.type enum_v.name
           }
@@ -142,6 +143,31 @@ poof(
           error
         }
     })
+    // }
+
+    // {
+      type.map(m)
+      {
+        /// m.type m.name m.tags(t) { t.name }
+
+        m.is_union?
+        {
+          m.has_tag(type_tag)?
+          {
+            @var enum_t m.tag_value(type_tag)
+
+            // has!
+            {
+              enum_t
+              enum_t.map_values(enum_v)
+              {
+                enum_v.type enum_v.name
+              }
+            }
+          }
+        }
+      }
+    // }
   }
 )
 // tests/integration/generated/accessors/anonymous_k5Pe98By.h

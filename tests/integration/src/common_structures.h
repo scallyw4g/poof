@@ -40,6 +40,15 @@ enum foo_enum
   foo_enum_value_3,
 };
 
+enum bar_enum
+{
+  bar_enum_value_0,
+  bar_enum_value_1,
+  bar_enum_value_2,
+  bar_enum_value_3,
+};
+
+
 
 struct array_struct
 {
@@ -149,7 +158,14 @@ struct foo_struct_1
   {
     int _int3;
     f32  foo;
+
   } _embedded3; poof(@type_tag(foo_enum))
+
+  union
+  {
+    int anonymous;
+  }; poof(@type_tag(bar_enum))
+
 
   counted_string S1; // Ensures the special-case hacks we put in work.  This is actually compound, but we want it considered primitive.
 

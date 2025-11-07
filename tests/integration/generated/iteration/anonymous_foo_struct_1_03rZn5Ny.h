@@ -30,6 +30,7 @@ this_is_a_bug _embedded1
 this_is_a_bug _embedded2 
 union (anonymous) (value unsupported)
 this_is_a_bug _embedded3 
+union (anonymous) (value unsupported)
 counted_string S1 
 foofuncptr FooFuncPtr 
 foofunc0 FooFun 

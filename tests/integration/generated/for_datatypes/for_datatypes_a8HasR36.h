@@ -6,7 +6,7 @@ array()
 hash(34EC700A)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:81)
+location(tests/integration/src/common_structures.h:90)
 
 
 function args
@@ -46,7 +46,7 @@ array()
 hash(1BC148A5)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:79)
+location(tests/integration/src/common_structures.h:88)
 
 
 function args
@@ -130,7 +130,7 @@ array()
 hash(2A4BE8BA)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:92)
+location(tests/integration/src/common_structures.h:101)
 
 
 
@@ -168,6 +168,7 @@ struct members
   this_is_a_bug _embedded2
   union (anonymous)
   this_is_a_bug _embedded3
+  union (anonymous)
   counted_string S1
   foofuncptr FooFuncPtr
   foofunc0 FooFun
@@ -227,7 +228,7 @@ array()
 hash(2B1EFA62)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:171)
+location(tests/integration/src/common_structures.h:187)
 
 
 
@@ -245,7 +246,7 @@ array()
 hash(B47F294)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:76)
+location(tests/integration/src/common_structures.h:85)
 
 
 function args
@@ -288,7 +289,7 @@ array()
 hash(11D37368)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:61)
+location(tests/integration/src/common_structures.h:70)
 
 
 
@@ -329,7 +330,7 @@ array()
 hash(31690B79)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:51)
+location(tests/integration/src/common_structures.h:60)
 
 
 
@@ -351,7 +352,7 @@ array()
 hash(1F378381)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:44)
+location(tests/integration/src/common_structures.h:53)
 
 
 
@@ -574,7 +575,7 @@ array()
 hash(3AEF4D40)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:55)
+location(tests/integration/src/common_structures.h:64)
 
 
 
@@ -597,7 +598,7 @@ array()
 hash(94CDD91)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:67)
+location(tests/integration/src/common_structures.h:76)
 
 
 
@@ -615,7 +616,7 @@ array()
 hash(29B9FDBA)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:78)
+location(tests/integration/src/common_structures.h:87)
 
 
 function args
@@ -647,6 +648,24 @@ struct members
     int  _int2
 
 }
+
+
+
+
+//
+
+name((anonymous))
+type(union)
+value((value unsupported))
+array()
+hash(2937360B)
+indirection()
+tags()
+location((unknown):-1)
+
+
+
+
 
 
 
@@ -707,6 +726,32 @@ location(tests/integration/src/common_structures.h:24)
 
 //
 
+name(bar_enum)
+type(enum)
+value((value unsupported))
+array()
+hash(284726AE)
+indirection()
+tags()
+location(tests/integration/src/common_structures.h:43)
+
+
+
+
+
+
+enum values
+{
+    bar_enum_value_0 bar_enum_value_0 
+  bar_enum_value_1 bar_enum_value_1 
+  bar_enum_value_2 bar_enum_value_2 
+  bar_enum_value_3 bar_enum_value_3 
+
+}
+
+
+//
+
 name(foo_struct_0)
 type(struct)
 value((value unsupported))
@@ -714,7 +759,7 @@ array()
 hash(2D3996C3)
 indirection()
 tags( tag_with_value=69 )
-location(tests/integration/src/common_structures.h:88)
+location(tests/integration/src/common_structures.h:97)
 
 
 
@@ -736,7 +781,7 @@ array()
 hash(3B2926CC)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:174)
+location(tests/integration/src/common_structures.h:190)
 
 
 
@@ -759,7 +804,7 @@ array()
 hash(A897753)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:80)
+location(tests/integration/src/common_structures.h:89)
 
 
 function args
@@ -799,7 +844,7 @@ array()
 hash(13DD1FA3)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:72)
+location(tests/integration/src/common_structures.h:81)
 
 
 function args
@@ -824,7 +869,7 @@ array()
 hash(1B207F9)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:182)
+location(tests/integration/src/common_structures.h:198)
 
 
 

@@ -61,6 +61,8 @@ union (anonymous) not a function
 
 this_is_a_bug _embedded3 not a function
 
+union (anonymous) not a function
+
 counted_string S1 not a function
 
 foofuncptr FooFuncPtr is a function
