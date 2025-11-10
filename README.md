@@ -14,16 +14,16 @@ There is a language primer and reference in [language_introduction.md](language_
 
 # Introduction
 
-`poof` is a metaprogramming environment that aims to augment the C programming
-language with modern, and sometimes experimental, metaprogramming techniques.
-
 `poof` was born out of frustration with the lack of ergonomics when
 metaprogramming with C++ templates.  The canonical example is printing an enum
 value as a string.  What _should_ be an extremly simple operation turns into an
 almost comical dance of macros and templates.  If you don't to use macros it's
-even more hilarious.  Let's look at an example.
+even more hilarious.
 
-```
+Let's look at an example of how poof makes this operation
+trivial, without torturing your enum type definitions.
+
+```C
 
 // Do this once globally for your program; this is how we embed poof code
 // directly into our source files
