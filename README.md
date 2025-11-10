@@ -24,6 +24,12 @@ almost comical dance of macros and templates.  If you don't to use macros it's
 even more hilarious.  Let's look at an example.
 
 ```
+
+// Do this once globally for your program; this is how we embed poof code
+// directly into our source files
+#define poof(...)
+
+
 enum my_very_important_enum
 {
   EnumValue_0,
@@ -34,8 +40,14 @@ enum my_very_important_enum
 };
 
 poof(
+
+  /// poof meta-functions are defined with the func keyword, and take type arguments
+  ///
   func gen_to_string(enum_t)
   {
+
+    /// This is the function definition we're going to emit
+    ///
     const char *ToString( enum_t.name Value )
     {
       switch (Value)
@@ -44,9 +56,12 @@ poof(
       }
       return 0;
     }
+
   }
 )
 
+// Finally, calling the meta-function looks like this
+//
 poof( gen_to_string(my_very_important_enum) )
 #include "gen_to_string_my_very_important_enum.h"
 
@@ -69,6 +84,14 @@ const char *ToString(my_very_important_enum Type)
   return 0;
 }
 ```
+
+As you can see, with poof, operations that _should_ be simple actually are.
+This capability of iterating over types extends to many useful problem domains.
+For example:
+
+* serializing and deserialzing arbitrary datatypes
+* low-effort UI code for inspecting arbitrary datatypes, live at runtime
+* preventing certain classes of bugs at both compile time and runtime
 
 # Getting started
 
