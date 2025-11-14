@@ -14,14 +14,27 @@ There is a language primer and reference in [language_introduction.md](language_
 
 # Introduction
 
-`poof` was born out of frustration with the lack of ergonomics when
-metaprogramming with C++ templates.  The canonical example is printing an enum
-value as a string.  What _should_ be an extremly simple operation turns into an
-almost comical dance of macros and templates.  If you don't to use macros it's
-even more hilarious.
+`poof` is a practical answer to frustration with the state of compile-time
+metaprogramming tools in C and C++.
 
-Let's look at an example of how poof makes this operation
-trivial, without torturing your enum type definitions.
+
+# Target Audience
+
+poof has a very specific target audience; programmers that care deeply about
+control, and want a flexible, no-nonsense answer to generics.  If you write a
+metric fuck-ton of code, and are frustrated by C++ templates, poof may be
+interesting to you.
+
+# Simple Example
+
+poof excels at many tasks that range from miserable to impossible by using C++ templates.
+A very simple example is printing a runtime enum value as it's source-code string representation.
+
+It is nearly-trivial to generate a ToString function from poof.
+
+In C++ templates this operation is painful, and _atrocious_ if you don't use a helper macro to define your enum.
+
+Let's take a look at how we do it with poof.
 
 ```C
 
