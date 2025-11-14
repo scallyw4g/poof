@@ -99,7 +99,9 @@ const char *ToString(my_very_important_enum Type)
 ```
 
 As you can see, with poof, operations that _should_ be simple actually are.
+
 This capability of iterating over types extends to many useful problem domains.
+
 For example:
 
 * serializing and deserialzing arbitrary datatypes
