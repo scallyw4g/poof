@@ -6599,6 +6599,7 @@ RemoveAllWhitespaceChunks(string_builder *Builder)
 link_internal void
 FinalizeAndFlush( parse_context *Ctx,
                       meta_func *Func,
+           meta_func_arg_buffer *InstanceArgs,
                       c_token   *InvocationSite,
                  string_builder *Builder,
      tuple_cs_cs_buffer_builder *OutputTuples,
@@ -6632,10 +6633,11 @@ FinalizeAndFlush( parse_context *Ctx,
   cs Code = Finalize(Builder, Memory);
 
   cs OutfileName = GenerateOutfileNameFor(
-      // ToString(Directive),
-      Func->Name,
-      GetRandomString(8, umm(Hash(&Code)), Memory),
-      Memory);
+       Ctx,
+       Func,
+       InstanceArgs,
+       Memory,
+       GetRandomString(8, umm(Hash(&Code)), Memory) );
 
   cs ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, Func->Directives, Memory);
   Append(OutputTuples, Tuple(ActualOutputFile, Code));
@@ -6900,28 +6902,39 @@ ToString(parse_context *Ctx, meta_func_arg *Arg, memory_arena *Memory)
   return Result;
 }
 
-link_internal counted_string
-GenerateOutfileNameFor(parse_context *Ctx, meta_func *Func, meta_func_arg_buffer *Args, memory_arena *Memory, cs Modifier)
+link_internal cs
+GenerateOutfileNameFor( parse_context *Ctx,
+                            meta_func *Func,
+                 meta_func_arg_buffer *InstanceArgs,
+                         memory_arena *Memory,
+                                   cs  Modifier )
 {
   string_builder OutfileBuilder = StringBuilder();
   Append(&OutfileBuilder, Func->Name);
   Append(&OutfileBuilder, CSz("_"));
-  for (u32 ArgIndex = 0; ArgIndex < Args->Count; ++ArgIndex)
+  for (u32 ArgIndex = 0; ArgIndex < InstanceArgs->Count; ++ArgIndex)
   {
-    meta_func_arg *Arg = Args->Start + ArgIndex;
+    meta_func_arg *Arg = InstanceArgs->Start + ArgIndex;
     Append(&OutfileBuilder, ToString(Ctx, Arg, Memory));
-    if ( ArgIndex+1 != Args->Count )
+    if ( ArgIndex+1 != InstanceArgs->Count )
     {
       Append(&OutfileBuilder, CSz("_"));
     }
   }
+
+  if (Modifier.Count)
+  {
+    Append(&OutfileBuilder, CSz("_"));
+    Append(&OutfileBuilder, Modifier);
+  }
+
   Append(&OutfileBuilder, CSz(".h"));
-  counted_string Result = Finalize(&OutfileBuilder, Memory);
+  cs Result = Finalize(&OutfileBuilder, Memory);
   return Result;
 }
 
-link_internal counted_string
-GenerateOutfileNameFor(counted_string Name, counted_string DatatypeName, memory_arena* Memory, counted_string Modifier)
+link_internal cs
+GenerateOutfileNameFor(cs Name, cs DatatypeName, memory_arena* Memory, cs Modifier)
 {
   string_builder OutfileBuilder = StringBuilder();
   Append(&OutfileBuilder, Name);
@@ -6933,7 +6946,7 @@ GenerateOutfileNameFor(counted_string Name, counted_string DatatypeName, memory_
     Append(&OutfileBuilder, Modifier);
   }
   Append(&OutfileBuilder, CSz(".h"));
-  counted_string Result = Finalize(&OutfileBuilder, Memory);
+  cs Result = Finalize(&OutfileBuilder, Memory);
 
   return Result;
 }

@@ -1933,7 +1933,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           if (CallFunction(Ctx, DirectiveT, Func, &ArgInstances, &FuncBuilder, Memory, &Depth))
           {
 #if 1
-            FinalizeAndFlush(Ctx, Func, DirectiveT, &FuncBuilder, Builder, Memory);
+            FinalizeAndFlush(Ctx, Func, &ArgInstances, DirectiveT, &FuncBuilder, Builder, Memory);
 #else
             cs Code = Finalize(&FuncBuilder, Memory);
             counted_string OutfileName = GenerateOutfileNameFor(Ctx, Func, &ArgInstances, Memory);
@@ -2013,7 +2013,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
           else
           {
 #if 1
-            FinalizeAndFlush(Ctx, &Func, DirectiveT, &FuncBuilder, Builder, Memory);
+            FinalizeAndFlush(Ctx, &Func, &Args, DirectiveT, &FuncBuilder, Builder, Memory);
 #else
             counted_string OutfileName = GenerateOutfileNameFor( Func.Name, ArgType, Memory, GetRandomString(8, umm(Hash(&Code)), Memory));
             cs Header = FCS(Func.HeaderFormatString, DirectiveT->Filename, DirectiveT->LineNumber);
@@ -2229,7 +2229,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
 
 #if 1
-        FinalizeAndFlush(Ctx, &ForAllDummyFunc, DirectiveT, &OutputBuilder, Builder, Memory);
+        FinalizeAndFlush(Ctx, &ForAllDummyFunc, &ForAllDummyFunc.Args, DirectiveT, &OutputBuilder, Builder, Memory);
 #else
         cs OutfileName = GenerateOutfileNameFor(ToString(Directive), GetRandomString(8, umm(Hash(&Code)), Memory), Memory);
         cs Header = FCS(ForAllDummyFunc.HeaderFormatString, DirectiveT->Filename, DirectiveT->LineNumber);
@@ -2269,7 +2269,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 #if 1
         meta_func DUnionDummyFunc = MetaFunc(CSz("d_union"), {});
         DUnionDummyFunc.SourceToken = DatatypeT;
-        FinalizeAndFlush(Ctx, &DUnionDummyFunc, DirectiveT, &CodeBuilder, Builder, Memory);
+        FinalizeAndFlush(Ctx, &DUnionDummyFunc, &DUnionDummyFunc.Args, DirectiveT, &CodeBuilder, Builder, Memory);
 #else
         counted_string Code = Finalize(&CodeBuilder, Memory);
 
