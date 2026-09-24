@@ -4912,9 +4912,9 @@ ParseStructBody(parse_context *Ctx, c_token *StructNameT, poof_tag_block_array *
 
       case type_compound_decl:
       {
-        // NOTE(Jesse): This is a pretty gross hack to make sure variables
-        // declared after an anonymous compound decl can get back to their
-        // declaration somehow. ie.
+        // NOTE(Jesse): This is a pretty gross hack to make sure names declared
+        // after an anonymous compound decl can get back to their declaration
+        // somehow. ie.
         //
         // struct
         // {
@@ -6466,13 +6466,14 @@ FlushOutputToDisk( parse_context *Ctx,
                               cs  OutputForThisParser,
                               cs  NewFilename,
              meta_func_directive  MetaDirectives,
-                    memory_arena *Memory)
+                    memory_arena *Memory )
 {
   TIMED_FUNCTION();
   parser *Parser = Ctx->CurrentParser;
 
  b32 OmitInclude  = BitfieldIsSet(MetaDirectives, omit_include);
  b32 CodeFragment = BitfieldIsSet(MetaDirectives, code_fragment);
+ b32 RewriteAllIncludes = Ctx->Args.RewriteAllIncludes;
 
   // NOTE(Jesse): It can be a semicolon too
   // TODO(Jesse): I _think_ the semicolon thing is fixed and this assertion shouldn't fire anymore
@@ -6486,61 +6487,72 @@ FlushOutputToDisk( parse_context *Ctx,
   }
 
   counted_string OutputPath = {};
+  if (RewriteAllIncludes) { OutputPath = Concat(Ctx->Args.Outpath, NewFilename, Memory); }
 
   EatUntilIncluding(Parser, CTokenType_Newline);
-
-  /* EatNBSP(Parser); */
-
-  /* parser PrevParserState = *Parser; */
-  /* c_token_cursor PrevTokens = *Parser->Tokens; */
   c_token *LastTokenBeforeNewline = PeekTokenPointer(Parser, -1);
 
-  c_token *T = PeekTokenRawPointer(Parser);
-  if (T && T->Type == CT_PreprocessorInclude)
-  {
-    c_token IncludeT = RequireTokenRaw(Parser, CT_PreprocessorInclude);
-    counted_string IncludePath = IncludeT.IncludePath;
-
-    if (IncludeT.Flags & CTFlags_RelativeInclude) { IncludePath = StripQuotes(IncludePath); }
-
-    /* Info("INCLUDE PATH %S", IncludePath); */
-    /* OutputPath = Concat(Ctx->Args.Outpath, Basename(IncludePath), Memory); */
-    OutputPath = IncludePath;
-  }
-
-  if (OmitInclude && T && T->Type == CTokenType_CommentSingleLine)
-  {
-    OutputPath = T->Value;
-    Frontcate(&OutputPath, 3);
-    /* Info("OmitInclude (%S)", OutputPath); */
-  }
-
+  c_token *PotentialIncludeToken = PeekTokenRawPointer(Parser);
   cs CodeToInsert = {};
-  if (OutputPath.Start == False)
+  if (OutputPath.Start == 0)
   {
-    Assert(PeekTokenRaw(Parser, -1).Type == CTokenType_Newline);
-
-    OutputPath = Concat(Ctx->Args.Outpath, NewFilename, Memory);
-    Assert(LastTokenBeforeNewline->CodeToInsert.Start == 0);
-    Assert(LastTokenBeforeNewline->CodeToInsert.Count == 0);
-
-    if (OmitInclude)
+    Assert(PotentialIncludeToken);
+    if (PotentialIncludeToken->Type == CT_PreprocessorInclude)
     {
-      if (T)
+      RequireTokenRawPointer(Parser, CT_PreprocessorInclude);
+      if (OutputPath.Start == 0)
       {
-        if (T->Type != CTokenType_CommentSingleLine)
+        counted_string IncludePath = PotentialIncludeToken->IncludePath;
+        if (PotentialIncludeToken->Flags & CTFlags_RelativeInclude) { IncludePath = StripQuotes(IncludePath); }
+        OutputPath = IncludePath;
+      }
+    }
+    else if (OmitInclude && PotentialIncludeToken->Type == CTokenType_CommentSingleLine)
+    {
+      RequireTokenRawPointer(Parser, CTokenType_CommentSingleLine);
+      OutputPath = PotentialIncludeToken->Value;
+
+      OutputPath = Trim(OutputPath);
+      Frontcate(&OutputPath, 2);
+      OutputPath = Trim(OutputPath);
+    }
+    else
+    {
+      // NOTE(Jesse): This would fail if the include ended with whitespace.. 
+      // we should probably handle that case.
+      InvalidCodePath();
+    }
+
+    if (OutputPath.Start == 0)
+    {
+      Assert(PeekTokenRaw(Parser, -1).Type == CTokenType_Newline);
+
+      OutputPath = Concat(Ctx->Args.Outpath, NewFilename, Memory);
+      Assert(LastTokenBeforeNewline->CodeToInsert.Start == 0);
+      Assert(LastTokenBeforeNewline->CodeToInsert.Count == 0);
+      if (OmitInclude)
+      {
+        if (PotentialIncludeToken)
         {
+          if (PotentialIncludeToken->Type != CTokenType_CommentSingleLine)
+          {
+            CodeToInsert = Concat(CSz("// "), OutputPath, Memory);
+          }
+          else
+          {
+            // We already had a coment there
+          }
+        }
+        else
+        {
+          // File ended without another token, insert a new one
           CodeToInsert = Concat(CSz("// "), OutputPath, Memory);
         }
       }
       else
       {
-        CodeToInsert = Concat(CSz("// "), OutputPath, Memory);
+        CodeToInsert = Concat(CSz("#include <"), OutputPath, CSz(">"), Memory);
       }
-    }
-    else
-    {
-      CodeToInsert = Concat(CSz("#include <"), OutputPath, CSz(">"), Memory);
     }
   }
 
@@ -6550,7 +6562,6 @@ FlushOutputToDisk( parse_context *Ctx,
     LastTokenBeforeNewline->Type = CT_PoofInsertedCode;
     LastTokenBeforeNewline->CodeToInsert = CodeToInsert;
   }
-
 
 
   Output(OutputForThisParser, OutputPath, Memory);
@@ -6572,9 +6583,6 @@ FlushOutputToDisk( parse_context *Ctx,
     Ctx->CurrentParser = OldParser;
   }
 #endif
-
-  /* PushParser(Ctx->CurrentParser, OutputParse, parser_push_type_include); */
-  /* GoGoGadgetMetaprogramming(Ctx, TodoInfo); */
 
   return OutputPath;
 }
