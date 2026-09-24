@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/primitives.h:251:0
-// (gen_primitive_deep_copy) def
+
+// def (gen_primitive_deep_copy)
 // ./include/bonsai_stdlib/src/primitives.h:238:0
 link_internal void
 DeepCopy( s64 *Src, s64 *Dest )

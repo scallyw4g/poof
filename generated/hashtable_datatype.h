@@ -1,6 +1,7 @@
 // callsite
 // ./poof/poof.h:722:0
-// (hashtable) def
+
+// def (hashtable)
 // ./include/bonsai_stdlib/src/poof_functions.h:775:0
 struct datatype_linked_list_node
 {

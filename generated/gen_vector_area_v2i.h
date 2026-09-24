@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/vector.h:799:0
-// (gen_vector_area) def
+
+// def (gen_vector_area)
 // ./include/bonsai_stdlib/src/poof_functions.h:427:0
 inline s32
 Area( v2i Vec )

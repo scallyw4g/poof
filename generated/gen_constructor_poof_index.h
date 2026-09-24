@@ -1,6 +1,7 @@
 // callsite
 // ./poof/poof.h:520:0
-// (gen_constructor) def
+
+// def (gen_constructor)
 // ./include/bonsai_stdlib/src/poof_functions.h:113:0
 link_internal poof_index
 PoofIndex(  u32   Index , u32   MaxIndex  )

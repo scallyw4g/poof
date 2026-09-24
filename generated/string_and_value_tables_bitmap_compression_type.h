@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/bitmap.cpp:76:0
-// (string_and_value_tables) def
+
+// def (string_and_value_tables)
 // ./include/bonsai_stdlib/src/poof_functions.h:2046:0
 link_internal b32
 IsValid(bitmap_compression_type Value)

@@ -1325,13 +1325,13 @@ ResolveMetaOperator(        parse_context *Ctx,
                 MemberIndex = RequireToken(Scope, CTokenType_IntLiteral).UnsignedValue;
 
                 u32 AtIndex = 0;
-                declaration_stream_chunk *IndexedMember = Members->FirstChunk;
-                while ( IndexedMember && AtIndex < MemberIndex )
+                declaration_stream_chunk *LoopMember = Members->FirstChunk;
+                while ( LoopMember && AtIndex < MemberIndex )
                 {
-                  IndexedMember = IndexedMember->Next;
+                  LoopMember = LoopMember->Next;
                   AtIndex ++;
                 }
-                TargetMember = IndexedMember;
+                TargetMember = LoopMember;
 
                 if (TargetMember)
                 {
@@ -1352,17 +1352,17 @@ ResolveMetaOperator(        parse_context *Ctx,
               else if (NextT->Type == CTokenType_Identifier)
               {
                 cs MemberName = RequireToken(Scope, CTokenType_Identifier).Value;
-                declaration_stream_chunk *IndexedMember = Members->FirstChunk;
-                while ( IndexedMember )
+                declaration_stream_chunk *LoopMember = Members->FirstChunk;
+                while ( LoopMember )
                 {
                   // TODO(Jesse)(memory_leak): begin/end temporary memory here!
-                  if (AreEqual(MemberName, GetNameForDecl(&IndexedMember->Element)))
+                  if (AreEqual(MemberName, GetNameForDecl(&LoopMember->Element)))
                   {
-                    TargetMember = IndexedMember;
+                    TargetMember = LoopMember;
                     break;
                   }
 
-                  IndexedMember = IndexedMember->Next;
+                  LoopMember = LoopMember->Next;
                 }
 
                 if (!TargetMember)
@@ -1373,6 +1373,48 @@ ResolveMetaOperator(        parse_context *Ctx,
                                                       CSz("Attempted to access member (%S) on (%S), which does not have that member!"),
                                                       MemberName,
                                                       GetNameForDatatype(ReplaceData, GetTranArena())),
+                                 MetaOperatorToken);
+                }
+              }
+              else if (NextT->Type == CTokenType_At)
+              {
+                RequireToken(Scope, CTokenType_At);
+                cs TagName = RequireToken(Scope, CTokenType_Identifier).Value;
+
+                declaration_stream_chunk *LoopMember = Members->FirstChunk;
+                /* IterateOver(Members, Member, LoopIndex) */
+                while ( LoopMember )
+                {
+                  if (FindTag(Ctx, TagName, &LoopMember->Element.Tags))
+                  {
+                    if (TargetMember == 0)
+                    {
+                      TargetMember = LoopMember;
+                    }
+                    else
+                    {
+                      PoofTypeError( Scope,
+                                     ParseErrorCode_InvalidTag,
+                                     FormatCountedString( GetTranArena(),
+                                                          CSz("(%S) contained multiple members with tag name (%S)"),
+                                                          GetNameForDatatype(ReplaceData, GetTranArena()),
+                                                          TagName
+                                                        ),
+                                     MetaOperatorToken);
+                    }
+                  }
+                  LoopMember = LoopMember->Next;
+                }
+
+                if (TargetMember == 0)
+                {
+                  PoofTypeError( Scope,
+                                 ParseErrorCode_InvalidTag,
+                                 FormatCountedString( GetTranArena(),
+                                                      CSz("(%S) contained no members with tag name (%S)"),
+                                                      GetNameForDatatype(ReplaceData, GetTranArena()),
+                                                      TagName
+                                                    ),
                                  MetaOperatorToken);
                 }
               }
@@ -1412,6 +1454,12 @@ ResolveMetaOperator(        parse_context *Ctx,
               {
                 Scope->ErrorCode = MemberScope.ErrorCode;
               }
+            }
+            else
+            {
+              // NOTE(Jesse): Above parsing code is responsible for checking this
+              // and emitting an error if it didn't find a member
+              InvalidCodePath();
             }
           }
           else

@@ -200,3 +200,10 @@ poof(
 )
 // tests/integration/generated/tags/for_datatypes_gGnNeVTa.h
 
+poof(
+  func (tag_struct struct_t) @omit_include
+  {
+    struct_t.member(@foo, (member_with_foo_tag) { found @foo tag on (member_with_foo_tag)! })
+  }
+)
+// tests/integration/generated/tags/anonymous_kvfkPQ37.h

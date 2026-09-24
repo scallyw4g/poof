@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/to_string.cpp:65:0
-// (to_string) def
+
+// def (to_string)
 // ./include/bonsai_stdlib/src/to_string.cpp:36:0
 link_internal cs
 ToString(texture *Element)

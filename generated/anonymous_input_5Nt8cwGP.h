@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/platform/win32/win32_platform.cpp:412:0
-// (anonymous) def
+
+// def (anonymous)
 // ./include/bonsai_stdlib/src/platform/win32/win32_platform.cpp:412:0
 BindKeyupToInput( VK_RETURN, Enter);
 

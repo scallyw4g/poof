@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/binary_parser.cpp:3:0
-// (buffer) def
+
+// def (buffer)
 // ./include/bonsai_stdlib/src/poof_functions.h:1432:0
 struct u32_buffer
 {

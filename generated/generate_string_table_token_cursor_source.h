@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/c_token.h:256:0
-// (generate_string_table) def
+
+// def (generate_string_table)
 // ./include/bonsai_stdlib/src/poof_functions.h:1741:0
 link_internal b32
 IsValid(token_cursor_source Value)

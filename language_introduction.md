@@ -698,6 +698,27 @@ poof( for_datatypes(struct enum)
     }
 )
 ```
+:fire: @var
+
+Declare a new identifier.
+If the new identifier declared with @var resolves to an existing type name
+you may use it as that type, otherwise it is resolved to a symbol
+
+```
+poof(
+    func extend_struct(struct_t)
+    {
+        @var extended_struct_name (struct_t.name)_extended
+        extended_struct_name
+    }
+)
+poof(extend_struct(foo))
+/// emits foo_extended
+
+```
+
+
+Defines a new poof variable
 
 :fire: poof_error
 

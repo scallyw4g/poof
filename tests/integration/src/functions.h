@@ -139,3 +139,16 @@ poof(
 
 poof(gen_struct_func(thing))
 // tests/integration/generated/functions/gen_struct_func_struct_473003373.h
+
+
+typedef void (*func_ptr_type)();
+
+poof(
+  func func_taking_typdefd_func_arg(arg)  @omit_include
+  {
+    arg
+  }
+)
+
+poof(func_taking_typdefd_func_arg(func_ptr_type*))
+// tests/integration/generated/functions/func_taking_typdefd_func_arg_KUoyRicK.h

@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/perlin.h:12:0
-// (gen_constructor) def
+
+// def (gen_constructor)
 // ./include/bonsai_stdlib/src/poof_functions.h:113:0
 link_internal perlin_params
 PerlinParams(  u32_8x   P0 , u32_8x   P1 , f32_8x   Fract0 , f32_8x   Fract1 , f32_8x   Fade  )

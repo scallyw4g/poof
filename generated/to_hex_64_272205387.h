@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/counted_string.cpp:855:0
-// (to_hex_64) def
+
+// def (to_hex_64)
 // ./include/bonsai_stdlib/src/counted_string.cpp:826:0
 link_internal cs
 ToHex( s64 Value )

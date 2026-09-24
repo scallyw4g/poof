@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/binary_parser.cpp:36:0
-// (stream_and_cursor) def
+
+// def (stream_and_cursor)
 // ./include/bonsai_stdlib/src/poof_functions.h:2054:0
 struct s32_cursor
 {

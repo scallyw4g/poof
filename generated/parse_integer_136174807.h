@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/counted_string.h:862:0
-// (parse_integer) def
+
+// def (parse_integer)
 // ./include/bonsai_stdlib/src/counted_string.h:833:0
 link_internal b32
 ParseInteger(cs String, u32 *Out)

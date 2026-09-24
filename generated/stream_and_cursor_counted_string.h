@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/counted_string.h:123:0
-// (stream_and_cursor) def
+
+// def (stream_and_cursor)
 // ./include/bonsai_stdlib/src/poof_functions.h:2054:0
 struct counted_string_cursor
 {

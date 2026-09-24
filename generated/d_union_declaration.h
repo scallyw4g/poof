@@ -1,6 +1,7 @@
 // callsite
 // ./poof/poof.h:411:0
-// (d_union) def
+
+// def (d_union)
 // ./poof/poof.h:411:0
 enum declaration_type
 {

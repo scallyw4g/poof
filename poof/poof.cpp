@@ -6380,8 +6380,6 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
               }
               else
               {
-                comma_separated_decl Var = ParseCommaSeperatedDecl(Ctx);
-                MaybeEatAdditionalCommaSeperatedNames(Ctx);
                 RequireToken(Parser, CTokenType_Semicolon);
               }
             } break;
@@ -7837,6 +7835,24 @@ GetTagFromDatatype(parse_context *Ctx, cs TagName, datatype *Data, parser *Scope
       if (AreEqual(Tag->Name, TagName))
       {
         Result = *Tag;
+        break;
+      }
+    }
+  }
+
+  return Result;
+}
+
+link_internal poof_tag *
+FindTag(parse_context *Ctx, cs TagName, poof_tag_block_array *Tags)
+{
+  poof_tag *Result = {};
+  {
+    IterateOver(Tags, Tag, TagIndex)
+    {
+      if (AreEqual(Tag->Name, TagName))
+      {
+        Result = Tag;
         break;
       }
     }

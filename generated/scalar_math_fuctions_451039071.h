@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/maff.h:386:0
-// (scalar_math_fuctions) def
+
+// def (scalar_math_fuctions)
 // ./include/bonsai_stdlib/src/maff.h:371:0
 inline r32
 Clamp( r32 Min, r32 Value, r32 Max )

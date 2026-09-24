@@ -1,6 +1,7 @@
 // callsite
 // ./poof/poof.h:1180:0
-// (generate_stream_iterator) def
+
+// def (generate_stream_iterator)
 // ./include/bonsai_stdlib/src/poof_functions.h:1948:0
 struct declaration_iterator
 {

@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/binary_parser.h:1:0
-// (generate_cursor_struct) def
+
+// def (generate_cursor_struct)
 // ./include/bonsai_stdlib/src/poof_functions.h:1545:0
 struct u64_cursor
 {

@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/rect.h:154:0
-// (gen_rect_helpers) def
+
+// def (gen_rect_helpers)
 // ./include/bonsai_stdlib/src/rect.h:58:0
 link_internal rect3i
 RectMinMax(v3i Min, v3i Max)

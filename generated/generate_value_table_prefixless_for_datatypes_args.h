@@ -1,6 +1,7 @@
 // callsite
 // ./poof/poof.h:49:0
-// (generate_value_table_prefixless) def
+
+// def (generate_value_table_prefixless)
 // ./include/bonsai_stdlib/src/poof_functions.h:1853:0
 link_internal for_datatypes_args
 ForDatatypesArgsPrefixless(counted_string S)

@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/ui/ui.cpp:19:0
-// (hashtable_impl) def
+
+// def (hashtable_impl)
 // ./include/bonsai_stdlib/src/poof_functions.h:797:0
 link_internal b32 AreEqual(ui_toggle_linked_list_node *Node1, ui_toggle_linked_list_node *Node2 );
 link_internal b32 AreEqual(ui_toggle *Element1, ui_toggle *Element2 );

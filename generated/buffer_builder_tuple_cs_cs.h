@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/counted_string.cpp:50:0
-// (buffer_builder) def
+
+// def (buffer_builder)
 // ./include/bonsai_stdlib/src/poof_functions.h:712:0
 struct tuple_cs_cs_buffer_builder
 {

@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/binary_parser.cpp:575:0
-// (gen_read_primitive) def
+
+// def (gen_read_primitive)
 // ./include/bonsai_stdlib/src/binary_parser.cpp:555:0
 link_internal bool
 Read_u64(u8_cursor *Cursor, u64 *Dest)

@@ -1,6 +1,7 @@
 // callsite
 // poof/poof.cpp:1895:0
-// (gen_stream_getter) def
+
+// def (gen_stream_getter)
 // poof/poof.cpp:1874:0
 link_internal type_def*
 GetTypeDefByAlias( type_def_stream* Stream,  counted_string  Alias )

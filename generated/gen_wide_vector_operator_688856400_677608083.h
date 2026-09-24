@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/simd_avx2.h:191:0
-// (gen_wide_vector_operator) def
+
+// def (gen_wide_vector_operator)
 // ./include/bonsai_stdlib/src/simd_avx2.h:148:0
 link_inline f32_8x
 operator-(f32_8x A, f32_8x B)

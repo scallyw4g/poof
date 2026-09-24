@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/shader.cpp:363:0
-// (set_shader_uniform) def
+
+// def (set_shader_uniform)
 // ./include/bonsai_stdlib/src/poof_functions.h:14:0
 
 b32

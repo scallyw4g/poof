@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/to_string.cpp:56:0
-// (to_string_primitive) def
+
+// def (to_string_primitive)
 // ./include/bonsai_stdlib/src/to_string.cpp:3:0
 link_internal cs
 ToString(s8 *Element)

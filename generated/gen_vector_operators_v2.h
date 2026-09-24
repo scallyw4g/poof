@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/vector.h:220:0
-// (gen_vector_operators) def
+
+// def (gen_vector_operators)
 // ./include/bonsai_stdlib/src/poof_functions.h:268:0
 link_internal void
 DeepCopy(v2 *Src, v2 *Dest)

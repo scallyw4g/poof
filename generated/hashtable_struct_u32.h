@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/primitive_containers.h:34:0
-// (hashtable_struct) def
+
+// def (hashtable_struct)
 // ./include/bonsai_stdlib/src/poof_functions.h:778:0
 struct u32_linked_list_node
 {

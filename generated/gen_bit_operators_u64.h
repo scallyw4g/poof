@@ -1,6 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/bit_tricks.h:70:0
-// (gen_bit_operators) def
+
+// def (gen_bit_operators)
 // ./include/bonsai_stdlib/src/bit_tricks.h:4:0
 link_internal u64
 UnsetLeastSignificantSetBit(u64 *Input)
