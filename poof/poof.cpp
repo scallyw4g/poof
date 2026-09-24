@@ -2541,7 +2541,7 @@ ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_aren
     .Outpath      = CSz("."),
     .Files        = AllocateBuffer<counted_string_cursor, counted_string>((u32)ArgCount, Memory),
     .IncludePaths = AllocateBuffer<counted_string_cursor, counted_string>((u32)ArgCount, Memory),
-    False, False, False
+    False, False, False, False
   };
 
 #if 0
@@ -2609,6 +2609,8 @@ ParseArgs(const char** ArgStrings, u32 ArgCount, parse_context *Ctx, memory_aren
 "\n"
 "          | --no-normalize-output-whitespace : disable normalizing whitespace.  Useful to emit whitespace-sensitive languages.\n"
 "\n"
+"          | --rewrite-all-includes : generate new include filenames and emit them to source files for all poof operations\n"
+"\n"
 " --log-level <LogLevel_Value>    : One of "));
 
 DumpValidLogLevelOptions();
@@ -2628,6 +2630,10 @@ PrintToStdout(CSz(
              StringsMatch(CSz("--do-debug-window"), Arg) )
     {
       Result.DoDebugWindow = True;
+    }
+    else if ( StringsMatch(CSz("--rewrite-all-includes"), Arg) )
+    {
+      Result.RewriteAllIncludes = True;
     }
     else if ( StringsMatch(CSz("--no-normalize-output-whitespace"), Arg) )
     {
@@ -6457,10 +6463,10 @@ AllocateTokenizedFiles(u32 Count, memory_arena* Memory)
 
 link_internal cs
 FlushOutputToDisk( parse_context *Ctx,
-                   cs OutputForThisParser,
-                   cs NewFilename,
-                   meta_func_directive MetaDirectives,
-                   memory_arena* Memory)
+                              cs  OutputForThisParser,
+                              cs  NewFilename,
+             meta_func_directive  MetaDirectives,
+                    memory_arena *Memory)
 {
   TIMED_FUNCTION();
   parser *Parser = Ctx->CurrentParser;
@@ -6912,13 +6918,17 @@ GenerateOutfileNameFor( parse_context *Ctx,
   string_builder OutfileBuilder = StringBuilder();
   Append(&OutfileBuilder, Func->Name);
   Append(&OutfileBuilder, CSz("_"));
-  for (u32 ArgIndex = 0; ArgIndex < InstanceArgs->Count; ++ArgIndex)
+
+  if (InstanceArgs)
   {
-    meta_func_arg *Arg = InstanceArgs->Start + ArgIndex;
-    Append(&OutfileBuilder, ToString(Ctx, Arg, Memory));
-    if ( ArgIndex+1 != InstanceArgs->Count )
+    for (u32 ArgIndex = 0; ArgIndex < InstanceArgs->Count; ++ArgIndex)
     {
-      Append(&OutfileBuilder, CSz("_"));
+      meta_func_arg *Arg = InstanceArgs->Start + ArgIndex;
+      Append(&OutfileBuilder, ToString(Ctx, Arg, Memory));
+      if ( ArgIndex+1 != InstanceArgs->Count )
+      {
+        Append(&OutfileBuilder, CSz("_"));
+      }
     }
   }
 
@@ -6930,24 +6940,6 @@ GenerateOutfileNameFor( parse_context *Ctx,
 
   Append(&OutfileBuilder, CSz(".h"));
   cs Result = Finalize(&OutfileBuilder, Memory);
-  return Result;
-}
-
-link_internal cs
-GenerateOutfileNameFor(cs Name, cs DatatypeName, memory_arena* Memory, cs Modifier)
-{
-  string_builder OutfileBuilder = StringBuilder();
-  Append(&OutfileBuilder, Name);
-  Append(&OutfileBuilder, CSz("_"));
-  Append(&OutfileBuilder, DatatypeName);
-  if (Modifier.Count)
-  {
-    Append(&OutfileBuilder, CSz("_"));
-    Append(&OutfileBuilder, Modifier);
-  }
-  Append(&OutfileBuilder, CSz(".h"));
-  cs Result = Finalize(&OutfileBuilder, Memory);
-
   return Result;
 }
 

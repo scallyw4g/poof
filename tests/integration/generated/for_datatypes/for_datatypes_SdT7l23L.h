@@ -1,7 +1,7 @@
 // callsite
 // tests/integration/src/for_datatypes.h:85:0
 
-// def ((builtin.for_datatypes))
+// def (builtin.for_datatypes)
 // tests/integration/src/for_datatypes.h:85:0
 foo_struct_1 pass 
 bar_struct pass 

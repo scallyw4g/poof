@@ -1,7 +1,7 @@
 // callsite
 // tests/integration/src/for_datatypes.h:94:0
 
-// def ((builtin.for_datatypes))
+// def (builtin.for_datatypes)
 // tests/integration/src/for_datatypes.h:94:0
 foo_enum pass 
 bar_enum pass 

@@ -624,7 +624,7 @@ ResolveMetaOperator(        parse_context *Ctx,
         {
           cs Sep = MaybeParseSepOperator(Scope);
 
-          meta_func MapFunc = ParseMapMetaFunctionInstance(Scope, CSz("(builtin.map.index)"), Memory);
+          meta_func MapFunc = ParseMapMetaFunctionInstance(Scope, CSz("builtin.map.index"), Memory);
           meta_func_arg_buffer NewArgs = ExtendBuffer(Args, MapFunc.Args.Count, Memory);
 
           // TODO(Jesse): Throw an error?
@@ -709,7 +709,7 @@ ResolveMetaOperator(        parse_context *Ctx,
         {
           cs Sep = MaybeParseSepOperator(Scope);
 
-          meta_func MapFunc = ParseMapMetaFunctionInstance(Scope, CSz("(builtin.map.symbol)"), Memory);
+          meta_func MapFunc = ParseMapMetaFunctionInstance(Scope, CSz("builtin.map.symbol"), Memory);
           Assert(MapFunc.Args.Count == 1 || MapFunc.Args.Count == 2);
 
           meta_func_arg_buffer NewArgs = ExtendBuffer(Args, MapFunc.Args.Count, Memory);
@@ -1279,7 +1279,7 @@ ResolveMetaOperator(        parse_context *Ctx,
           cs Name = GetNameForDatatype(ReplaceData, Memory);
           if (OptionalToken(Scope, CTokenType_Question))
           {
-            b32 DoTrueBranch = StringsMatch(Name, CSz("(anonymous)")) == False;
+            b32 DoTrueBranch = StringsMatch(Name, CSz("anonymous")) == False;
             PredicateBlock( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
           }
           else
@@ -2127,7 +2127,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
       {
 
         // NOTE(Jesse): This is just here to parse the func tags out.
-        meta_func ForAllDummyFunc = MetaFunc(CSz("(builtin.for_datatypes)"), {});
+        meta_func ForAllDummyFunc = MetaFunc(CSz("builtin.for_datatypes"), {});
         ForAllDummyFunc.SourceToken = DirectiveT;
 
         ParseMetaFuncTags(Parser, &ForAllDummyFunc);
@@ -2229,7 +2229,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
 
 #if 1
-        FinalizeAndFlush(Ctx, &ForAllDummyFunc, &ForAllDummyFunc.Args, DirectiveT, &OutputBuilder, Builder, Memory);
+        FinalizeAndFlush(Ctx, &ForAllDummyFunc, 0, DirectiveT, &OutputBuilder, Builder, Memory);
 #else
         cs OutfileName = GenerateOutfileNameFor(ToString(Directive), GetRandomString(8, umm(Hash(&Code)), Memory), Memory);
         cs Header = FCS(ForAllDummyFunc.HeaderFormatString, DirectiveT->Filename, DirectiveT->LineNumber);
@@ -2269,7 +2269,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 #if 1
         meta_func DUnionDummyFunc = MetaFunc(CSz("d_union"), {});
         DUnionDummyFunc.SourceToken = DatatypeT;
-        FinalizeAndFlush(Ctx, &DUnionDummyFunc, &DUnionDummyFunc.Args, DirectiveT, &CodeBuilder, Builder, Memory);
+        FinalizeAndFlush(Ctx, &DUnionDummyFunc, 0, DirectiveT, &CodeBuilder, Builder, Memory);
 #else
         counted_string Code = Finalize(&CodeBuilder, Memory);
 

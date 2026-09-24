@@ -1,7 +1,7 @@
 // callsite
 // tests/integration/src/tags.h:189:0
 
-// def ((builtin.for_datatypes))
+// def (builtin.for_datatypes)
 // tests/integration/src/tags.h:189:0
 enum  (enum foo_enum) foo= 
 struct (has_numeric_tag) numeric_tag=3 

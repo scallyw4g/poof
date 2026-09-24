@@ -1,5 +1,5 @@
 // callsite
-// ./poof/poof.h:1183:0
+// ./poof/poof.h:1184:0
 
 // def (generate_stream_push)
 // ./include/bonsai_stdlib/src/poof_functions.h:1884:0

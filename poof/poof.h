@@ -1140,6 +1140,7 @@ struct arguments
   b32 DoDebugWindow;
   b32 HelpTextPrinted;
   b32 DoNotNormalizeWhitespace;
+  b32 RewriteAllIncludes;
 };
 
 struct program_datatypes
