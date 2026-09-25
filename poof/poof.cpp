@@ -6530,9 +6530,9 @@ FlushOutputToDisk( parse_context *Ctx,
     }
     else
     {
-      // NOTE(Jesse): This would fail if the include ended with whitespace.. 
-      // we should probably handle that case.
-      InvalidCodePath();
+      // Didn't get an include; we'll generate a new one
+      if (RewriteAllIncludes) { Assert(OutputPath.Start); }
+      else                    { Assert(OutputPath.Start == 0); }
     }
 
     if (OutputPath.Start == 0)

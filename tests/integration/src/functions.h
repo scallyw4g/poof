@@ -8,7 +8,7 @@ poof(
   }
 )
 
-/* poof( func poof_noop(ignored) @code_fragment {} ) */
+poof( func poof_noop(ignored) @code_fragment @omit_include {} )
 
 struct thing
 {
@@ -16,7 +16,8 @@ struct thing
   int baz;
 
   // NOTE(Jesse): Test we can call a poof function from inside a struct
-  /* poof(poof_noop(foobaz)) */
+  poof(poof_noop(foobaz))
+// tests/integration/generated/functions/poof_noop$foobaz$xQZUVGxM.h
 };
 
 struct thing_two

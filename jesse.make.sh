@@ -24,6 +24,11 @@
 # accessors
 # INTEGRATION_TEST_INDEX=0 \
 # INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug" \
+# ./make.sh RunIntegrationTests
+
+# functions
+INTEGRATION_TEST_INDEX=5 \
+INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug" \
 ./make.sh RunIntegrationTests
 
 # multi_level_functions
