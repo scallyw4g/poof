@@ -12,7 +12,7 @@
 # ./make.sh BuildParserTests
 # ./make.sh RunParserTests
 
-# ./make.sh RunInstalledPoof
+./make.sh RunInstalledPoof
 # ./make.sh RunPoof
 
 # OPTIMIZATION_LEVEL="-O2" \

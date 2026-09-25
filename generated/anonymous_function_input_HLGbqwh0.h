@@ -1,7 +1,7 @@
 // callsite
 // ./include/bonsai_stdlib/src/input.h:93:0
 
-// def (anonymous)
+// def (poof_func.anonymous)
 // ./include/bonsai_stdlib/src/input.h:93:0
 Input->Enter.Clicked = False;
 Input->Enter.Released = False;

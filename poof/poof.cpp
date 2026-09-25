@@ -6629,6 +6629,7 @@ RemoveAllWhitespaceChunks(string_builder *Builder)
 }
 
 link_internal void
+poof(@async)
 FinalizeAndFlush( parse_context *Ctx,
                       meta_func *Func,
            meta_func_arg_buffer *InstanceArgs,
@@ -9208,7 +9209,12 @@ main(s32 ArgCount_, const char** ArgStrings)
 
   application_api AppApi = {};
   bonsai_stdlib Stdlib = {};
-  bonsai_init_flags InitFlags = BonsaiInit_LaunchThreadPool;
+
+#if BONSAI_DEBUG_SYSTEM_API
+  bonsai_init_flags InitFlags = bonsai_init_flags(BonsaiInit_LaunchThreadPool|BonsaiInit_InitDebugSystem);
+#else
+#error "Threadpool requires debug system support"
+#endif
 
   Global_Stdlib = &Stdlib;
 
@@ -9217,11 +9223,7 @@ main(s32 ArgCount_, const char** ArgStrings)
 
   if (Ctx.Args.DoDebugWindow)
   {
-#if BONSAI_DEBUG_SYSTEM_API
-    InitFlags = bonsai_init_flags(InitFlags|BonsaiInit_OpenWindow|BonsaiInit_InitDebugSystem);
-#else
-    Error("Requested debug window when debug system was not compiled in!");
-#endif
+    InitFlags = bonsai_init_flags(InitFlags|BonsaiInit_OpenWindow);
   }
 
   Ensure( InitializeBonsaiStdlib( InitFlags, &AppApi, &Stdlib, Memory) );
@@ -9258,9 +9260,7 @@ main(s32 ArgCount_, const char** ArgStrings)
 
     parser *Parser = PreprocessedParserForFile(&Ctx, ParserFilename, TokenCursorSource_RootFile, 0);
 
-#if BONSAI_DEBUG_SYSTEM_API
     if (Ctx.Args.DoDebugWindow) { MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt()); }
-#endif
 
     if (Parser->ErrorCode == ParseErrorCode_None)
     {
@@ -9277,9 +9277,7 @@ main(s32 ArgCount_, const char** ArgStrings)
 
       FullRewind(Ctx.CurrentParser);
 
-#if BONSAI_DEBUG_SYSTEM_API
     if (Ctx.Args.DoDebugWindow) { MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt()); }
-#endif
 
       GoGoGadgetMetaprogramming(&Ctx, &TodoInfo);
 
@@ -9291,9 +9289,7 @@ main(s32 ArgCount_, const char** ArgStrings)
         {
           ScanForMutationsAndOutput(&Bucket->Element, Ctx.Args.Outpath, Memory);
           Bucket = Bucket->Next;
-#if BONSAI_DEBUG_SYSTEM_API
     if (Ctx.Args.DoDebugWindow) { MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt()); }
-#endif
         }
       }
 
@@ -9346,7 +9342,6 @@ main(s32 ArgCount_, const char** ArgStrings)
   }
 
 
-#if BONSAI_DEBUG_SYSTEM_API
   // BootstrapDebugSystem is behind a flag, or it could have failed.
   if (Ctx.Args.DoDebugWindow && GetDebugState())
   {
@@ -9437,7 +9432,6 @@ main(s32 ArgCount_, const char** ArgStrings)
       /* Ensure(RewindArena(GetTranArena())); */
     }
   }
-#endif
 
   /* TryDeleteDirectory(TMP_DIR_ROOT); */
 
