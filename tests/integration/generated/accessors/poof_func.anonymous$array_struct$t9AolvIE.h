@@ -1,8 +1,8 @@
 // callsite
-// tests\integration\src\accessors.h:28:0
+// tests/integration/src/accessors.h:28:0
 
 // def (poof_func.anonymous)
-// tests\integration\src\accessors.h:28:0
+// tests/integration/src/accessors.h:28:0
 isarray 
 0 foo
 1 foo

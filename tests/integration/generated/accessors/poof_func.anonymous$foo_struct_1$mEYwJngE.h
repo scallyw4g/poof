@@ -1,8 +1,8 @@
 // callsite
-// tests\integration\src\accessors.h:122:0
+// tests/integration/src/accessors.h:122:0
 
 // def (poof_func.anonymous)
-// tests\integration\src\accessors.h:122:0
+// tests/integration/src/accessors.h:122:0
 // {
 this_is_a_bug _embedded3 
 
