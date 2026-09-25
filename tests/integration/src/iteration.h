@@ -11,7 +11,7 @@ poof(
     }
   }
 )
-// tests/integration/generated/iteration/anonymous_function_foo_1.h
+// tests/integration/generated/iteration/poof_func.anonymous$foo_enum$8JAfOWNX.h
 
 poof(
   func (foo_enum Type) @omit_include
@@ -22,7 +22,7 @@ poof(
     }
   }
 )
-// tests/integration/generated/iteration/anonymous_foo_enum_5DGxlNu5.h
+// tests/integration/generated/iteration/poof_func.anonymous$foo_enum$VhueyP4G.h
 
 
 poof(
@@ -34,7 +34,7 @@ poof(
     }
   }
 )
-// tests/integration/generated/iteration/anonymous_foo_struct_1_M6dQmZmw.h
+// tests/integration/generated/iteration/poof_func.anonymous$foo_struct_1$g2VrVMoJ.h
 
 poof(
   func (foo_struct_1 Type) @omit_include
@@ -45,7 +45,7 @@ poof(
     }
   }
 )
-// tests/integration/generated/iteration/anonymous_foo_struct_1_03rZn5Ny.h
+// tests/integration/generated/iteration/poof_func.anonymous$foo_struct_1$JPXNUriq.h
 
 
 poof(
@@ -57,10 +57,10 @@ poof(
     }
   }
 )
-// tests/integration/generated/iteration/anonymous_qHDx1ZgU.h
+// tests/integration/generated/iteration/poof_func.anonymous$foo_enum$FPahQTP3.h
 
 poof(d_union foobar_dunion { foo_struct_1 bar_struct } )
-#include <tests/integration/generated/iteration/d_union_foobar_union.h>
+#include <tests/integration/generated/iteration/poof_builtin.d_union$$TniUcDPl.h>
 
 poof(
   func (foobar_dunion Foobar) @omit_include
@@ -93,7 +93,7 @@ poof(
 
   }
 )
-// tests/integration/generated/iteration/anonymous_foobar_dunion_E2SFNKQr.h
+// tests/integration/generated/iteration/poof_func.anonymous$foobar_dunion$2j5WkWho.h
 
 
 poof(
@@ -107,7 +107,7 @@ poof(
 )
 
 poof(symbol_map_test(foo_struct_1, {foo bar baz}))
-// tests/integration/generated/iteration/symbol_map_test_foo_struct_1_79487798.h
+// tests/integration/generated/iteration/symbol_map_test$foo_struct_1.79487798$DPc3oAOM.h
 
 
 poof(
@@ -121,7 +121,7 @@ poof(
 )
 
 poof(index_map_test(foo_struct_1, 3))
-// tests/integration/generated/iteration/index_map_test_foo_struct_1_3.h
+// tests/integration/generated/iteration/index_map_test$foo_struct_1.3$3VDHbv6s.h
 
 
 int test_func(int *bar, float **baz, foo_struct_1 &fuzz)
@@ -137,7 +137,7 @@ poof(
 )
 
 poof(func_arg_map_test(test_func))
-// tests/integration/generated/iteration/func_arg_map_test_test_func.h
+// tests/integration/generated/iteration/func_arg_map_test$test_func$l3V2RXl0.h
 
 
 
@@ -155,4 +155,4 @@ poof(
 )
 
 poof(var_func(foo_struct_1))
-// tests/integration/generated/iteration/var_func_struct_156032401.h
+// tests/integration/generated/iteration/var_func$foo_struct_1.counted_string$yxbYK9Iw.h

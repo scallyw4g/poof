@@ -21,7 +21,7 @@ struct thing_two
 };
 
 poof(foobaz(thing))
-// tests/integration/generated/functions/foobaz_.h
+// tests/integration/generated/functions/foobaz$thing$aA3KDoYv.h
 
 
 poof(
@@ -32,7 +32,7 @@ poof(
 )
 
 poof(nested_func(thing))
-// tests/integration/generated/functions/nested_func_struct.h
+// tests/integration/generated/functions/nested_func$thing$630pRD6X.h
 
 // just testing the overload works
 poof(
@@ -62,7 +62,7 @@ poof(
 )
 
 poof(overload_test_func(thing))
-// tests/integration/generated/functions/func2_thing.h
+// tests/integration/generated/functions/overload_test_func$thing$ZLl5Kj2G.h
 
 
 poof(
@@ -75,7 +75,7 @@ poof(
 )
 
 poof(var_func(thing))
-// tests/integration/generated/functions/var_func_thing_786368078.h
+// tests/integration/generated/functions/var_func$thing.525555696$VEx3POGk.h
 
 poof(
   func poof_comment_func(ignored) @omit_include
@@ -86,7 +86,7 @@ poof(
 )
 
 poof(poof_comment_func(thing))
-// tests/integration/generated/functions/poof_comment_func_thing.h
+// tests/integration/generated/functions/poof_comment_func$thing$4rhNU8xi.h
 
 
 poof(
@@ -121,7 +121,7 @@ poof(
 )
 
 poof(transforms_func(thing))
-// tests/integration/generated/functions/transforms_func_struct_525555696.h
+// tests/integration/generated/functions/transforms_func$thing.746483492.thing_two$aIMG5brV.h
 
 
 poof(
@@ -138,7 +138,7 @@ poof(
 )
 
 poof(gen_struct_func(thing))
-// tests/integration/generated/functions/gen_struct_func_struct_473003373.h
+// tests/integration/generated/functions/gen_struct_func$thing.473003373$sVeyFUCM.h
 
 
 typedef void (*func_ptr_type)();

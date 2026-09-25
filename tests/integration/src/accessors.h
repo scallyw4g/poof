@@ -10,7 +10,7 @@ struct foo poof(@foo_tag(bar))
 
 
 poof( func (foo F) @omit_include { F.tag_value(foo_tag) } )
-// tests/integration/generated/accessors/anonymous_foo_5DPVctl0.h
+// tests/integration/generated/accessors/poof_func.anonymous$foo$6UDBSxku.h
 
 
 poof(
@@ -21,7 +21,7 @@ poof(
     })
   }
 )
-// tests/integration/generated/accessors/anonymous_bar_struct_XqHSO27n.h
+// tests/integration/generated/accessors/poof_func.anonymous$bar_struct$9bWjNL42.h
 
 
 poof(
@@ -44,7 +44,7 @@ poof(
     }
   }
 )
-// tests/integration/generated/accessors/anonymous_array_struct_R1CjBJgY.h
+// tests/integration/generated/accessors/poof_func.anonymous$array_struct$t9AolvIE.h
 
 
 poof(
@@ -75,13 +75,13 @@ poof(
 )
 
 poof(function_test(foofunc))
-// tests/integration/generated/accessors/anonymous_foofunc_6akI3os3.h
+// tests/integration/generated/accessors/function_test$foofunc$Pb9U2E8c.h
 
 poof(function_test(foofunc0))
-// tests/integration/generated/accessors/function_test_foofunc0.h
+// tests/integration/generated/accessors/function_test$foofunc0$ixbkXujS.h
 
 poof(function_test(typedefd_foofunc))
-// tests/integration/generated/accessors/function_test_typedefd_foofunc.h
+// tests/integration/generated/accessors/function_test$typedefd_foofunc$lxjDEZCy.h
 
 
 poof(
@@ -116,7 +116,7 @@ poof(
 )
 
 poof(function_test_1(foo_struct_1))
-// tests/integration/generated/accessors/function_test_1_foo_struct_1.h
+// tests/integration/generated/accessors/function_test_1$foo_struct_1$udYxRZY1.h
 
 poof(
   func (foo_struct_1 type) @omit_include
@@ -168,4 +168,4 @@ poof(
     // }
   }
 )
-// tests/integration/generated/accessors/anonymous_k5Pe98By.h
+// tests/integration/generated/accessors/poof_func.anonymous$foo_struct_1$mEYwJngE.h

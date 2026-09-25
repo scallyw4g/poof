@@ -58,7 +58,7 @@ poof(
 
   }
 )
-// tests/integration/generated/for_datatypes/for_datatypes_a8HasR36.h
+// tests/integration/generated/for_datatypes/poof_builtin.for_datatypes$$3MoVkYEU.h
 
 
 poof(
@@ -79,7 +79,7 @@ poof(
     func_t.name func_t.is_function? { pass } { fail }
   }
 )
-// tests/integration/generated/for_datatypes/for_datatypes_LpiQmVs9.h
+// tests/integration/generated/for_datatypes/poof_builtin.for_datatypes$$WrgnJVwn.h
 
 poof(
   for_datatypes(struct) @code_fragment @omit_include
@@ -88,7 +88,7 @@ poof(
     struct_t.name struct_t.is_struct? { pass } { fail }
   }
 )
-// tests/integration/generated/for_datatypes/for_datatypes_SdT7l23L.h
+// tests/integration/generated/for_datatypes/poof_builtin.for_datatypes$$7SMAtRWY.h
 
 poof(
   for_datatypes(enum) @code_fragment @omit_include
@@ -97,7 +97,7 @@ poof(
     enum_t.name enum_t.is_enum? { pass } { fail }
   }
 )
-// tests/integration/generated/for_datatypes/for_datatypes_JGEIc02V.h
+// tests/integration/generated/for_datatypes/poof_builtin.for_datatypes$$ChTM3Iba.h
 
 poof(
   for_datatypes(func) @code_fragment @omit_include
@@ -106,5 +106,5 @@ poof(
     func_t.name func_t.is_function? { pass } { fail }
   }
 )
-// tests/integration/generated/for_datatypes/for_datatypes_lTJHCJfY.h
+// tests/integration/generated/for_datatypes/poof_builtin.for_datatypes$$ABO4sJCm.h
 

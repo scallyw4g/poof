@@ -1,0 +1,11 @@
+// callsite
+// tests/integration/src/iteration.h:52:0
+
+// def (poof_func.anonymous)
+// tests/integration/src/iteration.h:52:0
+
+has_foo_tag(foo_enum_value_1) 
+ ||| has_foo_tag(foo_enum_value_2) 
+
+
+

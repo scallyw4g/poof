@@ -27,8 +27,8 @@
 # ./make.sh RunIntegrationTests
 
 # tags
-INTEGRATION_TEST_INDEX=8 \
-INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug" \
+# INTEGRATION_TEST_INDEX=8 \
+# INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug" \
 ./make.sh RunIntegrationTests
 
 # ./make.sh BuildDebugSystem

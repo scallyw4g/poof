@@ -17,7 +17,7 @@ poof(
     baz enum_only,
   }
 )
-#include <tests/integration/generated/discriminated_union/d_union_foo_bar_baz.h>
+#include <tests/integration/generated/discriminated_union/poof_builtin.d_union$$PHkOxtq2.h>
 
 
 enum custom_enum_tag
@@ -38,4 +38,4 @@ poof(
     long long int barf;
   }
 )
-#include <tests/integration/generated/discriminated_union/d_union_foo_bar_baz_cust.h>
+#include <tests/integration/generated/discriminated_union/poof_builtin.d_union$$qnkCZVDu.h>

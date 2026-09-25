@@ -389,7 +389,7 @@ Map( parse_context *Ctx,
           if (Operator == map || Operator == map_args)
           {
             auto FuncDecl = SafeAccess(function_decl, Decl);
-            meta_func MetaF = MetaFunc(CSz("map_function_decl_args"), 0, *Args, *MapScope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
+            meta_func MetaF = MetaFunc(CSz("poof_builtin.map.function_decl_args"), 0, *Args, *MapScope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
 
             MapFunctionDeclArgs(Ctx, FuncDecl, &MetaF, MatchValue, Sep, OutputBuilder, Memory, Depth);
           }
@@ -409,7 +409,7 @@ Map( parse_context *Ctx,
           if (Operator == map || Operator == map_values)
           {
             auto EnumDecl = SafeAccess(enum_decl, Decl);
-            meta_func MetaF = MetaFunc(CSz("map_enum_values"), 0, *Args, *MapScope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
+            meta_func MetaF = MetaFunc(CSz("poof_builtin.map.enum_values"), 0, *Args, *MapScope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
 
             MapEnumValues(Ctx, EnumDecl, &MetaF, MatchValue, Sep, OutputBuilder, Memory, Depth);
           }
@@ -506,7 +506,7 @@ Map( parse_context *Ctx,
                   if (BaseDecl->Type == type_enum_decl)
                   {
                     auto EnumDecl = SafeAccess(enum_decl, BaseDecl);
-                    meta_func MetaF = MetaFunc(CSz("map_enum_values"), 0, *Args, *MapScope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
+                    meta_func MetaF = MetaFunc(CSz("poof_builtin.map.enum_values"), 0, *Args, *MapScope, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
                     MapEnumValues(Ctx, EnumDecl, &MetaF, MatchValue, Sep, OutputBuilder, Memory, Depth);
                   }
                   else
@@ -2267,7 +2267,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
         while(OptionalToken(Parser, CTokenType_Semicolon));
 
 #if 1
-        meta_func DUnionDummyFunc = MetaFunc(CSz("d_union"), {});
+        meta_func DUnionDummyFunc = MetaFunc(CSz("poof_builtin.d_union"), {});
         DUnionDummyFunc.SourceToken = DatatypeT;
         FinalizeAndFlush(Ctx, &DUnionDummyFunc, 0, DirectiveT, &CodeBuilder, Builder, Memory);
 #else

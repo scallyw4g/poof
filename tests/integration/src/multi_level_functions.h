@@ -42,4 +42,4 @@ struct parent
 };
 
 poof( f2(parent) )
-#include <tests/integration/generated/multi_level_functions/f2_foo.h>
+#include <tests/integration/generated/multi_level_functions/f2$parent$1d7uhLYa.h>

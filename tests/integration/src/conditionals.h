@@ -16,7 +16,7 @@ poof(
     }
   }
 )
-// tests/integration/generated/conditionals/anonymous_foo_struct_1_8guZPTf0.h
+// tests/integration/generated/conditionals/poof_func.anonymous$foo_struct_1$Y9U8HrHs.h
 #endif
 
 #if 1
@@ -35,7 +35,7 @@ poof(
     }
   }
 )
-// tests/integration/generated/conditionals/anonymous_foo_struct_1_h7hirkAZ.h
+// tests/integration/generated/conditionals/poof_func.anonymous$foo_struct_1$qvnSR7I6.h
 #endif
 
 #if 1
@@ -54,7 +54,7 @@ poof(
     }
   }
 )
-// tests\integration\generated\conditionals/anonymous_foo_struct_1_HxUplAeU.h
+// tests/integration/generated/conditionals/poof_func.anonymous$foo_struct_1$K2hFcDO5.h
 #endif
 
 
@@ -74,7 +74,7 @@ poof(
     }
   }
 )
-// tests/integration/generated/conditionals/anonymous_foo_struct_1_LVid4PGg.h
+// tests/integration/generated/conditionals/poof_func.anonymous$foo_struct_1$b1FePQPI.h
 #endif
 
 
@@ -94,7 +94,7 @@ poof(
     }
   }
 )
-// tests/integration/generated/conditionals/anonymous_foo_struct_1_CPfSoIS7.h
+// tests/integration/generated/conditionals/poof_func.anonymous$foo_struct_1$9lqR1BKt.h
 #endif
 
 
@@ -114,7 +114,7 @@ poof(
     }
   }
 )
-// tests\integration\generated\conditionals/anonymous_foo_struct_1_QAGBtJOS.h
+// tests/integration/generated/conditionals/poof_func.anonymous$foo_struct_1$kynrjY4f.h
 #endif
 
 
@@ -132,7 +132,7 @@ poof(
     }
   }
 )
-// tests\integration\generated\conditionals/anonymous_foo_struct_1_BaBAMF6m.h
+// tests/integration/generated/conditionals/poof_func.anonymous$foo_struct_1$e1xhvv2m.h
 #endif
 
 
@@ -149,7 +149,7 @@ poof(
     }
   }
 )
-// tests\integration\generated\conditionals/anonymous_foo_struct_1_6M8tx4gp.h
+// tests/integration/generated/conditionals/poof_func.anonymous$foo_struct_1$tGEwUMjH.h
 #endif
 
 poof(
@@ -164,7 +164,7 @@ poof(
     }
   }
 )
-// tests\integration\generated\conditionals/anonymous_foo_struct_1_xuh38nWl.h
+// tests/integration/generated/conditionals/poof_func.anonymous$foo_struct_1$4FvjG0MW.h
 
 poof(
   func (foo_struct_1 TFooStruct) @omit_include
@@ -181,5 +181,5 @@ poof(
     }
   }
 )
-// tests\integration\generated\conditionals/anonymous_foo_struct_1_dlHRwaDJ.h
+// tests/integration/generated/conditionals/poof_func.anonymous$foo_struct_1$3MJwtqWG.h
 

@@ -1,0 +1,25 @@
+// callsite
+// tests/integration/src/discriminated_union.h:13:0
+
+// def (poof_builtin.d_union)
+// tests/integration/src/discriminated_union.h:13:0
+enum foo_bar_baz_type
+{
+  type_foo_bar_baz_noop,
+  type_foo,
+  type_bar,
+  type_baz,
+};
+
+struct foo_bar_baz
+{
+  enum foo_bar_baz_type Type;
+
+  union
+  {
+    struct foo foo;
+    struct bar bar;
+  };
+};
+
+
