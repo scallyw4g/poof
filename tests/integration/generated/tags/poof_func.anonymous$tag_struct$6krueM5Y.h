@@ -1,7 +1,7 @@
 // callsite
 // tests/integration/src/tags.h:49:0
 
-// def (anonymous)
+// def (poof_func.anonymous)
 // tests/integration/src/tags.h:49:0
 // foo
 int  a1 has foo tag

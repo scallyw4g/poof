@@ -6494,7 +6494,7 @@ FlushOutputToDisk( parse_context *Ctx,
 
   c_token *PotentialIncludeToken = PeekTokenRawPointer(Parser);
   cs CodeToInsert = {};
-  if (OutputPath.Start == 0)
+  /* if (OutputPath.Start == 0) */
   {
     Assert(PotentialIncludeToken);
     if (PotentialIncludeToken->Type == CT_PreprocessorInclude)
@@ -6937,7 +6937,7 @@ GenerateOutfileNameFor( parse_context *Ctx,
 {
   string_builder OutfileBuilder = StringBuilder();
   Append(&OutfileBuilder, Func->Name);
-  Append(&OutfileBuilder, CSz("@"));
+  Append(&OutfileBuilder, CSz("$"));
 
   if (InstanceArgs)
   {
@@ -6947,14 +6947,14 @@ GenerateOutfileNameFor( parse_context *Ctx,
       Append(&OutfileBuilder, ToString(Ctx, Arg, Memory));
       if ( ArgIndex+1 != InstanceArgs->Count )
       {
-        Append(&OutfileBuilder, CSz("@"));
+        Append(&OutfileBuilder, CSz("."));
       }
     }
   }
 
   if (Modifier.Count)
   {
-    Append(&OutfileBuilder, CSz("#"));
+    Append(&OutfileBuilder, CSz("$"));
     Append(&OutfileBuilder, Modifier);
   }
 

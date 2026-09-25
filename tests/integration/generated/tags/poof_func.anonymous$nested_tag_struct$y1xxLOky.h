@@ -1,7 +1,7 @@
 // callsite
 // tests/integration/src/tags.h:85:0
 
-// def (anonymous)
+// def (poof_func.anonymous)
 // tests/integration/src/tags.h:85:0
 // has_tag bar (outer members)
 (tag_struct b1) has bar tag (value=b1)

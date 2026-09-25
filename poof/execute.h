@@ -249,7 +249,7 @@ PredicateBlock( parse_context *Ctx,
 
   if (ParserToUse->Tokens)
   {
-    Execute(Ctx, CSz("builtin.predicate"), ParserToUse, Args, OutputBuilder, Memory, Depth);
+    Execute(Ctx, CSz("poof_builtin.predicate"), ParserToUse, Args, OutputBuilder, Memory, Depth);
     if (ParserToUse->ErrorCode)
     {
       Scope->ErrorCode = ParserToUse->ErrorCode;
@@ -298,7 +298,7 @@ MapCompoundDeclMembers(parse_context *Ctx,
           SetLast(&NewArgs, ReplacementPattern(*MatchValue, &Data));
 
           u32 StartingChunkIndex = OutputBuilder->Chunks.ElementCount;
-          Execute(Ctx, CSz("builtin.map.compound_decl"), MapScope, &NewArgs, OutputBuilder, Memory, Depth);
+          Execute(Ctx, CSz("poof_builtin.map.compound_decl"), MapScope, &NewArgs, OutputBuilder, Memory, Depth);
           u32 EndingChunkIndex = OutputBuilder->Chunks.ElementCount;
 
           if (MapScope->ErrorCode)
@@ -475,7 +475,7 @@ Map( parse_context *Ctx,
                 SetLast(&NewArgs, ReplacementPattern(*MatchValue, PoofIndex(SafeTruncateToU32(ArrayIndex), SafeTruncateToU32(ArrayLength))));
 
                 Rewind(MapScope->Tokens);
-                Execute(Ctx, CSz("builtin.map.array"), MapScope, &NewArgs, OutputBuilder, Memory, Depth);
+                Execute(Ctx, CSz("poof_builtin.map.array"), MapScope, &NewArgs, OutputBuilder, Memory, Depth);
                 if (MapScope->ErrorCode)
                 {
                   ParentScope->ErrorCode = MapScope->ErrorCode;
@@ -624,7 +624,7 @@ ResolveMetaOperator(        parse_context *Ctx,
         {
           cs Sep = MaybeParseSepOperator(Scope);
 
-          meta_func MapFunc = ParseMapMetaFunctionInstance(Scope, CSz("builtin.map.index"), Memory);
+          meta_func MapFunc = ParseMapMetaFunctionInstance(Scope, CSz("poof_builtin.map.index"), Memory);
           meta_func_arg_buffer NewArgs = ExtendBuffer(Args, MapFunc.Args.Count, Memory);
 
           // TODO(Jesse): Throw an error?
@@ -709,7 +709,7 @@ ResolveMetaOperator(        parse_context *Ctx,
         {
           cs Sep = MaybeParseSepOperator(Scope);
 
-          meta_func MapFunc = ParseMapMetaFunctionInstance(Scope, CSz("builtin.map.symbol"), Memory);
+          meta_func MapFunc = ParseMapMetaFunctionInstance(Scope, CSz("poof_builtin.map.symbol"), Memory);
           Assert(MapFunc.Args.Count == 1 || MapFunc.Args.Count == 2);
 
           meta_func_arg_buffer NewArgs = ExtendBuffer(Args, MapFunc.Args.Count, Memory);
@@ -831,7 +831,7 @@ ResolveMetaOperator(        parse_context *Ctx,
               auto D = Datatype(Tag);
               SetLast(&NewArgs, ReplacementPattern(Match, &D));
 
-              Execute(Ctx, CSz("builtin.tags"), &NextScope, &NewArgs, OutputBuilder, Memory, Depth);
+              Execute(Ctx, CSz("poof_builtin.tags"), &NextScope, &NewArgs, OutputBuilder, Memory, Depth);
               if (NextScope.ErrorCode)
               {
                 Scope->ErrorCode = NextScope.ErrorCode;
@@ -1449,7 +1449,7 @@ ResolveMetaOperator(        parse_context *Ctx,
               auto Data = Datatype(&TargetMember->Element);
               SetLast(&NewArgs, ReplacementPattern(MatchPattern, &Data));
 
-              Execute(Ctx, CSz("builtin.member"), &MemberScope, &NewArgs, OutputBuilder, Memory, Depth);
+              Execute(Ctx, CSz("poof_builtin.member"), &MemberScope, &NewArgs, OutputBuilder, Memory, Depth);
               if (MemberScope.ErrorCode)
               {
                 Scope->ErrorCode = MemberScope.ErrorCode;
@@ -1592,7 +1592,7 @@ Execute( parse_context *Ctx,
 #else
 
         Ctx->Args.DoNotNormalizeWhitespace = True;
-        cs Code = Execute(Ctx, CSz("builtin.string_parse"), StringParse, Args, Memory, &IgnoreDepth);
+        cs Code = Execute(Ctx, CSz("poof_builtin.string_parse"), StringParse, Args, Memory, &IgnoreDepth);
         Ctx->Args.DoNotNormalizeWhitespace = DoNotNormalizeWhitespace;
 
         if (StringParse->ErrorCode)
@@ -1643,7 +1643,7 @@ Execute( parse_context *Ctx,
 
               parser ExpansionContext = EatUntilExcluding_Parser(Scope, CTokenType_Newline, GetTranArena());
 
-              meta_func ExpansionFunc = MetaFunc(CSz("builtin.var"), 0, *Args, ExpansionContext, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
+              meta_func ExpansionFunc = MetaFunc(CSz("poof_keyword.var"), 0, *Args, ExpansionContext, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
               cs Expanded = Execute(Ctx, &ExpansionFunc, Args, Memory, Depth);
 
               meta_func_arg_buffer NewArgs = ExtendBuffer(Args, 1, Memory);
@@ -1665,7 +1665,7 @@ Execute( parse_context *Ctx,
             case poof_error:
             {
               parser Body = GetBodyTextForNextScope(Scope, Memory);
-              cs ErrorText = Execute(Ctx, CSz("builtin.poof_error"), &Body, Args, Memory, Depth);
+              cs ErrorText = Execute(Ctx, CSz("poof_keyword.poof_error"), &Body, Args, Memory, Depth);
 
               // TODO(Jesse): Does this actually fire at any time?  Seems weird ..
               if (ErrorText.Count == 0) { ErrorText = ToString(&Body, Memory); }
@@ -1984,7 +1984,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
 
         RequireToken(Parser, CTokenType_CloseParen);
 
-        meta_func Func = MetaFunc(CSz("anonymous"), {});
+        meta_func Func = MetaFunc(CSz("poof_func.anonymous"), {});
         Func.SourceToken = DirectiveT;
         ParseMetaFuncTags(Parser, &Func);
 
@@ -2127,7 +2127,7 @@ ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Di
       {
 
         // NOTE(Jesse): This is just here to parse the func tags out.
-        meta_func ForAllDummyFunc = MetaFunc(CSz("builtin.for_datatypes"), {});
+        meta_func ForAllDummyFunc = MetaFunc(CSz("poof_builtin.for_datatypes"), {});
         ForAllDummyFunc.SourceToken = DirectiveT;
 
         ParseMetaFuncTags(Parser, &ForAllDummyFunc);

@@ -30,7 +30,7 @@ poof(
     tag_struct_helper(struct_t)
   }
 )
-// tests/integration/generated/tags/anonymous_QnhbIncf.h
+// tests/integration/generated/tags/poof_func.anonymous$tag_struct$NpcoMn0s.h
 
 poof(
   for_datatypes(struct) @omit_include
@@ -42,7 +42,7 @@ poof(
     }
   }
 )
-// tests/integration/generated/tags/(builtin.for_datatypes)_sdgoB3Hg.h
+// tests/integration/generated/tags/poof_builtin.for_datatypes$$vVntfeDU.h
 
 
 poof(
@@ -71,7 +71,7 @@ poof(
     }
   }
 )
-// tests/integration/generated/tags/anonymous_tag_struct_oX7F12Cw.h
+// tests/integration/generated/tags/poof_func.anonymous$tag_struct$6krueM5Y.h
 
 
 
@@ -112,7 +112,7 @@ poof(
     }
   }
 )
-// tests/integration/generated/tags/anonymous_nested_tag_struct_oX7F12Cw.h
+// tests/integration/generated/tags/poof_func.anonymous$nested_tag_struct$y1xxLOky.h
 
 #endif
 
@@ -137,7 +137,7 @@ poof(
     }
   }
 )
-// tests/integration/generated/tags/anonymous_tagged_struct_yZhxgWx1.h
+// tests/integration/generated/tags/poof_func.anonymous$tagged_struct$b8hrOuun.h
 
 
 
@@ -163,7 +163,7 @@ poof(
     }
   }
 )
-// tests/integration/generated/tags/anonymous_foo_enum_5rPlBIF8.h
+// tests/integration/generated/tags/poof_func.anonymous$foo_enum$dpT7rceH.h
 
 
 
@@ -181,7 +181,7 @@ poof(
     }
   }
 )
-// tests/integration/generated/tags/anonymous_has_numeric_tag_W4DIb6aG.h
+// tests/integration/generated/tags/poof_func.anonymous$has_numeric_tag$rYMuPULP.h
 
 
 
@@ -198,7 +198,7 @@ poof(
     enum  ((enum_t)) enum_t.tags(t) { t.name=t.value }
   }
 )
-// tests/integration/generated/tags/for_datatypes_gGnNeVTa.h
+// tests/integration/generated/tags/poof_builtin.for_datatypes$$lU5FgNqw.h
 
 poof(
   func (tag_struct struct_t) @omit_include
@@ -206,4 +206,4 @@ poof(
     struct_t.member(@foo, (member_with_foo_tag) { found (@foo) tag on ((member_with_foo_tag))! })
   }
 )
-// tests/integration/generated/tags/anonymous_tag_struct_kvfkPQ37.h
+// tests/integration/generated/tags/poof_func.anonymous$tag_struct$dELhCA5D.h

@@ -1,7 +1,7 @@
 // callsite
 // tests/integration/src/tags.h:127:0
 
-// def (anonymous)
+// def (poof_func.anonymous)
 // tests/integration/src/tags.h:127:0
 tagged_struct has tag foo
 
