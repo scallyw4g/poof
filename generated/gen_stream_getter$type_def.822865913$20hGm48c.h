@@ -1,0 +1,22 @@
+// callsite
+// poof/poof.cpp:1899:0
+
+// def (gen_stream_getter)
+// poof/poof.cpp:1878:0
+link_internal type_def*
+GetTypeDefByAlias( type_def_stream* Stream,  counted_string  Alias )
+{
+  type_def *Result = 0;
+  ITERATE_OVER(Stream)
+  {
+    type_def* T = GET_ELEMENT(Iter);
+    if (AreEqual(T->Alias, Alias))
+    {
+      Result = T;
+      break;
+    }
+  }
+
+  return Result;
+}
+

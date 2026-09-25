@@ -16,7 +16,7 @@ enum poof_global_keyword
   var,
 };
 poof( string_and_value_tables(poof_global_keyword) )
-#include <string_and_value_tables_poof_global_keyword.h>
+#include <generated/string_and_value_tables$poof_global_keyword$aaHT2MsT.h>
 /* #include <string_and_value_tables_poof_global_keyword.h> */
 /* #include <generated/string_and_value_tables_poof_global_keyword.h> */
 
@@ -44,10 +44,10 @@ enum for_datatypes_args poof(@bitfield)
 };
 
 poof(string_and_value_tables(for_datatypes_args))
-#include <generated/string_and_value_tables_for_datatypes_args.h>
+#include <generated/string_and_value_tables$for_datatypes_args$w05NtiZa.h>
 
 poof(generate_value_table_prefixless(for_datatypes_args))
-#include <generated/generate_value_table_prefixless_for_datatypes_args.h>
+#include <generated/generate_value_table_prefixless$for_datatypes_args$fwZa5S6G.h>
 
 enum metaprogramming_directive
 {
@@ -62,7 +62,7 @@ enum metaprogramming_directive
   polymorphic_func,
 };
 poof( string_and_value_tables(metaprogramming_directive) )
-#include <generated/string_and_value_tables_metaprogramming_directive.h>
+#include <generated/string_and_value_tables$metaprogramming_directive$qrAAwk6N.h>
 
 enum meta_func_directive
 {
@@ -73,7 +73,7 @@ enum meta_func_directive
   origin_comment_format = (1 << 2),
 };
 poof( string_and_value_tables(meta_func_directive) )
-#include <string_and_value_tables_meta_func_directive.h>
+#include <generated/string_and_value_tables$meta_func_directive$C9ctAl72.h>
 
 
 
@@ -125,7 +125,7 @@ enum meta_arg_operator
 };
 
 poof( generate_value_table(meta_arg_operator) )
-#include <generated/generate_value_table_meta_arg_operator.h>
+#include <generated/generate_value_table$meta_arg_operator$R97A46wO.h>
 
 enum meta_transform_op
 {
@@ -139,7 +139,7 @@ enum meta_transform_op
   strip_all_prefix    , // TODO(Jesse): Change name to strip_all_prefixes
 };
 poof(generate_value_table(meta_transform_op))
-#include <generated/generate_value_table_enum.h>
+#include <generated/generate_value_table$meta_transform_op$n523F62A.h>
 
 
 
@@ -215,7 +215,7 @@ AreEqual(compound_decl Thing0, compound_decl Thing1)
 }
 
 poof(stream_and_cursor(compound_decl))
-#include <generated/stream_and_cursor_struct_def.h> // TODO(Jesse): Change this name
+#include <generated/stream_and_cursor$compound_decl$US7O7Fwl.h>// TODO(Jesse): Change this name
 
 enum linkage_type
 {
@@ -278,7 +278,7 @@ enum type_qualifier
   TypeQual_Noreturn    = (1 << 26),
 };
 poof(string_and_value_tables(type_qualifier))
-#include <generated/string_and_value_tables_type_qualifier.h>
+#include <generated/string_and_value_tables$type_qualifier$sQycqRrR.h>
 
 #if 0
 enum type_spec_type
@@ -327,7 +327,7 @@ struct variable_decl
   u32 StrictBitWidth; // For declarations in structs like : `int foo_bool : 1`
 };
 poof(generate_stream(variable_decl))
-#include <generated/generate_stream_variable_decl.h>
+#include <generated/generate_stream$variable_decl$kjUwsUsp.h>
 
 enum function_type
 {
@@ -338,7 +338,7 @@ enum function_type
   function_type_normal,
 };
 poof(string_and_value_tables(function_type))
-#include <generated/string_and_value_tables_function_type.h>
+#include <generated/string_and_value_tables$function_type$vUEeWoaQ.h>
 
 struct ast_node_statement;
 struct function_decl
@@ -360,7 +360,7 @@ struct function_decl
 };
 
 poof(generate_stream(function_decl))
-#include <generated/generate_stream_function_decl.h>
+#include <generated/generate_stream$function_decl$0my7LW5r.h>
 
 struct poof_tag
 {
@@ -369,7 +369,7 @@ struct poof_tag
 };
 
 poof(block_array(poof_tag, {2}))
-#include <generated/block_array_poof_tag_688856405.h>
+#include <generated/block_array$poof_tag.688856405$6ijxyOZM.h>
 
 
 
@@ -382,7 +382,7 @@ struct enum_member
   poof_tag_block_array Tags;
 };
 poof(generate_stream(enum_member))
-#include <generated/generate_stream_enum_member.h>
+#include <generated/generate_stream$enum_member$H0PprmsB.h>
 
 struct enum_decl
 {
@@ -405,7 +405,7 @@ AreEqual(enum_decl Thing0, enum_decl Thing1)
 }
 
 poof(stream_and_cursor(enum_decl))
-#include <generated/stream_and_cursor_enum_def.h>
+#include <generated/stream_and_cursor$enum_decl$scXVlJf1.h>
 
 poof(
   d_union declaration
@@ -419,7 +419,7 @@ poof(
     poof_tag_block_array Tags;
   }
 )
-#include <generated/d_union_declaration.h>
+#include <generated/poof_builtin.d_union$$mr7XIsIO.h>
 
 
 link_internal b32
@@ -436,13 +436,13 @@ AreEqual(declaration Thing0, declaration Thing1)
 }
 
 poof(string_and_value_tables(declaration_type))
-#include <generated/string_and_value_tables_declaration_type.h>
+#include <generated/string_and_value_tables$declaration_type$YeDNXyIk.h>
 
 poof(generate_cursor(declaration))
-#include <generated/generate_cursor_declaration.h>
+#include <generated/generate_cursor$declaration$gebKckal.h>
 
 poof(generate_stream_chunk_struct(declaration))
-#include <generated/generate_stream_chunk_declaration.h>
+#include <generated/generate_stream_chunk_struct$declaration$uGVq2aaZ.h>
 
 // TODO(Jesse): Should type_spec actually be representative of primitive types?
 struct primitive_def
@@ -456,7 +456,7 @@ struct type_def
   type_spec Type;
 };
 poof(generate_stream(type_def))
-#include <generated/generate_stream_type_def.h>
+#include <generated/generate_stream$type_def$D0xTTIU8.h>
 
 enum macro_type
 {
@@ -489,10 +489,10 @@ Hash(macro_def *M)
 }
 
 poof(are_equal(macro_def))
-#include <generated/are_equal_macro_def.h>
+#include <generated/are_equal$macro_def$USbd72Tr.h>
 
 poof(hashtable(macro_def))
-#include <generated/hashtable_macro_def.h>
+#include <generated/hashtable$macro_def$rJlJcibw.h>
 
 
 enum datatype_type
@@ -508,7 +508,7 @@ enum datatype_type
 };
 
 poof(generate_string_table(datatype_type))
-#include <generated/generate_string_table_datatype_type.h>
+#include <generated/generate_string_table$datatype_type$WXHNcYZG.h>
 
 
 struct poof_index
@@ -518,7 +518,7 @@ struct poof_index
 };
 
 poof(gen_constructor(poof_index))
-#include <generated/gen_constructor_poof_index.h>
+#include <generated/gen_constructor$poof_index$KiNoQJvH.h>
 
 
 struct poof_symbol
@@ -526,7 +526,7 @@ struct poof_symbol
   cs Value;
 };
 poof(gen_constructor(poof_symbol))
-#include <generated/gen_constructor_poof_symbol.h>
+#include <generated/gen_constructor$poof_symbol$SjQGCxm9.h>
 
 
 /* poof( */
@@ -566,7 +566,7 @@ struct meta_func_arg
 
 
 poof(string_and_value_tables(meta_func_arg_type))
-#include <generated/string_and_value_tables_meta_func_arg_type.h>
+#include <generated/string_and_value_tables$meta_func_arg_type$MATv1B2k.h>
 
 /* poof(d_union_constructors(meta_func_arg)) */
 /* #include <generated/d_union_constructors_meta_func_arg.h> */
@@ -614,13 +614,13 @@ MetaFuncArg( poof_symbol A   , counted_string Match   )
 
 
 poof(generate_stream(meta_func_arg))
-#include <generated/generate_stream_meta_func_arg.h>
+#include <generated/generate_stream$meta_func_arg$jMfqeH1M.h>
 
 poof(buffer(meta_func_arg))
-#include <generated/buffer_meta_func_arg.h>
+#include <generated/buffer$meta_func_arg$CPfJrPVR.h>
 
 poof(generate_stream_compact(meta_func_arg))
-#include <generated/generate_stream_compact_meta_func_arg.h>
+#include <generated/generate_stream_compact$meta_func_arg$fjGad5ja.h>
 
 link_internal meta_func_arg
 MetaFuncArg(parse_context *Ctx, poof_tag Tag);
@@ -636,10 +636,10 @@ struct meta_func
 };
 
 poof(generate_stream(meta_func))
-#include <generated/generate_stream_meta_func.h>
+#include <generated/generate_stream$meta_func$gfT2qUlu.h>
 
 poof(gen_constructor(meta_func))
-#include <generated/gen_constructor_meta_func.h>
+#include <generated/gen_constructor$meta_func$6F924y2J.h>
 
 #define DEFAULT_META_FUNC_HEADER_FORMAT_STRING CSz("// %S:%u:0\n")
 
@@ -689,11 +689,11 @@ struct datatype poof(@d_union)
 };
 
 poof(maybe(datatype))
-#include <generated/maybe_datatype.h>
+#include <generated/maybe$datatype$EaZS3kf1.h>
 
 typedef datatype* datatype_ptr;
 poof(maybe(datatype_ptr))
-#include <generated/maybe_datatype_ptr.h>
+#include <generated/maybe$datatype_ptr$NDRkUBG2.h>
 
 /* poof(dunion_debug_print(declaration)) */
 /* #include <generated/dunion_debug_print_declaration.h> */
@@ -715,12 +715,12 @@ poof(maybe(datatype_ptr))
 /* #include <generated/debug_print_type_def.h> */
 
 poof(dunion_debug_print(datatype))
-#include <generated/dunion_debug_print_datatype.h>
+#include <generated/dunion_debug_print$datatype$c19Db5el.h>
 
 link_internal umm Hash(datatype *D);
 
 poof(hashtable(datatype))
-#include <generated/hashtable_datatype.h>
+#include <generated/hashtable$datatype$awDi943f.h>
 
 struct d_union_member
 {
@@ -729,7 +729,7 @@ struct d_union_member
   d_union_flags Flags;
 };
 poof(generate_stream(d_union_member))
-#include <generated/generate_stream_d_union_member.h>
+#include <generated/generate_stream$d_union_member$TOT573RY.h>
 
 link_internal datatype
 Datatype()
@@ -984,7 +984,7 @@ struct todo
   b32 FoundInCodebase;
 };
 poof(generate_stream(todo))
-#include <generated/generate_stream_todo.h>
+#include <generated/generate_stream$todo$83RJdSkS.h>
 
 struct tag
 {
@@ -992,7 +992,7 @@ struct tag
   todo_stream Todos;
 };
 poof(generate_stream(tag))
-#include <generated/generate_stream_tag.h>
+#include <generated/generate_stream$tag$k9GDLsA2.h>
 
 struct person
 {
@@ -1000,7 +1000,7 @@ struct person
   tag_stream Tags;
 };
 poof(generate_stream(person))
-#include <generated/generate_stream_person.h>
+#include <generated/generate_stream$person$fHab2bvG.h>
 
 // TODO(Jesse): Delete these
 #define SafeAccessObj(T, Obj) ((Obj).T); Assert((Obj).Type == type_##T)
@@ -1012,7 +1012,7 @@ struct ast_node_expression
   ast_node_expression *Next;
 };
 poof(generate_stream(ast_node_expression))
-#include <generated/generate_stream_ast_node_expression.h>
+#include <generated/generate_stream$ast_node_expression$l7vb4WAl.h>
 
 struct ast_node_statement
 {
@@ -1042,7 +1042,7 @@ struct ast_node_variable_def
   ast_node *Value;
 };
 poof(generate_stream(ast_node_variable_def))
-#include <generated/generate_stream_ast_node_variable_def.h>
+#include <generated/generate_stream$ast_node_variable_def$kly2ZTMh.h>
 
 struct ast_node_access
 {
@@ -1108,13 +1108,13 @@ poof(
     ast_node_type_specifier
   }
 )
-#include <generated/d_union_ast_node.h>
+#include <generated/poof_builtin.d_union$$JpALTKQ1.h>
 
 poof(generate_stream(ast_node))
-#include <generated/generate_stream_ast_node.h>
+#include <generated/generate_stream$ast_node$qCrssXPH.h>
 
 poof(string_and_value_tables(ast_node_type))
-#include <generated/string_and_value_tables_ast_node_type.h>
+#include <generated/string_and_value_tables$ast_node_type$CyZapCfu.h>
 
 
 link_internal ast_node*
@@ -1179,10 +1179,10 @@ enum output_mode
 
 
 poof(generate_stream_iterator(declaration))
-#include <generated/generate_stream_iterator_datatype.h>
+#include <generated/generate_stream_iterator$declaration$Vb7hIxPD.h>
 
 poof(generate_stream_push(declaration))
-#include <generated/generate_stream_push_datatype.h>
+#include <generated/generate_stream_push$declaration$5xZYyTd0.h>
 
 enum parser_push_type
 {

@@ -1,0 +1,11 @@
+// callsite
+// ./include/bonsai_stdlib/src/vector.h:1197:0
+
+// def (maybe)
+// ./include/bonsai_stdlib/src/poof_functions.h:2331:0
+struct maybe_v3
+{
+  maybe_tag Tag;
+  v3 Value;
+};
+

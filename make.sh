@@ -179,6 +179,7 @@ function RunPoof {
   $POOF_DEBUGGER $POOF_EXECUTABLE \
                                   \
     $POOF_LOG_LEVEL               \
+    --rewrite-all-includes \
     poof/poof.cpp                 \
     -D POOF_PREPROCESSOR          \
     -D BONSAI_PREPROCESSOR        \

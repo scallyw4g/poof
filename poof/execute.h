@@ -2019,8 +2019,8 @@ ExecuteMetaprogrammingDirective( parse_context *Ctx,
           else
           {
 #if 1
-            FinalizeAndFlush(Ctx, &Func, &Args, DirectiveT, &FuncBuilder, Builder, Memory);
-            /* FinalizeAndFlush_Async(Ctx, &Func, &Args, DirectiveT, &FuncBuilder, Builder, Memory); */
+            /* FinalizeAndFlush(Ctx, &Func, &Args, DirectiveT, &FuncBuilder, Builder, Memory); */
+            FinalizeAndFlush_Async(&GetPlatform()->HighPriority, Ctx, &Func, &Args, DirectiveT, &FuncBuilder, Builder, Memory);
 #else
             counted_string OutfileName = GenerateOutfileNameFor( Func.Name, ArgType, Memory, GetRandomString(8, umm(Hash(&Code)), Memory));
             cs Header = FCS(Func.HeaderFormatString, DirectiveT->Filename, DirectiveT->LineNumber);

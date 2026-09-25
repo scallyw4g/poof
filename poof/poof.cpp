@@ -1897,12 +1897,12 @@ poof(
 )
 
 poof( gen_stream_getter(type_def, {Alias}) )
-#include <generated/gen_stream_getter_type_def_822865913.h>
+#include <generated/gen_stream_getter$type_def.822865913$20hGm48c.h>
 
 
 
 poof( gen_stream_getter(enum_decl, {NameT}) )
-#include <generated/gen_stream_getter_enum_decl_689333910.h>
+#include <generated/gen_stream_getter$enum_decl.578867176$wGn57YTO.h>
 
 
 #if 0
@@ -7336,7 +7336,7 @@ PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
         })
       }
     )
-#include <generated/anonymous_function_type_qualifier_fPa8h41Z.h>
+#include <generated/poof_func.anonymous$type_qualifier$f44hJS1Y.h>
 
     Result = Finalize(&Builder, Memory);
   }
