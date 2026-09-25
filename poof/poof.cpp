@@ -2821,20 +2821,21 @@ RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Fi
 }
 
 link_internal b32
+poof(@async)
 Output( cs Code,
         cs OutputFilename,
-        memory_arena *Memory,
         output_mode Mode = Output_NoOverwrite )
 {
   TIMED_FUNCTION();
   Mode = Output_Unsafe;
   b32 Result = False;
 
+  auto Memory = GetTranArena();
   native_file TempFile = GetTempFile(&TempFileEntropy, Memory);
   if (TempFile.Handle)
   {
-        b32 FileWritesSucceeded = WriteToFile(&TempFile, Code);
-            FileWritesSucceeded &= CloseFile(&TempFile);
+    b32 FileWritesSucceeded = WriteToFile(&TempFile, Code);
+        FileWritesSucceeded &= CloseFile(&TempFile);
 
     if (FileWritesSucceeded)
     {
@@ -6579,7 +6580,7 @@ FlushOutputToDisk( parse_context *Ctx,
   }
 
 
-  Output(OutputForThisParser, OutputPath, Memory);
+  Output(OutputForThisParser, OutputPath);
   parser *OutputParse = ParserForAnsiStream(Ctx, AnsiStream(OutputForThisParser, OutputPath), TokenCursorSource_MetaprogrammingExpansion, Ctx->Memory);
 
 #if 1
@@ -6626,7 +6627,6 @@ RemoveAllWhitespaceChunks(string_builder *Builder)
 }
 
 link_internal void
-poof(@async)
 FinalizeAndFlush( parse_context *Ctx,
                       meta_func *Func,
            meta_func_arg_buffer *InstanceArgs,
