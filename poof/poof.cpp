@@ -9208,7 +9208,7 @@ main(s32 ArgCount_, const char** ArgStrings)
 
   application_api AppApi = {};
   bonsai_stdlib Stdlib = {};
-  bonsai_init_flags InitFlags = BonsaiInit_Default;
+  bonsai_init_flags InitFlags = BonsaiInit_LaunchThreadPool;
 
   Global_Stdlib = &Stdlib;
 
@@ -9404,13 +9404,9 @@ main(s32 ArgCount_, const char** ArgStrings)
 
       if (Stdlib.Plat.Input.Escape.Clicked) { break; }
 
-      Info("Hi");
-
       b32 Toggle = False, Toggle2 = False;
-      if (Stdlib.Plat.Input.F1.Clicked) { Info("hi"); Toggle = True; }
-      if (Stdlib.Plat.Input.F2.Clicked) { Info("hi2"); Toggle2 = True; }
-
-      Info("%d", Stdlib.Plat.Input.F1.Clicked);
+      if (Stdlib.Plat.Input.F1.Clicked) { Info("F1"); Toggle = True; }
+      if (Stdlib.Plat.Input.F2.Clicked) { Info("F2"); Toggle2 = True; }
 
       /* DebugState->DisplayDebugMenu = True; */
       DEBUG_FRAME_BEGIN(&Ui, Dt, Toggle, Toggle2);
