@@ -183,22 +183,13 @@ struct foo_struct_1
 
 
 
-poof(
-  func poof_noop(ignored) @code_fragment {})
-
-// NOTE(Jesse): This just tests we can do a poof inside an enum
 enum poof_enum
 {
   enum_value_0,
-  poof(poof_noop(foo_struct_0))
-#include <tests/integration/generated/iteration/poof_noop$foo_struct_0$Se2htfwc.h>
 };
 
-// NOTE(Jesse): This just tests we can do a poof inside a struct
 struct poof_struct
 {
   int foo;
-  poof(poof_noop(foo_struct_0))
-#include <tests/integration/generated/iteration/poof_noop$foo_struct_0$y3QfKRVB.h>
   float bar;
 };

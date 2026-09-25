@@ -225,24 +225,6 @@ location(tests/integration/src/common_structures.h:3)
 
 //
 
-name(poof_noop)
-type(meta_func)
-value((value unsupported))
-array()
-hash(2B1EFA62)
-indirection()
-tags()
-location(tests/integration/src/common_structures.h:187)
-
-
-
-
-
-
-
-
-//
-
 name(typedefd_foofunc)
 type(foofunc)
 value(int )
@@ -785,7 +767,7 @@ array()
 hash(3B2926CC)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:190)
+location(tests/integration/src/common_structures.h:186)
 
 
 
@@ -873,7 +855,7 @@ array()
 hash(1B207F9)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:198)
+location(tests/integration/src/common_structures.h:191)
 
 
 
