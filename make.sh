@@ -294,6 +294,7 @@ function RunIntegrationTests()
 
       # REWRITE_ALL_INCLUDES="--rewrite-all-includes"
       $INTEGRATION_TEST_DEBUGGER bin/poof \
+        -d \
         $POOF_COLOR_FLAG                  \
         $REWRITE_ALL_INCLUDES             \
         $INTEGRATION_TEST_LOG_LEVEL       \

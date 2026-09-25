@@ -9278,6 +9278,9 @@ main(s32 ArgCount_, const char** ArgStrings)
         {
           ScanForMutationsAndOutput(&Bucket->Element, Ctx.Args.Outpath, Memory);
           Bucket = Bucket->Next;
+#if BONSAI_DEBUG_SYSTEM_API
+    if (Ctx.Args.DoDebugWindow) { MAIN_THREAD_ADVANCE_DEBUG_SYSTEM(GetDt()); }
+#endif
         }
       }
 
@@ -9354,9 +9357,8 @@ main(s32 ArgCount_, const char** ArgStrings)
     r32 Dt = 1.f;
 
     // Do a frame to just toggle the UI on.  Pretty dumb.. but whatever.
-    /* DEBUG_FRAME_BEGIN(&Ui, Dt, True, False); */
-    /* DEBUG_FRAME_END(Dt); */
-    UiFrameEnd(&Ui);
+    DEBUG_FRAME_BEGIN(&Ui, Dt, True, False);
+    DEBUG_FRAME_END(Dt);
 
     UNPACK_STDLIB(&Stdlib);
 
@@ -9380,6 +9382,12 @@ main(s32 ArgCount_, const char** ArgStrings)
 
 
       UiFrameBegin(&Ui);
+
+      // TODO(Jesse): move this!
+      // Map GPU buffers for next frame
+      MapGpuBuffer(&Ui.SolidQuadGeometryBuffer);
+      MapGpuBuffer(&Ui.TextGroup->Buf);
+
 
       if (Stdlib.Plat.Input.Escape.Clicked) { break; }
 
