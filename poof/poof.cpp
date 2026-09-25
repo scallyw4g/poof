@@ -8438,47 +8438,53 @@ ParseMetaFuncDefArg(parser *Parser, meta_func_arg_stream *Stream)
   cs Match = {};
   cs Type = {};
 
-  c_token *FirstT = RequireTokenPointer(Parser, CTokenType_Identifier);
-  if (c_token *SecondT = OptionalToken(Parser, CTokenType_Identifier))
+  // NOTE(Jesse): FirstT is an optional token in case there are no arguments
+  //
+  b32 Result = False;
+  if (c_token *FirstT = OptionalToken(Parser, CTokenType_Identifier))
   {
-    Type = FirstT->Value;
-    Match = SecondT->Value;
-  }
-  else
-  {
-    Match = FirstT->Value;
-  }
-
-  meta_func_arg Arg = {};
-  Arg.Match = Match;
-
-  if (Type.Start)
-  {
-    meta_func_arg_type ArgT = MetaFuncArgType(Type);
-    switch (ArgT)
+    if (c_token *SecondT = OptionalToken(Parser, CTokenType_Identifier))
     {
-      case type_meta_func_arg_noop:
-      {
-        ParseError(Parser, ParseErrorCode_InvalidArgumentType, CSz("Invalid Type Token"), FirstT);
-      } break;
-
-      case type_datatype:
-      case type_poof_index:
-      case type_poof_symbol:
-      {
-        Arg.Type = ArgT;
-      } break;
+      Type = FirstT->Value;
+      Match = SecondT->Value;
     }
-  }
-  else
-  {
-    // Default to datatype if no type specified
-    Arg.Type = type_datatype;
+    else
+    {
+      Match = FirstT->Value;
+    }
+
+    meta_func_arg Arg = {};
+    Arg.Match = Match;
+
+    if (Type.Start)
+    {
+      meta_func_arg_type ArgT = MetaFuncArgType(Type);
+      switch (ArgT)
+      {
+        case type_meta_func_arg_noop:
+        {
+          ParseError(Parser, ParseErrorCode_InvalidArgumentType, CSz("Invalid Type Token"), FirstT);
+        } break;
+
+        case type_datatype:
+        case type_poof_index:
+        case type_poof_symbol:
+        {
+          Arg.Type = ArgT;
+        } break;
+      }
+    }
+    else
+    {
+      // Default to datatype if no type specified
+      Arg.Type = type_datatype;
+    }
+
+    Push(Stream, Arg);
+
+    Result = (OptionalToken(Parser, CTokenType_Comma) != 0);
   }
 
-  Push(Stream, Arg);
-
-  b32 Result = (OptionalToken(Parser, CTokenType_Comma) != 0);
   return Result;
 }
 

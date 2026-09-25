@@ -2,6 +2,12 @@
 #include <tests/integration/src/common_structures.h>
 
 poof(
+  func no_args()
+  {
+  }
+)
+
+poof(
   func foobaz(type) @omit_include
   {
     foobaZ!

@@ -1,8 +1,8 @@
 // callsite
-// tests/integration/src/functions.h:70:0
+// tests/integration/src/functions.h:76:0
 
 // def (overload_test_func)
-// tests/integration/src/functions.h:52:0
+// tests/integration/src/functions.h:58:0
 // should prroduce the hash of the counted_string (cs) type
 // type != type
 2758FB0 != cs.hash
