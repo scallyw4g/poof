@@ -7,13 +7,15 @@
 
 # FetchBonsaiDebug
 
-./make.sh BuildParserTests
-./make.sh RunParserTests
+# ./make.sh BuildParserTests
+# ./make.sh RunParserTests
 
 # ./make.sh RunInstalledPoof
 ./make.sh BuildPoof
 # ./make.sh RunPoof
 
+./make.sh RunIntegrationTests
+#
 # export OPTIMIZATION_LEVEL="-O2"
 
 # ./make.sh RunInstalledPoof
