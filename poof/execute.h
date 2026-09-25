@@ -1551,13 +1551,16 @@ TryParseMetaTransformOp(parser *Scope, meta_transform_op *Operator, c_token **Op
 link_internal void
 Execute( parse_context *Ctx,
              meta_func *Func,
-  meta_func_arg_buffer *Args,
+  meta_func_arg_buffer *InputArgs,
         string_builder *OutputBuilder,
           memory_arena *Memory,
                    umm *Depth )
 {
   TIMED_FUNCTION();
   Assert(Func->Body.Tokens->At == Func->Body.Tokens->Start);
+
+  meta_func_arg_buffer  Locals_ = *InputArgs;
+  meta_func_arg_buffer *Locals  = &Locals_;
 
   static int debugcounter;
   Info("%d : Func(%S) : Stack(%u) : %S", debugcounter++, Func->Name, *Depth, Func->Body.Tokens->Filename);
@@ -1592,7 +1595,7 @@ Execute( parse_context *Ctx,
 #else
 
         Ctx->Args.DoNotNormalizeWhitespace = True;
-        cs Code = Execute(Ctx, CSz("poof_builtin.string_parse"), StringParse, Args, Memory, &IgnoreDepth);
+        cs Code = Execute(Ctx, CSz("poof_builtin.string_parse"), StringParse, Locals, Memory, &IgnoreDepth);
         Ctx->Args.DoNotNormalizeWhitespace = DoNotNormalizeWhitespace;
 
         if (StringParse->ErrorCode)
@@ -1643,11 +1646,11 @@ Execute( parse_context *Ctx,
 
               parser ExpansionContext = EatUntilExcluding_Parser(Scope, CTokenType_Newline, GetTranArena());
 
-              meta_func ExpansionFunc = MetaFunc(CSz("poof_keyword.var"), 0, *Args, ExpansionContext, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
-              cs Expanded = Execute(Ctx, &ExpansionFunc, Args, Memory, Depth);
+              meta_func ExpansionFunc = MetaFunc(CSz("poof_keyword.var"), 0, *Locals, ExpansionContext, meta_func_directive_noop, DEFAULT_META_FUNC_HEADER_FORMAT_STRING);
+              cs Expanded = Execute(Ctx, &ExpansionFunc, Locals, Memory, Depth);
 
-              meta_func_arg_buffer NewArgs = ExtendBuffer(Args, 1, Memory);
-              datatype *D = ResolveNameToDatatype(Ctx, Scope, ExpansionFunc.Body.Tokens->Start, Args, Expanded);
+              meta_func_arg_buffer NewArgs = ExtendBuffer(Locals, 1, Memory);
+              datatype *D = ResolveNameToDatatype(Ctx, Scope, ExpansionFunc.Body.Tokens->Start, Locals, Expanded);
               if (D->Type)
               {
                 SetLast(&NewArgs, ReplacementPattern(NewName, D));
@@ -1657,7 +1660,7 @@ Execute( parse_context *Ctx,
                 SetLast(&NewArgs, ReplacementPattern(NewName, PoofSymbol(Expanded)));
               }
 
-              *Args = NewArgs;
+              *Locals = NewArgs;
 
               DidPoofOp = True;
             } break;
@@ -1665,7 +1668,7 @@ Execute( parse_context *Ctx,
             case poof_error:
             {
               parser Body = GetBodyTextForNextScope(Scope, Memory);
-              cs ErrorText = Execute(Ctx, CSz("poof_keyword.poof_error"), &Body, Args, Memory, Depth);
+              cs ErrorText = Execute(Ctx, CSz("poof_keyword.poof_error"), &Body, Locals, Memory, Depth);
 
               // TODO(Jesse): Does this actually fire at any time?  Seems weird ..
               if (ErrorText.Count == 0) { ErrorText = ToString(&Body, Memory); }
@@ -1691,11 +1694,11 @@ Execute( parse_context *Ctx,
               {
                 if(T1)
                 {
-                  datatype *D0 = ResolveNameToDatatype(Ctx, Scope, T0, Args, T0->Value);
-                  datatype *D1 = ResolveNameToDatatype(Ctx, Scope, T1, Args, T1->Value);
+                  datatype *D0 = ResolveNameToDatatype(Ctx, Scope, T0, Locals, T0->Value);
+                  datatype *D1 = ResolveNameToDatatype(Ctx, Scope, T1, Locals, T1->Value);
 
                   b32 DoTrueBranch = (D0->Type && D1->Type) && AreEqual(D0, D1);
-                  PredicateBlock( Ctx, Scope, Args, DoTrueBranch, OutputBuilder, Memory, Depth);
+                  PredicateBlock( Ctx, Scope, Locals, DoTrueBranch, OutputBuilder, Memory, Depth);
                   DidPoofOp = True;
                 }
                 else
@@ -1714,11 +1717,11 @@ Execute( parse_context *Ctx,
         else
         {
 
-          for (u32 ArgIndex = 0; ArgIndex < Args->Count; ++ArgIndex)
+          for (u32 ArgIndex = 0; ArgIndex < Locals->Count; ++ArgIndex)
           {
             if (DidPoofOp) break;
 
-            meta_func_arg *Replace = Args->Start + ArgIndex;
+            meta_func_arg *Replace = Locals->Start + ArgIndex;
 
             c_token *NextMatch = OptionalTokenRaw(Scope, CToken(Replace->Match));
 
@@ -1736,7 +1739,7 @@ Execute( parse_context *Ctx,
               TryParseMetaArgOperator(Scope, &Operator, &OperatorToken);
 
               string_builder OperatorBuilder = StringBuilder();
-              ResolveMetaOperator(Ctx, Args, Replace, Scope, Operator, BodyToken, OperatorToken, Memory, Depth, &OperatorBuilder);
+              ResolveMetaOperator(Ctx, Locals, Replace, Scope, Operator, BodyToken, OperatorToken, Memory, Depth, &OperatorBuilder);
               cs OperatorOutput = Finalize(&OperatorBuilder, Memory);
 
               //
@@ -1794,7 +1797,7 @@ Execute( parse_context *Ctx,
               DidPoofOp = True;
 
               meta_func_arg_buffer ArgInstances = {};
-              if (ParseAndTypeCheckArgs(Ctx, Scope, NestedFuncT, NestedFunc, &ArgInstances, Args, Memory))
+              if (ParseAndTypeCheckArgs(Ctx, Scope, NestedFuncT, NestedFunc, &ArgInstances, Locals, Memory))
               {
                 string_builder Builder = StringBuilder();
                 if (CallFunction(Ctx, NestedFuncT, NestedFunc, &ArgInstances, &Builder, Memory, Depth))
@@ -1912,7 +1915,10 @@ Execute(parse_context* Ctx, meta_func* Func, string_builder *OutputBuilder, memo
 }
 
 link_internal void
-ExecuteMetaprogrammingDirective(parse_context *Ctx, metaprogramming_directive Directive, c_token *DirectiveT, tuple_cs_cs_buffer_builder *Builder)
+ExecuteMetaprogrammingDirective( parse_context *Ctx,
+                     metaprogramming_directive  Directive,
+                                       c_token *DirectiveT,
+                    tuple_cs_cs_buffer_builder *Builder )
 {
   program_datatypes *Datatypes   = &Ctx->Datatypes;
   memory_arena *Memory           = Ctx->Memory;
