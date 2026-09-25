@@ -292,7 +292,7 @@ function RunIntegrationTests()
       echo -e "$Info TestIndex($test_index)"
       echo -e "$Indent $INTEGRATION_TEST_DEBUGGER bin/poof $POOF_COLOR_FLAG $INTEGRATION_TEST_LOG_LEVEL $filename -o $test_output_dir"
 
-      # REWRITE_ALL_INCLUDES="--rewrite-all-includes"
+      REWRITE_ALL_INCLUDES="--rewrite-all-includes"
       $INTEGRATION_TEST_DEBUGGER bin/poof \
         $POOF_COLOR_FLAG                  \
         $REWRITE_ALL_INCLUDES             \

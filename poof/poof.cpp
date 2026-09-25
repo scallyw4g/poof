@@ -6500,7 +6500,11 @@ FlushOutputToDisk( parse_context *Ctx,
     if (PotentialIncludeToken->Type == CT_PreprocessorInclude)
     {
       RequireTokenRawPointer(Parser, CT_PreprocessorInclude);
-      if (OutputPath.Start == 0)
+      if (RewriteAllIncludes)
+      {
+        PotentialIncludeToken->Value = Concat(CSz("#include <"), OutputPath, CSz(">"), Memory);
+      }
+      else
       {
         counted_string IncludePath = PotentialIncludeToken->IncludePath;
         if (PotentialIncludeToken->Flags & CTFlags_RelativeInclude) { IncludePath = StripQuotes(IncludePath); }
@@ -6509,12 +6513,20 @@ FlushOutputToDisk( parse_context *Ctx,
     }
     else if (OmitInclude && PotentialIncludeToken->Type == CTokenType_CommentSingleLine)
     {
-      RequireTokenRawPointer(Parser, CTokenType_CommentSingleLine);
-      OutputPath = PotentialIncludeToken->Value;
 
-      OutputPath = Trim(OutputPath);
-      Frontcate(&OutputPath, 2);
-      OutputPath = Trim(OutputPath);
+      if (RewriteAllIncludes)
+      {
+        PotentialIncludeToken->Value = Concat(CSz("// "), OutputPath, Memory);
+      }
+      else
+      {
+        RequireTokenRawPointer(Parser, CTokenType_CommentSingleLine);
+        OutputPath = PotentialIncludeToken->Value;
+
+        OutputPath = Trim(OutputPath);
+        Frontcate(&OutputPath, 2);
+        OutputPath = Trim(OutputPath);
+      }
     }
     else
     {
@@ -6925,7 +6937,7 @@ GenerateOutfileNameFor( parse_context *Ctx,
 {
   string_builder OutfileBuilder = StringBuilder();
   Append(&OutfileBuilder, Func->Name);
-  Append(&OutfileBuilder, CSz("_"));
+  Append(&OutfileBuilder, CSz("@"));
 
   if (InstanceArgs)
   {
@@ -6935,14 +6947,14 @@ GenerateOutfileNameFor( parse_context *Ctx,
       Append(&OutfileBuilder, ToString(Ctx, Arg, Memory));
       if ( ArgIndex+1 != InstanceArgs->Count )
       {
-        Append(&OutfileBuilder, CSz("_"));
+        Append(&OutfileBuilder, CSz("@"));
       }
     }
   }
 
   if (Modifier.Count)
   {
-    Append(&OutfileBuilder, CSz("_"));
+    Append(&OutfileBuilder, CSz("#"));
     Append(&OutfileBuilder, Modifier);
   }
 
@@ -9100,7 +9112,7 @@ ScanForMutationsAndOutput(parser *Parser, counted_string OutputPath, memory_aren
     }
   }
 
-  if (NeedsToBeOverwritten)
+  /* if (NeedsToBeOverwritten) */
   {
     RewriteOriginalFile(Parser, OutputPath, Parser->Tokens->Filename, Memory);
   }
