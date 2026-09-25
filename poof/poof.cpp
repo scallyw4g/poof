@@ -25,12 +25,6 @@ link_internal void DebugPrint(type_spec *TypeSpec, u32 Depth = 0);
 #include <poof/print_ast_node.h>
 
 
-link_internal void
-poof(@async)
-FinalizeAndFlush( parse_context *Ctx, meta_func *Func, meta_func_arg_buffer *InstanceArgs, c_token   *InvocationSite, string_builder *Builder, tuple_cs_cs_buffer_builder *OutputTuples, memory_arena *Memory );
-
-#include <bonsai_stdlib/src/threadpool.cpp>
-
 
 
 
@@ -373,7 +367,7 @@ ExpandMacro( parse_context *Ctx,
 {
   TIMED_FUNCTION();
 
-  memory_arena *TempMemory = AllocateArena(Megabytes(5), False);
+  memory_arena *TempMemory = AllocateArenaUntracked(Megabytes(5), False);
 
   // @expand_macro_temp_mem
   /* temp_memory_handle MemHandle = BeginTemporaryMemory(TempMemory); */
@@ -6678,6 +6672,8 @@ FinalizeAndFlush( parse_context *Ctx,
   cs ActualOutputFile = FlushOutputToDisk(Ctx, Code, OutfileName, Func->Directives, Memory);
   Append(OutputTuples, Tuple(ActualOutputFile, Code));
 }
+
+#include <bonsai_stdlib/src/threadpool.cpp>
 
 link_internal meta_func_arg*
 StreamContains(meta_func_arg_stream* Stream, counted_string Match)
