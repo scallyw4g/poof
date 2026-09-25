@@ -55,17 +55,17 @@ undefined_type _und0 not primitive
 
 foo_struct_0 _foo0 not primitive
 
-struct (anonymous) not primitive
+struct anonymous not primitive
 
 this_is_a_bug _embedded1 not primitive
 
 this_is_a_bug _embedded2 not primitive
 
-union (anonymous) not primitive
+union anonymous not primitive
 
 this_is_a_bug _embedded3 not primitive
 
-union (anonymous) not primitive
+union anonymous not primitive
 
 counted_string S1 is primitive
 

@@ -167,12 +167,12 @@ struct members
   foo_enum _foo_enum
   undefined_type _und0
   foo_struct_0 _foo0
-  struct (anonymous)
+  struct anonymous
   this_is_a_bug _embedded1
   this_is_a_bug _embedded2
-  union (anonymous)
+  union anonymous
   this_is_a_bug _embedded3
-  union (anonymous)
+  union anonymous
   counted_string S1
   foofuncptr FooFuncPtr
   foofunc0 FooFun
@@ -617,65 +617,6 @@ function args
 
 //
 
-name((anonymous))
-type(union)
-value((value unsupported))
-array()
-hash(2937360B)
-indirection()
-tags()
-location((unknown):-1)
-
-
-
-
-
-
-
-
-//
-
-name((anonymous))
-type(union)
-value((value unsupported))
-array()
-hash(2937360B)
-indirection()
-tags()
-location((unknown):-1)
-
-
-
-
-
-
-
-
-//
-
-name((anonymous))
-type(struct)
-value((value unsupported))
-array()
-hash(2937360B)
-indirection()
-tags()
-location((unknown):-1)
-
-
-
-
-struct members
-{
-    int  _int2
-
-}
-
-
-
-
-//
-
 name(upshift_by_31)
 type(macro)
 value((value unsupported))
@@ -779,6 +720,65 @@ enum values
     enum_value_0 enum_value_0 
 
 }
+
+
+//
+
+name(anonymous)
+type(union)
+value((value unsupported))
+array()
+hash(328A5731)
+indirection()
+tags()
+location((unknown):-1)
+
+
+
+
+
+
+
+
+//
+
+name(anonymous)
+type(union)
+value((value unsupported))
+array()
+hash(328A5731)
+indirection()
+tags()
+location((unknown):-1)
+
+
+
+
+
+
+
+
+//
+
+name(anonymous)
+type(struct)
+value((value unsupported))
+array()
+hash(328A5731)
+indirection()
+tags()
+location((unknown):-1)
+
+
+
+
+struct members
+{
+    int  _int2
+
+}
+
+
 
 
 //

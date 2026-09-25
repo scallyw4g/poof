@@ -55,17 +55,17 @@ undefined_type _und0 not enum
 
 foo_struct_0 _foo0 not enum
 
-struct (anonymous) not enum
+struct anonymous not enum
 
 this_is_a_bug _embedded1 not enum
 
 this_is_a_bug _embedded2 not enum
 
-union (anonymous) not enum
+union anonymous not enum
 
 this_is_a_bug _embedded3 not enum
 
-union (anonymous) not enum
+union anonymous not enum
 
 counted_string S1 not enum
 

@@ -2,8 +2,8 @@
 
 # export POOF_LOG_LEVEL=LogLevel_Debug
 
-./make.sh RunInstalledPoof
-[ $? -ne 0 ] && echo "Poof Failed, exiting." && exit 1
+# ./make.sh RunInstalledPoof
+# [ $? -ne 0 ] && echo "Poof Failed, exiting." && exit 1
 
 # ./make.sh BuildAllBinariesRunAllTests
 

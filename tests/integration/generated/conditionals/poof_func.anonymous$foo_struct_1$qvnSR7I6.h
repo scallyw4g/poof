@@ -55,17 +55,17 @@ undefined_type _und0 not struct
 
 foo_struct_0 _foo0 is struct
 
-struct (anonymous) is struct
+struct anonymous is struct
 
 this_is_a_bug _embedded1 is struct
 
 this_is_a_bug _embedded2 is struct
 
-union (anonymous) not struct
+union anonymous not struct
 
 this_is_a_bug _embedded3 not struct
 
-union (anonymous) not struct
+union anonymous not struct
 
 counted_string S1 not struct
 

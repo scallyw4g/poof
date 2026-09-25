@@ -55,17 +55,17 @@ undefined_type _und0 not compound
 
 foo_struct_0 _foo0 is compound
 
-struct (anonymous) is compound
+struct anonymous is compound
 
 this_is_a_bug _embedded1 is compound
 
 this_is_a_bug _embedded2 is compound
 
-union (anonymous) is compound
+union anonymous is compound
 
 this_is_a_bug _embedded3 is compound
 
-union (anonymous) is compound
+union anonymous is compound
 
 counted_string S1 not compound
 

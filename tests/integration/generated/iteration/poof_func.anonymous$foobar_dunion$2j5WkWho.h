@@ -5,7 +5,7 @@
 // tests/integration/src/iteration.h:66:0
 -- all members start --
 
-foobar_dunion_type Type  union (anonymous) (value unsupported) 
+foobar_dunion_type Type  union anonymous (value unsupported) 
 
 -- all members end --
 

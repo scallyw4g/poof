@@ -169,3 +169,21 @@ poof(
   }
 )
 // tests/integration/generated/accessors/poof_func.anonymous$foo_struct_1$mEYwJngE.h
+
+poof(
+  func (foo_struct_1 type) @omit_include
+  {
+    type.map(member) {
+      member.is_union?
+      {
+        member.name?
+        {
+          member.name
+        }
+      }
+    }
+  }
+)
+// tests/integration/generated/accessors/poof_func.anonymous$foo_struct_1$A0sLYXna.h
+
+

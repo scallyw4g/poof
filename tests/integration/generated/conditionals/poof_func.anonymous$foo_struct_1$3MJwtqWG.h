@@ -55,17 +55,17 @@ undefined_type _und0 not a pointer
 
 foo_struct_0 _foo0 not a pointer
 
-struct (anonymous) not a pointer
+struct anonymous not a pointer
 
 this_is_a_bug _embedded1 not a pointer
 
 this_is_a_bug _embedded2 not a pointer
 
-union (anonymous) not a pointer
+union anonymous not a pointer
 
 this_is_a_bug _embedded3 not a pointer
 
-union (anonymous) not a pointer
+union anonymous not a pointer
 
 counted_string S1 not a pointer
 

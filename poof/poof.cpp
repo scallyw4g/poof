@@ -3452,8 +3452,8 @@ global_variable c_token Global_DefaultNameToken =
 {
   CTokenType_Identifier,
   CTFlags_None,
-  {CSz("(anonymous)")},
-  {CSz("(anonymous)")},
+  {CSz("anonymous")},
+  {CSz("anonymous")},
   0,
   False,
   {{}},
@@ -5119,7 +5119,6 @@ ParseEnum(parse_context *Ctx, type_spec *TypeSpec)
   program_datatypes *Datatypes = &Ctx->Datatypes;
 
   c_token *EnumNameT = TypeSpec->DatatypeToken;
-  /* counted_string EnumName = EnumNameT ? EnumNameT->Value : CSz("(anonymous)"); */
 
   enum_decl Enum = {};
   Enum.NameT = EnumNameT ? EnumNameT : &Global_DefaultNameToken;
@@ -6371,7 +6370,7 @@ ParseDatatypes(parse_context *Ctx, parser *Parser)
 
               Info( "Pushing %S decl (%S)",
                     StructOrUnion.IsUnion ? CSz("union") : CSz("struct"),
-                    StructOrUnion.Type ? StructOrUnion.Type->Value : CSz("(anonymous)") );
+                    StructOrUnion.Type ? StructOrUnion.Type->Value : CSz("anonymous") );
 
               /* if (StringsMatch(StructOrUnion.Type->Value, CSz("terminal_colors"))) */
               /* { */
@@ -7493,7 +7492,7 @@ GetNameTokenForDatatype(datatype *Data)
 link_internal cs
 GetNameForDatatype(datatype *Data, memory_arena *Memory)
 {
-  cs Result = CSz("(anonymous)");
+  cs Result = CSz("anonymous");
   unbox(Data)
   {
     // NOTE(Jesse): I decieded that nobody should ever ask for a name of an

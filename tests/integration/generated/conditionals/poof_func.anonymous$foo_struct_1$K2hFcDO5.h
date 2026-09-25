@@ -55,17 +55,17 @@ undefined_type _und0 not defined
 
 foo_struct_0 _foo0 defined
 
-struct (anonymous) defined
+struct anonymous defined
 
 this_is_a_bug _embedded1 defined
 
 this_is_a_bug _embedded2 defined
 
-union (anonymous) defined
+union anonymous defined
 
 this_is_a_bug _embedded3 defined
 
-union (anonymous) defined
+union anonymous defined
 
 counted_string S1 defined
 
