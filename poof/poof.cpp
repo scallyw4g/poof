@@ -10,7 +10,7 @@
 
 #define BONSAI_STDLIB_USE_CUSTOM_THREADPOOL 1
 
-#define STDLIB_SHADER_PATH "include/bonsai_stdlib/shaders/"
+#define STDLIB_SHADER_PATH "external/bonsai_stdlib/shaders/"
 
 #include <bonsai_stdlib/bonsai_stdlib.h>
 #include <bonsai_stdlib/bonsai_stdlib.cpp>
@@ -6465,6 +6465,8 @@ AllocateTokenizedFiles(u32 Count, memory_arena* Memory)
 /* link_internal tuple_cs_cs_buffer */
 /* GoGoGadgetMetaprogramming(parse_context* Ctx, todo_list_info* TodoInfo); */
 
+link_internal void Output_Async( work_queue *Queue, cs Code , cs OutputFilename , output_mode Mode , b32 *Result = 0  );
+
 link_internal cs
 FlushOutputToDisk( parse_context *Ctx,
                               cs  OutputForThisParser,
@@ -6580,7 +6582,7 @@ FlushOutputToDisk( parse_context *Ctx,
   }
 
 
-  Output(OutputForThisParser, OutputPath);
+  Output_Async(&GetPlatform()->HighPriority, OutputForThisParser, OutputPath, Output_Unsafe);
   parser *OutputParse = ParserForAnsiStream(Ctx, AnsiStream(OutputForThisParser, OutputPath), TokenCursorSource_MetaprogrammingExpansion, Ctx->Memory);
 
 #if 1
@@ -7336,7 +7338,7 @@ PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
         })
       }
     )
-#include <generated/poof_func.anonymous$type_qualifier$f44hJS1Y.h>
+#include <generated/poof_func.anonymous$type_qualifier$a701PbUN.h>
 
     Result = Finalize(&Builder, Memory);
   }
