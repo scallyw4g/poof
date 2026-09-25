@@ -8,6 +8,8 @@
   #define DEBUG_PRINT 0
 #endif
 
+/* #define BONSAI_STDLIB_USE_CUSTOM_THREADPOOL 1 */
+
 #define STDLIB_SHADER_PATH "include/bonsai_stdlib/shaders/"
 
 #include <bonsai_stdlib/bonsai_stdlib.h>
@@ -21,6 +23,11 @@ link_internal void DebugPrint(type_spec *TypeSpec, u32 Depth = 0);
 
 #include <poof/poof.h>
 #include <poof/print_ast_node.h>
+
+#if BONSAI_STDLIB_USE_CUSTOM_THREADPOOL
+#include "poof/poof_work_queue_impl.h"
+#endif
+
 
 
 
