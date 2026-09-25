@@ -9195,27 +9195,23 @@ main(s32 ArgCount_, const char** ArgStrings)
 
   application_api AppApi = {};
   bonsai_stdlib Stdlib = {};
-  bonsai_init_flags InitFlags = BonsaiInit_InitDebugSystem;
+  bonsai_init_flags InitFlags = BonsaiInit_Default;
 
   Global_Stdlib = &Stdlib;
 
   parse_context Ctx = AllocateParseContext(Memory);
   Ctx.Args = ParseArgs(ArgStrings, ArgCount, &Ctx, Memory);
 
-#if BONSAI_DEBUG_SYSTEM_API
   if (Ctx.Args.DoDebugWindow)
   {
+#if BONSAI_DEBUG_SYSTEM_API
     InitFlags = bonsai_init_flags(InitFlags|BonsaiInit_OpenWindow|BonsaiInit_InitDebugSystem);
-  }
+#else
+    Error("Requested debug window when debug system was not compiled in!");
 #endif
+  }
 
   Ensure( InitializeBonsaiStdlib( InitFlags, &AppApi, &Stdlib, Memory) );
-
-  /* DEBUG_REGISTER_ARENA(Memory); */
-  /* DEBUG_REGISTER_ARENA(&Global_PermMemory); */
-
-  /* AllocateAndInitThreadStates(Memory); */
-
 
   if (Ctx.Args.HelpTextPrinted)
   {
