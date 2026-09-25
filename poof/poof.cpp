@@ -8,7 +8,7 @@
   #define DEBUG_PRINT 0
 #endif
 
-/* #define BONSAI_STDLIB_USE_CUSTOM_THREADPOOL 1 */
+#define BONSAI_STDLIB_USE_CUSTOM_THREADPOOL 1
 
 #define STDLIB_SHADER_PATH "include/bonsai_stdlib/shaders/"
 
@@ -24,9 +24,12 @@ link_internal void DebugPrint(type_spec *TypeSpec, u32 Depth = 0);
 #include <poof/poof.h>
 #include <poof/print_ast_node.h>
 
-#if BONSAI_STDLIB_USE_CUSTOM_THREADPOOL
-#include "poof/poof_work_queue_impl.h"
-#endif
+
+link_internal void
+poof(@async)
+FinalizeAndFlush( parse_context *Ctx, meta_func *Func, meta_func_arg_buffer *InstanceArgs, c_token   *InvocationSite, string_builder *Builder, tuple_cs_cs_buffer_builder *OutputTuples, memory_arena *Memory );
+
+#include <bonsai_stdlib/src/threadpool.cpp>
 
 
 
