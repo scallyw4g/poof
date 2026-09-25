@@ -2,7 +2,7 @@
 // ./poof/poof.h:1181:0
 
 // def (generate_stream_iterator)
-// ./include/bonsai_stdlib/src/poof_functions.h:1948:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2083:0
 struct declaration_iterator
 {
   declaration_stream* Stream;

@@ -1,8 +1,8 @@
 // callsite
-// ./include/bonsai_stdlib/src/ui/ui.h:142:0
+// ./include/bonsai_stdlib/src/ui/ui.h:151:0
 
 // def (hashtable_struct)
-// ./include/bonsai_stdlib/src/poof_functions.h:778:0
+// ./include/bonsai_stdlib/src/poof_functions.h:804:0
 struct window_layout_linked_list_node
 {
   b32 Tombstoned;
@@ -11,8 +11,14 @@ struct window_layout_linked_list_node
 };
 
 struct window_layout_hashtable
+poof(
+  @collection
+  
+   @do_editor_ui 
+)
 {
-  umm Size;
+  u32 Size;
+  u32 Pad;
   window_layout_linked_list_node **Elements;
   /* OWNED_BY_THREAD_MEMBER() */
 };

@@ -1,12 +1,12 @@
 // callsite
-// ./include/bonsai_stdlib/src/vector.h:811:0
+// ./include/bonsai_stdlib/src/vector.h:814:0
 
 // def (gen_vector_normalize)
-// ./include/bonsai_stdlib/src/poof_functions.h:571:0
+// ./include/bonsai_stdlib/src/poof_functions.h:596:0
 inline v2
 Normalize( v2 Vec, r32 Length)
 {
-  if (Length == 0.f) return {};
+  if (Length < 0.00001f) return {};
   v2 Result = Vec/Length;
   return Result;
 }

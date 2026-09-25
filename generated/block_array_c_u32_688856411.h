@@ -2,16 +2,16 @@
 // ./include/bonsai_stdlib/src/primitive_containers.cpp:2:0
 
 // def (block_array_c)
-// ./include/bonsai_stdlib/src/poof_functions.h:2375:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2553:0
 
 
 
 
-/* link_internal cs */
-/* CS( index_t Index ) */
-/* { */
-/*   return FSz("(%u)", Index.Index); */
-/* } */
+link_internal cs
+CS( u32_block_array_index Index )
+{
+  return FSz("(%u)", Index.Index);
+}
 
 link_internal u32 *
 Set( u32_block_array *Arr,
@@ -99,7 +99,7 @@ Find( u32_block_array *Array, u32 *Query)
   u32_block_array_index Result = {INVALID_BLOCK_ARRAY_INDEX};
   IterateOver(Array, E, Index)
   {
-    if ( E == Query )
+    if ( AreEqual(E, Query) )
     {
       Result = Index;
       break;
@@ -176,5 +176,22 @@ Shift( u32_block_array *Array, u32 *Element )
   Insert(Array, { .Index = 0 }, Element);
 }
 
+/* element_t.has_tag(do_editor_ui)? */
+/* { */
+/*   do_editor_ui_for_container( block_array_t ) */
+/* } */
+
+
+link_internal u32 *
+Pop( u32_block_array *Array )
+{
+  if (auto Result = TryGetPtr(Array, LastIndex(Array)))
+  {
+    Assert(Array->ElementCount > 0);
+    Array->ElementCount -= 1;
+    return Result;
+  }
+  return 0;
+}
 
 

@@ -2,7 +2,8 @@
 // ./poof/poof.h:407:0
 
 // def (stream_and_cursor)
-// ./include/bonsai_stdlib/src/poof_functions.h:2054:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2189:0
+
 struct enum_decl_cursor
 {
   enum_decl *Start;
@@ -10,6 +11,7 @@ struct enum_decl_cursor
   enum_decl *At;
   enum_decl *End;
 };
+
 
 
 
@@ -27,7 +29,7 @@ EnumDeclCursor(umm ElementCount, memory_arena* Memory)
 }
 
 link_internal enum_decl*
-GetPtr(enum_decl_cursor *Cursor, umm ElementIndex)
+GetPtr( enum_decl_cursor *Cursor, umm ElementIndex)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -37,13 +39,13 @@ GetPtr(enum_decl_cursor *Cursor, umm ElementIndex)
 }
 
 link_internal enum_decl*
-TryGetPtr(enum_decl_cursor *Cursor, umm ElementIndex)
+TryGetPtr( enum_decl_cursor *Cursor, umm ElementIndex)
 {
   return GetPtr(Cursor, ElementIndex);
 }
 
 link_internal enum_decl*
-GetPtrUnsafe(enum_decl_cursor *Cursor, umm ElementIndex)
+GetPtrUnsafe( enum_decl_cursor *Cursor, umm ElementIndex)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -53,7 +55,7 @@ GetPtrUnsafe(enum_decl_cursor *Cursor, umm ElementIndex)
 }
 
 link_internal enum_decl
-Get(enum_decl_cursor *Cursor, umm ElementIndex)
+Get( enum_decl_cursor *Cursor, umm ElementIndex)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -63,7 +65,7 @@ Get(enum_decl_cursor *Cursor, umm ElementIndex)
 }
 
 link_internal void
-Set(enum_decl_cursor *Cursor, umm ElementIndex, enum_decl Element)
+Set( enum_decl_cursor *Cursor, umm ElementIndex, enum_decl Element)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -78,7 +80,7 @@ Set(enum_decl_cursor *Cursor, umm ElementIndex, enum_decl Element)
 }
 
 link_internal enum_decl*
-Advance(enum_decl_cursor *Cursor)
+Advance( enum_decl_cursor *Cursor)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -88,7 +90,7 @@ Advance(enum_decl_cursor *Cursor)
 }
 
 link_internal enum_decl *
-Push(enum_decl_cursor *Cursor, enum_decl Element)
+Push( enum_decl_cursor *Cursor, enum_decl Element)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -99,7 +101,7 @@ Push(enum_decl_cursor *Cursor, enum_decl Element)
 }
 
 link_internal enum_decl
-Pop(enum_decl_cursor *Cursor)
+Pop( enum_decl_cursor *Cursor)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -110,7 +112,7 @@ Pop(enum_decl_cursor *Cursor)
 }
 
 link_internal s32
-LastIndex(enum_decl_cursor *Cursor)
+LastIndex( enum_decl_cursor *Cursor)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -119,7 +121,7 @@ LastIndex(enum_decl_cursor *Cursor)
 }
 
 link_internal enum_decl*
-LastElement(enum_decl_cursor *Cursor)
+LastElement( enum_decl_cursor *Cursor)
 {
   enum_decl *Result = {};
   s32 I = LastIndex(Cursor);
@@ -128,7 +130,7 @@ LastElement(enum_decl_cursor *Cursor)
 }
 
 link_internal b32
-Remove(enum_decl_cursor *Cursor, enum_decl Query)
+Remove( enum_decl_cursor *Cursor, enum_decl Query)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -151,7 +153,7 @@ Remove(enum_decl_cursor *Cursor, enum_decl Query)
 
 
 link_internal b32
-ResizeCursor(enum_decl_cursor *Cursor, umm Count, memory_arena *Memory)
+ResizeCursor( enum_decl_cursor *Cursor, umm Count, memory_arena *Memory)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 

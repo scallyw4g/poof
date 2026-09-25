@@ -363,7 +363,7 @@ ExpandMacro( parse_context *Ctx,
 {
   TIMED_FUNCTION();
 
-  memory_arena *TempMemory = AllocateArena(Megabytes(5), False, False);
+  memory_arena *TempMemory = AllocateArena(Megabytes(5), False);
 
   // @expand_macro_temp_mem
   /* temp_memory_handle MemHandle = BeginTemporaryMemory(TempMemory); */
@@ -941,7 +941,7 @@ GetByValue(counted_string_hashtable *Table, counted_string Value)
 {
   counted_string *Result = {};
 
-  counted_string_linked_list_node *Bucket = GetHashBucket(umm(Hash(&Value)), Table);
+  counted_string_linked_list_node *Bucket = GetHashBucket(Hash(&Value), Table);
   while (Bucket)
   {
     counted_string *Element = &Bucket->Element;
@@ -965,7 +965,7 @@ Get(parser_hashtable *Table, counted_string Value)
 {
   parser *Result = {};
 
-  auto *Bucket = GetHashBucket(umm(Hash(&Value)), Table);
+  auto *Bucket = GetHashBucket(Hash(&Value), Table);
   while (Bucket)
   {
     parser *Element = &Bucket->Element;
@@ -989,7 +989,7 @@ GetByName(macro_def_hashtable *Table, counted_string Name)
 {
   macro_def *Result = {};
 
-  macro_def_linked_list_node *Bucket = GetHashBucket(umm(Hash(&Name)), Table);
+  macro_def_linked_list_node *Bucket = GetHashBucket(Hash(&Name), Table);
   while (Bucket)
   {
     macro_def *M = &Bucket->Element;
@@ -2002,7 +2002,7 @@ GetDatatypeByName( datatype_hashtable *Table, cs QueryName )
 {
   datatype *Result = {};
 
-  auto *Bucket = GetHashBucket(umm(Hash(&QueryName)), Table);
+  auto *Bucket = GetHashBucket(Hash(&QueryName), Table);
   while (Bucket)
   {
     auto E = &Bucket->Element;
@@ -9196,7 +9196,7 @@ main(s32 ArgCount_, const char** ArgStrings)
 
   application_api AppApi = {};
   bonsai_stdlib Stdlib = {};
-  bonsai_init_flags InitFlags = {};
+  bonsai_init_flags InitFlags = BonsaiInit_InitDebugSystem;
 
   Global_Stdlib = &Stdlib;
 
@@ -9370,7 +9370,7 @@ main(s32 ArgCount_, const char** ArgStrings)
 
       // TODO(Jesse): Make a stdlib function that wraps all this stuff up
       // @stdlib_frame_preamble
-      ResetInputForFrameStart(&Plat->Input, 0);
+      ResetInputForFrameStart(&Plat->Input);
 
       // @stdlib_frame_preamble
       v2 LastMouseP = Plat->MouseP;

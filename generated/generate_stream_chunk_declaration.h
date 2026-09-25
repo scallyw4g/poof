@@ -2,7 +2,7 @@
 // ./poof/poof.h:444:0
 
 // def (generate_stream_chunk_struct)
-// ./include/bonsai_stdlib/src/poof_functions.h:1873:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2008:0
 struct declaration_stream_chunk
 {
   declaration Element;

@@ -2,7 +2,8 @@
 // ./poof/poof.h:441:0
 
 // def (generate_cursor)
-// ./include/bonsai_stdlib/src/poof_functions.h:1538:0
+// ./include/bonsai_stdlib/src/poof_functions.h:1609:0
+
 struct declaration_cursor
 {
   declaration *Start;
@@ -10,6 +11,7 @@ struct declaration_cursor
   declaration *At;
   declaration *End;
 };
+
 
 
 
@@ -27,7 +29,7 @@ DeclarationCursor(umm ElementCount, memory_arena* Memory)
 }
 
 link_internal declaration*
-GetPtr(declaration_cursor *Cursor, umm ElementIndex)
+GetPtr( declaration_cursor *Cursor, umm ElementIndex)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -37,13 +39,13 @@ GetPtr(declaration_cursor *Cursor, umm ElementIndex)
 }
 
 link_internal declaration*
-TryGetPtr(declaration_cursor *Cursor, umm ElementIndex)
+TryGetPtr( declaration_cursor *Cursor, umm ElementIndex)
 {
   return GetPtr(Cursor, ElementIndex);
 }
 
 link_internal declaration*
-GetPtrUnsafe(declaration_cursor *Cursor, umm ElementIndex)
+GetPtrUnsafe( declaration_cursor *Cursor, umm ElementIndex)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -53,7 +55,7 @@ GetPtrUnsafe(declaration_cursor *Cursor, umm ElementIndex)
 }
 
 link_internal declaration
-Get(declaration_cursor *Cursor, umm ElementIndex)
+Get( declaration_cursor *Cursor, umm ElementIndex)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -63,7 +65,7 @@ Get(declaration_cursor *Cursor, umm ElementIndex)
 }
 
 link_internal void
-Set(declaration_cursor *Cursor, umm ElementIndex, declaration Element)
+Set( declaration_cursor *Cursor, umm ElementIndex, declaration Element)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -78,7 +80,7 @@ Set(declaration_cursor *Cursor, umm ElementIndex, declaration Element)
 }
 
 link_internal declaration*
-Advance(declaration_cursor *Cursor)
+Advance( declaration_cursor *Cursor)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -88,7 +90,7 @@ Advance(declaration_cursor *Cursor)
 }
 
 link_internal declaration *
-Push(declaration_cursor *Cursor, declaration Element)
+Push( declaration_cursor *Cursor, declaration Element)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -99,7 +101,7 @@ Push(declaration_cursor *Cursor, declaration Element)
 }
 
 link_internal declaration
-Pop(declaration_cursor *Cursor)
+Pop( declaration_cursor *Cursor)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -110,7 +112,7 @@ Pop(declaration_cursor *Cursor)
 }
 
 link_internal s32
-LastIndex(declaration_cursor *Cursor)
+LastIndex( declaration_cursor *Cursor)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -119,7 +121,7 @@ LastIndex(declaration_cursor *Cursor)
 }
 
 link_internal declaration*
-LastElement(declaration_cursor *Cursor)
+LastElement( declaration_cursor *Cursor)
 {
   declaration *Result = {};
   s32 I = LastIndex(Cursor);
@@ -128,7 +130,7 @@ LastElement(declaration_cursor *Cursor)
 }
 
 link_internal b32
-Remove(declaration_cursor *Cursor, declaration Query)
+Remove( declaration_cursor *Cursor, declaration Query)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -151,7 +153,7 @@ Remove(declaration_cursor *Cursor, declaration Query)
 
 
 link_internal b32
-ResizeCursor(declaration_cursor *Cursor, umm Count, memory_arena *Memory)
+ResizeCursor( declaration_cursor *Cursor, umm Count, memory_arena *Memory)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 

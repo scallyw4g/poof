@@ -2,7 +2,7 @@
 // ./include/bonsai_stdlib/src/file.cpp:8:0
 
 // def (block_array)
-// ./include/bonsai_stdlib/src/poof_functions.h:2596:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2775:0
 
 
 
@@ -14,12 +14,18 @@ struct file_traversal_node_block
   file_traversal_node Elements[8];
 };
 
+
 struct file_traversal_node_block_array_index
 {
   umm Index; 
 };
 
 struct file_traversal_node_block_array
+poof(
+  @collection
+  
+  
+)
 {
   file_traversal_node_block **BlockPtrs; poof(@array_length(Element->BlockCount))
   u32   BlockCount;
@@ -149,6 +155,7 @@ link_internal file_traversal_node *
 GetPtr( file_traversal_node_block_array *Arr, file_traversal_node_block_array_index Index )
 {
   Assert(Arr->BlockPtrs);
+  Assert(Index.Index < AtElements(Arr).Index);
   Assert(Index.Index < Capacity(Arr).Index);
 
   file_traversal_node_block *Block = GetBlock(Arr, Index);
@@ -185,15 +192,30 @@ TryGetPtr( file_traversal_node_block_array *Arr, umm Index)
   return Result;
 }
 
-
-
-
-
-/* link_internal cs */
-/* CS( index_t Index ) */
+/* link_internal void */
+/* Swap( (element_t.name)_block_array *Arr, umm I0, umm I1) */
 /* { */
-/*   return FSz("(%u)", Index.Index); */
+/*   Assert(I0 < AtElements(Arr).Index); */
+/*   Assert(I1 < AtElements(Arr).Index); */
+
+/*   auto P0 = GetPtr(Arr, I0); */
+/*   auto P1 = GetPtr(Arr, I1); */
+
+/*   auto Tmp = *P0; */
+/*   *P0 = *P1; */
+
+/*   *P1 = Tmp; */
 /* } */
+
+
+
+
+
+link_internal cs
+CS( file_traversal_node_block_array_index Index )
+{
+  return FSz("(%u)", Index.Index);
+}
 
 link_internal file_traversal_node *
 Set( file_traversal_node_block_array *Arr,
@@ -281,7 +303,7 @@ Find( file_traversal_node_block_array *Array, file_traversal_node *Query)
   file_traversal_node_block_array_index Result = {INVALID_BLOCK_ARRAY_INDEX};
   IterateOver(Array, E, Index)
   {
-    if ( E == Query )
+    if ( AreEqual(E, Query) )
     {
       Result = Index;
       break;
@@ -358,6 +380,23 @@ Shift( file_traversal_node_block_array *Array, file_traversal_node *Element )
   Insert(Array, { .Index = 0 }, Element);
 }
 
+/* element_t.has_tag(do_editor_ui)? */
+/* { */
+/*   do_editor_ui_for_container( block_array_t ) */
+/* } */
+
+
+link_internal file_traversal_node *
+Pop( file_traversal_node_block_array *Array )
+{
+  if (auto Result = TryGetPtr(Array, LastIndex(Array)))
+  {
+    Assert(Array->ElementCount > 0);
+    Array->ElementCount -= 1;
+    return Result;
+  }
+  return 0;
+}
 
 
 

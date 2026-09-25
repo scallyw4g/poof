@@ -2,18 +2,23 @@
 // ./poof/poof.h:438:0
 
 // def (string_and_value_tables)
-// ./include/bonsai_stdlib/src/poof_functions.h:2046:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2181:0
 link_internal b32
 IsValid(declaration_type Value)
 {
   b32 Result = False;
   switch (Value)
   {
-        case type_declaration_noop:
-    case type_enum_decl:
-    case type_function_decl:
-    case type_compound_decl:
-    case type_variable_decl:
+            case type_declaration_noop:
+
+        case type_enum_decl:
+
+        case type_function_decl:
+
+        case type_compound_decl:
+
+        case type_variable_decl:
+
 
     {
       Result = True;
@@ -27,19 +32,29 @@ IsValid(declaration_type Value)
 link_internal counted_string
 ToStringPrefixless(declaration_type Type)
 {
-  Assert(IsValid(Type));
-  counted_string Result = {};
-
-  switch (Type)
+  cs Result = {};
+  if (IsValid(Type))
   {
-        case type_declaration_noop: { Result = CSz("noop"); } break;
-    case type_enum_decl: { Result = CSz("decl"); } break;
-    case type_function_decl: { Result = CSz("decl"); } break;
-    case type_compound_decl: { Result = CSz("decl"); } break;
-    case type_variable_decl: { Result = CSz("decl"); } break;
+    switch (Type)
+    {
+                  case type_declaration_noop: { Result = CSz("noop"); } break;
+
+            case type_enum_decl: { Result = CSz("decl"); } break;
+
+            case type_function_decl: { Result = CSz("decl"); } break;
+
+            case type_compound_decl: { Result = CSz("decl"); } break;
+
+            case type_variable_decl: { Result = CSz("decl"); } break;
 
 
-    
+
+      
+    }
+  }
+  else
+  {
+    Result = CSz("(CORRUPT ENUM VALUE)");
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
@@ -53,11 +68,16 @@ ToString(declaration_type Type)
   counted_string Result = {};
   switch (Type)
   {
-        case type_declaration_noop: { Result = CSz("type_declaration_noop"); } break;
-    case type_enum_decl: { Result = CSz("type_enum_decl"); } break;
-    case type_function_decl: { Result = CSz("type_function_decl"); } break;
-    case type_compound_decl: { Result = CSz("type_compound_decl"); } break;
-    case type_variable_decl: { Result = CSz("type_variable_decl"); } break;
+            case type_declaration_noop: { Result = CSz("type_declaration_noop"); } break;
+
+        case type_enum_decl: { Result = CSz("type_enum_decl"); } break;
+
+        case type_function_decl: { Result = CSz("type_function_decl"); } break;
+
+        case type_compound_decl: { Result = CSz("type_compound_decl"); } break;
+
+        case type_variable_decl: { Result = CSz("type_variable_decl"); } break;
+
 
 
     

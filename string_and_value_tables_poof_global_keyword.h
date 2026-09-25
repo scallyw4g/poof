@@ -2,17 +2,21 @@
 // ./poof/poof.h:18:0
 
 // def (string_and_value_tables)
-// ./include/bonsai_stdlib/src/poof_functions.h:2046:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2181:0
 link_internal b32
 IsValid(poof_global_keyword Value)
 {
   b32 Result = False;
   switch (Value)
   {
-        case poof_global_keyword_noop:
-    case poof_error:
-    case are_equal:
-    case var:
+            case poof_global_keyword_noop:
+
+        case poof_error:
+
+        case are_equal:
+
+        case var:
+
 
     {
       Result = True;
@@ -26,18 +30,27 @@ IsValid(poof_global_keyword Value)
 link_internal counted_string
 ToStringPrefixless(poof_global_keyword Type)
 {
-  Assert(IsValid(Type));
-  counted_string Result = {};
-
-  switch (Type)
+  cs Result = {};
+  if (IsValid(Type))
   {
-        case poof_global_keyword_noop: { Result = CSz("noop"); } break;
-    case poof_error: { Result = CSz("error"); } break;
-    case are_equal: { Result = CSz("equal"); } break;
-    case var: { Result = CSz("var"); } break;
+    switch (Type)
+    {
+                  case poof_global_keyword_noop: { Result = CSz("noop"); } break;
+
+            case poof_error: { Result = CSz("error"); } break;
+
+            case are_equal: { Result = CSz("equal"); } break;
+
+            case var: { Result = CSz("var"); } break;
 
 
-    
+
+      
+    }
+  }
+  else
+  {
+    Result = CSz("(CORRUPT ENUM VALUE)");
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
@@ -51,10 +64,14 @@ ToString(poof_global_keyword Type)
   counted_string Result = {};
   switch (Type)
   {
-        case poof_global_keyword_noop: { Result = CSz("poof_global_keyword_noop"); } break;
-    case poof_error: { Result = CSz("poof_error"); } break;
-    case are_equal: { Result = CSz("are_equal"); } break;
-    case var: { Result = CSz("var"); } break;
+            case poof_global_keyword_noop: { Result = CSz("poof_global_keyword_noop"); } break;
+
+        case poof_error: { Result = CSz("poof_error"); } break;
+
+        case are_equal: { Result = CSz("are_equal"); } break;
+
+        case var: { Result = CSz("var"); } break;
+
 
 
     

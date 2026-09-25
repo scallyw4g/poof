@@ -1,8 +1,8 @@
 // callsite
-// ./include/bonsai_stdlib/src/texture.h:44:0
+// ./include/bonsai_stdlib/src/texture.h:48:0
 
 // def (block_array_h)
-// ./include/bonsai_stdlib/src/poof_functions.h:2208:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2343:0
 
 
 
@@ -14,12 +14,18 @@ struct texture_block
   texture Elements[8];
 };
 
+
 struct texture_block_array_index
 {
   umm Index; 
 };
 
 struct texture_block_array
+poof(
+  @collection
+  
+   @do_editor_ui 
+)
 {
   texture_block **BlockPtrs; poof(@array_length(Element->BlockCount))
   u32   BlockCount;
@@ -149,6 +155,7 @@ link_internal texture *
 GetPtr( texture_block_array *Arr, texture_block_array_index Index )
 {
   Assert(Arr->BlockPtrs);
+  Assert(Index.Index < AtElements(Arr).Index);
   Assert(Index.Index < Capacity(Arr).Index);
 
   texture_block *Block = GetBlock(Arr, Index);
@@ -184,4 +191,19 @@ TryGetPtr( texture_block_array *Arr, umm Index)
   auto Result = TryGetPtr(Arr, texture_block_array_index{Index});
   return Result;
 }
+
+/* link_internal void */
+/* Swap( (element_t.name)_block_array *Arr, umm I0, umm I1) */
+/* { */
+/*   Assert(I0 < AtElements(Arr).Index); */
+/*   Assert(I1 < AtElements(Arr).Index); */
+
+/*   auto P0 = GetPtr(Arr, I0); */
+/*   auto P1 = GetPtr(Arr, I1); */
+
+/*   auto Tmp = *P0; */
+/*   *P0 = *P1; */
+
+/*   *P1 = Tmp; */
+/* } */
 

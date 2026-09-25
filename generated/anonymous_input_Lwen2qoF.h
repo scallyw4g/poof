@@ -1,8 +1,8 @@
 // callsite
-// ./include/bonsai_stdlib/src/ui/ui.cpp:3622:0
+// ./include/bonsai_stdlib/src/ui/ui.cpp:3745:0
 
 // def (anonymous)
-// ./include/bonsai_stdlib/src/ui/ui.cpp:3622:0
+// ./include/bonsai_stdlib/src/ui/ui.cpp:3745:0
 
 
 
@@ -70,19 +70,6 @@ if (Input->Space.Clicked)
   else
   {
     Cast(char*, Text.Start)[Text.Count] = ' ';
-  }
-  Text.Count++;
-}
-
-if (Input->Underscore.Clicked)
-{
-  if (Input->Shift.Pressed)
-  {
-    Cast(char*, Text.Start)[Text.Count] = ToUpper('_');
-  }
-  else
-  {
-    Cast(char*, Text.Start)[Text.Count] = '_';
   }
   Text.Count++;
 }

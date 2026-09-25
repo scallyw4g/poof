@@ -1,12 +1,14 @@
 // callsite
-// ./include/bonsai_stdlib/src/vector.h:1170:0
+// ./include/bonsai_stdlib/src/vector.h:1202:0
 
 // def (static_cursor)
-// ./include/bonsai_stdlib/src/poof_functions.h:1233:0
+// ./include/bonsai_stdlib/src/poof_functions.h:1302:0
+
 
 struct v2_static_cursor_16
+poof(@do_editor_ui)
 {
-  v2 Start[16];
+  v2 Start[16]; poof(@array_length(Element->At))
   u32 At;
 };
 

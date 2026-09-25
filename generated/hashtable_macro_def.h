@@ -2,7 +2,7 @@
 // ./poof/poof.h:494:0
 
 // def (hashtable)
-// ./include/bonsai_stdlib/src/poof_functions.h:775:0
+// ./include/bonsai_stdlib/src/poof_functions.h:801:0
 struct macro_def_linked_list_node
 {
   b32 Tombstoned;
@@ -11,8 +11,14 @@ struct macro_def_linked_list_node
 };
 
 struct macro_def_hashtable
+poof(
+  @collection
+  
+  
+)
 {
-  umm Size;
+  u32 Size;
+  u32 Pad;
   macro_def_linked_list_node **Elements;
   /* OWNED_BY_THREAD_MEMBER() */
 };
@@ -27,18 +33,18 @@ Allocate_macro_def_linked_list_node(memory_arena *Memory)
 }
 
 link_internal macro_def_hashtable
-Allocate_macro_def_hashtable(umm ElementCount, memory_arena *Memory)
+Allocate_macro_def_hashtable(u32 ElementCount, memory_arena *Memory)
 {
   macro_def_hashtable Result = {
     .Elements = Allocate( macro_def_linked_list_node*, Memory, ElementCount),
     .Size = ElementCount,
-    /* OWNED_BY_THREAD_MEMBER_INIT() */
+    .Pad = 0,
   };
   return Result;
 }
 
 link_internal macro_def_linked_list_node *
-GetHashBucket(umm HashValue, macro_def_hashtable *Table)
+GetHashBucket(u32 HashValue, macro_def_hashtable *Table)
 {
   /* ENSURE_OWNED_BY_THREAD(Table); */
 
@@ -48,7 +54,7 @@ GetHashBucket(umm HashValue, macro_def_hashtable *Table)
 }
 
 link_internal macro_def *
-GetFirstAtBucket(umm HashValue, macro_def_hashtable *Table)
+GetFirstAtBucket(u32 HashValue, macro_def_hashtable *Table)
 {
   /* ENSURE_OWNED_BY_THREAD(Table); */
 
@@ -60,7 +66,7 @@ GetFirstAtBucket(umm HashValue, macro_def_hashtable *Table)
 link_internal macro_def_linked_list_node**
 GetMatchingBucket(macro_def Element, macro_def_hashtable *Table, memory_arena *Memory)
 {
-  umm HashValue = Hash(&Element) % Table->Size;
+  u32 HashValue = Hash(&Element) % Table->Size;
   macro_def_linked_list_node **Bucket = Table->Elements + HashValue;
   while (*Bucket)
   {
@@ -71,18 +77,12 @@ GetMatchingBucket(macro_def Element, macro_def_hashtable *Table, memory_arena *M
 }
 
 link_internal macro_def *
-Insert(macro_def_linked_list_node *Node, macro_def_hashtable *Table)
+InsertBlank(u32 HashValue, macro_def_hashtable *Table, memory_arena *Memory)
 {
-  /* ENSURE_OWNED_BY_THREAD(Table); */
-
   Assert(Table->Size);
-  umm HashValue = Hash(&Node->Element) % Table->Size;
-  macro_def_linked_list_node **Bucket = Table->Elements + HashValue;
-  while (*Bucket)
-  {
-    /* Assert(!AreEqual(&Bucket[0]->Element, &Node->Element)); */
-    Bucket = &(*Bucket)->Next;
-  }
+  macro_def_linked_list_node **Bucket = Table->Elements + (HashValue % Table->Size);
+  macro_def_linked_list_node  *Node   = Allocate_macro_def_linked_list_node(Memory);
+  Node->Next = *Bucket;
   *Bucket = Node;
   return &Bucket[0]->Element;
 }
@@ -90,18 +90,16 @@ Insert(macro_def_linked_list_node *Node, macro_def_hashtable *Table)
 link_internal macro_def*
 Insert(macro_def Element, macro_def_hashtable *Table, memory_arena *Memory)
 {
-  /* ENSURE_OWNED_BY_THREAD(Table); */
-
-  macro_def_linked_list_node *Bucket = Allocate_macro_def_linked_list_node(Memory);
-  Bucket->Element = Element;
-  Insert(Bucket, Table);
-  return &Bucket->Element;
+  u32 HashValue = Hash(&Element) % Table->Size;
+  auto Result = InsertBlank(HashValue, Table, Memory);
+  *Result = Element;
+  return Result;
 }
 
 link_internal macro_def*
 Upsert(macro_def Element, macro_def_hashtable *Table, memory_arena *Memory)
 {
-  umm HashValue = Hash(&Element) % Table->Size;
+  u32 HashValue = Hash(&Element) % Table->Size;
   macro_def_linked_list_node **Bucket = Table->Elements + HashValue;
   while (*Bucket)
   {
@@ -109,18 +107,48 @@ Upsert(macro_def Element, macro_def_hashtable *Table, memory_arena *Memory)
     Bucket = &(*Bucket)->Next;
   }
 
+  macro_def *Result = {};
   if (*Bucket && Bucket[0]->Tombstoned == False)
   {
     Bucket[0]->Element = Element;
+    Result = &Bucket[0]->Element;
   }
   else
   {
-    Insert(Element, Table, Memory);
+    Result = Insert(Element, Table, Memory);
   }
 
-  return &Bucket[0]->Element;
+  return Result;
 }
 
+//
+// Get
+//
+
+/* Type.member(@hashtable_key, (key_member) { @var key key_member }); */
+
+/* link_internal (Type.name) * */
+/* GetByKey( (Type.name)_hashtable *Table, key.type KeyQuery ) */
+/* { */
+/*   (Type.name) *Result = {}; */
+/*   (Type.name)_linked_list_node *Bucket = GetBucketBy(key.name)(Table, KeyQuery); */
+/*   while (Bucket) */
+/*   { */
+/*     Type.is_primitive? */
+/*     { if (Bucket->Tombstoned == False && AreEqual(*E, KeyQuery)) } */
+/*     { if (Bucket->Tombstoned == False && AreEqual(E->key.name, KeyQuery)) } */
+/*     { */
+/*       Result = &Bucket->Element; */
+/*       break; */
+/*     } */
+/*     else */
+/*     { */
+/*       Bucket = Bucket->Next; */
+/*     } */
+/*   } */
+
+/*   return Result; */
+/* } */
 
 //
 // Iterator impl.
@@ -128,10 +156,12 @@ Upsert(macro_def Element, macro_def_hashtable *Table, memory_arena *Memory)
 
 struct macro_def_hashtable_iterator
 {
-  umm HashIndex;
+  u32 HashIndex;
   macro_def_hashtable *Table;
   macro_def_linked_list_node *Node;
 };
+
+
 
 link_internal macro_def_hashtable_iterator
 operator++( macro_def_hashtable_iterator &Iterator )

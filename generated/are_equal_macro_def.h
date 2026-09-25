@@ -2,7 +2,7 @@
 // ./poof/poof.h:491:0
 
 // def (are_equal)
-// ./include/bonsai_stdlib/src/poof_functions.h:624:0
+// ./include/bonsai_stdlib/src/poof_functions.h:649:0
 link_internal b32
 AreEqual(macro_def *Thing1, macro_def *Thing2)
 {

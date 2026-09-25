@@ -2,26 +2,39 @@
 // ./poof/poof.h:1116:0
 
 // def (string_and_value_tables)
-// ./include/bonsai_stdlib/src/poof_functions.h:2046:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2181:0
 link_internal b32
 IsValid(ast_node_type Value)
 {
   b32 Result = False;
   switch (Value)
   {
-        case type_ast_node_noop:
-    case type_ast_node_statement:
-    case type_ast_node_access:
-    case type_ast_node_literal:
-    case type_ast_node_expression:
-    case type_ast_node_parenthesized:
-    case type_ast_node_operator:
-    case type_ast_node_function_call:
-    case type_ast_node_return:
-    case type_ast_node_initializer_list:
-    case type_ast_node_symbol:
-    case type_ast_node_variable_def:
-    case type_ast_node_type_specifier:
+            case type_ast_node_noop:
+
+        case type_ast_node_statement:
+
+        case type_ast_node_access:
+
+        case type_ast_node_literal:
+
+        case type_ast_node_expression:
+
+        case type_ast_node_parenthesized:
+
+        case type_ast_node_operator:
+
+        case type_ast_node_function_call:
+
+        case type_ast_node_return:
+
+        case type_ast_node_initializer_list:
+
+        case type_ast_node_symbol:
+
+        case type_ast_node_variable_def:
+
+        case type_ast_node_type_specifier:
+
 
     {
       Result = True;
@@ -35,27 +48,45 @@ IsValid(ast_node_type Value)
 link_internal counted_string
 ToStringPrefixless(ast_node_type Type)
 {
-  Assert(IsValid(Type));
-  counted_string Result = {};
-
-  switch (Type)
+  cs Result = {};
+  if (IsValid(Type))
   {
-        case type_ast_node_noop: { Result = CSz("noop"); } break;
-    case type_ast_node_statement: { Result = CSz("statement"); } break;
-    case type_ast_node_access: { Result = CSz("access"); } break;
-    case type_ast_node_literal: { Result = CSz("literal"); } break;
-    case type_ast_node_expression: { Result = CSz("expression"); } break;
-    case type_ast_node_parenthesized: { Result = CSz("parenthesized"); } break;
-    case type_ast_node_operator: { Result = CSz("operator"); } break;
-    case type_ast_node_function_call: { Result = CSz("call"); } break;
-    case type_ast_node_return: { Result = CSz("return"); } break;
-    case type_ast_node_initializer_list: { Result = CSz("list"); } break;
-    case type_ast_node_symbol: { Result = CSz("symbol"); } break;
-    case type_ast_node_variable_def: { Result = CSz("def"); } break;
-    case type_ast_node_type_specifier: { Result = CSz("specifier"); } break;
+    switch (Type)
+    {
+                  case type_ast_node_noop: { Result = CSz("noop"); } break;
+
+            case type_ast_node_statement: { Result = CSz("statement"); } break;
+
+            case type_ast_node_access: { Result = CSz("access"); } break;
+
+            case type_ast_node_literal: { Result = CSz("literal"); } break;
+
+            case type_ast_node_expression: { Result = CSz("expression"); } break;
+
+            case type_ast_node_parenthesized: { Result = CSz("parenthesized"); } break;
+
+            case type_ast_node_operator: { Result = CSz("operator"); } break;
+
+            case type_ast_node_function_call: { Result = CSz("call"); } break;
+
+            case type_ast_node_return: { Result = CSz("return"); } break;
+
+            case type_ast_node_initializer_list: { Result = CSz("list"); } break;
+
+            case type_ast_node_symbol: { Result = CSz("symbol"); } break;
+
+            case type_ast_node_variable_def: { Result = CSz("def"); } break;
+
+            case type_ast_node_type_specifier: { Result = CSz("specifier"); } break;
 
 
-    
+
+      
+    }
+  }
+  else
+  {
+    Result = CSz("(CORRUPT ENUM VALUE)");
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
@@ -69,19 +100,32 @@ ToString(ast_node_type Type)
   counted_string Result = {};
   switch (Type)
   {
-        case type_ast_node_noop: { Result = CSz("type_ast_node_noop"); } break;
-    case type_ast_node_statement: { Result = CSz("type_ast_node_statement"); } break;
-    case type_ast_node_access: { Result = CSz("type_ast_node_access"); } break;
-    case type_ast_node_literal: { Result = CSz("type_ast_node_literal"); } break;
-    case type_ast_node_expression: { Result = CSz("type_ast_node_expression"); } break;
-    case type_ast_node_parenthesized: { Result = CSz("type_ast_node_parenthesized"); } break;
-    case type_ast_node_operator: { Result = CSz("type_ast_node_operator"); } break;
-    case type_ast_node_function_call: { Result = CSz("type_ast_node_function_call"); } break;
-    case type_ast_node_return: { Result = CSz("type_ast_node_return"); } break;
-    case type_ast_node_initializer_list: { Result = CSz("type_ast_node_initializer_list"); } break;
-    case type_ast_node_symbol: { Result = CSz("type_ast_node_symbol"); } break;
-    case type_ast_node_variable_def: { Result = CSz("type_ast_node_variable_def"); } break;
-    case type_ast_node_type_specifier: { Result = CSz("type_ast_node_type_specifier"); } break;
+            case type_ast_node_noop: { Result = CSz("type_ast_node_noop"); } break;
+
+        case type_ast_node_statement: { Result = CSz("type_ast_node_statement"); } break;
+
+        case type_ast_node_access: { Result = CSz("type_ast_node_access"); } break;
+
+        case type_ast_node_literal: { Result = CSz("type_ast_node_literal"); } break;
+
+        case type_ast_node_expression: { Result = CSz("type_ast_node_expression"); } break;
+
+        case type_ast_node_parenthesized: { Result = CSz("type_ast_node_parenthesized"); } break;
+
+        case type_ast_node_operator: { Result = CSz("type_ast_node_operator"); } break;
+
+        case type_ast_node_function_call: { Result = CSz("type_ast_node_function_call"); } break;
+
+        case type_ast_node_return: { Result = CSz("type_ast_node_return"); } break;
+
+        case type_ast_node_initializer_list: { Result = CSz("type_ast_node_initializer_list"); } break;
+
+        case type_ast_node_symbol: { Result = CSz("type_ast_node_symbol"); } break;
+
+        case type_ast_node_variable_def: { Result = CSz("type_ast_node_variable_def"); } break;
+
+        case type_ast_node_type_specifier: { Result = CSz("type_ast_node_type_specifier"); } break;
+
 
 
     

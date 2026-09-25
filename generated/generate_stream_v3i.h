@@ -2,7 +2,7 @@
 // ./include/bonsai_stdlib/src/vector.cpp:8:0
 
 // def (generate_stream)
-// ./include/bonsai_stdlib/src/poof_functions.h:2034:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2169:0
 struct v3i_stream_chunk
 {
   v3i Element;

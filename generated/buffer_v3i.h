@@ -2,7 +2,7 @@
 // ./include/bonsai_stdlib/src/vector.cpp:2:0
 
 // def (buffer)
-// ./include/bonsai_stdlib/src/poof_functions.h:1432:0
+// ./include/bonsai_stdlib/src/poof_functions.h:1503:0
 struct v3i_buffer
 {
   umm Count;

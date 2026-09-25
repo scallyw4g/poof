@@ -2,7 +2,7 @@
 // ./poof/poof.h:127:0
 
 // def (generate_value_table)
-// ./include/bonsai_stdlib/src/poof_functions.h:1835:0
+// ./include/bonsai_stdlib/src/poof_functions.h:1970:0
 link_internal meta_arg_operator
 MetaArgOperator(counted_string S)
 {

@@ -1,8 +1,8 @@
 // callsite
-// ./include/bonsai_stdlib/src/counted_string.cpp:30:0
+// ./include/bonsai_stdlib/src/counted_string.cpp:37:0
 
 // def (hashtable)
-// ./include/bonsai_stdlib/src/poof_functions.h:775:0
+// ./include/bonsai_stdlib/src/poof_functions.h:801:0
 struct counted_string_linked_list_node
 {
   b32 Tombstoned;
@@ -11,8 +11,14 @@ struct counted_string_linked_list_node
 };
 
 struct counted_string_hashtable
+poof(
+  @collection
+  
+  
+)
 {
-  umm Size;
+  u32 Size;
+  u32 Pad;
   counted_string_linked_list_node **Elements;
   /* OWNED_BY_THREAD_MEMBER() */
 };
@@ -27,18 +33,18 @@ Allocate_counted_string_linked_list_node(memory_arena *Memory)
 }
 
 link_internal counted_string_hashtable
-Allocate_counted_string_hashtable(umm ElementCount, memory_arena *Memory)
+Allocate_counted_string_hashtable(u32 ElementCount, memory_arena *Memory)
 {
   counted_string_hashtable Result = {
     .Elements = Allocate( counted_string_linked_list_node*, Memory, ElementCount),
     .Size = ElementCount,
-    /* OWNED_BY_THREAD_MEMBER_INIT() */
+    .Pad = 0,
   };
   return Result;
 }
 
 link_internal counted_string_linked_list_node *
-GetHashBucket(umm HashValue, counted_string_hashtable *Table)
+GetHashBucket(u32 HashValue, counted_string_hashtable *Table)
 {
   /* ENSURE_OWNED_BY_THREAD(Table); */
 
@@ -48,7 +54,7 @@ GetHashBucket(umm HashValue, counted_string_hashtable *Table)
 }
 
 link_internal counted_string *
-GetFirstAtBucket(umm HashValue, counted_string_hashtable *Table)
+GetFirstAtBucket(u32 HashValue, counted_string_hashtable *Table)
 {
   /* ENSURE_OWNED_BY_THREAD(Table); */
 
@@ -60,7 +66,7 @@ GetFirstAtBucket(umm HashValue, counted_string_hashtable *Table)
 link_internal counted_string_linked_list_node**
 GetMatchingBucket(counted_string Element, counted_string_hashtable *Table, memory_arena *Memory)
 {
-  umm HashValue = Hash(&Element) % Table->Size;
+  u32 HashValue = Hash(&Element) % Table->Size;
   counted_string_linked_list_node **Bucket = Table->Elements + HashValue;
   while (*Bucket)
   {
@@ -71,18 +77,12 @@ GetMatchingBucket(counted_string Element, counted_string_hashtable *Table, memor
 }
 
 link_internal counted_string *
-Insert(counted_string_linked_list_node *Node, counted_string_hashtable *Table)
+InsertBlank(u32 HashValue, counted_string_hashtable *Table, memory_arena *Memory)
 {
-  /* ENSURE_OWNED_BY_THREAD(Table); */
-
   Assert(Table->Size);
-  umm HashValue = Hash(&Node->Element) % Table->Size;
-  counted_string_linked_list_node **Bucket = Table->Elements + HashValue;
-  while (*Bucket)
-  {
-    /* Assert(!AreEqual(&Bucket[0]->Element, &Node->Element)); */
-    Bucket = &(*Bucket)->Next;
-  }
+  counted_string_linked_list_node **Bucket = Table->Elements + (HashValue % Table->Size);
+  counted_string_linked_list_node  *Node   = Allocate_counted_string_linked_list_node(Memory);
+  Node->Next = *Bucket;
   *Bucket = Node;
   return &Bucket[0]->Element;
 }
@@ -90,18 +90,16 @@ Insert(counted_string_linked_list_node *Node, counted_string_hashtable *Table)
 link_internal counted_string*
 Insert(counted_string Element, counted_string_hashtable *Table, memory_arena *Memory)
 {
-  /* ENSURE_OWNED_BY_THREAD(Table); */
-
-  counted_string_linked_list_node *Bucket = Allocate_counted_string_linked_list_node(Memory);
-  Bucket->Element = Element;
-  Insert(Bucket, Table);
-  return &Bucket->Element;
+  u32 HashValue = Hash(&Element) % Table->Size;
+  auto Result = InsertBlank(HashValue, Table, Memory);
+  *Result = Element;
+  return Result;
 }
 
 link_internal counted_string*
 Upsert(counted_string Element, counted_string_hashtable *Table, memory_arena *Memory)
 {
-  umm HashValue = Hash(&Element) % Table->Size;
+  u32 HashValue = Hash(&Element) % Table->Size;
   counted_string_linked_list_node **Bucket = Table->Elements + HashValue;
   while (*Bucket)
   {
@@ -109,18 +107,48 @@ Upsert(counted_string Element, counted_string_hashtable *Table, memory_arena *Me
     Bucket = &(*Bucket)->Next;
   }
 
+  counted_string *Result = {};
   if (*Bucket && Bucket[0]->Tombstoned == False)
   {
     Bucket[0]->Element = Element;
+    Result = &Bucket[0]->Element;
   }
   else
   {
-    Insert(Element, Table, Memory);
+    Result = Insert(Element, Table, Memory);
   }
 
-  return &Bucket[0]->Element;
+  return Result;
 }
 
+//
+// Get
+//
+
+/* Type.member(@hashtable_key, (key_member) { @var key key_member }); */
+
+/* link_internal (Type.name) * */
+/* GetByKey( (Type.name)_hashtable *Table, key.type KeyQuery ) */
+/* { */
+/*   (Type.name) *Result = {}; */
+/*   (Type.name)_linked_list_node *Bucket = GetBucketBy(key.name)(Table, KeyQuery); */
+/*   while (Bucket) */
+/*   { */
+/*     Type.is_primitive? */
+/*     { if (Bucket->Tombstoned == False && AreEqual(*E, KeyQuery)) } */
+/*     { if (Bucket->Tombstoned == False && AreEqual(E->key.name, KeyQuery)) } */
+/*     { */
+/*       Result = &Bucket->Element; */
+/*       break; */
+/*     } */
+/*     else */
+/*     { */
+/*       Bucket = Bucket->Next; */
+/*     } */
+/*   } */
+
+/*   return Result; */
+/* } */
 
 //
 // Iterator impl.
@@ -128,10 +156,12 @@ Upsert(counted_string Element, counted_string_hashtable *Table, memory_arena *Me
 
 struct counted_string_hashtable_iterator
 {
-  umm HashIndex;
+  u32 HashIndex;
   counted_string_hashtable *Table;
   counted_string_linked_list_node *Node;
 };
+
+
 
 link_internal counted_string_hashtable_iterator
 operator++( counted_string_hashtable_iterator &Iterator )

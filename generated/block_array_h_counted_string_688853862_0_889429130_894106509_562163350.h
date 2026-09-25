@@ -1,8 +1,8 @@
 // callsite
-// ./include/bonsai_stdlib/src/counted_string.h:1138:0
+// ./include/bonsai_stdlib/src/counted_string.h:1161:0
 
 // def (block_array_h)
-// ./include/bonsai_stdlib/src/poof_functions.h:2208:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2343:0
 
 
 
@@ -14,12 +14,18 @@ struct counted_string_block
   counted_string Elements[32];
 };
 
+
 struct counted_string_block_array_index
 {
   umm Index; 
 };
 
 struct counted_string_block_array
+poof(
+  @collection
+  
+  
+)
 {
   counted_string_block **BlockPtrs; poof(@array_length(Element->BlockCount))
   u32   BlockCount;
@@ -149,6 +155,7 @@ link_internal counted_string *
 GetPtr( counted_string_block_array *Arr, counted_string_block_array_index Index )
 {
   Assert(Arr->BlockPtrs);
+  Assert(Index.Index < AtElements(Arr).Index);
   Assert(Index.Index < Capacity(Arr).Index);
 
   counted_string_block *Block = GetBlock(Arr, Index);
@@ -184,4 +191,19 @@ TryGetPtr( counted_string_block_array *Arr, umm Index)
   auto Result = TryGetPtr(Arr, counted_string_block_array_index{Index});
   return Result;
 }
+
+/* link_internal void */
+/* Swap( (element_t.name)_block_array *Arr, umm I0, umm I1) */
+/* { */
+/*   Assert(I0 < AtElements(Arr).Index); */
+/*   Assert(I1 < AtElements(Arr).Index); */
+
+/*   auto P0 = GetPtr(Arr, I0); */
+/*   auto P1 = GetPtr(Arr, I1); */
+
+/*   auto Tmp = *P0; */
+/*   *P0 = *P1; */
+
+/*   *P1 = Tmp; */
+/* } */
 

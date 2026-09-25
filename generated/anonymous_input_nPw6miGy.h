@@ -1,8 +1,8 @@
 // callsite
-// ./include/bonsai_stdlib/src/platform/win32/win32_platform.cpp:440:0
+// ./include/bonsai_stdlib/src/platform/win32/win32_platform.cpp:475:0
 
 // def (anonymous)
-// ./include/bonsai_stdlib/src/platform/win32/win32_platform.cpp:440:0
+// ./include/bonsai_stdlib/src/platform/win32/win32_platform.cpp:475:0
 BindKeydownToInput( VK_RETURN, Enter);
 
 BindKeydownToInput( VK_ESCAPE, Escape);
@@ -48,7 +48,6 @@ BindKeydownToInput( VK_OEM_MINUS, Minus);
 BindKeydownToInput( VK_OEM_2, FSlash);
 
 BindKeydownToInput( VK_SPACE, Space);
-
 
 BindKeydownToInput( 0x30, N0);
 

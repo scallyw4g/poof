@@ -2,7 +2,7 @@
 // ./include/bonsai_stdlib/src/primitive_containers.h:14:0
 
 // def (block_array_h)
-// ./include/bonsai_stdlib/src/poof_functions.h:2208:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2343:0
 
 
 
@@ -14,12 +14,18 @@ struct u32_block
   u32 Elements[8];
 };
 
+
 struct u32_block_array_index
 {
   umm Index; 
 };
 
 struct u32_block_array
+poof(
+  @collection
+  
+  
+)
 {
   u32_block **BlockPtrs; poof(@array_length(Element->BlockCount))
   u32   BlockCount;
@@ -149,6 +155,7 @@ link_internal u32 *
 GetPtr( u32_block_array *Arr, u32_block_array_index Index )
 {
   Assert(Arr->BlockPtrs);
+  Assert(Index.Index < AtElements(Arr).Index);
   Assert(Index.Index < Capacity(Arr).Index);
 
   u32_block *Block = GetBlock(Arr, Index);
@@ -184,4 +191,19 @@ TryGetPtr( u32_block_array *Arr, umm Index)
   auto Result = TryGetPtr(Arr, u32_block_array_index{Index});
   return Result;
 }
+
+/* link_internal void */
+/* Swap( (element_t.name)_block_array *Arr, umm I0, umm I1) */
+/* { */
+/*   Assert(I0 < AtElements(Arr).Index); */
+/*   Assert(I1 < AtElements(Arr).Index); */
+
+/*   auto P0 = GetPtr(Arr, I0); */
+/*   auto P1 = GetPtr(Arr, I1); */
+
+/*   auto Tmp = *P0; */
+/*   *P0 = *P1; */
+
+/*   *P1 = Tmp; */
+/* } */
 

@@ -2,19 +2,25 @@
 // ./include/bonsai_stdlib/src/console_io.h:13:0
 
 // def (string_and_value_tables)
-// ./include/bonsai_stdlib/src/poof_functions.h:2046:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2181:0
 link_internal b32
 IsValid(log_level Value)
 {
   b32 Result = False;
   switch (Value)
   {
-        case LogLevel_Undefined:
-    case LogLevel_Verbose:
-    case LogLevel_Debug:
-    case LogLevel_Info:
-    case LogLevel_Error:
-    case LogLevel_Shush:
+            case LogLevel_Undefined:
+
+        case LogLevel_Verbose:
+
+        case LogLevel_Debug:
+
+        case LogLevel_Info:
+
+        case LogLevel_Error:
+
+        case LogLevel_Shush:
+
 
     {
       Result = True;
@@ -28,20 +34,31 @@ IsValid(log_level Value)
 link_internal counted_string
 ToStringPrefixless(log_level Type)
 {
-  Assert(IsValid(Type));
-  counted_string Result = {};
-
-  switch (Type)
+  cs Result = {};
+  if (IsValid(Type))
   {
-        case LogLevel_Undefined: { Result = CSz("Undefined"); } break;
-    case LogLevel_Verbose: { Result = CSz("Verbose"); } break;
-    case LogLevel_Debug: { Result = CSz("Debug"); } break;
-    case LogLevel_Info: { Result = CSz("Info"); } break;
-    case LogLevel_Error: { Result = CSz("Error"); } break;
-    case LogLevel_Shush: { Result = CSz("Shush"); } break;
+    switch (Type)
+    {
+                  case LogLevel_Undefined: { Result = CSz("Undefined"); } break;
+
+            case LogLevel_Verbose: { Result = CSz("Verbose"); } break;
+
+            case LogLevel_Debug: { Result = CSz("Debug"); } break;
+
+            case LogLevel_Info: { Result = CSz("Info"); } break;
+
+            case LogLevel_Error: { Result = CSz("Error"); } break;
+
+            case LogLevel_Shush: { Result = CSz("Shush"); } break;
 
 
-    
+
+      
+    }
+  }
+  else
+  {
+    Result = CSz("(CORRUPT ENUM VALUE)");
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
@@ -55,12 +72,18 @@ ToString(log_level Type)
   counted_string Result = {};
   switch (Type)
   {
-        case LogLevel_Undefined: { Result = CSz("LogLevel_Undefined"); } break;
-    case LogLevel_Verbose: { Result = CSz("LogLevel_Verbose"); } break;
-    case LogLevel_Debug: { Result = CSz("LogLevel_Debug"); } break;
-    case LogLevel_Info: { Result = CSz("LogLevel_Info"); } break;
-    case LogLevel_Error: { Result = CSz("LogLevel_Error"); } break;
-    case LogLevel_Shush: { Result = CSz("LogLevel_Shush"); } break;
+            case LogLevel_Undefined: { Result = CSz("LogLevel_Undefined"); } break;
+
+        case LogLevel_Verbose: { Result = CSz("LogLevel_Verbose"); } break;
+
+        case LogLevel_Debug: { Result = CSz("LogLevel_Debug"); } break;
+
+        case LogLevel_Info: { Result = CSz("LogLevel_Info"); } break;
+
+        case LogLevel_Error: { Result = CSz("LogLevel_Error"); } break;
+
+        case LogLevel_Shush: { Result = CSz("LogLevel_Shush"); } break;
+
 
 
     

@@ -1,8 +1,8 @@
 // callsite
-// ./include/bonsai_stdlib/src/ui/ui.cpp:2477:0
+// ./include/bonsai_stdlib/src/ui/ui.cpp:2543:0
 
 // def (anonymous)
-// ./include/bonsai_stdlib/src/ui/ui.cpp:2477:0
+// ./include/bonsai_stdlib/src/ui/ui.cpp:2543:0
 
 case type_ui_render_command_window_start:
 {
@@ -55,6 +55,12 @@ case type_ui_render_command_untextured_quad_at:
 
 
 
+
+case type_ui_render_command_layout_start:
+{
+  Command->ui_render_command_layout_start.Layout.At = {};
+  Command->ui_render_command_layout_start.Layout.DrawBounds = InvertedInfinityRectangle();
+} break;
 
 
 

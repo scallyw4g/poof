@@ -2,7 +2,7 @@
 // ./poof/poof.h:528:0
 
 // def (gen_constructor)
-// ./include/bonsai_stdlib/src/poof_functions.h:113:0
+// ./include/bonsai_stdlib/src/poof_functions.h:126:0
 link_internal poof_symbol
 PoofSymbol(  cs   Value  )
 {

@@ -1,8 +1,8 @@
 // callsite
-// ./include/bonsai_stdlib/src/random.h:235:0
+// ./include/bonsai_stdlib/src/random.h:236:0
 
 // def (gen_random_between)
-// ./include/bonsai_stdlib/src/random.h:214:0
+// ./include/bonsai_stdlib/src/random.h:215:0
 link_internal s32
 RandomBetween( s32 LowestPossibleValue, random_series *Entropy, s32 HighestPossibleValue)
 {

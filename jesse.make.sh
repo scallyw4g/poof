@@ -3,6 +3,8 @@
 # export POOF_LOG_LEVEL=LogLevel_Debug
 
 ./make.sh RunInstalledPoof
+[ $? -ne 0 ] && echo "Poof Failed, exiting." && exit 1
+
 # ./make.sh BuildAllBinariesRunAllTests
 
 # FetchBonsaiDebug
@@ -12,6 +14,8 @@
 
 # ./make.sh RunInstalledPoof
 ./make.sh BuildPoof
+[ $? -ne 0 ] && echo "Build Failed, exiting." && exit 1
+#
 # ./make.sh RunPoof
 
 ./make.sh RunIntegrationTests

@@ -2,7 +2,7 @@
 // ./poof/poof.h:1184:0
 
 // def (generate_stream_push)
-// ./include/bonsai_stdlib/src/poof_functions.h:1884:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2019:0
 link_internal declaration *
 Push(declaration_stream* Stream, declaration Element)
 {

@@ -2,7 +2,7 @@
 // ./include/bonsai_stdlib/src/vector.h:779:0
 
 // def (gen_vector_infix_operator)
-// ./include/bonsai_stdlib/src/poof_functions.h:168:0
+// ./include/bonsai_stdlib/src/poof_functions.h:181:0
 inline v3i
 operator^( v3i P1, v3i P2 )
 {

@@ -2,7 +2,7 @@
 // ./include/bonsai_stdlib/src/xml.h:46:0
 
 // def (hashtable_struct)
-// ./include/bonsai_stdlib/src/poof_functions.h:778:0
+// ./include/bonsai_stdlib/src/poof_functions.h:804:0
 struct xml_tag_linked_list_node
 {
   b32 Tombstoned;
@@ -11,8 +11,14 @@ struct xml_tag_linked_list_node
 };
 
 struct xml_tag_hashtable
+poof(
+  @collection
+  
+  
+)
 {
-  umm Size;
+  u32 Size;
+  u32 Pad;
   xml_tag_linked_list_node **Elements;
   /* OWNED_BY_THREAD_MEMBER() */
 };

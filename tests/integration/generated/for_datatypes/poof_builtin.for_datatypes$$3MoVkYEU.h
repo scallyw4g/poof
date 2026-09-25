@@ -25,24 +25,6 @@ function args
 
 //
 
-name(s16)
-type(short )
-value((value unsupported))
-array()
-hash(290D30A5)
-indirection()
-tags()
-location((unknown):-1)
-
-
-
-
-
-
-
-
-//
-
 name(foofunc0)
 type((function))
 value(foofunc0)
@@ -57,6 +39,24 @@ function args
 {
   
 }
+
+
+
+
+
+
+//
+
+name(s16)
+type(short )
+value((value unsupported))
+array()
+hash(290D30A5)
+indirection()
+tags()
+location((unknown):-1)
+
+
 
 
 
@@ -618,6 +618,42 @@ function args
 //
 
 name((anonymous))
+type(union)
+value((value unsupported))
+array()
+hash(2937360B)
+indirection()
+tags()
+location((unknown):-1)
+
+
+
+
+
+
+
+
+//
+
+name((anonymous))
+type(union)
+value((value unsupported))
+array()
+hash(2937360B)
+indirection()
+tags()
+location((unknown):-1)
+
+
+
+
+
+
+
+
+//
+
+name((anonymous))
 type(struct)
 value((value unsupported))
 array()
@@ -634,42 +670,6 @@ struct members
     int  _int2
 
 }
-
-
-
-
-//
-
-name((anonymous))
-type(union)
-value((value unsupported))
-array()
-hash(2937360B)
-indirection()
-tags()
-location((unknown):-1)
-
-
-
-
-
-
-
-
-//
-
-name((anonymous))
-type(union)
-value((value unsupported))
-array()
-hash(2937360B)
-indirection()
-tags()
-location((unknown):-1)
-
-
-
-
 
 
 
@@ -767,7 +767,7 @@ array()
 hash(3B2926CC)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:186)
+location(tests/integration/src/common_structures.h:188)
 
 
 
@@ -855,7 +855,7 @@ array()
 hash(1B207F9)
 indirection()
 tags()
-location(tests/integration/src/common_structures.h:191)
+location(tests/integration/src/common_structures.h:193)
 
 
 

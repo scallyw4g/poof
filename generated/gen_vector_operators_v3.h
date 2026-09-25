@@ -2,7 +2,7 @@
 // ./include/bonsai_stdlib/src/vector.h:226:0
 
 // def (gen_vector_operators)
-// ./include/bonsai_stdlib/src/poof_functions.h:268:0
+// ./include/bonsai_stdlib/src/poof_functions.h:281:0
 link_internal void
 DeepCopy(v3 *Src, v3 *Dest)
 {
@@ -55,6 +55,18 @@ MaxChannel( v3 P1 )
 ;
   return Result;
 }
+
+inline r32
+MinChannel( v3 P1 )
+{
+  r32 Result = P1.E[0];
+    Result = Cast(r32, Min(Result, P1.E[0]));
+  Result = Cast(r32, Min(Result, P1.E[1]));
+  Result = Cast(r32, Min(Result, P1.E[2]));
+;
+  return Result;
+}
+
 
 inline b32
 operator<( v3 P1, v3 P2 )

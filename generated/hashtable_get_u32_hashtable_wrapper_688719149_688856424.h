@@ -2,15 +2,15 @@
 // ./include/bonsai_stdlib/src/primitive_containers.cpp:8:0
 
 // def (hashtable_get)
-// ./include/bonsai_stdlib/src/poof_functions.h:976:0
-u32_linked_list_node*
+// ./include/bonsai_stdlib/src/poof_functions.h:1040:0
+link_internal u32_linked_list_node *
 GetBucketByValue( u32_hashtable *Table, u32 Query )
 {
   /* ENSURE_OWNED_BY_THREAD(Table); */
 
   u32_linked_list_node* Result = {};
 
-  auto *Bucket = GetHashBucket(umm(Hash(&Query)), Table);
+  auto *Bucket = GetHashBucket(Hash(&Query), Table);
   while (Bucket)
   {
     auto E = &Bucket->Element;
@@ -30,26 +30,24 @@ GetBucketByValue( u32_hashtable *Table, u32 Query )
   return Result;
 }
 
-maybe_u32
+link_internal u32 *
 GetByValue( u32_hashtable *Table, u32 Query )
 {
   /* ENSURE_OWNED_BY_THREAD(Table); */
 
-  maybe_u32 Result = {};
+  u32 *Result = {};
 
   u32_linked_list_node *Bucket = GetBucketByValue(Table, Query);
   if (Bucket)
   {
-    Result.Tag = Maybe_Yes;
-    Result.Value = Bucket->Element;
+    Result = &Bucket->Element;
   }
 
   return Result;
 }
 
-
 link_internal b32
-Tombstone(u32 Key, u32_hashtable *Table, memory_arena *Memory)
+Tombstone(u32 Key, u32_hashtable *Table)
 {
   b32 Result = False;
   u32_linked_list_node *Bucket = GetBucketByValue(Table, Key);
@@ -65,6 +63,6 @@ Tombstone(u32 Key, u32_hashtable *Table, memory_arena *Memory)
 link_internal b32
 Drop( u32_hashtable *Table, u32 Key )
 {
-  return Tombstone(Key, Table, 0);
+  return Tombstone(Key, Table);
 }
 

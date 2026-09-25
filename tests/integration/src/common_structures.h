@@ -148,12 +148,13 @@ struct foo_struct_1
   undefined_type _und0;
   foo_struct_0   _foo0;
 
-
+  // named struct
   struct
   {
     int _int2;
   } _embedded1, _embedded2;
 
+  // named union
   union
   {
     int _int3;
@@ -161,6 +162,7 @@ struct foo_struct_1
 
   } _embedded3; poof(@type_tag(foo_enum))
 
+  // anonymous union
   union
   {
     int anonymous;

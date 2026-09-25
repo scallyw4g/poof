@@ -2,16 +2,16 @@
 // ./include/bonsai_stdlib/src/texture.cpp:5:0
 
 // def (block_array_c)
-// ./include/bonsai_stdlib/src/poof_functions.h:2375:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2553:0
 
 
 
 
-/* link_internal cs */
-/* CS( index_t Index ) */
-/* { */
-/*   return FSz("(%u)", Index.Index); */
-/* } */
+link_internal cs
+CS( texture_block_array_index Index )
+{
+  return FSz("(%u)", Index.Index);
+}
 
 link_internal texture *
 Set( texture_block_array *Arr,
@@ -99,7 +99,7 @@ Find( texture_block_array *Array, texture *Query)
   texture_block_array_index Result = {INVALID_BLOCK_ARRAY_INDEX};
   IterateOver(Array, E, Index)
   {
-    if ( E == Query )
+    if ( AreEqual(E, Query) )
     {
       Result = Index;
       break;
@@ -176,5 +176,22 @@ Shift( texture_block_array *Array, texture *Element )
   Insert(Array, { .Index = 0 }, Element);
 }
 
+/* element_t.has_tag(do_editor_ui)? */
+/* { */
+/*   do_editor_ui_for_container( block_array_t ) */
+/* } */
+
+
+link_internal texture *
+Pop( texture_block_array *Array )
+{
+  if (auto Result = TryGetPtr(Array, LastIndex(Array)))
+  {
+    Assert(Array->ElementCount > 0);
+    Array->ElementCount -= 1;
+    return Result;
+  }
+  return 0;
+}
 
 

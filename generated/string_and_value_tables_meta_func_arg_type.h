@@ -2,17 +2,21 @@
 // ./poof/poof.h:568:0
 
 // def (string_and_value_tables)
-// ./include/bonsai_stdlib/src/poof_functions.h:2046:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2181:0
 link_internal b32
 IsValid(meta_func_arg_type Value)
 {
   b32 Result = False;
   switch (Value)
   {
-        case type_meta_func_arg_noop:
-    case type_datatype:
-    case type_poof_index:
-    case type_poof_symbol:
+            case type_meta_func_arg_noop:
+
+        case type_datatype:
+
+        case type_poof_index:
+
+        case type_poof_symbol:
+
 
     {
       Result = True;
@@ -26,18 +30,27 @@ IsValid(meta_func_arg_type Value)
 link_internal counted_string
 ToStringPrefixless(meta_func_arg_type Type)
 {
-  Assert(IsValid(Type));
-  counted_string Result = {};
-
-  switch (Type)
+  cs Result = {};
+  if (IsValid(Type))
   {
-        case type_meta_func_arg_noop: { Result = CSz("noop"); } break;
-    case type_datatype: { Result = CSz("datatype"); } break;
-    case type_poof_index: { Result = CSz("index"); } break;
-    case type_poof_symbol: { Result = CSz("symbol"); } break;
+    switch (Type)
+    {
+                  case type_meta_func_arg_noop: { Result = CSz("noop"); } break;
+
+            case type_datatype: { Result = CSz("datatype"); } break;
+
+            case type_poof_index: { Result = CSz("index"); } break;
+
+            case type_poof_symbol: { Result = CSz("symbol"); } break;
 
 
-    
+
+      
+    }
+  }
+  else
+  {
+    Result = CSz("(CORRUPT ENUM VALUE)");
   }
   /* if (Result.Start == 0) { Info("Could not convert value(%d) to (enum_t.name)", Type); } */
   return Result;
@@ -51,10 +64,14 @@ ToString(meta_func_arg_type Type)
   counted_string Result = {};
   switch (Type)
   {
-        case type_meta_func_arg_noop: { Result = CSz("type_meta_func_arg_noop"); } break;
-    case type_datatype: { Result = CSz("type_datatype"); } break;
-    case type_poof_index: { Result = CSz("type_poof_index"); } break;
-    case type_poof_symbol: { Result = CSz("type_poof_symbol"); } break;
+            case type_meta_func_arg_noop: { Result = CSz("type_meta_func_arg_noop"); } break;
+
+        case type_datatype: { Result = CSz("type_datatype"); } break;
+
+        case type_poof_index: { Result = CSz("type_poof_index"); } break;
+
+        case type_poof_symbol: { Result = CSz("type_poof_symbol"); } break;
+
 
 
     

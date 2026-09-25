@@ -2,7 +2,8 @@
 // ./poof/poof.h:217:0
 
 // def (stream_and_cursor)
-// ./include/bonsai_stdlib/src/poof_functions.h:2054:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2189:0
+
 struct compound_decl_cursor
 {
   compound_decl *Start;
@@ -10,6 +11,7 @@ struct compound_decl_cursor
   compound_decl *At;
   compound_decl *End;
 };
+
 
 
 
@@ -27,7 +29,7 @@ CompoundDeclCursor(umm ElementCount, memory_arena* Memory)
 }
 
 link_internal compound_decl*
-GetPtr(compound_decl_cursor *Cursor, umm ElementIndex)
+GetPtr( compound_decl_cursor *Cursor, umm ElementIndex)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -37,13 +39,13 @@ GetPtr(compound_decl_cursor *Cursor, umm ElementIndex)
 }
 
 link_internal compound_decl*
-TryGetPtr(compound_decl_cursor *Cursor, umm ElementIndex)
+TryGetPtr( compound_decl_cursor *Cursor, umm ElementIndex)
 {
   return GetPtr(Cursor, ElementIndex);
 }
 
 link_internal compound_decl*
-GetPtrUnsafe(compound_decl_cursor *Cursor, umm ElementIndex)
+GetPtrUnsafe( compound_decl_cursor *Cursor, umm ElementIndex)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -53,7 +55,7 @@ GetPtrUnsafe(compound_decl_cursor *Cursor, umm ElementIndex)
 }
 
 link_internal compound_decl
-Get(compound_decl_cursor *Cursor, umm ElementIndex)
+Get( compound_decl_cursor *Cursor, umm ElementIndex)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -63,7 +65,7 @@ Get(compound_decl_cursor *Cursor, umm ElementIndex)
 }
 
 link_internal void
-Set(compound_decl_cursor *Cursor, umm ElementIndex, compound_decl Element)
+Set( compound_decl_cursor *Cursor, umm ElementIndex, compound_decl Element)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -78,7 +80,7 @@ Set(compound_decl_cursor *Cursor, umm ElementIndex, compound_decl Element)
 }
 
 link_internal compound_decl*
-Advance(compound_decl_cursor *Cursor)
+Advance( compound_decl_cursor *Cursor)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -88,7 +90,7 @@ Advance(compound_decl_cursor *Cursor)
 }
 
 link_internal compound_decl *
-Push(compound_decl_cursor *Cursor, compound_decl Element)
+Push( compound_decl_cursor *Cursor, compound_decl Element)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -99,7 +101,7 @@ Push(compound_decl_cursor *Cursor, compound_decl Element)
 }
 
 link_internal compound_decl
-Pop(compound_decl_cursor *Cursor)
+Pop( compound_decl_cursor *Cursor)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -110,7 +112,7 @@ Pop(compound_decl_cursor *Cursor)
 }
 
 link_internal s32
-LastIndex(compound_decl_cursor *Cursor)
+LastIndex( compound_decl_cursor *Cursor)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -119,7 +121,7 @@ LastIndex(compound_decl_cursor *Cursor)
 }
 
 link_internal compound_decl*
-LastElement(compound_decl_cursor *Cursor)
+LastElement( compound_decl_cursor *Cursor)
 {
   compound_decl *Result = {};
   s32 I = LastIndex(Cursor);
@@ -128,7 +130,7 @@ LastElement(compound_decl_cursor *Cursor)
 }
 
 link_internal b32
-Remove(compound_decl_cursor *Cursor, compound_decl Query)
+Remove( compound_decl_cursor *Cursor, compound_decl Query)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 
@@ -151,7 +153,7 @@ Remove(compound_decl_cursor *Cursor, compound_decl Query)
 
 
 link_internal b32
-ResizeCursor(compound_decl_cursor *Cursor, umm Count, memory_arena *Memory)
+ResizeCursor( compound_decl_cursor *Cursor, umm Count, memory_arena *Memory)
 {
   /* ENSURE_OWNED_BY_THREAD(Cursor); */
 

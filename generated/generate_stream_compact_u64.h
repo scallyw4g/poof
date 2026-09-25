@@ -2,7 +2,7 @@
 // ./include/bonsai_stdlib/src/binary_parser.cpp:32:0
 
 // def (generate_stream_compact)
-// ./include/bonsai_stdlib/src/poof_functions.h:2004:0
+// ./include/bonsai_stdlib/src/poof_functions.h:2139:0
 link_internal u64_buffer
 Compact(u64_stream *Stream, memory_arena *PermMemory)
 {
