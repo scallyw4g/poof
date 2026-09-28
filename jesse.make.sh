@@ -12,18 +12,19 @@
 # ./make.sh BuildParserTests
 # ./make.sh RunParserTests
 
-./make.sh RunInstalledPoof
-[ $? -ne 0 ] && echo "Poof Failed, exiting." && exit 1
+# ./make.sh RunInstalledPoof
+# [ $? -ne 0 ] && echo "Poof Failed, exiting." && exit 1
 
 # ./make.sh RunPoof
+# [ $? -ne 0 ] && echo "Poof Failed, exiting." && exit 1
 
-OPTIMIZATION_LEVEL="-O2" \
+# OPTIMIZATION_LEVEL="-O2" \
 ./make.sh BuildPoof
 [ $? -ne 0 ] && echo "Build Failed, exiting." && exit 1
 
 
-./make.sh RunPoof
-[ $? -ne 0 ] && echo "Poof Failed, exiting." && exit 1
+# ./make.sh RunPoof
+# [ $? -ne 0 ] && echo "Poof Failed, exiting." && exit 1
 
 # ./make.sh RunIntegrationTests
 #
@@ -34,10 +35,10 @@ OPTIMIZATION_LEVEL="-O2" \
 # ./make.sh BuildPoof
 # [ $? -ne 0 ] && echo "Build Failed, exiting." && exit 1
 
-accessors
-INTEGRATION_TEST_INDEX=0 \
-INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug" \
-./make.sh RunIntegrationTests
+# accessors
+# INTEGRATION_TEST_INDEX=0 \
+# INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug" \
+# ./make.sh RunIntegrationTests
 
 # functions
 # INTEGRATION_TEST_INDEX=5 \

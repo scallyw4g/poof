@@ -7345,7 +7345,7 @@ PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
         })
       }
     )
-#include <generated/poof_func.anonymous$type_qualifier$yWZom2ro.h>
+#include <generated/anonymous_function_type_qualifier_fPa8h41Z.h>
 
     Result = Finalize(&Builder, Memory);
   }
@@ -9351,6 +9351,7 @@ main(s32 ArgCount_, const char** ArgStrings)
     Warn("No input files specified, exiting.");
   }
 
+  SignalAndWaitForWorkers(&Stdlib.Plat.WorkerThreadsSuspendFutex);
 
   // BootstrapDebugSystem is behind a flag, or it could have failed.
   if (Ctx.Args.DoDebugWindow && GetDebugState())

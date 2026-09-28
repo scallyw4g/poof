@@ -175,7 +175,7 @@ function RunPoof {
 
     # --do-debug-window \
 
-  # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
+  POOF_LOG_LEVEL="--log-level LogLevel_Debug"
     # --rewrite-all-includes \
   $POOF_DEBUGGER $POOF_EXECUTABLE \
                                   \
