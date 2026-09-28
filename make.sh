@@ -176,10 +176,10 @@ function RunPoof {
     # --do-debug-window \
 
   # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
+    # --rewrite-all-includes \
   $POOF_DEBUGGER $POOF_EXECUTABLE \
                                   \
     $POOF_LOG_LEVEL               \
-    --rewrite-all-includes \
     poof/poof.cpp                 \
     -D POOF_PREPROCESSOR          \
     -D BONSAI_PREPROCESSOR        \

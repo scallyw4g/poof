@@ -10,8 +10,6 @@
 
 #define BONSAI_STDLIB_USE_CUSTOM_THREADPOOL 1
 
-#define STDLIB_SHADER_PATH "external/bonsai_stdlib/shaders/"
-
 #include <bonsai_stdlib/bonsai_stdlib.h>
 #include <bonsai_stdlib/bonsai_stdlib.cpp>
 
@@ -2744,6 +2742,7 @@ PrintToStdout(CSz(
 
 global_variable random_series TempFileEntropy = {};
 
+
 link_internal b32
 RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Filename, memory_arena* Memory)
 {
@@ -2768,7 +2767,7 @@ RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Fi
       // TODO(Jesse): This should probably work differently..
       //
       // Output nothing for the special tokens we insert for #includes
-      if (T->Type == CT_InsertedCode)
+      if (T->Type == CT_InsertedCode || T->Type == CT_PoofInsertedCode)
       {
         continue;
       }
@@ -2779,7 +2778,10 @@ RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Fi
       }
       else
       {
-        FileWritesSucceeded &= WriteToFile(&TempFile, CS((const char*)&T->Type, 1));
+        if (T->Type)
+        {
+          FileWritesSucceeded &= WriteToFile(&TempFile, CS((const char*)&T->Type, 1));
+        }
       }
 
       // The original token can be anything; the file could end with something
@@ -2819,6 +2821,7 @@ RewriteOriginalFile(parser *Parser, counted_string OutputPath, counted_string Fi
 
   return Result;
 }
+
 
 link_internal b32
 poof(@async)
@@ -6477,9 +6480,9 @@ FlushOutputToDisk( parse_context *Ctx,
   TIMED_FUNCTION();
   parser *Parser = Ctx->CurrentParser;
 
- b32 OmitInclude  = BitfieldIsSet(MetaDirectives, omit_include);
- b32 CodeFragment = BitfieldIsSet(MetaDirectives, code_fragment);
- b32 RewriteAllIncludes = Ctx->Args.RewriteAllIncludes;
+  b32 OmitInclude  = BitfieldIsSet(MetaDirectives, omit_include);
+  b32 CodeFragment = BitfieldIsSet(MetaDirectives, code_fragment);
+  b32 RewriteAllIncludes = Ctx->Args.RewriteAllIncludes;
 
   // NOTE(Jesse): It can be a semicolon too
   // TODO(Jesse): I _think_ the semicolon thing is fixed and this assertion shouldn't fire anymore
@@ -6508,7 +6511,9 @@ FlushOutputToDisk( parse_context *Ctx,
       RequireTokenRawPointer(Parser, CT_PreprocessorInclude);
       if (RewriteAllIncludes)
       {
-        PotentialIncludeToken->Value = Concat(CSz("#include <"), OutputPath, CSz(">"), Memory);
+        CodeToInsert = Concat(CSz("#include <"), OutputPath, CSz(">"), Memory);
+        PotentialIncludeToken->Type = CTokenType_Poof;
+        PotentialIncludeToken->Value = {};
       }
       else
       {
@@ -6522,7 +6527,9 @@ FlushOutputToDisk( parse_context *Ctx,
 
       if (RewriteAllIncludes)
       {
-        PotentialIncludeToken->Value = Concat(CSz("// "), OutputPath, Memory);
+        CodeToInsert = Concat(CSz("// "), OutputPath, Memory);
+        PotentialIncludeToken->Type = CTokenType_Poof;
+        PotentialIncludeToken->Value = {};
       }
       else
       {
@@ -7338,7 +7345,7 @@ PrintTypeSpec(type_spec *TypeSpec, memory_arena *Memory)
         })
       }
     )
-#include <generated/poof_func.anonymous$type_qualifier$a701PbUN.h>
+#include <generated/poof_func.anonymous$type_qualifier$yWZom2ro.h>
 
     Result = Finalize(&Builder, Memory);
   }
@@ -9105,28 +9112,30 @@ ScanForMutationsAndOutput(parser *Parser, counted_string OutputPath, memory_aren
 
   b32 NeedsToBeOverwritten = false;
 
-  c_token *Start = Tokens->Start;
-  for (umm TokenIndex = 0; TokenIndex < TotalTokens; ++TokenIndex)
-  {
-    c_token *T = Start + TokenIndex;
-
-    if (StringsMatch(T->Value, CSz("bonsai_function")))
+  { TIMED_NAMED_BLOCK(ScanFile);
+    c_token *Start = Tokens->Start;
+    for (umm TokenIndex = 0; TokenIndex < TotalTokens; ++TokenIndex)
     {
-      T->Value = CSz("link_internal");
-      NeedsToBeOverwritten = true;
-    }
+      c_token *T = Start + TokenIndex;
 
-    // This is how we signal that we've got a `poof` statement without an
-    // include directive following it.  This system should probably be fleshed
-    // out to support more arbitrary output types, but this is fine for now.
-    if (T->Type == CT_PoofInsertedCode)
-    {
-      NeedsToBeOverwritten = true;
-      break;
+      if (StringsMatch(T->Value, CSz("bonsai_function")))
+      {
+        T->Value = CSz("link_internal");
+        NeedsToBeOverwritten = true;
+      }
+
+      // This is how we signal that we've got a `poof` statement without an
+      // include directive following it.  This system should probably be fleshed
+      // out to support more arbitrary output types, but this is fine for now.
+      if (T->Type == CT_PoofInsertedCode)
+      {
+        NeedsToBeOverwritten = true;
+        break;
+      }
     }
   }
 
-  /* if (NeedsToBeOverwritten) */
+  if (NeedsToBeOverwritten)
   {
     RewriteOriginalFile(Parser, OutputPath, Parser->Tokens->Filename, Memory);
   }
