@@ -175,7 +175,7 @@ function RunPoof {
 
     # --do-debug-window \
 
-  POOF_LOG_LEVEL="--log-level LogLevel_Debug"
+  # POOF_LOG_LEVEL="--log-level LogLevel_Debug"
     # --rewrite-all-includes \
   $POOF_DEBUGGER $POOF_EXECUTABLE \
                                   \
@@ -293,10 +293,10 @@ function RunIntegrationTests()
       echo -e "$Info TestIndex($test_index)"
       echo -e "$Indent $INTEGRATION_TEST_DEBUGGER bin/poof $POOF_COLOR_FLAG $INTEGRATION_TEST_LOG_LEVEL $filename -o $test_output_dir"
 
-      REWRITE_ALL_INCLUDES="--rewrite-all-includes"
-        # -d \
+      # REWRITE_ALL_INCLUDES="--rewrite-all-includes"
       $INTEGRATION_TEST_DEBUGGER bin/poof \
         $POOF_COLOR_FLAG                  \
+        -d \
         $REWRITE_ALL_INCLUDES             \
         $INTEGRATION_TEST_LOG_LEVEL       \
         $filename                         \

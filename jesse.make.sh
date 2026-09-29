@@ -30,8 +30,9 @@
 #
 # export OPTIMIZATION_LEVEL="-O2"
 
-# ./make.sh RunInstalledPoof
-# OPTIMIZATION_LEVEL="-O2" \
+./make.sh RunInstalledPoof
+
+OPTIMIZATION_LEVEL="-O2" \
 ./make.sh BuildPoof
 [ $? -ne 0 ] && echo "Build Failed, exiting." && exit 1
 

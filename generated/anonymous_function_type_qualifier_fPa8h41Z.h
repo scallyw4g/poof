@@ -1,8 +1,8 @@
 // callsite
-// poof/poof.cpp:7322:0
+// poof/poof.cpp:7512:0
 
-// def (anonymous)
-// poof/poof.cpp:7322:0
+// def (poof_func.anonymous)
+// poof/poof.cpp:7512:0
 if (TypeSpec->Qualifier & TypeQual_None)
 {
   Append(&Builder, CSz("none "));

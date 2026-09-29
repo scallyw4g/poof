@@ -2749,13 +2749,20 @@ RewriteOriginalFile(parser *Parser, counted_string Filename, memory_arena* Memor
   TIMED_FUNCTION();
   b32 Result = False;
 
-  native_file TempFile = GetTempFile(&TempFileEntropy, Memory);
-  if (TempFile.Handle)
+  /* u8_cursor_block_array WriteBuffer = U8CursorBlockArray(Kilobytes(128)); */
+  u8_cursor_block_array WriteBuffer = U8CursorBlockArray(Memory);
   {
+    WriteBuffer.BlockSize = Kilobytes(128);
+    u8_cursor First = U8Cursor(WriteBuffer.BlockSize, Memory);
+    Ensure( Push(&WriteBuffer, &First) );
+  }
+
+  {
+    TIMED_NAMED_BLOCK(Serialize);
     Rewind(Parser->Tokens);
     Assert(Parser->Tokens->At == Parser->Tokens->Start);
 
-    b32 FileWritesSucceeded = True;
+    b32 WriteBufferSuccess = True;
 
     umm TotalTokens = TotalElements(Parser->Tokens);
 
@@ -2773,39 +2780,59 @@ RewriteOriginalFile(parser *Parser, counted_string Filename, memory_arena* Memor
       }
 
       if (T->Type) { Assert(T->Value.Start); }
-      FileWritesSucceeded &= WriteToFile(&TempFile, T->Value);
+      /* WriteBufferSuccess &= Write(&TempFile, T->Value); */
+      WriteBufferSuccess &= Write(&WriteBuffer, T->Value);
 
       // We keep the Value for these tokens intact, so we already wrote out the
       // previous value
       if (T->Type == CT_PoofInsertedCode)
       {
         Assert(T->CodeToInsert.Start);
-        FileWritesSucceeded &= WriteToFile(&TempFile, T->CodeToInsert);
+        /* WriteBufferSuccess &= WriteToFile(&TempFile, T->CodeToInsert); */
+        WriteBufferSuccess &= Write(&WriteBuffer, T->CodeToInsert);
       }
 
     }
 
-    FileWritesSucceeded &= CloseFile(&TempFile);
 
-    if (FileWritesSucceeded)
+    if (WriteBufferSuccess)
     {
-      if (Rename(TempFile.Path, Filename))
+      TIMED_NAMED_BLOCK(WriteToFile);
+      native_file TempFile = GetTempFile(&TempFileEntropy, Memory);
+      if (TempFile.Handle)
       {
-        Result = True;
+        if (WriteToFile(&TempFile, &WriteBuffer))
+        {
+          if (CloseFile(&TempFile))
+          {
+            if (Rename(TempFile.Path, Filename))
+            {
+              Result = True;
+            }
+            else
+            {
+              Error("Renaming tempfile: %S -> %S", TempFile.Path, Filename);
+            }
+          }
+          else
+          {
+            // Error
+          }
+        }
+        else
+        {
+          // Error
+        }
       }
       else
       {
-        Error("Renaming tempfile: %S -> %S", TempFile.Path, Filename);
+        Error("Opening tempfile: %S", TempFile.Path);
       }
     }
     else
     {
-      Error("Writing to tempfile: %S", TempFile.Path);
+      Error("Writing to WriteBuffer failed during RewriteOriginalFile.");
     }
-  }
-  else
-  {
-    Error("Opening tempfile: %S", TempFile.Path);
   }
 
   return Result;
@@ -6616,8 +6643,8 @@ FlushOutputToDisk( parse_context *Ctx,
     PrevRawToken->CodeToInsert = CodeToInsert;
   }
 
-  /* Output_Async(&GetPlatform()->HighPriority, OutputForThisParser, OutputPath, Output_Unsafe); */
-  Output(OutputForThisParser, OutputPath, Output_Unsafe);
+  Output_Async(&GetPlatform()->HighPriority, OutputForThisParser, OutputPath, Output_Unsafe);
+  /* Output(OutputForThisParser, OutputPath, Output_Unsafe); */
   parser *OutputParse = ParserForAnsiStream(Ctx, AnsiStream(OutputForThisParser, OutputPath), TokenCursorSource_MetaprogrammingExpansion, Ctx->Memory);
 
 #if 1
