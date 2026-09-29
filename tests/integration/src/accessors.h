@@ -184,6 +184,4 @@ poof(
     }
   }
 )
-// tests/integration/generated/accessors/poof_func.anonymous$foo_struct_1$A0sLYXna.h
-
-
+// tests/integration/generated/accessors/poof_func.anonymous$foo_struct_1$beZQD7XQ.h

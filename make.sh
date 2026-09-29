@@ -30,7 +30,7 @@
 
 # RunIntegrationTests=1
 # INTEGRATION_TEST_INDEX=1
-# INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug -c0"
+INTEGRATION_TEST_LOG_LEVEL="--log-level LogLevel_Debug -c0"
 # INTEGRATION_TEST_DEBUGGER="gdb --args"
 
 # RunExtendedIntegrationTests=1
@@ -293,9 +293,9 @@ function RunIntegrationTests()
       echo -e "$Info TestIndex($test_index)"
       echo -e "$Indent $INTEGRATION_TEST_DEBUGGER bin/poof $POOF_COLOR_FLAG $INTEGRATION_TEST_LOG_LEVEL $filename -o $test_output_dir"
 
-      # REWRITE_ALL_INCLUDES="--rewrite-all-includes"
+      REWRITE_ALL_INCLUDES="--rewrite-all-includes"
+        # -d \
       $INTEGRATION_TEST_DEBUGGER bin/poof \
-        -d \
         $POOF_COLOR_FLAG                  \
         $REWRITE_ALL_INCLUDES             \
         $INTEGRATION_TEST_LOG_LEVEL       \
