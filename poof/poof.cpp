@@ -6533,13 +6533,10 @@ FlushOutputToDisk( parse_context *Ctx,
 
   EatUntilIncluding(Parser, CTokenType_Newline);
 
-  c_token *PrevNewlineToken      = PeekTokenRawPointer(Parser, -1);
+  // NOTE(Jesse): Most of the time PrevRawToken is a newline, but if the file
+  // ends without a newline it can be something else
+  c_token *PrevRawToken          = PeekTokenRawPointer(Parser, -1);
   c_token *PotentialIncludeToken = PeekTokenRawPointer(Parser);
-
-  // NOTE(Jesse): It can be a semicolon too
-  // NOTE(Jesse): I _think_ the semicolon thing is fixed and this assertion shouldn't fire anymore
-  //
-  Assert(PrevNewlineToken && PrevNewlineToken->Type == CTokenType_Newline);
 
   // Nuke the include token if we want to rewrite it
   if (RewriteAllIncludes && PotentialIncludeToken)
@@ -6611,11 +6608,12 @@ FlushOutputToDisk( parse_context *Ctx,
 
   if (CodeToInsert.Count)
   {
-    // NOTE(Jesse): Keep the value intact so we can still print it
-    Assert(StringsMatch(PrevNewlineToken->Value, CSz("\n")));
-
-    PrevNewlineToken->Type = CT_PoofInsertedCode;
-    PrevNewlineToken->CodeToInsert = CodeToInsert;
+    if (PrevRawToken->Type != CTokenType_Newline)
+    {
+      CodeToInsert = Concat(CSz("\n"), CodeToInsert, Memory);
+    }
+    PrevRawToken->Type = CT_PoofInsertedCode;
+    PrevRawToken->CodeToInsert = CodeToInsert;
   }
 
   /* Output_Async(&GetPlatform()->HighPriority, OutputForThisParser, OutputPath, Output_Unsafe); */
